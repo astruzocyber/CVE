@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVE / KEV / Dependabot Alert Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Vulnerability Alert Dashboard</h1>
+    <p class="subtitle">CISA KEV &middot; NVD &middot; FIRST.org EPSS &middot; GitHub Dependabot</p>
+    <p class="meta" id="last-updated">Loading...</p>
+  </header>
+
+  <main>
+    <div class="controls">
+      <input type="text" id="search" placeholder="Search CVE ID, description, product...">
+      <select id="kev-filter">
+        <option value="all">All (KEV + non-KEV)</option>
+        <option value="kev">KEV only</option>
+        <option value="non-kev">Non-KEV only</option>
+      </select>
+      <select id="sort-by">
+        <option value="first_seen">Sort: Newest first</option>
+        <option value="cvss_score">Sort: CVSS (high to low)</option>
+        <option value="epss_score">Sort: EPSS (high to low)</option>
+        <option value="cve_id">Sort: CVE ID</option>
+      </select>
+      <span class="count" id="result-count"></span>
+    </div>
+
+    <div id="empty-state" class="empty-state" hidden>
+      No alerts match your filters (or no data has been collected yet -- the
+      scheduled GitHub Action runs every 4 hours; you can also trigger it manually
+      from the Actions tab).
+    </div>
+
+    <div class="card-grid" id="card-grid"></div>
+  </main>
+
+  <footer>
+    <p>Data sourced from <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA KEV</a>,
+      <a href="https://nvd.nist.gov/" target="_blank" rel="noopener">NVD</a>,
+      <a href="https://www.first.org/epss/" target="_blank" rel="noopener">FIRST.org EPSS</a>,
+      and GitHub Dependabot Alerts. Fully static, zero-cost, updated on a schedule via GitHub Actions.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+# Watchlist configuration for the CVE/KEV/Dependabot alert dashboard.
+# Edit this file any time to tune signal-to-noise; changes take effect on the next scheduled run.
+
+cvss_minimum: 7.0
+
+# Vendor/product pairs use NVD's CPE vendor/product naming (lowercase, hyphens for spaces).
+# Populated with a broad set of major, widely-deployed vendors/products since GFR Media
+# (like most media/publishing orgs) commonly runs on web/CMS/infrastructure stacks such as
+# WordPress, nginx, PHP, and common cloud/OS/office software. Adjust freely once you see
+# real results in Phase 7 — narrow this down to what you actually run.
+vendors_products:
+  - vendor: "microsoft"
+    product: "windows"
+  - vendor: "microsoft"
+    product: "office"
+  - vendor: "microsoft"
+    product: "exchange_server"
+  - vendor: "apache"
+    product: "http_server"
+  - vendor: "apache"
+    product: "log4j"
+  - vendor: "apache"
+    product: "tomcat"
+  - vendor: "nginx"
+    product: "nginx"
+  - vendor: "wordpress"
+    product: "wordpress"
+  - vendor: "php"
+    product: "php"
+  - vendor: "oracle"
+    product: "mysql"
+  - vendor: "adobe"
+    product: "acrobat_reader_dc"
+  - vendor: "cisco"
+    product: "ios"
+  - vendor: "fortinet"
+    product: "fortios"
+  - vendor: "vmware"
+    product: "vcenter_server"
+  - vendor: "google"
+    product: "chrome"
+  - vendor: "mozilla"
+    product: "firefox"
+  - vendor: "openssl"
+    product: "openssl"
+  - vendor: "linux"
+    product: "linux_kernel"
+  - vendor: "amazon"
+    product: "aws"
+  - vendor: "cloudflare"
+    product: "cloudflare"
+
+# Free-text keyword matches against CVE descriptions (case-insensitive substring match).
+# Kept deliberately narrow -- broad terms like "media" or "cdn" match unrelated CVEs
+# (e.g. Linux kernel "media" driver code, SIP "media" transport) and create noise.
+keywords:
+  - "wordpress"
+  - "wp plugin"
+  - "wp-content"
+  - "content management system"
+  - "cloudflare"
+
+# GitHub repos to check via the Dependabot Alerts API (needs GH_DEPENDABOT_TOKEN secret
+# with security_events read scope on each repo listed).
+dependabot_repos:
+  - "astruzocyber/CVE"
+
+# If true, only surface CVEs that are in the CISA KEV catalog OR have a high EPSS score
+# (>= 0.5), cutting noise significantly. User chose false: alert on any watchlist match
+# regardless of KEV/EPSS status.
+require_kev_or_high_epss: false
+
+# EPSS threshold used only when require_kev_or_high_epss is true.
+epss_high_threshold: 0.5
