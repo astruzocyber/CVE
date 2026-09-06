@@ -259,11 +259,17 @@ def fetch_dependabot_alerts(repos, token):
     }
     for repo in repos:
         print(f"Querying Dependabot alerts for {repo}...")
-        page = 1
-        while True:
-            url = f"{GITHUB_API}/repos/{repo}/dependabot/alerts?state=open&per_page=100&page={page}"
+        # NOTE: this endpoint does NOT support the classic ?page=N offset param
+        # (confirmed live: GitHub returns HTTP 400 "Pagination using the `page`
+        # parameter is not supported"). It uses RFC 5988 Link-header pagination
+        # instead, so we follow rel="next" URLs until exhausted.
+        url = f"{GITHUB_API}/repos/{repo}/dependabot/alerts?state=open&per_page=100"
+        while url:
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **headers})
             try:
-                data = http_get_json(url, headers=headers, timeout=30)
+                with urllib.request.urlopen(req, timeout=30) as resp:
+                    data = json.loads(resp.read().decode())
+                    link_header = resp.headers.get("Link", "")
             except urllib.error.HTTPError as e:
                 body = ""
                 try:
@@ -295,10 +301,19 @@ def fetch_dependabot_alerts(repos, token):
                     "dependabot_url": alert.get("html_url"),
                     "severity": advisory.get("severity"),
                 })
-            if len(data) < 100:
-                break
-            page += 1
-            time.sleep(0.3)
+            # Parse Link header for rel="next", e.g.:
+            # <https://api.github.com/...&page=2>; rel="next", <...>; rel="last"
+            next_url = None
+            for part in link_header.split(","):
+                if 'rel="next"' in part:
+                    start = part.find("<") + 1
+                    end = part.find(">")
+                    if start > 0 and end > start:
+                        next_url = part[start:end]
+                    break
+            url = next_url
+            if url:
+                time.sleep(0.3)
     print(f"  Dependabot candidates: {len(results)}")
     return results
 
