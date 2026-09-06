@@ -9,8 +9,17 @@
 <body>
   <header>
     <h1>Vulnerability Alert Dashboard</h1>
-    <p class="subtitle">CISA KEV &middot; NVD &middot; FIRST.org EPSS &middot; GitHub Dependabot</p>
+    <p class="subtitle">CISA KEV &middot; NVD &middot; FIRST.org EPSS &middot; GitHub Security Advisories (GHSA) &middot; GitHub Dependabot</p>
     <p class="meta" id="last-updated">Loading...</p>
+
+    <div class="stats-bar" id="stats-bar" hidden>
+      <div class="stat"><span class="stat-value" id="stat-total">-</span><span class="stat-label">Total alerts</span></div>
+      <div class="stat stat-critical"><span class="stat-value" id="stat-critical">-</span><span class="stat-label">Critical (CVSS&ge;9)</span></div>
+      <div class="stat stat-kev"><span class="stat-value" id="stat-kev">-</span><span class="stat-label">In CISA KEV</span></div>
+      <div class="stat stat-overdue"><span class="stat-value" id="stat-overdue">-</span><span class="stat-label">KEV overdue (BOD 22-01)</span></div>
+      <div class="stat stat-ransomware"><span class="stat-value" id="stat-ransomware">-</span><span class="stat-label">Ransomware-linked</span></div>
+      <div class="stat"><span class="stat-value" id="stat-epss">-</span><span class="stat-label">Avg EPSS</span></div>
+    </div>
   </header>
 
   <main>
@@ -19,14 +28,24 @@
       <select id="kev-filter">
         <option value="all">All (KEV + non-KEV)</option>
         <option value="kev">KEV only</option>
+        <option value="overdue">KEV overdue only</option>
+        <option value="ransomware">Ransomware-linked only</option>
         <option value="non-kev">Non-KEV only</option>
       </select>
+      <select id="source-filter">
+        <option value="all">All sources</option>
+        <option value="nvd">NVD</option>
+        <option value="ghsa">GHSA</option>
+        <option value="dependabot">Dependabot</option>
+      </select>
       <select id="sort-by">
+        <option value="risk_score">Sort: Risk score (high to low)</option>
         <option value="first_seen">Sort: Newest first</option>
         <option value="cvss_score">Sort: CVSS (high to low)</option>
         <option value="epss_score">Sort: EPSS (high to low)</option>
         <option value="cve_id">Sort: CVE ID</option>
       </select>
+      <button id="export-csv" type="button">Export CSV</button>
       <span class="count" id="result-count"></span>
     </div>
 
@@ -43,7 +62,15 @@
     <p>Data sourced from <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA KEV</a>,
       <a href="https://nvd.nist.gov/" target="_blank" rel="noopener">NVD</a>,
       <a href="https://www.first.org/epss/" target="_blank" rel="noopener">FIRST.org EPSS</a>,
+      <a href="https://github.com/advisories" target="_blank" rel="noopener">GitHub Security Advisories</a>,
       and GitHub Dependabot Alerts. Fully static, zero-cost, updated on a schedule via GitHub Actions.</p>
+    <p class="methodology">Risk score (0-100) = 35% CVSS (scaled) + 40% EPSS (probability
+      of exploitation in the next 30 days) + 25% flat bonus if listed in CISA's Known
+      Exploited Vulnerabilities catalog, capped at 100. This weights real-world
+      exploitation signal above theoretical severity and is a local heuristic, not an
+      industry-standard score -- use it to triage order, not as a sole go/no-go gate.
+      Every external API response is schema-validated before use; on an unexpected
+      shape the pipeline logs a warning and skips that data rather than guessing.</p>
   </footer>
 
   <script src="app.js"></script>

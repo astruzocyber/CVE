@@ -2,31 +2,63 @@
 """
 scripts/aggregate.py
 
-Pulls vulnerability intel from CISA KEV, NVD, FIRST.org EPSS, and GitHub Dependabot
-Alerts, filters against config/watchlist.yaml, deduplicates against data/seen_ids.json,
-and writes:
-  - data/alerts.json      cumulative list of ALL matched alerts (dashboard reads this)
-  - data/seen_ids.json    set of unique keys already surfaced (persists across runs)
-  - data/new_alerts.json  only the alerts that are NEW this run (notify step reads this;
-                           not meant to be committed, see .gitignore)
+Pulls vulnerability intel from CISA KEV, NVD, FIRST.org EPSS, GitHub Security
+Advisories (GHSA, covers open-source package ecosystems), and GitHub Dependabot
+Alerts, filters against config/watchlist.yaml, deduplicates against
+docs/data/seen_ids.json, respects config/suppressions.yaml (accepted-risk list),
+computes a composite risk score, and writes:
+  - docs/data/alerts.json       cumulative list of ALL matched alerts (dashboard reads this)
+  - docs/data/seen_ids.json     set of unique keys already surfaced (persists across runs)
+  - docs/data/new_alerts.json   only the alerts that are NEW this run (notify step reads this;
+                                 not meant to be committed, see .gitignore)
+  - docs/data/stats.json        precomputed summary stats for the dashboard header
 
 Environment variables (all optional except where noted):
   NVD_API_KEY            NVD API key (raises rate limit 5->50 req/30s). If unset, the
                           script runs unauthenticated and paces itself accordingly.
-  GH_DEPENDABOT_TOKEN    PAT with security_events read scope, needed only if
-                          dependabot_repos is non-empty in watchlist.yaml.
-  LOOKBACK_DAYS          How many days back to query NVD for published/modified CVEs.
+  GH_DEPENDABOT_TOKEN     PAT with security_events read scope, needed only if
+                          dependabot_repos is non-empty in watchlist.yaml. Also used
+                          (if present) as a bearer token for the GHSA advisories query
+                          to raise its rate limit; GHSA works unauthenticated too.
+  LOOKBACK_DAYS           How many days back to query NVD for published/modified CVEs.
                           Default 8 (covers scheduler downtime/failures with margin).
+
+Accuracy / schema-drift policy (per project brief: "adapt and note discrepancy rather
+than guess"):
+  Every external API response is passed through validate_schema() before we read any
+  field from it. That function checks the top-level shape we depend on actually exists;
+  if the API changed shape underneath us, we print an explicit WARNING naming exactly
+  what was expected vs what came back, and treat the response as empty/skipped rather
+  than crash or silently fabricate a well-formed result from a malformed one. This is a
+  cheap, dependency-free stand-in for full JSON-schema validation, deliberately kept
+  inline (no new dependency) since the shapes we care about are small and stable.
 
 Design notes / assumptions (flagged per project brief instructions):
   - NVD's CVE API does not accept a vendor+product pair directly without a well-formed
     CPE URI. Rather than guess CPE strings, we use `keywordSearch` with "<vendor> <product>"
     which searches CVE descriptions/titles. This is broader than a strict CPE match but
     avoids silently fabricating CPE URIs that might not exist. Same technique for keywords.
+  - GHSA (GitHub Security Advisories, /advisories REST endpoint) covers open-source
+    package ecosystems (npm, PyPI, Go, Maven, etc.) and is often faster than NVD for
+    those ecosystems. It is queried via `affects=<package>` for each entry in
+    watchlist.yaml's `ghsa_packages` list (package names, NOT vendor/product pairs --
+    GHSA's `affects` filter matches actual ecosystem package names). Left empty by
+    default; only queried if the user opts in with real package names, to avoid
+    guessing what "package" means for a non-package vendor/product like "wordpress".
   - Dependabot alerts are already scoped to repos the user explicitly listed, so we do NOT
     re-apply the vendor/product/keyword filter to them -- only the CVSS floor and the
     require_kev_or_high_epss switch, consistent with "filters results against the watchlist".
   - EPSS API allows batched lookups: https://api.first.org/data/v1/epss?cve=A,B,C
+  - Composite risk score (0-100): 35% CVSS (scaled to 100), 40% EPSS (0-1 scaled to 100),
+    plus a flat +25 bonus if the CVE is in CISA KEV, capped at 100. Weights EPSS/KEV
+    (actual exploitation signal) above raw CVSS (theoretical severity), matching how
+    working threat-intel teams triage in practice. Formula is intentionally transparent
+    and documented here plus in the dashboard footer, not a black box.
+  - Suppression list (config/suppressions.yaml): CVE/GHSA IDs a human has explicitly
+    marked as accepted risk / not applicable, each with a reason and optional expiry
+    date. Suppressed entries are excluded from new alert generation entirely (they were
+    reviewed and dismissed), but re-surface automatically once `expires` passes, so
+    "accepted risk" can't silently become "forgotten forever".
 """
 import json
 import os
@@ -35,7 +67,7 @@ import time
 import urllib.parse
 import urllib.request
 import urllib.error
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, date
 
 try:
     import yaml
@@ -45,25 +77,60 @@ except ImportError:
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WATCHLIST_PATH = os.path.join(REPO_ROOT, "config", "watchlist.yaml")
+SUPPRESSIONS_PATH = os.path.join(REPO_ROOT, "config", "suppressions.yaml")
 # Data lives under docs/data so GitHub Pages (serving from /docs) can fetch it directly
 # via a relative path, with no separate copy/sync step needed.
 DATA_DIR = os.path.join(REPO_ROOT, "docs", "data")
 ALERTS_PATH = os.path.join(DATA_DIR, "alerts.json")
 SEEN_PATH = os.path.join(DATA_DIR, "seen_ids.json")
 NEW_ALERTS_PATH = os.path.join(DATA_DIR, "new_alerts.json")
+STATS_PATH = os.path.join(DATA_DIR, "stats.json")
 
 KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
 NVD_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
 EPSS_URL = "https://api.first.org/data/v1/epss"
+GHSA_URL = "https://api.github.com/advisories"
 GITHUB_API = "https://api.github.com"
 
-USER_AGENT = "cve-kev-dependabot-dashboard/1.0 (+github actions)"
+USER_AGENT = "cve-kev-dependabot-dashboard/2.0 (+github actions)"
+
+
+# ---------------------------------------------------------------------------
+# Schema-drift guard -- accuracy layer used before we trust ANY external
+# response. Never silently proceed on a shape we don't recognize.
+# ---------------------------------------------------------------------------
+def validate_schema(name, obj, required_keys, kind="dict"):
+    """Return True if obj matches the minimal expected shape, else print an
+    explicit, specific WARNING (expected vs actual) and return False. Callers
+    must skip/degrade on False rather than guess at missing fields."""
+    if kind == "dict":
+        if not isinstance(obj, dict):
+            print(f"  SCHEMA WARNING [{name}]: expected a JSON object, got "
+                  f"{type(obj).__name__}. Treating as empty.", file=sys.stderr)
+            return False
+        missing = [k for k in required_keys if k not in obj]
+        if missing:
+            print(f"  SCHEMA WARNING [{name}]: response is missing expected "
+                  f"key(s) {missing} (has keys: {sorted(obj.keys())[:15]}). "
+                  f"The upstream API may have changed shape -- treating this "
+                  f"response as empty rather than guessing at fields.",
+                  file=sys.stderr)
+            return False
+        return True
+    if kind == "list":
+        if not isinstance(obj, list):
+            print(f"  SCHEMA WARNING [{name}]: expected a JSON array, got "
+                  f"{type(obj).__name__}. Treating as empty.", file=sys.stderr)
+            return False
+        return True
+    return True
 
 
 def http_get_json(url, headers=None, timeout=30):
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **(headers or {})})
     with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+        body = resp.read().decode("utf-8")
+        return json.loads(body), resp.headers
 
 
 def load_watchlist():
@@ -73,9 +140,55 @@ def load_watchlist():
     wl.setdefault("vendors_products", [])
     wl.setdefault("keywords", [])
     wl.setdefault("dependabot_repos", [])
+    wl.setdefault("ghsa_packages", [])
     wl.setdefault("require_kev_or_high_epss", False)
     wl.setdefault("epss_high_threshold", 0.5)
     return wl
+
+
+def load_suppressions():
+    """config/suppressions.yaml is optional. Schema:
+    - cve_id: "CVE-2024-12345"   # or ghsa_id
+      reason: "Not applicable, we don't run this module"
+      expires: "2027-01-01"       # optional; omit for indefinite
+    Returns a dict: {id: {"reason": ..., "expires": date-or-None}}, with any
+    already-expired entries dropped (so they resurface on the next alert cycle
+    rather than being silently suppressed forever).
+    """
+    if not os.path.exists(SUPPRESSIONS_PATH):
+        return {}
+    try:
+        with open(SUPPRESSIONS_PATH, "r") as f:
+            raw = yaml.safe_load(f) or []
+    except Exception as e:
+        print(f"  WARNING: could not parse config/suppressions.yaml: {e}", file=sys.stderr)
+        return {}
+    if not isinstance(raw, list):
+        print("  WARNING: config/suppressions.yaml should be a YAML list; ignoring.",
+              file=sys.stderr)
+        return {}
+    today = datetime.now(timezone.utc).date()
+    out = {}
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        sid = item.get("cve_id") or item.get("ghsa_id")
+        if not sid:
+            continue
+        expires_raw = item.get("expires")
+        expires = None
+        if expires_raw:
+            try:
+                expires = datetime.strptime(str(expires_raw), "%Y-%m-%d").date()
+            except ValueError:
+                print(f"  WARNING: suppressions.yaml entry {sid} has an unparseable "
+                      f"'expires' date ({expires_raw!r}), ignoring the expiry (treating "
+                      f"as indefinite) rather than guessing what was meant.",
+                      file=sys.stderr)
+        if expires is not None and expires < today:
+            continue  # expired -- let it resurface
+        out[sid] = {"reason": item.get("reason", ""), "expires": expires_raw}
+    return out
 
 
 def load_json_file(path, default):
@@ -101,9 +214,17 @@ def save_json_file(path, obj):
 def fetch_kev():
     print("Fetching CISA KEV catalog...")
     try:
-        data = http_get_json(KEV_URL)
+        data, _ = http_get_json(KEV_URL)
+        if not validate_schema("CISA KEV", data, ["vulnerabilities", "catalogVersion"]):
+            return {}
         vulns = data.get("vulnerabilities", [])
-        kev_map = {v["cveID"]: v for v in vulns if "cveID" in v}
+        if not validate_schema("CISA KEV.vulnerabilities", vulns, [], kind="list"):
+            return {}
+        kev_map = {}
+        for v in vulns:
+            if not isinstance(v, dict) or "cveID" not in v:
+                continue
+            kev_map[v["cveID"]] = v
         print(f"  KEV catalog: {len(kev_map)} entries")
         return kev_map
     except Exception as e:
@@ -121,7 +242,10 @@ def nvd_query(params, api_key=None):
     url = NVD_URL + "?" + urllib.parse.urlencode(params)
     for attempt in range(3):
         try:
-            return http_get_json(url, headers=headers, timeout=45)
+            data, _ = http_get_json(url, headers=headers, timeout=45)
+            if not validate_schema("NVD response", data, ["vulnerabilities", "totalResults"]):
+                return None
+            return data
         except urllib.error.HTTPError as e:
             if e.code == 403 or e.code == 429:
                 wait = 6 * (attempt + 1)
@@ -226,7 +350,9 @@ def fetch_epss(cve_ids):
         batch = ids[i:i + batch_size]
         url = EPSS_URL + "?" + urllib.parse.urlencode({"cve": ",".join(batch)})
         try:
-            data = http_get_json(url, timeout=30)
+            data, _ = http_get_json(url, timeout=30)
+            if not validate_schema("EPSS response", data, ["data"]):
+                continue
             for item in data.get("data", []):
                 cve = item.get("cve")
                 if cve:
@@ -241,7 +367,7 @@ def fetch_epss(cve_ids):
 
 
 # ---------------------------------------------------------------------------
-# 4. GitHub Dependabot Alerts
+# 4. GitHub Dependabot Alerts (per named repo the user configured)
 # ---------------------------------------------------------------------------
 def fetch_dependabot_alerts(repos, token):
     if not repos:
@@ -282,9 +408,13 @@ def fetch_dependabot_alerts(repos, token):
             except Exception as e:
                 print(f"  WARNING: Dependabot API failed for {repo}: {e}", file=sys.stderr)
                 break
+            if not validate_schema(f"Dependabot alerts[{repo}]", data, [], kind="list"):
+                break
             if not data:
                 break
             for alert in data:
+                if not isinstance(alert, dict):
+                    continue
                 advisory = alert.get("security_advisory", {}) or {}
                 cve_id = advisory.get("cve_id") or advisory.get("ghsa_id")
                 cvss = (advisory.get("cvss") or {}).get("score")
@@ -319,10 +449,76 @@ def fetch_dependabot_alerts(repos, token):
 
 
 # ---------------------------------------------------------------------------
+# 5. GitHub Security Advisories (GHSA) -- open-source ecosystem coverage,
+#    queried by exact package name via ?affects=<package>. Schema confirmed
+#    live against GitHub's own REST docs (rest/security-advisories/global-advisories)
+#    before writing this: https://docs.github.com/en/rest/security-advisories/global-advisories
+# ---------------------------------------------------------------------------
+def fetch_ghsa_advisories(packages, token=None):
+    if not packages:
+        return []
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
+    results = []
+    print(f"Querying GHSA advisories for {len(packages)} package(s)...")
+    for pkg in packages:
+        url = GHSA_URL + "?" + urllib.parse.urlencode({"affects": pkg, "per_page": 100})
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **headers})
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = json.loads(resp.read().decode())
+        except urllib.error.HTTPError as e:
+            body = ""
+            try:
+                body = e.read().decode()
+            except Exception:
+                pass
+            print(f"  WARNING: GHSA API HTTP {e.code} for package '{pkg}': {body[:300]}",
+                  file=sys.stderr)
+            continue
+        except Exception as e:
+            print(f"  WARNING: GHSA API failed for package '{pkg}': {e}", file=sys.stderr)
+            continue
+        if not validate_schema(f"GHSA advisories[{pkg}]", data, [], kind="list"):
+            continue
+        for adv in data:
+            if not isinstance(adv, dict):
+                continue
+            cvss_info = adv.get("cvss") or {}
+            score = cvss_info.get("score")
+            ecosystems = sorted({
+                (v.get("package") or {}).get("ecosystem", "unknown")
+                for v in (adv.get("vulnerabilities") or []) if isinstance(v, dict)
+            })
+            results.append({
+                "cve_id": adv.get("cve_id") or adv.get("ghsa_id"),
+                "description": adv.get("summary", ""),
+                "cvss_score": float(score) if score is not None else None,
+                "cvss_version": "GHSA CVSS",
+                "published": adv.get("published_at"),
+                "matched_vendor_product": [f"{pkg} ({'/'.join(ecosystems) or 'ghsa'})"],
+                "matched_keywords": [],
+                "source": "ghsa",
+                "dependabot_url": adv.get("html_url"),
+                "severity": adv.get("severity"),
+            })
+        time.sleep(0.3)
+    print(f"  GHSA candidates: {len(results)}")
+    return results
+
+
+# ---------------------------------------------------------------------------
 # Filtering
 # ---------------------------------------------------------------------------
-def passes_filters(entry, watchlist, kev_map, epss_map):
+def passes_filters(entry, watchlist, kev_map, epss_map, suppressions):
     cve_id = entry["cve_id"]
+    if cve_id in suppressions:
+        return False
     cvss = entry.get("cvss_score")
     in_kev = cve_id in kev_map
     epss_info = epss_map.get(cve_id, {})
@@ -343,21 +539,36 @@ def passes_filters(entry, watchlist, kev_map, epss_map):
     return True
 
 
+def composite_risk_score(cvss, epss_score, in_kev):
+    """0-100 composite, weighting real-world exploitation signal (EPSS, KEV)
+    above raw theoretical severity (CVSS). Documented in the module docstring
+    and the dashboard footer -- never presented as an official/standard score."""
+    cvss_component = (cvss / 10.0) * 35 if cvss is not None else 0
+    epss_component = (epss_score or 0) * 40
+    kev_component = 25 if in_kev else 0
+    return round(min(100, cvss_component + epss_component + kev_component), 1)
+
+
 def build_final_entry(entry, kev_map, epss_map):
     cve_id = entry["cve_id"]
     in_kev = cve_id in kev_map
     epss_info = epss_map.get(cve_id, {})
     kev_entry = kev_map.get(cve_id, {})
+    cvss = entry.get("cvss_score")
+    epss_score = epss_info.get("epss")
     return {
         "cve_id": cve_id,
         "description": entry.get("description", ""),
-        "cvss_score": entry.get("cvss_score"),
+        "cvss_score": cvss,
         "cvss_version": entry.get("cvss_version"),
-        "epss_score": epss_info.get("epss"),
+        "epss_score": epss_score,
         "epss_percentile": epss_info.get("percentile"),
         "kev": in_kev,
         "kev_date_added": kev_entry.get("dateAdded") if in_kev else None,
         "kev_due_date": kev_entry.get("dueDate") if in_kev else None,
+        "kev_ransomware_use": (kev_entry.get("knownRansomwareCampaignUse") == "Known") if in_kev else False,
+        "kev_required_action": kev_entry.get("requiredAction") if in_kev else None,
+        "risk_score": composite_risk_score(cvss, epss_score, in_kev),
         "affected": entry.get("matched_vendor_product", []),
         "matched_keywords": entry.get("matched_keywords", []),
         "source": entry.get("source"),
@@ -374,21 +585,77 @@ def unique_key(entry):
     return f"{entry['cve_id']}::{entry['source']}"
 
 
+def compute_stats(alerts):
+    total = len(alerts)
+    kev_count = sum(1 for a in alerts if a.get("kev"))
+    ransomware_count = sum(1 for a in alerts if a.get("kev_ransomware_use"))
+    by_severity = {"critical": 0, "high": 0, "medium": 0, "low": 0, "unknown": 0}
+    epss_values = []
+    by_source = {}
+    for a in alerts:
+        cvss = a.get("cvss_score")
+        if cvss is None:
+            by_severity["unknown"] += 1
+        elif cvss >= 9.0:
+            by_severity["critical"] += 1
+        elif cvss >= 7.0:
+            by_severity["high"] += 1
+        elif cvss >= 4.0:
+            by_severity["medium"] += 1
+        else:
+            by_severity["low"] += 1
+        if isinstance(a.get("epss_score"), (int, float)):
+            epss_values.append(a["epss_score"])
+        src = a.get("source", "unknown")
+        by_source[src] = by_source.get(src, 0) + 1
+
+    # KEV entries with a due date in the past and not yet resolved -- an
+    # operationally meaningful "overdue remediation" count (BOD 22-01 style).
+    today = datetime.now(timezone.utc).date()
+    overdue_kev = 0
+    for a in alerts:
+        due = a.get("kev_due_date")
+        if not due:
+            continue
+        try:
+            due_date = datetime.strptime(due, "%Y-%m-%d").date()
+            if due_date < today:
+                overdue_kev += 1
+        except ValueError:
+            continue
+
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "total_alerts": total,
+        "kev_count": kev_count,
+        "kev_ransomware_count": ransomware_count,
+        "kev_overdue_count": overdue_kev,
+        "by_severity": by_severity,
+        "by_source": by_source,
+        "avg_epss": round(sum(epss_values) / len(epss_values), 4) if epss_values else None,
+    }
+
+
 def main():
     nvd_api_key = os.environ.get("NVD_API_KEY", "").strip() or None
     gh_token = os.environ.get("GH_DEPENDABOT_TOKEN", "").strip() or None
 
     watchlist = load_watchlist()
+    suppressions = load_suppressions()
+    if suppressions:
+        print(f"Loaded {len(suppressions)} active suppression(s) from config/suppressions.yaml")
 
     kev_map = fetch_kev()
     nvd_candidates = fetch_nvd_candidates(watchlist, nvd_api_key)
     dependabot_candidates = fetch_dependabot_alerts(watchlist["dependabot_repos"], gh_token)
+    ghsa_candidates = fetch_ghsa_advisories(watchlist["ghsa_packages"], gh_token)
 
-    all_candidates = list(nvd_candidates.values()) + dependabot_candidates
+    all_candidates = list(nvd_candidates.values()) + dependabot_candidates + ghsa_candidates
     all_cve_ids = {c["cve_id"] for c in all_candidates if c.get("cve_id") and c["cve_id"].startswith("CVE-")}
     epss_map = fetch_epss(all_cve_ids) if all_cve_ids else {}
 
-    filtered = [c for c in all_candidates if c.get("cve_id") and passes_filters(c, watchlist, kev_map, epss_map)]
+    filtered = [c for c in all_candidates
+                if c.get("cve_id") and passes_filters(c, watchlist, kev_map, epss_map, suppressions)]
     print(f"After filtering: {len(filtered)} matches")
 
     existing_alerts = load_json_file(ALERTS_PATH, [])
@@ -410,14 +677,23 @@ def main():
             merged = {**final, "first_seen": prior.get("first_seen", final["first_seen"])}
             existing_by_key[key] = merged
 
+    # Suppressed entries that were previously alerted should also disappear from the
+    # cumulative view going forward (an analyst explicitly accepted the risk) -- but
+    # their seen_id stays recorded so they don't silently reappear as "new" the moment
+    # the suppression expires; they'll re-enter the normal filter/dedup path instead.
+    existing_by_key = {k: v for k, v in existing_by_key.items() if v.get("cve_id") not in suppressions}
+
     cumulative = sorted(existing_by_key.values(), key=lambda a: a.get("first_seen", ""), reverse=True)
+    stats = compute_stats(cumulative)
 
     save_json_file(ALERTS_PATH, cumulative)
     save_json_file(SEEN_PATH, sorted(seen_ids))
     save_json_file(NEW_ALERTS_PATH, new_alerts)
+    save_json_file(STATS_PATH, stats)
 
     print(f"Wrote {len(cumulative)} total alerts to {ALERTS_PATH}")
     print(f"Wrote {len(new_alerts)} NEW alerts to {NEW_ALERTS_PATH}")
+    print(f"Wrote stats to {STATS_PATH}: {stats}")
 
     # Emit for GitHub Actions step output
     gh_output = os.environ.get("GITHUB_OUTPUT")

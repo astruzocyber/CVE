@@ -72,3 +72,10 @@ require_kev_or_high_epss: false
 
 # EPSS threshold used only when require_kev_or_high_epss is true.
 epss_high_threshold: 0.5
+
+# GitHub Security Advisories (GHSA) package names to check via the /advisories?affects=
+# endpoint. This covers OPEN-SOURCE ECOSYSTEM PACKAGES (npm, PyPI, Go, Maven, RubyGems,
+# etc.) and is often faster than NVD for library-level CVEs. These must be exact package
+# names as published to their ecosystem (e.g. "lodash", "django", "log4j-core"), NOT
+# vendor/product pairs. Left empty by default -- add real package names you depend on.
+ghsa_packages: []

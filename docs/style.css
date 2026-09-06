@@ -45,6 +45,36 @@ header h1 {
   font-size: 0.8rem;
 }
 
+.stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  min-width: 90px;
+}
+
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.stat-critical .stat-value,
+.stat-ransomware .stat-value { color: var(--red); }
+.stat-overdue .stat-value { color: var(--orange); }
+.stat-kev .stat-value { color: var(--yellow); }
+
 main {
   max-width: 1200px;
   margin: 0 auto;
@@ -76,6 +106,20 @@ main {
   background: var(--bg-panel);
   color: var(--text);
   font-size: 0.9rem;
+}
+
+.controls button {
+  padding: 9px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.controls button:hover {
+  background: rgba(79, 157, 255, 0.12);
 }
 
 .count {
@@ -134,6 +178,38 @@ main {
 .badge.medium { background: rgba(255, 217, 61, 0.15); color: var(--yellow); border: 1px solid var(--yellow); }
 .badge.low { background: rgba(87, 204, 153, 0.15); color: var(--green); border: 1px solid var(--green); }
 .badge.source { background: rgba(79, 157, 255, 0.15); color: var(--accent); border: 1px solid var(--accent); }
+.badge.ransomware { background: rgba(255, 92, 92, 0.35); color: #fff; border: 1px solid var(--red); }
+.badge.overdue { background: rgba(255, 169, 77, 0.3); color: #fff; border: 1px solid var(--orange); }
+
+.risk-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.risk-bar-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 4px;
+  background: var(--bg-panel);
+  overflow: hidden;
+}
+
+.risk-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.risk-bar-fill.critical { background: var(--red); }
+.risk-bar-fill.high { background: var(--orange); }
+.risk-bar-fill.medium { background: var(--yellow); }
+.risk-bar-fill.low { background: var(--green); }
+
+.risk-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
 
 .description {
   font-size: 0.88rem;
@@ -190,3 +266,10 @@ footer {
 }
 
 footer a { color: var(--accent); }
+
+.methodology {
+  max-width: 800px;
+  margin: 10px auto 0;
+  color: var(--text-dim);
+  opacity: 0.85;
+}

@@ -1,0 +1,21 @@
+# Accepted-risk / suppression list for the vulnerability dashboard.
+#
+# Use this when a human analyst has reviewed an alert and determined it does not apply
+# (wrong platform/version, compensating control already in place, false positive, etc.)
+# Suppressed entries are excluded from docs/data/alerts.json and will not generate new
+# GitHub Issues -- but they are NOT deleted from history silently: set an `expires` date
+# so the suppression is time-boxed and the item automatically re-enters triage once that
+# date passes, rather than becoming a permanently forgotten blind spot.
+#
+# Schema (YAML list, each item requires cve_id OR ghsa_id, reason is required, expires optional):
+#
+# - cve_id: "CVE-2024-12345"
+#   reason: "Confirmed we do not run the affected module (verified 2026-01-05 by J.Smith)"
+#   expires: "2027-01-05"
+#
+# - ghsa_id: "GHSA-abcd-1234-efgh"
+#   reason: "Compensating control: WAF rule blocks the exploit vector, tracked in TICKET-123"
+#   expires: "2026-12-31"
+#
+# Leave this file as an empty list until you have real suppressions to record.
+[]

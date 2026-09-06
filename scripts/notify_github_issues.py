@@ -2,16 +2,15 @@
 """
 scripts/notify_github_issues.py
 
-Reads data/new_alerts.json (produced by scripts/aggregate.py in the same job) and opens
-one GitHub Issue per new alert, with a triage checklist. Uses the built-in
-GITHUB_TOKEN (via GH_REPO_TOKEN env, typically secrets.GITHUB_TOKEN in the workflow --
-no extra secret needed for this channel).
+Reads docs/data/new_alerts.json (produced by scripts/aggregate.py in the same job) and
+opens one GitHub Issue per new alert, with a risk-based priority label and a triage
+checklist. Uses the built-in GITHUB_TOKEN -- no extra secret needed for this channel.
 
-Idempotent by design: it only ever reads data/new_alerts.json, which aggregate.py
-already filtered down to alerts not present in data/seen_ids.json. If this script fails
-partway, the alerts are already marked "seen" so they won't be re-issued next run --
-that's an accepted tradeoff to avoid duplicate issues at the cost of possibly missing a
-notification on rare failure (visible in the Action run logs either way).
+Idempotent by design: it only ever reads docs/data/new_alerts.json, which aggregate.py
+already filtered down to alerts not present in docs/data/seen_ids.json. If this script
+fails partway, the alerts are already marked "seen" so they won't be re-issued next run
+-- that's an accepted tradeoff to avoid duplicate issues at the cost of possibly missing
+a notification on rare failure (visible in the Action run logs either way).
 """
 import json
 import os
@@ -43,6 +42,22 @@ def severity_label(cvss):
     return "severity-low"
 
 
+def priority_label(risk_score):
+    """Priority is driven by the composite risk score (CVSS+EPSS+KEV), not raw CVSS
+    alone -- a CVSS 7.0 CVE that is actively exploited (KEV) and has high EPSS should
+    outrank a theoretical CVSS 9.8 nobody is exploiting. This is what a working triage
+    queue should optimize for."""
+    if risk_score is None:
+        return "priority-unknown"
+    if risk_score >= 75:
+        return "priority-p0-urgent"
+    if risk_score >= 50:
+        return "priority-p1-high"
+    if risk_score >= 25:
+        return "priority-p2-medium"
+    return "priority-p3-low"
+
+
 def build_issue_body(alert):
     kev_line = "Yes (CISA Known Exploited Vulnerabilities catalog)" if alert.get("kev") else "No"
     epss = alert.get("epss_score")
@@ -50,19 +65,30 @@ def build_issue_body(alert):
     affected = ", ".join(alert.get("affected", [])) or "n/a"
     keywords = ", ".join(alert.get("matched_keywords", [])) or "n/a"
     dependabot_url = alert.get("dependabot_url")
+    risk = alert.get("risk_score")
 
     lines = [
         f"**CVE:** {alert.get('cve_id', 'unknown')}",
+        f"**Composite risk score:** {risk if risk is not None else 'n/a'}/100 "
+        f"(35% CVSS + 40% EPSS + 25% KEV bonus -- see dashboard footer for methodology)",
         f"**Source:** {alert.get('source', 'unknown')}",
         f"**CVSS score:** {alert.get('cvss_score', 'n/a')} ({alert.get('cvss_version', 'n/a')})",
         f"**EPSS score:** {epss_line}",
         f"**In CISA KEV:** {kev_line}",
+    ]
+    if alert.get("kev"):
+        lines.append(f"**KEV remediation due date:** {alert.get('kev_due_date', 'n/a')}")
+        if alert.get("kev_ransomware_use"):
+            lines.append("**Known ransomware campaign use:** YES -- treat as urgent")
+        if alert.get("kev_required_action"):
+            lines.append(f"**CISA required action:** {alert.get('kev_required_action')}")
+    lines += [
         f"**Affected vendor/product:** {affected}",
         f"**Matched keywords:** {keywords}",
         f"**Published:** {alert.get('published', 'n/a')}",
     ]
     if dependabot_url:
-        lines.append(f"**Dependabot alert:** {dependabot_url}")
+        lines.append(f"**Advisory/alert link:** {dependabot_url}")
     lines += [
         "",
         "**Description:**",
@@ -74,6 +100,9 @@ def build_issue_body(alert):
         "- [ ] Check for available patch / upgrade path",
         "- [ ] Assess exploitability in our environment (network exposure, auth required, etc.)",
         "- [ ] Patch or mitigate",
+        "- [ ] If not applicable, add to config/suppressions.yaml with a reason + expiry "
+        "rather than just closing this issue, so it does not silently resurface as a "
+        "false \"new\" alert",
         "- [ ] Close this issue once resolved",
     ]
     return "\n".join(lines)
@@ -120,15 +149,26 @@ def main():
         print("No new alerts to notify.")
         return
 
+    # Highest composite risk first, so if the run is interrupted partway, the most
+    # urgent issues were the ones already created.
+    alerts.sort(key=lambda a: a.get("risk_score") or 0, reverse=True)
+
     print(f"Opening {len(alerts)} GitHub issue(s) for new alerts...")
     for alert in alerts:
         cve_id = alert.get("cve_id", "UNKNOWN")
         kev_tag = " [KEV]" if alert.get("kev") else ""
-        title = f"[VULN ALERT] {cve_id}{kev_tag} - {', '.join(alert.get('affected', [])) or alert.get('source')}"
+        ransomware_tag = " [RANSOMWARE]" if alert.get("kev_ransomware_use") else ""
+        risk = alert.get("risk_score")
+        risk_tag = f" (risk {risk})" if risk is not None else ""
+        title = (f"[VULN ALERT] {cve_id}{kev_tag}{ransomware_tag}{risk_tag} - "
+                 f"{', '.join(alert.get('affected', [])) or alert.get('source')}")
         body = build_issue_body(alert)
-        labels = ["vulnerability-alert", severity_label(alert.get("cvss_score"))]
+        labels = ["vulnerability-alert", severity_label(alert.get("cvss_score")),
+                   priority_label(alert.get("risk_score"))]
         if alert.get("kev"):
             labels.append("kev")
+        if alert.get("kev_ransomware_use"):
+            labels.append("ransomware")
         create_issue(repo, token, title, body, labels)
 
 
