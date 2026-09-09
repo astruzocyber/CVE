@@ -15,6 +15,7 @@ a notification on rare failure (visible in the Action run logs either way).
 import json
 import os
 import sys
+import time
 import urllib.request
 import urllib.error
 
@@ -109,32 +110,49 @@ def build_issue_body(alert):
 
 
 def create_issue(repo, token, title, body, labels):
+    """Create a GitHub Issue with retry/backoff on 429/5xx, mirroring the same
+    3-attempt exponential-backoff pattern used throughout scripts/aggregate.py
+    for CISA KEV/NVD/EPSS/Dependabot/GHSA. Without this, a transient rate-limit
+    or 5xx from the Issues API would silently drop a vulnerability notification
+    for the rest of the run with no retry -- the exact failure mode already
+    fixed for every data-fetch call, but previously left unaddressed here."""
     url = f"{GITHUB_API}/repos/{repo}/issues"
     payload = json.dumps({"title": title, "body": body, "labels": labels}).encode()
-    req = urllib.request.Request(
-        url,
-        data=payload,
-        method="POST",
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Accept": "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28",
-            "Content-Type": "application/json",
-        },
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            data = json.loads(resp.read().decode())
-            print(f"  Created issue #{data.get('number')}: {title}")
-            return True
-    except urllib.error.HTTPError as e:
-        body_text = ""
+    last_err = None
+    for attempt in range(3):
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            method="POST",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Accept": "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28",
+                "Content-Type": "application/json",
+            },
+        )
         try:
-            body_text = e.read().decode()
-        except Exception:
-            pass
-        print(f"  ERROR creating issue for {title}: HTTP {e.code} {body_text[:300]}", file=sys.stderr)
-        return False
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = json.loads(resp.read().decode())
+                print(f"  Created issue #{data.get('number')}: {title}")
+                return True
+        except urllib.error.HTTPError as e:
+            last_err = e
+            body_text = ""
+            try:
+                body_text = e.read().decode()
+            except Exception:
+                pass
+            if e.code == 429 or e.code >= 500:
+                wait = 5 * (attempt + 1)
+                print(f"  Issue creation HTTP {e.code} for {title}, retrying in {wait}s "
+                      f"(attempt {attempt + 1}/3)...", file=sys.stderr)
+                time.sleep(wait)
+                continue
+            print(f"  ERROR creating issue for {title}: HTTP {e.code} {body_text[:300]}", file=sys.stderr)
+            return False
+    print(f"  ERROR creating issue for {title} after 3 attempts: {last_err}", file=sys.stderr)
+    return False
 
 
 def main():
