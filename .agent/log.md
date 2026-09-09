@@ -169,3 +169,49 @@ and was implemented.
 Not stopped. Next cycle in ~30 minutes.
 
 ---
+
+## Cycle 4 — 2026-09-09T03:52:00Z
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions runs
+(all `completed`/`success`, 52s-1m16s runtimes, including one scheduled run).
+No warnings/errors/429/throttle signals found excluding benign Node 20
+deprecation noise. All sources (CISA KEV, NVD, FIRST.org EPSS, GHSA,
+Dependabot) healthy.
+
+**Implemented:** Accessibility labels/aria-attributes on the dashboard's
+filter controls (`docs/index.html`, `docs/app.js`, `docs/style.css`). The
+search input and three `<select>` filters (KEV status, source, sort order)
+had no accessible name beyond a visual placeholder; the per-card
+"breakdown" toggle button never announced expanded/collapsed state. Added
+visually-hidden `<label>`s (new `.visually-hidden` CSS utility, standard
+clip-based off-screen pattern) paired with `aria-label` on each control,
+`role="status"` on the empty-state message, `aria-live="polite"` on the
+result count, and `aria-expanded` wired to the breakdown toggle's actual
+state. Scored 5/5/5: zero-cost (pure static markup/CSS/JS, no new
+dependency, no API calls), low validation risk (purely additive attributes,
+no visual change), decent value (screen-reader usability was previously
+untested and had real gaps on a public dashboard).
+
+Validation performed: `node --check docs/app.js` passed. Served `docs/` on
+local port 8791, loaded in browser tool, screenshotted card grid — cards,
+badges, breakdown toggles all render identically to before (visually-hidden
+labels are off-screen, no layout change confirmed). No Python files changed,
+so no pipeline backup/re-run was needed for this cycle.
+
+Committed as `23a0e81`, pushed to main. Frontend-only change, so no
+`cve-alerts.yml` workflow run needed — GitHub Pages redeploys `docs/`
+automatically on push to main. Waited ~40s, curled the live URLs:
+`https://astruzocyber.github.io/CVE/` → 200, `/app.js` → 200, `/style.css`
+→ 200, and confirmed `aria-label` count in the live `index.html` matches the
+local version (4). Loaded the LIVE dashboard in the browser tool and
+screenshotted: stats bar, historical trend chart, and filter section all
+render correctly with real production data (436 total alerts, 101 critical,
+1 in KEV). Live verification passed; no revert needed.
+
+**Rejected this cycle:** none — the one candidate identified cleared the bar
+and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles = 0/3.
+Not stopped. Next cycle in ~30 minutes.
+
+---

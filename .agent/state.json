@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 3,
+  "total_cycles": 4,
   "implemented": [
     {
       "cycle": 1,
@@ -23,9 +23,16 @@
       "title": "Retry with backoff on GHSA advisories fetch",
       "description": "fetch_ghsa_advisories() was the last remaining external HTTP call in the pipeline still making a single bare attempt per package, after cycles 1-2 already added the same 3-attempt exponential-backoff pattern to fetch_kev()/nvd_query()/fetch_epss()/fetch_dependabot_alerts(). Even though ghsa_packages is currently empty in config/watchlist.yaml (so the function is a no-op today), it's live production code that will run the instant the user adds a package name, and leaving it as the sole unretried call was an inconsistency waiting to bite silently. Added the identical 429/5xx-retried, other-HTTP-errors-logged-and-skipped pattern used everywhere else in the file. Zero new dependencies, zero added call volume under normal conditions (retries only fire on actual transient failure), completes the reliability layer across every external source the pipeline touches.",
       "commit_sha": "d92b1de"
+    },
+    {
+      "cycle": 4,
+      "timestamp": "2026-09-09T03:52:00Z",
+      "title": "Frontend accessibility: labels and aria-attributes on filter controls",
+      "description": "The dashboard's search input, three select filters (KEV status, source, sort order), and the per-card risk-score breakdown toggle button had no accessible name for screen readers -- inputs relied only on a visual placeholder and unlabeled <select> elements, and the toggle button never communicated its expanded/collapsed state via aria-expanded. Added a <label class=\"visually-hidden\"> (new CSS utility class, standard clip-based visually-hidden pattern) paired with each control plus matching aria-label attributes, added role=\"status\" to the empty-state message and aria-live=\"polite\" to the result count so screen-reader users get live updates on filter changes, and wired aria-expanded=\"true\"/\"false\" on the score-breakdown toggle button so its state is announced. Pure frontend markup/CSS change, zero new dependencies, zero risk to data pipeline or existing functionality -- purely additive attributes with no visual change (visually-hidden labels are clipped off-screen).",
+      "commit_sha": "23a0e81"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T03:20:57Z",
+  "last_cycle_at": "2026-09-09T03:52:00Z",
   "stopped": false
 }
