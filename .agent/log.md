@@ -994,3 +994,56 @@ implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 20 — 2026-09-09 (approx, this run)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs -- all `completed`/`success` (12:12:53Z, 08:10:54Z, 05:10:29Z,
+04:29:29Z, 04:10:07Z). No 429/throttle signals seen (checked latest run
+log, only benign Node 20 deprecation warning). All sources
+(NVD/EPSS/KEV/GHSA/Dependabot) healthy going into this cycle.
+
+**Implemented:** Added a severity (CVSS band) filter dropdown. The
+`severityClass()` helper has computed critical/high/medium/low CVSS
+bands since early cycles (used for card border color/badges) but there
+was no way to filter the board by severity band -- only KEV status and
+source had dropdowns, forcing a viewer to scan visually or use CVSS sort
+to isolate e.g. just critical-severity alerts. Added a `#severity-filter`
+`<select>` to `docs/index.html` (all/critical/high/medium/low, mirroring
+the existing thresholds: CVSS >=9, 7-8.9, 4-6.9, <4) and matching filter
+logic in `applyFiltersAndRender()` in `docs/app.js`, reusing the existing
+`severityClass()` helper unchanged (no new scoring logic). Composes with
+the existing URL-query-param sharing (cycle 7) via a new `sev=` param,
+so a filtered severity view is itself shareable/bookmarkable, and stacks
+with the dependency-file filter, KEV filter, source filter, and search.
+Pure additive frontend change: no new API calls, no backend/schema
+changes, zero cost.
+
+Validation performed: `node --check docs/app.js` passed; `index.html`
+parsed cleanly via Python's `html.parser`. Served `docs/` on scratch
+port 8933 with real production data (445 alerts). Loaded in the browser
+tool: selected severity `critical`, verified `window.__lastFiltered`
+count (101) matched a manual count of `allAlerts` with `severityClass()
+=== "critical"` (101), confirmed URL updated to `?sev=critical`. Reset
+to `all`, confirmed "445 of 445 alerts" still reads correctly (no
+regression) and URL param cleared. Reloaded with `?sev=high` in the URL
+directly (fresh navigation, not just hash change) and confirmed the
+select correctly pre-populated to `high` and the count read "344 of 445
+alerts" -- URL-param-on-load path works. Screenshot confirmed normal
+dashboard rendering (stats bar, trend chart, source-breakdown pill, no
+layout break).
+
+Committed as `05eaa1e`, pushed to main. Pure frontend change with zero
+pipeline/data impact -- did not trigger `cve-alerts.yml`. Waited 45s for
+GitHub Pages redeploy, confirmed via `curl` that live `app.js` contains
+3 occurrences of `severity-filter` and both `index.html`/`app.js` return
+HTTP 200. Loaded the LIVE dashboard in the browser tool: selected
+`critical`, confirmed "101 of 445 alerts" and URL updated to
+`?sev=critical` -- matches local validation exactly, no regression to
+stats bar/trend chart. Live verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (severity
+filter dropdown) cleared the bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.

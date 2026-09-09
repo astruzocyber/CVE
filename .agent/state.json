@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 19,
+  "total_cycles": 20,
   "implemented": [
     {
       "cycle": 1,
@@ -135,9 +135,16 @@
       "title": "Add 'First seen' age badge and 'Oldest first' triage-backlog sort",
       "description": "Every alert card already showed 'Published' (vendor/NVD publish date) but had no way to answer 'how long has our team known about this' -- a distinct triage-aging question, since first_seen (set once on first ingestion, never touched by score-refresh cycles) can differ from Published by years for old CVEs that only start matching the watchlist later. Added a firstSeenAge() helper computing whole days since first_seen, rendered as a small 'First seen: Nd ago' badge in the card footer, plus a new 'Sort: Oldest first (triage backlog)' option in the existing #sort-by dropdown so a security lead can surface long-lingering un-triaged alerts that the default newest-first sort keeps pushing off-screen. Pure additive frontend change: no new API calls, no backend/schema changes (first_seen already existed in alerts.json), zero cost. Adjusted .card-footer CSS to flex-wrap with gap since it now holds 3 elements instead of 2.",
       "commit_sha": "8d2cda2"
+    },
+    {
+      "cycle": 20,
+      "timestamp": "2026-09-09T13:15:00Z",
+      "title": "Add severity (CVSS band) filter dropdown",
+      "description": "severityClass() has computed critical/high/medium/low CVSS bands since early cycles (used for card border color) but there was no way to filter the board by severity band -- only KEV status and source had dropdowns. Added a #severity-filter <select> to docs/index.html (all/critical/high/medium/low, mirroring the existing severityClass() thresholds: >=9, 7-8.9, 4-6.9, <4) and matching filter logic in applyFiltersAndRender() in docs/app.js, reusing the existing severityClass() helper unchanged. Composes with the existing URL-query-param sharing (cycle 7) via a new sev= param, so a filtered severity view is itself shareable/bookmarkable, and with the dependency-file filter and search. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost.",
+      "commit_sha": "05eaa1e"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T12:42:24Z",
+  "last_cycle_at": "2026-09-09T13:15:00Z",
   "stopped": false
 }
