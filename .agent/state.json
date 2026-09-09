@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 35,
+  "total_cycles": 36,
   "implemented": [
     {
       "cycle": 1,
@@ -247,9 +247,16 @@
       "title": "Print/PDF stylesheet and Print button for triage reports",
       "description": "The dashboard had zero @media print rules despite being a security-team triage tool likely to be printed or exported as PDF for leadership/compliance handoff -- printing the raw dark theme would dump an unreadable, ink-wasting, interactive-controls-included page. Added a print stylesheet (docs/style.css) converting to light bg/dark text, hiding non-essential UI (toolbar/filters, dependency-file uploader, trend chart canvas, stale banner), expanding the risk-score breakdown inline (visible without clicking), badges/pills recolored to print-safe outlines, and preventing cards from splitting across page breaks (break-inside: avoid). Added a visible 'Print / PDF' button (docs/index.html) next to Export CSV that calls window.print() (itself correctly hidden in the print view via .controls). Pure additive CSS/HTML/JS -- zero new API calls, zero backend/schema changes, zero cost. Validated locally via CDP print-media emulation (Emulation.setEmulatedMedia) on real production data (516 alerts): confirmed body background/text flipped to light/dark, .controls hidden, .score-breakdown expanded, stale-banner hidden, card-grid single-column, all correctly gated to print media only (screen rendering unaffected, confirmed body bg reverted to dark and existing search filter still worked: wordpress 516->132->516). Live-verified on production: print-view button and @media print rules confirmed present in deployed app.js/style.css/index.html.",
       "commit_sha": "ce17ca5"
+    },
+    {
+      "cycle": 36,
+      "timestamp": "2026-09-09T23:41:03.334258+00:00",
+      "title": "Add Total KEV count and KEV ransomware-use count as opt-in trend chart datasets",
+      "description": "docs/data/history/trend.csv has recorded kev_count (column 3) and kev_ransomware_count (column 5) every run since cycle-1-era history tracking began, but loadTrendChart() in docs/app.js only ever parsed/plotted columns 1 (total_alerts, added cycle 26), 4 (kev_overdue_count), and 6 (avg_epss) -- the raw KEV catalog membership trend and ransomware-actively-exploited trend were invisible even though the CSV columns were already being fetched and parsed on every load. Added two more opt-in (hidden:true by default, matching cycle 26's precedent for 'Total tracked alerts') Chart.js datasets: 'Total KEV count' and 'KEV ransomware-use count', both bound to the existing hidden y2 axis so they don't visually compete with the two default-visible labeled axes (KEV overdue count / Avg EPSS). Default view is byte-for-byte visually identical to before; a viewer opts in by clicking the legend item. Pure additive frontend change: no new API calls, no backend/schema changes (both columns already existed in trend.csv), zero cost.",
+      "commit_sha": "3dfd577"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T23:07:03.022678+00:00",
+  "last_cycle_at": "2026-09-09T23:41:03.334258+00:00",
   "stopped": false
 }

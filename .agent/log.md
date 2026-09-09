@@ -1528,3 +1528,30 @@ input debounce) cleared the bar and was implemented.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 35. `stopped`: false.
+
+## Cycle 36 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded, no 429/throttle signals from NVD/EPSS/GHSA/CISA/Dependabot in Actions logs, only benign Node 20 runner deprecation noise. State was clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add `Total KEV count` and `KEV ransomware-use count` as opt-in (hidden-by-default) datasets on the historical trend chart.
+
+- **Opportunity:** Auditing `loadTrendChart()` against `docs/data/history/trend.csv`'s actual columns found `kev_count` (column 3) and `kev_ransomware_count` (column 5) have been written to the CSV every run since early cycles, but only 3 of the 6 columns (`total_alerts` since cycle 26, `kev_overdue_count`, `avg_epss`) were ever parsed/plotted — the raw KEV catalog membership trend and ransomware-actively-exploited trend were invisible despite the data already being fetched client-side on every page load.
+- **Frontend:** Added `kevCount`/`kevRansomware` array parsing (same null-safe pattern as existing columns) and two new Chart.js datasets, both `hidden: true` by default (mirroring cycle 26's precedent for "Total tracked alerts") and bound to the existing hidden `y2` axis so they never visually compete with the two default-visible labeled axes. Default rendered view is unchanged; a viewer opts in via the Chart.js legend.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure client-side parse of already-fetched CSV columns, zero new dependencies, zero new API/network calls). Validation risk 1/5 (additive datasets only, `hidden:true` guarantees zero default-view visual change, existing datasets/axes untouched). Value 2/5 (real signal previously silently discarded — KEV membership growth and ransomware-exploited-KEV trend are meaningful for a security-team triage tool — same category as cycle 26's original trend-chart enrichment).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. No `aggregate.py`/schema changes — `git status --short` confirmed only `docs/app.js` touched, so no data-pipeline dry-run/backup/restore cycle was needed.
+- Served `docs/` on a local scratch port (8933) with real production data (516 alerts, 16 trend.csv rows). Used the browser tool to inspect the live Chart.js instance via `Chart.getChart()`: confirmed all 5 dataset labels present (`Total tracked alerts`, `Total KEV count`, `KEV overdue count`, `KEV ransomware-use count`, `Avg EPSS (%)`) with correct hidden flags (`[true, true, false, true, false]` — only the two originally-visible datasets remain visible by default). Confirmed stats bar and card grid unaffected (516/516 alerts, `stat-total`: 516).
+
+**Deploy (Step 5):**
+- Committed (`3dfd577`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~60s for Pages deployment, curled `https://astruzocyber.github.io/CVE/app.js` — 200 OK, confirmed `KEV ransomware-use count` string present live.
+- Loaded the LIVE dashboard in the browser tool with a fresh cache-busted navigation: confirmed `stat-total`: 516, `result-count`: "516 of 516 alerts", and the live Chart.js instance exposes all 5 expected dataset labels in the correct order — zero regression.
+
+**Rejected this cycle:** None — the trend-chart dataset-parity candidate cleared the bar on first pass (feasibility 5/5, validation risk 1/5, value 2/5) and was implemented.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 36. `stopped`: false.
