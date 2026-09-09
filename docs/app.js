@@ -150,6 +150,12 @@ function renderCard(alert) {
       }).join("")}</div>`
     : "";
   const epssPct = typeof alert.epss_score === "number" ? (alert.epss_score * 100).toFixed(1) + "%" : "n/a";
+  const epssPercentileTitle = typeof alert.epss_percentile === "number"
+    ? ` title="Higher than ${(alert.epss_percentile * 100).toFixed(0)}% of all scored CVEs (EPSS percentile)"`
+    : "";
+  const epssPercentileHtml = typeof alert.epss_percentile === "number"
+    ? ` <span class="epss-percentile"${epssPercentileTitle}>(top ${(100 - alert.epss_percentile * 100).toFixed(0)}%)</span>`
+    : "";
   const riskVal = typeof alert.risk_score === "number" ? alert.risk_score.toFixed(0) : "n/a";
   const b = alert.risk_score_breakdown;
   const breakdownHtml = b ? `
@@ -178,7 +184,7 @@ function renderCard(alert) {
       <div class="description">${escapeHtml(alert.description || "(no description)")}</div>
       <div class="scores">
         <span>CVSS: <strong>${fmtScore(alert.cvss_score)}</strong></span>
-        <span>EPSS: <strong>${epssPct}</strong></span>
+        <span>EPSS: <strong>${epssPct}</strong>${epssPercentileHtml}</span>
         ${alert.kev_due_date ? `<span>KEV due: <strong>${escapeHtml(alert.kev_due_date)}</strong></span>` : ""}
       </div>
       <div class="affected">Affected: ${escapeHtml(affected)}</div>
@@ -412,12 +418,12 @@ function toCsvRow(fields) {
 
 function exportCsv() {
   const rows = window.__lastFiltered || allAlerts;
-  const header = ["cve_id", "risk_score", "cvss_score", "epss_score", "kev", "kev_due_date",
+  const header = ["cve_id", "risk_score", "cvss_score", "epss_score", "epss_percentile", "kev", "kev_due_date",
     "kev_ransomware_use", "source", "affected", "cwe_ids", "published", "first_seen", "description"];
   const lines = [toCsvRow(header)];
   for (const a of rows) {
     lines.push(toCsvRow([
-      a.cve_id, a.risk_score, a.cvss_score, a.epss_score, a.kev, a.kev_due_date,
+      a.cve_id, a.risk_score, a.cvss_score, a.epss_score, a.epss_percentile, a.kev, a.kev_due_date,
       a.kev_ransomware_use, a.source, (a.affected || []).join("; "), (a.cwe_ids || []).join("; "),
       a.published, a.first_seen, a.description,
     ]));
