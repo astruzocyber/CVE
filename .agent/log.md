@@ -745,3 +745,48 @@ magnitude on the OVERDUE badge) cleared the bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 15 — 2026-09-09T10:26:00Z (approx)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs -- all `completed`/`success` (08:10:54Z, 05:10:29Z, 04:29:29Z,
+04:10:07Z, 03:20:57Z). Grepped the latest run's log for warning/error/
+traceback/429/throttle (excluding known Node deprecation noise) -- clean,
+only benign Node20-deprecation warnings from GitHub-owned actions. No
+429/throttle signal from NVD/EPSS/KEV/GHSA/Dependabot. All sources healthy
+going into this cycle.
+
+**Implemented:** Surfaced `stats.by_source` (e.g. `{"nvd": 440}`) as a row
+of small pills under the stats bar. `compute_stats()` in `aggregate.py` has
+computed this field since early cycles, but it was never rendered on the
+dashboard -- a viewer had no quick way to see the source mix (is this
+mostly NVD sweep noise, or are GHSA/Dependabot actually contributing?)
+without exporting CSV and counting manually. Added `renderSourceBreakdown()`
+to `docs/app.js` (called from the existing `loadStats()`), a new
+`#source-breakdown` div in `docs/index.html`, and `.source-breakdown`/
+`.source-pill` rules in `docs/style.css`. Pure additive frontend change
+reading an existing stats.json field: zero new API calls, zero backend/
+schema changes, zero cost.
+
+Validation performed: `node --check docs/app.js` passed. Served `docs/`
+locally on scratch port 8817 with real production data (440 alerts),
+loaded in the browser tool: confirmed the pill rendered as "nvd: 440",
+confirmed zero regression to the stats bar, historical trend chart, and
+search filter (`wordpress` query still correctly narrowed 440->125 alerts).
+
+Committed as `458143a`, pushed to main. Pure frontend change with zero
+pipeline/data impact -- did not trigger `cve-alerts.yml` (no reason to
+consume Actions minutes for a change that can't affect production data).
+Waited 45s for GitHub Pages redeploy, confirmed via `curl` that live
+`app.js`/`index.html` both return HTTP 200 and contain the new
+`renderSourceBreakdown`/`source-breakdown` identifiers. Loaded the LIVE
+dashboard at `https://astruzocyber.github.io/CVE/` in the browser tool:
+confirmed `#source-breakdown` is populated with "nvd: 440" and the result
+count still reads "440 of 440 alerts" -- no regression. Live verification
+passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (by-source
+breakdown pills) cleared the bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.
