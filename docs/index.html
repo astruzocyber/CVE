@@ -115,6 +115,10 @@
       Exploited Vulnerabilities catalog, capped at 100. This weights real-world
       exploitation signal above theoretical severity and is a local heuristic, not an
       industry-standard score -- use it to triage order, not as a sole go/no-go gate.
+      If CVSS or EPSS is not yet published for a CVE, that component's weight is
+      redistributed proportionally across the remaining known components rather than
+      scored as zero, so missing data never masquerades as "not severe" / "won't be
+      exploited" -- look for the redistribution note in a card's breakdown panel.
       Every external API response is schema-validated before use; on an unexpected
       shape the pipeline logs a warning and skips that data rather than guessing.
       Click "breakdown" on any card to see the exact CVSS/EPSS/KEV components behind

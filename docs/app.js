@@ -115,10 +115,11 @@ function renderCard(alert) {
   const b = alert.risk_score_breakdown;
   const breakdownHtml = b ? `
       <div class="score-breakdown" hidden>
-        <div class="breakdown-row"><span>CVSS ${fmtScore(b.cvss_raw)} &times; 35%</span><span>= ${fmtScore(b.cvss_component)} pts</span></div>
-        <div class="breakdown-row"><span>EPSS ${typeof b.epss_raw === "number" ? (b.epss_raw * 100).toFixed(1) + "%" : "n/a"} &times; 40%</span><span>= ${fmtScore(b.epss_component)} pts</span></div>
-        <div class="breakdown-row"><span>KEV bonus</span><span>= ${fmtScore(b.kev_bonus)} pts</span></div>
+        <div class="breakdown-row"><span>CVSS ${fmtScore(b.cvss_raw)} &times; ${b.cvss_weight || "35%"}</span><span>= ${fmtScore(b.cvss_component)} pts</span></div>
+        <div class="breakdown-row"><span>EPSS ${typeof b.epss_raw === "number" ? (b.epss_raw * 100).toFixed(1) + "%" : "n/a"} &times; ${b.epss_weight || "40%"}</span><span>= ${fmtScore(b.epss_component)} pts</span></div>
+        <div class="breakdown-row"><span>${b.kev_weight || "KEV bonus"}</span><span>= ${fmtScore(b.kev_bonus)} pts</span></div>
         <div class="breakdown-row breakdown-total"><span>Total${b.capped ? " (capped at 100)" : ""}</span><span>= ${riskVal} pts</span></div>
+        ${b.weight_redistributed ? `<div class="breakdown-note">Note: CVSS/EPSS weight was redistributed because one score is not yet available for this CVE.</div>` : ""}
       </div>` : "";
   const toggleBtn = b ? `<button class="score-toggle" type="button" title="Show risk score breakdown" aria-expanded="false">breakdown &#9662;</button>` : "";
 

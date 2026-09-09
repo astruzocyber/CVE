@@ -636,21 +636,47 @@ def composite_risk_score(cvss, epss_score, in_kev):
     above raw theoretical severity (CVSS). Documented in the module docstring
     and the dashboard footer -- never presented as an official/standard score.
     Returns (total, breakdown_dict) so callers can surface the exact components
-    that produced the number instead of a black box -- score transparency."""
-    cvss_component = round((cvss / 10.0) * 35, 1) if cvss is not None else 0.0
-    epss_component = round((epss_score or 0) * 40, 1)
-    kev_component = 25.0 if in_kev else 0.0
+    that produced the number instead of a black box -- score transparency.
+
+    Missing-data handling: previously a missing CVSS or EPSS score was silently
+    treated as 0 (i.e. "definitely not severe" / "definitely won't be
+    exploited"), which is a materially different claim than "we don't know" --
+    and could artificially deflate risk_score by up to 35 or 40 points for a
+    CVE that simply hasn't been scored yet by NVD/FIRST.org (112/445 currently-
+    tracked alerts are missing epss_score as of this change). Now, when a
+    component's raw input is None, its weight is redistributed proportionally
+    across the remaining *available* components (CVSS 35%, EPSS 40%, KEV flat
+    25%) rather than counted as zero, so a CVE's score reflects only the
+    signal actually known about it. KEV status is a lookup against a fixed
+    public catalog, never "unknown" (only True/False), so kev_component
+    itself is never missing -- only its share of the weight pool changes.
+    """
+    have_cvss = cvss is not None
+    have_epss = epss_score is not None
+    base_weights = {"cvss": 35.0 if have_cvss else 0.0,
+                     "epss": 40.0 if have_epss else 0.0,
+                     "kev": 25.0}
+    available_weight = sum(base_weights.values())
+    # available_weight is always >= 25 (kev's weight always counts), so this
+    # never divides by zero.
+    scale = 100.0 / available_weight
+
+    cvss_component = round((cvss / 10.0) * base_weights["cvss"] * scale, 1) if have_cvss else 0.0
+    epss_component = round((epss_score or 0) * base_weights["epss"] * scale, 1) if have_epss else 0.0
+    kev_component = round(base_weights["kev"] * scale, 1) if in_kev else 0.0
     total = round(min(100, cvss_component + epss_component + kev_component), 1)
+    redistributed = not (have_cvss and have_epss)
     breakdown = {
         "cvss_raw": cvss,
         "cvss_component": cvss_component,
-        "cvss_weight": "35% of (CVSS/10)",
+        "cvss_weight": f"{round(base_weights['cvss'] * scale, 1)}% of (CVSS/10)" if have_cvss else "n/a (missing)",
         "epss_raw": epss_score,
         "epss_component": epss_component,
-        "epss_weight": "40% of EPSS probability",
+        "epss_weight": f"{round(base_weights['epss'] * scale, 1)}% of EPSS probability" if have_epss else "n/a (missing)",
         "kev_bonus": kev_component,
-        "kev_weight": "flat +25 if in CISA KEV",
+        "kev_weight": f"flat +{round(base_weights['kev'] * scale, 1)} if in CISA KEV",
         "capped": (cvss_component + epss_component + kev_component) > 100,
+        "weight_redistributed": redistributed,
     }
     return total, breakdown
 
