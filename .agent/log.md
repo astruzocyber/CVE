@@ -892,3 +892,52 @@ filter option) cleared the bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 18 — 2026-09-09 (approx, this run)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs -- all `completed`/`success` (08:10:54Z, 05:10:29Z, 04:29:29Z,
+04:10:07Z, 03:20:57Z). No 429/throttle signals seen. All sources
+(NVD/EPSS/KEV/GHSA/Dependabot) healthy going into this cycle.
+
+**Implemented:** Added a "Sort: KEV due date (soonest first)" option to the
+existing `#sort-by` dropdown (`docs/index.html`) and matching sort branch
+in `applyFiltersAndRender()` (`docs/app.js`). Sorts by `kev_due_date`
+ascending; entries with no due date (non-KEV, or KEV with no published
+due date) are pushed to the end rather than the front, avoiding the
+classic bug where an empty/undefined string compares as "smallest" and
+would otherwise incorrectly rank non-KEV alerts as most urgent. This is
+the natural complement to cycle 16's DUE SOON badge and cycle 17's
+"KEV due soon" filter: a security lead can now filter to due-soon KEV
+entries AND sort the whole dashboard by deadline proximity in one view,
+and it composes for free with the existing URL-query-param sharing
+(writes `?sort=kev_due_date`).
+
+Validation performed: `node --check docs/app.js` passed; `index.html`
+parsed cleanly with Python's `html.parser`. Served `docs/` locally on
+scratch port 8931 with real production data (440 alerts). Loaded in the
+browser tool, confirmed the new `kev_due_date` option is present in the
+select, selected it, and verified via `window.__lastFiltered` that the
+one real alert with a KEV due date (`2026-09-18`) sorted to position 0
+and all 439 null-due-date entries followed it (non-null prefix verified
+sorted, `nonNullSorted: true`), with the URL updating to
+`?sort=kev_due_date`. Reset to the default `risk_score` sort, confirmed
+"440 of 440 alerts" still reads correctly (no regression) and the URL
+param cleared. Screenshot confirmed normal dashboard rendering (stats
+bar, trend chart, no layout break).
+
+Committed as `f6f46a8`, pushed to main. Pure frontend change with zero
+pipeline/data impact -- did not trigger `cve-alerts.yml`. Waited 40s for
+GitHub Pages redeploy, confirmed via `curl` that live `app.js` contains
+10 occurrences of `kev_due_date` (new sort logic) and `index.html`
+returns HTTP 200. Loaded the LIVE dashboard at
+`https://astruzocyber.github.io/CVE/` in the browser tool: confirmed the
+`#sort-by` select now has 6 options including `kev_due_date`, and the
+result count reads "440 of 440 alerts" -- no regression. Live
+verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (KEV
+due-date sort option) cleared the bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.
