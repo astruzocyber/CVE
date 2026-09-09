@@ -428,14 +428,25 @@ function toCsvRow(fields) {
 
 function exportCsv() {
   const rows = window.__lastFiltered || allAlerts;
+  // Columns intentionally mirror every field already rendered on the card UI --
+  // cvss_vector_components (cycle 30/31 exploitability chip), kev_required_action
+  // (cycle 27), and kev_notes (cycle 28) were added to the schema and frontend
+  // display but never carried through to CSV export, so a viewer exporting for
+  // offline reporting/compliance tracking silently lost that data even though
+  // it's visible on-screen. Purely additive columns reading existing fields --
+  // no new API calls, no schema changes, no risk to existing columns/consumers.
   const header = ["cve_id", "risk_score", "cvss_score", "epss_score", "epss_percentile", "kev", "kev_due_date",
-    "kev_ransomware_use", "source", "affected", "cwe_ids", "published", "first_seen", "description"];
+    "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
+    "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "published", "first_seen",
+    "description"];
   const lines = [toCsvRow(header)];
   for (const a of rows) {
+    const vc = a.cvss_vector_components || {};
     lines.push(toCsvRow([
       a.cve_id, a.risk_score, a.cvss_score, a.epss_score, a.epss_percentile, a.kev, a.kev_due_date,
-      a.kev_ransomware_use, a.source, (a.affected || []).join("; "), (a.cwe_ids || []).join("; "),
-      a.published, a.first_seen, a.description,
+      a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
+      vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
+      (a.cwe_ids || []).join("; "), a.published, a.first_seen, a.description,
     ]));
   }
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });
