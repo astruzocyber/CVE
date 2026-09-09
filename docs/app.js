@@ -56,6 +56,10 @@ function renderCard(alert) {
     : "";
   const sourceBadge = `<span class="badge source">${escapeHtml(alert.source || "unknown")}</span>`;
   const affected = (alert.affected || []).join(", ") || "n/a";
+  const matchedKeywords = alert.matched_keywords || [];
+  const matchedHtml = matchedKeywords.length
+    ? `<div class="matched">Watchlist match: ${matchedKeywords.map((k) => `<span class="badge match">${escapeHtml(k)}</span>`).join("")}</div>`
+    : "";
   const epssPct = typeof alert.epss_score === "number" ? (alert.epss_score * 100).toFixed(1) + "%" : "n/a";
   const riskVal = typeof alert.risk_score === "number" ? alert.risk_score.toFixed(0) : "n/a";
   const b = alert.risk_score_breakdown;
@@ -87,6 +91,7 @@ function renderCard(alert) {
         ${alert.kev_due_date ? `<span>KEV due: <strong>${escapeHtml(alert.kev_due_date)}</strong></span>` : ""}
       </div>
       <div class="affected">Affected: ${escapeHtml(affected)}</div>
+      ${matchedHtml}
       <div class="card-footer">
         <span>Published: ${fmtDate(alert.published)}</span>
         <span>${alert.dependabot_url ? `<a href="${alert.dependabot_url}" target="_blank" rel="noopener">View alert</a>` : ""}</span>
