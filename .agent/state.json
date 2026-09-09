@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 1,
+  "total_cycles": 2,
   "implemented": [
     {
       "cycle": 1,
@@ -9,9 +9,16 @@
       "title": "Retry with backoff on CISA KEV and EPSS fetch failures",
       "description": "fetch_kev() and fetch_epss() previously made a single bare HTTP attempt each, unlike nvd_query() which already retried 3x with exponential backoff. A transient network blip, 429, or 5xx from either CISA KEV or FIRST.org EPSS would silently zero out KEV status (losing the +25 risk-score bonus for every alert that run) or EPSS scores (40% of the composite risk score) for the whole run, degrading risk-score accuracy without any visible failure. Both functions now use the same 3-attempt exponential backoff pattern already established for NVD, with explicit stderr logging of each retry attempt. Zero new dependencies, zero new API calls under normal conditions (retries only fire on actual failure).",
       "commit_sha": "f4428be"
+    },
+    {
+      "cycle": 2,
+      "timestamp": "2026-09-09T02:38:03Z",
+      "title": "Retry with backoff on Dependabot Alerts API pagination fetch",
+      "description": "fetch_dependabot_alerts() was the last remaining HTTP call in the pipeline still making a single bare attempt per page, unlike fetch_kev()/nvd_query()/fetch_epss() which all already retry 3x with exponential backoff on 429/5xx/transient errors after cycles 1's fix. Because dependabot_repos includes astruzocyber/CVE itself (actively used, not a dead config path), a transient failure on any page mid-pagination would silently truncate or drop that repo's Dependabot alerts for the entire run with no retry. Added the same 3-attempt backoff pattern (429/5xx retried, other HTTP errors and exhausted retries logged and treated as end-of-pagination for that repo, matching prior behavior on unrecoverable failure). Zero new dependencies, zero added call volume under normal conditions.",
+      "commit_sha": "8e94e2d"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T02:00:00Z",
+  "last_cycle_at": "2026-09-09T02:38:03Z",
   "stopped": false
 }

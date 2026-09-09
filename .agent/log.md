@@ -56,3 +56,59 @@ and was implemented.
 Not stopped. Next cycle in ~30 minutes.
 
 ---
+
+## Cycle 2 — 2026-09-09T02:38:03Z
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions runs
+(all `completed`/`success`, 52s-1m29s runtimes). Grepped the latest run's logs
+for warnings/errors/429/throttle signals excluding known-benign Node 20
+deprecation noise — none found. All sources (CISA KEV, NVD, FIRST.org EPSS,
+GHSA, Dependabot) healthy, no backoff signals observed.
+
+**Implemented:** Retry-with-backoff on `fetch_dependabot_alerts()`'s per-page
+HTTP fetch in `scripts/aggregate.py`. After cycle 1's fix to `fetch_kev()`/
+`fetch_epss()`, this was the last remaining external call in the pipeline
+still making a single bare attempt with no retry, unlike `nvd_query()` and the
+now-fixed KEV/EPSS calls. `dependabot_repos` in `config/watchlist.yaml`
+actively lists `astruzocyber/CVE` (not a dead/example config path), so a
+transient 429/5xx/network blip on any page mid-pagination would silently
+truncate or drop that repo's Dependabot alerts for the entire run with no
+visible error. Added the same 3-attempt exponential-backoff pattern already
+proven in cycle 1: 429/5xx retried with increasing backoff, other HTTP status
+codes and exhausted-retry cases still log a WARNING and end pagination for
+that repo (matching prior behavior on genuinely unrecoverable failure — no
+change to what counts as a hard stop, only added resilience to transient
+ones). Scored 5/5/5 on feasibility/risk/value: free (no new API usage, retries
+only fire on actual failure), low validation risk (mirrors an existing proven
+pattern in the same file, touches only one function), improves data
+completeness which the user explicitly prioritizes over feature breadth.
+
+Validation performed: `ast.parse` syntax check passed. Backed up
+`docs/data/{alerts,seen_ids,stats}.json`, `docs/data/history/`,
+`docs/feed.{json,xml}`, `docs/data/kev_snapshot.json` to `/tmp/cve_backup`,
+then ran `scripts/aggregate.py` for real against live APIs (LOOKBACK_DAYS=2,
+using a real Dependabot-scoped token via `gh auth token` so the modified code
+path was genuinely exercised, not skipped): KEV catalog 1699 entries, 587 NVD
+candidates, Dependabot query for astruzocyber/CVE executed cleanly (0 open
+alerts — expected, no crash/warning), EPSS batch queried, 432 total alerts
+written, 0 schema warnings, clean exit. Ran `git checkout --` on the
+throwaway local test-run data files (`trend.csv`, `stats.json`) afterward so
+no test output touched committed production data (the live Actions run
+regenerates real data after push). No frontend files changed, so no local
+server/browser validation was needed.
+
+Committed as `8e94e2d`, pushed to main, triggered
+`gh workflow run cve-alerts.yml` (run 34303991054) — completed `success` in
+1m3s with no new warnings/errors (only the pre-existing benign Node 20
+deprecation notice). Pulled latest and curled the live site:
+`https://astruzocyber.github.io/CVE/` → 200,
+`https://astruzocyber.github.io/CVE/data/stats.json` → 200. Live verification
+passed; no revert needed.
+
+**Rejected this cycle:** none — the one candidate identified cleared the bar
+and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles = 0/3.
+Not stopped. Next cycle in ~30 minutes.
+
+---
