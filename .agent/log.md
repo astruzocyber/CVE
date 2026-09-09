@@ -112,3 +112,60 @@ and was implemented.
 Not stopped. Next cycle in ~30 minutes.
 
 ---
+
+## Cycle 3 — 2026-09-09T03:20:57Z
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions runs
+(all `completed`/`success`, 52s-1m29s runtimes). Grepped the latest run's logs
+for warnings/errors/429/throttle signals excluding known-benign Node 20
+deprecation noise — none found. All sources (CISA KEV, NVD, FIRST.org EPSS,
+GHSA, Dependabot) healthy, no backoff signals observed.
+
+**Implemented:** Retry-with-backoff on `fetch_ghsa_advisories()`'s per-package
+HTTP fetch in `scripts/aggregate.py`. This was the last remaining external
+call in the pipeline still making a single bare attempt with no retry, after
+cycles 1-2 already brought `fetch_kev()`/`nvd_query()`/`fetch_epss()`/
+`fetch_dependabot_alerts()` up to the same 3-attempt exponential-backoff
+pattern. `ghsa_packages` is currently empty in `config/watchlist.yaml`, so
+this function is a no-op in the live pipeline today, but it is live
+production code that activates the moment the user adds a package name —
+leaving it as the one unretried path was an inconsistency that would
+silently degrade data completeness the day it's actually used. Added the
+identical pattern: 429/5xx retried with increasing backoff, other HTTP status
+codes and exhausted retries logged as a WARNING and skip that package
+(matching prior behavior on genuinely unrecoverable failure). Scored 5/5/5 on
+feasibility/risk/value: free (no new API usage, retries only fire on actual
+failure), low validation risk (mirrors an existing proven pattern, touches
+only one function), completes the reliability layer across every external
+source the pipeline can call.
+
+Validation performed: `ast.parse` and `yaml.safe_load` syntax checks passed.
+Backed up `docs/data/{alerts,seen_ids,stats}.json`, `docs/data/history/`,
+`docs/feed.{json,xml}`, `docs/data/kev_snapshot.json` to `/tmp/cve_backup`,
+then ran `scripts/aggregate.py` for real against live APIs (LOOKBACK_DAYS=2,
+using a real Dependabot-scoped token via `gh auth token`): KEV catalog 1699
+entries, 593 NVD candidates, Dependabot query for astruzocyber/CVE executed
+cleanly (0 open alerts), EPSS batch queried, 436 total alerts written, 0
+schema warnings, clean exit, no crash. GHSA path itself wasn't exercised
+(empty `ghsa_packages` list means the function returns early with no
+network calls either before or after this change), but the modified code is
+syntactically valid and structurally identical to the already-proven pattern
+in the other three functions. Ran `git checkout --` on the throwaway
+local test-run data files afterward so no test output touched committed
+production data.
+
+Committed as `d92b1de`, pushed to main, triggered `gh workflow run
+cve-alerts.yml` (run 34306771292) — completed `success` in 1m8s with no new
+warnings/errors (only the pre-existing benign Node 20 deprecation notice).
+Pulled latest and curled the live site: `https://astruzocyber.github.io/CVE/`
+→ 200, `https://astruzocyber.github.io/CVE/data/stats.json` → 200. No
+frontend files changed, so no browser/screenshot check was needed. Live
+verification passed; no revert needed.
+
+**Rejected this cycle:** none — the one candidate identified cleared the bar
+and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles = 0/3.
+Not stopped. Next cycle in ~30 minutes.
+
+---

@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 2,
+  "total_cycles": 3,
   "implemented": [
     {
       "cycle": 1,
@@ -16,9 +16,16 @@
       "title": "Retry with backoff on Dependabot Alerts API pagination fetch",
       "description": "fetch_dependabot_alerts() was the last remaining HTTP call in the pipeline still making a single bare attempt per page, unlike fetch_kev()/nvd_query()/fetch_epss() which all already retry 3x with exponential backoff on 429/5xx/transient errors after cycles 1's fix. Because dependabot_repos includes astruzocyber/CVE itself (actively used, not a dead config path), a transient failure on any page mid-pagination would silently truncate or drop that repo's Dependabot alerts for the entire run with no retry. Added the same 3-attempt backoff pattern (429/5xx retried, other HTTP errors and exhausted retries logged and treated as end-of-pagination for that repo, matching prior behavior on unrecoverable failure). Zero new dependencies, zero added call volume under normal conditions.",
       "commit_sha": "8e94e2d"
+    },
+    {
+      "cycle": 3,
+      "timestamp": "2026-09-09T03:20:57Z",
+      "title": "Retry with backoff on GHSA advisories fetch",
+      "description": "fetch_ghsa_advisories() was the last remaining external HTTP call in the pipeline still making a single bare attempt per package, after cycles 1-2 already added the same 3-attempt exponential-backoff pattern to fetch_kev()/nvd_query()/fetch_epss()/fetch_dependabot_alerts(). Even though ghsa_packages is currently empty in config/watchlist.yaml (so the function is a no-op today), it's live production code that will run the instant the user adds a package name, and leaving it as the sole unretried call was an inconsistency waiting to bite silently. Added the identical 429/5xx-retried, other-HTTP-errors-logged-and-skipped pattern used everywhere else in the file. Zero new dependencies, zero added call volume under normal conditions (retries only fire on actual transient failure), completes the reliability layer across every external source the pipeline touches.",
+      "commit_sha": "d92b1de"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T02:38:03Z",
+  "last_cycle_at": "2026-09-09T03:20:57Z",
   "stopped": false
 }
