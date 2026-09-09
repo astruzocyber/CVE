@@ -296,6 +296,17 @@ function applyFiltersAndRender() {
     if (sortBy === "cve_id") {
       return (a.cve_id || "").localeCompare(b.cve_id || "");
     }
+    if (sortBy === "kev_due_date") {
+      // Soonest deadline first. Entries with no due date (non-KEV, or KEV
+      // with no published due date) are not "most urgent" -- they have no
+      // deadline at all -- so they sort to the end, not the front, avoiding
+      // the classic bug where empty-string/undefined compares as "smallest".
+      const ad = a.kev_due_date, bd = b.kev_due_date;
+      if (!ad && !bd) return 0;
+      if (!ad) return 1;
+      if (!bd) return -1;
+      return ad.localeCompare(bd);
+    }
     // default: first_seen, newest first
     return (b.first_seen || "").localeCompare(a.first_seen || "");
   });
