@@ -535,21 +535,46 @@ def fetch_ghsa_advisories(packages, token=None):
     print(f"Querying GHSA advisories for {len(packages)} package(s)...")
     for pkg in packages:
         url = GHSA_URL + "?" + urllib.parse.urlencode({"affects": pkg, "per_page": 100})
-        try:
-            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **headers})
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                data = json.loads(resp.read().decode())
-        except urllib.error.HTTPError as e:
-            body = ""
+        # Retry with backoff on transient failures (429/5xx/network) -- same resilience
+        # pattern already used by fetch_kev()/nvd_query()/fetch_epss()/
+        # fetch_dependabot_alerts(). Without this, a single transient blip would
+        # silently drop this package's GHSA advisories for the whole run with no retry.
+        data = None
+        last_err = None
+        hard_fail = False
+        for attempt in range(3):
             try:
-                body = e.read().decode()
-            except Exception:
-                pass
-            print(f"  WARNING: GHSA API HTTP {e.code} for package '{pkg}': {body[:300]}",
-                  file=sys.stderr)
-            continue
-        except Exception as e:
-            print(f"  WARNING: GHSA API failed for package '{pkg}': {e}", file=sys.stderr)
+                req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **headers})
+                with urllib.request.urlopen(req, timeout=30) as resp:
+                    data = json.loads(resp.read().decode())
+                break
+            except urllib.error.HTTPError as e:
+                last_err = e
+                if e.code == 429 or e.code >= 500:
+                    wait = 5 * (attempt + 1)
+                    print(f"  GHSA API HTTP {e.code} for package '{pkg}', retrying in "
+                          f"{wait}s (attempt {attempt + 1}/3)...", file=sys.stderr)
+                    time.sleep(wait)
+                    continue
+                body = ""
+                try:
+                    body = e.read().decode()
+                except Exception:
+                    pass
+                print(f"  WARNING: GHSA API HTTP {e.code} for package '{pkg}': {body[:300]}",
+                      file=sys.stderr)
+                hard_fail = True
+                break
+            except Exception as e:
+                last_err = e
+                wait = 5 * (attempt + 1)
+                print(f"  GHSA API request failed for package '{pkg}' ({e}), retrying "
+                      f"in {wait}s (attempt {attempt + 1}/3)...", file=sys.stderr)
+                time.sleep(wait)
+        if data is None:
+            if not hard_fail:
+                print(f"  WARNING: GHSA API failed for package '{pkg}' after 3 attempts: "
+                      f"{last_err}", file=sys.stderr)
             continue
         if not validate_schema(f"GHSA advisories[{pkg}]", data, [], kind="list"):
             continue
