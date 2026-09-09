@@ -66,7 +66,7 @@ function renderCard(alert) {
         <div class="breakdown-row"><span>KEV bonus</span><span>= ${fmtScore(b.kev_bonus)} pts</span></div>
         <div class="breakdown-row breakdown-total"><span>Total${b.capped ? " (capped at 100)" : ""}</span><span>= ${riskVal} pts</span></div>
       </div>` : "";
-  const toggleBtn = b ? `<button class="score-toggle" type="button" title="Show risk score breakdown">breakdown &#9662;</button>` : "";
+  const toggleBtn = b ? `<button class="score-toggle" type="button" title="Show risk score breakdown" aria-expanded="false">breakdown &#9662;</button>` : "";
 
   return `
     <div class="card">
@@ -322,6 +322,7 @@ document.getElementById("card-grid").addEventListener("click", (e) => {
   if (panel && panel.classList.contains("score-breakdown")) {
     panel.hidden = !panel.hidden;
     btn.innerHTML = panel.hidden ? "breakdown &#9662;" : "breakdown &#9652;";
+    btn.setAttribute("aria-expanded", panel.hidden ? "false" : "true");
   }
 });
 

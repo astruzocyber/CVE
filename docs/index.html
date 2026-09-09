@@ -44,21 +44,25 @@
     </section>
 
     <div class="controls">
-      <input type="text" id="search" placeholder="Search CVE ID, description, product...">
-      <select id="kev-filter">
+      <label for="search" class="visually-hidden">Search alerts</label>
+      <input type="text" id="search" placeholder="Search CVE ID, description, product..." aria-label="Search CVE ID, description, product">
+      <label for="kev-filter" class="visually-hidden">Filter by KEV status</label>
+      <select id="kev-filter" aria-label="Filter by KEV status">
         <option value="all">All (KEV + non-KEV)</option>
         <option value="kev">KEV only</option>
         <option value="overdue">KEV overdue only</option>
         <option value="ransomware">Ransomware-linked only</option>
         <option value="non-kev">Non-KEV only</option>
       </select>
-      <select id="source-filter">
+      <label for="source-filter" class="visually-hidden">Filter by source</label>
+      <select id="source-filter" aria-label="Filter by source">
         <option value="all">All sources</option>
         <option value="nvd">NVD</option>
         <option value="ghsa">GHSA</option>
         <option value="dependabot">Dependabot</option>
       </select>
-      <select id="sort-by">
+      <label for="sort-by" class="visually-hidden">Sort order</label>
+      <select id="sort-by" aria-label="Sort order">
         <option value="risk_score">Sort: Risk score (high to low)</option>
         <option value="first_seen">Sort: Newest first</option>
         <option value="cvss_score">Sort: CVSS (high to low)</option>
@@ -66,10 +70,10 @@
         <option value="cve_id">Sort: CVE ID</option>
       </select>
       <button id="export-csv" type="button">Export CSV</button>
-      <span class="count" id="result-count"></span>
+      <span class="count" id="result-count" aria-live="polite"></span>
     </div>
 
-    <div id="empty-state" class="empty-state" hidden>
+    <div id="empty-state" class="empty-state" role="status" hidden>
       No alerts match your filters (or no data has been collected yet -- the
       scheduled GitHub Action runs every 4 hours; you can also trigger it manually
       from the Actions tab).
