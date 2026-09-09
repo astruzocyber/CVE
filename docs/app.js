@@ -106,6 +106,9 @@ function renderCard(alert) {
     : "";
   const sourceBadge = `<span class="badge source">${escapeHtml(alert.source || "unknown")}</span>`;
   const affected = (alert.affected || []).join(", ") || "n/a";
+  const kevActionHtml = alert.kev && alert.kev_required_action
+    ? `<div class="kev-action"><strong>CISA required action:</strong> ${escapeHtml(alert.kev_required_action)}</div>`
+    : "";
   const matchedKeywords = alert.matched_keywords || [];
   const matchedHtml = matchedKeywords.length
     ? `<div class="matched">Watchlist match: ${matchedKeywords.map((k) => `<span class="badge match">${escapeHtml(k)}</span>`).join("")}</div>`
@@ -152,6 +155,7 @@ function renderCard(alert) {
         ${alert.kev_due_date ? `<span>KEV due: <strong>${escapeHtml(alert.kev_due_date)}</strong></span>` : ""}
       </div>
       <div class="affected">Affected: ${escapeHtml(affected)}</div>
+      ${kevActionHtml}
       ${matchedHtml}
       ${cweHtml}
       <div class="card-footer">
