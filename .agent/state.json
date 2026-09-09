@@ -1,7 +1,7 @@
 {
     "consecutive_no_improvement": 0,
     "consecutive_failed_cycles": 0,
-    "total_cycles": 16,
+    "total_cycles": 17,
     "implemented": [
         {
             "cycle": 1,
@@ -114,9 +114,16 @@
             "title": "DUE SOON badge for KEV entries within 7 days of remediation deadline",
             "description": "Cycle 14 added a days-overdue magnitude to the existing OVERDUE badge, but there was no forward-looking equivalent -- a KEV entry due in 2 days looked identical to one due in 60 days until it actually crossed the deadline and became OVERDUE, giving a security team zero advance warning to prioritize remediation before a BOD 22-01 compliance breach. Added daysUntilDue(alert) to docs/app.js (mutually exclusive with the existing overdueDays()/isOverdue(): returns null if there's no due date or the date has already passed) and a new yellow 'DUE SOON (Nd)' badge rendered on renderCard() whenever 0 <= days-until-due <= 7, alongside the existing KEV/RANSOMWARE/OVERDUE badges. Added matching .badge.due-soon CSS rule to docs/style.css. Pure additive frontend change reading the existing kev_due_date field: zero new API calls, zero backend/schema changes, zero cost.",
             "commit_sha": "a23c75c"
+        },
+        {
+            "cycle": 17,
+            "timestamp": "2026-09-09T11:35:11.835382+00:00",
+            "title": "Add 'KEV due soon (<=7d)' filter option to dashboard",
+            "description": "Cycle 16 added a DUE SOON badge (0-7 days until CISA KEV BOD 22-01 remediation deadline) but there was no way to isolate just those alerts in the existing KEV-status filter dropdown -- a security lead had to scan every card visually to find upcoming deadlines. Added a 'KEV due soon (<=7d) only' option to the #kev-filter <select> in docs/index.html, and matching filter logic in applyFiltersAndRender() in docs/app.js reusing the existing daysUntilDue() helper from cycle 16 (0 <= days <= 7). Pure additive frontend change: no new API calls, no backend/schema changes, zero cost. Composes with the existing URL-query-param sharing (cycle 7) so a filtered 'due soon' view is itself shareable/bookmarkable.",
+            "commit_sha": "159b8b1"
         }
     ],
     "rejected": [],
-    "last_cycle_at": "2026-09-09T11:02:04.027644+00:00",
+    "last_cycle_at": "2026-09-09T11:35:11.835382+00:00",
     "stopped": false
 }

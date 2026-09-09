@@ -841,3 +841,54 @@ lookahead badge) cleared the bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 17 — 2026-09-09T11:33Z (approx)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs -- all `completed`/`success` (08:10:54Z, 05:10:29Z, 04:29:29Z,
+04:10:07Z, 03:20:57Z). Grepped the latest run's log for warning/error/
+traceback/429/throttle (excluding Node20-deprecation noise) -- clean. All
+sources (NVD/EPSS/KEV/GHSA/Dependabot) healthy going into this cycle.
+
+**Implemented:** Added a "KEV due soon (<=7d) only" option to the existing
+KEV-status filter dropdown. Cycle 16 introduced a `daysUntilDue()` helper
+and a yellow "DUE SOON (Nd)" badge on cards within 7 days of their CISA KEV
+BOD 22-01 remediation deadline, but there was no way to *filter* to just
+those alerts -- a security lead still had to visually scan every card to
+find approaching deadlines, unlike the existing "KEV overdue only" filter
+which already isolates past-deadline alerts. Added the option to
+`docs/index.html`'s `#kev-filter` `<select>` and matching filter branch in
+`applyFiltersAndRender()` in `docs/app.js` (reuses `daysUntilDue()`
+unchanged, filters to `0 <= days <= 7`). Composes for free with the
+existing URL-query-param sharing (cycle 7), so a filtered due-soon view is
+itself shareable/bookmarkable without any further work.
+
+Validation performed: `node --check docs/app.js` passed. Served `docs/`
+locally on scratch port 8931 with real production data (440 alerts, 0
+currently in the due-soon window), loaded in the browser tool. Since no
+real alert currently falls in the window, injected one synthetic due-soon
+alert (`CVE-9999-TESTDUE`, due in 3 days) directly into the live in-page
+`allAlerts` array, selected the new filter, and confirmed
+`applyFiltersAndRender()` correctly isolated exactly that one card
+("1 of 441 alerts", card grid contained only `CVE-9999-TESTDUE`) --
+exercising the new filter branch end-to-end. Reverted the synthetic alert
+and re-ran with `all` selected, confirming the dashboard returned to
+"440 of 440 alerts" with zero residual state. Also confirmed the URL
+query-param round-trip: selecting the new filter correctly wrote
+`?kev=due-soon` into the address bar (verifies composition with cycle 7's
+shareable-filter feature).
+
+Committed as `159b8b1`, pushed to main. Pure frontend change with zero
+pipeline/data impact -- did not trigger `cve-alerts.yml`. Waited 45s for
+GitHub Pages redeploy, confirmed via `curl` that live `app.js`/`index.html`
+both contain the new `due-soon` identifier and return HTTP 200. Loaded the
+LIVE dashboard at `https://astruzocyber.github.io/CVE/` in the browser
+tool: confirmed the `#kev-filter` select now has 6 options including
+`due-soon`, and the result count still reads "440 of 440 alerts" -- no
+regression. Live verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (due-soon
+filter option) cleared the bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.
