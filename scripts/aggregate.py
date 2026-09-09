@@ -301,6 +301,36 @@ def extract_cvss(nvd_cve):
     return None, None
 
 
+# NVD's cvssData already carries the individual CVSS vector components (attack
+# vector, attack complexity, privileges required, user interaction) alongside
+# baseScore -- this is the same metrics object extract_cvss() reads, just
+# pulling additional already-fetched fields instead of only baseScore. These
+# answer a distinct triage question from the numeric score alone: a 7.5 that
+# needs local access + user interaction is a very different priority from a
+# 7.5 that's remote/no-auth/no-interaction, even though both look identical
+# as a bare CVSS number. Only implemented for NVD (CVSS v3.1/3.0 schema);
+# GHSA/Dependabot advisories expose a raw vector_string in a mixed v3/v4
+# format without pre-split fields, so extraction there is left for a future
+# cycle rather than risking a mis-parsed field now.
+def extract_cvss_vector_components(nvd_cve):
+    metrics = nvd_cve.get("metrics", {})
+    for key in ("cvssMetricV31", "cvssMetricV30"):
+        if key in metrics and metrics[key]:
+            cvss_data = metrics[key][0].get("cvssData", {})
+            av = cvss_data.get("attackVector")
+            ac = cvss_data.get("attackComplexity")
+            pr = cvss_data.get("privilegesRequired")
+            ui = cvss_data.get("userInteraction")
+            if av or ac or pr or ui:
+                return {
+                    "attack_vector": av,
+                    "attack_complexity": ac,
+                    "privileges_required": pr,
+                    "user_interaction": ui,
+                }
+    return None
+
+
 def extract_description(nvd_cve):
     for d in nvd_cve.get("descriptions", []):
         if d.get("lang") == "en":
@@ -383,6 +413,7 @@ def fetch_nvd_candidates(watchlist, api_key):
                 "description": extract_description(cve),
                 "cvss_score": score,
                 "cvss_version": cvss_version,
+                "cvss_vector_components": extract_cvss_vector_components(cve),
                 "cwe_ids": extract_cwe_nvd(cve),
                 "published": cve.get("published"),
                 "matched_vendor_product": [],
@@ -730,6 +761,7 @@ def build_final_entry(entry, kev_map, epss_map):
         "description": entry.get("description", ""),
         "cvss_score": cvss,
         "cvss_version": entry.get("cvss_version"),
+        "cvss_vector_components": entry.get("cvss_vector_components"),
         "cwe_ids": entry.get("cwe_ids", []),
         "epss_score": epss_score,
         "epss_percentile": epss_info.get("percentile"),

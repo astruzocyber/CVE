@@ -156,6 +156,15 @@ function renderCard(alert) {
   const epssPercentileHtml = typeof alert.epss_percentile === "number"
     ? ` <span class="epss-percentile"${epssPercentileTitle}>(top ${(100 - alert.epss_percentile * 100).toFixed(0)}%)</span>`
     : "";
+  const vc = alert.cvss_vector_components;
+  const exploitLabels = { NETWORK: "Network", ADJACENT_NETWORK: "Adjacent", LOCAL: "Local", PHYSICAL: "Physical",
+    LOW: "Low", HIGH: "High", NONE: "None", REQUIRED: "Required" };
+  const exploitChipHtml = vc && vc.attack_vector
+    ? `<span class="exploit-chip" title="CVSS vector: attack vector=${escapeHtml(vc.attack_vector || "?")}, complexity=${escapeHtml(vc.attack_complexity || "?")}, privileges=${escapeHtml(vc.privileges_required || "?")}, user interaction=${escapeHtml(vc.user_interaction || "?")}">`
+      + `${escapeHtml(exploitLabels[vc.attack_vector] || vc.attack_vector)}`
+      + (vc.privileges_required === "NONE" && vc.user_interaction === "NONE" ? " \u00b7 no auth/interaction" : "")
+      + `</span>`
+    : "";
   const riskVal = typeof alert.risk_score === "number" ? alert.risk_score.toFixed(0) : "n/a";
   const b = alert.risk_score_breakdown;
   const breakdownHtml = b ? `
@@ -186,6 +195,7 @@ function renderCard(alert) {
         <span>CVSS: <strong>${fmtScore(alert.cvss_score)}</strong></span>
         <span>EPSS: <strong>${epssPct}</strong>${epssPercentileHtml}</span>
         ${alert.kev_due_date ? `<span>KEV due: <strong>${escapeHtml(alert.kev_due_date)}</strong></span>` : ""}
+        ${exploitChipHtml}
       </div>
       <div class="affected">Affected: ${escapeHtml(affected)}</div>
       ${kevActionHtml}
