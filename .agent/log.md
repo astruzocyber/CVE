@@ -1275,3 +1275,30 @@ input debounce) cleared the bar and was implemented.
 **Rejected this cycle:** None — the trend-chart candidate cleared the bar on first pass and was implemented.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 26. `stopped`: false.
+
+
+## Cycle 27 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34375061636, 34369721256, 34360511746, 34349733814, 34327718061), no 429/throttle signals from NVD/EPSS/GHSA/CISA in recent Actions logs, only benign Node 20 runner deprecation noise.
+
+**Change:** Render CISA KEV "required action" remediation guidance directly on alert cards.
+
+- **Opportunity:** `build_final_entry()`/the resurfaced-alert refresh loop in `scripts/aggregate.py` has captured CISA's `requiredAction` field from the KEV catalog API into `kev_required_action` on every alert since early cycles, but it was never rendered anywhere in `docs/app.js`/`docs/index.html` — a viewer had to click "View on NVD" and separately cross-reference the CISA KEV catalog to find CISA's actual required remediation text for a KEV entry, even though the data was already sitting unused in `alerts.json`. Found by re-reading `scripts/aggregate.py` fresh this cycle and cross-checking every field written into the entry schema against what's actually rendered on a card.
+- **Frontend:** Added a `.kev-action` box (red-tinted border/background, matching the existing KEV/OVERDUE color language but visually distinct from the neutral `.matched`/`.cwe-row` rows) to `renderCard()` in `docs/app.js`, rendered only when `alert.kev` is true AND `kev_required_action` is present (most non-KEV alerts have no such field, and some KEV entries may lack a populated requiredAction). Added matching `.kev-action`/`.kev-action strong` CSS rules to `docs/style.css`. Pure additive change reading an existing already-fetched field: zero new API calls, zero backend/schema changes, zero cost.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure client-side template addition reading an already-populated field), validation risk 2/5 (additive conditional block, gated on `alert.kev &&`, cannot fire for the 500/501 non-KEV alerts), value 4/5 (closes a real, high-signal gap for the one thing a security lead most needs from a KEV entry — CISA's specific required remediation action — previously requiring an external lookup).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK.
+- Served `docs/` on a scratch local port (8951) with real production data (501 alerts, 1 KEV entry — CVE-2026-85046 — with a populated `kev_required_action`). Used the browser tool: confirmed the new `.kev-action` box renders the full CISA guidance text with correct styling; confirmed existing search filter still works (`chrome`: 501→110→501 on clear); screenshot-confirmed the card layout (badges, risk bar, CWE row, footer) is unaffected.
+- No `aggregate.py`/data-schema changes, so no data-pipeline dry-run/backup/restore cycle was needed (`git status` confirmed only `docs/app.js` and `docs/style.css` were touched).
+
+**Deploy (Step 5):**
+- Committed (`63c4e6b`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Polled GitHub Pages deployment; curled `https://astruzocyber.github.io/CVE/app.js`, `style.css`, `index.html` (all 200 OK, `kev-action` string present in `app.js`).
+- Loaded the LIVE dashboard in the browser tool: confirmed 501/501 alerts, the CVE-2026-85046 KEV card renders the full CISA required-action text correctly styled. Screenshot-confirmed zero regression to badges, risk bar, CWE row, or card footer.
+
+**Rejected this cycle:** None — the KEV-required-action candidate cleared the bar on first pass and was implemented.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 27. `stopped`: false.

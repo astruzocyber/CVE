@@ -1,7 +1,7 @@
 {
     "consecutive_no_improvement": 0,
     "consecutive_failed_cycles": 0,
-    "total_cycles": 26,
+    "total_cycles": 27,
     "implemented": [
         {
             "cycle": 1,
@@ -184,9 +184,16 @@
             "title": "Optional 'Total tracked alerts' line on historical trend chart",
             "description": "docs/data/history/trend.csv has recorded total_alerts (column 2) every run since cycle-1-era history tracking began, but the Chart.js trend chart only ever plotted kev_overdue_count and avg_epss -- the raw alert-volume growth trend (a meaningful signal for a security lead: 'is our watchlist/data coverage growing steadily or did something break/spike?') was invisible even though the data was already being fetched and rendered as the x-axis labels source. Added a third dataset ('Total tracked alerts', parsed from the already-fetched trend.csv column 1) on a new hidden y2 axis (display:false, so it doesn't visually compete with the two existing labeled axes), defaulted to hidden:true in the Chart.js dataset config so the default view is byte-for-byte visually identical to before -- a viewer opts in by clicking the legend item, standard Chart.js interaction pattern. Pure additive frontend change: no new API calls, no backend/schema changes (total_alerts already existed as trend.csv column 2), zero cost.",
             "commit_sha": "1b08f2a"
+        },
+        {
+            "cycle": 27,
+            "timestamp": "2026-09-09T17:35:00Z",
+            "title": "Render CISA KEV 'required action' guidance on alert cards",
+            "description": "CISA's KEV catalog API has always returned a requiredAction field per entry (the specific remediation guidance CISA publishes for that KEV CVE) and aggregate.py has captured it into kev_required_action on every alert since early cycles, but the frontend never rendered it -- a viewer had to click 'View on NVD' and separately look up the CISA KEV catalog to find CISA's actual required remediation text, even though the data was already sitting unused in alerts.json. Added a highlighted .kev-action box (red-tinted border/background, distinct from the neutral CWE/matched-keyword rows) rendered on renderCard() in docs/app.js whenever alert.kev is true AND kev_required_action is present, showing 'CISA required action: <text>' directly on the card. Pure additive frontend change: no new API calls, no backend/schema changes (kev_required_action already existed in the data), zero cost. Validated: node --check passed; served docs/ on a scratch local port (8951) with real production data (501 alerts, 1 KEV entry with a populated kev_required_action), confirmed via browser tool the new box renders the full CISA guidance text correctly, confirmed existing search filter (chrome: 501->110->501 clear) and card layout unaffected, screenshot-confirmed correct visual styling. No aggregate.py/data changes so no data-pipeline dry-run was needed. Live-verified: pushed (frontend-only, no workflow dispatch needed), curled changed live URLs (app.js/style.css/index.html all 200 OK, kev-action string present in app.js), loaded the live dashboard in the browser tool -- confirmed 501/501 alerts, the CVE-2026-85046 KEV card renders the full CISA required-action text correctly styled, screenshot confirmed zero regression to badges, risk bar, CWE row, or card footer.",
+            "commit_sha": "63c4e6be0eceb761fa8a172acd9e8840544556b1"
         }
     ],
     "rejected": [],
-    "last_cycle_at": "2026-09-09T17:05:00Z",
+    "last_cycle_at": "2026-09-09T17:35:00Z",
     "stopped": false
 }
