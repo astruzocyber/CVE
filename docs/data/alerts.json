@@ -1,5 +1,79 @@
 [
   {
+    "cve_id": "CVE-2026-83593",
+    "description": "The WPBot \u2013 AI ChatBot for Live Support, Lead Generation, AI Services plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'conversation' parameter in all versions up to, and including, 8.7.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The action is gated only by a nonce that is localized into every public-facing page via wp_localize_script, rendering the nonce check ineffective as an access control barrier for unauthenticated users.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "risk_score": 25.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0,
+      "epss_weight": "40% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25 if in CISA KEV",
+      "capped": false
+    },
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-09T06:17:17.670",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T08:11:38.825885+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-76009",
+    "description": "The Next-Cart Store to WooCommerce Migration plugin for WordPress is vulnerable to Authentication Bypass in all versions up to, and including, 3.9.8 via the `NCWM_Kitconnect::run()` function. This is due to the plugin registering the `/wp-json/next_cart/v1/migration` REST route with `permission_callback` set to `__return_true` and relying on a hardcoded fallback value of `__token__` in `get_option('nextcart_token', '__token__')` when the `nextcart_token` option has not yet been written to the database. This makes it possible for unauthenticated attackers to bypass authentication to the migration endpoint by supplying the literal string `__token__` as the token, gaining access to privileged handlers that pass attacker-controlled SQL directly to `$wpdb->query()` and `$wpdb->get_results()` \u2014 enabling arbitrary SQL execution including administrator account creation \u2014 and pass an attacker-controlled path to `unlink()`, enabling arbitrary file deletion and full site takeover. The hardcoded fallback is reachable whenever the `nextcart_token` option has not yet been populated, which occurs after WP-CLI, network, or programmatic plugin activation without a subsequent authenticated `wp-admin` visit, as token generation is deferred to `admin_init` via `register_settings()`.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "risk_score": 28.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0,
+      "epss_weight": "40% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25 if in CISA KEV",
+      "capped": false
+    },
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-09T06:17:16.497",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T08:11:38.825878+00:00"
+  },
+  {
     "cve_id": "CVE-2026-84293",
     "description": "The Repeater Fields for Gravity Forms plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Repeated Multi-Input Sub-Field Values in all versions up to, and including, 3.0.4 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This vulnerability only affects multi-input sub-field types within a repeater (such as Name, Address, and Checkbox fields), as scalar single-input field values are escaped with esc_html() at the output stage in version 3.0.4.",
     "cvss_score": 7.2,
@@ -23,7 +97,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -57,7 +133,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress",
       "wp plugin"
@@ -93,6 +171,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
@@ -130,6 +209,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
@@ -166,6 +246,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
@@ -201,7 +282,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4043,7 +4126,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4078,6 +4163,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
@@ -4113,7 +4199,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress",
       "wp plugin"
@@ -4250,7 +4338,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress",
       "wp plugin"
@@ -4285,7 +4375,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4387,7 +4479,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4421,7 +4515,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4455,7 +4551,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4489,7 +4587,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4523,7 +4623,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4557,7 +4659,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4591,7 +4695,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4625,7 +4731,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4659,7 +4767,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4727,7 +4837,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4761,7 +4873,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4795,7 +4909,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4829,7 +4945,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4863,7 +4981,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4897,7 +5017,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4931,7 +5053,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4965,7 +5089,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -4999,7 +5125,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -5033,7 +5161,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -5067,7 +5197,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -5101,7 +5233,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -5135,7 +5269,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -5169,7 +5305,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -5203,7 +5341,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -5237,7 +5377,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -5375,7 +5517,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress",
       "wp plugin"
@@ -5619,6 +5763,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "openssl/openssl"
     ],
     "matched_keywords": [
@@ -10007,6 +10152,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
@@ -10043,6 +10189,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
@@ -10080,6 +10227,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
@@ -10357,6 +10505,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
@@ -10429,6 +10578,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
@@ -10465,6 +10615,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
@@ -13119,7 +13270,9 @@
       "kev_weight": "flat +25 if in CISA KEV",
       "capped": false
     },
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "wordpress"
     ],
@@ -13154,6 +13307,7 @@
       "capped": false
     },
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
