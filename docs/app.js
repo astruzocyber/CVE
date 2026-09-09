@@ -621,6 +621,28 @@ document.getElementById("source-filter").addEventListener("change", applyFilters
 document.getElementById("sort-by").addEventListener("change", applyFiltersAndRender);
 document.getElementById("export-csv").addEventListener("click", exportCsv);
 
+// Single-click reset of every filter/sort control back to its default, plus
+// clearing the dependency-file filter and the URL's filter query params --
+// previously a viewer with search + kev-filter + severity + source + a
+// pasted dependency file active had to clear each control individually to
+// get back to the unfiltered board. Deliberately does NOT touch a #alert-...
+// hash (a direct deep-link to one card is a distinct concern from filters).
+document.getElementById("reset-filters").addEventListener("click", () => {
+  document.getElementById("search").value = "";
+  document.getElementById("kev-filter").value = "all";
+  document.getElementById("severity-filter").value = "all";
+  document.getElementById("source-filter").value = "all";
+  document.getElementById("sort-by").value = "risk_score";
+  dependencyPackageNames = null;
+  const depText = document.getElementById("dep-text-input");
+  const depFile = document.getElementById("dep-file-input");
+  const depStatus = document.getElementById("dep-status");
+  if (depText) depText.value = "";
+  if (depFile) depFile.value = "";
+  if (depStatus) depStatus.textContent = "";
+  applyFiltersAndRender();
+});
+
 readFiltersFromURL();
 setupDependencyFilter();
 loadData();
