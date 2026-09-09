@@ -316,6 +316,7 @@ function applyFiltersAndRender() {
         a.description,
         ...(a.affected || []),
         ...(a.matched_keywords || []),
+        ...(a.cwe_ids || []),
       ]
         .join(" ")
         .toLowerCase();
