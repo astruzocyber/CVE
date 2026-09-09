@@ -738,6 +738,7 @@ def build_final_entry(entry, kev_map, epss_map):
         "kev_due_date": kev_entry.get("dueDate") if in_kev else None,
         "kev_ransomware_use": (kev_entry.get("knownRansomwareCampaignUse") == "Known") if in_kev else False,
         "kev_required_action": kev_entry.get("requiredAction") if in_kev else None,
+        "kev_notes": kev_entry.get("notes") if in_kev else None,
         "risk_score": risk_score,
         "risk_score_breakdown": risk_breakdown,
         "affected": entry.get("matched_vendor_product", []),
@@ -994,6 +995,7 @@ def main():
         prior["kev_due_date"] = kev_entry.get("dueDate") if in_kev else None
         prior["kev_ransomware_use"] = (kev_entry.get("knownRansomwareCampaignUse") == "Known") if in_kev else False
         prior["kev_required_action"] = kev_entry.get("requiredAction") if in_kev else None
+        prior["kev_notes"] = kev_entry.get("notes") if in_kev else None
         prior["risk_score"] = risk_score
         prior["risk_score_breakdown"] = risk_breakdown
 

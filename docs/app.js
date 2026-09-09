@@ -87,6 +87,32 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// CISA KEV catalog "notes" field is a semicolon-separated mix of vendor advisory
+// URLs and generic boilerplate (BOD 26-04 directive links, Forensics Triage
+// Requirements links, and a redundant NVD link -- the dashboard already links to
+// NVD in the card footer). Extract only genuine vendor/advisory links so a viewer
+// can jump straight to the vendor's patch notes without wading through repeated
+// directive boilerplate present on every KEV entry.
+function kevNotesLinksHtml(notes) {
+  if (!notes || typeof notes !== "string") return "";
+  const parts = notes.split(";").map((p) => p.trim()).filter(Boolean);
+  const urlRe = /(https?:\/\/\S+)/;
+  const links = [];
+  for (const part of parts) {
+    const m = part.match(urlRe);
+    if (!m) continue;
+    const url = m[1];
+    if (/nvd\.nist\.gov/i.test(url)) continue;
+    if (/bod-26-04|forensics-triage/i.test(url)) continue;
+    const label = part.slice(0, m.index).replace(/:$/, "").trim();
+    links.push({ url, label: label || "Vendor advisory" });
+  }
+  if (!links.length) return "";
+  return `<div class="kev-notes">Advisories: ${links.map((l) =>
+    `<a href="${escapeHtml(l.url)}" target="_blank" rel="noopener">${escapeHtml(l.label)}</a>`
+  ).join(" &middot; ")}</div>`;
+}
+
 function renderCard(alert) {
   const sevClass = severityClass(alert.cvss_score);
   const rClass = riskClass(alert.risk_score);
@@ -109,6 +135,7 @@ function renderCard(alert) {
   const kevActionHtml = alert.kev && alert.kev_required_action
     ? `<div class="kev-action"><strong>CISA required action:</strong> ${escapeHtml(alert.kev_required_action)}</div>`
     : "";
+  const kevNotesHtml = alert.kev && alert.kev_notes ? kevNotesLinksHtml(alert.kev_notes) : "";
   const matchedKeywords = alert.matched_keywords || [];
   const matchedHtml = matchedKeywords.length
     ? `<div class="matched">Watchlist match: ${matchedKeywords.map((k) => `<span class="badge match">${escapeHtml(k)}</span>`).join("")}</div>`
@@ -156,6 +183,7 @@ function renderCard(alert) {
       </div>
       <div class="affected">Affected: ${escapeHtml(affected)}</div>
       ${kevActionHtml}
+      ${kevNotesHtml}
       ${matchedHtml}
       ${cweHtml}
       <div class="card-footer">
