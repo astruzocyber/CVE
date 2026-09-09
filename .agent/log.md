@@ -1386,3 +1386,31 @@ input debounce) cleared the bar and was implemented.
 **Rejected this cycle:** None — the exploitability-chip candidate cleared the bar on first pass and was implemented.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 30. `stopped`: false.
+
+
+## Cycle 31 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34399421600, 34398719776, 34390363792, 34375061636, 34369721256), no 429/throttle signals from NVD/EPSS/GHSA/CISA in Actions logs, only benign Node 20 runner deprecation noise.
+
+**Change:** Extract CVSS attack-vector/complexity/privileges/user-interaction components from GHSA/Dependabot advisories' raw `vector_string` field, closing the gap deliberately deferred in cycle 30.
+
+- **Opportunity:** Cycle 30 added `extract_cvss_vector_components()` for NVD-sourced alerts only, explicitly noting GHSA/Dependabot advisories expose the same four components as a raw mixed-version `vector_string` (e.g. `CVSS:3.1/AV:N/AC:H/PR:N/UI:N/...`) rather than NVD's pre-split fields, and deferred parsing it to a future cycle rather than risk a mis-parsed field. This cycle closes that gap for CVSS v3.0/v3.1 strings, which use a fixed, publicly documented FIRST.org abbreviation scheme (the exact same AV/AC/PR/UI codes NVD's `cvssData` already encodes) -- following a stable public spec, not guessing.
+- **Backend:** Added `parse_cvss_v3_vector_string()` to `scripts/aggregate.py`: splits the vector string on `/`, maps each `KEY:VALUE` pair through the documented CVSS v3.x code tables (AV: N/A/L/P, AC: L/H, PR: N/L/H, UI: N/R). CVSS v4.0 strings are detected by their `CVSS:4.0` prefix (v4 redefines/adds components -- e.g. new `AT` metric, different `UI` value set -- so mapping them through the v3 tables would silently produce wrong data) and explicitly return `None` rather than guess. Wired into `fetch_dependabot_alerts()` and `fetch_ghsa_advisories()`, both of which already fetch a `cvss.vector_string` field in their existing API responses -- zero new HTTP calls. No frontend change needed: `renderCard()`'s existing `exploit-chip` logic (cycle 30) already reads `alert.cvss_vector_components` generically regardless of source.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure parse of an already-fetched field using a fixed public spec table, zero new API calls), validation risk 2/5 (additive field, gated by presence checks both in the parser itself -- returns `None` on any unrecognized/v4 format -- and in the existing frontend rendering logic; cannot affect NVD-sourced alerts or break rendering for entries missing the field), value 3/5 (closes an explicitly-flagged gap from the prior cycle; currently dormant in production since `ghsa_packages` is empty and `GH_DEPENDABOT_TOKEN` is unset, but activates automatically and correctly the moment either source is configured, with zero further code changes needed).
+
+**Validation (Step 4):**
+- `python3 -c "import ast; ast.parse(...)"` on `scripts/aggregate.py`: OK. No frontend files touched, so no `node --check` needed; `git status --short` confirmed only `scripts/aggregate.py` modified before commit.
+- Direct unit test of `parse_cvss_v3_vector_string()` against a real CVSS v3.1 vector string sampled live from the GHSA API (`GET /advisories?affects=lodash`, GHSA-r5fr-rjxr-66jc / CVE-2026-4800): correctly returned `{'attack_vector': 'NETWORK', 'attack_complexity': 'HIGH', 'privileges_required': 'NONE', 'user_interaction': 'NONE'}`. Also tested a synthetic CVSS v4.0 vector string: correctly returned `None` (confirming the v3-only guard works and no v4 field is ever mis-mapped), plus `None`/empty-string inputs: both correctly return `None`.
+- Backed up `docs/data/{alerts,seen_ids,stats}.json`, `docs/data/history/`, `docs/feed.json`, `docs/feed.xml`, `docs/data/kev_snapshot.json` to `/tmp`. Ran `scripts/aggregate.py` for real against live NVD/EPSS/CISA KEV data (`GH_DEPENDABOT_TOKEN` unset locally, so Dependabot fetch correctly skipped with its existing warning -- expected, not a regression; `ghsa_packages` is empty in the committed watchlist, so the new GHSA code path did not fire against live data this run, consistent with the unit-test-only verification above for that path). Completed successfully: 515 total alerts, 365 with `cvss_vector_components` (all `nvd` source, as expected). No crash, no schema drift. `git checkout --` restored all production data files afterward (`git status --short` confirmed only `scripts/aggregate.py` remained modified before commit).
+
+**Deploy (Step 5):**
+- Committed (`e3fe7eb`) and pushed to `main`. Backend schema change (new parsing path in `scripts/aggregate.py`), so dispatched `cve-alerts.yml` via `gh workflow run` (run `34403032881`) rather than relying solely on the next scheduled run.
+- Polled the dispatched run to completion: `success`, ~47s. Grepped the log for warnings/errors/tracebacks excluding known-benign Node 20 deprecation noise: none found.
+- `git pull` to sync the freshly-regenerated production data (516 alerts, 267 with `cvss_vector_components`, all still `nvd`-sourced as expected since GHSA/Dependabot remain unconfigured in production). Curled `data/alerts.json` -- 200 OK.
+- No frontend files changed, so no live browser re-verification was needed for this cycle -- confirmed via `renderCard()` already handling the field generically as implemented in cycle 30's live-verified deploy.
+
+**Rejected this cycle:** None — the GHSA/Dependabot vector-parsing candidate cleared the bar on first pass and was implemented.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 31. `stopped`: false.
