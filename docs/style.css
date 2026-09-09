@@ -657,3 +657,59 @@ footer a { color: var(--accent); }
     width: 100%;
   }
 }
+
+/* Print stylesheet: a security lead handing a triage list to leadership/
+   compliance needs a readable paper/PDF report, not a dark-background dump
+   of interactive controls. Converts to light background/dark text, hides
+   everything non-essential (toolbar, filters, dependency-file uploader,
+   trend chart canvas, stale-banner, CVE deep-link "Copied!" indicator),
+   expands the risk-score breakdown so the math is visible without
+   clicking, and lets cards flow across page breaks without being split.
+   Reference links (NVD, Dependabot) are kept visible since they're
+   genuinely useful on a printed/PDF triage report. */
+@media print {
+  body {
+    background: #fff;
+    color: #111;
+  }
+
+  .stale-banner,
+  .trend-section,
+  .dep-filter,
+  .controls,
+  .cve-link-btn::after,
+  #empty-state {
+    display: none !important;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #999;
+    color: #111;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .score-breakdown {
+    display: block !important;
+  }
+
+  a {
+    color: #111;
+    text-decoration: underline;
+  }
+
+  .badge,
+  .exploit-chip,
+  .severity-pill,
+  .source-pill {
+    border: 1px solid #666 !important;
+    color: #111 !important;
+    background: none !important;
+  }
+}

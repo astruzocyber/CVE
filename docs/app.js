@@ -740,6 +740,7 @@ document.getElementById("severity-filter").addEventListener("change", applyFilte
 document.getElementById("source-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("sort-by").addEventListener("change", applyFiltersAndRender);
 document.getElementById("export-csv").addEventListener("click", exportCsv);
+document.getElementById("print-view").addEventListener("click", () => window.print());
 
 // Single-click reset of every filter/sort control back to its default, plus
 // clearing the dependency-file filter and the URL's filter query params --
