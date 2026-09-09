@@ -72,10 +72,11 @@ function renderCard(alert) {
       </div>` : "";
   const toggleBtn = b ? `<button class="score-toggle" type="button" title="Show risk score breakdown" aria-expanded="false">breakdown &#9662;</button>` : "";
 
+  const cveIdSafe = escapeHtml(alert.cve_id);
   return `
-    <div class="card">
+    <div class="card" data-cve-id="${cveIdSafe}" id="alert-${cveIdSafe}">
       <div class="card-header">
-        <span class="cve-id">${escapeHtml(alert.cve_id)}</span>
+        <button class="cve-id cve-link-btn" type="button" data-cve="${cveIdSafe}" title="Copy a direct link to this alert">${cveIdSafe}</button>
         <div class="badges">${kevBadge}${ransomwareBadge}${overdueBadge}${sevBadge}${sourceBadge}</div>
       </div>
       <div class="risk-row">
@@ -380,20 +381,59 @@ async function loadData() {
 
   applyFiltersAndRender();
   loadStats();
+  highlightFromHash();
 }
 
 // Click delegation for the per-card risk-score breakdown toggle (avoids
 // attaching a listener per card on every re-render).
 document.getElementById("card-grid").addEventListener("click", (e) => {
-  const btn = e.target.closest(".score-toggle");
-  if (!btn) return;
-  const panel = btn.closest(".risk-row").nextElementSibling;
-  if (panel && panel.classList.contains("score-breakdown")) {
-    panel.hidden = !panel.hidden;
-    btn.innerHTML = panel.hidden ? "breakdown &#9662;" : "breakdown &#9652;";
-    btn.setAttribute("aria-expanded", panel.hidden ? "false" : "true");
+  const toggleBtn = e.target.closest(".score-toggle");
+  if (toggleBtn) {
+    const panel = toggleBtn.closest(".risk-row").nextElementSibling;
+    if (panel && panel.classList.contains("score-breakdown")) {
+      panel.hidden = !panel.hidden;
+      toggleBtn.innerHTML = panel.hidden ? "breakdown &#9662;" : "breakdown &#9652;";
+      toggleBtn.setAttribute("aria-expanded", panel.hidden ? "false" : "true");
+    }
+    return;
+  }
+
+  // Per-CVE shareable deep link: clicking the CVE ID copies a URL that,
+  // when opened, scrolls to and highlights that exact card -- useful for a
+  // security lead pointing a teammate at one specific alert rather than the
+  // whole filtered view (complements the existing filter-state URL params).
+  const linkBtn = e.target.closest(".cve-link-btn");
+  if (linkBtn) {
+    const cve = linkBtn.dataset.cve;
+    const url = `${location.origin}${location.pathname}${location.search}#alert-${encodeURIComponent(cve)}`;
+    const originalText = linkBtn.textContent;
+    const showCopied = () => {
+      linkBtn.textContent = "Copied!";
+      setTimeout(() => {
+        linkBtn.textContent = originalText;
+      }, 1200);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(showCopied).catch(() => {});
+    }
+    history.replaceState(null, "", url);
   }
 });
+
+// If the page was opened with a #alert-CVE-... hash (from the copy-link
+// button above, or a hand-typed link), scroll to that card and highlight it
+// briefly once the data has rendered. No-op if the card doesn't exist (e.g.
+// filtered out or not in the current dataset) -- fails quietly.
+function highlightFromHash() {
+  if (!location.hash) return;
+  const target = document.querySelector(
+    `.card[id="${CSS.escape(location.hash.slice(1))}"]`
+  );
+  if (!target) return;
+  target.scrollIntoView({ behavior: "smooth", block: "center" });
+  target.classList.add("highlighted");
+  setTimeout(() => target.classList.remove("highlighted"), 2500);
+}
 
 // --- Historical trend chart (Chart.js via CDN, client-side render only) ---
 async function loadTrendChart() {
