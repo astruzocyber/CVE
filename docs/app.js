@@ -188,11 +188,40 @@ function setupDependencyFilter() {
   });
 }
 
+// --- Shareable filter state via URL query params (read on load, written on
+// every filter change with replaceState so it never spams browser history). ---
+function readFiltersFromURL() {
+  const params = new URLSearchParams(location.search);
+  const searchEl = document.getElementById("search");
+  const kevEl = document.getElementById("kev-filter");
+  const sourceEl = document.getElementById("source-filter");
+  const sortEl = document.getElementById("sort-by");
+  if (params.has("q")) searchEl.value = params.get("q");
+  // Setting .value to an option that doesn't exist on a <select> is a no-op
+  // in every browser, so an unrecognized/stale param value safely falls back
+  // to whatever the element's default selection already was.
+  if (params.has("kev")) kevEl.value = params.get("kev");
+  if (params.has("source")) sourceEl.value = params.get("source");
+  if (params.has("sort")) sortEl.value = params.get("sort");
+}
+
+function updateURLFromFilters(search, kevFilter, sourceFilter, sortBy) {
+  const params = new URLSearchParams();
+  if (search) params.set("q", search);
+  if (kevFilter && kevFilter !== "all") params.set("kev", kevFilter);
+  if (sourceFilter && sourceFilter !== "all") params.set("source", sourceFilter);
+  if (sortBy && sortBy !== "risk_score") params.set("sort", sortBy);
+  const qs = params.toString();
+  const newUrl = location.pathname + (qs ? "?" + qs : "") + location.hash;
+  history.replaceState(null, "", newUrl);
+}
+
 function applyFiltersAndRender() {
   const search = document.getElementById("search").value.trim().toLowerCase();
   const kevFilter = document.getElementById("kev-filter").value;
   const sourceFilter = document.getElementById("source-filter").value;
   const sortBy = document.getElementById("sort-by").value;
+  updateURLFromFilters(search, kevFilter, sourceFilter, sortBy);
 
   let filtered = allAlerts.filter((a) => {
     if (kevFilter === "kev" && !a.kev) return false;
@@ -388,6 +417,7 @@ document.getElementById("source-filter").addEventListener("change", applyFilters
 document.getElementById("sort-by").addEventListener("change", applyFiltersAndRender);
 document.getElementById("export-csv").addEventListener("click", exportCsv);
 
+readFiltersFromURL();
 setupDependencyFilter();
 loadData();
 loadTrendChart();
