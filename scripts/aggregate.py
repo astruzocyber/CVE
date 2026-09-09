@@ -431,21 +431,49 @@ def fetch_dependabot_alerts(repos, token):
         url = f"{GITHUB_API}/repos/{repo}/dependabot/alerts?state=open&per_page=100"
         while url:
             req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **headers})
-            try:
-                with urllib.request.urlopen(req, timeout=30) as resp:
-                    data = json.loads(resp.read().decode())
-                    link_header = resp.headers.get("Link", "")
-            except urllib.error.HTTPError as e:
-                body = ""
+            # Retry with backoff on transient failures (429/5xx/network) -- same
+            # resilience pattern as fetch_kev()/nvd_query()/fetch_epss(). Without
+            # this, a single transient blip on any page mid-pagination silently
+            # truncates or drops this repo's Dependabot alerts for the whole run.
+            data = None
+            link_header = ""
+            page_failed = False
+            last_err = None
+            for attempt in range(3):
                 try:
-                    body = e.read().decode()
-                except Exception:
-                    pass
-                print(f"  WARNING: Dependabot API HTTP {e.code} for {repo}: {body[:300]}",
-                      file=sys.stderr)
-                break
-            except Exception as e:
-                print(f"  WARNING: Dependabot API failed for {repo}: {e}", file=sys.stderr)
+                    with urllib.request.urlopen(req, timeout=30) as resp:
+                        data = json.loads(resp.read().decode())
+                        link_header = resp.headers.get("Link", "")
+                    break
+                except urllib.error.HTTPError as e:
+                    last_err = e
+                    if e.code == 429 or e.code >= 500:
+                        wait = 5 * (attempt + 1)
+                        print(f"  Dependabot API HTTP {e.code} for {repo}, retrying in "
+                              f"{wait}s (attempt {attempt + 1}/3)...", file=sys.stderr)
+                        time.sleep(wait)
+                        continue
+                    body = ""
+                    try:
+                        body = e.read().decode()
+                    except Exception:
+                        pass
+                    print(f"  WARNING: Dependabot API HTTP {e.code} for {repo}: {body[:300]}",
+                          file=sys.stderr)
+                    page_failed = True
+                    break
+                except Exception as e:
+                    last_err = e
+                    wait = 5 * (attempt + 1)
+                    print(f"  Dependabot API request failed for {repo} ({e}), retrying "
+                          f"in {wait}s (attempt {attempt + 1}/3)...", file=sys.stderr)
+                    time.sleep(wait)
+            else:
+                page_failed = True
+            if data is None:
+                if page_failed and last_err is not None and not isinstance(last_err, urllib.error.HTTPError):
+                    print(f"  WARNING: Dependabot API failed for {repo} after 3 attempts: "
+                          f"{last_err}", file=sys.stderr)
                 break
             if not validate_schema(f"Dependabot alerts[{repo}]", data, [], kind="list"):
                 break
