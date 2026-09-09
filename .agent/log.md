@@ -790,3 +790,54 @@ breakdown pills) cleared the bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 16 — 2026-09-09T10:58:00Z (approx)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs -- all `completed`/`success` (08:10:54Z, 05:10:29Z, 04:29:29Z,
+04:10:07Z, 03:20:57Z). Grepped the latest run's log for warning/error/
+traceback/429/throttle (excluding known Node20-deprecation noise) -- clean.
+No 429/throttle signal from NVD/EPSS/KEV/GHSA/Dependabot. All sources
+healthy going into this cycle.
+
+**Implemented:** "DUE SOON" badge for KEV entries within 7 days of their
+CISA KEV BOD 22-01 remediation deadline. Cycle 14 added a days-overdue
+magnitude to the existing OVERDUE badge, but there was no forward-looking
+equivalent -- a KEV entry due in 2 days looked identical to one due in 60
+days until it actually crossed the deadline, giving zero advance warning
+for a security team to prioritize remediation before a compliance breach.
+Added `daysUntilDue(alert)` to `docs/app.js` (mutually exclusive with the
+existing `overdueDays()`/`isOverdue()` -- returns null once the due date
+has passed) and a new yellow "DUE SOON (Nd)" badge rendered on
+`renderCard()` whenever 0 <= days-until-due <= 7. Added matching
+`.badge.due-soon` CSS rule to `docs/style.css`. Pure additive frontend
+change reading the existing `kev_due_date` field: zero new API calls, zero
+backend/schema changes, zero cost.
+
+Validation performed: `node --check docs/app.js` passed. Served `docs/`
+locally on scratch port 8825 with real production data (440 alerts, 1 KEV
+entry, 0 currently overdue and 0 currently within the 7-day due-soon
+window in the live dataset) -- confirmed zero regression (440/440 alerts,
+stats bar, historical trend chart all render correctly). Since no real
+alert currently falls in the due-soon window, directly unit-tested
+`daysUntilDue()` in the live page JS context with synthetic dates (3 days
+out returns 3; 5 days overdue correctly returns null since that's
+`overdueDays()`'s territory; no due date returns null) and confirmed
+`renderCard()` on a synthetic due-soon alert actually emits the
+`due-soon`/`DUE SOON` badge markup -- exercising the new code path end to
+end despite the current dataset having no live example.
+
+Committed as `a23c75c`, pushed to main. Pure frontend change with zero
+pipeline/data impact -- did not trigger `cve-alerts.yml`. Waited 45s for
+GitHub Pages redeploy, confirmed via `curl` that live `app.js` contains the
+new `daysUntilDue`/`due-soon`/`DUE SOON` identifiers. Loaded the LIVE
+dashboard at `https://astruzocyber.github.io/CVE/` in the browser tool:
+confirmed 440 cards render, result count reads "440 of 440 alerts", and
+`daysUntilDue` is present as a live function -- no regression. Live
+verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (due-soon
+lookahead badge) cleared the bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.

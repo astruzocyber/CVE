@@ -1,7 +1,7 @@
 {
     "consecutive_no_improvement": 0,
     "consecutive_failed_cycles": 0,
-    "total_cycles": 15,
+    "total_cycles": 16,
     "implemented": [
         {
             "cycle": 1,
@@ -107,9 +107,16 @@
             "title": "Show alert count by source (stats.by_source) breakdown pills on dashboard",
             "description": "compute_stats() in aggregate.py has computed a by_source dict (e.g. {\"nvd\": 440}) since early cycles, but it was never rendered on the dashboard -- a viewer had no quick way to see the source mix (NVD sweep vs GHSA vs Dependabot contributions) without exporting CSV and counting manually. Added renderSourceBreakdown() to docs/app.js, called from the existing loadStats() fetch of data/stats.json: renders one small pill per source (name + count, sorted by count descending) into a new #source-breakdown div in docs/index.html, hidden when by_source is empty/missing. Added matching .source-breakdown/.source-pill CSS rules to docs/style.css. Pure additive frontend change reading an existing stats.json field: zero new API calls, zero backend/schema changes, zero cost. Validated locally on scratch port 8817 with real production data (440 alerts): node --check passed, pill rendered correctly as 'nvd: 440', confirmed zero regression to stats bar, historical trend chart, and search filter (wordpress query still correctly narrowed 440->125). Live-verified on production: curl confirmed new identifiers present in deployed app.js/index.html, and a live browser load confirmed the #source-breakdown div is populated with 'nvd: 440' and the result count still reads 440 of 440 alerts.",
             "commit_sha": "458143a846d7d48aa269f71a4b2c5bd374bd3433"
+        },
+        {
+            "cycle": 16,
+            "timestamp": "2026-09-09T11:02:04.027636+00:00",
+            "title": "DUE SOON badge for KEV entries within 7 days of remediation deadline",
+            "description": "Cycle 14 added a days-overdue magnitude to the existing OVERDUE badge, but there was no forward-looking equivalent -- a KEV entry due in 2 days looked identical to one due in 60 days until it actually crossed the deadline and became OVERDUE, giving a security team zero advance warning to prioritize remediation before a BOD 22-01 compliance breach. Added daysUntilDue(alert) to docs/app.js (mutually exclusive with the existing overdueDays()/isOverdue(): returns null if there's no due date or the date has already passed) and a new yellow 'DUE SOON (Nd)' badge rendered on renderCard() whenever 0 <= days-until-due <= 7, alongside the existing KEV/RANSOMWARE/OVERDUE badges. Added matching .badge.due-soon CSS rule to docs/style.css. Pure additive frontend change reading the existing kev_due_date field: zero new API calls, zero backend/schema changes, zero cost.",
+            "commit_sha": "a23c75c"
         }
     ],
     "rejected": [],
-    "last_cycle_at": "2026-09-09T10:26:00Z",
+    "last_cycle_at": "2026-09-09T11:02:04.027644+00:00",
     "stopped": false
 }
