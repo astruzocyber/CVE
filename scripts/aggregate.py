@@ -218,24 +218,46 @@ def save_json_file(path, obj):
 # 1. CISA KEV
 # ---------------------------------------------------------------------------
 def fetch_kev():
+    """Fetch the CISA KEV catalog with retry/backoff -- a transient failure here
+    would otherwise silently zero out KEV status (and the +25 risk-score bonus)
+    for every alert in the entire run, so this gets the same resilience pattern
+    already used by nvd_query() rather than a single bare attempt."""
     print("Fetching CISA KEV catalog...")
-    try:
-        data, _ = http_get_json(KEV_URL)
-        if not validate_schema("CISA KEV", data, ["vulnerabilities", "catalogVersion"]):
-            return {}
-        vulns = data.get("vulnerabilities", [])
-        if not validate_schema("CISA KEV.vulnerabilities", vulns, [], kind="list"):
-            return {}
-        kev_map = {}
-        for v in vulns:
-            if not isinstance(v, dict) or "cveID" not in v:
+    last_err = None
+    for attempt in range(3):
+        try:
+            data, _ = http_get_json(KEV_URL)
+            if not validate_schema("CISA KEV", data, ["vulnerabilities", "catalogVersion"]):
+                return {}
+            vulns = data.get("vulnerabilities", [])
+            if not validate_schema("CISA KEV.vulnerabilities", vulns, [], kind="list"):
+                return {}
+            kev_map = {}
+            for v in vulns:
+                if not isinstance(v, dict) or "cveID" not in v:
+                    continue
+                kev_map[v["cveID"]] = v
+            print(f"  KEV catalog: {len(kev_map)} entries")
+            return kev_map
+        except urllib.error.HTTPError as e:
+            last_err = e
+            if e.code == 429 or e.code >= 500:
+                wait = 5 * (attempt + 1)
+                print(f"  KEV fetch HTTP {e.code}, retrying in {wait}s "
+                      f"(attempt {attempt + 1}/3)...", file=sys.stderr)
+                time.sleep(wait)
                 continue
-            kev_map[v["cveID"]] = v
-        print(f"  KEV catalog: {len(kev_map)} entries")
-        return kev_map
-    except Exception as e:
-        print(f"  WARNING: failed to fetch KEV catalog: {e}", file=sys.stderr)
-        return {}
+            print(f"  WARNING: failed to fetch KEV catalog: HTTP {e.code} {e.reason}",
+                  file=sys.stderr)
+            return {}
+        except Exception as e:
+            last_err = e
+            wait = 5 * (attempt + 1)
+            print(f"  KEV fetch failed ({e}), retrying in {wait}s "
+                  f"(attempt {attempt + 1}/3)...", file=sys.stderr)
+            time.sleep(wait)
+    print(f"  WARNING: failed to fetch KEV catalog after 3 attempts: {last_err}", file=sys.stderr)
+    return {}
 
 
 # ---------------------------------------------------------------------------
@@ -355,19 +377,30 @@ def fetch_epss(cve_ids):
     for i in range(0, len(ids), batch_size):
         batch = ids[i:i + batch_size]
         url = EPSS_URL + "?" + urllib.parse.urlencode({"cve": ",".join(batch)})
-        try:
-            data, _ = http_get_json(url, timeout=30)
-            if not validate_schema("EPSS response", data, ["data"]):
-                continue
-            for item in data.get("data", []):
-                cve = item.get("cve")
-                if cve:
-                    epss_scores[cve] = {
-                        "epss": float(item.get("epss", 0)),
-                        "percentile": float(item.get("percentile", 0)),
-                    }
-        except Exception as e:
-            print(f"  WARNING: EPSS batch failed: {e}", file=sys.stderr)
+        # Retry with backoff on transient failures -- a single dropped batch would
+        # otherwise silently leave every CVE in it with epss_score=None (40% of the
+        # composite risk score), same resilience pattern as nvd_query()/fetch_kev().
+        for attempt in range(3):
+            try:
+                data, _ = http_get_json(url, timeout=30)
+                if not validate_schema("EPSS response", data, ["data"]):
+                    break
+                for item in data.get("data", []):
+                    cve = item.get("cve")
+                    if cve:
+                        epss_scores[cve] = {
+                            "epss": float(item.get("epss", 0)),
+                            "percentile": float(item.get("percentile", 0)),
+                        }
+                break
+            except Exception as e:
+                if attempt < 2:
+                    wait = 5 * (attempt + 1)
+                    print(f"  WARNING: EPSS batch failed ({e}), retrying in {wait}s "
+                          f"(attempt {attempt + 1}/3)...", file=sys.stderr)
+                    time.sleep(wait)
+                else:
+                    print(f"  WARNING: EPSS batch failed after 3 attempts: {e}", file=sys.stderr)
         time.sleep(0.5)
     return epss_scores
 
