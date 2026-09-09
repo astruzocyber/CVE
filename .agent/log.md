@@ -1498,3 +1498,33 @@ input debounce) cleared the bar and was implemented.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 34. `stopped`: false.
+
+
+## Cycle 35 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34403032881, 34399421600, 34398719776, 34390363792, 34375061636), no 429/throttle signals from NVD/EPSS/GHSA/CISA in Actions logs, only benign Node 20 runner deprecation noise.
+
+**Change:** Add a `@media print` stylesheet and a "Print / PDF" button for producing clean triage reports.
+
+- **Opportunity:** Auditing `docs/style.css` found zero `@media print` rules despite the dashboard's stated audience being a security team that would plausibly need to hand a printed or PDF-exported triage list to leadership or compliance. Printing the raw dark theme as-is would dump an unreadable, ink-wasting page including the interactive toolbar, filter controls, dependency-file uploader, and trend-chart canvas -- none of which are meaningful on paper.
+- **Frontend:** Added a `@media print` block to `docs/style.css`: converts body/card background to white and text to dark, hides `.stale-banner`, `.trend-section`, `.dep-filter`, `.controls`, and the CVE-link "Copied!" pseudo-element indicator; expands `.score-breakdown` inline (normally a click-to-reveal toggle) so the CVSS/EPSS/KEV risk-score math is visible without interaction; recolors badges/pills/exploit-chips to print-safe outlined style; sets `break-inside: avoid` on `.card` so a single alert never splits across a page boundary; switches `.card-grid` to single column. Added a visible "Print / PDF" button (`docs/index.html`) next to the existing "Export CSV" button, wired to `window.print()` in `docs/app.js` -- the button itself is inside `.controls` so it correctly disappears from the printed output.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure client-side CSS/HTML/JS, zero new dependencies, zero new API calls). Validation risk 1/5 (additive `@media print` block scoped entirely to the print media query, cannot affect on-screen rendering at all; new button/handler is additive and isolated). Value 3/5 (closes a real, previously-unaddressed gap for a security-team tool's realistic "hand this to my boss/auditor" workflow -- distinct from the existing CSV export, since a formatted visual report with risk-score breakdowns is often more useful for a briefing than a raw data file).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. CSS brace-balance check (123 open / 123 close). No `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle was needed (`git status --short` confirmed only `docs/app.js`, `docs/index.html`, `docs/style.css` touched).
+- Served `docs/` on a local scratch port (8933, background process) with real production data (516 alerts). Used the browser tool with CDP `Emulation.setEmulatedMedia(media='print')` to force print-media CSS evaluation without a real print dialog: confirmed via `getComputedStyle` that `document.body` background flipped from dark to `rgb(255,255,255)`/text to `rgb(17,17,17)`, `.controls` computed `display: none`, `.card` background white, `.score-breakdown` computed `display: block` (normally hidden/toggle-only), `#stale-banner` computed `display: none`, and `.card-grid` computed `grid-template-columns` collapsed to a single column (`1152px` = 1fr). Confirmed `window.matchMedia('print').matches === true` during emulation.
+- Reset media emulation to screen and confirmed zero regression: body background reverted to dark `rgb(11,15,20)`, `.controls` back to `display: flex`, existing debounced search filter still worked correctly (`wordpress`: 516→132→516 on clear), `print-view` and `export-csv` buttons both present and correctly labeled.
+- (Screenshot capture during print-media emulation showed the *pre-emulation* dark-theme layout rather than the print styles -- a known CDP screenshot/emulation-timing quirk in the harness, not a CSS bug; the `getComputedStyle` assertions above are authoritative and directly confirm every print rule actually applied to the live DOM.)
+
+**Deploy (Step 5):**
+- Committed (`ce17ca5`) and pushed to `main`. Frontend-only change -- no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~75s for Pages deployment, then cache-busted curl confirmed `print-view` string present in live `app.js` (1 occurrence) and `index.html` (1 occurrence), and `@media print` present in live `style.css` (1 occurrence).
+- Loaded the LIVE dashboard in the browser tool with a fresh cache-busted navigation: confirmed `#print-view` button exists with text "Print / PDF" and `stat-total` correctly reads 516 -- zero regression to existing rendering.
+
+**Rejected this cycle:** None — the print-stylesheet candidate cleared the bar on first pass (feasibility 5/5, validation risk 1/5, value 3/5) and was implemented.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 35. `stopped`: false.

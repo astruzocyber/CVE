@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 34,
+  "total_cycles": 35,
   "implemented": [
     {
       "cycle": 1,
@@ -240,9 +240,16 @@
       "title": "Add matched_keywords column to CSV export",
       "description": "Cycle 32 closed a CSV-export parity gap for kev_required_action/kev_notes/CVSS-vector fields, but matched_keywords (rendered as a green 'Watchlist match' badge on cards since cycle 8, and already part of the search haystack since cycle 25) was still missing from exportCsv(). A viewer exporting CSV for offline triage/reporting could see which watchlist keyword(s) flagged a CVE on-screen but lost that signal entirely in the exported file. Added matched_keywords as a new CSV column (joined with '; ', matching the existing convention used for affected/cwe_ids array fields), placed after cwe_ids in both the header and per-row array. Pure additive one-column change reading a field already present in alerts.json since early cycles: zero new API calls, zero backend/schema changes.",
       "commit_sha": "ad02248"
+    },
+    {
+      "cycle": 35,
+      "timestamp": "2026-09-09T23:07:03.022670+00:00",
+      "title": "Print/PDF stylesheet and Print button for triage reports",
+      "description": "The dashboard had zero @media print rules despite being a security-team triage tool likely to be printed or exported as PDF for leadership/compliance handoff -- printing the raw dark theme would dump an unreadable, ink-wasting, interactive-controls-included page. Added a print stylesheet (docs/style.css) converting to light bg/dark text, hiding non-essential UI (toolbar/filters, dependency-file uploader, trend chart canvas, stale banner), expanding the risk-score breakdown inline (visible without clicking), badges/pills recolored to print-safe outlines, and preventing cards from splitting across page breaks (break-inside: avoid). Added a visible 'Print / PDF' button (docs/index.html) next to Export CSV that calls window.print() (itself correctly hidden in the print view via .controls). Pure additive CSS/HTML/JS -- zero new API calls, zero backend/schema changes, zero cost. Validated locally via CDP print-media emulation (Emulation.setEmulatedMedia) on real production data (516 alerts): confirmed body background/text flipped to light/dark, .controls hidden, .score-breakdown expanded, stale-banner hidden, card-grid single-column, all correctly gated to print media only (screen rendering unaffected, confirmed body bg reverted to dark and existing search filter still worked: wordpress 516->132->516). Live-verified on production: print-view button and @media print rules confirmed present in deployed app.js/style.css/index.html.",
+      "commit_sha": "ce17ca5"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T22:30:00Z",
+  "last_cycle_at": "2026-09-09T23:07:03.022678+00:00",
   "stopped": false
 }
