@@ -305,11 +305,43 @@ function exportCsv() {
   URL.revokeObjectURL(url);
 }
 
+// Pipeline runs on a 4-hour schedule (.github/workflows/cve-alerts.yml). If the
+// most recent generated_at is older than STALE_THRESHOLD_MS, something is wrong
+// with the scheduled Action (broken workflow, disabled schedule, repeated
+// failures) and a security lead viewing this public dashboard should know the
+// data may be out of date rather than silently trusting it. Threshold is set
+// generously above the 4h cadence to tolerate a single missed/delayed run
+// without false-alarming on normal GitHub Actions scheduling jitter.
+const STALE_THRESHOLD_MS = 20 * 60 * 60 * 1000; // 20 hours
+
+function checkStaleness(generatedAt) {
+  const banner = document.getElementById("stale-banner");
+  if (!banner) return;
+  if (!generatedAt) {
+    banner.hidden = true;
+    return;
+  }
+  const generated = new Date(generatedAt);
+  if (isNaN(generated)) {
+    banner.hidden = true;
+    return;
+  }
+  const ageMs = Date.now() - generated.getTime();
+  if (ageMs > STALE_THRESHOLD_MS) {
+    const hours = Math.round(ageMs / (60 * 60 * 1000));
+    banner.textContent = `\u26a0 Data may be stale: last successful update was ${hours}h ago (expected every ~4h). The aggregation pipeline may be failing -- check GitHub Actions.`;
+    banner.hidden = false;
+  } else {
+    banner.hidden = true;
+  }
+}
+
 async function loadStats() {
   try {
     const res = await fetch("data/stats.json", { cache: "no-store" });
     if (!res.ok) return;
     const stats = await res.json();
+    checkStaleness(stats.generated_at);
     document.getElementById("stats-bar").hidden = false;
     document.getElementById("stat-total").textContent = stats.total_alerts ?? "-";
     document.getElementById("stat-critical").textContent = stats.by_severity?.critical ?? "-";
