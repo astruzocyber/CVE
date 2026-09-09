@@ -254,6 +254,7 @@ function readFiltersFromURL() {
   const params = new URLSearchParams(location.search);
   const searchEl = document.getElementById("search");
   const kevEl = document.getElementById("kev-filter");
+  const severityEl = document.getElementById("severity-filter");
   const sourceEl = document.getElementById("source-filter");
   const sortEl = document.getElementById("sort-by");
   if (params.has("q")) searchEl.value = params.get("q");
@@ -261,14 +262,16 @@ function readFiltersFromURL() {
   // in every browser, so an unrecognized/stale param value safely falls back
   // to whatever the element's default selection already was.
   if (params.has("kev")) kevEl.value = params.get("kev");
+  if (params.has("sev") && severityEl) severityEl.value = params.get("sev");
   if (params.has("source")) sourceEl.value = params.get("source");
   if (params.has("sort")) sortEl.value = params.get("sort");
 }
 
-function updateURLFromFilters(search, kevFilter, sourceFilter, sortBy) {
+function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy) {
   const params = new URLSearchParams();
   if (search) params.set("q", search);
   if (kevFilter && kevFilter !== "all") params.set("kev", kevFilter);
+  if (severityFilter && severityFilter !== "all") params.set("sev", severityFilter);
   if (sourceFilter && sourceFilter !== "all") params.set("source", sourceFilter);
   if (sortBy && sortBy !== "risk_score") params.set("sort", sortBy);
   const qs = params.toString();
@@ -279,9 +282,10 @@ function updateURLFromFilters(search, kevFilter, sourceFilter, sortBy) {
 function applyFiltersAndRender() {
   const search = document.getElementById("search").value.trim().toLowerCase();
   const kevFilter = document.getElementById("kev-filter").value;
+  const severityFilter = document.getElementById("severity-filter").value;
   const sourceFilter = document.getElementById("source-filter").value;
   const sortBy = document.getElementById("sort-by").value;
-  updateURLFromFilters(search, kevFilter, sourceFilter, sortBy);
+  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy);
 
   let filtered = allAlerts.filter((a) => {
     if (kevFilter === "kev" && !a.kev) return false;
@@ -292,6 +296,7 @@ function applyFiltersAndRender() {
       if (typeof d !== "number" || d < 0 || d > 7) return false;
     }
     if (kevFilter === "ransomware" && !a.kev_ransomware_use) return false;
+    if (severityFilter !== "all" && severityClass(a.cvss_score) !== severityFilter) return false;
     if (!matchesSource(a, sourceFilter)) return false;
     if (dependencyPackageNames && !alertMatchesPackages(a, dependencyPackageNames)) return false;
     if (search) {
@@ -588,6 +593,7 @@ async function loadTrendChart() {
 
 document.getElementById("search").addEventListener("input", applyFiltersAndRender);
 document.getElementById("kev-filter").addEventListener("change", applyFiltersAndRender);
+document.getElementById("severity-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("source-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("sort-by").addEventListener("change", applyFiltersAndRender);
 document.getElementById("export-csv").addEventListener("click", exportCsv);
