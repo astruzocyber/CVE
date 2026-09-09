@@ -386,3 +386,50 @@ bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 8 — 2026-09-09T06:20:00Z
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs prior to this cycle -- all `completed`/`success`. Latest run (05:10:29Z)
+showed 7 transient `NVD HTTP error 503: Service Unavailable` lines, absorbed
+by pre-existing retry logic, non-fatal; no 429/throttle signal from any
+source. Sources healthy going into this cycle.
+
+**Implemented:** Watchlist keyword-match badges on alert cards. The
+aggregate.py pipeline has captured `matched_keywords` per alert since early
+cycles (which watchlist.yaml keyword(s) caused a CVE to surface, e.g.
+`wordpress`) -- 129/438 currently-tracked alerts have a non-empty value --
+but this field was never surfaced in the UI, so a security lead had no
+visual cue for *why* a CVE appeared beyond generic source presence. Added a
+green "Watchlist match" badge row to `renderCard()` in `docs/app.js` (reads
+the existing `matched_keywords` array, no new data/API/schema change) and
+matching `.matched` / `.badge.match` CSS rules in `docs/style.css`. Renders
+conditionally, only for alerts with a non-empty array; zero visual change
+for the rest. Scored 5/5/5: zero added cost (no new calls, no new fields),
+low validation risk (pure additive render of already-collected data), real
+value (explains relevance at a glance for a security triage tool).
+
+Validation performed: `node --check docs/app.js` passed. No backend/pipeline
+files touched, so no aggregate.py test-run/backup step was needed. Served
+`docs/` locally on scratch port 8792, loaded in the browser tool, filtered
+to `q=wordpress` (123 of 438 alerts), confirmed green "WORDPRESS" / "WP
+PLUGIN" / "WP-CONTENT" badges rendered correctly under the Affected line on
+multiple cards with screenshot verification. Cleared the search box and
+confirmed unchanged baseline ("438 of 438 alerts", no console errors, no
+regression to any other card element or filter).
+
+Committed as `44b21c4`, pushed to main. Pure frontend-JS/CSS change with
+zero pipeline/data impact -- did not trigger `cve-alerts.yml` (no reason to
+consume Actions minutes for a change that can't affect production data).
+Waited ~80s for GitHub Pages redeploy, confirmed via `curl` that live
+`app.js` contains the new badge-rendering code. Loaded the LIVE dashboard at
+`https://astruzocyber.github.io/CVE/?q=wordpress` in the browser tool:
+screenshot confirmed green watchlist-match badges rendering correctly in
+production alongside all existing badges/scores/layout, no regression. Live
+verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified cleared the
+bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.

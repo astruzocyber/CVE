@@ -1,59 +1,66 @@
 {
-  "consecutive_no_improvement": 0,
-  "consecutive_failed_cycles": 0,
-  "total_cycles": 7,
-  "implemented": [
-    {
-      "cycle": 1,
-      "timestamp": "2026-09-09T02:00:00Z",
-      "title": "Retry with backoff on CISA KEV and EPSS fetch failures",
-      "description": "fetch_kev() and fetch_epss() previously made a single bare HTTP attempt each, unlike nvd_query() which already retried 3x with exponential backoff. A transient network blip, 429, or 5xx from either CISA KEV or FIRST.org EPSS would silently zero out KEV status (losing the +25 risk-score bonus for every alert that run) or EPSS scores (40% of the composite risk score) for the whole run, degrading risk-score accuracy without any visible failure. Both functions now use the same 3-attempt exponential backoff pattern already established for NVD, with explicit stderr logging of each retry attempt. Zero new dependencies, zero new API calls under normal conditions (retries only fire on actual failure).",
-      "commit_sha": "f4428be"
-    },
-    {
-      "cycle": 2,
-      "timestamp": "2026-09-09T02:38:03Z",
-      "title": "Retry with backoff on Dependabot Alerts API pagination fetch",
-      "description": "fetch_dependabot_alerts() was the last remaining HTTP call in the pipeline still making a single bare attempt per page. Added 3-attempt exponential backoff on 429/5xx/transient errors.",
-      "commit_sha": "8e94e2d"
-    },
-    {
-      "cycle": 3,
-      "timestamp": "2026-09-09T03:20:57Z",
-      "title": "Retry with backoff on GHSA advisories fetch",
-      "description": "fetch_ghsa_advisories() was the last remaining external HTTP call without retry. Added the identical 429/5xx-retried pattern used everywhere else in the file.",
-      "commit_sha": "d92b1de"
-    },
-    {
-      "cycle": 4,
-      "timestamp": "2026-09-09T03:52:00Z",
-      "title": "Frontend accessibility: labels and aria-attributes on filter controls",
-      "description": "Added visually-hidden labels, aria-label attributes, aria-live result count, role=status empty-state, and aria-expanded on the score-breakdown toggle. Pure additive markup, zero visual change.",
-      "commit_sha": "23a0e81"
-    },
-    {
-      "cycle": 5,
-      "timestamp": "2026-09-09T04:30:13Z",
-      "title": "Retry with backoff on GitHub Issue creation (notify_github_issues.py)",
-      "description": "create_issue() was the last remaining external HTTP call in the entire pipeline without retry. Added the identical 429/5xx-retried pattern, closing the reliability layer across both aggregate.py and notify_github_issues.py.",
-      "commit_sha": "4b537d1"
-    },
-    {
-      "cycle": 6,
-      "timestamp": "2026-09-09T05:10:29Z",
-      "title": "Refresh EPSS/KEV/risk_score for existing alerts outside NVD lookback window",
-      "description": "Previously, once a CVE aged out of the NVD lookback window (2 days in production CI, 8 days default locally) or wasn't resurfaced by Dependabot/GHSA that run, its epss_score (40% of composite risk_score) and kev status froze permanently at the value captured on first_seen -- even though FIRST.org publishes new EPSS scores daily and CISA KEV catalog additions are unrelated to NVD's lastModified window. Now every run also queries EPSS/KEV for all existing tracked alerts (not just ones resurfaced this cycle) and refreshes epss_score, epss_percentile, kev, kev_date_added, kev_due_date, kev_ransomware_use, kev_required_action, risk_score, and risk_score_breakdown in place for the untouched ones -- leaving description/cvss_score/source/first_seen/affected fields alone since this run has no fresher data for them. Validated locally: same 438 CVEs before/after, first_seen and cvss_score untouched, only score fields updated; EPSS query volume rose from ~305 (filtered-only) to ~943 (all 438 tracked + new candidates, deduplicated) CVEs, still a single unauthenticated batched FIRST.org endpoint call (no key, generous free rate limit), well within zero-cost constraints. Live CI run hit transient NVD 503s (existing retry logic absorbed them, non-fatal) and completed successfully with correct output.",
-      "commit_sha": "71e5d5c"
-    },
-    {
-      "cycle": 7,
-      "timestamp": "2026-09-09T05:45:00Z",
-      "title": "Shareable filter state via URL query params",
-      "description": "Dashboard filters (search, KEV status, source, sort order) previously reset on every page load and could not be shared or bookmarked -- e.g. a security lead could not send a teammate a direct link to 'KEV overdue only, sorted by risk score'. Added readFiltersFromURL() (reads q/kev/source/sort from location.search on load, no-op for unrecognized values since setting a <select>.value to a nonexistent option is a browser no-op) and updateURLFromFilters() (writes the current filter state into the URL via history.replaceState on every applyFiltersAndRender call, so it never spams browser history and defaults are omitted from the URL to keep links clean). Zero backend/API changes, zero new dependencies, purely additive client-side JS. Scored 5/5/5: zero cost, low validation risk (pure URL<->DOM sync, no data mutation), real value (shareable/bookmarkable triage views, a genuine UX gap for a security-team tool).",
-      "commit_sha": "f1cb15d7833c1e3ddad3df486108944f38914763"
-    }
-  ],
-  "rejected": [],
-  "last_cycle_at": "2026-09-09T05:45:00Z",
-  "stopped": false
+    "consecutive_no_improvement": 0,
+    "consecutive_failed_cycles": 0,
+    "total_cycles": 8,
+    "implemented": [
+        {
+            "cycle": 1,
+            "timestamp": "2026-09-09T02:00:00Z",
+            "title": "Retry with backoff on CISA KEV and EPSS fetch failures",
+            "description": "fetch_kev() and fetch_epss() previously made a single bare HTTP attempt each, unlike nvd_query() which already retried 3x with exponential backoff. A transient network blip, 429, or 5xx from either CISA KEV or FIRST.org EPSS would silently zero out KEV status (losing the +25 risk-score bonus for every alert that run) or EPSS scores (40% of the composite risk score) for the whole run, degrading risk-score accuracy without any visible failure. Both functions now use the same 3-attempt exponential backoff pattern already established for NVD, with explicit stderr logging of each retry attempt. Zero new dependencies, zero new API calls under normal conditions (retries only fire on actual failure).",
+            "commit_sha": "f4428be"
+        },
+        {
+            "cycle": 2,
+            "timestamp": "2026-09-09T02:38:03Z",
+            "title": "Retry with backoff on Dependabot Alerts API pagination fetch",
+            "description": "fetch_dependabot_alerts() was the last remaining HTTP call in the pipeline still making a single bare attempt per page. Added 3-attempt exponential backoff on 429/5xx/transient errors.",
+            "commit_sha": "8e94e2d"
+        },
+        {
+            "cycle": 3,
+            "timestamp": "2026-09-09T03:20:57Z",
+            "title": "Retry with backoff on GHSA advisories fetch",
+            "description": "fetch_ghsa_advisories() was the last remaining external HTTP call without retry. Added the identical 429/5xx-retried pattern used everywhere else in the file.",
+            "commit_sha": "d92b1de"
+        },
+        {
+            "cycle": 4,
+            "timestamp": "2026-09-09T03:52:00Z",
+            "title": "Frontend accessibility: labels and aria-attributes on filter controls",
+            "description": "Added visually-hidden labels, aria-label attributes, aria-live result count, role=status empty-state, and aria-expanded on the score-breakdown toggle. Pure additive markup, zero visual change.",
+            "commit_sha": "23a0e81"
+        },
+        {
+            "cycle": 5,
+            "timestamp": "2026-09-09T04:30:13Z",
+            "title": "Retry with backoff on GitHub Issue creation (notify_github_issues.py)",
+            "description": "create_issue() was the last remaining external HTTP call in the entire pipeline without retry. Added the identical 429/5xx-retried pattern, closing the reliability layer across both aggregate.py and notify_github_issues.py.",
+            "commit_sha": "4b537d1"
+        },
+        {
+            "cycle": 6,
+            "timestamp": "2026-09-09T05:10:29Z",
+            "title": "Refresh EPSS/KEV/risk_score for existing alerts outside NVD lookback window",
+            "description": "Previously, once a CVE aged out of the NVD lookback window (2 days in production CI, 8 days default locally) or wasn't resurfaced by Dependabot/GHSA that run, its epss_score (40% of composite risk_score) and kev status froze permanently at the value captured on first_seen -- even though FIRST.org publishes new EPSS scores daily and CISA KEV catalog additions are unrelated to NVD's lastModified window. Now every run also queries EPSS/KEV for all existing tracked alerts (not just ones resurfaced this cycle) and refreshes epss_score, epss_percentile, kev, kev_date_added, kev_due_date, kev_ransomware_use, kev_required_action, risk_score, and risk_score_breakdown in place for the untouched ones -- leaving description/cvss_score/source/first_seen/affected fields alone since this run has no fresher data for them. Validated locally: same 438 CVEs before/after, first_seen and cvss_score untouched, only score fields updated; EPSS query volume rose from ~305 (filtered-only) to ~943 (all 438 tracked + new candidates, deduplicated) CVEs, still a single unauthenticated batched FIRST.org endpoint call (no key, generous free rate limit), well within zero-cost constraints. Live CI run hit transient NVD 503s (existing retry logic absorbed them, non-fatal) and completed successfully with correct output.",
+            "commit_sha": "71e5d5c"
+        },
+        {
+            "cycle": 7,
+            "timestamp": "2026-09-09T05:45:00Z",
+            "title": "Shareable filter state via URL query params",
+            "description": "Dashboard filters (search, KEV status, source, sort order) previously reset on every page load and could not be shared or bookmarked -- e.g. a security lead could not send a teammate a direct link to 'KEV overdue only, sorted by risk score'. Added readFiltersFromURL() (reads q/kev/source/sort from location.search on load, no-op for unrecognized values since setting a <select>.value to a nonexistent option is a browser no-op) and updateURLFromFilters() (writes the current filter state into the URL via history.replaceState on every applyFiltersAndRender call, so it never spams browser history and defaults are omitted from the URL to keep links clean). Zero backend/API changes, zero new dependencies, purely additive client-side JS. Scored 5/5/5: zero cost, low validation risk (pure URL<->DOM sync, no data mutation), real value (shareable/bookmarkable triage views, a genuine UX gap for a security-team tool).",
+            "commit_sha": "f1cb15d7833c1e3ddad3df486108944f38914763"
+        },
+        {
+            "cycle": 8,
+            "timestamp": "2026-09-09T06:20:00Z",
+            "title": "Show watchlist keyword-match badges on alert cards",
+            "description": "The aggregate.py pipeline has captured matched_keywords (which watchlist.yaml keyword term(s) caused a CVE to surface, e.g. 'wordpress') per alert since early cycles, and 129/438 currently-tracked alerts have a non-empty value -- but the field was never rendered on the dashboard, so a security lead reviewing the feed had no visual indicator of WHY a given CVE was flagged as relevant versus appearing from a generic NVD/GHSA/Dependabot sweep. Added a small green 'Watchlist match' badge row per matched keyword to renderCard() in docs/app.js (purely additive DOM, no new fields/API calls) and matching .matched/.badge.match CSS rules in docs/style.css. Renders only when matched_keywords is non-empty; alerts with an empty array (majority, from generic source-driven presence) are unaffected.",
+            "commit_sha": "44b21c4"
+        }
+    ],
+    "rejected": [],
+    "last_cycle_at": "2026-09-09T06:20:00Z",
+    "stopped": false
 }
