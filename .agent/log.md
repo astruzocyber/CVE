@@ -433,3 +433,58 @@ bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 9 — 2026-09-09T06:56:00Z
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs prior to this cycle -- all `completed`/`success`. Latest run
+(05:10:29Z) showed 7 transient `NVD HTTP error 503` lines, absorbed by
+pre-existing retry logic, non-fatal. No 429/throttle signal from any
+source. Sources healthy going into this cycle.
+
+**Implemented:** Stale-data warning banner on the dashboard. The
+aggregation pipeline runs every 4 hours via GitHub Actions but the public
+dashboard had zero client-visible signal if that schedule silently broke
+(disabled cron, repeated failures, workflow misconfiguration) -- a viewer
+would keep trusting stale data indefinitely with no cue anything was wrong.
+Added `checkStaleness()` in `docs/app.js`, wired into the existing
+`loadStats()` fetch of `data/stats.json`: compares `stats.generated_at`
+against `Date.now()`, and if the gap exceeds 20 hours (5x the 4h cadence,
+tolerant of one missed/delayed run without false-alarming on ordinary
+Actions scheduling jitter) shows a visible red `role="alert"` banner naming
+the exact staleness age in hours and pointing to GitHub Actions. New
+`#stale-banner` element added to `docs/index.html` (hidden by default),
+matching `.stale-banner` CSS rule added to `docs/style.css`. Zero new API
+calls, zero backend/schema changes -- pure additive frontend read of a
+field (`generated_at`) already present in `stats.json` since the dashboard
+was first built.
+
+Validation performed: `node --check docs/app.js` passed; YAML files
+unaffected/still valid; no Python files touched so no aggregate.py
+backup/test-run step was needed. Served `docs/` locally on scratch port
+8793, loaded in the browser tool with real production `stats.json`
+(generated ~106 min old at test time) -- confirmed banner correctly
+**hidden** (fresh data, under threshold), screenshot verified normal
+dashboard rendering. Then called `checkStaleness('2026-09-01T00:00:00Z')`
+directly in the loaded page to simulate a ~199h-stale scenario -- confirmed
+banner correctly **shown** with accurate hour count and clear message,
+screenshot verified layout renders cleanly with no visual regression to
+stats bar or trend chart below it. Killed local server after validation.
+
+Committed as `4271b30`, pushed to main. Pure frontend-JS/HTML/CSS change
+with zero pipeline/data impact -- did not trigger `cve-alerts.yml` (no
+reason to consume Actions minutes for a change that can't affect
+production data). Waited ~60s for GitHub Pages redeploy, confirmed via
+`curl` that live `app.js` contains `checkStaleness` and `index.html`/
+`style.css` return HTTP 200. Loaded the LIVE dashboard at
+`https://astruzocyber.github.io/CVE/` in the browser tool: confirmed
+`stale-banner` correctly hidden (real production data is fresh),
+`result-count` showing "438 of 438 alerts" (unchanged), screenshot
+confirmed no regression to any existing feature. Live verification passed;
+no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified cleared the
+bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.

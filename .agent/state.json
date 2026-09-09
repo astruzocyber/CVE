@@ -1,7 +1,7 @@
 {
     "consecutive_no_improvement": 0,
     "consecutive_failed_cycles": 0,
-    "total_cycles": 8,
+    "total_cycles": 9,
     "implemented": [
         {
             "cycle": 1,
@@ -58,9 +58,16 @@
             "title": "Show watchlist keyword-match badges on alert cards",
             "description": "The aggregate.py pipeline has captured matched_keywords (which watchlist.yaml keyword term(s) caused a CVE to surface, e.g. 'wordpress') per alert since early cycles, and 129/438 currently-tracked alerts have a non-empty value -- but the field was never rendered on the dashboard, so a security lead reviewing the feed had no visual indicator of WHY a given CVE was flagged as relevant versus appearing from a generic NVD/GHSA/Dependabot sweep. Added a small green 'Watchlist match' badge row per matched keyword to renderCard() in docs/app.js (purely additive DOM, no new fields/API calls) and matching .matched/.badge.match CSS rules in docs/style.css. Renders only when matched_keywords is non-empty; alerts with an empty array (majority, from generic source-driven presence) are unaffected.",
             "commit_sha": "44b21c4"
+        },
+        {
+            "cycle": 9,
+            "timestamp": "2026-09-09T06:58:03.989324Z",
+            "title": "Stale-data warning banner on dashboard",
+            "description": "The aggregation pipeline runs on a 4-hour GitHub Actions schedule but the public dashboard had no way to signal if it silently stopped updating (broken workflow, disabled schedule cron, repeated failures) -- a security lead would keep trusting increasingly-old data indefinitely with zero visual cue. Added checkStaleness() in docs/app.js, called from the existing loadStats() fetch of data/stats.json: compares stats.generated_at against Date.now() and, if the gap exceeds 20 hours (5x the 4h cadence, tolerant of one missed/delayed run without false-alarming on normal Actions scheduling jitter), shows a visible red role=alert banner naming the exact staleness age in hours and pointing the viewer to check GitHub Actions. Pure additive frontend change: new #stale-banner <p> element in docs/index.html (hidden by default), a new .stale-banner CSS rule in docs/style.css, and the checkStaleness() function plus one call site in docs/app.js. Zero new API calls, zero backend/schema changes, zero risk to existing data pipeline.",
+            "commit_sha": "4271b30"
         }
     ],
     "rejected": [],
-    "last_cycle_at": "2026-09-09T06:20:00Z",
+    "last_cycle_at": "2026-09-09T06:58:03.989334Z",
     "stopped": false
 }
