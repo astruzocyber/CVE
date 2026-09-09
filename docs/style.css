@@ -119,6 +119,36 @@ header h1 {
   color: var(--text);
 }
 
+.severity-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.severity-pill {
+  font-size: 0.75rem;
+  background: var(--bg-panel);
+  border-radius: 12px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.severity-pill:hover,
+.severity-pill:focus-visible {
+  filter: brightness(1.25);
+}
+
+.severity-pill.critical { border: 1px solid var(--red); color: var(--red); }
+.severity-pill.high { border: 1px solid var(--orange); color: var(--orange); }
+.severity-pill.medium { border: 1px solid var(--yellow); color: var(--yellow); }
+.severity-pill.low { border: 1px solid var(--green); color: var(--green); }
+.severity-pill.unknown { border: 1px solid var(--border); color: var(--text-dim); }
+
+.severity-pill strong { color: inherit; }
+
+
 main {
   max-width: 1200px;
   margin: 0 auto;

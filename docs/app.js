@@ -510,6 +510,53 @@ function renderSourceBreakdown(bySource) {
   el.hidden = false;
 }
 
+// compute_stats() has computed by_severity ({"critical":N,"high":N,"medium":N,
+// "low":N,"unknown":N}) since early cycles for the "Critical" stat pill, but the
+// medium/low/unknown bands were never surfaced anywhere on the dashboard -- a viewer
+// could see the critical count but had no visibility into the overall severity mix.
+// Renders one clickable pill per non-zero band (reusing the existing severity color
+// convention from card borders/badges); clicking a pill sets the severity-filter
+// dropdown to that band and re-applies filters, giving a one-click drill-down.
+// Purely additive: reads an existing stats.json field, no new API calls.
+function renderSeverityBreakdown(bySeverity) {
+  const el = document.getElementById("severity-breakdown");
+  if (!el) return;
+  if (!bySeverity || typeof bySeverity !== "object") {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  const order = ["critical", "high", "medium", "low", "unknown"];
+  const entries = order
+    .map((band) => [band, bySeverity[band]])
+    .filter(([, count]) => typeof count === "number" && count > 0);
+  if (entries.length === 0) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  el.innerHTML = entries
+    .map(([band, count]) =>
+      `<button type="button" class="severity-pill ${band}" data-severity="${band}" title="Filter to ${band} severity">${band}: <strong>${count}</strong></button>`
+    )
+    .join("");
+  el.hidden = false;
+  el.querySelectorAll(".severity-pill").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const severityEl = document.getElementById("severity-filter");
+      if (!severityEl) return;
+      const band = btn.getAttribute("data-severity");
+      // "unknown" has no matching <option> in the existing severity-filter
+      // dropdown (which only offers all/critical/high/medium/low) -- silently
+      // no-op rather than setting an invalid value.
+      if (band === "unknown") return;
+      severityEl.value = band;
+      applyFiltersAndRender();
+    });
+  });
+}
+
+
 async function loadStats() {
   try {
     const res = await fetch("data/stats.json", { cache: "no-store" });
@@ -525,6 +572,7 @@ async function loadStats() {
     document.getElementById("stat-epss").textContent =
       typeof stats.avg_epss === "number" ? (stats.avg_epss * 100).toFixed(1) + "%" : "-";
     renderSourceBreakdown(stats.by_source);
+    renderSeverityBreakdown(stats.by_severity);
   } catch {
     // stats.json is optional/may not exist yet on the very first run -- fail quietly
   }
