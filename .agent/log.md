@@ -326,3 +326,63 @@ bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 7 — 2026-09-09T05:45:00Z
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions runs
+prior to this cycle (all `completed`/`success`, run times 46s-2m28s). No
+sustained 429/throttle signals from any source. Sources healthy going into
+this cycle.
+
+**Implemented:** Shareable filter state via URL query params. Dashboard
+filters (search text, KEV status, source, sort order) previously reset on
+every page load and could not be shared or bookmarked -- a security lead
+had no way to send a teammate a direct link to e.g. "KEV overdue only,
+sorted by risk score" without a screenshot or verbal instructions. Added
+`readFiltersFromURL()` (reads `q`/`kev`/`source`/`sort` from `location.search`
+on load; setting a `<select>.value` to an option that doesn't exist is a
+no-op in every browser, so a stale/unrecognized param value safely falls
+back to the element's default) and `updateURLFromFilters()` (writes current
+filter state into the URL via `history.replaceState` inside
+`applyFiltersAndRender`, so every keystroke/filter change updates the URL
+without spamming browser history; default values are omitted from the URL
+to keep links clean, e.g. an all-default view produces no query string at
+all). Zero backend/pipeline changes, zero new dependencies, purely additive
+client-side JS in `docs/app.js`. Scored 5/5/5: zero added cost, low
+validation risk (pure URL<->DOM sync, touches no data), real value
+(bookmarkable/shareable triage views -- a genuine gap for a security-team
+tool used across a team).
+
+Validation performed: `node --check docs/app.js` passed. No backend/data
+files touched, so no aggregate.py test-run/backup step was needed. Served
+`docs/` locally on scratch port 8791, loaded
+`http://localhost:8791/index.html?kev=kev&sort=cvss_score` in the browser
+tool: confirmed `kev-filter` select correctly read "kev" from the URL,
+`sort-by` correctly read "cvss_score", result count correctly showed
+"1 of 438 alerts" (filter actually applied, not just UI state). Typed into
+the search box and confirmed `location.search` updated live to
+`?q=wordpress&kev=kev&sort=cvss_score` with the empty-state rendering
+correctly for the (now) zero-match filter combination -- screenshot
+confirmed correct rendering, no regression. Loaded the default
+`http://localhost:8791/index.html` (no params) and confirmed unchanged
+baseline behavior: "438 of 438 alerts", stats bar populated, no console
+errors. Killed the local scratch server after testing.
+
+Committed as `f1cb15d`, pushed to main. Since this was a pure frontend-JS
+change with zero pipeline/data impact, did not trigger `cve-alerts.yml`
+(no reason to consume Actions minutes or risk touching production data
+files for a change that can't affect them). Waited for GitHub Pages to
+redeploy (~75s), confirmed via `curl` that the live `app.js` contains
+`readFiltersFromURL` (2 occurrences, function definition + call site).
+Loaded the LIVE dashboard at
+`https://astruzocyber.github.io/CVE/?kev=kev&sort=risk_score` in the
+browser tool: screenshot confirmed `kev-filter` value "kev" applied
+correctly, result count "1 of 438 alerts", stats bar/trend chart/all
+existing features rendering normally with the URL-driven filter live in
+production. Live verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified cleared the
+bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.

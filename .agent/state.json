@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 6,
+  "total_cycles": 7,
   "implemented": [
     {
       "cycle": 1,
@@ -44,9 +44,16 @@
       "title": "Refresh EPSS/KEV/risk_score for existing alerts outside NVD lookback window",
       "description": "Previously, once a CVE aged out of the NVD lookback window (2 days in production CI, 8 days default locally) or wasn't resurfaced by Dependabot/GHSA that run, its epss_score (40% of composite risk_score) and kev status froze permanently at the value captured on first_seen -- even though FIRST.org publishes new EPSS scores daily and CISA KEV catalog additions are unrelated to NVD's lastModified window. Now every run also queries EPSS/KEV for all existing tracked alerts (not just ones resurfaced this cycle) and refreshes epss_score, epss_percentile, kev, kev_date_added, kev_due_date, kev_ransomware_use, kev_required_action, risk_score, and risk_score_breakdown in place for the untouched ones -- leaving description/cvss_score/source/first_seen/affected fields alone since this run has no fresher data for them. Validated locally: same 438 CVEs before/after, first_seen and cvss_score untouched, only score fields updated; EPSS query volume rose from ~305 (filtered-only) to ~943 (all 438 tracked + new candidates, deduplicated) CVEs, still a single unauthenticated batched FIRST.org endpoint call (no key, generous free rate limit), well within zero-cost constraints. Live CI run hit transient NVD 503s (existing retry logic absorbed them, non-fatal) and completed successfully with correct output.",
       "commit_sha": "71e5d5c"
+    },
+    {
+      "cycle": 7,
+      "timestamp": "2026-09-09T05:45:00Z",
+      "title": "Shareable filter state via URL query params",
+      "description": "Dashboard filters (search, KEV status, source, sort order) previously reset on every page load and could not be shared or bookmarked -- e.g. a security lead could not send a teammate a direct link to 'KEV overdue only, sorted by risk score'. Added readFiltersFromURL() (reads q/kev/source/sort from location.search on load, no-op for unrecognized values since setting a <select>.value to a nonexistent option is a browser no-op) and updateURLFromFilters() (writes the current filter state into the URL via history.replaceState on every applyFiltersAndRender call, so it never spams browser history and defaults are omitted from the URL to keep links clean). Zero backend/API changes, zero new dependencies, purely additive client-side JS. Scored 5/5/5: zero cost, low validation risk (pure URL<->DOM sync, no data mutation), real value (shareable/bookmarkable triage views, a genuine UX gap for a security-team tool).",
+      "commit_sha": "f1cb15d7833c1e3ddad3df486108944f38914763"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T05:10:29Z",
+  "last_cycle_at": "2026-09-09T05:45:00Z",
   "stopped": false
 }
