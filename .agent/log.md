@@ -1221,3 +1221,30 @@ input debounce) cleared the bar and was implemented.
 **Rejected this cycle:** None — the reset-filters candidate cleared the bar on first pass (feasibility 5/5: pure client-side DOM/state reset, zero new calls; validation risk 2/5: additive control wired to already-tested `applyFiltersAndRender()`; value 4/5: real UX gap once 5+ stackable filters/sort options accumulated across prior cycles).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 24. `stopped`: false.
+
+
+## Cycle 25 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34375061636, 34369721256, 34360511746, 34349733814, 34327718061), no 429/throttle signals from NVD/EPSS/GHSA/CISA in recent logs, only benign Node 20 runner deprecation noise.
+
+**Change:** Include `cwe_ids` in the client-side search haystack.
+
+- **Root cause / opportunity:** Cycle 23 added CWE classification extraction and rendered `.badge.cwe` links on every alert card, but the free-text search box (`applyFiltersAndRender()` in `docs/app.js`) built its search haystack from `cve_id`, `description`, `affected`, and `matched_keywords` only — `cwe_ids` was never added. Result: a viewer typing `CWE-79` to find all XSS-classified CVEs got zero results even though CWE-79 badges were visibly present on multiple cards. Found by re-reading `docs/app.js` fresh this cycle and cross-checking the haystack array against every field actually rendered on a card.
+- **Frontend:** One-line change — `...(a.cwe_ids || [])` spread into the existing haystack array in `applyFiltersAndRender()`. No new fields, no new API calls, no backend/schema changes.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure client-side array addition), validation risk 1/5 (single-line additive change to a well-tested filter function, no new state), value 4/5 (closes a real, visible search gap the moment the previous cycle's CWE badges shipped — a natural "next" bug rather than a novel feature).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK.
+- Served `docs/` on scratch local port 8933 with real production data (501 alerts, 251 carrying `cwe_ids`). Used the browser tool: searched `CWE-434` → correctly narrowed to 5 of 501 alerts; cleared search → back to 501 of 501; searched `chrome` (pre-existing search term) → 110 of 501, confirming no regression to existing search behavior.
+- No `aggregate.py`/data-schema changes, so no data-pipeline dry-run/backup/restore cycle was needed.
+
+**Deploy (Step 5):**
+- Committed (`91948c4`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Polled GitHub Pages deployment; curled `https://astruzocyber.github.io/CVE/app.js` (200 OK, `cwe_ids` string count increased from 3→4 occurrences, confirming the new line shipped).
+- Loaded the LIVE dashboard in the browser tool: searched `CWE-79` → correctly narrowed to 23 of 501 alerts; cleared → 501 of 501. Screenshot-confirmed stats bar, historical trend chart, dependency-filter section, CWE badges, and card rendering all intact with no regression.
+
+**Rejected this cycle:** None — the CWE-search-indexing fix cleared the bar on first pass and was implemented.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 25. `stopped`: false.
