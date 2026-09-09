@@ -1,5 +1,185 @@
 [
   {
+    "cve_id": "CVE-2026-87491",
+    "description": "Out of bounds write in V8 in Google Chrome prior to 153.0.8010.36 allowed a remote attacker to execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: Medium)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "risk_score": 30.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0,
+      "epss_weight": "40% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25 if in CISA KEV",
+      "capped": false
+    },
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:05.887",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T12:13:51.901953+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80099",
+    "description": "Several Newfold plugins are vulnerable to Authentication Bypass. The vulnerability exists because the plugins bundle the wp-module-data module. In the module, the `authenticate()` method \u2014 registered on the `rest_authentication_errors` filter and therefore evaluated for every unauthenticated REST API request \u2014 performs an HMAC-style Bearer token comparison that degenerates when `HiiveConnection::get_auth_token()` returns `false`: PHP coerces `strrev(false)` to `strrev('')`, collapsing the secret salt to the publicly known constant `hash('sha256', '') = e3b0c44...`, while all remaining hash inputs (HTTP method, request URL, raw request body, and the `X-Timestamp` header) remain fully attacker-controlled. This makes it possible for unauthenticated attackers to compute a valid Bearer token entirely offline, pass the token equality check, and have `wp_set_current_user()` invoked against the first administrator returned by `get_users(['role' => 'administrator'])`, granting full administrator-level access and enabling arbitrary REST API operations such as creating new administrator accounts and achieving complete site takeover. Vulnerable versions are WP Plugin Crazy Domains (<= 2.5.2), WP Plugin Web (<= 2.3.4), WP Plugin Hostgator (<= 3.1.0), WP Plugin Bluehost (<= 4.17.1). The affected module is vulnerable in versions up to, and including, 2.9.4.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "risk_score": 30.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0,
+      "epss_weight": "40% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25 if in CISA KEV",
+      "capped": false
+    },
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-09T09:17:12.157",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T12:13:51.901867+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-14989",
+    "description": "The Cookie Banner for GDPR / CCPA \u2013 WPLP Cookie Consent plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'wpl_user_preference' parameter in all versions up to, and including, 4.4.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The consent-logging AJAX endpoint is registered for unauthenticated users and its required nonce (wpl_consent_logging_nonce) is publicly emitted via wp_localize_script on the frontend, meaning any unauthenticated site visitor can plant a payload without any prior authentication or privileged access.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "risk_score": 25.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0,
+      "epss_weight": "40% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25 if in CISA KEV",
+      "capped": false
+    },
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-09T09:17:10.580",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T12:13:51.901690+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-14359",
+    "description": "The YITH WooCommerce Waitlist Premium plugin for WordPress is vulnerable to Privilege Escalation in versions up to, and including, 3.35.0. This is due to the add_user_in_waiting_list() function registered on the wp_ajax_yith_wcwtl_add_user action being missing both a capability check and a nonce verification, and using parse_str() + extract() to import attacker-controlled variables from $_POST['params'] that are then passed to wp_create_user() and $user->set_role(). This makes it possible for authenticated attackers, with Subscriber-level access and above, to elevate their privileges to that of an administrator by creating a new user account and assigning it the administrator role.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "risk_score": 30.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0,
+      "epss_weight": "40% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25 if in CISA KEV",
+      "capped": false
+    },
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-09T09:17:10.450",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T12:13:51.901685+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-75927",
+    "description": "The PublishPress Capabilities \u2013 User Role Editor, Access Permissions, User Capabilities, Admin Menus plugin for WordPress is vulnerable to Privilege Escalation in all versions up to, and including, 2.50.0. This is due to the `addPluginCapabilities()` function unconditionally granting the Editor role all 15 `manage_capabilities_*` capabilities \u2014 including `manage_capabilities`, `manage_capabilities_roles`, `manage_capabilities_settings`, and `manage_capabilities_backup` \u2014 via a hard-coded `$eligible_roles = ['administrator', 'editor']` assignment that runs automatically on the first `admin_init` after plugin activation with no administrator opt-in, persisting the grants directly to the database. This makes it possible for authenticated attackers with Editor-level access to elevate their privileges to a site-wide capability manager, enabling them to create, rename, and delete non-system roles, modify capabilities of non-administrator roles, restore role backups, and write arbitrary plugin options whose names begin with `cme_`, `capsman`, `pp_capabilities`, or `presspermit` via `update_option()`. The escalation stops short of full Administrator access, as WordPress's `map_meta_cap` layer still prevents the escalated Editor from granting administrator-only capabilities to other roles; however, all role-management and plugin-settings functionality gated solely on `manage_capabilities_*` capabilities remains fully accessible.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "risk_score": 25.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0,
+      "epss_weight": "40% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25 if in CISA KEV",
+      "capped": false
+    },
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-09T08:17:21.997",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T12:13:51.901680+00:00"
+  },
+  {
     "cve_id": "CVE-2026-83593",
     "description": "The WPBot \u2013 AI ChatBot for Live Support, Lead Generation, AI Services plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'conversation' parameter in all versions up to, and including, 8.7.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The action is gated only by a nonce that is localized into every public-facing page via wp_localize_script, rendering the nonce check ineffective as an access control barrier for unauthenticated users.",
     "cvss_score": 7.2,
