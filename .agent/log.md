@@ -1331,3 +1331,29 @@ input debounce) cleared the bar and was implemented.
 **Rejected this cycle:** None — the KEV-notes-advisory-link candidate cleared the bar on first pass and was implemented.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 28. `stopped`: false.
+
+
+## Cycle 29 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34390363792, 34375061636, 34369721256, 34360511746, 34349733814), no 429/throttle signals from NVD/EPSS/GHSA/CISA in recent Actions logs, only benign Node 20 runner deprecation noise.
+
+**Change:** Show EPSS percentile (relative rank) alongside the raw EPSS score on alert cards and in CSV export.
+
+- **Opportunity:** `build_final_entry()` in `scripts/aggregate.py` has captured `epss_percentile` (each CVE's rank among all EPSS-scored CVEs, a 0-1 fraction returned by FIRST.org's EPSS API) into the alert schema since early cycles, but it was never rendered on the dashboard or included in CSV export -- only the raw `epss_score` probability was shown. These answer different triage questions: a low absolute probability (e.g. 2%) can still mean top-2%-of-all-CVEs relative rank, a materially different signal that was previously invisible without manually cross-referencing FIRST.org.
+- **Frontend:** Added a `(top N%)` span (computed as `100 - epss_percentile*100`) next to the EPSS score in each card's scores row in `docs/app.js` `renderCard()`, with a title tooltip spelling out the full phrasing ("Higher than X% of all scored CVEs"), gated on `typeof alert.epss_percentile === "number"` so it silently omits for CVEs without an EPSS score. Also added `epss_percentile` as a new CSV export column immediately after `epss_score`. Added a matching `.epss-percentile` CSS rule to `docs/style.css`.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure client-side template addition reading an already-fetched, already-stored field, zero new API calls), validation risk 2/5 (additive, gated on a type check, cannot break existing rendering for entries missing the field), value 4/5 (closes a real, previously-invisible triage signal already present in the data).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. No `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle was needed (`git status --short` confirmed only `docs/app.js` and `docs/style.css` touched).
+- Served `docs/` on a scratch local port (8973) with real production data (505 alerts). Used the browser tool: confirmed the `(top 29%)` span renders correctly next to `EPSS: 1.4%` on the CVE-2026-85046 card with the correct tooltip text, screenshot-confirmed no layout regression across multiple cards; confirmed existing search filter still works (`chrome`: 505→110→505 on clear).
+
+**Deploy (Step 5):**
+- Committed (`a28a3c4`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Polled GitHub Pages deployment to completion; curled `https://astruzocyber.github.io/CVE/app.js` and `style.css` (both 200 OK, `epss-percentile` string present in the live `app.js`).
+- Loaded the LIVE dashboard in the browser tool: confirmed 502 `.epss-percentile` spans rendering across the live 505-alert dataset with correct text/tooltip, screenshot-confirmed stats bar and historical trend chart unaffected. No regression observed.
+
+**Rejected this cycle:** None — the EPSS-percentile candidate cleared the bar on first pass and was implemented.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 29. `stopped`: false.
