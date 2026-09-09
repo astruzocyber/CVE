@@ -354,6 +354,27 @@ function checkStaleness(generatedAt) {
   }
 }
 
+// stats.by_source (e.g. {"nvd": 440, "ghsa": 3, "dependabot:owner/repo": 2}) has been
+// computed by the pipeline since early cycles but was never surfaced on the dashboard --
+// a viewer had no quick way to see the source mix (e.g. "is this mostly NVD sweep noise,
+// or are GHSA/Dependabot actually contributing?") without exporting CSV and counting
+// manually. Renders a small inline pill per source, sorted by count descending. Purely
+// additive: reads an existing stats.json field, no new API calls, no schema changes.
+function renderSourceBreakdown(bySource) {
+  const el = document.getElementById("source-breakdown");
+  if (!el) return;
+  if (!bySource || typeof bySource !== "object" || Object.keys(bySource).length === 0) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  const entries = Object.entries(bySource).sort((a, b) => b[1] - a[1]);
+  el.innerHTML = entries
+    .map(([src, count]) => `<span class="source-pill">${escapeHtml(src)}: <strong>${escapeHtml(String(count))}</strong></span>`)
+    .join("");
+  el.hidden = false;
+}
+
 async function loadStats() {
   try {
     const res = await fetch("data/stats.json", { cache: "no-store" });
@@ -368,6 +389,7 @@ async function loadStats() {
     document.getElementById("stat-ransomware").textContent = stats.kev_ransomware_count ?? "-";
     document.getElementById("stat-epss").textContent =
       typeof stats.avg_epss === "number" ? (stats.avg_epss * 100).toFixed(1) + "%" : "-";
+    renderSourceBreakdown(stats.by_source);
   } catch {
     // stats.json is optional/may not exist yet on the very first run -- fail quietly
   }
