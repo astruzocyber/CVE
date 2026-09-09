@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 4,
+  "total_cycles": 5,
   "implemented": [
     {
       "cycle": 1,
@@ -30,9 +30,16 @@
       "title": "Frontend accessibility: labels and aria-attributes on filter controls",
       "description": "The dashboard's search input, three select filters (KEV status, source, sort order), and the per-card risk-score breakdown toggle button had no accessible name for screen readers -- inputs relied only on a visual placeholder and unlabeled <select> elements, and the toggle button never communicated its expanded/collapsed state via aria-expanded. Added a <label class=\"visually-hidden\"> (new CSS utility class, standard clip-based visually-hidden pattern) paired with each control plus matching aria-label attributes, added role=\"status\" to the empty-state message and aria-live=\"polite\" to the result count so screen-reader users get live updates on filter changes, and wired aria-expanded=\"true\"/\"false\" on the score-breakdown toggle button so its state is announced. Pure frontend markup/CSS change, zero new dependencies, zero risk to data pipeline or existing functionality -- purely additive attributes with no visual change (visually-hidden labels are clipped off-screen).",
       "commit_sha": "23a0e81"
+    },
+    {
+      "cycle": 5,
+      "timestamp": "2026-09-09T04:30:13Z",
+      "title": "Retry with backoff on GitHub Issue creation (notify_github_issues.py)",
+      "description": "create_issue() in scripts/notify_github_issues.py was the last remaining external HTTP call in the pipeline still making a single bare attempt, after prior cycles added the same 3-attempt exponential-backoff pattern to fetch_kev()/nvd_query()/fetch_epss()/fetch_dependabot_alerts()/fetch_ghsa_advisories() in scripts/aggregate.py. A transient 429/5xx from the GitHub Issues API would silently drop a vulnerability notification for the rest of the run with no retry -- notably worse than a data-fetch failure since notify_github_issues.py only reads new_alerts.json once and never re-runs for those alerts (idempotency design already accepts 'seen but not notified' as a rare tradeoff, but this closes the transient-failure gap that was causing it unnecessarily). Added the identical 429/5xx-retried, other-HTTP-errors-logged-and-skipped pattern used throughout aggregate.py. Zero new dependencies, zero added call volume under normal conditions, completes the reliability layer across every external HTTP call in the entire pipeline (both aggregate.py and notify_github_issues.py).",
+      "commit_sha": "4b537d1"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T03:52:00Z",
+  "last_cycle_at": "2026-09-09T04:30:13Z",
   "stopped": false
 }

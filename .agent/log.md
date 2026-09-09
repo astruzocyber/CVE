@@ -215,3 +215,46 @@ and was implemented.
 Not stopped. Next cycle in ~30 minutes.
 
 ---
+
+## Cycle 5 — 2026-09-09T04:30:13Z
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions runs
+(all `completed`/`success`, 55s-1m22s runtimes). No warnings/errors/429/throttle
+signals found excluding benign Node 20 deprecation noise. All sources (CISA KEV,
+NVD, FIRST.org EPSS, GHSA, Dependabot, GitHub Issues) healthy.
+
+**Implemented:** Retry with backoff on GitHub Issue creation
+(`scripts/notify_github_issues.py`, `create_issue()`). This was the last
+remaining external HTTP call in the entire pipeline still making a single bare
+attempt, after cycles 1-3 already added the same 3-attempt exponential-backoff
+pattern to every fetch function in `scripts/aggregate.py`. A transient 429/5xx
+from the GitHub Issues API would previously drop a vulnerability notification
+silently for the rest of the run with no retry. Added the identical
+429/5xx-retried, other-errors-logged-and-skipped pattern, closing the
+reliability layer across the whole codebase. Scored 5/5/5: zero-cost (no new
+dependency, no added call volume under normal conditions), low validation risk
+(mirrors a proven pattern used 4x already), decent value (closes a real
+notification-drop gap on a public alerting pipeline).
+
+Validation performed: `ast.parse` syntax check passed, module imports cleanly.
+Wrote a standalone unit test mocking `urllib.request.urlopen` to simulate
+429-then-500-then-success (confirmed 3 calls, retry backoff logged, final
+success returns True) and a non-retryable 404 (confirmed immediate failure,
+exactly 1 call, no retry loop entered) -- both assertions passed. No Python
+schema/data-writing logic changed, so no data-file backup/restore was needed.
+
+Committed as `4b537d1`, pushed to main, triggered `gh workflow run
+cve-alerts.yml` (run 34311168380) — completed `success` in ~45s. Live log
+confirms the new code path executed for real: "Created issue #218: [VULN
+ALERT] CVE-2026-84293 (risk 25.2) - wordpress/wordpress" with no
+errors/warnings beyond the pre-existing benign Node 20 deprecation notice.
+Pulled latest and curled the live site: `https://astruzocyber.github.io/CVE/`
+→ 200, `/data/stats.json` → 200. No frontend files changed, so no
+browser/screenshot check was needed. Live verification passed; no revert
+needed.
+
+**Rejected this cycle:** none — the one candidate identified cleared the bar
+and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles = 0/3.
+Not stopped. Next cycle in ~30 minutes.
