@@ -1442,3 +1442,31 @@ input debounce) cleared the bar and was implemented.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 32. `stopped`: false.
+
+
+## Cycle 33 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34403032881, 34399421600, 34398719776, 34390363792, 34375061636), no 429/throttle signals from NVD/EPSS/GHSA/CISA in Actions logs, only benign Node 20 runner deprecation noise.
+
+**Change:** Add clickable severity-breakdown pills (critical/high/medium/low/unknown counts) below the existing source-breakdown row in the dashboard header.
+
+- **Opportunity:** `compute_stats()` in `scripts/aggregate.py` has computed `by_severity` (critical/high/medium/low/unknown counts) since early cycles, but only the single "Critical" count ever made it onto the dashboard via the stats bar -- the medium/low/unknown bands and overall severity mix were invisible without exporting CSV. Cycle 15's `by_source` breakdown pills established a clean pattern for surfacing an existing-but-unrendered stats field; this cycle applies the same pattern to `by_severity`, plus adds a genuinely new interaction (click-to-filter) that cycle 15's static pills didn't have.
+- **Frontend:** Added `renderSeverityBreakdown()` to `docs/app.js`, wired into the existing `loadStats()` call alongside `renderSourceBreakdown()`. Renders one `<button>` pill per non-zero severity band, reusing the dashboard's existing red/orange/yellow/green severity color convention (already used for card borders/badges since early cycles, so zero new color decisions). Each pill click sets the existing `#severity-filter` dropdown and calls the existing `applyFiltersAndRender()` -- a one-click drill-down composing for free with cycle 7's shareable-URL filters. `unknown` band has no matching `<option>` in the dropdown, so its click handler silently no-ops rather than setting an invalid value. Added `#severity-breakdown` div to `docs/index.html` and matching `.severity-breakdown`/`.severity-pill` CSS to `docs/style.css`.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (reads an already-computed, already-fetched stats.json field, zero new API calls, zero backend/schema changes). Validation risk 1/5 (purely additive DOM/CSS, gated on non-zero counts so it degrades gracefully to `hidden` if the field is ever absent, cannot affect any existing rendering path). Value 3/5 (closes a real visibility gap -- the dashboard could show "128 critical" but nothing about the other 388 alerts' severity mix -- plus adds a genuinely new one-click filter interaction, not just a static display).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. No `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle was needed (`git status --short` confirmed only `docs/app.js`, `docs/index.html`, `docs/style.css` touched).
+- Served `docs/` on a local scratch port (8933) with real production data (516 alerts: critical=128, high=388, medium=0, low=0, unknown=0). Used the browser tool: confirmed both non-zero pills (`critical: 128`, `high: 388`) rendered with correct DOM structure and CSS classes; clicked the "critical" pill and confirmed `#severity-filter` correctly updated to `critical` and the result count correctly narrowed to "128 of 516 alerts"; clicked the existing Reset Filters button and confirmed it correctly returned to "516 of 516 alerts" with the dropdown back to `all` (zero regression to the cycle-24 reset-filters feature). Screenshot confirmed correct visual placement under the source-breakdown row, stats bar, and historical trend chart all rendering with zero regression.
+
+**Deploy (Step 5):**
+- Committed (`9256637`) and pushed to `main`. Frontend-only change -- no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited for Pages deployment, curled `app.js`/`index.html`/`style.css` -- all 200 OK, confirmed `renderSeverityBreakdown` string present in the live `app.js` (2 occurrences: definition + call site).
+- Loaded the LIVE dashboard in the browser tool with a fresh cache-busted navigation: JS-eval-confirmed `#severity-breakdown` renders the correct live counts (critical:128, high:388) matching production `stats.json`, and `stat-total` correctly reads 516. Screenshot capture hit a transient CDP `TimeoutError` on this run (same documented harness flakiness noted in cycle 32's log, not a page regression) -- functional JS-level verification was sufficient given the exact same DOM structure was already screenshot-confirmed correct in the local scratch-port test immediately prior.
+
+**Rejected this cycle:** None — the severity-breakdown candidate cleared the bar on first pass (feasibility 5/5, validation risk 1/5, value 3/5) and was implemented.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 33. `stopped`: false.

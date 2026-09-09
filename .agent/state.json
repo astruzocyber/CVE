@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 32,
+  "total_cycles": 33,
   "implemented": [
     {
       "cycle": 1,
@@ -226,9 +226,16 @@
       "title": "Add CVSS exploitability, KEV required-action/notes fields to CSV export",
       "description": "CSV export (exportCsv() in docs/app.js) had not been updated in step with three prior cycles' additions to alert cards and the underlying schema: cvss_vector_components (attack_vector/attack_complexity/privileges_required/user_interaction from cycles 30/31), kev_required_action (CISA remediation guidance, cycle 27), and kev_notes (vendor advisory notes, cycle 28) were all visible on the card UI but silently dropped from CSV export, so a viewer exporting for offline reporting or compliance tracking lost data they could plainly see on-screen. Added the four flattened vc.* fields plus kev_required_action and kev_notes as new CSV columns, reading fields already present in alerts.json -- zero new API calls, zero backend/schema changes. Validated: node --check passed; exercised the exact export logic in-browser against real production data (516 alerts) locally and confirmed on the live site, verifying correct values/quoting for both KEV (populated required_action/notes/vector fields) and non-KEV (correctly empty) rows; confirmed existing search filter (wordpress: 516->132->516 on reset) and stats bar unaffected. Live-verified: pushed, curled app.js (200 OK, new fields present), loaded live dashboard fresh, confirmed 516/516 alerts loaded with correct kev_required_action/kev_notes/attack_vector values on real KEV entries (CVE-2025-25249, CVE-2026-87491).",
       "commit_sha": "9c2007b"
+    },
+    {
+      "cycle": 33,
+      "timestamp": "2026-09-09T21:58:37.275405+00:00",
+      "title": "Clickable severity-breakdown pills in dashboard header",
+      "description": "compute_stats() has computed by_severity (critical/high/medium/low/unknown counts) since early cycles, feeding only the single 'Critical' stat pill -- the medium/low/unknown bands and the overall severity mix were never surfaced anywhere on the dashboard. Added renderSeverityBreakdown() in docs/app.js, called from the existing loadStats() fetch of data/stats.json: renders one pill per non-zero severity band (reusing the existing red/orange/yellow/green severity color convention already used for card borders and badges), placed under the existing source-breakdown pill row in a new #severity-breakdown div in docs/index.html with matching .severity-pill/.severity-breakdown CSS in docs/style.css. Each pill is a clickable <button> that sets the existing #severity-filter dropdown to that band and re-applies filters via the existing applyFiltersAndRender() path, giving a one-click drill-down (unknown band silently no-ops since severity-filter has no matching option for it, avoiding an invalid dropdown value). Pure additive frontend change reading an already-fetched stats.json field: zero new API calls, zero backend/schema changes, zero cost. Validated: node --check passed; served docs/ on a scratch local port with real production data (516 alerts, critical:128/high:388/medium:0/low:0), used the browser tool to confirm both pills render with correct counts, clicking 'critical' correctly filtered to 128 of 516 and set the dropdown value, and Reset Filters correctly cleared back to 516 of 516 -- confirmed zero regression to stats bar, source-breakdown pills, or historical trend chart via screenshot. Live-verified: pushed (frontend-only, no workflow dispatch needed), curled app.js/index.html/style.css (200 OK, renderSeverityBreakdown present), loaded the live dashboard fresh and confirmed via JS eval the severity-breakdown div renders correct live counts (critical:128, high:388) matching production stats.json -- screenshot capture hit a transient CDP timeout (documented harness flakiness, not a page regression, per cycle 32's precedent), but functional JS-level inspection was sufficient given no visual markup beyond the already-locally-screenshotted structure was touched.",
+      "commit_sha": "9256637927548ff382f9e03d59906e1d279bd277"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T21:23:42.035Z",
+  "last_cycle_at": "2026-09-09T21:58:37.275405+00:00",
   "stopped": false
 }
