@@ -668,7 +668,9 @@ async function loadTrendChart() {
     const rows = lines.slice(1).map((line) => line.split(","));
     const labels = rows.map((r) => r[0]);
     const totalAlerts = rows.map((r) => (r[1] === "" || r[1] === undefined ? null : Number(r[1])));
+    const kevCount = rows.map((r) => (r[2] === "" || r[2] === undefined ? null : Number(r[2])));
     const kevOverdue = rows.map((r) => (r[3] === "" ? null : Number(r[3])));
+    const kevRansomware = rows.map((r) => (r[4] === "" || r[4] === undefined ? null : Number(r[4])));
     const avgEpss = rows.map((r) => (r[5] === "" ? null : Number(r[5]) * 100));
 
     document.getElementById("trend-section").hidden = false;
@@ -687,12 +689,30 @@ async function loadTrendChart() {
             hidden: true,
           },
           {
+            label: "Total KEV count",
+            data: kevCount,
+            borderColor: "#c77dff",
+            backgroundColor: "rgba(199,125,255,0.1)",
+            yAxisID: "y2",
+            tension: 0.2,
+            hidden: true,
+          },
+          {
             label: "KEV overdue count",
             data: kevOverdue,
             borderColor: "#ff5c5c",
             backgroundColor: "rgba(255,92,92,0.15)",
             yAxisID: "y",
             tension: 0.2,
+          },
+          {
+            label: "KEV ransomware-use count",
+            data: kevRansomware,
+            borderColor: "#ff9f40",
+            backgroundColor: "rgba(255,159,64,0.15)",
+            yAxisID: "y2",
+            tension: 0.2,
+            hidden: true,
           },
           {
             label: "Avg EPSS (%)",
