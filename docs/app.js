@@ -94,7 +94,10 @@ function renderCard(alert) {
       ${matchedHtml}
       <div class="card-footer">
         <span>Published: ${fmtDate(alert.published)}</span>
-        <span>${alert.dependabot_url ? `<a href="${alert.dependabot_url}" target="_blank" rel="noopener">View alert</a>` : ""}</span>
+        <span class="footer-links">
+          ${alert.cve_id && /^CVE-/i.test(alert.cve_id) ? `<a href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}" target="_blank" rel="noopener">View on NVD</a>` : ""}
+          ${alert.dependabot_url ? `<a href="${alert.dependabot_url}" target="_blank" rel="noopener">View alert</a>` : ""}
+        </span>
       </div>
     </div>
   `;
