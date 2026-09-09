@@ -268,6 +268,10 @@ function applyFiltersAndRender() {
     if (kevFilter === "kev" && !a.kev) return false;
     if (kevFilter === "non-kev" && a.kev) return false;
     if (kevFilter === "overdue" && !isOverdue(a)) return false;
+    if (kevFilter === "due-soon") {
+      const d = daysUntilDue(a);
+      if (typeof d !== "number" || d < 0 || d > 7) return false;
+    }
     if (kevFilter === "ransomware" && !a.kev_ransomware_use) return false;
     if (!matchesSource(a, sourceFilter)) return false;
     if (dependencyPackageNames && !alertMatchesPackages(a, dependencyPackageNames)) return false;
