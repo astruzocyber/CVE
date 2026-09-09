@@ -1470,3 +1470,31 @@ input debounce) cleared the bar and was implemented.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 33. `stopped`: false.
+
+
+## Cycle 34 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34403032881, 34399421600, 34398719776, 34390363792, 34375061636), no 429/throttle signals from NVD/EPSS/GHSA/CISA in Actions logs, only benign Node 20 runner deprecation noise.
+
+**Change:** Add `matched_keywords` column to CSV export.
+
+- **Opportunity:** Cycle 32 closed a CSV-export parity gap for `kev_required_action`/`kev_notes`/CVSS-vector-component fields that were visible on cards but missing from `exportCsv()`. Auditing `renderCard()` vs `exportCsv()` again this cycle found one more instance of the same pattern: `matched_keywords` (rendered as a green "Watchlist match" badge on cards since cycle 8, and already included in the search haystack since cycle 25) was still absent from CSV export. A viewer exporting for offline triage/reporting could see on-screen which watchlist keyword(s) flagged a given CVE but lost that signal entirely once exported.
+- **Frontend:** Added `matched_keywords` (joined with `"; "`, matching the existing convention for `affected`/`cwe_ids` array columns) as a new CSV column in `docs/app.js`, placed after `cwe_ids` in both the header and per-row array.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure client-side template addition, reads a field already present in `alerts.json` since early cycles, zero new dependencies). Validation risk 1/5 (additive column appended at a stable position, cannot reorder/break existing columns, gated by `|| []` fallback so alerts with no matched keywords render an empty string not a crash). Value 2/5 (small, but genuine and previously-silent data-loss gap for a security-team reporting workflow — same category and precedent as cycle 32's fix, no new risk introduced).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. No `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle was needed (`git status --short` confirmed only `docs/app.js` touched).
+- Served `docs/` on a local scratch port (8933) with real production data (516 alerts, 139 with non-empty `matched_keywords`). Used the browser tool to exercise the exact new export-row-building logic in-page via JS eval against the live in-memory `allAlerts` array: confirmed a matched-keyword alert (CVE-2026-84068) correctly serializes `["wordpress","wp plugin"]` and a no-match alert produces no `undefined` in its row. Confirmed existing search filter still works (`wordpress`: 516→132→516 on reset) — no regression to existing features.
+
+**Deploy (Step 5):**
+- Committed (`ad02248`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited for Pages deployment, curled `https://astruzocyber.github.io/CVE/app.js` — 200 OK, confirmed `matched_keywords` string count rose from 2 (pre-change) to 4 (post-change, header + row-building).
+- Loaded the LIVE dashboard in the browser tool with a fresh cache-busted navigation: confirmed 516/516 alerts loaded correctly (`stat-total`: 516, `result-count`: "516 of 516 alerts") — zero regression.
+
+**Rejected this cycle:** None — the CSV-export-field-parity candidate cleared the bar on first pass (feasibility 5/5, validation risk 1/5, value 2/5) and was implemented.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 34. `stopped`: false.
