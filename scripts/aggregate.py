@@ -85,6 +85,12 @@ ALERTS_PATH = os.path.join(DATA_DIR, "alerts.json")
 SEEN_PATH = os.path.join(DATA_DIR, "seen_ids.json")
 NEW_ALERTS_PATH = os.path.join(DATA_DIR, "new_alerts.json")
 STATS_PATH = os.path.join(DATA_DIR, "stats.json")
+HISTORY_DIR = os.path.join(DATA_DIR, "history")
+HISTORY_CSV_PATH = os.path.join(HISTORY_DIR, "trend.csv")
+KEV_SNAPSHOT_PATH = os.path.join(DATA_DIR, "kev_snapshot.json")
+FEED_JSON_PATH = os.path.join(REPO_ROOT, "docs", "feed.json")
+FEED_XML_PATH = os.path.join(REPO_ROOT, "docs", "feed.xml")
+SITE_URL = "https://astruzocyber.github.io/CVE/"
 
 KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
 NVD_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
@@ -542,11 +548,25 @@ def passes_filters(entry, watchlist, kev_map, epss_map, suppressions):
 def composite_risk_score(cvss, epss_score, in_kev):
     """0-100 composite, weighting real-world exploitation signal (EPSS, KEV)
     above raw theoretical severity (CVSS). Documented in the module docstring
-    and the dashboard footer -- never presented as an official/standard score."""
-    cvss_component = (cvss / 10.0) * 35 if cvss is not None else 0
-    epss_component = (epss_score or 0) * 40
-    kev_component = 25 if in_kev else 0
-    return round(min(100, cvss_component + epss_component + kev_component), 1)
+    and the dashboard footer -- never presented as an official/standard score.
+    Returns (total, breakdown_dict) so callers can surface the exact components
+    that produced the number instead of a black box -- score transparency."""
+    cvss_component = round((cvss / 10.0) * 35, 1) if cvss is not None else 0.0
+    epss_component = round((epss_score or 0) * 40, 1)
+    kev_component = 25.0 if in_kev else 0.0
+    total = round(min(100, cvss_component + epss_component + kev_component), 1)
+    breakdown = {
+        "cvss_raw": cvss,
+        "cvss_component": cvss_component,
+        "cvss_weight": "35% of (CVSS/10)",
+        "epss_raw": epss_score,
+        "epss_component": epss_component,
+        "epss_weight": "40% of EPSS probability",
+        "kev_bonus": kev_component,
+        "kev_weight": "flat +25 if in CISA KEV",
+        "capped": (cvss_component + epss_component + kev_component) > 100,
+    }
+    return total, breakdown
 
 
 def build_final_entry(entry, kev_map, epss_map):
@@ -556,6 +576,7 @@ def build_final_entry(entry, kev_map, epss_map):
     kev_entry = kev_map.get(cve_id, {})
     cvss = entry.get("cvss_score")
     epss_score = epss_info.get("epss")
+    risk_score, risk_breakdown = composite_risk_score(cvss, epss_score, in_kev)
     return {
         "cve_id": cve_id,
         "description": entry.get("description", ""),
@@ -568,7 +589,8 @@ def build_final_entry(entry, kev_map, epss_map):
         "kev_due_date": kev_entry.get("dueDate") if in_kev else None,
         "kev_ransomware_use": (kev_entry.get("knownRansomwareCampaignUse") == "Known") if in_kev else False,
         "kev_required_action": kev_entry.get("requiredAction") if in_kev else None,
-        "risk_score": composite_risk_score(cvss, epss_score, in_kev),
+        "risk_score": risk_score,
+        "risk_score_breakdown": risk_breakdown,
         "affected": entry.get("matched_vendor_product", []),
         "matched_keywords": entry.get("matched_keywords", []),
         "source": entry.get("source"),
@@ -636,6 +658,118 @@ def compute_stats(alerts):
     }
 
 
+# ---------------------------------------------------------------------------
+# Historical trend tracking -- appends one row per run to a CSV under
+# docs/data/history/trend.csv (committed to the repo, no external DB/service).
+# Kept as CSV (not one-JSON-file-per-run) specifically to bound repo growth:
+# roughly 6 runs/day * ~90 bytes/row =~ 200KB/year, trivially within GitHub's
+# free repo storage and Pages' 1GB soft limit even after several years.
+# ---------------------------------------------------------------------------
+def append_history(stats):
+    os.makedirs(HISTORY_DIR, exist_ok=True)
+    is_new = not os.path.exists(HISTORY_CSV_PATH)
+    row = [
+        stats.get("generated_at", ""),
+        str(stats.get("total_alerts", "")),
+        str(stats.get("kev_count", "")),
+        str(stats.get("kev_overdue_count", "")),
+        str(stats.get("kev_ransomware_count", "")),
+        "" if stats.get("avg_epss") is None else str(stats["avg_epss"]),
+    ]
+    with open(HISTORY_CSV_PATH, "a") as f:
+        if is_new:
+            f.write("timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,avg_epss\n")
+        f.write(",".join(row) + "\n")
+    print(f"Appended trend row to {HISTORY_CSV_PATH}")
+
+
+# ---------------------------------------------------------------------------
+# New-KEV alert feed -- diffs the current KEV catalog against the previous
+# run's snapshot (docs/data/kev_snapshot.json) and writes any newly-added CVE
+# IDs to a static feed.json + feed.xml (RSS 2.0) that anyone can poll or
+# subscribe to with a free reader (no webhook/server infrastructure needed).
+# Note: this is ALL KEV additions, not filtered to the watchlist -- it's a
+# general "what's new in KEV" feed, distinct from the watchlist-scoped GitHub
+# Issues notifications.
+# ---------------------------------------------------------------------------
+def build_kev_feed(kev_map):
+    snapshot_existed = os.path.exists(KEV_SNAPSHOT_PATH)
+    prior_ids = set(load_json_file(KEV_SNAPSHOT_PATH, []))
+    current_ids = set(kev_map.keys())
+
+    if not snapshot_existed:
+        # First run ever: there is no real "prior" baseline, so every KEV
+        # entry would otherwise look "new" and flood the feed with 1000+
+        # items. Seed the baseline silently instead of alerting on it.
+        print(f"KEV feed: no prior snapshot found -- seeding baseline of {len(current_ids)} "
+              f"KEV entries without generating feed items.")
+        save_json_file(KEV_SNAPSHOT_PATH, sorted(current_ids))
+        new_ids = []
+    else:
+        new_ids = sorted(current_ids - prior_ids)
+        if new_ids:
+            print(f"KEV feed: {len(new_ids)} newly-added KEV entr{'y' if len(new_ids) == 1 else 'ies'}")
+        save_json_file(KEV_SNAPSHOT_PATH, sorted(current_ids))
+
+    existing_feed = load_json_file(FEED_JSON_PATH, {"version": "https://jsonfeed.org/version/1",
+                                                       "title": "New CISA KEV Entries", "items": []})
+    if not isinstance(existing_feed, dict) or not isinstance(existing_feed.get("items"), list):
+        existing_feed = {"version": "https://jsonfeed.org/version/1",
+                          "title": "New CISA KEV Entries", "items": []}
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    existing_by_id = {item.get("id"): item for item in existing_feed["items"] if isinstance(item, dict)}
+    for cve_id in new_ids:
+        kev_entry = kev_map.get(cve_id, {})
+        existing_by_id[cve_id] = {
+            "id": cve_id,
+            "title": f"{cve_id}: {kev_entry.get('vulnerabilityName', 'New KEV entry')}",
+            "content_text": kev_entry.get("shortDescription", ""),
+            "url": f"https://nvd.nist.gov/vuln/detail/{cve_id}",
+            "date_published": now_iso,
+            "_kev_date_added": kev_entry.get("dateAdded"),
+            "_kev_due_date": kev_entry.get("dueDate"),
+            "_kev_vendor_project": kev_entry.get("vendorProject"),
+            "_kev_product": kev_entry.get("product"),
+            "_kev_ransomware_use": kev_entry.get("knownRansomwareCampaignUse") == "Known",
+        }
+    # Keep the feed bounded (most recent 200 entries by date_published) so the
+    # JSON/XML files don't grow unbounded over years of runs.
+    all_items = sorted(existing_by_id.values(), key=lambda i: i.get("date_published", ""), reverse=True)[:200]
+    existing_feed["items"] = all_items
+    existing_feed["home_page_url"] = SITE_URL
+    existing_feed["feed_url"] = SITE_URL + "feed.json"
+    existing_feed["description"] = "Newly-added CISA Known Exploited Vulnerabilities (all KEV, not watchlist-filtered)."
+    save_json_file(FEED_JSON_PATH, existing_feed)
+
+    # RSS 2.0 mirror of the same items for feed readers that prefer XML.
+    def esc(s):
+        return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+    rss_items = "\n".join(
+        f"    <item>\n"
+        f"      <title>{esc(item.get('title'))}</title>\n"
+        f"      <link>{esc(item.get('url'))}</link>\n"
+        f"      <guid isPermaLink=\"false\">{esc(item.get('id'))}</guid>\n"
+        f"      <pubDate>{esc(item.get('date_published'))}</pubDate>\n"
+        f"      <description>{esc(item.get('content_text'))}</description>\n"
+        f"    </item>"
+        for item in all_items
+    )
+    rss = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<rss version="2.0"><channel>\n'
+        f"  <title>New CISA KEV Entries</title>\n"
+        f"  <link>{SITE_URL}</link>\n"
+        f"  <description>Newly-added CISA Known Exploited Vulnerabilities.</description>\n"
+        f"{rss_items}\n"
+        "</channel></rss>\n"
+    )
+    with open(FEED_XML_PATH, "w") as f:
+        f.write(rss)
+    print(f"Wrote KEV feed: {len(all_items)} items to {FEED_JSON_PATH} and {FEED_XML_PATH}")
+
+
 def main():
     nvd_api_key = os.environ.get("NVD_API_KEY", "").strip() or None
     gh_token = os.environ.get("GH_DEPENDABOT_TOKEN", "").strip() or None
@@ -690,6 +824,8 @@ def main():
     save_json_file(SEEN_PATH, sorted(seen_ids))
     save_json_file(NEW_ALERTS_PATH, new_alerts)
     save_json_file(STATS_PATH, stats)
+    append_history(stats)
+    build_kev_feed(kev_map)
 
     print(f"Wrote {len(cumulative)} total alerts to {ALERTS_PATH}")
     print(f"Wrote {len(new_alerts)} NEW alerts to {NEW_ALERTS_PATH}")

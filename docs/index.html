@@ -23,6 +23,26 @@
   </header>
 
   <main>
+    <section id="trend-section" class="trend-section" hidden>
+      <h2>Historical trend</h2>
+      <canvas id="trend-chart" height="80"></canvas>
+    </section>
+
+    <section class="dep-filter">
+      <h2>Filter by your dependencies (optional)</h2>
+      <p class="dep-hint">Paste or choose a <code>package.json</code> or <code>requirements.txt</code>.
+        Parsed entirely in your browser -- nothing is uploaded anywhere.</p>
+      <div class="dep-controls">
+        <input type="file" id="dep-file-input" accept=".json,.txt">
+        <textarea id="dep-text-input" rows="3" placeholder='Or paste file contents here...'></textarea>
+        <div class="dep-buttons">
+          <button id="dep-apply-btn" type="button">Apply filter</button>
+          <button id="dep-clear-btn" type="button">Clear</button>
+        </div>
+      </div>
+      <p class="dep-status" id="dep-status"></p>
+    </section>
+
     <div class="controls">
       <input type="text" id="search" placeholder="Search CVE ID, description, product...">
       <select id="kev-filter">
@@ -70,9 +90,13 @@
       exploitation signal above theoretical severity and is a local heuristic, not an
       industry-standard score -- use it to triage order, not as a sole go/no-go gate.
       Every external API response is schema-validated before use; on an unexpected
-      shape the pipeline logs a warning and skips that data rather than guessing.</p>
+      shape the pipeline logs a warning and skips that data rather than guessing.
+      Click "breakdown" on any card to see the exact CVSS/EPSS/KEV components behind
+      its score. Subscribe to <a href="feed.xml">feed.xml</a> or
+      <a href="feed.json">feed.json</a> for newly-added CISA KEV entries.</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -58,6 +58,15 @@ function renderCard(alert) {
   const affected = (alert.affected || []).join(", ") || "n/a";
   const epssPct = typeof alert.epss_score === "number" ? (alert.epss_score * 100).toFixed(1) + "%" : "n/a";
   const riskVal = typeof alert.risk_score === "number" ? alert.risk_score.toFixed(0) : "n/a";
+  const b = alert.risk_score_breakdown;
+  const breakdownHtml = b ? `
+      <div class="score-breakdown" hidden>
+        <div class="breakdown-row"><span>CVSS ${fmtScore(b.cvss_raw)} &times; 35%</span><span>= ${fmtScore(b.cvss_component)} pts</span></div>
+        <div class="breakdown-row"><span>EPSS ${typeof b.epss_raw === "number" ? (b.epss_raw * 100).toFixed(1) + "%" : "n/a"} &times; 40%</span><span>= ${fmtScore(b.epss_component)} pts</span></div>
+        <div class="breakdown-row"><span>KEV bonus</span><span>= ${fmtScore(b.kev_bonus)} pts</span></div>
+        <div class="breakdown-row breakdown-total"><span>Total${b.capped ? " (capped at 100)" : ""}</span><span>= ${riskVal} pts</span></div>
+      </div>` : "";
+  const toggleBtn = b ? `<button class="score-toggle" type="button" title="Show risk score breakdown">breakdown &#9662;</button>` : "";
 
   return `
     <div class="card">
@@ -68,7 +77,9 @@ function renderCard(alert) {
       <div class="risk-row">
         <div class="risk-bar-track"><div class="risk-bar-fill ${rClass}" style="width:${Math.min(100, alert.risk_score || 0)}%"></div></div>
         <span class="risk-label">Risk ${riskVal}/100</span>
+        ${toggleBtn}
       </div>
+      ${breakdownHtml}
       <div class="description">${escapeHtml(alert.description || "(no description)")}</div>
       <div class="scores">
         <span>CVSS: <strong>${fmtScore(alert.cvss_score)}</strong></span>
@@ -90,6 +101,93 @@ function matchesSource(alert, filter) {
   return src === filter || src.startsWith(filter + ":");
 }
 
+// --- Dependency-scoped filtering (client-side only; nothing is uploaded) ---
+let dependencyPackageNames = null; // null = no filter active; Set of lowercase names otherwise
+
+function parsePackageJson(text) {
+  const names = new Set();
+  try {
+    const obj = JSON.parse(text);
+    for (const section of ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]) {
+      if (obj[section]) {
+        for (const name of Object.keys(obj[section])) names.add(name.toLowerCase());
+      }
+    }
+  } catch (e) {
+    throw new Error("Could not parse as package.json: " + e.message);
+  }
+  return names;
+}
+
+function parseRequirementsTxt(text) {
+  const names = new Set();
+  for (let line of text.split("\n")) {
+    line = line.trim();
+    if (!line || line.startsWith("#") || line.startsWith("-")) continue;
+    // Strip version specifiers / extras / environment markers: name==1.0, name>=1.0, name[extra], name; marker
+    const m = line.match(/^([A-Za-z0-9._-]+)/);
+    if (m) names.add(m[1].toLowerCase());
+  }
+  return names;
+}
+
+function detectAndParseDependencyFile(text) {
+  const trimmed = text.trim();
+  if (trimmed.startsWith("{")) return parsePackageJson(trimmed);
+  return parseRequirementsTxt(trimmed);
+}
+
+function alertMatchesPackages(alert, packageNames) {
+  const haystack = (alert.affected || []).join(" ").toLowerCase() + " " + (alert.description || "").toLowerCase();
+  for (const pkg of packageNames) {
+    if (pkg && haystack.includes(pkg)) return true;
+  }
+  return false;
+}
+
+function setupDependencyFilter() {
+  const fileInput = document.getElementById("dep-file-input");
+  const textInput = document.getElementById("dep-text-input");
+  const applyBtn = document.getElementById("dep-apply-btn");
+  const clearBtn = document.getElementById("dep-clear-btn");
+  const statusEl = document.getElementById("dep-status");
+  if (!fileInput || !applyBtn) return;
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    textInput.value = await file.text();
+  });
+
+  applyBtn.addEventListener("click", () => {
+    const text = textInput.value;
+    if (!text.trim()) {
+      statusEl.textContent = "Paste or choose a package.json / requirements.txt first.";
+      return;
+    }
+    try {
+      const names = detectAndParseDependencyFile(text);
+      if (names.size === 0) {
+        statusEl.textContent = "No package names found in that file.";
+        return;
+      }
+      dependencyPackageNames = names;
+      statusEl.textContent = `Filtering to ${names.size} package(s): ${[...names].slice(0, 8).join(", ")}${names.size > 8 ? "..." : ""}`;
+      applyFiltersAndRender();
+    } catch (e) {
+      statusEl.textContent = "Error: " + e.message;
+    }
+  });
+
+  clearBtn.addEventListener("click", () => {
+    dependencyPackageNames = null;
+    textInput.value = "";
+    fileInput.value = "";
+    statusEl.textContent = "";
+    applyFiltersAndRender();
+  });
+}
+
 function applyFiltersAndRender() {
   const search = document.getElementById("search").value.trim().toLowerCase();
   const kevFilter = document.getElementById("kev-filter").value;
@@ -102,6 +200,7 @@ function applyFiltersAndRender() {
     if (kevFilter === "overdue" && !isOverdue(a)) return false;
     if (kevFilter === "ransomware" && !a.kev_ransomware_use) return false;
     if (!matchesSource(a, sourceFilter)) return false;
+    if (dependencyPackageNames && !alertMatchesPackages(a, dependencyPackageNames)) return false;
     if (search) {
       const haystack = [
         a.cve_id,
@@ -214,10 +313,80 @@ async function loadData() {
   loadStats();
 }
 
+// Click delegation for the per-card risk-score breakdown toggle (avoids
+// attaching a listener per card on every re-render).
+document.getElementById("card-grid").addEventListener("click", (e) => {
+  const btn = e.target.closest(".score-toggle");
+  if (!btn) return;
+  const panel = btn.closest(".risk-row").nextElementSibling;
+  if (panel && panel.classList.contains("score-breakdown")) {
+    panel.hidden = !panel.hidden;
+    btn.innerHTML = panel.hidden ? "breakdown &#9662;" : "breakdown &#9652;";
+  }
+});
+
+// --- Historical trend chart (Chart.js via CDN, client-side render only) ---
+async function loadTrendChart() {
+  const canvas = document.getElementById("trend-chart");
+  if (!canvas || typeof Chart === "undefined") return;
+  try {
+    const res = await fetch("data/history/trend.csv", { cache: "no-store" });
+    if (!res.ok) return;
+    const csvText = await res.text();
+    const lines = csvText.trim().split("\n");
+    if (lines.length < 2) return; // header only, not enough data yet
+    const rows = lines.slice(1).map((line) => line.split(","));
+    const labels = rows.map((r) => r[0]);
+    const kevOverdue = rows.map((r) => (r[3] === "" ? null : Number(r[3])));
+    const avgEpss = rows.map((r) => (r[5] === "" ? null : Number(r[5]) * 100));
+
+    document.getElementById("trend-section").hidden = false;
+    new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "KEV overdue count",
+            data: kevOverdue,
+            borderColor: "#ff5c5c",
+            backgroundColor: "rgba(255,92,92,0.15)",
+            yAxisID: "y",
+            tension: 0.2,
+          },
+          {
+            label: "Avg EPSS (%)",
+            data: avgEpss,
+            borderColor: "#4f9dff",
+            backgroundColor: "rgba(79,157,255,0.15)",
+            yAxisID: "y1",
+            tension: 0.2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: "index", intersect: false },
+        scales: {
+          x: { ticks: { maxTicksLimit: 8, color: "#9aa5b1" }, grid: { color: "rgba(255,255,255,0.05)" } },
+          y: { position: "left", title: { display: true, text: "KEV overdue count", color: "#9aa5b1" }, ticks: { color: "#9aa5b1" }, grid: { color: "rgba(255,255,255,0.05)" } },
+          y1: { position: "right", title: { display: true, text: "Avg EPSS (%)", color: "#9aa5b1" }, ticks: { color: "#9aa5b1" }, grid: { drawOnChartArea: false } },
+        },
+        plugins: { legend: { labels: { color: "#e6e9ef" } } },
+      },
+    });
+  } catch {
+    // Chart.js CDN unreachable or trend.csv not yet generated -- fail quietly,
+    // the rest of the dashboard still works without it.
+  }
+}
+
 document.getElementById("search").addEventListener("input", applyFiltersAndRender);
 document.getElementById("kev-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("source-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("sort-by").addEventListener("change", applyFiltersAndRender);
 document.getElementById("export-csv").addEventListener("click", exportCsv);
 
+setupDependencyFilter();
 loadData();
+loadTrendChart();
