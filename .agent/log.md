@@ -1125,3 +1125,43 @@ score weight redistribution) cleared the bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 22 — 2026-09-09 (approx, this run)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs on cve-alerts.yml -- all `completed`/`success`, most recent 50s, no
+429/throttle signals from NVD/EPSS/KEV/GHSA/Dependabot. All sources
+healthy. No rate-limit backoff needed.
+
+**Implemented:** Debounced the dashboard search input to 150ms
+(docs/app.js). Previously every keystroke in the search box triggered a
+full filter+sort+card-grid re-render plus a URL history.replaceState
+sync -- wasteful on 445+ (and growing) alerts, with visible potential
+lag on lower-end/mobile devices as the dataset grows. Wrapped the
+existing input listener in a standard debounce pattern (150ms, within
+common UX guidance for search-as-you-type responsiveness). Pure
+frontend change, zero new API calls, zero schema/backend changes, zero
+cost.
+
+Validation performed: `node --check docs/app.js` passed. Served docs/
+on a scratch local HTTP port with real production data (445 alerts),
+used the browser tool to confirm: typing "chrome" left the result count
+unchanged immediately after the keystroke (445/445, debounce delaying
+the render) and correctly updated to 56/445 after ~400ms; clearing the
+search correctly reset to 445/445; stats bar (101 critical, 1 KEV, 0.8%
+avg EPSS) rendered correctly throughout. No aggregate.py/data changes,
+so no GitHub Actions data-pipeline dispatch was needed for this cycle.
+
+Committed as `a2843cb`, pushed to main. Polled the GitHub Pages build
+deployment (triggered automatically on push) to completion, then curled
+https://astruzocyber.github.io/CVE/app.js and confirmed the new
+`searchDebounceTimer` code is live (200 OK). Loaded the live production
+dashboard in the browser tool: screenshot-confirmed correct rendering
+of stats bar, historical trend chart, and KEV/critical counts with no
+regression. Live verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (search
+input debounce) cleared the bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.

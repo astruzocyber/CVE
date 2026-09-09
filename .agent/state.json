@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 21,
+  "total_cycles": 22,
   "implemented": [
     {
       "cycle": 1,
@@ -149,9 +149,16 @@
       "title": "Redistribute risk-score weight when CVSS or EPSS is missing (instead of scoring as zero)",
       "description": "composite_risk_score() previously treated a missing CVSS or EPSS value as 0, i.e. silently asserting definite-low-severity/definite-low-exploitability for a CVE that simply has not been scored yet by NVD/FIRST.org -- 112/445 currently-tracked alerts are missing epss_score. Now each present component (CVSS 35%, EPSS 40%, KEV flat 25%) has its weight redistributed proportionally across whatever components ARE known, so a partial-data CVE risk_score reflects only real signal rather than being artificially deflated. risk_score_breakdown gained a weight_redistributed boolean and per-component effective-weight strings (e.g. \"58.3% of (CVSS/10)\" when EPSS is missing); the dashboard breakdown panel renders these plus a new explanatory note when redistribution occurred, and the footer methodology text documents the behavior. Pure risk-scoring-accuracy + transparency fix: no new API calls, no new external data sources, one new boolean field on an already-present nested object.",
       "commit_sha": "f59791b"
+    },
+    {
+      "cycle": 22,
+      "timestamp": "2026-09-09T14:36:33.148411+00:00",
+      "title": "Debounce search input (150ms)",
+      "description": "The dashboard search box previously triggered a full filter+sort+innerHTML re-render of the card grid (plus a history.replaceState URL sync from cycle 7's shareable-filters feature) on every single keystroke. With 445+ alerts and growing over time, typing a multi-character search term fired repeated full-grid rebuilds for every intermediate substring the user never intended to search for -- wasted CPU work and, on lower-end/mobile devices, visible input lag as the alert count grows. Wrapped the existing search input listener in a 150ms debounce (setTimeout/clearTimeout pattern, well under common UX guidance of ~100-300ms for search-as-you-type to still feel instant), collapsing rapid keystrokes into a single render after the user pauses typing. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost. Validated: node --check passed; served docs/ on a scratch local port with real production data (445 alerts), confirmed via browser tool that typing 'chrome' left the result count unchanged at 445/445 immediately after the keystroke event fired (debounce delaying execution) and correctly updated to 56/445 after ~400ms; confirmed clearing search correctly resets to 445/445 and the stats bar still renders correctly (101 critical, 1 KEV, 0.8% avg EPSS). No aggregate.py/data changes so no GitHub Actions data-pipeline run was needed; live-verified by polling the GitHub Pages build deployment run to completion, curling https://astruzocyber.github.io/CVE/app.js to confirm the new searchDebounceTimer code is live (200 OK, code present), and loading the live production dashboard in the browser tool -- screenshot confirmed correct rendering (stats bar, historical trend chart, KEV/critical counts all intact, no regression).",
+      "commit_sha": "a2843cb"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T14:00:00Z",
+  "last_cycle_at": "2026-09-09T14:36:33.148418+00:00",
   "stopped": false
 }
