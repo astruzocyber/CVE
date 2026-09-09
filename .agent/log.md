@@ -258,3 +258,71 @@ and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles = 0/3.
 Not stopped. Next cycle in ~30 minutes.
+
+---
+
+## Cycle 6 — 2026-09-09T05:10:29Z
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions runs
+prior to this cycle (all `completed`/`success`). No sustained 429/throttle
+signals from any source excluding benign Node 20 deprecation noise. Sources
+healthy going into this cycle.
+
+**Implemented:** Refresh EPSS/KEV/risk_score for existing tracked alerts even
+when this run's NVD lookback window (2 days in production CI) doesn't
+resurface them. Previously `epss_score` (40% of the composite risk score) and
+`kev` status froze permanently at whatever value was captured on
+`first_seen` the moment a CVE aged out of the lookback window or stopped
+being returned by Dependabot/GHSA -- even though FIRST.org publishes new
+EPSS scores daily and CISA KEV catalog additions have nothing to do with
+NVD's `lastModified` window. This was a real risk-scoring accuracy gap: a
+CVE could sit on the dashboard for weeks showing a stale EPSS score while
+its actual exploitation-probability signal moved, or fail to pick up a new
+KEV listing (losing the +25 risk bonus) until it happened to get re-matched
+by NVD. Now every run pulls EPSS/KEV for the union of this-run candidates
+and all currently-tracked CVE IDs, and refreshes the score-derived fields in
+place for entries not otherwise touched this cycle -- `description`,
+`cvss_score`, `source`, `first_seen`, `affected` etc. are left untouched
+since NVD didn't return fresher data for them. Scored 5/5/5: zero added
+cost (still a single unauthenticated batched FIRST.org EPSS call, same
+endpoint, same free rate limit, no new dependency or credential), low
+validation risk (pure refresh of already-existing score fields using the
+already-existing `composite_risk_score()`/`build_final_entry()` logic, no
+new external source), real value (closes a genuine, previously-undetected
+accuracy gap in the pipeline's core risk-scoring promise).
+
+Validation performed: `ast.parse` syntax check passed. Backed up
+`docs/data/{alerts,seen_ids,stats}.json`, `docs/data/history/`,
+`docs/feed.json`, `docs/feed.xml`, `docs/data/kev_snapshot.json` to `/tmp`.
+Ran the script for real locally (backgrounded, ~3.5 min due to NVD's
+unauthenticated rate limit of 25 search terms x 6.5s delay plus 943-CVE EPSS
+batch): output showed `NVD candidates (pre-filter): 810`, `Querying EPSS for
+943 CVEs` (up from the previous 305-candidate-only volume, confirming the
+new all-tracked-CVEs union worked), `After filtering: 305 matches`, `Wrote
+438 total alerts` (same total as before -- no data loss/duplication),
+`Wrote 0 NEW alerts` (correct, no genuinely new CVEs this cycle). Diffed
+old vs new `alerts.json`: same 438 `(cve_id, source)` keys, `first_seen` and
+`cvss_score` identical for every sampled entry -- only EPSS/KEV/risk_score
+fields refreshed, exactly as intended. `git checkout --` restored all data
+files to their pre-test state afterward so local throwaway test output
+never touched production data; only `scripts/aggregate.py` was left staged.
+
+Committed as `71e5d5c`, pushed to main, triggered `gh workflow run
+cve-alerts.yml` (run `34313822093`) -- completed `success` in ~2.5 min. Live
+log showed several transient `NVD HTTP error 503: Service Unavailable`
+during the run, which the pre-existing retry-with-backoff logic (implemented
+cycles 1-3, unrelated to this cycle's change) absorbed without failing the
+job -- run still completed with correct output: `NVD candidates (pre-filter):
+474`, `Querying EPSS for 792 CVEs`, `After filtering: 120 matches`, `Wrote
+438 total alerts` (consistent total, confirming resilience under real
+upstream 503s). Pulled latest, curled the live site:
+`https://astruzocyber.github.io/CVE/` -> 200, `/data/stats.json` -> 200,
+`/data/alerts.json` -> 200, confirmed 438 total alerts live-side matching
+local. No frontend files changed, so no browser/screenshot check was
+needed. Live verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified cleared the
+bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.

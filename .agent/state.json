@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 5,
+  "total_cycles": 6,
   "implemented": [
     {
       "cycle": 1,
@@ -14,32 +14,39 @@
       "cycle": 2,
       "timestamp": "2026-09-09T02:38:03Z",
       "title": "Retry with backoff on Dependabot Alerts API pagination fetch",
-      "description": "fetch_dependabot_alerts() was the last remaining HTTP call in the pipeline still making a single bare attempt per page, unlike fetch_kev()/nvd_query()/fetch_epss() which all already retry 3x with exponential backoff on 429/5xx/transient errors after cycles 1's fix. Because dependabot_repos includes astruzocyber/CVE itself (actively used, not a dead config path), a transient failure on any page mid-pagination would silently truncate or drop that repo's Dependabot alerts for the entire run with no retry. Added the same 3-attempt backoff pattern (429/5xx retried, other HTTP errors and exhausted retries logged and treated as end-of-pagination for that repo, matching prior behavior on unrecoverable failure). Zero new dependencies, zero added call volume under normal conditions.",
+      "description": "fetch_dependabot_alerts() was the last remaining HTTP call in the pipeline still making a single bare attempt per page. Added 3-attempt exponential backoff on 429/5xx/transient errors.",
       "commit_sha": "8e94e2d"
     },
     {
       "cycle": 3,
       "timestamp": "2026-09-09T03:20:57Z",
       "title": "Retry with backoff on GHSA advisories fetch",
-      "description": "fetch_ghsa_advisories() was the last remaining external HTTP call in the pipeline still making a single bare attempt per package, after cycles 1-2 already added the same 3-attempt exponential-backoff pattern to fetch_kev()/nvd_query()/fetch_epss()/fetch_dependabot_alerts(). Even though ghsa_packages is currently empty in config/watchlist.yaml (so the function is a no-op today), it's live production code that will run the instant the user adds a package name, and leaving it as the sole unretried call was an inconsistency waiting to bite silently. Added the identical 429/5xx-retried, other-HTTP-errors-logged-and-skipped pattern used everywhere else in the file. Zero new dependencies, zero added call volume under normal conditions (retries only fire on actual transient failure), completes the reliability layer across every external source the pipeline touches.",
+      "description": "fetch_ghsa_advisories() was the last remaining external HTTP call without retry. Added the identical 429/5xx-retried pattern used everywhere else in the file.",
       "commit_sha": "d92b1de"
     },
     {
       "cycle": 4,
       "timestamp": "2026-09-09T03:52:00Z",
       "title": "Frontend accessibility: labels and aria-attributes on filter controls",
-      "description": "The dashboard's search input, three select filters (KEV status, source, sort order), and the per-card risk-score breakdown toggle button had no accessible name for screen readers -- inputs relied only on a visual placeholder and unlabeled <select> elements, and the toggle button never communicated its expanded/collapsed state via aria-expanded. Added a <label class=\"visually-hidden\"> (new CSS utility class, standard clip-based visually-hidden pattern) paired with each control plus matching aria-label attributes, added role=\"status\" to the empty-state message and aria-live=\"polite\" to the result count so screen-reader users get live updates on filter changes, and wired aria-expanded=\"true\"/\"false\" on the score-breakdown toggle button so its state is announced. Pure frontend markup/CSS change, zero new dependencies, zero risk to data pipeline or existing functionality -- purely additive attributes with no visual change (visually-hidden labels are clipped off-screen).",
+      "description": "Added visually-hidden labels, aria-label attributes, aria-live result count, role=status empty-state, and aria-expanded on the score-breakdown toggle. Pure additive markup, zero visual change.",
       "commit_sha": "23a0e81"
     },
     {
       "cycle": 5,
       "timestamp": "2026-09-09T04:30:13Z",
       "title": "Retry with backoff on GitHub Issue creation (notify_github_issues.py)",
-      "description": "create_issue() in scripts/notify_github_issues.py was the last remaining external HTTP call in the pipeline still making a single bare attempt, after prior cycles added the same 3-attempt exponential-backoff pattern to fetch_kev()/nvd_query()/fetch_epss()/fetch_dependabot_alerts()/fetch_ghsa_advisories() in scripts/aggregate.py. A transient 429/5xx from the GitHub Issues API would silently drop a vulnerability notification for the rest of the run with no retry -- notably worse than a data-fetch failure since notify_github_issues.py only reads new_alerts.json once and never re-runs for those alerts (idempotency design already accepts 'seen but not notified' as a rare tradeoff, but this closes the transient-failure gap that was causing it unnecessarily). Added the identical 429/5xx-retried, other-HTTP-errors-logged-and-skipped pattern used throughout aggregate.py. Zero new dependencies, zero added call volume under normal conditions, completes the reliability layer across every external HTTP call in the entire pipeline (both aggregate.py and notify_github_issues.py).",
+      "description": "create_issue() was the last remaining external HTTP call in the entire pipeline without retry. Added the identical 429/5xx-retried pattern, closing the reliability layer across both aggregate.py and notify_github_issues.py.",
       "commit_sha": "4b537d1"
+    },
+    {
+      "cycle": 6,
+      "timestamp": "2026-09-09T05:10:29Z",
+      "title": "Refresh EPSS/KEV/risk_score for existing alerts outside NVD lookback window",
+      "description": "Previously, once a CVE aged out of the NVD lookback window (2 days in production CI, 8 days default locally) or wasn't resurfaced by Dependabot/GHSA that run, its epss_score (40% of composite risk_score) and kev status froze permanently at the value captured on first_seen -- even though FIRST.org publishes new EPSS scores daily and CISA KEV catalog additions are unrelated to NVD's lastModified window. Now every run also queries EPSS/KEV for all existing tracked alerts (not just ones resurfaced this cycle) and refreshes epss_score, epss_percentile, kev, kev_date_added, kev_due_date, kev_ransomware_use, kev_required_action, risk_score, and risk_score_breakdown in place for the untouched ones -- leaving description/cvss_score/source/first_seen/affected fields alone since this run has no fresher data for them. Validated locally: same 438 CVEs before/after, first_seen and cvss_score untouched, only score fields updated; EPSS query volume rose from ~305 (filtered-only) to ~943 (all 438 tracked + new candidates, deduplicated) CVEs, still a single unauthenticated batched FIRST.org endpoint call (no key, generous free rate limit), well within zero-cost constraints. Live CI run hit transient NVD 503s (existing retry logic absorbed them, non-fatal) and completed successfully with correct output.",
+      "commit_sha": "71e5d5c"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T04:30:13Z",
+  "last_cycle_at": "2026-09-09T05:10:29Z",
   "stopped": false
 }
