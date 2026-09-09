@@ -643,3 +643,58 @@ SEO/social meta tags) cleared the bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 13 — 2026-09-09T09:15:00Z (approx)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs prior to this cycle -- all `completed`/`success` (08:10:54Z, 05:10:29Z,
+04:29:29Z, 04:10:07Z, 03:20:57Z). Grepped the latest run's log for
+warning/error/traceback/429/throttle (excluding known Node deprecation
+noise) -- only benign Node20-deprecation warnings from GitHub-owned actions,
+no application-level errors. No 429/throttle signal from NVD/EPSS/KEV/GHSA/
+Dependabot. All sources healthy going into this cycle.
+
+**Implemented:** Added a per-CVE shareable deep-link feature. Each alert
+card previously had no unique DOM anchor and no way to link directly to one
+specific card -- only the whole filtered dashboard view was shareable (via
+cycle 7's URL query params). Added `id="alert-<CVE-ID>"` to every card,
+turned the CVE-ID header into a clickable `<button class="cve-link-btn">`
+that copies a `#alert-<CVE-ID>` deep-link to the clipboard (with a
+"Copied!" transient label, graceful no-op if the Clipboard API is
+unavailable) and updates the URL hash via `history.replaceState`. Added
+`highlightFromHash()`, called after every `loadData()` completes, which
+checks `location.hash` for `#alert-<CVE-ID>`, scrolls that card into view
+(smooth, centered) and applies a temporary `.highlighted` CSS class (blue
+glow border, auto-removed after 2.5s) -- fails silently if the card isn't
+in the current dataset. Pure additive frontend change across `docs/app.js`
+(58 lines) and `docs/style.css` (19 lines): no new API calls, no backend/
+schema changes, zero cost.
+
+Validation performed: `node --check docs/app.js` passed. Served `docs/`
+locally on a scratch port with real production data (440 alerts), loaded in
+the browser tool: confirmed clicking a CVE-ID button sets `location.hash`
+to `#alert-<CVE-ID>`; confirmed a genuine fresh navigation (`new_tab`, not
+an in-page `goto_url` hash-only change, which doesn't re-fire the JS load
+path and initially produced a false negative during testing) to a URL with
+`#alert-<CVE-ID>` correctly scrolled to and applied `.highlighted` to that
+exact card. Confirmed zero regression: search filter (`wordpress` query
+correctly narrowed 440->125 alerts) and the existing risk-score breakdown
+toggle (`.score-toggle` click correctly un-hides its panel) both still work
+exactly as before.
+
+Committed as `34ff7f2`, pushed to main. Pure frontend change with zero
+pipeline/data impact -- did not trigger `cve-alerts.yml` (no reason to
+consume Actions minutes for a change that can't affect production data).
+Waited ~60s for GitHub Pages redeploy, confirmed via `curl` that live
+`app.js` and `style.css` both return HTTP 200 and contain the new
+`cve-link-btn`/`highlightFromHash`/`highlighted` identifiers. Loaded the
+LIVE dashboard at `https://astruzocyber.github.io/CVE/` in the browser
+tool: confirmed the first card's CVE-ID renders as the new clickable
+`cve-link-btn` with the correct `data-cve` attribute. Live verification
+passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (per-CVE
+deep-link) cleared the bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.
