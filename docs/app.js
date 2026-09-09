@@ -49,6 +49,20 @@ function overdueDays(alert) {
   return Math.floor(diffMs / (24 * 60 * 60 * 1000));
 }
 
+// Whole days remaining until the CISA KEV BOD 22-01 remediation due date, or
+// null if there is no due date or it has already passed (that case is
+// covered by isOverdue()/overdueDays() above, not this function -- the two
+// are mutually exclusive by construction). Purely a display magnitude used
+// to flag upcoming deadlines before they become overdue, mirroring the
+// existing overdue-days feature symmetrically on the other side of "today".
+function daysUntilDue(alert) {
+  if (!alert.kev_due_date || isOverdue(alert)) return null;
+  const due = new Date(alert.kev_due_date + "T00:00:00Z");
+  if (isNaN(due)) return null;
+  const diffMs = due.getTime() - Date.now();
+  return Math.ceil(diffMs / (24 * 60 * 60 * 1000));
+}
+
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str ?? "";
@@ -65,6 +79,10 @@ function renderCard(alert) {
     ? `<span class="badge overdue">OVERDUE${typeof overdueDaysVal === "number" ? ` (${overdueDaysVal}d)` : ""}</span>`
     : "";
   const ransomwareBadge = alert.kev_ransomware_use ? `<span class="badge ransomware">RANSOMWARE</span>` : "";
+  const dueSoonDays = daysUntilDue(alert);
+  const dueSoonBadge = typeof dueSoonDays === "number" && dueSoonDays <= 7
+    ? `<span class="badge due-soon">DUE SOON (${dueSoonDays}d)</span>`
+    : "";
   const sevBadge = sevClass
     ? `<span class="badge ${sevClass}">${sevClass}</span>`
     : "";
@@ -91,7 +109,7 @@ function renderCard(alert) {
     <div class="card" data-cve-id="${cveIdSafe}" id="alert-${cveIdSafe}">
       <div class="card-header">
         <button class="cve-id cve-link-btn" type="button" data-cve="${cveIdSafe}" title="Copy a direct link to this alert">${cveIdSafe}</button>
-        <div class="badges">${kevBadge}${ransomwareBadge}${overdueBadge}${sevBadge}${sourceBadge}</div>
+        <div class="badges">${kevBadge}${ransomwareBadge}${overdueBadge}${dueSoonBadge}${sevBadge}${sourceBadge}</div>
       </div>
       <div class="risk-row">
         <div class="risk-bar-track"><div class="risk-bar-fill ${rClass}" style="width:${Math.min(100, alert.risk_score || 0)}%"></div></div>
