@@ -331,6 +331,47 @@ def extract_cvss_vector_components(nvd_cve):
     return None
 
 
+# GHSA/Dependabot advisories expose a raw CVSS `vector_string` (e.g.
+# "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H") rather than NVD's pre-split
+# component fields. CVSS v3.0/v3.1 uses a fixed, publicly documented metric
+# abbreviation scheme (first.org CVSS v3.1 spec) for AV/AC/PR/UI -- the exact
+# same four components extract_cvss_vector_components() already pulls from
+# NVD -- so parsing it here is following a stable public spec, not guessing.
+# CVSS v4.0 vector strings share some letter codes but redefine others (e.g.
+# adds AT, and UI values are N/P/A instead of v3's N/R) -- deliberately NOT
+# parsed here per the "adapt, never guess" policy; a v4 vector_string is
+# recognized by its "CVSS:4.0" prefix and skipped, returning None, rather
+# than risking a mis-mapped field.
+_CVSS_V3_AV = {"N": "NETWORK", "A": "ADJACENT_NETWORK", "L": "LOCAL", "P": "PHYSICAL"}
+_CVSS_V3_AC = {"L": "LOW", "H": "HIGH"}
+_CVSS_V3_PR = {"N": "NONE", "L": "LOW", "H": "HIGH"}
+_CVSS_V3_UI = {"N": "NONE", "R": "REQUIRED"}
+
+
+def parse_cvss_v3_vector_string(vector_string):
+    if not vector_string or not isinstance(vector_string, str):
+        return None
+    if not (vector_string.startswith("CVSS:3.0") or vector_string.startswith("CVSS:3.1")):
+        return None  # v4 or unrecognized format -- do not guess, skip
+    parts = {}
+    for piece in vector_string.split("/"):
+        if ":" in piece:
+            k, v = piece.split(":", 1)
+            parts[k] = v
+    av = _CVSS_V3_AV.get(parts.get("AV"))
+    ac = _CVSS_V3_AC.get(parts.get("AC"))
+    pr = _CVSS_V3_PR.get(parts.get("PR"))
+    ui = _CVSS_V3_UI.get(parts.get("UI"))
+    if av or ac or pr or ui:
+        return {
+            "attack_vector": av,
+            "attack_complexity": ac,
+            "privileges_required": pr,
+            "user_interaction": ui,
+        }
+    return None
+
+
 def extract_description(nvd_cve):
     for d in nvd_cve.get("descriptions", []):
         if d.get("lang") == "en":
@@ -550,12 +591,14 @@ def fetch_dependabot_alerts(repos, token):
                 advisory = alert.get("security_advisory", {}) or {}
                 cve_id = advisory.get("cve_id") or advisory.get("ghsa_id")
                 cvss = (advisory.get("cvss") or {}).get("score")
+                vector_string = (advisory.get("cvss") or {}).get("vector_string")
                 pkg = (alert.get("dependency") or {}).get("package", {}) or {}
                 results.append({
                     "cve_id": cve_id,
                     "description": advisory.get("summary", ""),
                     "cvss_score": float(cvss) if cvss is not None else None,
                     "cvss_version": "GHSA CVSS",
+                    "cvss_vector_components": parse_cvss_v3_vector_string(vector_string),
                     "cwe_ids": extract_cwe_ghsa(advisory),
                     "published": advisory.get("published_at"),
                     "matched_vendor_product": [pkg.get("name", "unknown")],
@@ -649,6 +692,7 @@ def fetch_ghsa_advisories(packages, token=None):
                 continue
             cvss_info = adv.get("cvss") or {}
             score = cvss_info.get("score")
+            vector_string = cvss_info.get("vector_string")
             ecosystems = sorted({
                 (v.get("package") or {}).get("ecosystem", "unknown")
                 for v in (adv.get("vulnerabilities") or []) if isinstance(v, dict)
@@ -658,6 +702,7 @@ def fetch_ghsa_advisories(packages, token=None):
                 "description": adv.get("summary", ""),
                 "cvss_score": float(score) if score is not None else None,
                 "cvss_version": "GHSA CVSS",
+                "cvss_vector_components": parse_cvss_v3_vector_string(vector_string),
                 "cwe_ids": extract_cwe_ghsa(adv),
                 "published": adv.get("published_at"),
                 "matched_vendor_product": [f"{pkg} ({'/'.join(ecosystems) or 'ghsa'})"],
