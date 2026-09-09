@@ -1047,3 +1047,81 @@ filter dropdown) cleared the bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 21 — 2026-09-09 (approx, this run)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs -- all `completed`/`success` (12:12:53Z and earlier). Live-triggered
+run this cycle (34360511746) also completed clean, only benign Node 20
+deprecation warning, no 429/throttle signals from NVD/EPSS/KEV/GHSA/
+Dependabot. All sources healthy.
+
+**Implemented:** Fixed a risk-scoring accuracy gap in
+`composite_risk_score()` (scripts/aggregate.py). Previously a missing
+CVSS or EPSS value (112/445 currently-tracked alerts lack epss_score,
+since FIRST.org hasn't scored every CVE) was silently treated as 0 --
+i.e. the pipeline was asserting "definitely low severity" / "definitely
+won't be exploited" for a CVE it simply has no data for yet, deflating
+risk_score by up to 35-40 points on missing-data alerts and materially
+understating triage priority for otherwise-high-CVSS CVEs like the
+CVE-2026-87491 example (CVSS 8.8, Chrome V8 RCE) verified live below.
+Now each present score component has its weight (CVSS 35%, EPSS 40%,
+KEV flat 25%) redistributed proportionally across whichever components
+are actually known, rather than counting the missing one as zero. KEV
+status itself is never "missing" (True/False from a fixed public
+catalog lookup), so only its share of the weight pool changes.
+`risk_score_breakdown` gained a `weight_redistributed` boolean and
+per-component effective-weight strings (e.g. "58.3% of (CVSS/10)" when
+EPSS is missing, vs the normal "35.0%"). Dashboard breakdown panel
+(docs/app.js) now surfaces these dynamic weight labels plus a new
+explanatory note div when redistribution occurred; footer methodology
+text (docs/index.html) documents the behavior for anyone reading the
+"how is this score computed" copy. Added a small `.breakdown-note` CSS
+rule (docs/style.css). Pure risk-scoring-accuracy + transparency
+improvement: zero new API calls, zero new external data sources, one
+new boolean field + updated weight-label strings on an already-present
+nested object -- no breaking schema change (existing consumers reading
+`cvss_component`/`epss_component`/`kev_bonus`/`capped`/`risk_score`
+still get the same field names and types).
+
+Validation performed: `ast.parse` on aggregate.py, `node --check` on
+app.js, Python `html.parser` on index.html all passed. Unit-tested
+`composite_risk_score()` directly with 5 cases (full data, missing EPSS,
+missing CVSS, missing both + KEV, full data + KEV) confirming correct
+proportional redistribution and that KEV bonus alone can reach 100 when
+both other scores are missing and KEV=true (weight pool = 25 -> scaled
+to 100%). Backed up all real production data files to /tmp, ran
+`scripts/aggregate.py` for real against the live GH_TOKEN (no separate
+Dependabot token configured, matching existing production behavior --
+that path already skips gracefully): completed cleanly, 445 total
+alerts (same as before), 112 correctly flagged `weight_redistributed`,
+333 unaffected/unchanged in structure. Restored all real data files via
+`git checkout --` afterward so no throwaway local test data touched
+tracked files ahead of the real CI run. Served docs/ on a scratch HTTP
+port with the recomputed real data, loaded in the browser tool: found a
+`weight_redistributed` alert (CVE-2026-87491), clicked its breakdown
+toggle, confirmed the panel correctly renders "EPSS n/a x n/a (missing)
+= 0.0 pts" and the new note, screenshot-verified no layout regression;
+confirmed existing severity filter, search, and stats bar all still
+functioned correctly with the modified data (101 critical, 445 total
+unchanged). Restored alerts.json again post-test.
+
+Committed as `f59791b`, pushed to main. Since this touched
+`scripts/aggregate.py`, triggered `cve-alerts.yml` via
+`workflow_dispatch` (run 34360511746): completed successfully in ~50s,
+log grep showed zero warnings/errors/tracebacks beyond the pre-existing
+benign Node 20 deprecation notice. `git pull` after the run's own
+auto-commit confirmed live `docs/data/alerts.json` has 445 total alerts,
+112 with `weight_redistributed: true`, matching local validation
+exactly. Curled the live site (200 OK) and loaded the actual production
+dashboard in the browser tool: located CVE-2026-87491 via the search
+filter, opened its breakdown panel, screenshot-confirmed identical
+correct rendering (CVSS 8.8 x 58.3%, EPSS n/a x n/a, KEV +41.7, Total 51
+pts, redistribution note) with no regression to the stats bar, trend
+chart, or existing filters. Live verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (missing-
+score weight redistribution) cleared the bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.

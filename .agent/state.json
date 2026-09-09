@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 20,
+  "total_cycles": 21,
   "implemented": [
     {
       "cycle": 1,
@@ -142,9 +142,16 @@
       "title": "Add severity (CVSS band) filter dropdown",
       "description": "severityClass() has computed critical/high/medium/low CVSS bands since early cycles (used for card border color) but there was no way to filter the board by severity band -- only KEV status and source had dropdowns. Added a #severity-filter <select> to docs/index.html (all/critical/high/medium/low, mirroring the existing severityClass() thresholds: >=9, 7-8.9, 4-6.9, <4) and matching filter logic in applyFiltersAndRender() in docs/app.js, reusing the existing severityClass() helper unchanged. Composes with the existing URL-query-param sharing (cycle 7) via a new sev= param, so a filtered severity view is itself shareable/bookmarkable, and with the dependency-file filter and search. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost.",
       "commit_sha": "05eaa1e"
+    },
+    {
+      "cycle": 21,
+      "timestamp": "2026-09-09T14:00:00Z",
+      "title": "Redistribute risk-score weight when CVSS or EPSS is missing (instead of scoring as zero)",
+      "description": "composite_risk_score() previously treated a missing CVSS or EPSS value as 0, i.e. silently asserting definite-low-severity/definite-low-exploitability for a CVE that simply has not been scored yet by NVD/FIRST.org -- 112/445 currently-tracked alerts are missing epss_score. Now each present component (CVSS 35%, EPSS 40%, KEV flat 25%) has its weight redistributed proportionally across whatever components ARE known, so a partial-data CVE risk_score reflects only real signal rather than being artificially deflated. risk_score_breakdown gained a weight_redistributed boolean and per-component effective-weight strings (e.g. \"58.3% of (CVSS/10)\" when EPSS is missing); the dashboard breakdown panel renders these plus a new explanatory note when redistribution occurred, and the footer methodology text documents the behavior. Pure risk-scoring-accuracy + transparency fix: no new API calls, no new external data sources, one new boolean field on an already-present nested object.",
+      "commit_sha": "f59791b"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T13:15:00Z",
+  "last_cycle_at": "2026-09-09T14:00:00Z",
   "stopped": false
 }
