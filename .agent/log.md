@@ -1248,3 +1248,30 @@ input debounce) cleared the bar and was implemented.
 **Rejected this cycle:** None — the CWE-search-indexing fix cleared the bar on first pass and was implemented.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 25. `stopped`: false.
+
+
+## Cycle 26 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34375061636, 34369721256, 34360511746, 34349733814, 34327718061), no 429/throttle signals from NVD/EPSS/GHSA/CISA in recent Actions logs, only benign Node 20 runner deprecation noise (`##[warning]Node.js 20 is deprecated...forced to run on Node.js 24`).
+
+**Change:** Add an optional "Total tracked alerts" line to the historical trend chart.
+
+- **Opportunity:** `docs/data/history/trend.csv` has recorded `total_alerts` as its second column every run since history tracking began, and `loadTrendChart()` in `docs/app.js` already fetches/parses the whole CSV row-by-row -- but only `kev_overdue_count` and `avg_epss` were ever plotted. The raw alert-volume growth trend (does watchlist/data coverage keep growing steadily, or did a spike/drop signal a config or pipeline problem?) was invisible despite the underlying data already being fetched.
+- **Frontend:** Added a third Chart.js dataset ("Total tracked alerts") parsed from the existing `rows` array (no new fetch), plotted on a new `y2` axis with `display: false` so it doesn't visually clutter the two existing labeled axes, and set `hidden: true` on the dataset itself so the default rendered chart is pixel-identical to before -- a viewer opts in via the standard Chart.js legend-click interaction. Also added `tooltip: { mode: "index", intersect: false }` so a shared tooltip across all three lines (visible ones) works correctly once toggled on.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure client-side parse of already-fetched CSV, zero new network calls), validation risk 2/5 (additive Chart.js dataset behind a `hidden: true` default, doesn't touch the two existing plotted lines), value 3/5 (a real but secondary triage signal -- distinct from cycle 15's `by_source` breakdown pills, this is a growth-over-time view).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK.
+- Served `docs/` on a scratch local port (8942) with real production data (501 alerts, `trend.csv` 13 rows). Used the browser tool: confirmed the chart renders identically to before by default (KEV overdue + Avg EPSS lines only, "Total tracked alerts" shown in the legend with strikethrough = hidden). Clicked the "Total tracked alerts" legend item: confirmed the third line correctly appears and traces the real total_alerts growth (432→501 across the visible window), with zero change to the other two lines' data or the stats bar.
+- No `aggregate.py`/data-schema changes, so no data-pipeline dry-run/backup/restore cycle was needed.
+
+**Deploy (Step 5):**
+- Committed (`1b08f2a`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Polled GitHub Pages deployment to completion; curled `https://astruzocyber.github.io/CVE/app.js` (200 OK, "Total tracked alerts" string present).
+- Loaded the LIVE dashboard in the browser tool: confirmed the trend chart renders correctly (identical default view: stats bar 501/123/1/0/0/0.7%, KEV overdue + Avg EPSS lines, "Total tracked alerts" present but hidden in the legend). No regression observed.
+
+**Rejected this cycle:** None — the trend-chart candidate cleared the bar on first pass and was implemented.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 26. `stopped`: false.

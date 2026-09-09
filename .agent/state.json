@@ -1,7 +1,7 @@
 {
     "consecutive_no_improvement": 0,
     "consecutive_failed_cycles": 0,
-    "total_cycles": 25,
+    "total_cycles": 26,
     "implemented": [
         {
             "cycle": 1,
@@ -177,9 +177,16 @@
             "title": "Include CWE IDs in search haystack",
             "description": "CWE badges have been rendered on alert cards since cycle 23 (extract_cwe_ids feature), but the search box haystack in applyFiltersAndRender() only indexed cve_id, description, affected, and matched_keywords -- cwe_ids was never added, so a viewer typing e.g. \"CWE-79\" to find all XSS-classified CVEs got zero results despite the CWE-79 badge being visibly present on matching cards. Added cwe_ids (spread into the existing haystack array) so free-text search now matches on CWE ID. Pure additive one-line client-side change, no new API calls, no backend/schema changes, zero cost.",
             "commit_sha": "91948c4"
+        },
+        {
+            "cycle": 26,
+            "timestamp": "2026-09-09T17:05:00Z",
+            "title": "Optional 'Total tracked alerts' line on historical trend chart",
+            "description": "docs/data/history/trend.csv has recorded total_alerts (column 2) every run since cycle-1-era history tracking began, but the Chart.js trend chart only ever plotted kev_overdue_count and avg_epss -- the raw alert-volume growth trend (a meaningful signal for a security lead: 'is our watchlist/data coverage growing steadily or did something break/spike?') was invisible even though the data was already being fetched and rendered as the x-axis labels source. Added a third dataset ('Total tracked alerts', parsed from the already-fetched trend.csv column 1) on a new hidden y2 axis (display:false, so it doesn't visually compete with the two existing labeled axes), defaulted to hidden:true in the Chart.js dataset config so the default view is byte-for-byte visually identical to before -- a viewer opts in by clicking the legend item, standard Chart.js interaction pattern. Pure additive frontend change: no new API calls, no backend/schema changes (total_alerts already existed as trend.csv column 2), zero cost.",
+            "commit_sha": "1b08f2a"
         }
     ],
     "rejected": [],
-    "last_cycle_at": "2026-09-09T16:33:01.526826+00:00",
+    "last_cycle_at": "2026-09-09T17:05:00Z",
     "stopped": false
 }
