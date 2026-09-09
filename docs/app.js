@@ -38,6 +38,17 @@ function isOverdue(alert) {
   return !isNaN(due) && due.getTime() < Date.now();
 }
 
+// How many whole days past the CISA KEV BOD 22-01 remediation due date this
+// alert is, or null if not overdue / no due date. Purely a display magnitude
+// for the existing OVERDUE badge -- the overdue/non-overdue decision itself
+// still comes from isOverdue() above, unchanged.
+function overdueDays(alert) {
+  if (!isOverdue(alert)) return null;
+  const due = new Date(alert.kev_due_date + "T00:00:00Z");
+  const diffMs = Date.now() - due.getTime();
+  return Math.floor(diffMs / (24 * 60 * 60 * 1000));
+}
+
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str ?? "";
@@ -49,7 +60,10 @@ function renderCard(alert) {
   const rClass = riskClass(alert.risk_score);
   const overdue = isOverdue(alert);
   const kevBadge = alert.kev ? `<span class="badge kev">KEV</span>` : "";
-  const overdueBadge = overdue ? `<span class="badge overdue">OVERDUE</span>` : "";
+  const overdueDaysVal = overdue ? overdueDays(alert) : null;
+  const overdueBadge = overdue
+    ? `<span class="badge overdue">OVERDUE${typeof overdueDaysVal === "number" ? ` (${overdueDaysVal}d)` : ""}</span>`
+    : "";
   const ransomwareBadge = alert.kev_ransomware_use ? `<span class="badge ransomware">RANSOMWARE</span>` : "";
   const sevBadge = sevClass
     ? `<span class="badge ${sevClass}">${sevClass}</span>`
