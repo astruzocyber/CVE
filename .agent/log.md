@@ -1195,3 +1195,29 @@ input debounce) cleared the bar and was implemented.
 **Rejected this cycle:** None — the CWE candidate cleared the bar on first pass (feasibility 5/5: zero new API calls; validation risk 2/5: purely additive parsing + rendering, backward-compatible on missing data; value 4/5: real triage signal, a distinct axis from CVSS/EPSS/KEV that a security team can scan/filter by mentally at a glance).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 23. `stopped`: false.
+
+## Cycle 24 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34369721256, 34360511746, 34349733814, 34327718061, 34313822093), no 429/throttle signals from NVD/EPSS/GHSA/CISA in recent logs, no unexpected errors/tracebacks (only benign Node 20 runner deprecation noise).
+
+**Change:** Add a one-click "Reset filters" button.
+
+- **Opportunity:** The dashboard has 5 independent filter/sort controls (search, KEV status, severity, source, sort-by) plus a client-side dependency-file filter (cycle-era feature) and shareable URL query params (cycle 7) — but no single way to clear all of them at once. A viewer who had stacked several filters had to reset each control individually.
+- **Frontend:** Added a `#reset-filters` `<button>` next to Export CSV in `docs/index.html`. `docs/app.js` wires it to blank the search box, reset every `<select>` to its default option, clear `dependencyPackageNames` plus the dep-text-input/dep-file-input/dep-status DOM elements, and call the existing `applyFiltersAndRender()` — which also runs `updateURLFromFilters()`, so the shareable-URL query params clear too. No CSS change needed (`.controls button` already styles it).
+- **Zero-cost/risk assessment:** Pure additive frontend change — no new API calls, no backend/schema changes, zero cost, low validation risk.
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK.
+- Served `docs/` on a scratch local port (8901) with real production data (500 alerts). Used the browser tool: stacked a search term ("chrome") + KEV-only filter (110→1 of 500), clicked Reset, confirmed all controls reverted to their default values, result count returned to 500 of 500, and the URL query string cleared.
+- No `aggregate.py`/data-schema changes, so no data-pipeline dry-run/backup/restore cycle was needed.
+
+**Deploy (Step 5):**
+- Committed (`ec9d301`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Polled GitHub Pages deployment to completion, curled `https://astruzocyber.github.io/CVE/app.js` (200 OK, `reset-filters` string present).
+- Loaded the LIVE dashboard in the browser tool: confirmed the `#reset-filters` button exists, applied a search filter (500→0 of 500), clicked Reset, confirmed it correctly returned to 500 of 500. No regression to stats bar, historical trend chart, or existing filters observed.
+
+**Rejected this cycle:** None — the reset-filters candidate cleared the bar on first pass (feasibility 5/5: pure client-side DOM/state reset, zero new calls; validation risk 2/5: additive control wired to already-tested `applyFiltersAndRender()`; value 4/5: real UX gap once 5+ stackable filters/sort options accumulated across prior cycles).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 24. `stopped`: false.

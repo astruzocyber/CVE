@@ -1,7 +1,7 @@
 {
     "consecutive_no_improvement": 0,
     "consecutive_failed_cycles": 0,
-    "total_cycles": 23,
+    "total_cycles": 24,
     "implemented": [
         {
             "cycle": 1,
@@ -163,9 +163,16 @@
             "title": "Extract and display CWE/weakness classification",
             "description": "NVD's weaknesses array, GHSA's advisory.cwes, and Dependabot's advisory.cwes were already present in API responses already being fetched (no new API calls) but never parsed. Added extract_cwe_ids() helpers wired into all three source parsers (NVD, GHSA, Dependabot) and propagated cwe_ids (list of CWE-NNN strings) into the final entry schema. Frontend renders a new .cwe-row of linked badges (each links to cwe.mitre.org/data/definitions/<N>.html) below the Affected line on every card, and cwe_ids was added as a column to the CSV export. Pure additive data enrichment: zero new network calls, zero new rate-limit risk. Validated: ast.parse/node --check passed; ran aggregate.py for real against production data (477 alerts processed, 342 populated cwe_ids, 135 pre-existing untouched alerts correctly lack the key until their next refresh -- same expected behavior as any newly-added field), then git checkout'd the throwaway local data files before commit so real production data was untouched. Frontend validated via a local scratch HTTP server with synthetic CWE-79/CWE-352 test values, confirming correct badge/link DOM structure. Live-verified: pushed, triggered cve-alerts.yml (completed success, 1m37s, no new warnings/errors beyond known-benign Node 20 deprecation noise), pulled the freshly-regenerated live data (500 alerts, 250 with cwe_ids), curled all four changed live URLs (200 OK), and loaded the live dashboard in the browser tool confirming a real card (CVE-2026-85046) renders a correct CWE-843 badge/link, plus stats bar and search/filter UI unaffected (500 cards, stats populated).",
             "commit_sha": "7585449"
+        },
+        {
+            "cycle": 24,
+            "timestamp": "2026-09-09T15:55:00Z",
+            "title": "Add one-click 'Reset filters' button",
+            "description": "The dashboard had 5 independent filter/sort controls (search, KEV status, severity, source, sort-by) plus a client-side dependency-file filter, but no single way to clear all of them at once -- a viewer who had stacked several filters (e.g. search + KEV-only + severity + pasted package.json) had to reset each control individually. Added a Reset filters button next to Export CSV in docs/index.html, wired in docs/app.js to blank the search box, set every select back to its default option, clear dependencyPackageNames plus the dep-text-input/dep-file-input/dep-status DOM, and re-render -- reusing the existing applyFiltersAndRender()/updateURLFromFilters() path so the shareable-URL query params (cycle 7) are cleared too. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost. Validated: node --check passed; served docs/ on a scratch local port with real production data (500 alerts), used the browser tool to stack a search term + KEV-only filter (110->1 of 500), clicked Reset, confirmed all controls reverted to default, result count returned to 500 of 500, and the URL query string was cleared. Live-verified on production: curled app.js/index.html (200 OK, reset-filters string present), loaded the live dashboard, applied a search filter (500->0 of 500 for a nonsense scoped test), clicked Reset, confirmed it correctly returned to 500 of 500.",
+            "commit_sha": "ec9d301"
         }
     ],
     "rejected": [],
-    "last_cycle_at": "2026-09-09T15:24:55.665209+00:00",
+    "last_cycle_at": "2026-09-09T15:55:00Z",
     "stopped": false
 }
