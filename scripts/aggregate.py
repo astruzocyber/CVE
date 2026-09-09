@@ -872,19 +872,30 @@ def main():
 
     all_candidates = list(nvd_candidates.values()) + dependabot_candidates + ghsa_candidates
     all_cve_ids = {c["cve_id"] for c in all_candidates if c.get("cve_id") and c["cve_id"].startswith("CVE-")}
+
+    existing_alerts = load_json_file(ALERTS_PATH, [])
+    existing_by_key = {unique_key(a): a for a in existing_alerts}
+    seen_ids = set(load_json_file(SEEN_PATH, []))
+
+    # Also refresh EPSS/KEV for CVEs already tracked on the dashboard even if this
+    # run's NVD lookback window (default 8 days) or Dependabot/GHSA results didn't
+    # resurface them -- otherwise epss_score (40% of risk_score) and kev status would
+    # silently freeze forever the moment a CVE ages out of the lookback window, even
+    # though EPSS publishes new scores daily and KEV catalog additions are unrelated
+    # to when NVD last modified the CVE record.
+    all_cve_ids |= {a["cve_id"] for a in existing_alerts
+                    if a.get("cve_id", "").startswith("CVE-")}
     epss_map = fetch_epss(all_cve_ids) if all_cve_ids else {}
 
     filtered = [c for c in all_candidates
                 if c.get("cve_id") and passes_filters(c, watchlist, kev_map, epss_map, suppressions)]
     print(f"After filtering: {len(filtered)} matches")
 
-    existing_alerts = load_json_file(ALERTS_PATH, [])
-    existing_by_key = {unique_key(a): a for a in existing_alerts}
-    seen_ids = set(load_json_file(SEEN_PATH, []))
-
     new_alerts = []
+    touched_keys = set()
     for c in filtered:
         key = unique_key(c)
+        touched_keys.add(key)
         final = build_final_entry(c, kev_map, epss_map)
         if key not in seen_ids:
             new_alerts.append(final)
@@ -896,6 +907,32 @@ def main():
             prior = existing_by_key.get(key, final)
             merged = {**final, "first_seen": prior.get("first_seen", final["first_seen"])}
             existing_by_key[key] = merged
+
+    # Existing alerts not resurfaced by this run (outside the NVD lookback window,
+    # or no longer returned by Dependabot/GHSA) still get their EPSS/KEV/risk_score
+    # refreshed in place -- same fields build_final_entry would set, but leaving
+    # every other field (description, cvss_score, source, first_seen, affected, ...)
+    # untouched since this run has no fresher data for them.
+    for key, prior in existing_by_key.items():
+        if key in touched_keys:
+            continue
+        cve_id = prior.get("cve_id", "")
+        if not cve_id.startswith("CVE-"):
+            continue
+        in_kev = cve_id in kev_map
+        kev_entry = kev_map.get(cve_id, {})
+        epss_info = epss_map.get(cve_id, {})
+        epss_score = epss_info.get("epss")
+        risk_score, risk_breakdown = composite_risk_score(prior.get("cvss_score"), epss_score, in_kev)
+        prior["epss_score"] = epss_score
+        prior["epss_percentile"] = epss_info.get("percentile")
+        prior["kev"] = in_kev
+        prior["kev_date_added"] = kev_entry.get("dateAdded") if in_kev else None
+        prior["kev_due_date"] = kev_entry.get("dueDate") if in_kev else None
+        prior["kev_ransomware_use"] = (kev_entry.get("knownRansomwareCampaignUse") == "Known") if in_kev else False
+        prior["kev_required_action"] = kev_entry.get("requiredAction") if in_kev else None
+        prior["risk_score"] = risk_score
+        prior["risk_score_breakdown"] = risk_breakdown
 
     # Suppressed entries that were previously alerted should also disappear from the
     # cumulative view going forward (an analyst explicitly accepted the risk) -- but
