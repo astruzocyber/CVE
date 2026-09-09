@@ -63,6 +63,24 @@ function daysUntilDue(alert) {
   return Math.ceil(diffMs / (24 * 60 * 60 * 1000));
 }
 
+// Human-readable "how long has this been on our radar" age, computed from
+// first_seen (set once by aggregate.py the first time a CVE/GHSA/Dependabot
+// alert is ingested and never touched again on subsequent refresh cycles --
+// see build_final_entry()/the "keep the original first_seen" merge logic in
+// scripts/aggregate.py). Distinct from "Published" (the vendor/NVD publish
+// date, which can predate first_seen by years for old CVEs that only start
+// matching the watchlist later) -- this answers "how long has our team known
+// about this" for triage aging/backlog purposes, a gap the card had no way
+// to answer before (only a "days overdue"/"days until due" concept existed,
+// scoped to KEV deadlines specifically).
+function firstSeenAge(alert) {
+  if (!alert.first_seen) return null;
+  const seen = new Date(alert.first_seen);
+  if (isNaN(seen)) return null;
+  const days = Math.floor((Date.now() - seen.getTime()) / (24 * 60 * 60 * 1000));
+  return days < 0 ? 0 : days;
+}
+
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str ?? "";
@@ -127,6 +145,7 @@ function renderCard(alert) {
       ${matchedHtml}
       <div class="card-footer">
         <span>Published: ${fmtDate(alert.published)}</span>
+        <span class="age-badge" title="Days since this alert was first ingested by the pipeline">${(() => { const age = firstSeenAge(alert); return typeof age === "number" ? `First seen: ${age}d ago` : ""; })()}</span>
         <span class="footer-links">
           ${alert.cve_id && /^CVE-/i.test(alert.cve_id) ? `<a href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}" target="_blank" rel="noopener">View on NVD</a>` : ""}
           ${alert.dependabot_url ? `<a href="${alert.dependabot_url}" target="_blank" rel="noopener">View alert</a>` : ""}
@@ -306,6 +325,13 @@ function applyFiltersAndRender() {
       if (!ad) return 1;
       if (!bd) return -1;
       return ad.localeCompare(bd);
+    }
+    if (sortBy === "first_seen_oldest") {
+      // Oldest-ingested first -- surfaces long-lingering un-triaged alerts
+      // that keep getting pushed off-screen by the default newest-first
+      // sort, so a backlog of stale un-actioned alerts doesn't silently
+      // hide at the bottom of the list forever.
+      return (a.first_seen || "").localeCompare(b.first_seen || "");
     }
     // default: first_seen, newest first
     return (b.first_seen || "").localeCompare(a.first_seen || "");
