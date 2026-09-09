@@ -559,6 +559,7 @@ async function loadTrendChart() {
     if (lines.length < 2) return; // header only, not enough data yet
     const rows = lines.slice(1).map((line) => line.split(","));
     const labels = rows.map((r) => r[0]);
+    const totalAlerts = rows.map((r) => (r[1] === "" || r[1] === undefined ? null : Number(r[1])));
     const kevOverdue = rows.map((r) => (r[3] === "" ? null : Number(r[3])));
     const avgEpss = rows.map((r) => (r[5] === "" ? null : Number(r[5]) * 100));
 
@@ -568,6 +569,15 @@ async function loadTrendChart() {
       data: {
         labels,
         datasets: [
+          {
+            label: "Total tracked alerts",
+            data: totalAlerts,
+            borderColor: "#9aa5b1",
+            backgroundColor: "rgba(154,165,177,0.08)",
+            yAxisID: "y2",
+            tension: 0.2,
+            hidden: true,
+          },
           {
             label: "KEV overdue count",
             data: kevOverdue,
@@ -593,8 +603,9 @@ async function loadTrendChart() {
           x: { ticks: { maxTicksLimit: 8, color: "#9aa5b1" }, grid: { color: "rgba(255,255,255,0.05)" } },
           y: { position: "left", title: { display: true, text: "KEV overdue count", color: "#9aa5b1" }, ticks: { color: "#9aa5b1" }, grid: { color: "rgba(255,255,255,0.05)" } },
           y1: { position: "right", title: { display: true, text: "Avg EPSS (%)", color: "#9aa5b1" }, ticks: { color: "#9aa5b1" }, grid: { drawOnChartArea: false } },
+          y2: { position: "right", display: false, title: { display: false } },
         },
-        plugins: { legend: { labels: { color: "#e6e9ef" } } },
+        plugins: { legend: { labels: { color: "#e6e9ef" } }, tooltip: { mode: "index", intersect: false } },
       },
     });
   } catch {
