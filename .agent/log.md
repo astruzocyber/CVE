@@ -541,3 +541,51 @@ bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 11 — 2026-09-09T08:10:00Z (approx)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs prior to this cycle -- all `completed`/`success` (05:10:29Z, 04:29:29Z,
+04:10:07Z, 03:20:57Z, 02:38:03Z; no new scheduled run since cycle 10, cadence
+is 4h). No 429/throttle signal from any source. Sources healthy going into
+this cycle.
+
+**Implemented:** Added a single `@media (max-width: 600px)` breakpoint to
+`docs/style.css`. The dashboard shipped a `viewport` meta tag implying mobile
+support but had zero `@media` rules anywhere in the stylesheet -- on a phone
+the toolbar controls row, the dependency-filter textarea (forced to a 240px
+min-width), and the multi-column card grid all kept full desktop sizing,
+producing an overflowing/awkwardly-wrapped layout for a real class of users
+(a security lead checking alerts from their phone). The new breakpoint
+stacks toolbar controls to full width, switches the card grid to a single
+column, drops the textarea min-width, and tightens header/main padding.
+Pure additive CSS, zero change above 600px viewport width.
+
+Validation performed: brace-balance check on `docs/style.css` (87 open / 87
+close, no Python files touched so no `aggregate.py` backup/test-run step was
+needed). Served `docs/` locally on scratch port 8797, loaded in the browser
+tool, emulated a 375x812 (iPhone-class) viewport via
+`Emulation.setDeviceMetricsOverride` -- confirmed `document.documentElement.
+scrollWidth === window.innerWidth` (no horizontal overflow), screenshot
+confirmed controls/textarea/card-grid all render correctly stacked with real
+production data (438 alerts). Cleared the device-metrics override and
+re-screenshotted at native desktop size -- confirmed pixel-identical
+rendering to before the change (stats bar, historical trend chart, controls
+row, cards all unchanged). Killed local server after validation.
+
+Committed as `87685d2`, pushed to main. Pure frontend-CSS change with zero
+pipeline/data impact -- did not trigger `cve-alerts.yml` (no reason to
+consume Actions minutes for a change that can't affect production data).
+Waited ~45s for GitHub Pages redeploy, confirmed via `curl` that live
+`style.css` returns HTTP 200 and contains the new `max-width: 600px` rule.
+Loaded the LIVE dashboard at `https://astruzocyber.github.io/CVE/` in the
+browser tool at the same 375x812 emulated viewport: stats bar, historical
+trend chart, and dependency-filter section all render correctly stacked
+with no overflow, confirming correct production behavior. Live verification
+passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified cleared the
+bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.

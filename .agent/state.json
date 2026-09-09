@@ -1,7 +1,7 @@
 {
     "consecutive_no_improvement": 0,
     "consecutive_failed_cycles": 0,
-    "total_cycles": 10,
+    "total_cycles": 11,
     "implemented": [
         {
             "cycle": 1,
@@ -72,9 +72,16 @@
             "title": "Add 'View on NVD' direct link to alert cards",
             "description": "Every alert card already showed source/CVSS/EPSS/risk data and (for Dependabot-sourced alerts) a link to the GitHub Dependabot alert, but a viewer wanting the canonical NVD record for a CVE (full CVSS vector, references, CPE match strings, CWE classification) had to manually construct or search for the URL themselves -- a real friction point for a security-team triage tool where NVD is the authoritative source. Added a 'View on NVD' link (https://nvd.nist.gov/vuln/detail/<cve_id>) to the card footer for every alert whose cve_id matches the CVE- prefix pattern (all of them in current data), placed alongside the existing Dependabot alert link inside a new .footer-links flex wrapper. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost.",
             "commit_sha": "ea09f3fe1c4878c4902906c6db0e45b940b9ffc0"
+        },
+        {
+            "cycle": 11,
+            "timestamp": "2026-09-09T08:04:59.337941+00:00",
+            "title": "Mobile-responsive @media breakpoint (max-width: 600px)",
+            "description": "The dashboard had a viewport meta tag but zero @media rules in style.css, so narrow-screen visitors got desktop sizing squeezed into a small column: toolbar controls row overflowing/wrapping awkwardly, dep-filter textarea forced to a 240px min-width wider than many phones, count text floating far right of a wrapped controls line. Added a single 600px breakpoint that stacks toolbar controls to full width, switches card-grid to single column, drops the textarea min-width constraint, and tightens header/main padding. Pure additive CSS, zero visual change above 600px (verified: desktop screenshot before/after identical). Validated locally at 375x812 (iPhone-class viewport) via the browser tool: confirmed no horizontal overflow (document.scrollWidth === window.innerWidth), controls/textarea/card-grid render correctly stacked. Live-verified on the production dashboard at the same viewport: stats bar, historical trend chart, and dependency filter section all render correctly stacked with no overflow.",
+            "commit_sha": "87685d2"
         }
     ],
     "rejected": [],
-    "last_cycle_at": "2026-09-09T07:33:00Z",
+    "last_cycle_at": "2026-09-09T08:04:59.337949+00:00",
     "stopped": false
 }
