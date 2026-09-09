@@ -592,7 +592,19 @@ async function loadTrendChart() {
   }
 }
 
-document.getElementById("search").addEventListener("input", applyFiltersAndRender);
+// The search box previously fired a full filter+sort+innerHTML re-render (plus a
+// history.replaceState URL sync) on every single keystroke. With 445+ alerts and
+// growing, typing a multi-character search term meant repeated full-grid rebuilds
+// for every intermediate substring the user never intended to search for -- wasted
+// work and, on lower-end mobile devices, visible input lag. Debouncing to 150ms
+// (well under human-perceptible "instant" response, per common UX guidance of
+// ~100-300ms for search-as-you-type) collapses rapid keystrokes into a single
+// render after the user pauses, with zero change in final filtered results.
+let searchDebounceTimer = null;
+document.getElementById("search").addEventListener("input", () => {
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(applyFiltersAndRender, 150);
+});
 document.getElementById("kev-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("severity-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("source-filter").addEventListener("change", applyFiltersAndRender);
