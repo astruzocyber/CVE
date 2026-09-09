@@ -442,3 +442,61 @@ footer a { color: var(--accent); }
   color: var(--text-dim);
   opacity: 0.85;
 }
+
+/* Mobile responsiveness: no @media rules existed previously, so small-viewport
+   users got the desktop layout squeezed into a narrow column (controls row
+   overflowing, count floated far right of a wrapped line, dep-filter textarea
+   forced to a 240px min-width wider than many phone screens). This adds a
+   single breakpoint that stacks the toolbar controls, lets the search input
+   take full width, drops the forced textarea min-width, and tightens header/
+   main padding -- no visual change above 600px viewport width. */
+@media (max-width: 600px) {
+  header {
+    padding: 18px 14px 12px;
+  }
+
+  header h1 {
+    font-size: 1.3rem;
+  }
+
+  main {
+    padding: 14px 12px 40px;
+  }
+
+  .stats-bar {
+    gap: 12px;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .controls input[type="text"],
+  .controls select,
+  .controls button {
+    width: 100%;
+  }
+
+  .count {
+    margin-left: 0;
+    text-align: left;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dep-controls textarea {
+    min-width: 0;
+    flex-basis: 100%;
+  }
+
+  .dep-buttons {
+    flex-direction: column;
+  }
+
+  .dep-buttons button {
+    width: 100%;
+  }
+}
