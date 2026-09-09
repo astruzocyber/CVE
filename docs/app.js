@@ -110,6 +110,15 @@ function renderCard(alert) {
   const matchedHtml = matchedKeywords.length
     ? `<div class="matched">Watchlist match: ${matchedKeywords.map((k) => `<span class="badge match">${escapeHtml(k)}</span>`).join("")}</div>`
     : "";
+  const cweIds = alert.cwe_ids || [];
+  const cweHtml = cweIds.length
+    ? `<div class="cwe-row">Weakness: ${cweIds.map((c) => {
+        const num = c.replace(/^CWE-/i, "");
+        return /^\d+$/.test(num)
+          ? `<a class="badge cwe" href="https://cwe.mitre.org/data/definitions/${num}.html" target="_blank" rel="noopener" title="View ${escapeHtml(c)} on cwe.mitre.org">${escapeHtml(c)}</a>`
+          : `<span class="badge cwe">${escapeHtml(c)}</span>`;
+      }).join("")}</div>`
+    : "";
   const epssPct = typeof alert.epss_score === "number" ? (alert.epss_score * 100).toFixed(1) + "%" : "n/a";
   const riskVal = typeof alert.risk_score === "number" ? alert.risk_score.toFixed(0) : "n/a";
   const b = alert.risk_score_breakdown;
@@ -144,6 +153,7 @@ function renderCard(alert) {
       </div>
       <div class="affected">Affected: ${escapeHtml(affected)}</div>
       ${matchedHtml}
+      ${cweHtml}
       <div class="card-footer">
         <span>Published: ${fmtDate(alert.published)}</span>
         <span class="age-badge" title="Days since this alert was first ingested by the pipeline">${(() => { const age = firstSeenAge(alert); return typeof age === "number" ? `First seen: ${age}d ago` : ""; })()}</span>
@@ -370,13 +380,13 @@ function toCsvRow(fields) {
 function exportCsv() {
   const rows = window.__lastFiltered || allAlerts;
   const header = ["cve_id", "risk_score", "cvss_score", "epss_score", "kev", "kev_due_date",
-    "kev_ransomware_use", "source", "affected", "published", "first_seen", "description"];
+    "kev_ransomware_use", "source", "affected", "cwe_ids", "published", "first_seen", "description"];
   const lines = [toCsvRow(header)];
   for (const a of rows) {
     lines.push(toCsvRow([
       a.cve_id, a.risk_score, a.cvss_score, a.epss_score, a.kev, a.kev_due_date,
-      a.kev_ransomware_use, a.source, (a.affected || []).join("; "), a.published,
-      a.first_seen, a.description,
+      a.kev_ransomware_use, a.source, (a.affected || []).join("; "), (a.cwe_ids || []).join("; "),
+      a.published, a.first_seen, a.description,
     ]));
   }
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });

@@ -62,6 +62,7 @@ Design notes / assumptions (flagged per project brief instructions):
 """
 import json
 import os
+import re
 import sys
 import time
 import urllib.parse
@@ -307,6 +308,38 @@ def extract_description(nvd_cve):
     return ""
 
 
+# NVD's "weaknesses" array can contain non-standard placeholder values like
+# "NVD-CWE-Other" or "NVD-CWE-noinfo" (used when NVD analysts haven't mapped
+# a real CWE yet) -- these carry no classification value for a viewer, so only
+# genuine "CWE-<digits>" identifiers are kept.
+_CWE_ID_RE = re.compile(r"^CWE-\d+$")
+
+
+def extract_cwe_nvd(nvd_cve):
+    ids = []
+    for w in nvd_cve.get("weaknesses", []) or []:
+        for d in w.get("description", []) or []:
+            val = d.get("value", "")
+            if d.get("lang") == "en" and _CWE_ID_RE.match(val) and val not in ids:
+                ids.append(val)
+    return ids
+
+
+def extract_cwe_ghsa(advisory_or_alert_dict):
+    # Shared shape used by both the GHSA global-advisories API and the
+    # Dependabot alerts API's embedded security_advisory object: a "cwes"
+    # list of {"cwe_id": "CWE-79", "name": "..."} -- already present in the
+    # response we already fetch, just never extracted before now.
+    ids = []
+    for c in (advisory_or_alert_dict.get("cwes") or []):
+        if not isinstance(c, dict):
+            continue
+        val = c.get("cwe_id", "")
+        if _CWE_ID_RE.match(val) and val not in ids:
+            ids.append(val)
+    return ids
+
+
 def fetch_nvd_candidates(watchlist, api_key):
     lookback_days = int(os.environ.get("LOOKBACK_DAYS", "8"))
     end = datetime.now(timezone.utc)
@@ -350,6 +383,7 @@ def fetch_nvd_candidates(watchlist, api_key):
                 "description": extract_description(cve),
                 "cvss_score": score,
                 "cvss_version": cvss_version,
+                "cwe_ids": extract_cwe_nvd(cve),
                 "published": cve.get("published"),
                 "matched_vendor_product": [],
                 "matched_keywords": [],
@@ -491,6 +525,7 @@ def fetch_dependabot_alerts(repos, token):
                     "description": advisory.get("summary", ""),
                     "cvss_score": float(cvss) if cvss is not None else None,
                     "cvss_version": "GHSA CVSS",
+                    "cwe_ids": extract_cwe_ghsa(advisory),
                     "published": advisory.get("published_at"),
                     "matched_vendor_product": [pkg.get("name", "unknown")],
                     "matched_keywords": [],
@@ -592,6 +627,7 @@ def fetch_ghsa_advisories(packages, token=None):
                 "description": adv.get("summary", ""),
                 "cvss_score": float(score) if score is not None else None,
                 "cvss_version": "GHSA CVSS",
+                "cwe_ids": extract_cwe_ghsa(adv),
                 "published": adv.get("published_at"),
                 "matched_vendor_product": [f"{pkg} ({'/'.join(ecosystems) or 'ghsa'})"],
                 "matched_keywords": [],
@@ -694,6 +730,7 @@ def build_final_entry(entry, kev_map, epss_map):
         "description": entry.get("description", ""),
         "cvss_score": cvss,
         "cvss_version": entry.get("cvss_version"),
+        "cwe_ids": entry.get("cwe_ids", []),
         "epss_score": epss_score,
         "epss_percentile": epss_info.get("percentile"),
         "kev": in_kev,
