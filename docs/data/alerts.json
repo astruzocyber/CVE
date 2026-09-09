@@ -1,5 +1,73 @@
 [
   {
+    "cve_id": "CVE-2026-84293",
+    "description": "The Repeater Fields for Gravity Forms plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Repeated Multi-Input Sub-Field Values in all versions up to, and including, 3.0.4 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This vulnerability only affects multi-input sub-field types within a repeater (such as Name, Address, and Checkbox fields), as scalar single-input field values are escaped with esc_html() at the output stage in version 3.0.4.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "risk_score": 25.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0,
+      "epss_weight": "40% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25 if in CISA KEV",
+      "capped": false
+    },
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T04:20:27.027",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T04:30:11.057572+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-17553",
+    "description": "The WP EasyCart plugin for WordPress is vulnerable to privilege escalation in versions up to, and including, 5.9.3. This is due to the ec_ajax_save_page_default_options() AJAX handler iterating over every $_POST key and passing it directly into update_option() without any allowlist, while gating the handler only on 'manage_options' OR the plugin's custom 'wpec_manager' capability. The plugin's built-in 'wpec_store_manager' role holds 'wpec_manager' but not 'manage_options', and the required nonce is emitted on frontend product/category templates that render for any user with 'wpec_manager'. This makes it possible for authenticated attackers, with Store Manager-level access and above, to elevate their privileges to administrator by updating arbitrary WordPress options such as default_role='administrator' and users_can_register='1', then self-registering a new account that is assigned the administrator role.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "risk_score": 25.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0,
+      "epss_weight": "40% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25 if in CISA KEV",
+      "capped": false
+    },
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T04:17:56.607",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T04:30:11.057563+00:00"
+  },
+  {
     "cve_id": "CVE-2026-76801",
     "description": "The FireBox \u2013 WooCommerce Popup Builder, Exit Intent Popup, Email Optin & Cart Abandonment plugin for WordPress is vulnerable to Remote Code Execution in all versions up to, and including, 3.1.10 via the value function. This is due to a trivially bypassable regex blacklist in Executer::allowedToRun() that fails to block WordPress core functions such as wp_insert_user, update_option, and file_put_contents, combined with no sanitization of PHP condition rule values stored via the firebox_meta REST endpoint. This makes it possible for authenticated attackers, with author-level access and above, to execute code on the server. On sites upgraded from a version prior to 3.1.10, the Migrator::preserveCampaignRoleAccess() function automatically grants the edit_fireboxes and publish_fireboxes capabilities to the Author role, lowering the effective entry point to Author-level access.",
     "cvss_score": 8.8,
