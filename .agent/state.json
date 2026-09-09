@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 18,
+  "total_cycles": 19,
   "implemented": [
     {
       "cycle": 1,
@@ -128,9 +128,16 @@
       "title": "Add 'KEV due date (soonest first)' sort option",
       "description": "Added a new sort option to the existing #sort-by dropdown that orders cards by kev_due_date ascending (soonest CISA KEV BOD 22-01 remediation deadline first). Non-KEV alerts and KEV entries with no published due date are pushed to the end (not the front, avoiding the classic empty-string-sorts-first bug) rather than being treated as most urgent. Complements cycle 16's DUE SOON badge and cycle 17's 'KEV due soon' filter -- together a security lead can now filter to due-soon KEV entries AND sort the whole board by proximity to deadline, composing for free with the existing URL-query-param sharing (writes ?sort=kev_due_date).",
       "commit": "f6f46a8"
+    },
+    {
+      "cycle": 19,
+      "timestamp": "2026-09-09T12:42:24Z",
+      "title": "Add 'First seen' age badge and 'Oldest first' triage-backlog sort",
+      "description": "Every alert card already showed 'Published' (vendor/NVD publish date) but had no way to answer 'how long has our team known about this' -- a distinct triage-aging question, since first_seen (set once on first ingestion, never touched by score-refresh cycles) can differ from Published by years for old CVEs that only start matching the watchlist later. Added a firstSeenAge() helper computing whole days since first_seen, rendered as a small 'First seen: Nd ago' badge in the card footer, plus a new 'Sort: Oldest first (triage backlog)' option in the existing #sort-by dropdown so a security lead can surface long-lingering un-triaged alerts that the default newest-first sort keeps pushing off-screen. Pure additive frontend change: no new API calls, no backend/schema changes (first_seen already existed in alerts.json), zero cost. Adjusted .card-footer CSS to flex-wrap with gap since it now holds 3 elements instead of 2.",
+      "commit_sha": "8d2cda2"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T12:08:13.150784+00:00",
+  "last_cycle_at": "2026-09-09T12:42:24Z",
   "stopped": false
 }

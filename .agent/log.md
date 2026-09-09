@@ -941,3 +941,56 @@ due-date sort option) cleared the bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 19 — 2026-09-09 (approx, this run)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs -- all `completed`/`success` (12:12:53Z, 08:10:54Z, 05:10:29Z,
+04:29:29Z, 04:10:07Z). No 429/throttle signals seen. All sources
+(NVD/EPSS/KEV/GHSA/Dependabot) healthy going into this cycle.
+
+**Implemented:** Added a "First seen: Nd ago" age badge to the card
+footer (new `firstSeenAge()` helper in `docs/app.js`, computed from the
+existing `first_seen` field which is set once at ingestion and never
+touched by subsequent score-refresh cycles) plus a "Sort: Oldest first
+(triage backlog)" option in the `#sort-by` dropdown. This answers "how
+long has our team known about this" distinctly from "Published" (the
+vendor/NVD date, which can predate first_seen by years for old CVEs that
+only start matching the watchlist later) and surfaces long-lingering
+un-triaged alerts that the default newest-first sort otherwise buries.
+Pure additive frontend change, no new API calls, no backend/schema
+changes. Adjusted `.card-footer` CSS to `flex-wrap` with `gap` since it
+now holds 3 elements instead of 2.
+
+Validation performed: `node --check docs/app.js` passed; `index.html`
+parsed cleanly via Python's `html.parser`; `style.css` brace count
+balanced (95/95). Served `docs/` locally on scratch port 8931 with real
+production data (445 alerts). Loaded in the browser tool: selected the
+new `first_seen_oldest` sort, verified `window.__lastFiltered` is
+strictly ascending by `first_seen` across all 445 entries, confirmed the
+URL updates to `?sort=first_seen_oldest`, confirmed a sample age badge
+reads "First seen: 3d ago" matching a first_seen ~3 days in the past.
+Reset to default `risk_score` sort, confirmed "445 of 445 alerts" still
+reads correctly (no regression) and URL param cleared. Screenshots
+confirmed normal card layout with the new age badge sitting cleanly
+alongside "Published" and the NVD/Dependabot links, no overflow/wrap
+issues, stats bar and trend chart unaffected.
+
+Committed as `8d2cda2`, pushed to main. Pure frontend change with zero
+pipeline/data impact -- did not trigger `cve-alerts.yml`. Waited 45s for
+GitHub Pages redeploy, confirmed via `curl` that live `app.js` contains
+3 occurrences of `first_seen_oldest`/`firstSeenAge` and both
+`index.html`/`app.js` return HTTP 200. Loaded the LIVE dashboard in the
+browser tool: confirmed `#sort-by` now includes the `first_seen_oldest`
+option and result count reads "445 of 445 alerts" (no regression). A
+post-verification screenshot call hit a transient CDP IPC timeout
+(harness-level, not a page issue) but the JS-based live check already
+confirmed correct production state before that call. Live verification
+passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (first-seen
+age badge + oldest-first triage sort) cleared the bar and was
+implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.
