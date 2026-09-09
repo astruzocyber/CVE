@@ -488,3 +488,56 @@ bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 10 — 2026-09-09T07:33:00Z
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs prior to this cycle -- all `completed`/`success` (05:10:29Z, 04:29:29Z,
+04:10:07Z, 03:20:57Z, 02:38:03Z). Latest run showed only transient NVD 503s
+absorbed by existing retry logic, non-fatal. No 429/throttle signal from any
+source. Sources healthy going into this cycle.
+
+**Implemented:** Added a "View on NVD" direct link to every alert card's
+footer. Cards already surfaced CVSS/EPSS/risk/KEV data and (for
+Dependabot-sourced alerts only) a link to the GitHub Dependabot alert page,
+but a viewer wanting the canonical NVD record for a CVE (full CVSS vector
+string, references, CPE matches, CWE classification) had no direct link and
+had to search for it manually -- real friction for a security-triage tool
+where NVD is the authoritative source of record. Added
+`https://nvd.nist.gov/vuln/detail/<cve_id>` as a link in `renderCard()`
+(`docs/app.js`), gated on `cve_id` matching the `CVE-` prefix pattern (true
+for all 438 currently-tracked alerts), placed alongside the existing
+Dependabot alert link inside a new `.footer-links` flex wrapper. Added a
+matching `.footer-links { display: flex; gap: 10px; }` rule to
+`docs/style.css`. Zero new API calls, zero backend/schema changes, zero
+cost -- pure additive frontend link generation from data already present.
+
+Validation performed: `node --check docs/app.js` passed; all `config/*.yaml`
+and `.github/workflows/*.yml` parsed clean with `yaml.safe_load`. No Python
+files touched, so no `aggregate.py` backup/test-run step was needed. Served
+`docs/` locally on scratch port 8794, loaded in the browser tool with real
+production data (438 alerts) -- screenshot confirmed "View on NVD" link
+renders correctly on every card alongside existing badges/breakdown/matched-
+keyword rows, verified `href` on a sample card
+(`https://nvd.nist.gov/vuln/detail/CVE-2026-85046`) matched that card's own
+CVE ID exactly, confirmed unchanged baseline "438 of 438 alerts" and no
+layout regression. Killed local server after validation.
+
+Committed as `ea09f3fe1c4878c4902906c6db0e45b940b9ffc0`, pushed to main.
+Pure frontend-JS/CSS change with zero pipeline/data impact -- did not
+trigger `cve-alerts.yml` (no reason to consume Actions minutes for a change
+that can't affect production data). Waited ~45s for GitHub Pages redeploy,
+confirmed via `curl` that live `app.js` returns HTTP 200 and contains
+`nvd.nist.gov/vuln/detail`. Loaded the LIVE dashboard at
+`https://astruzocyber.github.io/CVE/` in the browser tool: confirmed 438
+cards rendered, "438 of 438 alerts" unchanged, sampled a live card's
+"View on NVD" `href` and confirmed it matched that card's CVE ID exactly,
+screenshot confirmed correct production rendering with no regression to any
+existing feature (badges, breakdown toggle, watchlist-match badges, stats
+bar). Live verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified cleared the
+bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.

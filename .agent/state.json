@@ -1,7 +1,7 @@
 {
     "consecutive_no_improvement": 0,
     "consecutive_failed_cycles": 0,
-    "total_cycles": 9,
+    "total_cycles": 10,
     "implemented": [
         {
             "cycle": 1,
@@ -65,9 +65,16 @@
             "title": "Stale-data warning banner on dashboard",
             "description": "The aggregation pipeline runs on a 4-hour GitHub Actions schedule but the public dashboard had no way to signal if it silently stopped updating (broken workflow, disabled schedule cron, repeated failures) -- a security lead would keep trusting increasingly-old data indefinitely with zero visual cue. Added checkStaleness() in docs/app.js, called from the existing loadStats() fetch of data/stats.json: compares stats.generated_at against Date.now() and, if the gap exceeds 20 hours (5x the 4h cadence, tolerant of one missed/delayed run without false-alarming on normal Actions scheduling jitter), shows a visible red role=alert banner naming the exact staleness age in hours and pointing the viewer to check GitHub Actions. Pure additive frontend change: new #stale-banner <p> element in docs/index.html (hidden by default), a new .stale-banner CSS rule in docs/style.css, and the checkStaleness() function plus one call site in docs/app.js. Zero new API calls, zero backend/schema changes, zero risk to existing data pipeline.",
             "commit_sha": "4271b30"
+        },
+        {
+            "cycle": 10,
+            "timestamp": "2026-09-09T07:33:00Z",
+            "title": "Add 'View on NVD' direct link to alert cards",
+            "description": "Every alert card already showed source/CVSS/EPSS/risk data and (for Dependabot-sourced alerts) a link to the GitHub Dependabot alert, but a viewer wanting the canonical NVD record for a CVE (full CVSS vector, references, CPE match strings, CWE classification) had to manually construct or search for the URL themselves -- a real friction point for a security-team triage tool where NVD is the authoritative source. Added a 'View on NVD' link (https://nvd.nist.gov/vuln/detail/<cve_id>) to the card footer for every alert whose cve_id matches the CVE- prefix pattern (all of them in current data), placed alongside the existing Dependabot alert link inside a new .footer-links flex wrapper. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost.",
+            "commit_sha": "ea09f3fe1c4878c4902906c6db0e45b940b9ffc0"
         }
     ],
     "rejected": [],
-    "last_cycle_at": "2026-09-09T06:58:03.989334Z",
+    "last_cycle_at": "2026-09-09T07:33:00Z",
     "stopped": false
 }
