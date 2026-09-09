@@ -589,3 +589,57 @@ bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 12 — 2026-09-09T08:20:00Z (approx)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs prior to this cycle -- all `completed`/`success` (08:10:54Z, 05:10:29Z,
+04:29:29Z, 04:10:07Z, 03:20:57Z). Grepped the latest run's log for
+warning/error/traceback/429/throttle (excluding known Node deprecation
+noise) -- only benign Node20-deprecation warnings from GitHub-owned actions,
+no application-level errors. No 429/throttle signal from NVD/EPSS/KEV/GHSA/
+Dependabot. All sources healthy going into this cycle.
+
+**Implemented:** Added SEO meta tags, Open Graph/Twitter card tags, and an
+inline SVG favicon to `docs/index.html`. Confirmed via `curl` before the
+change that `https://astruzocyber.github.io/CVE/favicon.ico` 404'd (the page
+had no `<link rel="icon">` at all, so browsers fell back to the default
+path). Added: `<meta name="description">` summarizing the dashboard for
+search engines; `og:title`/`og:description`/`og:type`/`og:url` and
+`twitter:card`/`twitter:title`/`twitter:description` so sharing the
+dashboard URL in Slack/Discord/Twitter/X produces a real title+description
+link preview instead of a bare URL (genuinely useful for a security tool
+that gets pasted into incident-response channels); and a data-URI inline
+SVG favicon (shield-with-checkmark glyph, dashboard's own `--bg`/`--accent`
+colors) so the browser tab/bookmark icon resolves instead of 404ing, with
+zero external asset request added. Pure additive `<head>` change: 9 lines
+in `docs/index.html`, zero JS/CSS/backend/schema changes, zero new API
+calls, zero cost.
+
+Validation performed: confirmed `<head>`/`</head>` balance and meta-tag
+count via a small Python sanity check (no YAML/Python pipeline files
+touched, so no `aggregate.py` backup/test-run step was needed). Served
+`docs/` locally on scratch port 8811, loaded in the browser tool with real
+production data (440 alerts) -- confirmed `document.title`, the new
+`<link rel="icon">` element, and the new `<meta name="description">`
+content all present and correct; stats bar and historical trend chart
+rendered with no visual regression. Killed local server after validation.
+
+Committed as `6e601ac`, pushed to main. Pure frontend-HTML change with zero
+pipeline/data impact -- did not trigger `cve-alerts.yml` (no reason to
+consume Actions minutes for a change that can't affect production data).
+Waited ~105s for GitHub Pages redeploy (first `curl` check at ~45s still
+showed the old cached HTML; a second check at ~105s total confirmed the new
+meta/OG/favicon tags were live), then confirmed via `curl` that the live
+page contains `meta name="description"`, `og:title`, `twitter:card`, and
+`rel="icon"`. Loaded the LIVE dashboard at `https://astruzocyber.github.io/
+CVE/` in the browser tool: confirmed 440 cards rendered, stats bar populated
+(440 total alerts, 101 critical, 1 KEV, 0 overdue, 0 ransomware, 0.8% avg
+EPSS), historical trend chart rendering, no regression to any existing
+feature. Live verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (favicon +
+SEO/social meta tags) cleared the bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.
