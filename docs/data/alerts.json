@@ -1,5 +1,168 @@
 [
   {
+    "cve_id": "CVE-2026-87930",
+    "description": "MaxSite CMS through 109.6 passes the ci_session cookie to unserialize() without class restrictions, allowing unauthenticated attackers to inject PHP objects. Attackers can forge valid session cookies using the hardcoded encryption key to trigger magic methods and corrupt application state or achieve code execution if gadget classes exist.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cwe_ids": [
+      "CWE-502"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T17:17:53.990",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T18:40:19.508228+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84068",
+    "description": "The Quentn WP WordPress plugin before 1.2.15 does not adequately escape a request parameter before using it in an unprepared SQL query, allowing unauthenticated attackers to extract arbitrary data from the database via SQL injection.",
+    "cvss_score": 8.6,
+    "cvss_version": "CVSS V31",
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": 0.00177,
+    "epss_percentile": 0.0735,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.6,
+      "cvss_component": 30.1,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00177,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-09T06:17:17.830",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T18:40:19.507888+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-16960",
+    "description": "The Loops & Logic WordPress plugin before 4.3.0 does not restrict its public template-data action to the data a visitor is permitted to see, allowing unauthenticated users to read arbitrary user records (including email addresses and roles) and arbitrary site options.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cwe_ids": [
+      "CWE-200"
+    ],
+    "epss_score": 0.00173,
+    "epss_percentile": 0.06915,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00173,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-09T06:17:15.457",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T18:40:19.507858+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-14962",
+    "description": "The ELEX WooCommerce Request a Quote WordPress plugin before 2.4.1 does not properly sanitise and escape a parameter before using it in a SQL query, allowing unauthenticated users to perform SQL injection attacks and extract arbitrary data from the database.",
+    "cvss_score": 8.6,
+    "cvss_version": "CVSS V31",
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": 0.0019,
+    "epss_percentile": 0.08728,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.6,
+      "cvss_component": 30.1,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0019,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-09T06:17:15.057",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-09T18:40:19.507848+00:00"
+  },
+  {
     "cve_id": "CVE-2026-26212",
     "description": "Rara One Click Demo Import plugin for WordPress before 1.3.5 contains an arbitrary file upload vulnerability that allows authenticated attackers with Administrator privileges to upload arbitrary PHP files by passing a false value to wp_handle_upload() that disables WordPress core's file type validation checks across all three file parameters in the process_uploaded_files() function. Attackers can upload a malicious PHP file to the uploads directory and execute it over HTTP to achieve remote code execution in the web server process, with the uploaded file persisting on disk even after plugin deactivation and leaving no media library record to evade standard integrity checks.",
     "cvss_score": 7.2,
@@ -14,6 +177,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 42.0,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -56,6 +220,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -94,6 +259,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -132,6 +298,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -170,6 +337,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -208,6 +376,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -246,6 +415,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -284,6 +454,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -322,6 +493,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -360,6 +532,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -398,6 +571,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -436,6 +610,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -474,6 +649,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -512,6 +688,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -550,6 +727,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.4,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -588,6 +766,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -626,6 +805,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -664,6 +844,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -702,6 +883,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.4,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -740,6 +922,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -778,6 +961,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.3,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -816,6 +1000,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.4,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -854,6 +1039,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -892,6 +1078,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -930,6 +1117,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -968,6 +1156,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1006,6 +1195,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -1044,6 +1234,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1082,6 +1273,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.4,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -1120,6 +1312,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1158,6 +1351,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -1196,6 +1390,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.4,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -1234,6 +1429,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -1272,6 +1468,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1310,6 +1507,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1348,6 +1546,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1386,6 +1585,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1424,6 +1624,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -1462,6 +1663,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1500,6 +1702,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -1538,6 +1741,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -1576,6 +1780,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -1614,6 +1819,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -1652,6 +1858,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1690,6 +1897,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1728,6 +1936,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.3,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -1766,6 +1975,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1804,6 +2014,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -1842,6 +2053,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.3,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -1880,6 +2092,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1918,6 +2131,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -1956,6 +2170,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -1994,6 +2209,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -2032,6 +2248,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.8,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -2070,6 +2287,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -2108,6 +2326,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 43.8,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -2146,6 +2365,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -2184,6 +2404,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -2224,6 +2445,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -2265,6 +2487,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -2306,6 +2529,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -2346,6 +2570,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -2387,6 +2612,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.5,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -2428,6 +2654,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -2468,6 +2695,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -2509,6 +2737,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -2551,6 +2780,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -2592,6 +2822,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -2633,6 +2864,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -2674,6 +2906,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.4,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -2712,6 +2945,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.5,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -2750,6 +2984,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.7,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -2788,6 +3023,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -2826,6 +3062,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.4,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -2864,6 +3101,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.6,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -2902,6 +3140,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -2940,6 +3179,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -2981,6 +3221,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -3019,6 +3260,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.6,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -3057,6 +3299,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -3095,6 +3338,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.0,
     "risk_score_breakdown": {
       "cvss_raw": 9.4,
@@ -3133,6 +3377,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -3171,6 +3416,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -3209,6 +3455,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.4,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -3247,6 +3494,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -3285,6 +3533,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3324,6 +3573,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3362,6 +3612,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3400,6 +3651,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3438,6 +3690,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3476,6 +3729,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3514,6 +3768,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -3552,6 +3807,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3590,6 +3846,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3628,6 +3885,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3666,6 +3924,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3704,6 +3963,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3742,6 +4002,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3780,6 +4041,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3819,6 +4081,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3857,6 +4120,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 24.6,
     "risk_score_breakdown": {
       "cvss_raw": 7.0,
@@ -3895,6 +4159,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.5,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3933,6 +4198,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -3971,6 +4237,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4009,6 +4276,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4047,6 +4315,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4085,6 +4354,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4123,6 +4393,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4161,6 +4432,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4199,6 +4471,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4237,6 +4510,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4275,6 +4549,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4314,6 +4589,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4352,6 +4628,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4390,6 +4667,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4429,6 +4707,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4467,6 +4746,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4505,6 +4785,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -4543,6 +4824,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -4581,6 +4863,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4619,6 +4902,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4657,6 +4941,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4695,6 +4980,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4733,6 +5019,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -4771,6 +5058,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4809,6 +5097,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4847,6 +5136,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4885,6 +5175,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -4923,6 +5214,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4961,6 +5253,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -4999,6 +5292,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5037,6 +5331,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5075,6 +5370,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5113,6 +5409,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5151,6 +5448,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5189,6 +5487,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5227,6 +5526,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5265,6 +5565,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5303,6 +5604,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5341,6 +5643,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5379,6 +5682,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5417,6 +5721,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5456,6 +5761,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5494,6 +5800,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5532,6 +5839,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5570,6 +5878,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.8,
     "risk_score_breakdown": {
       "cvss_raw": 7.3,
@@ -5608,6 +5917,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5646,6 +5956,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5684,6 +5995,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5722,6 +6034,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.9,
     "risk_score_breakdown": {
       "cvss_raw": 7.3,
@@ -5760,6 +6073,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.9,
     "risk_score_breakdown": {
       "cvss_raw": 7.3,
@@ -5798,6 +6112,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5836,6 +6151,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5874,6 +6190,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5912,6 +6229,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5950,6 +6268,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -5988,6 +6307,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -6026,6 +6346,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -6064,6 +6385,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -6102,6 +6424,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 24.6,
     "risk_score_breakdown": {
       "cvss_raw": 7.0,
@@ -6140,6 +6463,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -6178,6 +6502,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -6216,6 +6541,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 24.6,
     "risk_score_breakdown": {
       "cvss_raw": 7.0,
@@ -6255,6 +6581,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -6293,6 +6620,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -6331,6 +6659,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -6369,6 +6698,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -6407,6 +6737,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -6445,6 +6776,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -6484,6 +6816,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -6522,6 +6855,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -6560,6 +6894,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.3,
     "risk_score_breakdown": {
       "cvss_raw": 8.0,
@@ -6598,6 +6933,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.1,
     "risk_score_breakdown": {
       "cvss_raw": 7.1,
@@ -6636,6 +6972,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 24.6,
     "risk_score_breakdown": {
       "cvss_raw": 7.0,
@@ -6674,6 +7011,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -6712,6 +7050,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -6751,6 +7090,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -6789,6 +7129,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -6827,6 +7168,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -6865,6 +7207,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.1,
     "risk_score_breakdown": {
       "cvss_raw": 7.4,
@@ -6901,6 +7244,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 32.0,
     "risk_score_breakdown": {
       "cvss_raw": 9.1,
@@ -6939,6 +7283,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -6979,6 +7324,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -7020,6 +7366,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 24.9,
     "risk_score_breakdown": {
       "cvss_raw": 7.1,
@@ -7061,6 +7408,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -7117,7 +7465,8 @@
     "published": "2026-01-27T16:16:14.257",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-07T16:10:38.799165+00:00"
+    "first_seen": "2026-09-07T16:10:38.799165+00:00",
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-86431",
@@ -7134,6 +7483,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -7172,6 +7522,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -7213,6 +7564,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -7254,6 +7606,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 55.5,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -7293,6 +7646,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.7,
     "risk_score_breakdown": {
       "cvss_raw": 7.3,
@@ -7331,6 +7685,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -7371,6 +7726,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -7411,6 +7767,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.0,
@@ -7451,6 +7808,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.1,
     "risk_score_breakdown": {
       "cvss_raw": 8.0,
@@ -7491,6 +7849,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.6,
@@ -7531,6 +7890,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 24.9,
     "risk_score_breakdown": {
       "cvss_raw": 7.1,
@@ -7571,6 +7931,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.4,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -7611,6 +7972,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -7651,6 +8013,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -7692,6 +8055,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.7,
     "risk_score_breakdown": {
       "cvss_raw": 7.3,
@@ -7730,6 +8094,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.5,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -7770,6 +8135,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -7810,6 +8176,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.4,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -7850,6 +8217,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -7890,6 +8258,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.5,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -7930,6 +8299,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -7970,6 +8340,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -8010,6 +8381,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -8050,6 +8422,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -8090,6 +8463,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -8130,6 +8504,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -8170,6 +8545,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -8210,6 +8586,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -8250,6 +8627,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -8290,6 +8668,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -8330,6 +8709,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 24.9,
     "risk_score_breakdown": {
       "cvss_raw": 7.1,
@@ -8390,7 +8770,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-55485",
@@ -8425,7 +8806,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-44990",
@@ -8442,6 +8824,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 32.8,
     "risk_score_breakdown": {
       "cvss_raw": 9.3,
@@ -8480,6 +8863,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 25.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.2,
@@ -8541,7 +8925,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-11325",
@@ -8578,7 +8963,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-85654",
@@ -8595,6 +8981,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -8651,7 +9038,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81849",
@@ -8686,7 +9074,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2024-28056",
@@ -8721,7 +9110,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-13447",
@@ -8738,6 +9128,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.5,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -8797,7 +9188,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-45221",
@@ -8814,6 +9206,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 27.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.8,
@@ -8870,7 +9263,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81719",
@@ -8905,7 +9299,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81718",
@@ -8940,7 +9335,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81714",
@@ -8975,7 +9371,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81707",
@@ -9010,7 +9407,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81705",
@@ -9045,7 +9443,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81704",
@@ -9080,7 +9479,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81702",
@@ -9115,7 +9515,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81701",
@@ -9150,7 +9551,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81700",
@@ -9185,7 +9587,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81699",
@@ -9220,7 +9623,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81698",
@@ -9255,7 +9659,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81693",
@@ -9290,7 +9695,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81692",
@@ -9325,7 +9731,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81691",
@@ -9360,7 +9767,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81690",
@@ -9395,7 +9803,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81689",
@@ -9430,7 +9839,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81688",
@@ -9465,7 +9875,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81683",
@@ -9500,7 +9911,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-63076",
@@ -9535,7 +9947,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-63075",
@@ -9570,7 +9983,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-63073",
@@ -9605,7 +10019,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-63072",
@@ -9640,7 +10055,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-54874",
@@ -9675,7 +10091,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-18798",
@@ -9710,7 +10127,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-14457",
@@ -9745,7 +10163,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74901",
@@ -9780,7 +10199,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74900",
@@ -9815,7 +10235,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74899",
@@ -9850,7 +10271,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74896",
@@ -9885,7 +10307,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74895",
@@ -9920,7 +10343,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74894",
@@ -9955,7 +10379,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74893",
@@ -9990,7 +10415,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74892",
@@ -10025,7 +10451,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74891",
@@ -10060,7 +10487,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74889",
@@ -10095,7 +10523,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74888",
@@ -10130,7 +10559,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74886",
@@ -10165,7 +10595,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74884",
@@ -10200,7 +10631,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74883",
@@ -10235,7 +10667,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74882",
@@ -10270,7 +10703,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74880",
@@ -10305,7 +10739,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74879",
@@ -10340,7 +10775,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74878",
@@ -10375,7 +10811,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74877",
@@ -10410,7 +10847,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74876",
@@ -10445,7 +10883,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74875",
@@ -10480,7 +10919,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74874",
@@ -10515,7 +10955,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-74872",
@@ -10550,7 +10991,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-14456",
@@ -10585,7 +11027,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-54876",
@@ -10620,7 +11063,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-66402",
@@ -10655,7 +11099,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-50010",
@@ -10672,6 +11117,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -10728,7 +11174,8 @@
     "published": "2026-06-09T17:17:19.277",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485657+00:00"
+    "first_seen": "2026-09-05T15:02:54.485657+00:00",
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-27459",
@@ -10763,7 +11210,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2025-5987",
@@ -10798,7 +11246,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-85053",
@@ -10815,6 +11264,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -10853,6 +11303,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -10891,6 +11342,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -10929,6 +11381,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -10967,6 +11420,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -11005,6 +11459,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -11043,6 +11498,7 @@
     "kev_due_date": "2026-09-18",
     "kev_ransomware_use": false,
     "kev_required_action": "Apply mitigations in accordance with vendor instructions, ensuring compliance with CISA\u2019s BOD 26-04 Prioritizing Security Updates Based on Risk (see URL in Notes) guidance and CISA\u2019s \u201cForensics Triage Requirements\u201d (see URL in Notes). Follow applicable BOD 26-04 guidance for cloud services or discontinue use of the product if mitigations are unavailable. Stakeholders are responsible for evaluating each asset's internet exposure and ensuring adherence to BOD 26-04 patching guidelines.",
+    "kev_notes": "https://chromereleases.googleblog.com/2026/09/stable-channel-update-for-desktop_01882797386.html ; BOD 26-04: https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk ; Forensics Triage Requirements: https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk ; https://nvd.nist.gov/vuln/detail/CVE-2026-85046",
     "risk_score": 56.4,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -11081,6 +11537,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -11119,6 +11576,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.9,
     "risk_score_breakdown": {
       "cvss_raw": 9.1,
@@ -11157,6 +11615,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -11213,7 +11672,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84353",
@@ -11230,6 +11690,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -11268,6 +11729,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -11324,7 +11786,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84350",
@@ -11359,7 +11822,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84349",
@@ -11394,7 +11858,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84347",
@@ -11429,7 +11894,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84335",
@@ -11464,7 +11930,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84334",
@@ -11499,7 +11966,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84333",
@@ -11516,6 +11984,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 33.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.6,
@@ -11572,7 +12041,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84325",
@@ -11607,7 +12077,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84324",
@@ -11642,7 +12113,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-82808",
@@ -11677,7 +12149,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-82072",
@@ -11712,7 +12185,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79290",
@@ -11747,7 +12221,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79282",
@@ -11782,7 +12257,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79275",
@@ -11817,7 +12293,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79266",
@@ -11852,7 +12329,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79263",
@@ -11887,7 +12365,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79257",
@@ -11922,7 +12401,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79256",
@@ -11957,7 +12437,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79245",
@@ -11992,7 +12473,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79244",
@@ -12027,7 +12509,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79240",
@@ -12062,7 +12545,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79235",
@@ -12097,7 +12581,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79232",
@@ -12132,7 +12617,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79231",
@@ -12167,7 +12653,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79230",
@@ -12202,7 +12689,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79227",
@@ -12237,7 +12725,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79226",
@@ -12272,7 +12761,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79224",
@@ -12307,7 +12797,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79223",
@@ -12342,7 +12833,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79215",
@@ -12377,7 +12869,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79210",
@@ -12412,7 +12905,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79202",
@@ -12447,7 +12941,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79200",
@@ -12482,7 +12977,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79198",
@@ -12517,7 +13013,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79148",
@@ -12552,7 +13049,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79090",
@@ -12587,7 +13085,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79072",
@@ -12622,7 +13121,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79058",
@@ -12657,7 +13157,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79020",
@@ -12692,7 +13193,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79011",
@@ -12727,7 +13229,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78892",
@@ -12762,7 +13265,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-20280",
@@ -12797,7 +13301,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-20279",
@@ -12832,7 +13337,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-20278",
@@ -12867,7 +13373,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-20277",
@@ -12902,7 +13409,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-20276",
@@ -12937,7 +13445,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-20275",
@@ -12972,7 +13481,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-20274",
@@ -13007,7 +13517,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-70724",
@@ -13042,7 +13553,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-60592",
@@ -13077,7 +13589,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-60623",
@@ -13112,7 +13625,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-60586",
@@ -13147,7 +13661,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-60317",
@@ -13182,7 +13697,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-60193",
@@ -13217,7 +13733,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-60192",
@@ -13252,7 +13769,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2025-30706",
@@ -13287,7 +13805,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-10196",
@@ -13304,6 +13823,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.6,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -13345,6 +13865,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -13387,6 +13908,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.6,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -13430,6 +13952,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 30.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -13468,6 +13991,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -13506,6 +14030,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -13544,6 +14069,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.2,
     "risk_score_breakdown": {
       "cvss_raw": 8.3,
@@ -13582,6 +14108,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.8,
     "risk_score_breakdown": {
       "cvss_raw": 8.2,
@@ -13622,6 +14149,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.9,
     "risk_score_breakdown": {
       "cvss_raw": 9.1,
@@ -13678,7 +14206,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-12483",
@@ -13695,6 +14224,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -13738,6 +14268,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -13776,6 +14307,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.5,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -13838,7 +14370,8 @@
     "published": "2026-09-04T05:17:13.013",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485355+00:00"
+    "first_seen": "2026-09-05T15:02:54.485355+00:00",
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84834",
@@ -13873,7 +14406,8 @@
     "published": "2026-09-03T17:17:29.400",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485273+00:00"
+    "first_seen": "2026-09-05T15:02:54.485273+00:00",
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84753",
@@ -13908,7 +14442,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84752",
@@ -13943,7 +14478,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-82524",
@@ -13978,7 +14514,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-77009",
@@ -14016,7 +14553,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-4357",
@@ -14054,7 +14592,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81772",
@@ -14089,7 +14628,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81283",
@@ -14124,7 +14664,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84374",
@@ -14159,7 +14700,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-84372",
@@ -14194,7 +14736,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-71981",
@@ -14211,6 +14754,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 31.0,
     "risk_score_breakdown": {
       "cvss_raw": 8.8,
@@ -14249,6 +14793,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 24.9,
     "risk_score_breakdown": {
       "cvss_raw": 7.1,
@@ -14305,7 +14850,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81891",
@@ -14340,7 +14886,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81889",
@@ -14375,7 +14922,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-82450",
@@ -14410,7 +14958,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-55634",
@@ -14445,7 +14994,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-55584",
@@ -14480,7 +15030,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76060",
@@ -14515,7 +15066,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81525",
@@ -14550,7 +15102,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-54718",
@@ -14585,7 +15138,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-37068",
@@ -14620,7 +15174,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78293",
@@ -14655,7 +15210,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78292",
@@ -14690,7 +15246,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78286",
@@ -14725,7 +15282,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78276",
@@ -14760,7 +15318,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78257",
@@ -14795,7 +15354,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-80428",
@@ -14830,7 +15390,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-80138",
@@ -14865,7 +15426,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79774",
@@ -14900,7 +15462,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-75574",
@@ -14935,7 +15498,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76635",
@@ -14970,7 +15534,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76214",
@@ -15005,7 +15570,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76213",
@@ -15040,7 +15606,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76208",
@@ -15075,7 +15642,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76207",
@@ -15110,7 +15678,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76205",
@@ -15145,7 +15714,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-75918",
@@ -15180,7 +15750,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-52608",
@@ -15215,7 +15786,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-72557",
@@ -15250,7 +15822,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-72556",
@@ -15285,7 +15858,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-72551",
@@ -15320,7 +15894,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-72592",
@@ -15355,7 +15930,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-70554",
@@ -15390,7 +15966,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-70553",
@@ -15425,7 +16002,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-39932",
@@ -15460,7 +16038,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-69088",
@@ -15495,7 +16074,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-49332",
@@ -15512,6 +16092,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 29.9,
     "risk_score_breakdown": {
       "cvss_raw": 8.5,
@@ -15570,7 +16151,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2025-15485",
@@ -15607,7 +16189,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-75528",
@@ -15644,7 +16227,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-82183",
@@ -15681,7 +16265,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81807",
@@ -15718,7 +16303,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81737",
@@ -15755,7 +16341,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-80467",
@@ -15792,7 +16379,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78657",
@@ -15830,7 +16418,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-77792",
@@ -15867,7 +16456,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19723",
@@ -15904,7 +16494,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19453",
@@ -15941,7 +16532,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19116",
@@ -15979,7 +16571,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-14357",
@@ -16019,7 +16612,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-12865",
@@ -16056,7 +16650,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-12526",
@@ -16093,7 +16688,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-9055",
@@ -16131,7 +16727,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-14982",
@@ -16169,7 +16766,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-10195",
@@ -16206,7 +16804,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-18550",
@@ -16243,7 +16842,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19914",
@@ -16280,7 +16880,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-75921",
@@ -16317,7 +16918,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19952",
@@ -16355,7 +16957,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19806",
@@ -16392,7 +16995,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19796",
@@ -16429,7 +17033,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19573",
@@ -16466,7 +17071,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-75865",
@@ -16504,7 +17110,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-82229",
@@ -16541,7 +17148,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-75133",
@@ -16558,6 +17166,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.3,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -16599,6 +17208,7 @@
     "kev_due_date": null,
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 28.5,
     "risk_score_breakdown": {
       "cvss_raw": 8.1,
@@ -16661,7 +17271,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-81660",
@@ -16698,7 +17309,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76585",
@@ -16735,7 +17347,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-14307",
@@ -16772,7 +17385,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-15980",
@@ -16809,7 +17423,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-15369",
@@ -16847,7 +17462,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-75807",
@@ -16884,7 +17500,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-14494",
@@ -16921,7 +17538,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-77012",
@@ -16958,7 +17576,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-77007",
@@ -16995,7 +17614,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76586",
@@ -17032,7 +17652,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76548",
@@ -17069,7 +17690,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-16947",
@@ -17106,7 +17728,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-16600",
@@ -17143,7 +17766,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-16259",
@@ -17180,7 +17804,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-16061",
@@ -17217,7 +17842,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-10522",
@@ -17254,7 +17880,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-6176",
@@ -17292,7 +17919,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-5934",
@@ -17330,7 +17958,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-79996",
@@ -17367,7 +17996,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76581",
@@ -17405,7 +18035,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-6286",
@@ -17442,7 +18073,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-5097",
@@ -17480,7 +18112,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19423",
@@ -17517,7 +18150,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19084",
@@ -17554,7 +18188,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-14558",
@@ -17592,7 +18227,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-77365",
@@ -17629,7 +18265,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-76053",
@@ -17666,7 +18303,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-18983",
@@ -17705,7 +18343,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-18978",
@@ -17743,7 +18382,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-18324",
@@ -17780,7 +18420,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19092",
@@ -17818,7 +18459,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-32566",
@@ -17855,7 +18497,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-32564",
@@ -17892,7 +18535,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78333",
@@ -17929,7 +18573,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78137",
@@ -17966,7 +18611,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-77018",
@@ -18003,7 +18649,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-77017",
@@ -18040,7 +18687,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-77016",
@@ -18077,7 +18725,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19715",
@@ -18115,7 +18764,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19223",
@@ -18152,7 +18802,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-13415",
@@ -18189,7 +18840,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-13598",
@@ -18226,7 +18878,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-65640",
@@ -18263,7 +18916,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-16253",
@@ -18300,7 +18954,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-12965",
@@ -18337,7 +18992,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78689",
@@ -18372,7 +19028,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-78222",
@@ -18407,7 +19064,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-77180",
@@ -18442,7 +19100,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-66362",
@@ -18477,7 +19136,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-18329",
@@ -18512,7 +19172,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-19513",
@@ -18551,7 +19212,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-80208",
@@ -18586,7 +19248,8 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   },
   {
     "cve_id": "CVE-2026-18485",
@@ -18621,6 +19284,7 @@
       "kev_weight": "flat +25.0 if in CISA KEV",
       "capped": false,
       "weight_redistributed": false
-    }
+    },
+    "kev_notes": null
   }
 ]
