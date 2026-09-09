@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 31,
+  "total_cycles": 32,
   "implemented": [
     {
       "cycle": 1,
@@ -219,9 +219,16 @@
       "title": "GHSA/Dependabot CVSS vector component extraction",
       "description": "Parses the CVSS v3.0/v3.1 vector_string field already returned by the GHSA advisories and Dependabot alerts APIs into the same attack_vector/attack_complexity/privileges_required/user_interaction shape NVD-sourced alerts have had since cycle 30, using the fixed public FIRST.org CVSS v3.x abbreviation scheme. CVSS v4.0 vector strings are explicitly detected and skipped (different schema) rather than guessed. No frontend change needed since renderCard() already renders cvss_vector_components generically for any source. Currently dormant in production data (ghsa_packages watchlist is empty, GH_DEPENDABOT_TOKEN unset) but verified correct via direct unit tests against real GHSA API sample vectors, ready to activate the moment either source is configured.",
       "commit_sha": "e3fe7eb"
+    },
+    {
+      "cycle": 32,
+      "timestamp": "2026-09-09T21:23:42.035Z",
+      "title": "Add CVSS exploitability, KEV required-action/notes fields to CSV export",
+      "description": "CSV export (exportCsv() in docs/app.js) had not been updated in step with three prior cycles' additions to alert cards and the underlying schema: cvss_vector_components (attack_vector/attack_complexity/privileges_required/user_interaction from cycles 30/31), kev_required_action (CISA remediation guidance, cycle 27), and kev_notes (vendor advisory notes, cycle 28) were all visible on the card UI but silently dropped from CSV export, so a viewer exporting for offline reporting or compliance tracking lost data they could plainly see on-screen. Added the four flattened vc.* fields plus kev_required_action and kev_notes as new CSV columns, reading fields already present in alerts.json -- zero new API calls, zero backend/schema changes. Validated: node --check passed; exercised the exact export logic in-browser against real production data (516 alerts) locally and confirmed on the live site, verifying correct values/quoting for both KEV (populated required_action/notes/vector fields) and non-KEV (correctly empty) rows; confirmed existing search filter (wordpress: 516->132->516 on reset) and stats bar unaffected. Live-verified: pushed, curled app.js (200 OK, new fields present), loaded live dashboard fresh, confirmed 516/516 alerts loaded with correct kev_required_action/kev_notes/attack_vector values on real KEV entries (CVE-2025-25249, CVE-2026-87491).",
+      "commit_sha": "9c2007b"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T20:47:39.447731+00:00",
+  "last_cycle_at": "2026-09-09T21:23:42.035Z",
   "stopped": false
 }

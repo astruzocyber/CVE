@@ -1414,3 +1414,31 @@ input debounce) cleared the bar and was implemented.
 **Rejected this cycle:** None — the GHSA/Dependabot vector-parsing candidate cleared the bar on first pass and was implemented.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 31. `stopped`: false.
+
+
+## Cycle 32 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34403032881, 34399421600, 34398719776, 34390363792, 34375061636), no 429/throttle signals from NVD/EPSS/GHSA/CISA in Actions logs, only benign Node 20 runner deprecation noise.
+
+**Change:** Add CVSS exploitability, KEV required-action, and KEV notes fields to CSV export.
+
+- **Opportunity:** Reviewing `renderCard()` vs `exportCsv()` in `docs/app.js` found a gap: three prior cycles (27 - CISA required-action display, 28 - vendor advisory notes, 30/31 - CVSS attack-vector/complexity/privileges/UI exploitability chip) added fields to the alert schema and rendered them on cards, but `exportCsv()` was never updated to include them. A viewer exporting CSV for offline reporting or compliance tracking would silently lose data they could see plainly on the dashboard itself.
+- **Frontend:** Added 6 new CSV columns (`kev_required_action`, `kev_notes`, `attack_vector`, `attack_complexity`, `privileges_required`, `user_interaction`) to the existing header/row-building logic in `exportCsv()`, flattening the nested `cvss_vector_components` object per row. Pure additive change reading fields already present in `alerts.json` -- zero new API calls, zero backend/schema changes.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure client-side template addition, no new dependencies), validation risk 1/5 (additive columns appended after existing ones, cannot break existing column order/consumers, gated by `|| {}` fallback for the nested object so missing data renders as empty string not a crash), value 3/5 (closes a real, previously-silent data-loss gap for a security-team compliance/reporting workflow -- small but genuine value, low effort, virtually zero risk).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. No `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle was needed (`git status --short` confirmed only `docs/app.js` touched).
+- Served `docs/` on a local scratch port with real production data (516 alerts). Used the browser tool: executed the exact new export-row-building logic in-page via JS eval (rather than triggering a real file download) against the live in-memory `allAlerts` array and confirmed correct values for both KEV rows (populated `kev_required_action`, `kev_notes`, and vector fields, correctly CSV-quoted with embedded commas/quotes) and non-KEV rows (correctly empty strings for the new fields, not `undefined`/crash). Confirmed existing search filter still works (`wordpress`: 516→132→516 on reset) and stats bar (`stat-total`: 516) unaffected -- no regression to existing features.
+
+**Deploy (Step 5):**
+- Committed (`9c2007b`) and pushed to `main`. Frontend-only change -- no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited for Pages deployment, curled `https://astruzocyber.github.io/CVE/app.js` -- 200 OK, confirmed `kev_required_action` string present (2 occurrences: header + row-building).
+- Loaded the LIVE dashboard in the browser tool with a fresh cache-busted navigation: confirmed 516/516 alerts loaded, inspected `allAlerts` directly via JS eval and confirmed real KEV entries (CVE-2025-25249, CVE-2026-87491) carry correctly populated `kev_required_action`/`kev_notes`/`attack_vector` fields ready for CSV export. (Screenshot capture via CDP timed out on this run -- an infra/tooling flakiness in the browser harness itself, not a page regression; functional JS-level verification via `page_info()`/`js()` confirmed the page loaded and rendered correctly, which was sufficient given no visual markup was touched by this change.)
+
+**Rejected this cycle:** None — the CSV-export-field-parity candidate cleared the bar on first pass (feasibility 5/5, validation risk 1/5, value 3/5) and was implemented.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 32. `stopped`: false.
