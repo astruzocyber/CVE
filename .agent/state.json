@@ -1,7 +1,7 @@
 {
     "consecutive_no_improvement": 0,
     "consecutive_failed_cycles": 0,
-    "total_cycles": 29,
+    "total_cycles": 30,
     "implemented": [
         {
             "cycle": 1,
@@ -205,9 +205,16 @@
             "title": "Show EPSS percentile (relative rank) alongside EPSS score",
             "description": "The pipeline has fetched and stored epss_percentile (each CVE's rank among all EPSS-scored CVEs, a 0-1 fraction) from FIRST.org's EPSS API on every run since early cycles, but it was never rendered anywhere on the dashboard or included in CSV export -- only the raw epss_score probability was shown. Raw EPSS probability and percentile rank answer different questions: a CVE with epss_score=0.02 sounds low in isolation, but if its percentile is 0.98 it is in the top 2% of all scored CVEs by exploitation probability -- a materially different signal for triage prioritization that was previously invisible. Added a small '(top N%)' span next to the EPSS score in each alert card's scores row (docs/app.js renderCard()), computed as 100 - epss_percentile*100, with a title tooltip spelling out the full percentile phrasing; gated on typeof alert.epss_percentile === 'number' so it silently omits for the small number of CVEs missing an EPSS score. Also added epss_percentile as a new column to the CSV export (exportCsv()) immediately after epss_score. Added matching .epss-percentile CSS rule to docs/style.css (small, dim, cursor:help). Pure additive frontend change reading an already-fetched, already-stored field: zero new API calls, zero backend/schema changes, zero cost.",
             "commit_sha": "a28a3c49e3a046543eb4d04926829732dabdba26"
+        },
+        {
+            "cycle": 30,
+            "timestamp": "2026-09-09T20:05:03.490956+00:00",
+            "title": "Show CVSS attack-vector/complexity/auth exploitability chip on alert cards",
+            "description": "extract_cvss() has always read NVD cvssData.baseScore, but the same cvssData object also carries attackVector/attackComplexity/privilegesRequired/userInteraction -- these were fetched on every run but never parsed or rendered, even though they answer a distinct triage question from the raw score: two CVEs with an identical CVSS 7.5 base score can differ enormously in real-world exploitability (e.g. NETWORK/no-auth/no-interaction vs LOCAL/HIGH-complexity/auth-required). Added extract_cvss_vector_components() to scripts/aggregate.py (NVD v3.1/v3.0 schema only for now; GHSA/Dependabot advisories expose a mixed v3/v4 vector_string without pre-split fields, deferred to a future cycle rather than risking a mis-parse), wired into the NVD candidate dict and build_final_entry() as a new cvss_vector_components field (null for non-NVD-sourced or pre-existing unrefreshed alerts). Frontend renders a compact .exploit-chip badge (e.g. \"Network - no auth/interaction\") next to CVSS/EPSS in the scores row, with a full-vector tooltip; gated on vc.attack_vector being present so it silently omits where absent. Zero new API calls (parses data already in the existing NVD fetch response).",
+            "commit_sha": "26ca9c7"
         }
     ],
     "rejected": [],
-    "last_cycle_at": "2026-09-09T19:19:30.583441+00:00",
+    "last_cycle_at": "2026-09-09T20:05:03.490956+00:00",
     "stopped": false
 }

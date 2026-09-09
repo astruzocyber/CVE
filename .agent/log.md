@@ -1357,3 +1357,32 @@ input debounce) cleared the bar and was implemented.
 **Rejected this cycle:** None — the EPSS-percentile candidate cleared the bar on first pass and was implemented.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 29. `stopped`: false.
+
+
+## Cycle 30 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34390363792, 34375061636, 34369721256, 34360511746, 34349733814), no 429/throttle signals from NVD/EPSS/GHSA/CISA in Actions logs, only benign Node 20 runner deprecation noise.
+
+**Change:** Show CVSS attack-vector/complexity/auth exploitability chip on alert cards.
+
+- **Opportunity:** `extract_cvss()` has always read NVD's `cvssData.baseScore` on every run, but the same `cvssData` object (already present in the fetched response) also carries `attackVector`/`attackComplexity`/`privilegesRequired`/`userInteraction` -- never parsed or rendered. These answer a materially different triage question than the base score alone: two CVEs both scored 7.5 can be a remote/no-auth/no-interaction (drop-everything-and-patch) versus a local/high-complexity/auth-required (much lower real-world urgency) vulnerability, which was previously invisible on the dashboard without manually reading the raw NVD JSON.
+- **Backend:** Added `extract_cvss_vector_components()` to `scripts/aggregate.py` -- reads the same NVD `cvssMetricV31`/`cvssMetricV30` metrics object `extract_cvss()` already reads, just pulling 4 additional fields. Scoped to NVD only for this cycle (GHSA/Dependabot advisories expose a raw mixed v3/v4 `vector_string` without pre-split component fields; extracting that correctly is deferred to a future cycle rather than risking a mis-parsed field now, per constraint 3). Wired into the NVD candidate dict (`cvss_vector_components`) and `build_final_entry()` (propagated through unchanged, `None` for GHSA/Dependabot-sourced or not-yet-refreshed pre-existing alerts). Zero new HTTP calls.
+- **Frontend:** Added a compact `.exploit-chip` badge (e.g. "Network · no auth/interaction") to the scores row in `renderCard()` in `docs/app.js`, with a full-vector tooltip (`title=` attribute) spelling out all four components; gated on `vc && vc.attack_vector` so it silently omits for the ~half of alerts without NVD vector data. Added matching `.exploit-chip` CSS to `docs/style.css`.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure parse of already-fetched NVD response fields, zero new API calls), validation risk 2/5 (additive, gated on presence check, cannot break rendering for entries missing the field), value 4/5 (closes a real, previously-invisible triage signal -- remote/no-auth exploitability -- that materially changes prioritization beyond the raw CVSS number alone).
+
+**Validation (Step 4):**
+- `python3 -c "import ast; ast.parse(...)"` on `scripts/aggregate.py`: OK. `node --check docs/app.js`: OK. `yaml.safe_load` on both config files: OK.
+- Backed up `docs/data/{alerts,seen_ids,stats}.json`, `docs/data/history/`, `docs/feed.json`, `docs/feed.xml`, `docs/data/kev_snapshot.json` to `/tmp`. Ran `scripts/aggregate.py` for real (backgrounded via `terminal(background=true)` + `process_manage(action='wait')` since the run exceeds the 180s foreground cap) against live NVD/EPSS/CISA KEV data. Completed successfully: 505 total alerts, 335/505 with a populated `cvss_vector_components` locally (256/505 after the live CI regeneration, difference expected from the ~2h gap and NVD lookback-window churn between local test and live run). Inspected output: correct nested dict shape (`attack_vector`/`attack_complexity`/`privileges_required`/`user_interaction`), no crash, `KEV catalog`/`NVD candidates`/`stats` all sane. `git checkout --` restored all production data files plus deleted a stray `new_alerts.json` test artifact afterward (`git status --short` confirmed only the 3 intended source files remained modified before commit).
+- Served a scratch copy of `docs/` on a local port (8931) with real production data (505 alerts) plus 2 synthetic `cvss_vector_components` values injected into 2 real cards (network/no-auth and local/high-complexity/auth-required, matching realistic NVD output observed during the dry run) to validate rendering without touching committed data. Used the browser tool: confirmed both chips render with correct text and tooltip, confirmed correct card layout (screenshot), confirmed existing search filter unaffected (`wordpress`: 505→132 of 505). `git checkout --` reverted the injected test file before commit.
+
+**Deploy (Step 5):**
+- Committed (`26ca9c7`) and pushed to `main`. Backend schema change (new `cvss_vector_components` field in `scripts/aggregate.py`), so dispatched `cve-alerts.yml` via `gh workflow run` (run `34398719776`) rather than relying solely on the next scheduled run.
+- Polled the dispatched run to completion: `success`, ~40s. Grepped the log for warnings/errors/tracebacks excluding known-benign Node 20 deprecation noise: none found.
+- `git pull` to sync the freshly-regenerated production data (505 alerts, 256 with `cvss_vector_components`). Curled `app.js`/`style.css`/`data/alerts.json` -- all 200 OK; confirmed `exploit-chip` string present in the live `app.js`.
+- Loaded the LIVE dashboard in the browser tool with a fresh cache-busted navigation: confirmed 256 `.exploit-chip` elements rendering correctly across the live dataset with correct text/tooltip (e.g. "Network" with full-vector tooltip), screenshot-confirmed stats bar (505 total, 123 critical, 2 KEV) and historical trend chart unaffected, no regression observed. (Note: an initial same-tab reload without a cache-bust query param showed 0 chips due to a stale cached `data/alerts.json` fetch -- same browser-tab caching artifact documented in cycle 28's log, correctly diagnosed and resolved via a fresh cache-busted navigation, not a deploy failure.)
+
+**Rejected this cycle:** None — the exploitability-chip candidate cleared the bar on first pass and was implemented.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 30. `stopped`: false.
