@@ -1,7 +1,7 @@
 {
     "consecutive_no_improvement": 0,
     "consecutive_failed_cycles": 0,
-    "total_cycles": 13,
+    "total_cycles": 14,
     "implemented": [
         {
             "cycle": 1,
@@ -93,9 +93,16 @@
             "title": "Per-CVE shareable deep-link with click-to-copy and scroll-to-highlight",
             "description": "Each alert card already had a unique cve_id but no way to link directly to a single specific card -- only the whole filtered view was shareable (cycle 7's URL query params). Added: (1) each card now gets id=\"alert-<CVE-ID>\" and its CVE-ID span became a clickable <button class=cve-link-btn> that copies a #alert-<CVE-ID> deep-link to the clipboard (navigator.clipboard.writeText, with a graceful no-op fallback if clipboard API is unavailable) and shows a transient 'Copied!' label; (2) a new highlightFromHash() function runs on every loadData() completion, checking location.hash for #alert-<CVE-ID>, scrolling that card into view (scrollIntoView smooth/center) and adding a temporary .highlighted CSS class (blue glow border, auto-removed after 2.5s) if the card exists in the current dataset -- fails silently if not found (e.g. filtered out or not yet ingested). Pure additive frontend change: no new API calls, no backend/schema changes, zero cost. Validated locally on scratch port (438/440-alert real production data): confirmed click-to-copy sets the URL hash and clipboard content, confirmed a fresh page load with #alert-<CVE-ID> in the URL correctly scrolls to and highlights that exact card (verified via a genuine new_tab navigation -- an in-page goto_url hash-only change does not re-fire the full load path, which was a test-methodology artifact, not a bug, confirmed by testing with real navigation). Confirmed zero regression to existing search filter and risk-score breakdown toggle. Live-verified on production: cve-link-btn renders correctly on the live dashboard.",
             "commit_sha": "34ff7f2"
+        },
+        {
+            "cycle": 14,
+            "timestamp": "2026-09-09T09:55:00Z",
+            "title": "Days-overdue count on KEV OVERDUE badge",
+            "description": "The existing OVERDUE badge (from cycle-1-era KEV due-date tracking) told the viewer a CVE had passed its CISA KEV BOD 22-01 remediation due date, but gave no magnitude -- a badge that's 1 day overdue and one that's 90 days overdue looked identical, which matters for a security team's triage priority (a compliance deadline missed by 90 days is a materially different escalation than 1 day). Added overdueDays(alert) in docs/app.js (pure function: computes whole days between kev_due_date and now, returns null if not overdue -- reuses the existing isOverdue() decision logic unchanged, just adds a magnitude on top) and updated the OVERDUE badge template to render e.g. 'OVERDUE (12d)'. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost.",
+            "commit_sha": "8646398b3cbfcf8206423e4b6b075dcf33ed64c3"
         }
     ],
     "rejected": [],
-    "last_cycle_at": "2026-09-09T09:19:40.312704+00:00",
+    "last_cycle_at": "2026-09-09T09:55:00Z",
     "stopped": false
 }

@@ -698,3 +698,50 @@ deep-link) cleared the bar and was implemented.
 
 **Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
 0/3. Not stopped. Next cycle in ~30 minutes.
+
+## Cycle 14 — 2026-09-09T09:55:00Z (approx)
+
+**Rate-limit / API health check (Step 1):** Reviewed last 5 GitHub Actions
+runs -- all `completed`/`success` (08:10:54Z, 05:10:29Z, 04:29:29Z,
+04:10:07Z, 03:20:57Z). Grepped the latest run's log for warning/error/
+traceback/429/throttle (excluding known Node deprecation noise) -- clean,
+only benign Node20-deprecation warnings from GitHub-owned actions. No
+429/throttle signal from NVD/EPSS/KEV/GHSA/Dependabot. All sources healthy
+going into this cycle.
+
+**Implemented:** Added a days-overdue count to the existing KEV OVERDUE
+badge. The badge previously showed only "OVERDUE" with no magnitude, so a
+CVE 1 day past its CISA KEV BOD 22-01 remediation due date looked identical
+to one 90 days overdue -- a real triage-priority gap for a security team.
+Added `overdueDays(alert)` to `docs/app.js` (pure function reusing the
+existing `isOverdue()` decision, computing whole days between
+`kev_due_date` and now, returning `null` if not overdue) and updated the
+badge template to render e.g. "OVERDUE (12d)". Pure additive frontend
+change: no new API calls, no backend/schema changes, zero cost.
+
+Validation performed: `node --check docs/app.js` passed. Served `docs/`
+locally on scratch port 8813 with real production data (440 alerts),
+loaded in the browser tool: confirmed `overdueDays()` correctly computes
+2443 days for a synthetic 2020-01-01 due-date test alert, confirmed the
+rendered card HTML contains both "OVERDUE" and the "(Nd)" suffix, confirmed
+zero regression -- all 440 real alerts still render, result count still
+reads "440 of 440 alerts". (Currently 0 real alerts in the live dataset are
+KEV-overdue, so the badge itself isn't visually exercised by production
+data this cycle, but the function was directly unit-tested against a
+synthetic alert in the live page context.)
+
+Committed as `8646398`, pushed to main. Pure frontend change with zero
+pipeline/data impact -- did not trigger `cve-alerts.yml` (no reason to
+consume Actions minutes for a change that can't affect production data).
+Waited 60s for GitHub Pages redeploy, confirmed via `curl` that live
+`app.js` contains the new `overdueDays` identifier. Loaded the LIVE
+dashboard at `https://astruzocyber.github.io/CVE/` in the browser tool:
+confirmed 440 cards render, stats bar populated, `overdueDays` function
+present in the live page context, no regression to any existing feature.
+Live verification passed; no revert needed.
+
+**Rejected this cycle:** none -- the one candidate identified (overdue-days
+magnitude on the OVERDUE badge) cleared the bar and was implemented.
+
+**Status:** consecutive_no_improvement = 0/10, consecutive_failed_cycles =
+0/3. Not stopped. Next cycle in ~30 minutes.
