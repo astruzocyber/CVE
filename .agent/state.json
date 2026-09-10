@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 59,
+  "total_cycles": 60,
   "implemented": [
     {
       "cycle": 1,
@@ -420,9 +420,16 @@
       "title": "Bulk 'Mark filtered as reviewed' toolbar button",
       "description": "Cycle 48 added per-card mark-reviewed localStorage toggle + hide-reviewed filter, cycle 49 added an X-of-N reviewed progress indicator, but marking dozens/hundreds of alerts matching a given search/filter combo an analyst had already triaged as a batch still required clicking each card's Mark reviewed button individually. Added a #mark-filtered-reviewed toolbar button that marks every alert in window.__lastFiltered (the same currently-visible set already backing Export CSV/JSON/Markdown report) as reviewed in one click, reusing the existing reviewedCves Set/localStorage plumbing and renderReviewedProgress()/applyFiltersAndRender() unchanged. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost. Validated: node --check + py_compile passed; python3 scripts/validate_data.py PASSED (534 alerts, 44/44 getElementById id refs resolve including the new button); 30/30 unit tests passed (unchanged, no scoring logic touched). Local browser smoke test via python3 -m http.server serving real production data (534 alerts): searched 'wordpress' -> 137/534 filtered, clicked Mark filtered as reviewed, confirmed reviewed-progress updated to exactly '137 of 534 reviewed (26%)' and localStorage held exactly 137 IDs, cleared search back to 534/534, enabled Hide reviewed and confirmed it correctly narrowed to 397 of 534 (534-137) with zero regression to existing filters/search/progress indicator.",
       "commit_sha": "c30752e"
+    },
+    {
+      "cycle": 60,
+      "timestamp": "2026-09-10T14:35:30Z",
+      "title": "'Copy suppression YAML' button on each alert card",
+      "description": "config/suppressions.yaml (accepted-risk/false-positive list) has been fully wired into aggregate.py (load_suppressions(), passes_filters()) since early cycles, but had zero frontend affordance -- an analyst who reviewed a CVE and determined it doesn't apply had to hand-type the exact YAML schema (cve_id, reason, expires) from memory/docs into the file. Added suppressionSnippet(alert) to docs/app.js: generates a ready-to-paste YAML list-item block with cve_id pre-filled, a placeholder reason the analyst must edit, and expires defaulted to exactly one year from today (keeps every suppression time-boxed by default, matching the file's own documented convention). New .copy-suppress-btn per card (mirrors the existing copy-md-btn pattern exactly) copies the snippet to clipboard via the same click-delegation handler used for cve-link-btn/copy-md-btn. Pure additive frontend: no new API calls, no backend/schema changes, zero cost.",
+      "commit_sha": "cb4a8f2"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T13:59:13Z",
+  "last_cycle_at": "2026-09-10T14:35:30Z",
   "stopped": false
 }
