@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 57,
+  "total_cycles": 58,
   "implemented": [
     {
       "cycle": 1,
@@ -406,9 +406,16 @@
       "title": "Keyboard shortcuts (/, Esc, r, t) for search focus/blur/reset/theme",
       "description": "Carried-forward candidate from cycle 56 (deferred as lower-priority than risk-delta). No keydown listeners existed anywhere in app.js. Added a single document-level keydown handler: / focuses the search box, Escape blurs any focused input, r triggers the existing reset-filters click handler, t triggers the existing theme-toggle click handler. Guards against firing while typing in any INPUT/TEXTAREA/contenteditable (checked via e.target, not focus state) and ignores Ctrl/Cmd/Alt-held combos. Pure additive: reuses already-validated reset-filters/theme-toggle logic as the actual action, the shortcut is just a new trigger path. Added title-attr shortcut hints on Reset filters/theme-toggle buttons plus a small kbd-hint tooltip span for discoverability.",
       "commit_sha": "439686d"
+    },
+    {
+      "cycle": 58,
+      "timestamp": "2026-09-10T13:22:07Z",
+      "title": "Top affected vendor/product breakdown pills (stats.by_vendor_product)",
+      "description": "compute_stats() now emits a top-10 by_vendor_product map (count of alerts per vendor/product pair, sorted descending, capped to 10 -- mirrors the existing by_cwe pattern exactly), built entirely from the already-extracted `affected` field (populated on 527/532 tracked alerts at cycle start via watchlist vendor/product matches) -- zero new API calls, zero new dependencies. Frontend adds renderVendorBreakdown() in docs/app.js (clickable .vendor-pill buttons, new #vendor-breakdown container in docs/index.html, .vendor-pill/.vendor-breakdown CSS rules in docs/style.css) mirroring cycle 45's CWE-pill click-to-search pattern: clicking a pill sets the search box to that vendor/product string and re-applies filters, reusing the already affected-aware search haystack. Answers a distinct triage question from severity/source/CWE breakdowns: which of the org's actual tracked vendors/products dominate current alert volume right now (e.g. wordpress/wordpress:137 vs openssl/openssl:62 points remediation attention at very different teams) -- previously this data existed per-card but had no aggregate view. Validated: py_compile + node --check passed; ran aggregate.py live against real NVD/CISA KEV/FIRST.org EPSS APIs (LOOKBACK_DAYS=2, real GH_TOKEN) confirming by_vendor_product populates correctly end-to-end (534 alerts, top entry wordpress/wordpress:137, correctly reflecting a live 2-new-alert refresh since cycle 57); scripts/validate_data.py PASSED against the freshly-regenerated real data (534 alerts, 43/43 getElementById id references resolve including the new vendor-breakdown id); python3 -m unittest discover 30/30 passed (untouched, sanity check); local browser smoke test via python3 -m http.server served real production data, confirmed 10 vendor-pills render with correct counts and purple/accent styling, confirmed clicking php/php correctly narrowed 534->112 alerts with zero regression to the existing source/severity/CWE pills, stats bar, or trend chart. Deployed via commit 0ea532f; live CI run 34482200027 (CI Data & Frontend Validation) success in 17s, pages-build-deployment run 34482199134 success; live-verified via cache-busted curl: deployed app.js contains renderVendorBreakdown, deployed index.html contains vendor-breakdown, deployed data/stats.json contains a correctly-populated by_vendor_product map matching the local dry-run.",
+      "commit_sha": "0ea532f"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T12:40:17Z",
+  "last_cycle_at": "2026-09-10T13:22:07Z",
   "stopped": false
 }

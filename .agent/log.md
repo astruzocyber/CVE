@@ -2224,3 +2224,38 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot this cycle. Zero new external API calls introduced (pure frontend change, no network calls beyond the existing `data/*.json` static fetches already in place).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 57. `stopped`: false.
+
+## Cycle 58 — 2026-09-10T13:22:07Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh:** `git log` HEAD was `4cecd03` (cycle 57 log commit), `git status` clean, matched `origin/main`. `gh run list`: last `ci.yml` and `cve-alerts.yml`/`pages-build-deployment` runs all `success` (14s-53s), no 429/throttle signals found in the latest scheduled `cve-alerts.yml` run log (grepped for 429/rate-limit/throttle/error/warn — only benign Node 20 deprecation noise). `.agent/state.json`: total_cycles=57, both counters 0, stopped=false — clean baseline.
+
+**Candidates considered:**
+1. **Top affected vendor/product breakdown pills (`stats.by_vendor_product`)** — feasibility 5/5 (pure derived aggregation from the `affected` field already populated on 527/532 tracked alerts, zero new API calls, mirrors the proven cycle-45 `by_cwe` pattern almost line-for-line); risk 1/5 (additive stats.json key + additive DOM/CSS, reuses already-validated click-to-search wiring); value 4/5 (fills a genuine, previously-total gap: severity/source/CWE breakdowns existed but there was no aggregate view of which *vendors/products* dominate current volume — a distinct and directly actionable triage axis, e.g. wordpress/wordpress:137 vs openssl/openssl:62 point at very different remediation owners). **CHOSEN.**
+2. GHSA/Dependabot coverage expansion (`ghsa_packages`/additional `dependabot_repos`) — still flagged as needing human input on actual tech stack (GFR Media), not something this agent can safely guess; carried forward unimplemented per cycles 56-57 reasoning.
+3. Full risk_score history array (time series per CVE) — still deferred per cycle 56 reasoning (unbounded schema/storage growth risk); `risk_score_prev` single-value delta remains the shipped stepping stone.
+4. New free data source (OSV.dev) — still deferred as its own dedicated-cycle scope; not reconsidered further since candidate 1 cleared the bar with lower risk and effort.
+5. Any paid/threat-intel enrichment — not seriously considered; would violate the zero-cost constraint, rejected on principle.
+
+**Implemented (candidate 1):**
+- `scripts/aggregate.py`: `compute_stats()` now builds `by_vendor_product` (dict, count per `affected` entry across all alerts, sorted descending, capped to top 10) alongside the existing `by_severity`/`by_source`/`by_cwe` breakdowns; added to the returned stats dict.
+- `docs/app.js`: new `renderVendorBreakdown(byVendorProduct)` function (clickable `.vendor-pill` buttons; clicking sets the search box to that vendor/product string and re-applies filters via the existing affected-aware search haystack), wired into `loadStats()` alongside the existing breakdown renderers.
+- `docs/index.html`: new `<div id="vendor-breakdown" hidden>` container in the header, alongside the existing source/severity/CWE breakdown divs.
+- `docs/style.css`: `.vendor-breakdown`/`.vendor-pill` rules mirroring the existing `.cwe-pill` styling with a distinct accent color.
+- Regenerated `docs/data/alerts.json`/`stats.json`/`history/trend.csv`/`seen_ids.json`/`feed.{json,xml}` via a live production run of `aggregate.py` (real NVD/CISA KEV/FIRST.org EPSS calls, `LOOKBACK_DAYS=2`) to confirm `by_vendor_product` populates correctly end-to-end before committing — 534 alerts (2 new since cycle 57's snapshot), schema-valid.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py`: OK.
+- `node --check docs/app.js`: OK.
+- `python3 scripts/validate_data.py` against the freshly-regenerated real production data: PASSED (534 alerts, 534 unique IDs, stats.json schema OK, trend.csv OK, 43/43 `getElementById` id references resolve — including the new `vendor-breakdown` id, feeds parse OK).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: 30/30 passed (unchanged — this cycle touched no scoring/parsing logic covered by the suite).
+- Local browser smoke test via `python3 -m http.server` serving the real regenerated production `docs/`: confirmed 10 `.vendor-pill` elements render with correct counts (`wordpress/wordpress: 137`, `google/chrome: 114`, `php/php: 112`, ...) and correct purple/accent styling matching the existing pill rows visually; clicked the `php/php` pill and confirmed the search box populated with `php/php` and the result count correctly narrowed `534 of 534` → `112 of 534`; confirmed zero regression to the existing source/severity/CWE pills, stats bar, and historical trend chart (all still rendering correctly in the same screenshot).
+
+**Deploy:** Committed `0ea532f`, pushed to `main` (clean fast-forward). Live CI run `34482200027` (`CI Data & Frontend Validation`) → `success`, 17s. `pages-build-deployment` run `34482199134` → `success`. Live-verified via cache-busted `curl`: `https://astruzocyber.github.io/CVE/app.js` contains `renderVendorBreakdown`, `index.html` contains `vendor-breakdown`, and `data/stats.json` contains a correctly-populated `by_vendor_product` map (`{"wordpress/wordpress": 137, "google/chrome": 114, "php/php": 112, "microsoft/office": 72, "openssl/openssl": 62, "microsoft/windows": 24, "nginx/nginx": 10, "oracle/mysql": 8, "cisco/ios": 7, "amazon/aws": 5}`) matching the local dry-run — change is live in production.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on actual tech stack, flagged not hard-rejected), full risk-score history array (deferred, schema-growth risk), OSV.dev integration (deferred, own-cycle scope). None violate zero-cost; all deferred on risk/scope grounds, not novelty grounds.
+
+**Rate-limit status:** No 429/throttle signals from NVD, CISA KEV, FIRST.org EPSS, GHSA, or Dependabot this cycle — not in the pre-cycle `gh run list` history review, not during the live `aggregate.py` verification run (KEV catalog 1703 entries, 704 NVD candidates pre-filter, EPSS queried for 960 CVEs, all clean; Dependabot skipped as expected since no `GH_DEPENDABOT_TOKEN` is set in this local dry-run environment — matches documented behavior, not a failure).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 58. `stopped`: false.
