@@ -922,6 +922,12 @@ def compute_stats(alerts):
 # roughly 6 runs/day * ~90 bytes/row =~ 200KB/year, trivially within GitHub's
 # free repo storage and Pages' 1GB soft limit even after several years.
 # ---------------------------------------------------------------------------
+HISTORY_CSV_HEADER = (
+    "timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,"
+    "avg_epss,avg_risk_score"
+)
+
+
 def append_history(stats):
     os.makedirs(HISTORY_DIR, exist_ok=True)
     is_new = not os.path.exists(HISTORY_CSV_PATH)
@@ -934,9 +940,33 @@ def append_history(stats):
         "" if stats.get("avg_epss") is None else str(stats["avg_epss"]),
         "" if stats.get("avg_risk_score") is None else str(stats["avg_risk_score"]),
     ]
+
+    # Schema-drift self-heal: when a column (e.g. avg_risk_score) is added to the
+    # row schema after trend.csv already exists, the old header line is never
+    # rewritten by the original append-only logic below, leaving newer rows with
+    # more columns than the committed header claims -- a real, previously-unnoticed
+    # data-hygiene bug (harmless to the frontend's positional CSV parser, but wrong
+    # for anyone opening the published artifact in a spreadsheet/pandas expecting
+    # header-column count to match). If the on-disk header is stale, upgrade just
+    # that one line in place; historical data rows are left untouched (older rows
+    # legitimately have fewer columns -- that's the schema-evolution record, not
+    # an error, per this project's stated "adapt and note discrepancy" policy).
+    if not is_new:
+        with open(HISTORY_CSV_PATH, "r") as f:
+            lines = f.readlines()
+        if lines and lines[0].rstrip("\n") != HISTORY_CSV_HEADER:
+            old_header = lines[0].rstrip("\n")
+            lines[0] = HISTORY_CSV_HEADER + "\n"
+            with open(HISTORY_CSV_PATH, "w") as f:
+                f.writelines(lines)
+            print(
+                f"Upgraded stale trend.csv header ({old_header!r} -> "
+                f"{HISTORY_CSV_HEADER!r}); historical data rows left untouched."
+            )
+
     with open(HISTORY_CSV_PATH, "a") as f:
         if is_new:
-            f.write("timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,avg_epss,avg_risk_score\n")
+            f.write(HISTORY_CSV_HEADER + "\n")
         f.write(",".join(row) + "\n")
     print(f"Appended trend row to {HISTORY_CSV_PATH}")
 

@@ -1,0 +1,47 @@
+name: CI Data & Frontend Validation
+
+# Independent, always-on regression guard: runs on every push/PR touching
+# docs/ or scripts/, regardless of the aggregation pipeline's own 4-hour
+# schedule. Prior to this workflow, the only safety net against a broken
+# commit reaching the live GitHub Pages site was this project's own
+# per-cycle manual validation (local scratch server + spot checks) -- there
+# was no automated check that ran unconditionally on every push. This closes
+# that gap at zero cost (public repo = unlimited free Actions minutes).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "scripts/**"
+  pull_request:
+    paths:
+      - "docs/**"
+      - "scripts/**"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Syntax-check pipeline scripts
+        run: |
+          python -m py_compile scripts/aggregate.py scripts/notify_github_issues.py scripts/validate_data.py
+
+      - name: Syntax-check frontend JS
+        run: |
+          node --check docs/app.js
+
+      - name: Validate committed data files against schema
+        run: python scripts/validate_data.py
