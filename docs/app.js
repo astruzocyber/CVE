@@ -888,6 +888,41 @@ function renderCweBreakdown(byCwe) {
 }
 
 
+// stats.json now includes a top-10 by_vendor_product map, built from the
+// already-extracted `affected` field (vendor/product pairs matched via
+// watchlist config or Dependabot package names) -- a distinct triage axis
+// from severity/source/CWE: "which of OUR actual vendors/products dominate
+// current alert volume". Mirrors the by_cwe pill pattern exactly: clicking a
+// pill sets the search box to that vendor/product string and re-applies
+// filters, reusing the existing affected-aware search haystack. Purely
+// additive: reads an existing (now-extended) stats.json field, no new API
+// calls.
+function renderVendorBreakdown(byVendorProduct) {
+  const el = document.getElementById("vendor-breakdown");
+  if (!el) return;
+  if (!byVendorProduct || typeof byVendorProduct !== "object" || Object.keys(byVendorProduct).length === 0) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  const entries = Object.entries(byVendorProduct).sort((a, b) => b[1] - a[1]);
+  el.innerHTML = entries
+    .map(([vp, count]) =>
+      `<button type="button" class="vendor-pill" data-vp="${escapeHtml(vp)}" title="Search for ${escapeHtml(vp)}">${escapeHtml(vp)}: <strong>${count}</strong></button>`
+    )
+    .join("");
+  el.hidden = false;
+  el.querySelectorAll(".vendor-pill").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const searchEl = document.getElementById("search");
+      if (!searchEl) return;
+      searchEl.value = btn.getAttribute("data-vp");
+      applyFiltersAndRender();
+    });
+  });
+}
+
+
 async function loadStats() {
   try {
     const res = await fetch("data/stats.json", { cache: "no-store" });
@@ -909,6 +944,7 @@ async function loadStats() {
     renderSourceBreakdown(stats.by_source);
     renderSeverityBreakdown(stats.by_severity);
     renderCweBreakdown(stats.by_cwe);
+    renderVendorBreakdown(stats.by_vendor_product);
   } catch {
     // stats.json is optional/may not exist yet on the very first run -- fail quietly
   }

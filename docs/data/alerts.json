@@ -1,5 +1,99 @@
 [
   {
+    "cve_id": "CVE-2026-87544",
+    "description": "Incorrect authorization in Extensions in Google Chrome prior to 153.0.8010.36 allowed a remote attacker to bypass system access restrictions into a privileged page via a crafted HTML page. (Chromium security severity: Low)",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-863"
+    ],
+    "epss_score": 0.00166,
+    "epss_percentile": 0.06144,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00166,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:11.920",
+    "nvd_last_modified": "2026-09-10T12:51:36.277",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T13:21:32.741924+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87450",
+    "description": "Incorrect authorization in Permissions in Google Chrome prior to 153.0.8010.36 allowed a remote attacker leveraging social engineering to obtain sensitive information via a crafted Chrome extension. (Chromium security severity: Medium)",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-863"
+    ],
+    "epss_score": 0.00185,
+    "epss_percentile": 0.08153,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00185,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:01.340",
+    "nvd_last_modified": "2026-09-10T13:08:07.880",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T13:21:32.741462+00:00"
+  },
+  {
     "cve_id": "CVE-2026-76562",
     "description": "The Sidebar Manager Light plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'sbm_description' parameter in all versions up to, and including, 1.18 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
     "cvss_score": 7.2,
@@ -236,7 +330,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-10T02:16:34.180",
-    "nvd_last_modified": "2026-09-10T02:16:34.180",
+    "nvd_last_modified": "2026-09-10T12:16:33.293",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T04:12:18.468246+00:00"
@@ -955,7 +1049,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-01-13T17:15:56.910",
-    "nvd_last_modified": "2026-09-10T04:17:39.200",
+    "nvd_last_modified": "2026-09-10T12:47:59.933",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.511695+00:00"
@@ -4162,7 +4256,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:05.887",
-    "nvd_last_modified": "2026-09-10T04:18:21.813",
+    "nvd_last_modified": "2026-09-10T12:49:02.630",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T12:13:51.901953+00:00"
@@ -14536,22 +14630,23 @@
     "description": "pyOpenSSL is a Python wrapper around the OpenSSL library. Starting in version 22.0.0 and prior to version 26.0.0, if a user provided callback to `set_cookie_generate_callback` returned a cookie value greater than 256 bytes, pyOpenSSL would overflow an OpenSSL provided buffer. Starting in version 26.0.0, cookie values that are too long are now rejected.",
     "cvss_score": 9.8,
     "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-120"
+    ],
     "epss_score": 0.00704,
     "epss_percentile": 0.51187,
     "kev": false,
     "kev_date_added": null,
     "kev_due_date": null,
-    "affected": [
-      "openssl/openssl"
-    ],
-    "matched_keywords": [],
-    "source": "nvd",
-    "published": "2026-03-18T00:16:19.273",
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485654+00:00",
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.6,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -14565,8 +14660,17 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "kev_notes": null,
-    "risk_score_prev": 34.6
+    "risk_score_prev": 34.6,
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-03-18T00:16:19.273",
+    "nvd_last_modified": "2026-09-10T13:17:59.900",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-05T15:02:54.485654+00:00"
   },
   {
     "cve_id": "CVE-2025-5987",

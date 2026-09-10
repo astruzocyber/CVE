@@ -852,6 +852,7 @@ def compute_stats(alerts):
     risk_values = []
     by_source = {}
     by_cwe = {}
+    by_vendor_product = {}
     for a in alerts:
         cvss = a.get("cvss_score")
         if cvss is None:
@@ -872,6 +873,8 @@ def compute_stats(alerts):
         by_source[src] = by_source.get(src, 0) + 1
         for cwe in (a.get("cwe_ids") or []):
             by_cwe[cwe] = by_cwe.get(cwe, 0) + 1
+        for vp in (a.get("affected") or []):
+            by_vendor_product[vp] = by_vendor_product.get(vp, 0) + 1
 
     # KEV entries with a due date in the past and not yet resolved -- an
     # operationally meaningful "overdue remediation" count (BOD 22-01 style).
@@ -913,6 +916,15 @@ def compute_stats(alerts):
         # Built from cwe_ids, a field already extracted from NVD/GHSA/Dependabot
         # responses since the CWE-badge cycle -- zero new API calls.
         "by_cwe": dict(sorted(by_cwe.items(), key=lambda kv: kv[1], reverse=True)[:10]),
+        # Top vendor/product pairs (from the already-extracted `affected` field,
+        # populated from watchlist vendor/product matches and Dependabot package
+        # names) across all currently-tracked alerts, sorted by count descending,
+        # capped to the top 10 -- a distinct triage axis from severity/source/CWE:
+        # "which of OUR actual vendors/products dominate the current alert volume"
+        # (e.g. a spike in wordpress/wordpress vs openssl/openssl points triage
+        # attention at a very different remediation team). Zero new API calls --
+        # built entirely from data already collected each run.
+        "by_vendor_product": dict(sorted(by_vendor_product.items(), key=lambda kv: kv[1], reverse=True)[:10]),
     }
 
 
