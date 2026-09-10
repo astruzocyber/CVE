@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 53,
+  "total_cycles": 54,
   "implemented": [
     {
       "cycle": 1,
@@ -373,6 +373,13 @@
       "title": "Bulk 'Export Markdown report' button for filtered-view summary table",
       "description": "Added exportMarkdownReport() to docs/app.js: builds a Markdown table (CVE, risk score, CVSS, EPSS, KEV status, affected, source) of the currently-filtered alert view (window.__lastFiltered || allAlerts), with a heading and generated-at/count line, downloaded via the same Blob/createObjectURL pattern as the existing exportCsv/exportJson. Distinct from cycle 51's per-alert Markdown copy (single-CVE detail block for one incident ticket) and cycles 32/34/37's CSV/JSON bulk export (machine-oriented flattened/raw data) -- fills the previously-total gap of pasting a filtered view (e.g. 'KEV overdue only') as a readable table into a status update, GitHub issue, or Slack/Teams post. Pure additive frontend: new function + new toolbar button + one event listener, reuses only already-rendered fields, zero new API calls, zero backend/schema changes. Validated: node --check passed; served docs/ locally with real production data (532 alerts), confirmed the button renders, captured and inspected the generated Blob content (35,091 bytes, well-formed Markdown table with correct real data), and confirmed zero regression to search/min-risk filters, reset-filters, existing export buttons, review-toggle, stats bar, breakdown pills, and trend chart. Deployed frontend-only (no workflow_dispatch needed); live-verified via cache-busted curl (exportMarkdownReport present in deployed app.js, export-md-report present in deployed index.html).",
       "commit_sha": "ae52dc0"
+    },
+    {
+      "cycle": 54,
+      "timestamp": "2026-09-10T10:37:00Z",
+      "title": "CI data-validation workflow (.github/workflows/ci.yml) + trend.csv header schema-drift fix",
+      "description": "Added scripts/validate_data.py (stdlib-only schema/consistency checker for alerts.json, stats.json, trend.csv, app.js<->index.html id refs, feeds) and wired it into a new always-on CI workflow that runs on every push/PR touching docs/ or scripts/, independent of the 4h aggregation pipeline schedule -- closing a real gap where the only validation safety net across 53 prior cycles was manual per-cycle agent checks. Writing the validator surfaced a genuine, previously-unnoticed bug: append_history() in aggregate.py wrote a 6-column trend.csv header once, then silently started appending 7-column rows (avg_risk_score) without ever upgrading the header -- harmless to the frontend positional parser but a real schema-drift defect for any external consumer of the published CSV. Fixed with a self-healing header upgrade (rewrites only the header line, leaves historical rows -- which legitimately have fewer columns -- untouched) and corrected the already-committed trend.csv header. Verified: python3 scripts/validate_data.py passes locally against real production data (532 alerts); live GitHub Actions run 34467073769 for the new ci.yml workflow completed success in 13s on first push.",
+      "commit_sha": "49720ad"
     }
   ],
   "rejected": [],
