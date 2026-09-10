@@ -1839,3 +1839,35 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs or the verification `workflow_dispatch` run. No change to call volume this cycle (new field derived entirely from already-fetched/already-extracted data, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 45. `stopped`: false.
+
+## Cycle 46 — 2026-09-10T06:00:00Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 8`: 7 success / 1 failure — the failure (2026-09-10T00:13:41Z) is the pre-cycle-38-fix git-race straggler already documented/resolved in cycles 38-41. No 429/rate-limit signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot in any recent run. State clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add schema.org JSON-LD `Dataset` structured data to the dashboard `<head>`.
+
+- **Opportunity:** Re-read `docs/index.html` fresh this cycle. Cycle 12 added meta description/OG/Twitter cards (human-facing link previews); cycle 41 added `robots.txt`/`sitemap.xml` (crawl-allow signal). Neither provides machine-readable structured data about what the page actually *is* — cycle 41's log explicitly deferred "JSON-LD structured data" as a "distinct, higher-scope SEO candidate," and it has been carried forward as a rejected-for-now item in every cycle since (36, 44, 45) without ever being picked up. Grepped `.agent/log.md`/`state.json` for `JSON-LD`/`ld+json`/`schema.org` — zero prior implementation, confirming this closes a genuinely open, previously-scoped gap.
+- **Frontend:** Added a `<script type="application/ld+json">` block to `docs/index.html` `<head>` describing the page as a schema.org `Dataset`: name/description mirroring the existing meta description, `url`/`sameAs` (GitHub repo), `isAccessibleForFree: true`, `creator` (Organization), and a `distribution` array pointing at the three already-existing machine-readable endpoints (`data/alerts.json`, `feed.xml`, `feed.json` — all shipped since earlier cycles, zero new files). `Dataset` is the correct schema.org type for a continuously-updated data feed (vs. `WebSite`/`Article`), helping search engines and AI/LLM crawlers correctly attribute and index the page as a downloadable, license-free vulnerability dataset. Pure additive `<head>` tag: zero JS/CSS/backend/schema changes, zero new API calls, zero cost. (Initially included a `license` field pointing at a repo `LICENSE` file; checked and found none exists in the repo, so removed that field rather than assert an unverifiable claim — kept `isAccessibleForFree: true`, which is verifiably true.)
+- **Rejected candidates considered this cycle:**
+  - *Extending `nvd_last_modified`/CVSS-vector fields to GHSA/Dependabot* — still correctly deferred (both sources dormant in production, no live field to validate against); nothing has changed.
+  - *Keyboard shortcuts for filter controls* — still marginal value for a click-through triage audience; not revisited.
+  - *CWE trend-over-time in trend.csv* — still correctly deferred per cycle 45's reasoning (variable-width CSV column scheme, higher validation risk than the point-in-time breakdown already shipped).
+- **Scoring:** Feasibility 5/5 (single static `<script>` tag, zero new API calls/dependencies/files, zero backend/schema touch). Validation risk 1/5 (purely additive, inert to a browser that ignores/doesn't execute the JSON-LD — validated as well-formed JSON via `python3 json.loads()` and rendered correctly when served locally). Value 3/5 (closes an explicitly-scoped, previously-deferred SEO/discoverability gap carried across 5+ prior cycles; real value for a public data tool wanting to be correctly indexed/cited by search engines and AI crawlers).
+
+**Validation (Step 4):**
+- `python3 -c "json.loads(...)"` on the extracted `<script type="application/ld+json">` block: confirmed well-formed JSON, all expected keys present (`@context`, `@type: Dataset`, `name`, `description`, `url`, `sameAs`, `isAccessibleForFree`, `creator`, `distribution`, `keywords`).
+- `node --check docs/app.js` (untouched, sanity check): OK.
+- `git diff --stat` confirmed only `docs/index.html` touched — no `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle needed.
+- Served `docs/` on a local scratch HTTP port (8961, background process) with real production data; `curl` confirmed the JSON-LD script tag rendered correctly in the served HTML. Killed the scratch server before committing.
+
+**Deploy (Step 5):**
+- Committed `0a037f2` (`docs/index.html`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~60s for Pages deployment, then cache-busted `curl` confirmed the JSON-LD block present and well-formed on the live production page (`@type: Dataset`, name/description/distribution all correct).
+
+**Rejected this cycle:** None new beyond the still-deferred carried-forward items (GHSA/Dependabot field-parity extensions, keyboard shortcuts, CWE-trend-over-time) — the JSON-LD candidate cleared the bar on first pass, closing out a gap open since cycle 41.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 46. `stopped`: false.

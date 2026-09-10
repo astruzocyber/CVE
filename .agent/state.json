@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 45,
+  "total_cycles": 46,
   "implemented": [
     {
       "cycle": 1,
@@ -317,9 +317,16 @@
       "title": "Top-CWE weakness breakdown pills on dashboard stats bar",
       "description": "compute_stats() now emits a top-10 by_cwe map (count of alerts per CWE classification, sorted descending) alongside the existing by_severity/by_source breakdowns, built entirely from the cwe_ids field already extracted from NVD/GHSA/Dependabot responses since an earlier cycle -- zero new API calls. Frontend renders a new clickable .cwe-pill row (mirroring the existing severity/source pill pattern); clicking a pill sets the search box to that CWE ID and re-applies filters, reusing the already-CWE-aware search haystack from a prior cycle. Answers a distinct triage question (what KINDS of weaknesses/bug classes dominate the tracked population right now) that severity/source/risk-score breakdowns cannot answer.",
       "commit_sha": "1d10de0"
+    },
+    {
+      "cycle": 46,
+      "timestamp": "2026-09-10T06:00:00Z",
+      "title": "Add schema.org JSON-LD Dataset structured data",
+      "description": "Cycle 12 added meta description/OG/Twitter cards, cycle 41 added robots.txt/sitemap.xml, but the dashboard had zero machine-readable structured data -- deferred explicitly since cycle 41 as a 'distinct, higher-scope SEO candidate'. Added a schema.org Dataset JSON-LD block to docs/index.html head describing the dashboard as a free, zero-cost, continuously-updated vulnerability dataset with distribution links to the existing alerts.json/feed.xml/feed.json endpoints (all pre-existing, no new files) and creator/keyword metadata. This is the correct schema.org type for a continuously-updated data feed (as opposed to WebSite/Article), helping search engines and AI crawlers correctly index/attribute the dashboard as a dataset with a machine-discoverable, downloadable distribution -- distinct value from the earlier meta-tag SEO work which only targeted human-facing link previews. Pure additive head script tag: zero JS/CSS/backend/schema changes, zero new API calls, zero cost. Validated: python3 json.loads() confirmed the embedded JSON-LD is well-formed; served docs/ on a local scratch port, confirmed script tag renders correctly. Deployed via commit 0a037f2 (frontend-only, no workflow_dispatch needed); live-verified via cache-busted curl parsing the deployed JSON-LD (type: Dataset, name/description/distribution all present and correct).",
+      "commit_sha": "0a037f2"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T05:20:00Z",
+  "last_cycle_at": "2026-09-10T06:00:00Z",
   "stopped": false
 }
