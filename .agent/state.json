@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 71,
+  "total_cycles": 72,
   "implemented": [
     {
       "cycle": 1,
@@ -520,9 +520,23 @@
         "Any paid/threat-intel enrichment -- violates zero-cost, rejected on principle.",
         "by_first_seen_age histogram/bucket breakdown -- lower value than keyword breakdown since first_seen age badges/filters already exist per-card since an earlier cycle; deferred, not rejected outright, may revisit."
       ]
+    },
+    {
+      "cycle": 72,
+      "timestamp": "2026-09-10T23:09:42Z",
+      "title": "Track epss_score_prev and show EPSS-delta badge on cards",
+      "description": "compute_stats()/build_final_entry() already tracked risk_score_prev (composite score delta since last refresh) but never tracked the raw EPSS probability's own prior value -- so an analyst seeing a risk_score delta had no way to tell whether it was EPSS-driven (exploitation-likelihood shift, EPSS publishes new scores daily and is 40% of risk_score's weight) vs. a CVSS/KEV change. Added epss_score_prev to build_final_entry() (defaults to None for new alerts, same convention as risk_score_prev), and populated it in both of main()'s refresh paths (re-surfaced-this-run merge, and the not-resurfaced-this-run in-place refresh loop, with a setdefault for backward-compat on old cumulative data missing the field). Rendered as a new .epss-delta pill next to the EPSS percentage on each card (mirrors .risk-delta styling/risk-up/risk-down modifier classes exactly, only fires when the delta is >=0.05 percentage points to avoid noise on negligible day-to-day EPSS churn), and added as a new epss_score_prev column in the CSV export (mirroring risk_score_prev's existing column). Zero new API calls -- built entirely from epss_score, already fetched every run. Added 1 new build_final_entry unit test (epss_score_prev defaults to None for new entries) -- 75 tests total, up from 74. Validated: py_compile + node --check OK; 75/75 unit tests passed; live end-to-end aggregate.py run against real NVD/CISA KEV/FIRST.org EPSS APIs in an isolated /tmp clone (595 alerts, 581/595 alerts got a real epss_score_prev value on this refresh, no rate-limit signals); validate_data.py PASSED against the regenerated real data (both in the /tmp isolation and after copying results into the repo); local browser smoke test via python3 -m http.server confirmed zero regression to search filter (146/595 for 'wordpress', vs cycle 71's 145/589 -- consistent with normal data drift), stats bar, breakdown pills, and trend chart; manually injected a synthetic epss_score_prev/epss_score gap into a card and confirmed via DOM inspection + screenshot that the new epss-delta badge renders correctly ('\u25b2+35.0pp') alongside the existing risk-delta badge with matching visual style. Deployed: commit 75af6b2367865530d19f33ecbc62e305e0be775d pushed to main; CI Data & Frontend Validation run 34540877839 completed success; pages-build-deployment run 34540876965 completed success; live-verified via cache-busted curl against https://astruzocyber.github.io/CVE/ that data/alerts.json contains the new epss_score_prev field (581/595 non-null) and app.js contains the new epss-delta code.",
+      "commit_sha": "75af6b2367865530d19f33ecbc62e305e0be775d",
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack (repeatedly flagged cycles 56-71).",
+        "Full risk_score history array (time series per CVE) -- still deferred per cycle 56 reasoning (unbounded schema/storage growth risk).",
+        "Any paid/threat-intel enrichment -- violates zero-cost, rejected on principle.",
+        "EPSS percentile histogram -- still deferred per cycle 56/prior reasoning (marginal value, epss_percentile already shown per-card).",
+        "by_first_seen_age histogram/bucket breakdown -- still deferred (lower value, badges/filters already exist per-card)."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T22:21:40Z",
+  "last_cycle_at": "2026-09-10T23:09:42Z",
   "stopped": false
 }
