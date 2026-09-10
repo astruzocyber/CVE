@@ -312,6 +312,7 @@ function renderCard(alert) {
   const isReviewed = reviewedCves.has(alert.cve_id);
   const reviewedBtn = `<button class="review-toggle-btn${isReviewed ? " reviewed" : ""}" type="button" data-cve="${cveIdSafe}" title="${isReviewed ? "Marked reviewed -- click to unmark" : "Mark this alert as reviewed"}" aria-pressed="${isReviewed ? "true" : "false"}">${isReviewed ? "\u2713 Reviewed" : "Mark reviewed"}</button>`;
   const copyMdBtn = `<button class="copy-md-btn" type="button" data-cve="${cveIdSafe}" title="Copy this alert as Markdown for an incident ticket">Copy as Markdown</button>`;
+  const copySuppressBtn = `<button class="copy-suppress-btn" type="button" data-cve="${cveIdSafe}" title="Copy a ready-to-paste config/suppressions.yaml entry for this alert (accepted-risk / false-positive)">Copy suppression YAML</button>`;
   return `
     <div class="card${isReviewed ? " reviewed-card" : ""}" data-cve-id="${cveIdSafe}" id="alert-${cveIdSafe}">
       <div class="card-header">
@@ -357,6 +358,7 @@ function renderCard(alert) {
           ${alert.dependabot_url ? `<a href="${alert.dependabot_url}" target="_blank" rel="noopener">View alert</a>` : ""}
         </span>
         ${copyMdBtn}
+        ${copySuppressBtn}
         ${reviewedBtn}
       </div>
     </div>
@@ -386,6 +388,27 @@ function alertToMarkdown(alert) {
   lines.push(`- **NVD:** https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}`);
   if (alert.dependabot_url) lines.push(`- **Dependabot alert:** ${alert.dependabot_url}`);
   return lines.join("\n");
+}
+
+// config/suppressions.yaml (accepted-risk list, see aggregate.py load_suppressions())
+// has existed since the earliest cycles and is a genuinely powerful pipeline feature --
+// exclude a reviewed-false-positive/accepted-risk CVE from future alert.json output and
+// GitHub Issue creation, with a mandatory reason and an auto-expiring date so it
+// resurfaces for re-review rather than becoming a silent permanent blind spot. But there
+// was zero frontend affordance to actually use it: an analyst who decided "not
+// applicable, we don't run this" had to hand-type the exact YAML schema (cve_id, reason,
+// expires) from memory/docs into the file themselves, a real friction point that likely
+// meant the feature was rarely used despite already being fully wired end-to-end in the
+// pipeline. Generates a ready-to-paste YAML list-item block with the CVE ID pre-filled,
+// a placeholder reason the analyst must edit, and expires defaulted to exactly one year
+// from today (keeps every suppression time-boxed by default, matching the file's own
+// documented convention -- never silently permanent).
+function suppressionSnippet(alert) {
+  const expires = new Date();
+  expires.setFullYear(expires.getFullYear() + 1);
+  const expiresStr = expires.toISOString().slice(0, 10);
+  const reasonPlaceholder = "REPLACE ME: why this does not apply (verified by <name>, <date>)";
+  return `- cve_id: "${alert.cve_id}"\n  reason: "${reasonPlaceholder}"\n  expires: "${expiresStr}"`;
 }
 
 function matchesSource(alert, filter) {
@@ -1030,6 +1053,31 @@ document.getElementById("card-grid").addEventListener("click", (e) => {
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(md).then(showCopied).catch(() => {});
+      }
+    }
+    return;
+  }
+
+  // Copy-suppression-YAML: generates a ready-to-paste config/suppressions.yaml
+  // list-item entry (cve_id, placeholder reason, expires = +1 year) for this alert,
+  // so an analyst who has reviewed and accepted the risk / confirmed a false positive
+  // doesn't have to hand-type the exact YAML schema from memory (see suppressionSnippet
+  // above for the full rationale).
+  const copySuppressBtn = e.target.closest(".copy-suppress-btn");
+  if (copySuppressBtn) {
+    const cve = copySuppressBtn.dataset.cve;
+    const alert = allAlerts.find((a) => a.cve_id === cve);
+    if (alert) {
+      const snippet = suppressionSnippet(alert);
+      const originalText = copySuppressBtn.textContent;
+      const showCopied = () => {
+        copySuppressBtn.textContent = "Copied!";
+        setTimeout(() => {
+          copySuppressBtn.textContent = originalText;
+        }, 1200);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(snippet).then(showCopied).catch(() => {});
       }
     }
     return;
