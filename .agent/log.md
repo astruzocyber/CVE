@@ -1903,3 +1903,35 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 47. `stopped`: false.
+
+## Cycle 48 — 2026-09-10T07:10:00Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 6`: 5 success / 1 failure — the failure (2026-09-10T00:13:41Z) is the pre-cycle-38-fix git-race straggler already documented/resolved in cycles 38-41. No 429/rate-limit signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot in any recent run. State clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add client-side "mark as reviewed" triage state + a "Hide reviewed" filter.
+
+- **Opportunity:** Re-read `docs/app.js`/`docs/index.html`/`.agent/log.md` fresh this cycle. Grepped the full log for `star`/`pin`/`bookmark`/`reviewed`/`dismiss` — zero prior implementation or rejection of any triage-tracking feature. The dashboard has accumulated many filter/sort/badge features (48 cycles) but had zero memory of analyst workflow state: every page reload shows all 532 alerts with no way to mark "already looked at this, nothing more to do here." For a daily-use security triage tool, this is a real, previously-total gap distinct from all prior filter-by-data-attribute features (KEV/severity/source/risk/EPSS) — this is filter-by-analyst-action.
+- **Frontend:** Added `reviewedCves` (a `Set<string>` of CVE IDs, loaded from/persisted to `localStorage['reviewedCves']` as a JSON array, with a try/catch fallback to an empty set on parse failure) and `toggleReviewed()`/`loadReviewedSet()`/`saveReviewedSet()` helpers in `docs/app.js`. `renderCard()` now renders a `.review-toggle-btn` in the card footer (text/aria-pressed/title reflect current state) and adds a `.reviewed-card` class (dimmed via CSS opacity) to reviewed cards. Click-delegation on `#card-grid` handles the toggle: re-renders just that one card in place (preserving scroll position and other open breakdown panels) unless the `#hide-reviewed` filter is active, in which case a full `applyFiltersAndRender()` runs since the card must disappear. Added a `#hide-reviewed` checkbox to the toolbar, wired into `applyFiltersAndRender()`'s filter predicate, `readFiltersFromURL()`/`updateURLFromFilters()` (new `hidereviewed=1` URL param, composing with the existing shareable-filter-state feature from cycle 7), and `reset-filters`. Purely local per-browser state — never touches the shared dataset/schema, never sent to any backend, zero new API calls, zero cost.
+- **Rejected candidates considered this cycle:**
+  - *Extending `nvd_last_modified`/CVSS-vector fields to GHSA/Dependabot* — still correctly deferred (both sources dormant in production, no live field to validate against); nothing has changed.
+  - *Keyboard shortcuts for filter controls* — still marginal value for a click-through triage audience; not revisited.
+  - *CWE trend-over-time in trend.csv* — still correctly deferred per cycle 45's reasoning.
+- **Scoring:** Feasibility 5/5 (pure client-side localStorage + additive DOM/filter logic, zero new API calls/dependencies/schema touch). Validation risk 2/5 (touches `applyFiltersAndRender()`'s filter predicate and `renderCard()`, both load-bearing functions — validated via a full local serve with real production data covering mark/unmark, persistence across reload, filter narrowing, URL round-trip, and reset). Value 4/5 (closes a genuinely new workflow gap for a daily-use triage tool — every one of the 47 prior cycles added data/filter/display features but none gave the analyst a way to track their own progress through the alert list).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK.
+- `git diff --stat` confirmed only `docs/app.js`/`docs/index.html`/`docs/style.css` touched — no `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle needed.
+- Served `docs/` on a local scratch HTTP port (8990, background process) with real production data (532 alerts). Browser-tool checks: clicking "Mark reviewed" on a card correctly set `reviewedCves`/localStorage and applied the `.reviewed-card` dimmed style; a fresh page navigation confirmed the reviewed state persisted (loaded from localStorage on init); checking "Hide reviewed" correctly narrowed `532 of 532` → `531 of 532` and removed that exact card from the DOM, setting `?hidereviewed=1` in the URL; a fresh navigation to `?hidereviewed=1` correctly restored the checkbox and re-filtered on load; `reset-filters` correctly unchecked it and cleared the URL param back to `532 of 532`; existing search filter (`wordpress` → `137 of 532`, debounce-respecting) showed zero regression. Cleared test `localStorage` state and killed the scratch server before committing.
+
+**Deploy (Step 5):**
+- Committed `c4ef207` (`docs/app.js`, `docs/index.html`, `docs/style.css`) and pushed to `main` via the standard pull-rebase-then-push loop. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~40s for Pages deployment, then cache-busted `curl` confirmed `review-toggle-btn`/`hide-reviewed`/`reviewedCves` present in the live `app.js` (15 occurrences) and `hide-reviewed` present in the live `index.html` (3 occurrences).
+- Live-verified via browser tool on the production dashboard (fresh navigation, cache-busted URL): `532 of 532 alerts`, `#hide-reviewed` checkbox and `.review-toggle-btn` both present and functional — zero regression to any of the 47 prior features.
+
+**Rejected this cycle:** None new beyond the still-deferred carried-forward items (GHSA/Dependabot field-parity extensions, keyboard shortcuts, CWE-trend-over-time) — the mark-as-reviewed candidate cleared the bar on first pass.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 6 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 48. `stopped`: false.

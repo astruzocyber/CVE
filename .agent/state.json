@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 47,
+  "total_cycles": 48,
   "implemented": [
     {
       "cycle": 1,
@@ -331,9 +331,16 @@
       "title": "Add minimum EPSS probability filter to dashboard",
       "description": "Composite risk_score has had a min-risk threshold filter since cycle 42, but EPSS (raw exploitation-probability, independent of CVSS severity) had no direct threshold filter -- only sortable/shown per-card. Added a #min-epss number input (0-100%, compared against the stored 0-1 epss_score) mirroring the existing min-risk input exactly: same 150ms debounce, same URL query-param persistence (minepss=), same reset-filters clearing. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost. Validated: node --check passed; served docs/ locally with real production data (532 alerts), confirmed minepss=30 -> 3/532 (cross-checked against standalone Python computation), URL round-trip on fresh navigation, reset-filters clearing, and zero regression to search/min-risk filters. Deployed frontend-only (no workflow_dispatch needed); live-verified via cache-busted curl (min-epss present in deployed app.js/index.html).",
       "commit_sha": "c15067e"
+    },
+    {
+      "cycle": 48,
+      "timestamp": "2026-09-10T07:10:00Z",
+      "title": "Client-side 'mark as reviewed' triage state + hide-reviewed filter",
+      "description": "Every alert card gets a local-only 'Mark reviewed' toggle button (localStorage Set of CVE IDs, per-browser, never synced/sent anywhere); reviewed cards get a dimmed .reviewed-card style. Added a 'Hide reviewed' toolbar checkbox that filters them out, composing with the existing URL-query-param sharing (hidereviewed=1) and reset-filters. Fills a real, previously-total gap: on every reload the board showed all 532 alerts with zero memory of which an analyst had already triaged, forcing re-scanning of already-handled entries every session. Zero new API calls, zero backend/schema changes, zero cost.",
+      "commit_sha": "c4ef207"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T06:35:00Z",
+  "last_cycle_at": "2026-09-10T07:10:00Z",
   "stopped": false
 }
