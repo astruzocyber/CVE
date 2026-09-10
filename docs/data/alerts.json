@@ -1,5 +1,54 @@
 [
   {
+    "cve_id": "CVE-2026-18351",
+    "description": "The Drag and Drop File Upload for Elementor Forms plugin for WordPress is vulnerable to Arbitrary File Upload in all versions up to, and including, 1.6.0 via the elementor_file_upload function. This is due to insufficient file type validation in the is_file_type_valid() function, which uses the attacker-controlled 'type' parameter as regex keys in the MIME allowlist, allowing blacklist bypass via a crafted extension that sanitize_file_name() later normalizes to a PHP extension. This makes it possible for unauthenticated attackers to upload files that may be executable, which makes remote code execution possible.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-10T02:16:34.180",
+    "nvd_last_modified": "2026-09-10T02:16:34.180",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T04:12:18.468246+00:00"
+  },
+  {
     "cve_id": "CVE-2026-63421",
     "description": "Keystone is a content management system for Node.js. Prior to 6.5.3, the findMany resolver in packages/core/src/lib/core/queries/resolvers.ts compares the signed take argument directly with graphql.maxTake, allowing a remote unauthenticated GraphQL client to provide a negative take value whose magnitude exceeds the configured bound. The bypass also applies to relationship queries and can return more records than the developer intended, potentially exhausting service resources. This issue is fixed in version 6.5.3.",
     "cvss_score": 7.5,
