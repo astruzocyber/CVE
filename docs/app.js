@@ -329,6 +329,7 @@ function readFiltersFromURL() {
   const sourceEl = document.getElementById("source-filter");
   const sortEl = document.getElementById("sort-by");
   const minRiskEl = document.getElementById("min-risk");
+  const minEpssEl = document.getElementById("min-epss");
   if (params.has("q")) searchEl.value = params.get("q");
   // Setting .value to an option that doesn't exist on a <select> is a no-op
   // in every browser, so an unrecognized/stale param value safely falls back
@@ -343,9 +344,13 @@ function readFiltersFromURL() {
     const n = Number(params.get("minrisk"));
     if (Number.isFinite(n)) minRiskEl.value = n;
   }
+  if (params.has("minepss") && minEpssEl) {
+    const n = Number(params.get("minepss"));
+    if (Number.isFinite(n)) minEpssEl.value = n;
+  }
 }
 
-function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk) {
+function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss) {
   const params = new URLSearchParams();
   if (search) params.set("q", search);
   if (kevFilter && kevFilter !== "all") params.set("kev", kevFilter);
@@ -353,6 +358,7 @@ function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, s
   if (sourceFilter && sourceFilter !== "all") params.set("source", sourceFilter);
   if (sortBy && sortBy !== "risk_score") params.set("sort", sortBy);
   if (typeof minRisk === "number" && !Number.isNaN(minRisk)) params.set("minrisk", String(minRisk));
+  if (typeof minEpss === "number" && !Number.isNaN(minEpss)) params.set("minepss", String(minEpss));
   const qs = params.toString();
   const newUrl = location.pathname + (qs ? "?" + qs : "") + location.hash;
   history.replaceState(null, "", newUrl);
@@ -366,7 +372,9 @@ function applyFiltersAndRender() {
   const sortBy = document.getElementById("sort-by").value;
   const minRiskRaw = document.getElementById("min-risk").value;
   const minRisk = minRiskRaw === "" ? null : Number(minRiskRaw);
-  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk);
+  const minEpssRaw = document.getElementById("min-epss").value;
+  const minEpss = minEpssRaw === "" ? null : Number(minEpssRaw);
+  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss);
 
   let filtered = allAlerts.filter((a) => {
     if (kevFilter === "kev" && !a.kev) return false;
@@ -381,6 +389,10 @@ function applyFiltersAndRender() {
     if (!matchesSource(a, sourceFilter)) return false;
     if (typeof minRisk === "number" && !Number.isNaN(minRisk)) {
       if (typeof a.risk_score !== "number" || a.risk_score < minRisk) return false;
+    }
+    if (typeof minEpss === "number" && !Number.isNaN(minEpss)) {
+      // epss_score is stored as a 0-1 probability; the input is a 0-100 percentage.
+      if (typeof a.epss_score !== "number" || a.epss_score * 100 < minEpss) return false;
     }
     if (dependencyPackageNames && !alertMatchesPackages(a, dependencyPackageNames)) return false;
     if (search) {
@@ -870,6 +882,11 @@ document.getElementById("min-risk").addEventListener("input", () => {
   clearTimeout(minRiskDebounceTimer);
   minRiskDebounceTimer = setTimeout(applyFiltersAndRender, 150);
 });
+let minEpssDebounceTimer = null;
+document.getElementById("min-epss").addEventListener("input", () => {
+  clearTimeout(minEpssDebounceTimer);
+  minEpssDebounceTimer = setTimeout(applyFiltersAndRender, 150);
+});
 document.getElementById("export-csv").addEventListener("click", exportCsv);
 document.getElementById("export-json").addEventListener("click", exportJson);
 document.getElementById("print-view").addEventListener("click", () => window.print());
@@ -906,6 +923,7 @@ document.getElementById("reset-filters").addEventListener("click", () => {
   document.getElementById("source-filter").value = "all";
   document.getElementById("sort-by").value = "risk_score";
   document.getElementById("min-risk").value = "";
+  document.getElementById("min-epss").value = "";
   dependencyPackageNames = null;
   const depText = document.getElementById("dep-text-input");
   const depFile = document.getElementById("dep-file-input");
