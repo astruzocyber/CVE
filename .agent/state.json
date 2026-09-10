@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 39,
+  "total_cycles": 40,
   "implemented": [
     {
       "cycle": 1,
@@ -275,9 +275,16 @@
       "title": "Add 'Sort: Published date (newest first)' option to dashboard",
       "description": "The existing sort dropdown had two ingestion-time-based options (first_seen newest/oldest) but no way to sort by the actual vendor/NVD publish date -- a distinct question from ingestion time, since first_seen (set once when the pipeline first ingested a CVE) can differ from published by years for older CVEs that only start matching the watchlist later (e.g. an old CVE newly added to CISA KEV). Added a 'published' option to the existing #sort-by <select> in docs/index.html and matching sort-comparator logic in applyFiltersAndRender() in docs/app.js, reusing the existing string-localeCompare pattern already used for kev_due_date/first_seen sorts; missing published values sort to the end (not treated as newest), avoiding the classic empty-string-sorts-first bug. Pure additive frontend change reading the already-existing published field (populated on all 527 currently-tracked alerts): zero new API calls, zero backend/schema changes, zero cost. Validated: node --check passed; served docs/ on a scratch local port with real production data (527 alerts), confirmed the new option renders and correctly reorders cards by published date descending, confirmed existing search filter (wordpress: 527->133->527 on clear, respecting the documented debounce) unaffected. Live-verified: pushed (frontend-only, no workflow dispatch needed), curled app.js/index.html (200 OK, new sortBy==='published' logic and 'Published date' option text both present), loaded the live dashboard fresh and confirmed the new option appears in the live #sort-by dropdown with 527/527 alerts loaded -- zero regression.",
       "commit_sha": "473cb44"
+    },
+    {
+      "cycle": 40,
+      "timestamp": "2026-09-10T02:15:00Z",
+      "title": "Extract and surface NVD record revision date (nvd_last_modified)",
+      "description": "NVD's lastModified field is present in every response already fetched for the lookback-window query (it's the field the query itself filters on) but was never propagated into the schema. Added nvd_last_modified to the NVD candidate parser in fetch_nvd_candidates() and build_final_entry() in scripts/aggregate.py, rendered as a 'Revised: <date>' badge on alert cards in docs/app.js only when it differs from the publication date (avoiding redundant noise for the common no-post-publication-edit case), and added as a new CSV export column. NVD-only for now (mirrors cycle 30's cvss_vector_components precedent -- GHSA/Dependabot expose this under different field names/semantics and are currently dormant in production). Zero new API calls, zero new dependencies. Validated: node --check and py_compile passed; ran the real aggregator against live production APIs (backgrounded dry-run, reverted local data-file diffs before commit per cycle-23 precedent), confirmed 361/527 alerts got the new field with zero schema breakage; served docs/ locally with real production data confirming correct badge rendering and zero regression to search/filter/stats. Deployed via commit d83a54c + a verification workflow_dispatch run (34428218711, success) since this touches the backend schema; live-verified via curl (286/527 alerts carrying nvd_last_modified) and a fresh browser load of the live dashboard (527/527 alerts, 195 rendered badges, zero regression to stats bar/trend chart/severity pills).",
+      "commit_sha": "d83a54c"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T01:20:00Z",
+  "last_cycle_at": "2026-09-10T02:15:00Z",
   "stopped": false
 }
