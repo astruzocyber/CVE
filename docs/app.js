@@ -1203,6 +1203,32 @@ document.getElementById("export-csv").addEventListener("click", exportCsv);
 document.getElementById("export-json").addEventListener("click", exportJson);
 document.getElementById("export-md-report").addEventListener("click", exportMarkdownReport);
 document.getElementById("print-view").addEventListener("click", () => window.print());
+// Bulk "mark filtered as reviewed": complements the existing per-card
+// review-toggle-btn (cycle 48) -- marking hundreds of individually-matched
+// alerts (e.g. everything that just matched a search/filter combo the
+// analyst has already triaged as a batch) one click at a time was the only
+// option until now. Operates on window.__lastFiltered (the same
+// currently-visible set backing Export CSV/JSON/Markdown report), so it
+// only ever marks what's on screen -- never the full untouched dataset --
+// and reuses the already-validated reviewedCves Set/localStorage plumbing
+// from cycle 48 unchanged.
+const markFilteredReviewedBtn = document.getElementById("mark-filtered-reviewed");
+if (markFilteredReviewedBtn) {
+  markFilteredReviewedBtn.addEventListener("click", () => {
+    const rows = window.__lastFiltered || allAlerts;
+    if (!rows.length) return;
+    let added = 0;
+    for (const a of rows) {
+      if (!reviewedCves.has(a.cve_id)) {
+        reviewedCves.add(a.cve_id);
+        added++;
+      }
+    }
+    if (added > 0) saveReviewedSet();
+    applyFiltersAndRender();
+    renderReviewedProgress();
+  });
+}
 const exportReviewedBtn = document.getElementById("export-reviewed");
 if (exportReviewedBtn) exportReviewedBtn.addEventListener("click", exportReviewedState);
 const importReviewedInput = document.getElementById("import-reviewed-input");
