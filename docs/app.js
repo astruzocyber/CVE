@@ -865,9 +865,32 @@ function renderSourceBreakdown(bySource) {
     return;
   }
   const entries = Object.entries(bySource).sort((a, b) => b[1] - a[1]);
+  // Cycle 66: the severity/CWE/vendor breakdown pills (cycles 33/45/58) were all
+  // made clickable one-click drill-down filters, but this source-breakdown pill
+  // row (cycle 15) was left as plain inert <span> text -- the only breakdown row
+  // on the dashboard that doesn't match the "click a pill to filter" pattern
+  // every other stats-bar breakdown uses. Only render a pill as a filter button
+  // if its key corresponds to an actual <option> in #source-filter (nvd/ghsa/
+  // dependabot); any other/future source key still renders as inert text so an
+  // unrecognized value never produces a dead/no-op button.
+  const filterableSources = new Set(["nvd", "ghsa", "dependabot"]);
   el.innerHTML = entries
-    .map(([src, count]) => `<span class="source-pill">${escapeHtml(src)}: <strong>${escapeHtml(String(count))}</strong></span>`)
+    .map(([src, count]) => {
+      const label = `${escapeHtml(src)}: <strong>${escapeHtml(String(count))}</strong>`;
+      if (filterableSources.has(src)) {
+        return `<button type="button" class="source-pill" data-source="${escapeHtml(src)}" title="Filter by source: ${escapeHtml(src)}">${label}</button>`;
+      }
+      return `<span class="source-pill">${label}</span>`;
+    })
     .join("");
+  el.querySelectorAll("button.source-pill").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const sourceEl = document.getElementById("source-filter");
+      if (!sourceEl) return;
+      sourceEl.value = btn.getAttribute("data-source");
+      applyFiltersAndRender();
+    });
+  });
   el.hidden = false;
 }
 

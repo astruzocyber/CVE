@@ -133,6 +133,21 @@ header h1 {
   color: var(--text);
 }
 
+/* Cycle 66: clickable source pills (button.source-pill) get the same hover/
+   cursor affordance as the other breakdown pills (severity/cwe/vendor); the
+   plain <span class="source-pill"> fallback for unrecognized source keys is
+   untouched by this rule and stays visually inert (no cursor/font change). */
+button.source-pill {
+  cursor: pointer;
+  font: inherit;
+  transition: filter 0.15s ease;
+}
+
+button.source-pill:hover,
+button.source-pill:focus-visible {
+  filter: brightness(1.25);
+}
+
 .severity-breakdown {
   display: flex;
   flex-wrap: wrap;
