@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 56,
+  "total_cycles": 57,
   "implemented": [
     {
       "cycle": 1,
@@ -399,9 +399,16 @@
         "Historical risk_score time-series (full array per CVE, not just prev) -- higher value for trend charts but meaningfully higher risk (schema growth, storage growth unbounded over time, more validate_data.py surface) for one cycle; risk_score_prev (single last-value delta) is the low-risk stepping stone, revisit full history later.",
         "New free data source integration (e.g. GitHub Security Advisories GraphQL beyond current Dependabot alerts) -- deferred, larger scope/higher validation risk than fits a single cycle; good candidate for a future cycle."
       ]
+    },
+    {
+      "cycle": 57,
+      "timestamp": "2026-09-10T12:40:17Z",
+      "title": "Keyboard shortcuts (/, Esc, r, t) for search focus/blur/reset/theme",
+      "description": "Carried-forward candidate from cycle 56 (deferred as lower-priority than risk-delta). No keydown listeners existed anywhere in app.js. Added a single document-level keydown handler: / focuses the search box, Escape blurs any focused input, r triggers the existing reset-filters click handler, t triggers the existing theme-toggle click handler. Guards against firing while typing in any INPUT/TEXTAREA/contenteditable (checked via e.target, not focus state) and ignores Ctrl/Cmd/Alt-held combos. Pure additive: reuses already-validated reset-filters/theme-toggle logic as the actual action, the shortcut is just a new trigger path. Added title-attr shortcut hints on Reset filters/theme-toggle buttons plus a small kbd-hint tooltip span for discoverability.",
+      "commit_sha": "439686d"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T12:00:22Z",
+  "last_cycle_at": "2026-09-10T12:40:17Z",
   "stopped": false
 }

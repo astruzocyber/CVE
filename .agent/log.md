@@ -2191,3 +2191,36 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **consecutive_failed_cycles: 0** (no failure this cycle).
 
 Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + Risk increase sort + badge" (pushed to main, no rebase conflicts).
+
+## Cycle 57 — 2026-09-10T12:40:17Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh:** `git log` HEAD was `63f972b` (auto data commit on top of cycle 56's `029d4ce`), `git status` clean, matched `origin/main`. `gh run list`: `ci.yml` last 3 runs all `success`; `cve-alerts.yml` last run (34475506130, scheduled 12:13:22Z) `success`, 47s, no 429/throttle signals in the log (checked `gh run view --log` for GHSA/Dependabot/EPSS/KEV lines — Dependabot candidates: 0 as expected for this repo's own security tab, EPSS queried 978 CVEs cleanly). `.agent/state.json`: total_cycles=56, both counters 0, stopped=false — clean baseline.
+
+**Candidates considered:**
+1. **Keyboard shortcuts (/, Esc, r, t)** — carried forward from cycle 56's rejected-alternatives list ("real usability value but pure UI polish... deferred in favor of risk-delta"). Re-scored this cycle: feasibility 5/5 (zero new deps, one `keydown` listener), risk 1/5 (reuses existing, already-validated `reset-filters`/`theme-toggle` click handlers as the actual action — the shortcut is just an alternate trigger path, cannot introduce new logic bugs in those actions themselves), value 3/5 (genuine analyst-facing friction reduction for a tool whose stated use case is triaging hundreds of alerts in a sitting; not data/reliability-tier but a real UX gap with zero prior coverage — no keydown listener existed anywhere in `app.js` before this). **CHOSEN** — highest value/risk ratio among available candidates this cycle; no reliability/data-pipeline gaps found on fresh review of `aggregate.py`/workflows that would outrank it.
+2. GHSA/Dependabot coverage expansion (populate `ghsa_packages`/additional `dependabot_repos` in `watchlist.yaml`) — still 532/532 alerts 100% NVD-sourced, `ghsa_packages: []` unchanged since original setup. Rejected again this cycle: requires user-specific knowledge of what packages/repos are actually relevant to the org (GFR Media per watchlist comments) that this agent cannot infer safely — populating it with guessed package names risks either noise (irrelevant packages) or false confidence (appears to add coverage but doesn't match anything real). Flagged as a standing candidate that needs human input on actual tech stack, not a reject-on-principle item.
+3. Full risk_score history array (time series) — still deferred per cycle 56's reasoning (schema/storage growth risk); `risk_score_prev` single-value delta from cycle 56 remains the shipped stepping stone.
+4. New free data source (OSV.dev) — still deferred as its own dedicated-cycle scope per cycle 56 reasoning; not reconsidered further this cycle since candidate 1 cleared the bar with lower risk.
+
+**Implemented (candidate 1):** See `.agent/state.json` cycle 57 entry for full description. Files touched: `docs/app.js` (new `keydown` listener, +35 lines), `docs/index.html` (title-attr hints + `.kbd-hint` span, +2/-2 lines), `docs/style.css` (`.kbd-hint` rule, +8 lines). No `aggregate.py`/schema/workflow changes.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js`: OK.
+- `python3 scripts/validate_data.py`: PASSED (532 alerts, 42/42 `getElementById` id references resolve — new `kbd-hint` span has no JS-side id lookup, doesn't add to that count, correctly so).
+- `python3 -m unittest discover -s scripts -p "test_*.py"`: 30/30 passed (unchanged — this cycle touched no Python).
+- Live in-browser smoke test (local `http.server` on real production `docs/data/*`, 532 alerts) via the browser-automation tool, dispatching real synthetic `KeyboardEvent`s:
+  - `/` while unfocused → search box gains focus. Confirmed.
+  - typed "wordpress" into search → 137/532 results, then `r` → search cleared, count back to 532/532. Confirmed `reset-filters` reuse works via keyboard.
+  - `t` → `data-theme` flipped `dark` → `light`. Confirmed `theme-toggle` reuse works via keyboard.
+  - **Typing guard correctness check:** focused the search input, typed the literal character "r" into it, then dispatched a `keydown{key:"r"}` targeted at the search input itself (not `document.body`) — value stayed `"r"` (not reset), confirming the `isTyping` guard correctly suppresses the shortcut while an analyst is actively typing a query containing "r".
+- `git diff --cached --stat` confirmed only the 3 intended frontend files touched, zero `docs/data/*`/`aggregate.py`/workflow changes — no data pipeline dry-run needed.
+
+**Deploy:** Committed `439686d`, pushed to `main` (clean fast-forward). Live CI run `34478032610` (`ci.yml`) → `success`, 14s. `pages-build-deployment` run `34478031821` → `success`, 53s. Live-verified via cache-busted `curl`: both `https://astruzocyber.github.io/CVE/app.js` and the root `index.html` contain `kbd-hint`/`Keyboard shortcuts` post-deploy — change is live in production.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on actual tech stack — flagged, not a hard reject), full risk-score history array (deferred, schema-growth risk), OSV.dev integration (deferred, own-cycle scope). None violate zero-cost; all deferred on risk/scope grounds per standard practice, not novelty grounds.
+
+**Rate-limit status:** No 429/throttle signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot this cycle. Zero new external API calls introduced (pure frontend change, no network calls beyond the existing `data/*.json` static fetches already in place).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 57. `stopped`: false.
