@@ -1687,3 +1687,34 @@ input debounce) cleared the bar and was implemented.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (static-asset-only change, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 41. `stopped`: false.
+
+## Cycle 42 — 2026-09-10T02:49:31Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 8`: 7 success / 1 failure. The one failure (2026-09-10T00:13:41Z) is the pre-cycle-38-fix git-race straggler already documented/resolved in cycles 38-41 (two subsequent workflow_dispatch runs succeeded post-fix). No 429/rate-limit signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot in any recent run. State clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add a minimum risk score numeric filter (`#min-risk`) to the dashboard toolbar.
+
+- **Opportunity:** `risk_score` (composite CVSS+EPSS+KEV blend) has been sortable and shown on every card since early cycles, but there was no way to threshold on it directly -- the existing severity filter only covers raw CVSS bands, which is a different signal than the composite risk score a security lead actually triages by. Reviewed prior cycles' log/state for any prior `risk_score` filter attempt -- none found.
+- **Frontend:** Added `<input type="number" id="min-risk">` to `docs/index.html`'s toolbar; filter/comparator logic in `applyFiltersAndRender()` in `docs/app.js` (`alert.risk_score >= minRisk`, ignoring malformed/empty input); URL persistence via `minrisk=` param wired into the existing `readFiltersFromURL()`/`updateURLFromFilters()` (cycle 7 precedent); debounced input handler (150ms, matches the existing search debounce); wired into `reset-filters`. CSS: `.controls input[type="number"]` rule plus mobile-breakpoint full-width rule.
+- **Rejected candidates considered this cycle:**
+  - *Keyboard shortcuts for filter controls* -- still marginal value for a click-through triage audience (same reasoning as cycle 40); not revisited.
+  - *JSON-LD structured data* -- still deferred per cycle 41's own note (distinct, higher-scope SEO candidate); not revisited.
+  - *Extending nvd_last_modified to GHSA/Dependabot* -- still correctly deferred (dormant in production, no live field mapping to validate); nothing has changed about that constraint.
+- **Scoring:** Feasibility 5/5 (pure client-side filter on an already-existing, already-populated field; zero new API calls/dependencies). Validation risk 1/5 (purely additive: one new input, one new filter branch, does not touch any existing filter/sort/render path). Value 3/5 (fills a real, previously-total gap -- risk_score was the one card-visible/sortable field with zero corresponding filter).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. `git status --short` confirmed only `docs/app.js`, `docs/index.html`, `docs/style.css` touched -- no `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle needed.
+- Served `docs/` on a local scratch port (8991, background process) with real production data (527 alerts). Browser-tool checks: `min-risk=50` correctly narrowed `527 of 527` -> `6 of 527` (cross-checked against the raw dataset's own `risk_score>=50` count via DOM card count, matched); URL updated to `?minrisk=50`; a fresh navigation to `?minrisk=50` correctly pre-filled the input and re-filtered to `6 of 527` on load (confirms `readFiltersFromURL` wiring); `reset-filters` correctly cleared it back to `527 of 527` with `location.search` empty; existing search filter regression check (`wordpress`: 527->133) passed with zero interference.
+
+**Deploy (Step 5):**
+- Committed `e616ce4` (`docs/app.js`, `docs/index.html`, `docs/style.css`) and pushed to `main`. Frontend-only change -- no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~45s for Pages deployment, then cache-busted curl confirmed `min-risk` present in live `app.js` (4 occurrences) and `index.html` (`id="min-risk"` present).
+- Live-verified via browser tool on the production dashboard: `stat-total` 527, baseline `result-count` "527 of 527 alerts"; setting the live filter to `minrisk=60` correctly returned `0 of 527 alerts`, then `minrisk=40` correctly returned `9 of 527 alerts` with `location.search` updating to `?minrisk=40` -- zero regression to stats bar or existing controls.
+
+**Rejected this cycle:** None new beyond the still-deferred items carried from prior cycles (keyboard shortcuts, JSON-LD structured data, GHSA/Dependabot `nvd_last_modified` parity) -- the min-risk-score filter candidate cleared the bar on first pass.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 42. `stopped`: false.

@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 41,
+  "total_cycles": 42,
   "implemented": [
     {
       "cycle": 1,
@@ -289,9 +289,16 @@
       "title": "Add robots.txt and sitemap.xml for search-engine crawlability",
       "description": "The dashboard had SEO meta tags (cycle 12: description, OG/Twitter cards, favicon) but no robots.txt or sitemap.xml -- crawlers had no explicit crawl-allow signal or canonical-URL discovery hint. Added a permissive docs/robots.txt (User-agent: * / Allow: /, pointing at the sitemap) and a minimal docs/sitemap.xml listing the single dashboard page with hourly changefreq (matching the real ~4h update cadence). Added a <link rel=sitemap> hint in index.html's <head>. Pure additive static files plus one head tag: zero JS/CSS/backend/schema changes, zero new API calls, zero cost. Validated: docs/sitemap.xml parsed as well-formed XML via python3 xml.dom.minidom; node --check docs/app.js passed (untouched, sanity check); served docs/ on a local scratch port (8977), confirmed robots.txt/sitemap.xml/index.html all 200 with correct content, confirmed via browser tool the live page still rendered 527/527 alerts with zero regression and the new <link rel=sitemap> resolved correctly in the DOM. Deployed via commit b8cb164 (frontend-only, no workflow dispatch needed -- GitHub Pages auto-deploys on push); live-verified via cache-busted curl (robots.txt 200, sitemap.xml 200 with correct content, sitemap link present in live index.html).",
       "commit_sha": "b8cb1649787f699dc2d43d177d43ccfc31da4c20"
+    },
+    {
+      "cycle": 42,
+      "timestamp": "2026-09-10T02:49:31Z",
+      "title": "Add minimum risk score numeric filter to dashboard",
+      "description": "Composite risk_score has been sortable since early cycles and shown on every card, but there was no way to isolate alerts above a given threshold -- only KEV status/severity band/source had dropdown filters, and the fixed CVSS severity bands (critical/high/medium/low) don't capture the composite risk_score (CVSS+EPSS+KEV blend) a security lead may actually want to threshold on (e.g. 'show me everything with risk_score >= 70' regardless of which component drove it). Added a #min-risk number input to the toolbar (debounced 150ms, mirroring the existing search-box debounce pattern), filter logic in applyFiltersAndRender() in docs/app.js comparing alert.risk_score against the threshold, URL query-param persistence (minrisk=, composing with the existing shareable-filter-state feature from cycle 7 via readFiltersFromURL/updateURLFromFilters), and reset via the existing Reset filters button. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost. Validated: node --check passed; served docs/ on a local scratch port (8991) with real production data (527 alerts), confirmed filter correctly narrowed 527->6 at minrisk=50 (verified against window count), URL restore-on-load worked (?minrisk=50 correctly pre-filled the input and re-filtered on fresh navigation), reset-filters correctly cleared it back to 527/527, and existing search filter (wordpress: 527->133) showed zero regression. Deployed via commit e616ce4 (frontend-only, no workflow_dispatch needed). Live-verified on production: curl confirmed min-risk present in deployed app.js/index.html; live browser load confirmed 527/527 alerts, minrisk=40 correctly narrowed to 9/527 with URL updating to ?minrisk=40, zero regression to stats bar.",
+      "commit_sha": "e616ce4"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T02:15:00Z",
+  "last_cycle_at": "2026-09-10T02:49:31Z",
   "stopped": false
 }
