@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 70,
+  "total_cycles": 71,
   "implemented": [
     {
       "cycle": 1,
@@ -507,9 +507,22 @@
       "title": "Add kev_due_soon_count stat (forward-looking KEV remediation workload)",
       "description": "Added compute_stats() field kev_due_soon_count tracking CISA KEV entries due within the next 7 days but not yet overdue (distinct from kev_overdue_count). Added trailing trend.csv column with schema self-heal, a new 'KEV due soon (<=7d)' dashboard stat tile next to the KEV overdue tile, and a new hidden-by-default trend chart dataset. Closes a gap where the frontend had a per-card DUE SOON badge and due-soon filter since cycles 16/17 but no aggregate count existed anywhere for at-a-glance visibility.",
       "commit_sha": "659dc630d19b8e9c71b1c2e3800cc41c0187a084"
+    },
+    {
+      "cycle": 71,
+      "timestamp": "2026-09-10T22:21:40Z",
+      "title": "Add by_matched_keyword breakdown (top watchlist term pills)",
+      "description": "compute_stats() now tracks by_matched_keyword: counts of the config/watchlist.yaml term(s) (matched_keywords field, already extracted every run and already shown as a per-card 'Watchlist match' badge since an early cycle and searchable) that caused each CVE to surface, sorted descending and capped to the top 10 -- mirroring the existing by_cwe/by_vendor_product pattern exactly. Renders as a new .keyword-breakdown pill row in docs/index.html (green-accent .keyword-pill in docs/style.css, matching cwe-pill/vendor-pill hover/focus conventions) via a new renderKeywordBreakdown() in docs/app.js, wired into loadStats() right after renderVendorBreakdown(). Clicking a pill sets the search box to that keyword and re-applies filters, reusing the existing matched_keywords-aware search haystack -- same click-to-filter UX as severity/source/CWE/vendor pills. This is a distinct triage axis from severity/source/CWE/vendor: 'which of OUR configured watch terms are driving current alert volume' (e.g. a spike in 'wordpress' vs 'wp plugin' points at a different remediation surface even within the same vendor/product). Added 2 new compute_stats unit tests (count/sort/cap-10 behavior, empty-match behavior) -- 73 tests total, up from 71 (70 + cycle 69's 2 avg_cvss tests + cycle 70 had none). Zero new API calls -- built entirely from matched_keywords, already collected each run. Validated: py_compile + node --check OK; 73/73 unit tests passed; live end-to-end aggregate.py run against real NVD/CISA KEV/FIRST.org EPSS APIs in an isolated /tmp clone (no secrets needed -- NVD_API_KEY/GH_DEPENDABOT_TOKEN both optional per module docstring; 595 alerts, by_matched_keyword={'wordpress': 145, 'wp plugin': 30, 'content management system': 12, 'wp-content': 3, 'cloudflare': 2}, no rate-limit signals); validate_data.py PASSED against the regenerated real data (both in the /tmp isolation and after copying results into the repo); local browser smoke test via python3 -m http.server confirmed the new pill row renders correctly below the vendor breakdown and clicking a pill (tested 'cloudflare') correctly populates the search box -- zero regression to existing stats bar, CWE/vendor pills, or trend chart. Live-verified via cache-busted curl: data/stats.json contains by_matched_keyword with the expected values, app.js and index.html both contain the new keyword-breakdown code/markup.",
+      "commit_sha": "b6d6b14",
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack (repeatedly flagged cycles 56-70).",
+        "Full risk_score history array (time series per CVE) -- still deferred per cycle 56 reasoning (unbounded schema/storage growth risk).",
+        "Any paid/threat-intel enrichment -- violates zero-cost, rejected on principle.",
+        "by_first_seen_age histogram/bucket breakdown -- lower value than keyword breakdown since first_seen age badges/filters already exist per-card since an earlier cycle; deferred, not rejected outright, may revisit."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T21:36:23.021597+00:00",
+  "last_cycle_at": "2026-09-10T22:21:40Z",
   "stopped": false
 }

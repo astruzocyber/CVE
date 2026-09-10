@@ -2691,3 +2691,40 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS APIs. RATE_LIMIT_EVENT: no.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 70. `stopped`: false.
+
+## Cycle 71 — 2026-09-10T22:21:40Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh (not from stale summary):** `git status` clean, HEAD matched `origin/main` at `aa5a117` (cycle 70's log/state commit) before starting. `gh run list`: last several `CI Data & Frontend Validation`/`pages-build-deployment` runs all `success`, no 429/throttle signals. `.agent/state.json`: `total_cycles`=70, both counters 0, `stopped`=false — matches task brief. `docs/data/alerts.json` at 595 alerts pre-cycle (matched brief). Reviewed all 70 prior `implemented` entries in `.agent/state.json` and the full `.agent/log.md` history to avoid duplicating shipped/rejected ideas. Confirmed via grep that `by_matched_keyword`/`keyword-breakdown`/watchlist-keyword breakdown was never previously implemented (0 matches across log/state), despite `matched_keywords` already being extracted per-alert and shown as a per-card badge since an early cycle.
+
+**Candidates considered:**
+1. **Add `by_matched_keyword` breakdown to `compute_stats()`/`stats.json`/dashboard** — feasibility 5/5 (mirrors the existing `by_cwe`/`by_vendor_product` top-10 dict-count-sort-slice pattern almost line-for-line, built entirely from the already-extracted `matched_keywords` field, zero new API calls/dependencies); risk 1/5 (purely additive field + a new hidden-by-default-safe pill row using the same click-to-search wiring already proven safe by the CWE/vendor/source pill precedents); value 4/5 (closes a real, distinct triage-axis gap: "which of OUR configured watch terms are driving current alert volume" — e.g. a spike in "wordpress" vs "wp plugin" points at a different remediation surface even within the same vendor/product — previously only visible per-card, never aggregated). **CHOSEN.**
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack; carried forward unimplemented per cycles 56-70 reasoning, not something this agent can safely guess.
+3. Full risk_score history array (time series per CVE) — still deferred per cycle 56 reasoning (unbounded schema/storage growth risk).
+4. by_first_seen_age histogram/bucket breakdown — lower value since first_seen age badges/filters already exist per-card since an earlier cycle; deferred for a future cycle, not rejected outright.
+5. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented (candidate 1):**
+- `scripts/aggregate.py`: `compute_stats()` gained a `by_matched_keyword` accumulator dict, populated in the existing per-alert loop from `a.get("matched_keywords") or []` (same empty-list-safe pattern as `cwe_ids`/`affected`). Returned as `dict(sorted(..., key=lambda kv: kv[1], reverse=True)[:10])` — identical top-10 cap convention as `by_cwe`/`by_vendor_product`.
+- `docs/index.html`: new `<div class="keyword-breakdown" id="keyword-breakdown" hidden>` directly after the existing `vendor-breakdown` div.
+- `docs/style.css`: added `.keyword-breakdown`/`.keyword-pill` rules (green accent via `var(--green, var(--accent))`), matching the `.cwe-pill`/`.vendor-pill` layout/hover/focus conventions exactly.
+- `docs/app.js`: new `renderKeywordBreakdown()` function (mirrors `renderVendorBreakdown()`), wired into `loadStats()` right after `renderVendorBreakdown(stats.by_vendor_product)`. Clicking a pill sets `#search` to that keyword and calls `applyFiltersAndRender()`, reusing the existing `matched_keywords`-aware search haystack.
+- `scripts/test_aggregate.py`: added `test_by_matched_keyword_counts_and_caps_top_10` and `test_by_matched_keyword_empty_when_no_matches` to `TestComputeStats` — 73 tests total, up from 71.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py`: OK.
+- `node --check docs/app.js`: OK.
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: **73/73 passed**.
+- **Live end-to-end `aggregate.py` run** against real NVD/CISA KEV/FIRST.org EPSS APIs, run in an isolated `/tmp` clone (`git clone .` then working-tree edits copied in) with a fresh venv, no secrets required (`NVD_API_KEY`/`GH_DEPENDABOT_TOKEN` both optional per module docstring, ran unauthenticated): 595 total alerts (stable, no organic growth this run — 0 new alerts), `by_matched_keyword` = `{'wordpress': 145, 'wp plugin': 30, 'content management system': 12, 'wp-content': 3, 'cloudflare': 2}`. No 429/rate-limit signals anywhere in the run (KEV catalog 1705 entries, NVD 547 pre-filter candidates for 25 search terms, EPSS queried for 878 CVEs, all succeeded).
+- `python3 scripts/validate_data.py` against the regenerated real production data: **PASSED**, both inside the `/tmp` isolation and again after copying results into the repo (595 alerts, 595 unique IDs, `stats.json` schema OK including `by_severity`/`by_source` partition checks, `trend.csv` 36 rows OK, 47/47 `getElementById` id refs resolve, feeds parse OK).
+- Local browser smoke test via `python3 -m http.server` serving the real, freshly-regenerated production `docs/` (595 alerts): screenshot confirmed the new green `.keyword-pill` row renders correctly below the vendor-breakdown pills (`wordpress: 145`, `wp plugin: 30`, `content management system: 12`, `wp-content: 3`, `cloudflare: 2`); clicked the `cloudflare` pill and confirmed `#search` was correctly populated with `cloudflare` — zero regression to the existing stats bar, CWE/vendor/severity pills, or trend chart.
+- Live-verified via cache-busted `curl` post-deploy: `data/stats.json` contains `by_matched_keyword` with the expected values and `total_alerts: 595`; live `app.js` and live `index.html` both contain the new `keyword-breakdown` code/markup (1 occurrence each, as expected for newly-added code).
+
+**Deploy:** Committed `b6d6b14` — "Cycle 71: add by_matched_keyword breakdown (top watchlist term pills)" — pushed to `main` (clean fast-forward from `aa5a117`, includes regenerated production `docs/data/alerts.json`/`stats.json`/`history/trend.csv` since `aggregate.py` was exercised live; `feed.json`/`feed.xml`/`new_alerts.json` unchanged this run — 0 new alerts, same KEV items). Live CI run `34537047898` (`CI Data & Frontend Validation`) → `success`, 12s. `pages-build-deployment` run `34537046823` → `success`. Live-verified via `curl https://astruzocyber.github.io/CVE/data/stats.json` → `by_matched_keyword` present with correct values, `total_alerts: 595` — the change is live in production.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on actual tech stack, flagged not hard-rejected), full risk-score history array (deferred, schema-growth risk), by_first_seen_age histogram (deferred, lower value than chosen candidate), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS APIs. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 71. `stopped`: false.
