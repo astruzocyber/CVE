@@ -1718,3 +1718,58 @@ input debounce) cleared the bar and was implemented.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 42. `stopped`: false.
+
+## Cycle 43 — 2026-09-10T04:02:35Z
+
+**Implemented:** Add avg_risk_score to stats.json + optional trend-chart dataset (commit 3d9a2ca)
+
+compute_stats() computed avg_epss (mean EPSS probability across tracked alerts) but never
+surfaced the mean of the composite risk_score field (35% CVSS + 40% EPSS + 25% KEV bonus)
+that already drives sorting, the min-risk-score filter, and card display -- a distinct
+population-level signal from avg_epss (a population could have low avg EPSS but high avg
+risk_score if several entries are currently KEV-listed, since the KEV bonus is 25% of the
+composite but does not affect raw EPSS at all).
+
+Changes:
+- scripts/aggregate.py: compute_stats() now also accumulates risk_values and emits
+  avg_risk_score (mean, rounded to 1 decimal, None if empty) alongside the existing
+  avg_epss/by_severity/by_source fields.
+- scripts/aggregate.py: append_history() writes avg_risk_score as trend.csv column 7.
+  Backward-compatible: pre-existing 6-column rows are untouched (header not rewritten),
+  and the frontend CSV parser treats a missing/undefined 7th column as null (verified with
+  a scratch mixed-length CSV: old + new row shapes both parsed without error).
+- docs/index.html: new "Avg risk score" stat pill next to "Avg EPSS".
+- docs/app.js: loadStats() populates #stat-avg-risk; loadTrendChart() adds a 3rd opt-in
+  Chart.js dataset ("Avg risk score", hidden:true by default matching cycles 26/36
+  precedent so the default view is visually unchanged).
+
+Zero new API calls, zero new dependencies, zero backend schema breakage to existing fields.
+
+**Validation:**
+- node --check docs/app.js, python3 -m py_compile scripts/aggregate.py: both passed.
+- Ran compute_stats()/append_history() locally against real production alerts.json (527
+  alerts) on a scratch copy of trend.csv (/tmp) -- confirmed avg_risk_score=30.2 computed
+  correctly and a new 7-column row appends cleanly after existing 6-column rows without
+  breaking the file.
+- Served docs/ on a local scratch HTTP port with a temporary copy of stats.json patched to
+  include avg_risk_score (restored the real file byte-for-byte before commit, confirmed via
+  `git diff --stat` showing no diff) -- confirmed the stat pill renders "30.2" correctly and
+  the trend chart still loads against the real (unmodified, 6-column-only) trend.csv with
+  zero errors, 527/527 alerts, stats bar and search/filter unaffected.
+- Deployed via commit 3d9a2ca + a verification workflow_dispatch run (34435588043, success,
+  only the known-benign Node 20 deprecation annotation) since this touches the backend
+  schema.
+- Live-verified: curl'd stats.json (avg_risk_score: 30.2 present) and trend.csv (new
+  7-column row appended after prior 6-column rows), loaded the live dashboard fresh via
+  browser tool -- confirmed 527/527 alerts, #stat-avg-risk reads "30.2", trend-section
+  visible, zero regression.
+
+**Rejected this cycle:** none evaluated beyond the implemented candidate (single
+highest-value/lowest-risk pick per policy).
+
+**API health:** No 429/throttle events from NVD, FIRST.org EPSS, CISA KEV, or GitHub APIs
+this cycle. workflow_dispatch verification run completed in 31s with no errors.
+
+**consecutive_no_improvement:** reset to 0 (this cycle shipped an improvement).
+**consecutive_failed_cycles:** 0.
+**total_cycles:** 43.
