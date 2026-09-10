@@ -249,6 +249,7 @@ function renderCard(alert) {
   const cveIdSafe = escapeHtml(alert.cve_id);
   const isReviewed = reviewedCves.has(alert.cve_id);
   const reviewedBtn = `<button class="review-toggle-btn${isReviewed ? " reviewed" : ""}" type="button" data-cve="${cveIdSafe}" title="${isReviewed ? "Marked reviewed -- click to unmark" : "Mark this alert as reviewed"}" aria-pressed="${isReviewed ? "true" : "false"}">${isReviewed ? "\u2713 Reviewed" : "Mark reviewed"}</button>`;
+  const copyMdBtn = `<button class="copy-md-btn" type="button" data-cve="${cveIdSafe}" title="Copy this alert as Markdown for an incident ticket">Copy as Markdown</button>`;
   return `
     <div class="card${isReviewed ? " reviewed-card" : ""}" data-cve-id="${cveIdSafe}" id="alert-${cveIdSafe}">
       <div class="card-header">
@@ -292,10 +293,36 @@ function renderCard(alert) {
           ${alert.cve_id && /^CVE-/i.test(alert.cve_id) ? `<a href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}" target="_blank" rel="noopener">View on NVD</a>` : ""}
           ${alert.dependabot_url ? `<a href="${alert.dependabot_url}" target="_blank" rel="noopener">View alert</a>` : ""}
         </span>
+        ${copyMdBtn}
         ${reviewedBtn}
       </div>
     </div>
   `;
+}
+
+// Formats an alert as a Markdown block for pasting into an incident ticket,
+// Slack/Teams message, or postmortem doc -- pulls together the fields a
+// triage analyst would otherwise have to copy one-by-one from the card.
+function alertToMarkdown(alert) {
+  const lines = [];
+  lines.push(`### ${alert.cve_id}`);
+  lines.push("");
+  if (alert.description) lines.push(alert.description);
+  lines.push("");
+  lines.push(`- **CVSS:** ${fmtScore(alert.cvss_score)}`);
+  lines.push(`- **EPSS:** ${typeof alert.epss_score === "number" ? (alert.epss_score * 100).toFixed(1) + "%" : "n/a"}`);
+  lines.push(`- **Risk score:** ${typeof alert.risk_score === "number" ? alert.risk_score.toFixed(0) : "n/a"}/100`);
+  lines.push(`- **KEV:** ${alert.kev ? "Yes" + (alert.kev_ransomware_use ? " (known ransomware use)" : "") : "No"}`);
+  if (alert.kev && alert.kev_due_date) lines.push(`- **KEV remediation due:** ${alert.kev_due_date}`);
+  if (alert.kev && alert.kev_required_action) lines.push(`- **Required action:** ${alert.kev_required_action}`);
+  lines.push(`- **Source:** ${alert.source || "unknown"}`);
+  lines.push(`- **Affected:** ${(alert.affected || []).join(", ") || "n/a"}`);
+  if ((alert.cwe_ids || []).length) lines.push(`- **Weakness (CWE):** ${alert.cwe_ids.join(", ")}`);
+  lines.push(`- **Published:** ${fmtDate(alert.published)}`);
+  lines.push(`- **First seen (tracked):** ${fmtDate(alert.first_seen)}`);
+  lines.push(`- **NVD:** https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}`);
+  if (alert.dependabot_url) lines.push(`- **Dependabot alert:** ${alert.dependabot_url}`);
+  return lines.join("\n");
 }
 
 function matchesSource(alert, filter) {
@@ -832,6 +859,30 @@ document.getElementById("card-grid").addEventListener("click", (e) => {
       navigator.clipboard.writeText(url).then(showCopied).catch(() => {});
     }
     history.replaceState(null, "", url);
+    return;
+  }
+
+  // Copy-as-Markdown: formats the alert's key triage fields as a Markdown
+  // block suitable for pasting directly into an incident ticket / Slack
+  // message, saving an analyst from manually re-typing CVE ID, scores,
+  // affected packages, and KEV status by hand.
+  const copyMdBtn = e.target.closest(".copy-md-btn");
+  if (copyMdBtn) {
+    const cve = copyMdBtn.dataset.cve;
+    const alert = allAlerts.find((a) => a.cve_id === cve);
+    if (alert) {
+      const md = alertToMarkdown(alert);
+      const originalText = copyMdBtn.textContent;
+      const showCopied = () => {
+        copyMdBtn.textContent = "Copied!";
+        setTimeout(() => {
+          copyMdBtn.textContent = originalText;
+        }, 1200);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(md).then(showCopied).catch(() => {});
+      }
+    }
     return;
   }
 
