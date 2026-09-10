@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 67,
+  "total_cycles": 68,
   "implemented": [
     {
       "cycle": 1,
@@ -481,9 +481,21 @@
         "GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack.",
         "Any paid/threat-intel enrichment -- violates zero-cost, rejected on principle."
       ]
+    },
+    {
+      "cycle": 68,
+      "timestamp": "2026-09-10T20:01:46Z",
+      "title": "Add stats.json by_severity/by_source partition check + unit tests for validate_data.py",
+      "description": "validate_data.py's check_stats_json() now cross-checks that sum(by_severity.values()) and sum(by_source.values()) both equal total_alerts -- compute_stats() buckets every alert into exactly one severity bucket (including 'unknown') and one source bucket by construction, so any mismatch would indicate a real aggregation bug silently dropping/double-counting alerts (e.g. an early continue or a swallowed exception in a future refactor), previously only catchable by a human eyeballing stats.json against alerts.json, which never happened across 67 prior cycles. Also added scripts/test_validate_data.py: validate_data.py is the sole automated CI regression guard (per its own module docstring) but had zero test coverage of its own logic across 67 prior cycles -- a latent bug in a check_*() function (inverted condition, wrong key, silent no-op) could defeat the very safety net it exists to provide, completely undetected. Added 22 new tests (68 total, up from 46) covering check_alerts_json/check_stats_json (including this cycle's new partition check)/check_trend_csv/check_js_html_consistency/check_feeds against synthetic docs/ trees built in temp directories -- zero network calls, zero dependency on real production data. Pure validation/test-infrastructure change: no schema, pipeline, or frontend changes; docs/app.js and docs/index.html untouched this cycle.",
+      "commit_sha": "cdcf86a",
+      "rejected_alternatives": [
+        "Full risk_score history array (time series per CVE) -- still deferred per cycle 56 reasoning (unbounded schema/storage growth risk).",
+        "GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack.",
+        "Any paid/threat-intel enrichment -- violates zero-cost, rejected on principle."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T19:26:00Z",
+  "last_cycle_at": "2026-09-10T20:01:46Z",
   "stopped": false
 }
