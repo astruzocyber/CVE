@@ -1226,6 +1226,41 @@ document.getElementById("reset-filters").addEventListener("click", () => {
   applyFiltersAndRender();
 });
 
+// Keyboard shortcuts for the most common triage actions -- prior to this,
+// every filter/search/reset action required a mouse click, real friction for
+// a security-team tool where analysts triage dozens/hundreds of alerts in a
+// sitting. Guards against firing while the user is typing in any text input/
+// textarea/contenteditable (checks e.target, not just focus state) so normal
+// typing (e.g. "r" in a search query) is never hijacked. Does not fire with
+// Ctrl/Cmd/Alt held, to avoid colliding with browser/OS shortcuts.
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const t = e.target;
+  const isTyping = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
+
+  if (e.key === "/" && !isTyping) {
+    e.preventDefault();
+    const search = document.getElementById("search");
+    if (search) search.focus();
+    return;
+  }
+  if (e.key === "Escape") {
+    if (isTyping && t.blur) t.blur();
+    return;
+  }
+  if (isTyping) return;
+  if (e.key === "r" || e.key === "R") {
+    e.preventDefault();
+    document.getElementById("reset-filters").click();
+    return;
+  }
+  if (e.key === "t" || e.key === "T") {
+    e.preventDefault();
+    document.getElementById("theme-toggle").click();
+    return;
+  }
+});
+
 readFiltersFromURL();
 setupDependencyFilter();
 loadData();
