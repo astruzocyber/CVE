@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 69,
+  "total_cycles": 70,
   "implemented": [
     {
       "cycle": 1,
@@ -500,9 +500,16 @@
       "title": "Track avg CVSS base score in stats.json/trend.csv/dashboard",
       "description": "compute_stats() already averaged epss_score (avg_epss) and the composite risk_score (avg_risk_score) across all tracked alerts, but never averaged the raw cvss_score field itself -- a distinct trend signal from both: avg_risk_score blends in EPSS/KEV so it moves even when underlying CVSS severity is flat, and cycle 67's critical_count/high_count are discrete bucket counts insensitive to movement within a band (e.g. 7.1->8.9 stays 'high' but meaningfully raises avg_cvss_score). Added avg_cvss_score to compute_stats()'s return dict (excludes unknown/None-CVSS entries from the average, same pattern as avg_epss/avg_risk_score), HISTORY_CSV_HEADER/append_history() (picked up transparently by the existing cycle-54 header self-heal mechanism, verified it fired correctly live), a new 'Avg CVSS' stats-bar tile in docs/index.html, and a new hidden-by-default 'Avg CVSS score' Chart.js trend-chart dataset in docs/app.js. Added 2 new compute_stats unit tests and updated the 3 existing append_history tests for the new column (70 tests total, up from 68). Zero new API calls -- built entirely from cvss_score, already extracted every run. Validated: py_compile + node --check OK; 70/70 unit tests passed; live end-to-end aggregate.py run against real NVD/CISA KEV/FIRST.org EPSS APIs (589 alerts, avg_cvss_score=8.45, header self-heal fired correctly, no rate-limit signals); validate_data.py PASSED against the regenerated real data; local browser smoke test via python3 -m http.server confirmed the new stats-bar tile ('8.45') and trend-chart dataset render correctly with zero regression to search filter (wordpress: 145/589), existing stats bar, or the other 8 trend-chart datasets. Live-verified via cache-busted curl: data/stats.json shows avg_cvss_score=8.45, app.js contains the new code, data/history/trend.csv's latest row carries the new avg_cvss_score column.",
       "commit_sha": "3373e06"
+    },
+    {
+      "cycle": 70,
+      "timestamp": "2026-09-10T21:36:23.021597+00:00",
+      "title": "Add kev_due_soon_count stat (forward-looking KEV remediation workload)",
+      "description": "Added compute_stats() field kev_due_soon_count tracking CISA KEV entries due within the next 7 days but not yet overdue (distinct from kev_overdue_count). Added trailing trend.csv column with schema self-heal, a new 'KEV due soon (<=7d)' dashboard stat tile next to the KEV overdue tile, and a new hidden-by-default trend chart dataset. Closes a gap where the frontend had a per-card DUE SOON badge and due-soon filter since cycles 16/17 but no aggregate count existed anywhere for at-a-glance visibility.",
+      "commit_sha": "659dc630d19b8e9c71b1c2e3800cc41c0187a084"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T20:47:01Z",
+  "last_cycle_at": "2026-09-10T21:36:23.021597+00:00",
   "stopped": false
 }

@@ -2654,3 +2654,40 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS APIs. RATE_LIMIT_EVENT: no.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 69. `stopped`: false.
+
+## Cycle 70 — 2026-09-10T21:36:31Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh (not from stale summary):** `git status` clean, HEAD matched `origin/main` at `3373e06` (cycle 69 commit) before starting. `gh run list`: last several `CI Data & Frontend Validation`/`pages-build-deployment` runs all `success` (14s-1m12s), no 429/throttle signals anywhere. `.agent/state.json`: `total_cycles`=69, both counters 0, `stopped`=false — matches task brief exactly. `docs/data/alerts.json` at 589 alerts pre-cycle (matched brief). Reviewed all 69 prior `implemented` entries in `.agent/state.json` and the full `.agent/log.md` tail to avoid duplicating shipped/rejected ideas. Confirmed via grep that `due_soon`/`kev_due_soon`/"DUE SOON" only existed as a per-card frontend badge (`docs/app.js:252`, since cycles 16/17) and a due-soon-only filter — never as an aggregate stats.json/trend field, distinguishing this from cycle 66's overdue count (already-passed deadline) and cycle 69's avg CVSS (raw severity trend).
+
+**Candidates considered:**
+1. **Add `kev_due_soon_count` to `compute_stats()`/`stats.json`/`trend.csv`/dashboard** — feasibility 5/5 (reuses the exact `kev_due_date`-parsing loop already added for `kev_overdue_count`, zero new API calls/dependencies, mirrors the cycle-54 header self-heal + cycle-67/68/69 additive-CSV-column precedent exactly); risk 1/5 (purely additive field/column/UI tile alongside the existing overdue tile; existing `kev_overdue_count` tests prove the date-parsing pattern is safe; verified live against real data with zero false positives, boundary-tested overdue/due-today/due-soon/far-future/no-date cases in a new unit test); value 4/5 (closes a genuine, previously-unaddressed forward-looking visibility gap: a security lead could see the current overdue count and the per-card DUE SOON badges by scrolling/filtering, but had no way to see "how many KEV entries are about to become overdue" at a glance from the stats bar or trend chart — this is complementary to, not a duplicate of, cycle 66's overdue-count tile, which only captures deadlines already missed). **CHOSEN.**
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack; carried forward unimplemented per cycles 56-69 reasoning, not something this agent can safely guess.
+3. Full risk_score history array (time series per CVE) — still deferred per cycle 56 reasoning (unbounded schema/storage growth risk).
+4. EPSS percentile histogram — still deferred per cycle 69 reasoning (marginal value vs. schema-risk).
+5. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented (candidate 1):**
+- `scripts/aggregate.py`: extended the existing `kev_due_date` parsing loop in `compute_stats()` to also count entries where `0 <= (due_date - today).days <= 7` as `due_soon_kev`, alongside the pre-existing `overdue_kev` count. Returns new `kev_due_soon_count` field. `HISTORY_CSV_HEADER` extended with a trailing `kev_due_soon_count` column; `append_history()` writes it from `stats["kev_due_soon_count"]` — picked up transparently by the existing cycle-54 header self-heal mechanism, verified it fired correctly live on the real production `trend.csv`.
+- `docs/index.html`: new `<div class="stat stat-due-soon">` tile with `id="stat-due-soon"` in the stats bar, directly next to the existing `stat-overdue` tile.
+- `docs/style.css`: added `.stat-due-soon .stat-value { color: var(--yellow); }` next to the existing `.stat-overdue`/`.stat-kev` color rules.
+- `docs/app.js`: renders `stats.kev_due_soon_count` into the new tile (guarded `getElementById` existence check for defense-in-depth); `loadTrendChart()` parses the new trailing CSV column (tolerant of older rows lacking it, same `undefined`-safe pattern as every other column) and adds "KEV due soon (<=7d) count" as a new Chart.js line dataset, hidden by default (consistent with the existing convention).
+- `scripts/test_aggregate.py`: added `test_kev_due_soon_count_excludes_overdue_and_far_future` to `TestComputeStats` (5-alert fixture covering overdue/due-in-5-days/due-today/due-in-30-days/no-due-date, asserting exactly 1 overdue and 2 due-soon); updated the 3 existing `TestAppendHistory` fixtures/assertions for the new trailing column — 71 tests total, up from 70.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py`: OK.
+- `node --check docs/app.js`: OK.
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: **71/71 passed**.
+- **Live end-to-end `aggregate.py` run** against real NVD/CISA KEV/FIRST.org EPSS APIs, run in an isolated `/tmp` copy first, then results copied into the real repo: 595 total alerts (up from 589 pre-cycle, organic growth), `kev_overdue_count`=1, `kev_due_soon_count`=1 correctly computed, header self-heal fired correctly on `trend.csv` (old 10-column header upgraded to 11 columns, historical rows left untouched), new trend row correctly appended with trailing `1`. No 429/rate-limit signals anywhere in the run.
+- `python3 scripts/validate_data.py` against the regenerated real production data: **PASSED** (595 alerts, 595 unique IDs, `stats.json` schema OK including `by_severity`/`by_source` partition checks, `trend.csv` 34 rows OK, 46/46 `getElementById` id refs resolve, feeds parse OK).
+- Local browser smoke test via `python3 -m http.server` serving the real, freshly-regenerated production `docs/` (595 alerts): confirmed `#stat-due-soon` renders `1`, `#stat-overdue` renders `1` (unchanged behavior), screenshot confirmed the new "KEV DUE SOON (<=7D)" tile renders correctly styled next to "KEV OVERDUE (BOD 22-01)", and the trend chart legend includes the new "KEV due soon (<=7d) count" series alongside all 9 pre-existing series with zero visual regression.
+- Live-verified via cache-busted `curl` post-deploy: `data/stats.json` shows `kev_due_soon_count: 1`; live page HTML contains `stat-due-soon` (2 occurrences: div id + label wiring).
+
+**Deploy:** Committed `659dc63` — "cycle 70: add kev_due_soon_count stat (forward-looking KEV remediation workload)" — pushed to `main` (clean fast-forward from `3373e06`, includes regenerated production `docs/data/alerts.json`/`stats.json`/`history/trend.csv`/`feed.json`/`feed.xml` since `aggregate.py` was exercised live). Live CI run `34532971627` (`CI Data & Frontend Validation`) → `success`, 14s. `pages-build-deployment` run `34532970474` → `success`. Live-verified via `curl https://astruzocyber.github.io/CVE/data/stats.json` → `kev_due_soon_count: 1, total_alerts: 595` — the change is live in production.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on actual tech stack, flagged not hard-rejected), full risk-score history array (deferred, schema-growth risk), EPSS percentile histogram (deferred, marginal value vs. schema-risk), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS APIs. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 70. `stopped`: false.
