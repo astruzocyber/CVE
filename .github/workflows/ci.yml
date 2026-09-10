@@ -45,3 +45,6 @@ jobs:
 
       - name: Validate committed data files against schema
         run: python scripts/validate_data.py
+
+      - name: Unit tests for scoring/parsing logic (aggregate.py)
+        run: python -m unittest discover -s scripts -p "test_*.py" -v
