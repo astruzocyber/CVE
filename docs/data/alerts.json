@@ -1,5 +1,321 @@
 [
   {
+    "cve_id": "CVE-2026-62243",
+    "description": "Netty (io.netty:netty-handler) versions from 4.2.0.Final through 4.2.16.Final and versions through 4.1.136.Final disable TLS hostname verification on the SslProvider.OPENSSL client path when a plain (non-extended) X509TrustManager is used and Unsafe-based trust-manager wrapping is unavailable (Java 25+). In this configuration the OpenSSL client does not perform hostname verification, allowing a man-in-the-middle attacker to present a certificate issued for a different hostname that is accepted without validation. Fixed in 4.2.17.Final and 4.1.137.Final.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-297"
+    ],
+    "epss_score": 0.00155,
+    "epss_percentile": 0.0493,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00155,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-62243",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "3703d79669ee024f6483c9d8697ac58ba546df33"
+      }
+    ],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-22T13:16:39.687",
+    "nvd_last_modified": "2026-09-10T20:46:19.780",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T21:34:18.637373+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-76174",
+    "description": "Unrestricted file upload vulnerability in the CSV file upload functionality of the Ocsreports admin_info endpoint. The application validates files solely based on the name provided by the client, without properly checking their content or securely restricting the permitted file types. This allows a user with administrator privileges to upload PHP files to a directory accessible via the web interface. If the file is subsequently processed by the server, an attacker could execute arbitrary code with the privileges of the account used by the web service.",
+    "cvss_score": 9.4,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00487,
+    "epss_percentile": 0.40368,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 33.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.4,
+      "cvss_component": 32.9,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00487,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-03T13:06:07.723",
+    "nvd_last_modified": "2026-09-03T18:14:11.063",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T21:34:18.636597+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-77998",
+    "description": "Joomla Extension - miniorange.com - Unauthenticated Authentication Bypass via SAMLResponse Parameter in miniOrange SAML SSO < 11.0.2, SAML SP Single Sign On \u2013 Login with ADFS < 6.4,  SAML SP Single Sign On \u2013 SAML SSO login with Google Apps < 6.4 - This is due to the mo_saml_validate_signature() function performing a loose boolean check on the raw tri-state integer returned by PHP's openssl_verify(), causing an error return value of -1 to be evaluated as truthy and therefore treated as a successful signature verification. This makes it possible for unauthenticated attackers to log in as any existing Joomla user, including administrators, by submitting a crafted SAMLResponse containing an attacker-controlled NameID and a deliberately malformed signature value that triggers an OpenSSL processing error \u2014 bypassing verification entirely and resulting in wp_set_auth_cookie() being called for the targeted account.",
+    "cvss_score": 10.0,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-639"
+    ],
+    "epss_score": 0.0034,
+    "epss_percentile": 0.27093,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 35.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 10.0,
+      "cvss_component": 35.0,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0034,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php",
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-25T13:19:30.817",
+    "nvd_last_modified": "2026-09-08T11:17:44.560",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T21:34:18.636501+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-71488",
+    "description": "league/commonmark is a PHP library for parsing and rendering CommonMark Markdown. From 0.6.0 until 2.9.0, specially crafted Markdown lines can cause the parser to have quadratic time complexity when converting, because several parsing paths repeatedly rescan growing portions of a line to translate between character positions and byte positions, and the Autolink extension can also copy and validate the remaining line at every URL-like prefix, allowing an attacker who can submit Markdown for conversion to consume disproportionate CPU time with a comparatively small request. This issue is fixed in 2.9.0.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-407",
+      "CWE-1050"
+    ],
+    "epss_score": 0.00346,
+    "epss_percentile": 0.27722,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00346,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-71488",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "a6ef6cdc308dfa39a34239c35818e75892a0e6a8"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-06T22:18:31.893",
+    "nvd_last_modified": "2026-09-10T20:41:33.140",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T21:34:18.636384+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-67434",
+    "description": "PHP_CodeSniffer tokenizes PHP files and detects violations of a defined set of coding standards. Prior to versions 3.13.6 and 4.0.2, PHP_CodeSniffer contains a command injection vulnerability in the code that generates the Gitblame, Hgblame, and Svnblame report formats. As a result, running PHP_CodeSniffer over untrusted files, for example in a continuous integration pipeline that scans pull requests, or on a developer machine reviewing third party code, could result in attacker controlled shell commands being executed when the Gitblame, Hgblame, or Svnblame report processes a file whose name contains shell metacharacters. Users using the default Full report, or any of the other non-blame reports, are not affected. Users on a runtime platform which does not allow filenames to contain shell metacharacters, such as \" and ;, are not affected. This issue is fixed in versions 3.13.6 and 4.0.2.",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "PASSIVE"
+    },
+    "cwe_ids": [
+      "CWE-78"
+    ],
+    "epss_score": 0.00701,
+    "epss_percentile": 0.51139,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 25.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00701,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-67434",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "4c378e1a528ea066890fc2397cbdd2f94eb2fc91"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-06T22:18:21.750",
+    "nvd_last_modified": "2026-09-10T20:41:33.140",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T21:34:18.636379+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-64638",
+    "description": "WordPress is vulnerable to a pre-auth reflected XSS vulnerability on the login screen.\r\n\r\nVia a specially crafted malicious third-party website hosted by an attacker, it is possible for this to be escalated to an RCE vulnerability with conditions outside of the attackers control. This requires successful social engineering of and explicit interaction by the target victim.\r\n\r\nThis issue affects all versions of WordPress. Version 7.0.3 has been released, containing a fix for the vulnerability, and as a courtesy to users on older branches the fix has been backported to all branches back to 4.7.\r\n\r\nDiscovered and responsibly disclosed by [the team at pwn.ai](https://pwn.ai/).",
+    "cvss_score": 8.9,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "ACTIVE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.31204,
+    "epss_percentile": 0.98162,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.9,
+      "cvss_component": 31.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.31204,
+      "epss_component": 12.5,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-08-07T18:17:20.340",
+    "nvd_last_modified": "2026-09-03T17:02:54.670",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T21:34:18.636037+00:00"
+  },
+  {
     "cve_id": "CVE-2026-69247",
     "description": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. From 44.0.0 until 50.0.0, pkcs7_decrypt_der, pkcs7_decrypt_pem, and pkcs7_decrypt_smime reported the outcome of decrypting a RecipientInfo's encryptedKey in several distinguishable ways, one of which disclosed the exact length recovered from the RSA operation. The same distinction was also observable by timing. An application that decrypts attacker-supplied EnvelopedData and reflects the outcome gives the attacker a Bleichenbacher oracle against the content-encryption key. Decryption ran as RSA PKCS#1 v1.5 decrypt of encryptedKey, build an AES cipher from the result, then AES-CBC decrypt and PKCS#7 unpad. Invalid RSA padding, a valid padding with a bad key length, a correct length with a wrong key, and the real key each failed or succeeded differently. Case 1 is reachable only where the linked library lacks implicit rejection: OpenSSL 3.0 and 3.1, LibreSSL, and BoringSSL. Exploitation requires a service that auto-decrypts untrusted EnvelopedData matching the victim certificate and answers adaptively at high volume, such as an S/MIME gateway or mail filter. This issue is fixed in 50.0.0.",
     "cvss_score": 8.2,
@@ -35,15 +351,9 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "osv_id": "CVE-2026-69247",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "53fccd93413a8d7f07d6d8999681f27b75cffa3f"
-      }
-    ],
+    "risk_score_prev": 28.8,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -296,7 +606,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:03.663",
-    "nvd_last_modified": "2026-09-10T19:17:37.720",
+    "nvd_last_modified": "2026-09-10T20:52:49.090",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T19:23:04.636654+00:00"
@@ -2073,7 +2383,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T15:17:43.817",
-    "nvd_last_modified": "2026-09-10T15:43:28.913",
+    "nvd_last_modified": "2026-09-10T21:17:48.537",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T16:10:34.213068+00:00"
@@ -2313,12 +2623,9 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [
-      "wordpress"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T07:17:03.620",
     "nvd_last_modified": "2026-09-10T15:13:07.090",
@@ -3067,12 +3374,9 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [
-      "wordpress"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T02:16:34.180",
     "nvd_last_modified": "2026-09-10T14:39:13.757",
@@ -4259,11 +4563,8 @@
     "risk_score_prev": 30.2,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -4414,11 +4715,9 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7261,11 +7560,8 @@
     "risk_score_prev": 25.3,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7313,11 +7609,8 @@
     "risk_score_prev": 30.9,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7416,11 +7709,8 @@
     "risk_score_prev": 25.3,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7468,11 +7758,8 @@
     "risk_score_prev": 28.5,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7571,11 +7858,8 @@
     "risk_score_prev": 25.4,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7624,11 +7908,9 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7677,12 +7959,9 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [
-      "wordpress"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T03:17:23.523",
     "nvd_last_modified": "2026-09-09T16:17:01.133",
@@ -7729,12 +8008,9 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [
-      "wordpress"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T03:17:23.157",
     "nvd_last_modified": "2026-09-09T15:33:47.627",
@@ -12158,7 +12434,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:20:53.070",
-    "nvd_last_modified": "2026-09-08T18:38:46.007",
+    "nvd_last_modified": "2026-09-10T21:17:48.087",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841477+00:00"
@@ -12256,7 +12532,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:20:02.413",
-    "nvd_last_modified": "2026-09-08T18:39:51.493",
+    "nvd_last_modified": "2026-09-10T21:17:35.493",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841457+00:00"
@@ -12403,7 +12679,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:19:30.663",
-    "nvd_last_modified": "2026-09-08T18:39:34.660",
+    "nvd_last_modified": "2026-09-10T21:17:31.487",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841429+00:00"
@@ -13278,6 +13554,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 32.0,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -13287,9 +13565,7 @@
     "nvd_last_modified": "2026-09-08T14:07:24.140",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-08T16:11:54.861233+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-08T16:11:54.861233+00:00"
   },
   {
     "cve_id": "CVE-2026-3174",
@@ -13381,12 +13657,9 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [
-      "wordpress"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T12:16:52.443",
     "nvd_last_modified": "2026-09-08T17:17:33.050",
@@ -13430,6 +13703,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -13442,9 +13717,7 @@
     "nvd_last_modified": "2026-09-08T13:17:31.433",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-08T12:14:41.566863+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-08T12:14:41.566863+00:00"
   },
   {
     "cve_id": "CVE-2026-86438",
@@ -13532,6 +13805,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 50.1,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -13541,9 +13816,7 @@
     "nvd_last_modified": "2026-09-07T13:17:27.740",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-07T16:10:38.799165+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-07T16:10:38.799165+00:00"
   },
   {
     "cve_id": "CVE-2026-86431",
@@ -14342,6 +14615,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.5,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -14353,9 +14628,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-06T04:12:42.475434+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-06T04:12:42.475434+00:00"
   },
   {
     "cve_id": "CVE-2026-18056",
@@ -14393,6 +14666,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -14404,9 +14679,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-06T04:12:42.475430+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-06T04:12:42.475430+00:00"
   },
   {
     "cve_id": "CVE-2026-16310",
@@ -14444,6 +14717,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -14455,9 +14730,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-06T04:12:42.475425+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-06T04:12:42.475425+00:00"
   },
   {
     "cve_id": "CVE-2025-9049",
@@ -14495,6 +14768,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -14506,9 +14781,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T16:12:40.521125+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T16:12:40.521125+00:00"
   },
   {
     "cve_id": "CVE-2024-11080",
@@ -14546,6 +14819,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.5,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -14557,9 +14832,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T16:12:40.521122+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T16:12:40.521122+00:00"
   },
   {
     "cve_id": "CVE-2026-83625",
@@ -14597,6 +14870,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -14608,9 +14883,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T16:12:40.521119+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T16:12:40.521119+00:00"
   },
   {
     "cve_id": "CVE-2026-81543",
@@ -14648,6 +14921,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -14659,9 +14934,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T16:12:40.521116+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T16:12:40.521116+00:00"
   },
   {
     "cve_id": "CVE-2026-78438",
@@ -14699,6 +14972,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -14710,9 +14985,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T16:12:40.521113+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T16:12:40.521113+00:00"
   },
   {
     "cve_id": "CVE-2026-77830",
@@ -14852,6 +15125,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -14863,9 +15138,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T16:12:40.521100+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T16:12:40.521100+00:00"
   },
   {
     "cve_id": "CVE-2026-15984",
@@ -14954,6 +15227,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -14965,9 +15240,7 @@
     "nvd_last_modified": "2026-09-08T14:17:28.073",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T16:12:40.521086+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T16:12:40.521086+00:00"
   },
   {
     "cve_id": "CVE-2026-77233",
@@ -15158,6 +15431,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -15169,9 +15444,7 @@
     "nvd_last_modified": "2026-09-04T19:17:22.257",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T16:12:40.521062+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T16:12:40.521062+00:00"
   },
   {
     "cve_id": "CVE-2026-55485",
@@ -15443,6 +15716,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "amazon/aws"
     ],
@@ -15452,9 +15727,7 @@
     "nvd_last_modified": "2026-09-08T14:00:33.017",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485874+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485874+00:00"
   },
   {
     "cve_id": "CVE-2026-83551",
@@ -15492,6 +15765,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "amazon/aws"
     ],
@@ -15501,9 +15776,7 @@
     "nvd_last_modified": "2026-09-03T16:44:01.873",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485870+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485870+00:00"
   },
   {
     "cve_id": "CVE-2026-81849",
@@ -15580,6 +15853,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 35.0,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "amazon/aws"
     ],
@@ -15589,9 +15864,7 @@
     "nvd_last_modified": "2026-09-04T14:13:32.820",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485864+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485864+00:00"
   },
   {
     "cve_id": "CVE-2026-13447",
@@ -15629,6 +15902,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.5,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress",
       "openssl/openssl"
@@ -15641,9 +15916,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485860+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485860+00:00"
   },
   {
     "cve_id": "CVE-2026-6958",
@@ -16043,6 +16316,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -16052,9 +16327,7 @@
     "nvd_last_modified": "2026-09-03T15:09:32.657",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485830+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485830+00:00"
   },
   {
     "cve_id": "CVE-2026-81702",
@@ -16092,6 +16365,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -16101,9 +16376,7 @@
     "nvd_last_modified": "2026-09-03T15:09:14.280",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485826+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485826+00:00"
   },
   {
     "cve_id": "CVE-2026-81701",
@@ -16219,6 +16492,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -16228,9 +16503,7 @@
     "nvd_last_modified": "2026-09-03T15:09:04.887",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485815+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485815+00:00"
   },
   {
     "cve_id": "CVE-2026-81698",
@@ -16493,6 +16766,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -16502,9 +16777,7 @@
     "nvd_last_modified": "2026-09-03T15:07:51.097",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485784+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485784+00:00"
   },
   {
     "cve_id": "CVE-2026-81688",
@@ -17977,6 +18250,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 32.2,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -17986,9 +18261,7 @@
     "nvd_last_modified": "2026-09-07T13:20:09.227",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485657+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485657+00:00"
   },
   {
     "cve_id": "CVE-2026-27459",
@@ -18408,6 +18681,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 56.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -18417,9 +18692,7 @@
     "nvd_last_modified": "2026-09-08T14:55:04.093",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485627+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485627+00:00"
   },
   {
     "cve_id": "CVE-2026-85045",
@@ -18604,6 +18877,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.7,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -18613,9 +18888,7 @@
     "nvd_last_modified": "2026-09-03T17:35:02.620",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485612+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485612+00:00"
   },
   {
     "cve_id": "CVE-2026-84353",
@@ -18751,6 +19024,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -18760,9 +19035,7 @@
     "nvd_last_modified": "2026-09-03T17:37:11.523",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485602+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485602+00:00"
   },
   {
     "cve_id": "CVE-2026-84350",
@@ -18800,6 +19073,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -18809,9 +19084,7 @@
     "nvd_last_modified": "2026-09-03T17:37:49.767",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485598+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485598+00:00"
   },
   {
     "cve_id": "CVE-2026-84349",
@@ -18849,6 +19122,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -18858,9 +19133,7 @@
     "nvd_last_modified": "2026-09-03T17:15:27.770",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485595+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485595+00:00"
   },
   {
     "cve_id": "CVE-2026-84347",
@@ -18898,6 +19171,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -18907,9 +19182,7 @@
     "nvd_last_modified": "2026-09-03T17:18:25.873",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485592+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485592+00:00"
   },
   {
     "cve_id": "CVE-2026-84335",
@@ -18947,6 +19220,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -18956,9 +19231,7 @@
     "nvd_last_modified": "2026-09-03T17:09:46.783",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485588+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485588+00:00"
   },
   {
     "cve_id": "CVE-2026-84334",
@@ -18996,6 +19269,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -19005,9 +19280,7 @@
     "nvd_last_modified": "2026-09-03T17:10:07.703",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485585+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485585+00:00"
   },
   {
     "cve_id": "CVE-2026-84333",
@@ -19094,6 +19367,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -19103,9 +19378,7 @@
     "nvd_last_modified": "2026-09-03T17:11:55.957",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485578+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485578+00:00"
   },
   {
     "cve_id": "CVE-2026-84325",
@@ -19143,6 +19416,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -19152,9 +19427,7 @@
     "nvd_last_modified": "2026-09-03T17:12:27.413",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485575+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485575+00:00"
   },
   {
     "cve_id": "CVE-2026-84324",
@@ -19192,6 +19465,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.6,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "google/chrome"
     ],
@@ -19201,9 +19476,7 @@
     "nvd_last_modified": "2026-09-03T17:12:44.213",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485572+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485572+00:00"
   },
   {
     "cve_id": "CVE-2026-82808",
@@ -20489,6 +20762,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "cisco/ios"
     ],
@@ -20498,9 +20773,7 @@
     "nvd_last_modified": "2026-09-03T13:04:39.930",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485454+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485454+00:00"
   },
   {
     "cve_id": "CVE-2026-20279",
@@ -20538,6 +20811,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "cisco/ios"
     ],
@@ -20547,9 +20822,7 @@
     "nvd_last_modified": "2026-09-03T13:04:39.750",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485450+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485450+00:00"
   },
   {
     "cve_id": "CVE-2026-20278",
@@ -20587,6 +20860,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "cisco/ios"
     ],
@@ -20596,9 +20871,7 @@
     "nvd_last_modified": "2026-09-03T13:04:39.583",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485447+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485447+00:00"
   },
   {
     "cve_id": "CVE-2026-20277",
@@ -20636,6 +20909,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.8,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "cisco/ios"
     ],
@@ -20645,9 +20920,7 @@
     "nvd_last_modified": "2026-09-03T16:37:52.170",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485443+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485443+00:00"
   },
   {
     "cve_id": "CVE-2026-20276",
@@ -20734,6 +21007,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "cisco/ios"
     ],
@@ -20743,9 +21018,7 @@
     "nvd_last_modified": "2026-09-03T13:04:39.407",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485436+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485436+00:00"
   },
   {
     "cve_id": "CVE-2026-20274",
@@ -20783,6 +21056,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.6,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "cisco/ios"
     ],
@@ -20792,9 +21067,7 @@
     "nvd_last_modified": "2026-09-04T14:17:18.423",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485433+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485433+00:00"
   },
   {
     "cve_id": "CVE-2026-70724",
@@ -20832,6 +21105,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "oracle/mysql"
     ],
@@ -20841,9 +21116,7 @@
     "nvd_last_modified": "2026-09-04T13:19:43.750",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485429+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485429+00:00"
   },
   {
     "cve_id": "CVE-2026-60592",
@@ -20930,6 +21203,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "oracle/mysql"
     ],
@@ -20939,9 +21214,7 @@
     "nvd_last_modified": "2026-09-03T18:34:06.343",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485422+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485422+00:00"
   },
   {
     "cve_id": "CVE-2026-60586",
@@ -20979,6 +21252,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.0,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "oracle/mysql"
     ],
@@ -20988,9 +21263,7 @@
     "nvd_last_modified": "2026-09-03T18:33:44.787",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485418+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485418+00:00"
   },
   {
     "cve_id": "CVE-2026-60317",
@@ -21028,6 +21301,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.0,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "oracle/mysql"
     ],
@@ -21037,9 +21312,7 @@
     "nvd_last_modified": "2026-09-03T18:34:02.120",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485414+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485414+00:00"
   },
   {
     "cve_id": "CVE-2026-60193",
@@ -21077,6 +21350,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "oracle/mysql"
     ],
@@ -21086,9 +21361,7 @@
     "nvd_last_modified": "2026-09-03T18:26:07.257",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485411+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485411+00:00"
   },
   {
     "cve_id": "CVE-2026-60192",
@@ -21126,6 +21399,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.5,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "oracle/mysql"
     ],
@@ -21135,9 +21410,7 @@
     "nvd_last_modified": "2026-09-03T18:26:03.270",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485407+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485407+00:00"
   },
   {
     "cve_id": "CVE-2025-30706",
@@ -21175,6 +21448,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "oracle/mysql"
     ],
@@ -21184,9 +21459,7 @@
     "nvd_last_modified": "2026-09-03T18:52:44.433",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485403+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485403+00:00"
   },
   {
     "cve_id": "CVE-2026-10196",
@@ -21224,6 +21497,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.6,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress",
       "php/php"
@@ -21236,9 +21511,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485399+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485399+00:00"
   },
   {
     "cve_id": "CVE-2026-19887",
@@ -21329,6 +21602,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.6,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress",
       "php/php"
@@ -21343,9 +21618,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485392+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485392+00:00"
   },
   {
     "cve_id": "CVE-2026-52775",
@@ -21728,6 +22001,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress",
       "php/php"
@@ -21742,9 +22017,7 @@
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485366+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485366+00:00"
   },
   {
     "cve_id": "CVE-2026-85604",
@@ -21883,6 +22156,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.5,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress",
       "php/php"
@@ -21895,9 +22170,7 @@
     "nvd_last_modified": "2026-09-07T12:17:16.933",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485355+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485355+00:00"
   },
   {
     "cve_id": "CVE-2026-84834",
@@ -21935,6 +22208,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -21944,9 +22219,7 @@
     "nvd_last_modified": "2026-09-07T12:17:20.830",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485273+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485273+00:00"
   },
   {
     "cve_id": "CVE-2026-84753",
@@ -21984,6 +22257,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -21993,9 +22268,7 @@
     "nvd_last_modified": "2026-09-05T02:17:18.017",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485269+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485269+00:00"
   },
   {
     "cve_id": "CVE-2026-84752",
@@ -22033,6 +22306,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -22042,9 +22317,7 @@
     "nvd_last_modified": "2026-09-03T18:17:28.370",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485265+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485265+00:00"
   },
   {
     "cve_id": "CVE-2026-82524",
@@ -22082,6 +22355,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -22091,9 +22366,7 @@
     "nvd_last_modified": "2026-09-03T13:06:15.767",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485262+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485262+00:00"
   },
   {
     "cve_id": "CVE-2026-77009",
@@ -22131,6 +22404,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.7,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress",
       "php/php"
@@ -22143,9 +22418,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485258+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485258+00:00"
   },
   {
     "cve_id": "CVE-2026-4357",
@@ -22183,6 +22456,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 35.1,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress",
       "php/php"
@@ -22195,9 +22470,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485255+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485255+00:00"
   },
   {
     "cve_id": "CVE-2026-81772",
@@ -22235,6 +22508,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -22244,9 +22519,7 @@
     "nvd_last_modified": "2026-09-03T14:17:01.987",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485251+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485251+00:00"
   },
   {
     "cve_id": "CVE-2026-81283",
@@ -23176,18 +23449,18 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.6,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-08-26T16:16:45.100",
-    "nvd_last_modified": "2026-09-04T18:17:56.483",
+    "nvd_last_modified": "2026-09-10T20:48:45.067",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485177+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485177+00:00"
   },
   {
     "cve_id": "CVE-2026-80138",
@@ -23225,6 +23498,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.6,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -23234,9 +23509,7 @@
     "nvd_last_modified": "2026-09-03T05:15:09.570",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485174+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485174+00:00"
   },
   {
     "cve_id": "CVE-2026-79774",
@@ -23664,6 +23937,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -23673,9 +23948,7 @@
     "nvd_last_modified": "2026-09-03T17:51:18.670",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485135+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485135+00:00"
   },
   {
     "cve_id": "CVE-2026-72556",
@@ -23713,6 +23986,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -23722,9 +23997,7 @@
     "nvd_last_modified": "2026-09-03T17:51:18.670",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485132+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485132+00:00"
   },
   {
     "cve_id": "CVE-2026-72551",
@@ -23762,6 +24035,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -23771,9 +24046,7 @@
     "nvd_last_modified": "2026-09-03T17:51:46.420",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485128+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485128+00:00"
   },
   {
     "cve_id": "CVE-2026-72592",
@@ -24006,6 +24279,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -24015,9 +24290,7 @@
     "nvd_last_modified": "2026-09-08T11:17:42.267",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485104+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485104+00:00"
   },
   {
     "cve_id": "CVE-2025-9314",
@@ -24055,6 +24328,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24066,9 +24341,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485100+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485100+00:00"
   },
   {
     "cve_id": "CVE-2025-15485",
@@ -24106,6 +24379,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.8,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24117,9 +24392,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485097+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485097+00:00"
   },
   {
     "cve_id": "CVE-2026-75528",
@@ -24208,6 +24481,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24219,9 +24494,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485089+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485089+00:00"
   },
   {
     "cve_id": "CVE-2026-81807",
@@ -24259,6 +24532,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24270,9 +24545,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485086+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485086+00:00"
   },
   {
     "cve_id": "CVE-2026-81737",
@@ -24310,6 +24583,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24321,9 +24596,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485082+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485082+00:00"
   },
   {
     "cve_id": "CVE-2026-80467",
@@ -24361,6 +24634,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24372,9 +24647,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485076+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485076+00:00"
   },
   {
     "cve_id": "CVE-2026-78657",
@@ -24464,6 +24737,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24475,9 +24750,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485069+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485069+00:00"
   },
   {
     "cve_id": "CVE-2026-19723",
@@ -24515,6 +24788,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24526,9 +24801,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485066+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485066+00:00"
   },
   {
     "cve_id": "CVE-2026-19453",
@@ -24566,6 +24839,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24577,9 +24852,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485062+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485062+00:00"
   },
   {
     "cve_id": "CVE-2026-19116",
@@ -24617,6 +24890,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress",
       "php/php"
@@ -24629,9 +24904,7 @@
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485059+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485059+00:00"
   },
   {
     "cve_id": "CVE-2026-14357",
@@ -24723,6 +24996,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24734,9 +25009,7 @@
     "nvd_last_modified": "2026-09-03T17:49:19.180",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485052+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485052+00:00"
   },
   {
     "cve_id": "CVE-2026-12526",
@@ -24774,6 +25047,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24785,9 +25060,7 @@
     "nvd_last_modified": "2026-09-03T17:49:19.180",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485049+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485049+00:00"
   },
   {
     "cve_id": "CVE-2026-9055",
@@ -24877,6 +25150,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.5,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -24889,9 +25164,7 @@
     "nvd_last_modified": "2026-09-04T03:17:40.097",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485042+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485042+00:00"
   },
   {
     "cve_id": "CVE-2026-10195",
@@ -26123,6 +26396,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -26134,9 +26409,7 @@
     "nvd_last_modified": "2026-09-03T16:17:23.077",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.484931+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.484931+00:00"
   },
   {
     "cve_id": "CVE-2026-6176",
@@ -27250,6 +27523,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.6,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -27261,9 +27536,7 @@
     "nvd_last_modified": "2026-09-03T17:02:54.670",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.484825+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.484825+00:00"
   },
   {
     "cve_id": "CVE-2026-16253",
@@ -27301,6 +27574,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -27312,9 +27587,7 @@
     "nvd_last_modified": "2026-09-03T13:04:35.540",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.484822+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.484822+00:00"
   },
   {
     "cve_id": "CVE-2026-12965",
@@ -27393,6 +27666,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.5,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "nginx/nginx"
     ],
@@ -27402,9 +27677,7 @@
     "nvd_last_modified": "2026-09-03T13:06:10.270",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.484814+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.484814+00:00"
   },
   {
     "cve_id": "CVE-2026-78222",
@@ -27491,6 +27764,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "nginx/nginx"
     ],
@@ -27500,9 +27775,7 @@
     "nvd_last_modified": "2026-09-03T13:06:08.600",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.484806+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.484806+00:00"
   },
   {
     "cve_id": "CVE-2026-66362",
@@ -27540,6 +27813,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "nginx/nginx"
     ],
@@ -27549,9 +27824,7 @@
     "nvd_last_modified": "2026-09-03T13:06:00.047",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.484787+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.484787+00:00"
   },
   {
     "cve_id": "CVE-2026-18329",
@@ -27589,6 +27862,8 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "nginx/nginx"
     ],
@@ -27598,9 +27873,7 @@
     "nvd_last_modified": "2026-09-03T16:37:52.170",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.484783+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.484783+00:00"
   },
   {
     "cve_id": "CVE-2026-19513",

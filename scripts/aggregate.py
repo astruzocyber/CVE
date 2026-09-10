@@ -978,8 +978,17 @@ def compute_stats(alerts):
 
     # KEV entries with a due date in the past and not yet resolved -- an
     # operationally meaningful "overdue remediation" count (BOD 22-01 style).
+    # Also tracked: KEV entries due within the next 7 days (not yet overdue).
+    # The frontend has had a per-card "DUE SOON (Nd)" badge and a "KEV due
+    # soon (<=7d) only" filter since cycles 16/17, but no aggregate count of
+    # how many entries are in that window existed anywhere -- a security lead
+    # had to actually apply the filter to find out "how many things are about
+    # to become overdue", with zero visibility from the stats bar alone. This
+    # is forward-looking workload visibility that kev_overdue_count (already
+    # missed) and kev_count (total KEV, no urgency signal) cannot answer.
     today = datetime.now(timezone.utc).date()
     overdue_kev = 0
+    due_soon_kev = 0
     for a in alerts:
         due = a.get("kev_due_date")
         if not due:
@@ -988,6 +997,8 @@ def compute_stats(alerts):
             due_date = datetime.strptime(due, "%Y-%m-%d").date()
             if due_date < today:
                 overdue_kev += 1
+            elif (due_date - today).days <= 7:
+                due_soon_kev += 1
         except ValueError:
             continue
 
@@ -997,6 +1008,7 @@ def compute_stats(alerts):
         "kev_count": kev_count,
         "kev_ransomware_count": ransomware_count,
         "kev_overdue_count": overdue_kev,
+        "kev_due_soon_count": due_soon_kev,
         "by_severity": by_severity,
         "by_source": by_source,
         "avg_epss": round(sum(epss_values) / len(epss_values), 4) if epss_values else None,
@@ -1048,7 +1060,7 @@ def compute_stats(alerts):
 # ---------------------------------------------------------------------------
 HISTORY_CSV_HEADER = (
     "timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,"
-    "avg_epss,avg_risk_score,critical_count,high_count,avg_cvss_score"
+    "avg_epss,avg_risk_score,critical_count,high_count,avg_cvss_score,kev_due_soon_count"
 )
 
 
@@ -1075,6 +1087,11 @@ def append_history(stats):
         str(by_severity.get("critical", "")),
         str(by_severity.get("high", "")),
         "" if stats.get("avg_cvss_score") is None else str(stats["avg_cvss_score"]),
+        # Forward-looking KEV workload count (due within 7 days, not yet
+        # overdue) -- see compute_stats()'s kev_due_soon_count comment for
+        # rationale. Trailing column, same additive-schema pattern as every
+        # prior trend.csv extension.
+        str(stats.get("kev_due_soon_count", "")),
     ]
 
     # Schema-drift self-heal: when a column (e.g. avg_risk_score) is added to the

@@ -1020,6 +1020,10 @@ async function loadStats() {
     document.getElementById("stat-critical").textContent = stats.by_severity?.critical ?? "-";
     document.getElementById("stat-kev").textContent = stats.kev_count ?? "-";
     document.getElementById("stat-overdue").textContent = stats.kev_overdue_count ?? "-";
+    const dueSoonEl = document.getElementById("stat-due-soon");
+    if (dueSoonEl) {
+      dueSoonEl.textContent = stats.kev_due_soon_count ?? "-";
+    }
     document.getElementById("stat-ransomware").textContent = stats.kev_ransomware_count ?? "-";
     document.getElementById("stat-epss").textContent =
       typeof stats.avg_epss === "number" ? (stats.avg_epss * 100).toFixed(1) + "%" : "-";
@@ -1213,6 +1217,9 @@ async function loadTrendChart() {
     // avg_cvss_score column added in a later schema revision; older rows
     // won't have index 9 at all -- treat missing same as empty.
     const avgCvssScore = rows.map((r) => (r[9] === "" || r[9] === undefined ? null : Number(r[9])));
+    // kev_due_soon_count column added in a later schema revision; older rows
+    // won't have index 10 at all -- treat missing same as empty.
+    const kevDueSoon = rows.map((r) => (r[10] === "" || r[10] === undefined ? null : Number(r[10])));
 
     document.getElementById("trend-section").hidden = false;
     new Chart(canvas, {
@@ -1296,6 +1303,15 @@ async function loadTrendChart() {
             borderColor: "#00b4d8",
             backgroundColor: "rgba(0,180,216,0.12)",
             yAxisID: "y1",
+            tension: 0.2,
+            hidden: true,
+          },
+          {
+            label: "KEV due soon (<=7d) count",
+            data: kevDueSoon,
+            borderColor: "#ffd166",
+            backgroundColor: "rgba(255,209,102,0.12)",
+            yAxisID: "y",
             tension: 0.2,
             hidden: true,
           },
