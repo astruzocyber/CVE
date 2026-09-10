@@ -1935,3 +1935,33 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 6 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 48. `stopped`: false.
+
+## Cycle 49 — 2026-09-10T07:45:00Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 6`: 5 success / 1 failure — the failure (2026-09-10T00:13:41Z) is the pre-cycle-38-fix git-race straggler already documented/resolved in cycles 38-41. No 429/rate-limit signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot in any recent run. State clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add a reviewed-progress indicator (X of N alerts reviewed, %) to the dashboard toolbar.
+
+- **Opportunity:** Re-read `docs/app.js`/`docs/index.html`/`.agent/log.md` fresh this cycle. Cycle 48 added the per-card "Mark reviewed" localStorage toggle and a "Hide reviewed" filter, but gave no at-a-glance sense of overall triage completion — an analyst had to manually count dimmed cards, or toggle "Hide reviewed" and read the narrowed result count, to gauge how much of the backlog they'd cleared. Grepped the log for `progress`/`completion`/`reviewed.*percent` — zero prior implementation, confirming this closes a genuinely new gap opened (not closed) by cycle 48.
+- **Frontend:** Added `renderReviewedProgress()` to `docs/app.js`: computes the reviewed count against the FULL tracked alert set (`allAlerts`), not the currently-filtered view — triage-completion ("how much of my whole backlog have I cleared") is a distinct question from filter-match count, so a security lead who has filtered down to a handful of KEV-overdue alerts still sees progress against the whole board, not the narrowed view. Renders `✓ X of N reviewed (Y%)` into a new `#reviewed-progress` span added next to the existing `#result-count` in `docs/index.html`. Called from `applyFiltersAndRender()` (every render) and from the review-toggle click handler (immediate update without a full grid re-render, matching cycle 48's existing single-card-patch optimization). Added a small `.reviewed-progress` CSS rule to `docs/style.css` matching the existing `.count` style. Pure additive: reuses the existing `reviewedCves` Set/localStorage key from cycle 48, zero new API calls, zero backend/schema changes.
+- **Rejected candidates considered this cycle:**
+  - *Extending `nvd_last_modified`/CVSS-vector fields to GHSA/Dependabot* — still correctly deferred (both sources dormant in production, no live field to validate against); nothing has changed.
+  - *Keyboard shortcuts for filter controls* — still marginal value for a click-through triage audience; not revisited.
+  - *CWE trend-over-time in trend.csv* — still correctly deferred per cycle 45's reasoning.
+- **Scoring:** Feasibility 5/5 (small pure function + one new DOM span, reuses an existing localStorage Set, zero new API calls/dependencies/schema touch). Validation risk 1/5 (purely additive read-only display, doesn't touch the filter predicate or card-rendering logic). Value 3/5 (closes a real usability gap opened by cycle 48's own feature — a triage-progress metric is a natural complement to mark-as-reviewed and a common pattern in checklist-style tools).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. `git diff --stat` confirmed only `docs/app.js`/`docs/index.html`/`docs/style.css` touched — no `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle needed.
+- Served `docs/` on a local scratch HTTP port (8999, background process) with real production data (532 alerts). Browser-tool checks: initial load showed `✓ 0 of 532 reviewed (0%)`; clicking "Mark reviewed" on a card immediately updated to `✓ 1 of 532 reviewed (0%)`; a fresh page navigation confirmed the reviewed state and progress indicator persisted (loaded from localStorage on init); toggling "Hide reviewed" correctly narrowed `#result-count` to `531 of 532 alerts` while `#reviewed-progress` correctly stayed at `1 of 532` (full-set denominator, not filtered-set — confirmed as intended behavior, not a bug). Cleared test `localStorage` state and killed the scratch server before committing.
+
+**Deploy (Step 5):**
+- Committed `bd448a4` (`docs/app.js`, `docs/index.html`, `docs/style.css`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~40s for Pages deployment, then cache-busted `curl` confirmed `reviewed-progress` present in the live `index.html` (1 occurrence) and `renderReviewedProgress` present in the live `app.js` (3 occurrences).
+
+**Rejected this cycle:** None new beyond the still-deferred carried-forward items (GHSA/Dependabot field-parity extensions, keyboard shortcuts, CWE-trend-over-time) — the reviewed-progress candidate cleared the bar on first pass.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 6 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 49. `stopped`: false.

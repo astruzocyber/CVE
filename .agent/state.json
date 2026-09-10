@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 48,
+  "total_cycles": 49,
   "implemented": [
     {
       "cycle": 1,
@@ -338,9 +338,16 @@
       "title": "Client-side 'mark as reviewed' triage state + hide-reviewed filter",
       "description": "Every alert card gets a local-only 'Mark reviewed' toggle button (localStorage Set of CVE IDs, per-browser, never synced/sent anywhere); reviewed cards get a dimmed .reviewed-card style. Added a 'Hide reviewed' toolbar checkbox that filters them out, composing with the existing URL-query-param sharing (hidereviewed=1) and reset-filters. Fills a real, previously-total gap: on every reload the board showed all 532 alerts with zero memory of which an analyst had already triaged, forcing re-scanning of already-handled entries every session. Zero new API calls, zero backend/schema changes, zero cost.",
       "commit_sha": "c4ef207"
+    },
+    {
+      "cycle": 49,
+      "timestamp": "2026-09-10T07:45:00Z",
+      "title": "Add reviewed-progress indicator (X of N alerts reviewed) to toolbar",
+      "description": "Cycle 48 added the per-card mark-reviewed localStorage toggle and 'Hide reviewed' filter, but gave no at-a-glance sense of overall triage completion -- an analyst had to manually count dimmed cards or toggle hide-reviewed and read the result count to gauge backlog progress. Added renderReviewedProgress() to docs/app.js, called from applyFiltersAndRender() (every render) and from the review-toggle click handler (immediate update without a full re-render): computes reviewed count against the FULL tracked alert set (allAlerts), not the currently-filtered view, since triage-completion is a distinct question from filter-match count -- renders a checkmark plus 'X of N reviewed (Y%)' into a new #reviewed-progress span in the toolbar (docs/index.html) next to the existing #result-count. Pure client-side localStorage read (reuses the existing reviewedCves Set from cycle 48), zero new API calls, zero backend/schema changes. Validated: node --check passed; served docs/ locally with real production data (532 alerts) via browser tool, confirmed initial state '0 of 532 reviewed (0%)', clicking mark-reviewed updated to '1 of 532 reviewed (0%)' immediately and persisted across a fresh page reload, confirmed the denominator stays at the full 532 (not the filtered count) when 'Hide reviewed' narrows the visible result-count to 531 of 532 -- correct by design. Deployed frontend-only (no workflow_dispatch needed); live-verified via cache-busted curl (reviewed-progress present in deployed index.html, renderReviewedProgress present 3x in deployed app.js).",
+      "commit_sha": "bd448a4"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T07:10:00Z",
+  "last_cycle_at": "2026-09-10T07:45:00Z",
   "stopped": false
 }
