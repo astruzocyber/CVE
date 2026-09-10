@@ -34,6 +34,62 @@ function toggleReviewed(cveId) {
   saveReviewedSet();
 }
 
+// Export/import of the reviewed-state set: the reviewedCves Set has been
+// localStorage-only since cycle 48, meaning it's trapped on one browser --
+// an analyst who clears cache, switches devices, or hands off a triage
+// session to a teammate loses (or can't share) their review progress
+// entirely, with zero way to recover or transfer it. Export produces a
+// small JSON file ({version, exported_at, reviewed_cve_ids: [...]}) via a
+// client-side Blob download (no server, no new API call). Import reads a
+// user-selected file and MERGES its CVE IDs into the current set (union,
+// not replace) so importing a teammate's export can't silently erase an
+// analyst's own progress -- a deliberate, safer default for shared/handoff
+// use. Malformed/non-JSON files fail with a visible status message rather
+// than throwing or silently no-opping.
+function exportReviewedState() {
+  const payload = {
+    version: 1,
+    exported_at: new Date().toISOString(),
+    reviewed_cve_ids: [...reviewedCves].sort(),
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `reviewed-state-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function importReviewedState(file, statusEl) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      const ids = Array.isArray(data.reviewed_cve_ids) ? data.reviewed_cve_ids : null;
+      if (!ids) throw new Error("missing reviewed_cve_ids array");
+      let added = 0;
+      for (const id of ids) {
+        if (typeof id === "string" && !reviewedCves.has(id)) {
+          reviewedCves.add(id);
+          added++;
+        }
+      }
+      saveReviewedSet();
+      applyFiltersAndRender();
+      renderReviewedProgress();
+      if (statusEl) statusEl.textContent = `Imported ${ids.length} reviewed CVE(s), ${added} new (merged with existing).`;
+    } catch (e) {
+      if (statusEl) statusEl.textContent = "Import failed: not a valid reviewed-state export file.";
+    }
+  };
+  reader.onerror = () => {
+    if (statusEl) statusEl.textContent = "Import failed: could not read file.";
+  };
+  reader.readAsText(file);
+}
+
 // Reviewed-progress indicator: cycle 48 added the per-card toggle and a
 // "hide reviewed" filter, but gave no at-a-glance sense of overall triage
 // completion (e.g. "have I gotten through most of the backlog, or barely
@@ -1053,6 +1109,17 @@ document.getElementById("min-epss").addEventListener("input", () => {
 document.getElementById("export-csv").addEventListener("click", exportCsv);
 document.getElementById("export-json").addEventListener("click", exportJson);
 document.getElementById("print-view").addEventListener("click", () => window.print());
+const exportReviewedBtn = document.getElementById("export-reviewed");
+if (exportReviewedBtn) exportReviewedBtn.addEventListener("click", exportReviewedState);
+const importReviewedInput = document.getElementById("import-reviewed-input");
+if (importReviewedInput) {
+  importReviewedInput.addEventListener("change", () => {
+    const file = importReviewedInput.files && importReviewedInput.files[0];
+    if (!file) return;
+    importReviewedState(file, document.getElementById("import-reviewed-status"));
+    importReviewedInput.value = "";
+  });
+}
 
 function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
