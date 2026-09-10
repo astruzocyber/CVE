@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <title>CVE / KEV / Dependabot Alert Dashboard</title>
 <meta name="description" content="Free, zero-cost vulnerability alert dashboard aggregating CISA KEV, NVD, FIRST.org EPSS, GitHub Security Advisories, and Dependabot alerts with a composite risk score, historical trend charts, and dependency-file matching.">
 <meta property="og:title" content="Vulnerability Alert Dashboard">
@@ -101,6 +102,7 @@
       <button id="export-json" type="button" title="Export the currently-filtered alerts as raw JSON for scripting/automation">Export JSON</button>
       <button id="print-view" type="button" title="Open the browser print dialog (use &quot;Save as PDF&quot; for a report)">Print / PDF</button>
       <button id="reset-filters" type="button" title="Clear search, KEV/severity/source filters, sort, and dependency-file filter">Reset filters</button>
+      <button id="theme-toggle" type="button" title="Toggle light/dark theme" aria-pressed="false">🌙 Dark</button>
       <span class="count" id="result-count" aria-live="polite"></span>
     </div>
 

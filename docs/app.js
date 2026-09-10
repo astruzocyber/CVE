@@ -840,6 +840,25 @@ document.getElementById("export-csv").addEventListener("click", exportCsv);
 document.getElementById("export-json").addEventListener("click", exportJson);
 document.getElementById("print-view").addEventListener("click", () => window.print());
 
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  try { localStorage.setItem("theme", theme); } catch (e) {}
+  const btn = document.getElementById("theme-toggle");
+  if (btn) {
+    const isLight = theme === "light";
+    btn.textContent = isLight ? "☀️ Light" : "🌙 Dark";
+    btn.setAttribute("aria-pressed", String(isLight));
+  }
+}
+(function initTheme() {
+  const current = document.documentElement.getAttribute("data-theme") || "dark";
+  applyTheme(current);
+})();
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme") || "dark";
+  applyTheme(current === "light" ? "dark" : "light");
+});
+
 // Single-click reset of every filter/sort control back to its default, plus
 // clearing the dependency-file filter and the URL's filter query params --
 // previously a viewer with search + kev-filter + severity + source + a
