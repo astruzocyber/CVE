@@ -356,7 +356,19 @@ function renderCard(alert) {
         <span class="footer-links">
           ${alert.cve_id && /^CVE-/i.test(alert.cve_id) ? `<a href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}" target="_blank" rel="noopener">View on NVD</a>` : ""}
           ${alert.dependabot_url ? `<a href="${alert.dependabot_url}" target="_blank" rel="noopener">View alert</a>` : ""}
+          ${alert.osv_id ? `<a href="https://osv.dev/vulnerability/${encodeURIComponent(alert.osv_id)}" target="_blank" rel="noopener" title="OSV.dev open-source vulnerability record with fixed-version data">View on OSV.dev</a>` : ""}
         </span>
+        ${(() => {
+          // osv_fixed_versions (cycle 61, OSV.dev read-only enrichment) answers a
+          // distinct question none of the existing fields answer: which exact
+          // package version actually fixes this CVE, if OSV.dev has that data.
+          // Renders only when non-empty; most alerts (non-package-ecosystem CVEs,
+          // or ones OSV hasn't curated) have none and show nothing extra.
+          const fixed = alert.osv_fixed_versions;
+          if (!Array.isArray(fixed) || fixed.length === 0) return "";
+          const items = fixed.map(f => `${escapeHtml(f.package || "?")}${f.ecosystem ? ` (${escapeHtml(f.ecosystem)})` : ""} \u2192 ${escapeHtml(f.fixed || "?")}`).join(", ");
+          return `<div class="osv-fixed" title="Fixed version(s) per OSV.dev">Fix available: ${items}</div>`;
+        })()}
         ${copyMdBtn}
         ${copySuppressBtn}
         ${reviewedBtn}
@@ -387,6 +399,10 @@ function alertToMarkdown(alert) {
   lines.push(`- **First seen (tracked):** ${fmtDate(alert.first_seen)}`);
   lines.push(`- **NVD:** https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}`);
   if (alert.dependabot_url) lines.push(`- **Dependabot alert:** ${alert.dependabot_url}`);
+  if (Array.isArray(alert.osv_fixed_versions) && alert.osv_fixed_versions.length) {
+    lines.push(`- **Fix available (OSV.dev):** ${alert.osv_fixed_versions.map(f => `${f.package || "?"}${f.ecosystem ? ` (${f.ecosystem})` : ""} -> ${f.fixed || "?"}`).join(", ")}`);
+  }
+  if (alert.osv_id) lines.push(`- **OSV.dev:** https://osv.dev/vulnerability/${encodeURIComponent(alert.osv_id)}`);
   return lines.join("\n");
 }
 

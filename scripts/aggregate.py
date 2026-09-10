@@ -97,6 +97,7 @@ KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulner
 NVD_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
 EPSS_URL = "https://api.first.org/data/v1/epss"
 GHSA_URL = "https://api.github.com/advisories"
+OSV_URL = "https://api.osv.dev/v1/vulns"
 GITHUB_API = "https://api.github.com"
 
 USER_AGENT = "cve-kev-dependabot-dashboard/2.0 (+github actions)"
@@ -259,6 +260,76 @@ def fetch_kev():
             time.sleep(wait)
     print(f"  WARNING: failed to fetch KEV catalog after 3 attempts: {last_err}", file=sys.stderr)
     return {}
+
+
+def parse_osv_fixed_versions(osv_data):
+    """Pure parsing helper (testable without network): given an OSV.dev vuln
+    JSON object, extract up to 5 (package, ecosystem, fixed-version) entries
+    from its affected[].ranges[].events[] fixed markers. Returns [] on any
+    unexpected shape rather than raising."""
+    fixed = []
+    if not isinstance(osv_data, dict):
+        return fixed
+    for aff in osv_data.get("affected", []) or []:
+        if not isinstance(aff, dict):
+            continue
+        pkg = aff.get("package") or {}
+        pkg_name = pkg.get("name") if isinstance(pkg, dict) else None
+        ecosystem = pkg.get("ecosystem") if isinstance(pkg, dict) else None
+        for rng in aff.get("ranges", []) or []:
+            if not isinstance(rng, dict):
+                continue
+            for ev in rng.get("events", []) or []:
+                if isinstance(ev, dict) and ev.get("fixed"):
+                    fixed.append({
+                        "package": pkg_name,
+                        "ecosystem": ecosystem,
+                        "fixed": ev["fixed"],
+                    })
+                    break  # first fixed event per range is enough
+    return fixed[:5]
+
+
+def fetch_osv_fix_info(cve_id):
+    """Look up a single CVE on OSV.dev (https://api.osv.dev/v1/vulns/<id>) for
+    read-only enrichment: does an OSV record exist for this CVE, and if so what
+    package(s)/ecosystem(s) have a known FIXED version? This is scoped narrowly
+    (per-CVE GET, no query/batch endpoint, no new ingestion source) so it can't
+    surface new alerts or change filtering/scoring -- purely additive metadata
+    on alerts the pipeline already decided to track via NVD/GHSA/Dependabot.
+
+    Fail-soft by design: a 404 (very common -- OSV primarily curates open-source
+    package ecosystem advisories, not every CVE, e.g. browser/OS CVEs routinely
+    have no OSV record) is expected and returns None immediately with no retry.
+    Only 429/5xx get the same bounded-retry treatment as every other fetch_*
+    function in this file; any other failure degrades to None rather than
+    raising, matching the project's schema/accuracy policy of never guessing.
+    """
+    url = f"{OSV_URL}/{urllib.parse.quote(cve_id)}"
+    for attempt in range(2):
+        try:
+            data, _ = http_get_json(url, timeout=10)
+            if not validate_schema(f"OSV.dev {cve_id}", data, ["id"]):
+                return None
+            return {"osv_id": data.get("id"), "osv_fixed_versions": parse_osv_fixed_versions(data)}
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return None
+            if e.code == 429 or e.code >= 500:
+                if attempt == 0:
+                    time.sleep(3)
+                    continue
+                print(f"  WARNING: OSV.dev fetch failed for {cve_id}: HTTP {e.code}",
+                      file=sys.stderr)
+                return None
+            return None
+        except Exception as e:
+            if attempt == 0:
+                time.sleep(2)
+                continue
+            print(f"  WARNING: OSV.dev fetch failed for {cve_id}: {e}", file=sys.stderr)
+            return None
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -826,6 +897,8 @@ def build_final_entry(entry, kev_map, epss_map):
         "risk_score": risk_score,
         "risk_score_breakdown": risk_breakdown,
         "risk_score_prev": None,
+        "osv_id": None,
+        "osv_fixed_versions": [],
         "affected": entry.get("matched_vendor_product", []),
         "matched_keywords": entry.get("matched_keywords", []),
         "source": entry.get("source"),
@@ -1156,12 +1229,31 @@ def main():
         prior["kev_notes"] = kev_entry.get("notes") if in_kev else None
         prior["risk_score"] = risk_score
         prior["risk_score_breakdown"] = risk_breakdown
+        prior.setdefault("osv_id", None)
+        prior.setdefault("osv_fixed_versions", [])
 
     # Suppressed entries that were previously alerted should also disappear from the
     # cumulative view going forward (an analyst explicitly accepted the risk) -- but
     # their seen_id stays recorded so they don't silently reappear as "new" the moment
     # the suppression expires; they'll re-enter the normal filter/dedup path instead.
     existing_by_key = {k: v for k, v in existing_by_key.items() if v.get("cve_id") not in suppressions}
+
+    # OSV.dev read-only enrichment (osv_id / osv_fixed_versions): only for NEW alerts
+    # this run, not a re-check of all cumulative entries -- OSV.dev has no batch-by-CVE
+    # endpoint, so enriching the full tracked population every run would mean hundreds
+    # of serial per-CVE GETs each cycle for a field that, once set, almost never changes
+    # (a fix either exists in OSV's data or doesn't). Bounded, one-time cost per CVE;
+    # fails soft (404/error -> stays None) and never affects filtering, scoring, or
+    # which alerts get surfaced -- purely additive metadata on already-decided alerts.
+    for final in new_alerts:
+        osv_info = fetch_osv_fix_info(final["cve_id"])
+        if osv_info:
+            final["osv_id"] = osv_info["osv_id"]
+            final["osv_fixed_versions"] = osv_info["osv_fixed_versions"]
+            key = unique_key(final)
+            if key in existing_by_key:
+                existing_by_key[key]["osv_id"] = final["osv_id"]
+                existing_by_key[key]["osv_fixed_versions"] = final["osv_fixed_versions"]
 
     cumulative = sorted(existing_by_key.values(), key=lambda a: a.get("first_seen", ""), reverse=True)
     stats = compute_stats(cumulative)

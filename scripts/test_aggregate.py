@@ -36,6 +36,7 @@ from aggregate import (
     unique_key,
     compute_stats,
     build_final_entry,
+    parse_osv_fixed_versions,
 )
 
 
@@ -231,6 +232,64 @@ class TestBuildFinalEntry(unittest.TestCase):
         self.assertIn("risk_score_prev", final)
         self.assertIsNone(final["risk_score_prev"])
         self.assertIsInstance(final["risk_score"], (int, float))
+
+    def test_default_osv_fields_are_empty(self):
+        # OSV.dev enrichment (cycle 61) is applied later in main() for NEW
+        # alerts only -- build_final_entry() itself must always default these
+        # fields rather than omit them, so every alert has a stable shape
+        # regardless of whether OSV.dev enrichment ran this cycle.
+        entry = {"cve_id": "CVE-2026-00002", "source": "nvd", "cvss_score": 5.0,
+                 "description": "test"}
+        final = build_final_entry(entry, kev_map={}, epss_map={})
+        self.assertIn("osv_id", final)
+        self.assertIsNone(final["osv_id"])
+        self.assertEqual(final["osv_fixed_versions"], [])
+
+
+class TestParseOsvFixedVersions(unittest.TestCase):
+    def test_extracts_fixed_versions_from_affected_ranges(self):
+        osv_data = {
+            "id": "GHSA-jfh8-c2jp-5v3q",
+            "affected": [
+                {
+                    "package": {"name": "org.apache.logging.log4j:log4j-core", "ecosystem": "Maven"},
+                    "ranges": [
+                        {"type": "ECOSYSTEM", "events": [
+                            {"introduced": "0"}, {"fixed": "2.3.1"},
+                        ]},
+                    ],
+                },
+            ],
+        }
+        result = parse_osv_fixed_versions(osv_data)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["package"], "org.apache.logging.log4j:log4j-core")
+        self.assertEqual(result[0]["ecosystem"], "Maven")
+        self.assertEqual(result[0]["fixed"], "2.3.1")
+
+    def test_no_fixed_event_yields_empty_list(self):
+        osv_data = {"id": "X", "affected": [
+            {"package": {"name": "foo", "ecosystem": "PyPI"},
+             "ranges": [{"events": [{"introduced": "0"}]}]},
+        ]}
+        self.assertEqual(parse_osv_fixed_versions(osv_data), [])
+
+    def test_missing_affected_key_returns_empty(self):
+        self.assertEqual(parse_osv_fixed_versions({"id": "X"}), [])
+
+    def test_malformed_input_does_not_raise(self):
+        self.assertEqual(parse_osv_fixed_versions(None), [])
+        self.assertEqual(parse_osv_fixed_versions({"affected": "not-a-list"}), [])
+        self.assertEqual(parse_osv_fixed_versions({"affected": [{"ranges": "bad"}]}), [])
+
+    def test_caps_at_five_entries(self):
+        osv_data = {"id": "X", "affected": [
+            {"package": {"name": f"pkg{i}", "ecosystem": "PyPI"},
+             "ranges": [{"events": [{"fixed": f"1.{i}.0"}]}]}
+            for i in range(8)
+        ]}
+        result = parse_osv_fixed_versions(osv_data)
+        self.assertEqual(len(result), 5)
 
 
 if __name__ == "__main__":
