@@ -630,6 +630,10 @@ async function loadStats() {
     document.getElementById("stat-ransomware").textContent = stats.kev_ransomware_count ?? "-";
     document.getElementById("stat-epss").textContent =
       typeof stats.avg_epss === "number" ? (stats.avg_epss * 100).toFixed(1) + "%" : "-";
+    const avgRiskEl = document.getElementById("stat-avg-risk");
+    if (avgRiskEl) {
+      avgRiskEl.textContent = typeof stats.avg_risk_score === "number" ? stats.avg_risk_score : "-";
+    }
     renderSourceBreakdown(stats.by_source);
     renderSeverityBreakdown(stats.by_severity);
   } catch {
@@ -730,6 +734,7 @@ async function loadTrendChart() {
     const kevOverdue = rows.map((r) => (r[3] === "" ? null : Number(r[3])));
     const kevRansomware = rows.map((r) => (r[4] === "" || r[4] === undefined ? null : Number(r[4])));
     const avgEpss = rows.map((r) => (r[5] === "" ? null : Number(r[5]) * 100));
+    const avgRiskScore = rows.map((r) => (r[6] === "" || r[6] === undefined ? null : Number(r[6])));
 
     document.getElementById("trend-section").hidden = false;
     new Chart(canvas, {
@@ -779,6 +784,15 @@ async function loadTrendChart() {
             backgroundColor: "rgba(79,157,255,0.15)",
             yAxisID: "y1",
             tension: 0.2,
+          },
+          {
+            label: "Avg risk score",
+            data: avgRiskScore,
+            borderColor: "#3ddc97",
+            backgroundColor: "rgba(61,220,151,0.12)",
+            yAxisID: "y1",
+            tension: 0.2,
+            hidden: true,
           },
         ],
       },

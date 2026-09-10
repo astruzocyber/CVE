@@ -848,6 +848,7 @@ def compute_stats(alerts):
     ransomware_count = sum(1 for a in alerts if a.get("kev_ransomware_use"))
     by_severity = {"critical": 0, "high": 0, "medium": 0, "low": 0, "unknown": 0}
     epss_values = []
+    risk_values = []
     by_source = {}
     for a in alerts:
         cvss = a.get("cvss_score")
@@ -863,6 +864,8 @@ def compute_stats(alerts):
             by_severity["low"] += 1
         if isinstance(a.get("epss_score"), (int, float)):
             epss_values.append(a["epss_score"])
+        if isinstance(a.get("risk_score"), (int, float)):
+            risk_values.append(a["risk_score"])
         src = a.get("source", "unknown")
         by_source[src] = by_source.get(src, 0) + 1
 
@@ -890,6 +893,14 @@ def compute_stats(alerts):
         "by_severity": by_severity,
         "by_source": by_source,
         "avg_epss": round(sum(epss_values) / len(epss_values), 4) if epss_values else None,
+        # Distinct from avg_epss: the average of the composite risk_score (35% CVSS +
+        # 40% EPSS + 25% KEV bonus) across all currently-tracked alerts -- a single
+        # number answering "how hot is the whole tracked population right now",
+        # which avg_epss alone can't (a population could have low average EPSS but
+        # a high average risk_score if many entries are in KEV). Computed the same
+        # way as avg_epss (mean of the already-computed risk_score field, no new
+        # API calls or dependencies).
+        "avg_risk_score": round(sum(risk_values) / len(risk_values), 1) if risk_values else None,
     }
 
 
@@ -910,10 +921,11 @@ def append_history(stats):
         str(stats.get("kev_overdue_count", "")),
         str(stats.get("kev_ransomware_count", "")),
         "" if stats.get("avg_epss") is None else str(stats["avg_epss"]),
+        "" if stats.get("avg_risk_score") is None else str(stats["avg_risk_score"]),
     ]
     with open(HISTORY_CSV_PATH, "a") as f:
         if is_new:
-            f.write("timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,avg_epss\n")
+            f.write("timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,avg_epss,avg_risk_score\n")
         f.write(",".join(row) + "\n")
     print(f"Appended trend row to {HISTORY_CSV_PATH}")
 
