@@ -204,6 +204,18 @@ function renderCard(alert) {
       ${cweHtml}
       <div class="card-footer">
         <span>Published: ${fmtDate(alert.published)}</span>
+        ${(() => {
+          // nvd_last_modified answers a distinct question from "published": has NVD
+          // revised the record (rescored CVSS, corrected CWE, edited description)
+          // since initial publication? Only render when it's a genuinely different
+          // calendar day from published, so a record with no post-publication edits
+          // (the common case) doesn't get a redundant, noisy second date shown.
+          if (!alert.nvd_last_modified || !alert.published) return "";
+          const pubDay = String(alert.published).slice(0, 10);
+          const modDay = String(alert.nvd_last_modified).slice(0, 10);
+          if (modDay === pubDay) return "";
+          return `<span class="revised-badge" title="NVD has revised this record since initial publication (rescored CVSS, corrected CWE/description, etc.)">Revised: ${escapeHtml(fmtDate(alert.nvd_last_modified))}</span>`;
+        })()}
         <span class="age-badge" title="Days since this alert was first ingested by the pipeline">${(() => { const age = firstSeenAge(alert); return typeof age === "number" ? `First seen: ${age}d ago` : ""; })()}</span>
         <span class="footer-links">
           ${alert.cve_id && /^CVE-/i.test(alert.cve_id) ? `<a href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}" target="_blank" rel="noopener">View on NVD</a>` : ""}
@@ -449,7 +461,7 @@ function exportCsv() {
   const header = ["cve_id", "risk_score", "cvss_score", "epss_score", "epss_percentile", "kev", "kev_due_date",
     "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
     "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "matched_keywords", "published",
-    "first_seen", "description"];
+    "nvd_last_modified", "first_seen", "description"];
   const lines = [toCsvRow(header)];
   for (const a of rows) {
     const vc = a.cvss_vector_components || {};
@@ -457,8 +469,8 @@ function exportCsv() {
       a.cve_id, a.risk_score, a.cvss_score, a.epss_score, a.epss_percentile, a.kev, a.kev_due_date,
       a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
       vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
-      (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.first_seen,
-      a.description,
+      (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.nvd_last_modified,
+      a.first_seen, a.description,
     ]));
   }
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });

@@ -457,6 +457,13 @@ def fetch_nvd_candidates(watchlist, api_key):
                 "cvss_vector_components": extract_cvss_vector_components(cve),
                 "cwe_ids": extract_cwe_nvd(cve),
                 "published": cve.get("published"),
+                # NVD's lastModified is already present in every response we fetch
+                # (it's how the lookback-window query itself is filtered) but was
+                # never propagated into our schema -- it answers a distinct question
+                # from "published": whether NVD has revised the record since initial
+                # publication (rescored CVSS, corrected CWE, edited description),
+                # which "published" alone can never reveal for an old CVE.
+                "nvd_last_modified": cve.get("lastModified"),
                 "matched_vendor_product": [],
                 "matched_keywords": [],
                 "source": "nvd",
@@ -822,6 +829,7 @@ def build_final_entry(entry, kev_map, epss_map):
         "matched_keywords": entry.get("matched_keywords", []),
         "source": entry.get("source"),
         "published": entry.get("published"),
+        "nvd_last_modified": entry.get("nvd_last_modified"),
         "severity": entry.get("severity"),
         "dependabot_url": entry.get("dependabot_url"),
         "first_seen": datetime.now(timezone.utc).isoformat(),
