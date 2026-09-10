@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 66,
+  "total_cycles": 67,
   "implemented": [
     {
       "cycle": 1,
@@ -469,9 +469,21 @@
       "title": "Make source-breakdown pills clickable filters",
       "description": "The severity/CWE/vendor breakdown pill rows in the stats bar (cycles 33/45/58) were all made clickable one-click drill-down filters, but the source-breakdown pill row (cycle 15) was the only remaining breakdown on the dashboard left as plain inert <span> text -- a UX inconsistency and a missed one-click filter shortcut for a real dashboard feature (filter by NVD/GHSA/Dependabot source). renderSourceBreakdown() in docs/app.js now renders a <button class=source-pill data-source=...> instead of a <span> for any source key present in the #source-filter dropdown's options (nvd/ghsa/dependabot), wired with a click handler that sets #source-filter.value and re-applies filters, mirroring the existing cwe-pill/vendor-pill click pattern almost line-for-line. Any unrecognized/future source key still renders as an inert <span> so no dead/no-op button can ever appear. docs/style.css added a button.source-pill cursor/hover rule (matching the cwe-pill/vendor-pill hover convention) without touching the existing plain .source-pill span styling. Pure additive frontend change: no aggregate.py/schema/API changes, no new API calls.",
       "commit_sha": "f894d84"
+    },
+    {
+      "cycle": 67,
+      "timestamp": "2026-09-10T19:26:00Z",
+      "title": "Track critical/high severity counts in trend.csv + fix validator header-drift bug",
+      "description": "append_history() now writes critical_count/high_count columns (from the already-computed by_severity stats) to trend.csv -- a severity-mix trend distinct from avg_risk_score (single composite)/total_alerts (raw volume)/avg_epss, none of which can reveal a population holding steady totals while critical-count silently climbs. docs/app.js trend chart gained two new hidden-by-default togglable line datasets (Critical severity count / High severity count) on the existing y2 axis. Fixing this also surfaced and fixed a real, previously-latent bug: scripts/validate_data.py hardcoded its own duplicate copy of the expected trend.csv header list instead of importing aggregate.py's HISTORY_CSV_HEADER constant -- this exact header extension would have broken CI's data-validation step (confirmed: it did fail locally before the fix) despite append_history()'s own header-self-heal logic explicitly documenting schema growth as expected/intentional. Now validate_data.py imports the real constant as single source of truth, so this class of drift can never recur. Added 3 new unit tests (46 total, up from 43): new-file full header+row, stale-header upgrade leaves old rows untouched, missing severity breakdown writes empty columns.",
+      "commit_sha": "dc317f9",
+      "rejected_alternatives": [
+        "Full risk_score history array (time series per CVE) -- still deferred per cycle 56 reasoning (unbounded schema/storage growth risk).",
+        "GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack.",
+        "Any paid/threat-intel enrichment -- violates zero-cost, rejected on principle."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T18:41:16Z",
+  "last_cycle_at": "2026-09-10T19:26:00Z",
   "stopped": false
 }

@@ -2549,3 +2549,38 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals observed anywhere this cycle. This cycle's change was frontend-only (no external API calls made at all) — data pipeline continues on its existing 4h schedule unaffected. RATE_LIMIT_EVENT: no.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 66. `stopped`: false.
+
+## Cycle 67 — 2026-09-10T19:26:00Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh (not from stale summary):** `git log` HEAD was `f894d84` (cycle 66 log commit), `git status` clean, matched `origin/main`. `gh run list`: last several `ci.yml`/`pages-build-deployment` runs all `success`, no 429/throttle signals. `.agent/state.json`: `total_cycles`=66, both counters 0, `stopped`=false. `docs/data/alerts.json`: 583 alerts. Reviewed all 66 prior `implemented` entries to avoid duplicating any shipped feature. Full field-completeness sweep of `stats.json`'s 10 top-level keys against frontend rendering confirmed all are surfaced except the historical trend was missing a severity-mix dimension.
+
+**Candidates considered:**
+1. **Track critical/high severity counts in trend.csv + surface as new chart lines** — feasibility 5/5 (both values already computed every run by `compute_stats()`'s existing `by_severity` dict, zero new API calls/dependencies, near-identical shape to the existing `avg_risk_score` column added in cycle 56/58's era); risk 2/5 (touches the trend.csv schema, the one artifact with an explicit self-healing header-upgrade mechanism already built for exactly this kind of extension — but required also fixing `validate_data.py`'s independent hardcoded header duplicate, which is itself a real latent bug this cycle uncovered and fixed); value 4/5 (closes a genuine trend-blind-spot: a security lead watching the dashboard over time could see total_alerts/avg_risk_score hold steady while the underlying critical/high split silently shifted, with zero way to see that shift — the existing severity breakdown pill only shows the current instant, not the trend). **CHOSEN**.
+2. Full risk_score history array (time series per CVE) — still deferred per cycle 56 reasoning (unbounded schema/storage growth risk).
+3. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack; not something this agent can safely guess.
+4. New free data source beyond OSV.dev — no additional zero-cost source identified this cycle that clears the value bar.
+5. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented (candidate 1):**
+- `scripts/aggregate.py`: `HISTORY_CSV_HEADER` extended with `critical_count,high_count`; `append_history()` now pulls both from the already-passed `stats["by_severity"]` dict (no new computation, no new API calls). The pre-existing header self-heal logic (added cycle 54) handles the upgrade transparently — verified live it fired correctly on the real production trend.csv.
+- `docs/app.js`: `loadTrendChart()` parses two new CSV columns (index 7/8, tolerant of older rows lacking them — same `undefined`-safe pattern as every other column) and adds "Critical severity count" / "High severity count" as two new Chart.js line datasets on the existing shared `y2` axis, both hidden by default (consistent with the existing convention of only showing 2-3 lines by default to avoid a cluttered first view).
+- `scripts/validate_data.py`: fixed a real, previously-unnoticed bug this cycle's work surfaced — the trend.csv header check hardcoded its own duplicate expected-header list instead of importing `aggregate.py`'s `HISTORY_CSV_HEADER` constant. This exact schema extension would have failed CI's validation step (confirmed: it did fail locally, `VALIDATION FAILED`, before the fix) even though `append_history()`'s own documented behavior treats header extension as expected, intentional schema evolution. Now imports the real constant as single source of truth — this class of drift structurally cannot recur.
+- `scripts/test_aggregate.py`: added `TestAppendHistory` (3 new cases: new-file gets full header+row with correct critical/high values, a stale pre-extension header is upgraded in place while old data rows are left untouched, missing `by_severity` writes empty (not error/crash) columns) — 46 tests total, up from 43.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py scripts/validate_data.py scripts/notify_github_issues.py`: OK.
+- `node --check docs/app.js`: OK.
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: 46/46 passed.
+- **Live end-to-end `aggregate.py` run** against real NVD/CISA KEV/FIRST.org EPSS APIs (`LOOKBACK_DAYS=2`, run directly against the real repo since this is a frontend+pipeline combined change with no destructive risk to existing fields): 587 total alerts (up from 583 pre-cycle), header self-heal fired correctly (`Upgraded stale trend.csv header (...) -> (...,critical_count,high_count); historical data rows left untouched.`), new trend row correctly appended with `141,446` (critical/high) matching `stats.json`'s `by_severity`. No 429/rate-limit signals anywhere in the run.
+- `python3 scripts/validate_data.py` against the regenerated real production data: **FAILED first** on the pre-existing header-mismatch bug this cycle discovered (`got [...9 cols...], expected [...7 cols...]`) — fixed `validate_data.py` to import the real constant, re-ran: **PASSED** (587 alerts, 587 unique IDs, stats.json schema OK, trend.csv 31 rows OK, 44/44 `getElementById` id refs resolve, feeds parse OK).
+- Local browser smoke test via `python3 -m http.server` serving the real, freshly-regenerated production `docs/` (587 alerts): confirmed `allAlerts.length === 587`, `#trend-section` visible, and via `Chart.getChart()` confirmed all 8 expected datasets present with correct real last-values including the two new ones (`Critical severity count: 141`, `High severity count: 446`, matching `stats.json`'s `by_severity` exactly) — zero regression to the 6 pre-existing trend lines or card grid.
+
+**Deploy:** Committed `dc317f9` — "Cycle 67: track critical/high severity counts in trend.csv + fix validator header drift" — pushed to `main` (clean fast-forward from `4db7fb9`, includes regenerated production `docs/data/*`/`docs/feed.json`/`docs/feed.xml`/`docs/data/history/trend.csv` since `aggregate.py` was exercised live). Live CI run `34520222066` (`CI Data & Frontend Validation`) → `success`, 11s. `pages-build-deployment` run `34520221821` → `success`. Live-verified via cache-busted `curl`: `https://astruzocyber.github.io/CVE/app.js` contains `Critical severity count`; `https://astruzocyber.github.io/CVE/data/history/trend.csv` tail shows the new row `...,587,4,1,1,0.0077,30.3,141,446` — the fix and its regenerated data are live in production.
+
+**Rejected this cycle:** Full risk-score history array (deferred, schema-growth risk), GHSA/Dependabot coverage expansion (needs human input on tech stack, flagged not hard-rejected), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS APIs. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 67. `stopped`: false.
