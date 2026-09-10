@@ -712,19 +712,33 @@ function exportCsv() {
   // offline reporting/compliance tracking silently lost that data even though
   // it's visible on-screen. Purely additive columns reading existing fields --
   // no new API calls, no schema changes, no risk to existing columns/consumers.
+  //
+  // Cycle 62: osv_id/osv_fixed_versions (cycle 61's OSV.dev enrichment, already
+  // rendered on-card and already included in exportJson()'s raw objects and
+  // alertToMarkdown()'s single-alert export) had the exact same gap this
+  // comment already documents for cvss_vector_components/kev_required_action/
+  // kev_notes -- visible on screen and in the other two export formats, but
+  // silently dropped from CSV. Added as two more purely-additive columns:
+  // osv_id as-is, osv_fixed_versions flattened to "pkg (ecosystem) -> version"
+  // entries joined by "; " (same join convention as affected/cwe_ids/
+  // matched_keywords above) so it survives a spreadsheet's single-cell-per-
+  // field model without losing the package/ecosystem/version structure.
   const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_percentile", "kev", "kev_due_date",
     "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
     "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "matched_keywords", "published",
-    "nvd_last_modified", "first_seen", "description"];
+    "nvd_last_modified", "first_seen", "osv_id", "osv_fixed_versions", "description"];
   const lines = [toCsvRow(header)];
   for (const a of rows) {
     const vc = a.cvss_vector_components || {};
+    const osvFixed = (a.osv_fixed_versions || [])
+      .map((f) => `${f.package || "?"}${f.ecosystem ? ` (${f.ecosystem})` : ""} -> ${f.fixed || "?"}`)
+      .join("; ");
     lines.push(toCsvRow([
       a.cve_id, a.risk_score, a.risk_score_prev, a.cvss_score, a.epss_score, a.epss_percentile, a.kev, a.kev_due_date,
       a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
       vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
       (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.nvd_last_modified,
-      a.first_seen, a.description,
+      a.first_seen, a.osv_id, osvFixed, a.description,
     ]));
   }
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });
