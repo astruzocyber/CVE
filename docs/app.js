@@ -398,6 +398,17 @@ function applyFiltersAndRender() {
       // hide at the bottom of the list forever.
       return (a.first_seen || "").localeCompare(b.first_seen || "");
     }
+    if (sortBy === "published") {
+      // Distinct from first_seen (when the pipeline ingested it): this is
+      // the actual vendor/NVD publish date, which can differ from first_seen
+      // by years for older CVEs that only start matching the watchlist
+      // later. Missing values sort to the end, not treated as newest.
+      const ap = a.published || "", bp = b.published || "";
+      if (!ap && !bp) return 0;
+      if (!ap) return 1;
+      if (!bp) return -1;
+      return bp.localeCompare(ap);
+    }
     // default: first_seen, newest first
     return (b.first_seen || "").localeCompare(a.first_seen || "");
   });
