@@ -133,6 +133,22 @@ function firstSeenAge(alert) {
   return days < 0 ? 0 : days;
 }
 
+// "NEW" badge/filter: distinct from the existing "First seen: Nd ago" badge
+// (cycle 19, always-visible aging label) and "Sort: Newest first" -- this
+// answers a binary triage question ("did anything land on my board since I
+// last checked, roughly in the last day") that scanning first_seen ages or
+// re-sorting doesn't answer at a glance across dozens of cards. 24h chosen
+// to comfortably span the pipeline's 4h run cadence (multiple runs' worth
+// of "new" stay flagged for a full day even if an analyst only checks once
+// daily) without staying stuck "new" for so long it loses meaning.
+const NEW_WITHIN_MS = 24 * 60 * 60 * 1000;
+function isNewWithin24h(alert) {
+  if (!alert.first_seen) return false;
+  const seen = new Date(alert.first_seen);
+  if (isNaN(seen)) return false;
+  return (Date.now() - seen.getTime()) <= NEW_WITHIN_MS;
+}
+
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str ?? "";
@@ -179,6 +195,7 @@ function renderCard(alert) {
   const dueSoonBadge = typeof dueSoonDays === "number" && dueSoonDays <= 7
     ? `<span class="badge due-soon">DUE SOON (${dueSoonDays}d)</span>`
     : "";
+  const newBadge = isNewWithin24h(alert) ? `<span class="badge new-alert">NEW</span>` : "";
   const sevBadge = sevClass
     ? `<span class="badge ${sevClass}">${sevClass}</span>`
     : "";
@@ -236,7 +253,7 @@ function renderCard(alert) {
     <div class="card${isReviewed ? " reviewed-card" : ""}" data-cve-id="${cveIdSafe}" id="alert-${cveIdSafe}">
       <div class="card-header">
         <button class="cve-id cve-link-btn" type="button" data-cve="${cveIdSafe}" title="Copy a direct link to this alert">${cveIdSafe}</button>
-        <div class="badges">${kevBadge}${ransomwareBadge}${overdueBadge}${dueSoonBadge}${sevBadge}${sourceBadge}</div>
+        <div class="badges">${newBadge}${kevBadge}${ransomwareBadge}${overdueBadge}${dueSoonBadge}${sevBadge}${sourceBadge}</div>
       </div>
       <div class="risk-row">
         <div class="risk-bar-track"><div class="risk-bar-fill ${rClass}" style="width:${Math.min(100, alert.risk_score || 0)}%"></div></div>
@@ -407,9 +424,13 @@ function readFiltersFromURL() {
   if (params.has("hidereviewed") && hideReviewedEl) {
     hideReviewedEl.checked = params.get("hidereviewed") === "1";
   }
+  const newOnlyEl = document.getElementById("new-only");
+  if (params.has("newonly") && newOnlyEl) {
+    newOnlyEl.checked = params.get("newonly") === "1";
+  }
 }
 
-function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed) {
+function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed, newOnly) {
   const params = new URLSearchParams();
   if (search) params.set("q", search);
   if (kevFilter && kevFilter !== "all") params.set("kev", kevFilter);
@@ -419,6 +440,7 @@ function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, s
   if (typeof minRisk === "number" && !Number.isNaN(minRisk)) params.set("minrisk", String(minRisk));
   if (typeof minEpss === "number" && !Number.isNaN(minEpss)) params.set("minepss", String(minEpss));
   if (hideReviewed) params.set("hidereviewed", "1");
+  if (newOnly) params.set("newonly", "1");
   const qs = params.toString();
   const newUrl = location.pathname + (qs ? "?" + qs : "") + location.hash;
   history.replaceState(null, "", newUrl);
@@ -435,10 +457,12 @@ function applyFiltersAndRender() {
   const minEpssRaw = document.getElementById("min-epss").value;
   const minEpss = minEpssRaw === "" ? null : Number(minEpssRaw);
   const hideReviewed = document.getElementById("hide-reviewed").checked;
-  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed);
+  const newOnly = document.getElementById("new-only").checked;
+  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed, newOnly);
 
   let filtered = allAlerts.filter((a) => {
     if (hideReviewed && reviewedCves.has(a.cve_id)) return false;
+    if (newOnly && !isNewWithin24h(a)) return false;
     if (kevFilter === "kev" && !a.kev) return false;
     if (kevFilter === "non-kev" && a.kev) return false;
     if (kevFilter === "overdue" && !isOverdue(a)) return false;
@@ -964,6 +988,7 @@ document.getElementById("severity-filter").addEventListener("change", applyFilte
 document.getElementById("source-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("sort-by").addEventListener("change", applyFiltersAndRender);
 document.getElementById("hide-reviewed").addEventListener("change", applyFiltersAndRender);
+document.getElementById("new-only").addEventListener("change", applyFiltersAndRender);
 let minRiskDebounceTimer = null;
 document.getElementById("min-risk").addEventListener("input", () => {
   clearTimeout(minRiskDebounceTimer);
@@ -1013,6 +1038,8 @@ document.getElementById("reset-filters").addEventListener("click", () => {
   document.getElementById("min-epss").value = "";
   const hideReviewedReset = document.getElementById("hide-reviewed");
   if (hideReviewedReset) hideReviewedReset.checked = false;
+  const newOnlyReset = document.getElementById("new-only");
+  if (newOnlyReset) newOnlyReset.checked = false;
   dependencyPackageNames = null;
   const depText = document.getElementById("dep-text-input");
   const depFile = document.getElementById("dep-file-input");

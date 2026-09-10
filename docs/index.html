@@ -127,6 +127,9 @@
       <label class="hide-reviewed-label" title="Hide alerts you've marked as reviewed on this device (local-only, not shared/synced)">
         <input type="checkbox" id="hide-reviewed"> Hide reviewed
       </label>
+      <label class="hide-reviewed-label" title="Show only alerts first seen on the dashboard within the last 24 hours">
+        <input type="checkbox" id="new-only"> New (24h) only
+      </label>
       <label for="sort-by" class="visually-hidden">Sort order</label>
       <select id="sort-by" aria-label="Sort order">
         <option value="risk_score">Sort: Risk score (high to low)</option>
@@ -141,7 +144,7 @@
       <button id="export-csv" type="button">Export CSV</button>
       <button id="export-json" type="button" title="Export the currently-filtered alerts as raw JSON for scripting/automation">Export JSON</button>
       <button id="print-view" type="button" title="Open the browser print dialog (use &quot;Save as PDF&quot; for a report)">Print / PDF</button>
-      <button id="reset-filters" type="button" title="Clear search, KEV/severity/source filters, risk/EPSS thresholds, hide-reviewed, sort, and dependency-file filter">Reset filters</button>
+      <button id="reset-filters" type="button" title="Clear search, KEV/severity/source filters, risk/EPSS thresholds, hide-reviewed, new-only, sort, and dependency-file filter">Reset filters</button>
       <button id="theme-toggle" type="button" title="Toggle light/dark theme" aria-pressed="false">🌙 Dark</button>
       <span class="count" id="result-count" aria-live="polite"></span>
       <span class="reviewed-progress" id="reviewed-progress" aria-live="polite" title="How many of all tracked alerts you've marked reviewed on this device (local-only, not shared/synced)"></span>
