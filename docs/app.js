@@ -459,6 +459,28 @@ function exportCsv() {
   URL.revokeObjectURL(url);
 }
 
+function exportJson() {
+  // Exports the currently-filtered alert set (or all alerts if no filter has
+  // run yet) as a raw JSON array -- exportCsv() (cycle 32/34) already covers a
+  // flattened subset of fields for spreadsheet/compliance workflows, but a
+  // viewer scripting against this data (e.g. feeding it into their own SIEM
+  // ingestion, a Python/jq pipeline, or a custom alert router) currently has
+  // to either scrape docs/data/alerts.json directly (which is unfiltered and
+  // undocumented as a public contract) or manually reconstruct full nested
+  // fields (cvss_vector_components, risk_score_breakdown, kev_* fields) lost
+  // in the CSV's flattened/joined columns. This exports the exact objects
+  // already backing the filtered on-screen view -- zero backend/schema
+  // changes, zero new API calls, zero cost.
+  const rows = window.__lastFiltered || allAlerts;
+  const blob = new Blob([JSON.stringify(rows, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `vulnerability-alerts-${new Date().toISOString().slice(0, 10)}.json`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 // Pipeline runs on a 4-hour schedule (.github/workflows/cve-alerts.yml). If the
 // most recent generated_at is older than STALE_THRESHOLD_MS, something is wrong
 // with the scheduled Action (broken workflow, disabled schedule, repeated
@@ -760,6 +782,7 @@ document.getElementById("severity-filter").addEventListener("change", applyFilte
 document.getElementById("source-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("sort-by").addEventListener("change", applyFiltersAndRender);
 document.getElementById("export-csv").addEventListener("click", exportCsv);
+document.getElementById("export-json").addEventListener("click", exportJson);
 document.getElementById("print-view").addEventListener("click", () => window.print());
 
 // Single-click reset of every filter/sort control back to its default, plus
