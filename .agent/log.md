@@ -2407,3 +2407,40 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals observed anywhere this cycle. Pre-cycle `gh run list`/log review of the last several `ci.yml`/`cve-alerts.yml`/`pages-build-deployment` runs showed all `success` with no rate-limit indicators. This cycle's change was frontend-only (no external API calls made at all) — data pipeline continues on its existing 4h schedule unaffected. RATE_LIMIT_EVENT: no.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 62. `stopped`: false.
+
+## Cycle 63 — 2026-09-10T16:38:02Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh (not from stale summary):** `git log` HEAD was `8b17182` (cycle 62 data-refresh commit from the scheduled `cve-alerts.yml` run), `git status` clean, matched `origin/main`. `gh run list`: last `ci.yml`/`cve-alerts.yml`/`pages-build-deployment` runs all `success` — most recent scheduled aggregation run `34500338953` succeeded in 50s. `.agent/state.json`: `total_cycles`=62, both counters 0, `stopped`=false — clean baseline matching the task brief exactly. `docs/data/alerts.json`: 548 alerts (grew by 1 since the brief's stated 547, from the intervening scheduled run — expected).
+
+**Candidates considered:**
+1. **Show kev_date_added (KEV catalog addition date) on card/MD/CSV** — feasibility 5/5 (field already populated in the schema since the earliest cycles, pure additive read of an already-present field, zero new API calls); risk 1/5 (purely additive: new conditional span on-card, new conditional line in `alertToMarkdown()`, new CSV column inserted between existing `kev`/`kev_due_date` columns — cannot break existing columns/consumers since insertion point is between two already-present columns, not at the end, but was verified via header-name comparison, not position, in the CSV consumer's own convention); value 3/5 (closes a real, previously-total display gap in the same spirit as cycles 32/37/62's CSV-completeness fixes: `kev_due_date` — the remediation deadline — was always shown, but `kev_date_added` — how long the KEV entry itself has existed — was silently absent everywhere despite being schema-present since cycle 1). **CHOSEN** (best feasibility/risk ratio found this cycle; closes a genuine, easily-verified gap rather than adding new speculative surface area).
+2. GHSA/Dependabot coverage expansion (`ghsa_packages`/additional `dependabot_repos`) — still flagged as needing human input on actual tech stack; carried forward unimplemented per cycles 56-62 reasoning, not something this agent can safely guess.
+3. Full risk_score history array (time series per CVE) — still deferred per cycle 56 reasoning (unbounded schema/storage growth risk); `risk_score_prev` single-value delta remains the shipped stepping stone. Blocker unchanged since cycle 61/62 — not revisited.
+4. New free data source beyond OSV.dev — no additional zero-cost source identified this cycle that clears the value bar above candidate 1's near-zero risk.
+5. Any paid/threat-intel enrichment — not seriously considered; would violate the zero-cost constraint, rejected on principle.
+
+**Implemented (candidate 1):**
+- `docs/app.js`: `renderCard()` gained a conditional `KEV added: <date>` span in the `.scores` row (only rendered when `alert.kev_date_added` is present), placed immediately before the existing `KEV due:` span. `alertToMarkdown()` gained a `- **KEV added:** <date>` line (only when `alert.kev` is true and the field is present), placed immediately before the existing `KEV remediation due` line. `exportCsv()`'s header/row arrays gained a `kev_date_added` column, inserted between the existing `kev` and `kev_due_date` columns to keep related fields adjacent. No changes to `aggregate.py`, no schema changes (the field has existed in `build_final_entry()`'s output since the earliest cycles) — purely a frontend display/export completeness fix.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js`: OK.
+- `python3 -m py_compile` on `aggregate.py`/`notify_github_issues.py`/`validate_data.py`/`test_aggregate.py`: OK (none touched this cycle — frontend-only change, sanity-checked anyway).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: 36/36 passed (unchanged, no scoring/parsing logic touched).
+- `python3 scripts/validate_data.py` against the existing real production `docs/data/*`: PASSED (548 alerts, 548 unique IDs, stats.json schema OK, trend.csv OK, 44/44 `getElementById` id references resolve, feeds parse OK).
+- Local browser smoke test via `python3 -m http.server` serving the real production `docs/` (548 alerts, real `data/*.json`), driven via the browser-automation tool:
+  - Confirmed `allAlerts.length === 548` after real load from production `data/alerts.json`.
+  - Called `alertToMarkdown()` directly against a real KEV alert (`CVE-2016-7255`, `kev_date_added: "2021-11-03"`) and confirmed the output includes the new "KEV added" line.
+  - Confirmed the rendered card DOM for that same CVE (`#alert-CVE-2016-7255`) includes the string "KEV added" in its innerHTML.
+  - Invoked `exportCsv()` with `URL.createObjectURL` monkey-patched to capture the generated `Blob` instead of triggering a download; read the Blob's real text content — confirmed the header row now includes `kev_date_added` correctly positioned between `kev` and `kev_due_date` (25 columns total header, up from 24).
+  - Confirmed zero regression: searched "wordpress" -> 144/548 (consistent with the current production `by_vendor_product` count), cleared search -> back to 548/548.
+- No `docs/data/*` changes this cycle (frontend-only, no `aggregate.py` touched), so no live `aggregate.py` dry-run regeneration was needed or performed — next scheduled `cve-alerts.yml` run continues to refresh data normally on its existing 4h cadence.
+
+**Deploy:** Committed `5fb3904` — "Cycle 63: show kev_date_added (KEV catalog addition date) on card/MD/CSV" — pushed to `main` (clean fast-forward from `8b17182`). Live CI run `34503296124` (`CI Data & Frontend Validation`) -> `success`, 26s. `pages-build-deployment` run `34503295105` -> `success`, 1m6s. Live-verified via cache-busted `curl`: `https://astruzocyber.github.io/CVE/app.js` contains 6 matches for `kev_date_added`/`KEV added` — change is live in production.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on actual tech stack, flagged not hard-rejected), full risk-score history array (deferred, schema-growth risk), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle. Pre-cycle `gh run list` review of the last several `ci.yml`/`cve-alerts.yml`/`pages-build-deployment` runs showed all `success` with no rate-limit indicators. This cycle's change was frontend-only (no external API calls made at all) — data pipeline continues on its existing 4h schedule unaffected. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 63. `stopped`: false.
