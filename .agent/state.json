@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 54,
+  "total_cycles": 55,
   "implemented": [
     {
       "cycle": 1,
@@ -380,9 +380,16 @@
       "title": "CI data-validation workflow (.github/workflows/ci.yml) + trend.csv header schema-drift fix",
       "description": "Added scripts/validate_data.py (stdlib-only schema/consistency checker for alerts.json, stats.json, trend.csv, app.js<->index.html id refs, feeds) and wired it into a new always-on CI workflow that runs on every push/PR touching docs/ or scripts/, independent of the 4h aggregation pipeline schedule -- closing a real gap where the only validation safety net across 53 prior cycles was manual per-cycle agent checks. Writing the validator surfaced a genuine, previously-unnoticed bug: append_history() in aggregate.py wrote a 6-column trend.csv header once, then silently started appending 7-column rows (avg_risk_score) without ever upgrading the header -- harmless to the frontend positional parser but a real schema-drift defect for any external consumer of the published CSV. Fixed with a self-healing header upgrade (rewrites only the header line, leaves historical rows -- which legitimately have fewer columns -- untouched) and corrected the already-committed trend.csv header. Verified: python3 scripts/validate_data.py passes locally against real production data (532 alerts); live GitHub Actions run 34467073769 for the new ci.yml workflow completed success in 13s on first push.",
       "commit_sha": "49720ad"
+    },
+    {
+      "cycle": 55,
+      "timestamp": "2026-09-10T11:14:00Z",
+      "title": "Unit test suite for aggregate.py scoring/parsing logic + fix latent CI gaps it exposed",
+      "description": "Added scripts/test_aggregate.py: 29 stdlib-only unittest cases covering composite_risk_score (weight redistribution on missing CVSS/EPSS, KEV flat +25 bonus, 0-100 clamping), parse_cvss_v3_vector_string (v3.0/v3.1 mapping, v4.0 correctly rejected, malformed input), extract_cwe_nvd/extract_cwe_ghsa (placeholder filtering, dedup, malformed-id rejection), unique_key, compute_stats severity bucket boundaries. All 29 passed against real aggregate.py -- no pre-existing bugs found, coverage itself is the value as a regression net for future cycles. Wired into ci.yml as a new unittest-discover step. Deploying it surfaced two real latent CI gaps from cycle 54: (1) ci.yml never ran 'pip install -r requirements.txt', so importing aggregate.py (which imports yaml) failed in the actual Actions runner (confirmed live failure, run 34470026053) even though validate_data.py never exercised this path locally. Fixed. (2) That fix, touching only .github/workflows/ci.yml, fell outside the existing paths filter and silently never re-triggered CI -- fixed by adding ci.yml/requirements.txt to the paths filter. Both fixes verified live: corrected CI workflow (run 34470191918) passed with all steps including the new unit-test step.",
+      "commit_sha": "d0990b1,78dc0b1,02343d9"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T10:05:00Z",
+  "last_cycle_at": "2026-09-10T11:14:00Z",
   "stopped": false
 }

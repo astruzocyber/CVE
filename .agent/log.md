@@ -2115,3 +2115,45 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot. No new external API calls introduced this cycle (CI workflow only touches committed repo files, zero network calls beyond `actions/checkout`/`actions/setup-python`, both free/standard GitHub-hosted actions).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 54. `stopped`: false.
+
+## Cycle 55 — 2026-09-10T11:14:00Z
+
+**Status:** Implemented, and fixed 2 real latent CI bugs it exposed. Live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 3`: 3/3 success. `gh run list --workflow=ci.yml --limit 5`: prior state green (cycle 54's ci.yml passing). State clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add a unit test suite (`scripts/test_aggregate.py`) for the pure scoring/parsing functions in `aggregate.py`, wired into `ci.yml`.
+
+- **Opportunity:** Re-read `scripts/aggregate.py` (1168 lines) fresh, focusing on `composite_risk_score`, `parse_cvss_v3_vector_string`, `extract_cwe_nvd`/`extract_cwe_ghsa`, `unique_key`, `compute_stats`. Cycle 54 added `validate_data.py` (schema/shape validation of *committed output*) but there was zero coverage of the *logic* that produces that output — a subtle bug in weight redistribution math, or a wrong CVSS letter-code mapping, would still emit schema-valid numbers and sail through both `validate_data.py` and 54 cycles of manual spot-checks. This is a distinct reliability layer from cycle 54's, not a duplicate.
+- **Implementation:** 29 `unittest` cases, stdlib-only, zero new dependencies, zero network calls, run in <1ms:
+  - `composite_risk_score`: both-present no-KEV exact value check, KEV flat +25 bonus, missing-EPSS redistributes weight upward (not silently zeroed), missing-CVSS redistributes weight, both-missing KEV-only edge case (scales to 100), never exceeds 100, never negative.
+  - `parse_cvss_v3_vector_string`: valid v3.1 and v3.0 vectors map to correct component values per the public CVSS spec, v4.0 vectors are correctly *rejected* (not mis-parsed with v3 semantics — this is the "adapt, never guess" policy the code comments already document, now enforced by a test), None/empty/malformed input handled without crashing, AV=A/P edge values.
+  - `extract_cwe_nvd`: valid CWE extraction, `NVD-CWE-Other`/`NVD-CWE-noinfo` placeholder filtering, dedup, non-English skip, empty/None weaknesses.
+  - `extract_cwe_ghsa`: valid extraction, missing key, non-dict entries skipped, malformed CWE-ID rejected.
+  - `unique_key`: same CVE from different sources produces distinct keys (this is the actual mechanism that lets a CVE surface from both NVD and Dependabot simultaneously — untested until now).
+  - `compute_stats`: exact severity-bucket boundary values (9.0/8.9/7.0/6.9/4.0/3.9 — catches off-by-one boundary regressions), total/KEV/ransomware counts, empty-alerts no-crash.
+  - All 29 passed on first run against the real, unmodified `aggregate.py` — no pre-existing logic bugs found. The value is the regression net itself for cycles 56+, not a bug caught this cycle.
+  - Added `python -m unittest discover -s scripts -p "test_*.py" -v` as a new step in `ci.yml`.
+- **Bugs found and fixed while deploying (not in the test logic itself, but in the CI wiring around it):**
+  1. **Missing dependency install in CI.** `ci.yml` (added cycle 54) never ran `pip install -r requirements.txt`. `validate_data.py` doesn't import `aggregate.py`, so cycle 54's CI had never actually exercised importing it — the first real import (`test_aggregate.py`'s `from aggregate import ...`, which pulls in `aggregate.py`'s top-level `import yaml`) failed in the live GitHub Actions runner with `ModuleNotFoundError: No module named 'yaml'` (confirmed via `gh run view 34470026053 --log-failed`), despite passing locally where `yaml`/`requests` were already present in the dev environment. Fixed by adding a `pip install -r requirements.txt` step before the syntax-check/validate/test steps.
+  2. **CI workflow couldn't validate changes to itself.** The fix for (1) touched only `.github/workflows/ci.yml`, which fell outside the existing `paths:` filter (`docs/**`, `scripts/**`) — so pushing the fix silently never re-triggered CI, and the last *visible* CI status stayed red from the original failure even after the fix landed. This is a structural blind spot: a validation gate that can't verify edits to its own definition. Fixed by adding `.github/workflows/ci.yml` and `requirements.txt` to both the `push` and `pull_request` path filters.
+- **Rejected candidates considered this cycle:** None needed — pursued this candidate directly per first-principles review (a genuine, previously-total coverage gap distinct from cycle 54's schema validator). Still-deferred carried-forward items unchanged: CWE trend-over-time (cycle 45), keyboard shortcuts (marginal value), GHSA/Dependabot field-parity extensions (both sources still dormant, 532/532 alerts 100% NVD-sourced), server-synced reviewed-state (violates zero-cost/static-architecture constraint, cycle 52).
+- **Scoring:** Feasibility 5/5 (stdlib `unittest`, zero new dependencies, tests run in milliseconds — free Actions minutes trivially cover it). Validation risk 1/5 initially assessed, but the deploy step itself surfaced 2 real CI-wiring bugs, both now fixed and live-verified — net risk after fix: near-zero (the test/CI files cannot affect the deploy path; `aggregate.py`/`docs/` runtime code was not modified at all this cycle). Value 4/5 (closes a genuine, previously-total gap: 54 prior cycles of scoring-math changes had zero automated logic-level regression coverage; also fixed 2 latent CI defects that would have silently degraded the safety net cycle 54 believed it had).
+
+**Validation (Step 4):**
+- `python3 -m unittest discover -s scripts -p "test_*.py" -v` locally: 29/29 passed against real, unmodified `aggregate.py`.
+- `python3 scripts/validate_data.py`: full pass against real production data (532 alerts) — confirms this cycle's changes didn't disturb the cycle-54 validator.
+- `python3 -m py_compile scripts/aggregate.py scripts/notify_github_issues.py scripts/validate_data.py scripts/test_aggregate.py`: OK.
+- `git diff --stat` per commit confirmed only `scripts/test_aggregate.py` (new) and `.github/workflows/ci.yml` touched across all 3 commits this cycle — zero `docs/`/`aggregate.py` runtime changes, so no data-pipeline dry-run/backup/restore cycle needed.
+
+**Deploy (Step 5) — 3 commits, iterative fix-and-verify against live CI:**
+1. `d0990b1` — added `scripts/test_aggregate.py` + wired `ci.yml`. Pushed. Live CI run `34470026053` **failed** (missing `pip install`, see bug #1 above) — caught via `gh run list`/`gh run view --log-failed`, not silently missed.
+2. `78dc0b1` — fixed by adding the `pip install -r requirements.txt` step. Pushed. `gh run list` showed the *previous* failed run still as the latest CI status — investigated via `gh run list --limit 5` and confirmed no new CI run had fired at all (bug #2 above: paths filter excluded `ci.yml` itself).
+3. `02343d9` — fixed by adding `ci.yml`/`requirements.txt` to the paths filter. Pushed. Live CI run `34470191918` **succeeded** (9s, all steps including the new unit-test step) — confirmed via `gh run list --workflow=ci.yml --limit 3`.
+- No `workflow_dispatch` needed for `cve-alerts.yml` (no `aggregate.py`/`docs/` runtime changes this cycle).
+
+**Rejected this cycle:** None (pursued directly, see Opportunity above). Carried-forward deferred items unchanged.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot. Zero new external API calls this cycle (test suite and CI-wiring changes only, no network calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 — the 2 CI failures this cycle were *self-corrected within the same cycle* via the standard iterative fix-verify loop (not carried as unresolved failures across cycle boundaries, and no bad commit ever reached the deploy-affecting `docs/`/`aggregate.py` path), so per the kill-switch definition ("if a cycle produces an error you cannot resolve within that cycle") this does not count as a failed cycle — it resolved before cycle end with a verified-green final state. `total_cycles`: 55. `stopped`: false.
