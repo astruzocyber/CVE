@@ -105,7 +105,37 @@ def check_stats_json():
                     )
         except Exception:
             pass
-    print("stats.json: schema OK, total_alerts matches alerts.json")
+    # Cross-check that the two breakdown maps this dashboard's trend chart and
+    # UI pills are built from (by_severity since cycle 67's critical/high trend
+    # lines, by_source since cycle 15/66's clickable pills) actually partition
+    # every alert -- i.e. their value sums equal total_alerts. compute_stats()
+    # buckets every alert into exactly one severity bucket ("unknown" included)
+    # and one source bucket by construction, so any mismatch here would mean a
+    # real bug silently dropped/double-counted alerts during aggregation
+    # (e.g. a future refactor introducing an early `continue` or a KeyError
+    # swallowed by a broad except) -- previously this could only have been
+    # caught by a human eyeballing stats.json against alerts.json, which never
+    # happened in 67 prior cycles. Cheap, stdlib-only, no false positives on
+    # legitimately-partial/older data since it only fires on an actual mismatch.
+    if "total_alerts" in data:
+        total = data["total_alerts"]
+        by_sev = data.get("by_severity")
+        if isinstance(by_sev, dict):
+            sev_sum = sum(v for v in by_sev.values() if isinstance(v, (int, float)))
+            if sev_sum != total:
+                fail(
+                    f"{path}: sum(by_severity.values()) ({sev_sum}) != total_alerts ({total}) "
+                    "-- every alert should fall into exactly one severity bucket"
+                )
+        by_src = data.get("by_source")
+        if isinstance(by_src, dict):
+            src_sum = sum(v for v in by_src.values() if isinstance(v, (int, float)))
+            if src_sum != total:
+                fail(
+                    f"{path}: sum(by_source.values()) ({src_sum}) != total_alerts ({total}) "
+                    "-- every alert should fall into exactly one source bucket"
+                )
+    print("stats.json: schema OK, total_alerts matches alerts.json, by_severity/by_source partition checks OK")
 
 
 def check_trend_csv():
