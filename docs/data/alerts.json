@@ -1,5 +1,55 @@
 [
   {
+    "cve_id": "CVE-2026-89049",
+    "description": "A server-side request forgery issue due to improper validation of equivalent address representations in the port forwarding to remote hosts functionality in Amazon AWS Systems Manager Agent (SSM Agent) before 3.3.4851.0 on all platforms might allow an authenticated remote user to bypass the remote destination denylist and reach link-local endpoints, potentially obtaining the temporary IAM role credentials of a managed instance and acting with that role's permissions from outside the instance, via a crafted destination host value that uses an alternate representation of a denied link-local address.\n\n\n\nTo remediate this issue, users should upgrade to version 3.3.4851.0 or later.",
+    "cvss_score": 9.9,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-918",
+      "CWE-1289"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.9,
+      "cvss_component": 57.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "amazon/aws"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-10T19:17:42.373",
+    "nvd_last_modified": "2026-09-10T19:44:21.980",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T20:10:15.040172+00:00"
+  },
+  {
     "cve_id": "CVE-2026-87628",
     "description": "Use after free in Cast in Google Chrome prior to 153.0.8010.36 allowed an adjacent attacker to potentially execute arbitrary code outside the sandbox via crafted network traffic. (Chromium security severity: Critical)",
     "cvss_score": 8.3,
@@ -34,7 +84,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 29.2,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -83,7 +133,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 30.9,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -132,7 +182,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 34.4,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -181,7 +231,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 28.4,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -230,7 +280,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 48.4,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -239,7 +289,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T18:18:12.457",
-    "nvd_last_modified": "2026-09-10T19:17:39.497",
+    "nvd_last_modified": "2026-09-10T19:54:25.810",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T19:23:04.636558+00:00"
@@ -279,7 +329,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -288,7 +338,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T17:17:06.083",
-    "nvd_last_modified": "2026-09-10T18:18:07.637",
+    "nvd_last_modified": "2026-09-10T19:58:20.507",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T19:23:04.636553+00:00"
@@ -877,7 +927,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:06.797",
-    "nvd_last_modified": "2026-09-10T16:18:05.073",
+    "nvd_last_modified": "2026-09-10T19:24:14.547",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550346+00:00"
@@ -1025,7 +1075,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T16:17:56.543",
-    "nvd_last_modified": "2026-09-10T19:17:35.117",
+    "nvd_last_modified": "2026-09-10T19:58:20.507",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550185+00:00"
@@ -1126,7 +1176,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T23:17:25.573",
-    "nvd_last_modified": "2026-09-09T14:17:12.570",
+    "nvd_last_modified": "2026-09-10T19:58:20.507",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550150+00:00"
@@ -2016,7 +2066,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:07.473",
-    "nvd_last_modified": "2026-09-10T15:17:52.473",
+    "nvd_last_modified": "2026-09-10T19:23:56.697",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:22:50.398772+00:00"
@@ -2163,7 +2213,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T14:17:03.823",
-    "nvd_last_modified": "2026-09-10T16:17:37.337",
+    "nvd_last_modified": "2026-09-10T19:58:20.507",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.441362+00:00"
