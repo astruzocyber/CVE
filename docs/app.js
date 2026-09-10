@@ -34,6 +34,27 @@ function toggleReviewed(cveId) {
   saveReviewedSet();
 }
 
+// Reviewed-progress indicator: cycle 48 added the per-card toggle and a
+// "hide reviewed" filter, but gave no at-a-glance sense of overall triage
+// completion (e.g. "have I gotten through most of the backlog, or barely
+// started?"). Counts against the FULL tracked set (allAlerts), not the
+// currently-filtered view, since "how much of my total backlog have I
+// cleared" is a distinct question from "how many match my current filter" --
+// a security lead filtering down to a handful of KEV-overdue alerts still
+// wants the denominator to be the whole board, not the narrowed view.
+function renderReviewedProgress() {
+  const el = document.getElementById("reviewed-progress");
+  if (!el) return;
+  const total = allAlerts.length;
+  if (total === 0) {
+    el.textContent = "";
+    return;
+  }
+  const reviewedCount = allAlerts.reduce((n, a) => n + (reviewedCves.has(a.cve_id) ? 1 : 0), 0);
+  const pct = Math.round((reviewedCount / total) * 100);
+  el.textContent = `\u2713 ${reviewedCount} of ${total} reviewed (${pct}%)`;
+}
+
 function severityClass(cvss) {
   if (cvss === null || cvss === undefined) return "";
   if (cvss >= 9.0) return "critical";
@@ -494,6 +515,7 @@ function applyFiltersAndRender() {
   const grid = document.getElementById("card-grid");
   const emptyState = document.getElementById("empty-state");
   document.getElementById("result-count").textContent = `${filtered.length} of ${allAlerts.length} alerts`;
+  renderReviewedProgress();
 
   if (filtered.length === 0) {
     grid.innerHTML = "";
@@ -807,6 +829,7 @@ document.getElementById("card-grid").addEventListener("click", (e) => {
       if (card && alert) {
         card.outerHTML = renderCard(alert);
       }
+      renderReviewedProgress();
     }
   }
 });
