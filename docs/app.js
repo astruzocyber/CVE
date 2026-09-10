@@ -677,6 +677,43 @@ function exportCsv() {
   URL.revokeObjectURL(url);
 }
 
+function exportMarkdownReport() {
+  // Cycle 51 added alertToMarkdown() for a single-alert detail block (pasting one
+  // CVE into an incident ticket), and cycles 32/34/37 added CSV/JSON bulk export
+  // for spreadsheet/scripting consumers -- but there was no bulk, human-readable
+  // Markdown summary of the *currently filtered view* itself, which is what a
+  // security lead actually wants to paste into a weekly status update, a GitHub
+  // issue, or a Slack/Teams channel post ("here's this week's KEV-overdue list").
+  // Produces a Markdown table (one row per alert: CVE, risk score, CVSS, EPSS,
+  // KEV status, affected, source) plus a one-line generated-at/count header --
+  // reuses only fields already rendered on-screen, so it's a pure additive
+  // client-side reduction of window.__lastFiltered with zero new API calls and
+  // zero backend/schema changes.
+  const rows = window.__lastFiltered || allAlerts;
+  const lines = [];
+  lines.push(`# Vulnerability alert report`);
+  lines.push("");
+  lines.push(`Generated: ${new Date().toISOString()} -- ${rows.length} alert(s)`);
+  lines.push("");
+  lines.push("| CVE | Risk | CVSS | EPSS | KEV | Affected | Source |");
+  lines.push("|---|---|---|---|---|---|---|");
+  for (const a of rows) {
+    const risk = typeof a.risk_score === "number" ? a.risk_score.toFixed(0) : "n/a";
+    const cvss = fmtScore(a.cvss_score);
+    const epss = typeof a.epss_score === "number" ? (a.epss_score * 100).toFixed(1) + "%" : "n/a";
+    const kev = a.kev ? (a.kev_ransomware_use ? "Yes (ransomware)" : "Yes") : "No";
+    const affected = ((a.affected || []).join(", ") || "n/a").replace(/\|/g, "\\|");
+    lines.push(`| ${a.cve_id} | ${risk} | ${cvss} | ${epss} | ${kev} | ${affected} | ${a.source || "unknown"} |`);
+  }
+  const blob = new Blob([lines.join("\n")], { type: "text/markdown" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `vulnerability-alert-report-${new Date().toISOString().slice(0, 10)}.md`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 function exportJson() {
   // Exports the currently-filtered alert set (or all alerts if no filter has
   // run yet) as a raw JSON array -- exportCsv() (cycle 32/34) already covers a
@@ -1108,6 +1145,7 @@ document.getElementById("min-epss").addEventListener("input", () => {
 });
 document.getElementById("export-csv").addEventListener("click", exportCsv);
 document.getElementById("export-json").addEventListener("click", exportJson);
+document.getElementById("export-md-report").addEventListener("click", exportMarkdownReport);
 document.getElementById("print-view").addEventListener("click", () => window.print());
 const exportReviewedBtn = document.getElementById("export-reviewed");
 if (exportReviewedBtn) exportReviewedBtn.addEventListener("click", exportReviewedState);
