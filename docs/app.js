@@ -616,6 +616,39 @@ function renderSeverityBreakdown(bySeverity) {
 }
 
 
+// stats.json now includes a top-10 by_cwe map (cycle 45), the same shape and
+// derivation pattern as by_severity/by_source above -- one clickable pill per
+// CWE, sorted by count descending server-side. Clicking a pill sets the
+// existing search box to that CWE ID and re-applies filters, reusing the
+// already-CWE-aware search haystack from an earlier cycle (no new filter
+// plumbing needed). Purely additive: reads an existing (now-extended)
+// stats.json field, no new API calls.
+function renderCweBreakdown(byCwe) {
+  const el = document.getElementById("cwe-breakdown");
+  if (!el) return;
+  if (!byCwe || typeof byCwe !== "object" || Object.keys(byCwe).length === 0) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  const entries = Object.entries(byCwe).sort((a, b) => b[1] - a[1]);
+  el.innerHTML = entries
+    .map(([cwe, count]) =>
+      `<button type="button" class="cwe-pill" data-cwe="${escapeHtml(cwe)}" title="Search for ${escapeHtml(cwe)}">${escapeHtml(cwe)}: <strong>${count}</strong></button>`
+    )
+    .join("");
+  el.hidden = false;
+  el.querySelectorAll(".cwe-pill").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const searchEl = document.getElementById("search");
+      if (!searchEl) return;
+      searchEl.value = btn.getAttribute("data-cwe");
+      applyFiltersAndRender();
+    });
+  });
+}
+
+
 async function loadStats() {
   try {
     const res = await fetch("data/stats.json", { cache: "no-store" });
@@ -636,6 +669,7 @@ async function loadStats() {
     }
     renderSourceBreakdown(stats.by_source);
     renderSeverityBreakdown(stats.by_severity);
+    renderCweBreakdown(stats.by_cwe);
   } catch {
     // stats.json is optional/may not exist yet on the very first run -- fail quietly
   }

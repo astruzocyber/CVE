@@ -850,6 +850,7 @@ def compute_stats(alerts):
     epss_values = []
     risk_values = []
     by_source = {}
+    by_cwe = {}
     for a in alerts:
         cvss = a.get("cvss_score")
         if cvss is None:
@@ -868,6 +869,8 @@ def compute_stats(alerts):
             risk_values.append(a["risk_score"])
         src = a.get("source", "unknown")
         by_source[src] = by_source.get(src, 0) + 1
+        for cwe in (a.get("cwe_ids") or []):
+            by_cwe[cwe] = by_cwe.get(cwe, 0) + 1
 
     # KEV entries with a due date in the past and not yet resolved -- an
     # operationally meaningful "overdue remediation" count (BOD 22-01 style).
@@ -901,6 +904,14 @@ def compute_stats(alerts):
         # way as avg_epss (mean of the already-computed risk_score field, no new
         # API calls or dependencies).
         "avg_risk_score": round(sum(risk_values) / len(risk_values), 1) if risk_values else None,
+        # Top weakness (CWE) classifications across all currently-tracked alerts,
+        # sorted by count descending, capped to the top 10 to keep stats.json small
+        # -- a distinct triage axis from severity/source: "what KINDS of bugs are
+        # we tracking right now" (e.g. a spike in CWE-79/XSS vs CWE-416/use-after-free
+        # says something different than a CVSS or source breakdown ever could).
+        # Built from cwe_ids, a field already extracted from NVD/GHSA/Dependabot
+        # responses since the CWE-badge cycle -- zero new API calls.
+        "by_cwe": dict(sorted(by_cwe.items(), key=lambda kv: kv[1], reverse=True)[:10]),
     }
 
 
