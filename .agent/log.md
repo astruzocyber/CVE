@@ -1804,3 +1804,38 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 44. `stopped`: false.
+
+## Cycle 45 — 2026-09-10T05:20:00Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 8` showed 7 success / 1 failure — the failure (2026-09-10T00:13:41Z) is the pre-cycle-38-fix git-race straggler already documented/resolved in cycles 38-41 (multiple subsequent runs succeeded cleanly). No 429/rate-limit signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot in any recent run. State clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add a top-CWE weakness-classification breakdown to the dashboard stats bar.
+
+- **Opportunity:** Re-read `scripts/aggregate.py` and `docs/app.js` fresh this cycle. `cwe_ids` (per-alert CWE classification list) has been extracted from NVD/GHSA/Dependabot and rendered as per-card badges since cycle 23, and made search-indexable since cycle 24 — but `compute_stats()` never aggregated it into a population-level breakdown the way `by_severity` and `by_source` already are. A viewer had no way to see, at a glance, "what kinds of vulnerabilities dominate the current tracked population" (e.g. a spike in CWE-79/XSS vs CWE-416/use-after-free) — a genuinely distinct triage axis from severity (how bad), source (where it came from), or risk score (how urgent). Grepped `.agent/log.md`/`state.json` for `by_cwe`/`cwe.*breakdown`/`weakness.*breakdown` — zero hits, confirming this is new.
+- **Backend:** `compute_stats()` in `scripts/aggregate.py` now accumulates a `by_cwe` dict while iterating alerts (same single-pass loop already computing `by_severity`/`by_source`, zero new iterations) and emits the top 10 CWE IDs by count (descending) as a new `by_cwe` field in `stats.json`. Capped at 10 to keep the file small and the UI readable.
+- **Frontend:** Added `renderCweBreakdown()` in `docs/app.js`, mirroring the existing `renderSeverityBreakdown()`/`renderSourceBreakdown()` pattern exactly — one clickable `.cwe-pill` per CWE, wired to set the search box to that CWE ID and re-apply filters (reusing the cycle-24 CWE-aware search haystack, no new filter logic needed). New `#cwe-breakdown` container added to `docs/index.html` next to the existing severity/source breakdown divs. New `.cwe-breakdown`/`.cwe-pill` CSS rules in `docs/style.css`, styled with the existing `--accent` color to visually distinguish from the red/orange/yellow/green severity pills.
+- **Rejected candidates considered this cycle:**
+  - *JSON-LD structured data* — still deferred per cycle 41's note (distinct, higher-scope SEO candidate); not revisited.
+  - *Extending `nvd_last_modified`/CVSS-vector fields to GHSA/Dependabot* — still correctly deferred (both sources dormant in production, no live field to validate against); nothing has changed.
+  - *Keyboard shortcuts for filter controls* — still marginal value for a click-through triage audience; not revisited.
+  - *CWE trend-over-time (adding by_cwe deltas to trend.csv)* — considered but rejected as excessive scope for one cycle (would require a variable-width CSV column scheme for up to 10 dynamically-changing CWE IDs, materially higher validation risk than a single new stats.json field); the point-in-time breakdown captures the primary triage value at much lower risk.
+- **Scoring:** Feasibility 5/5 (single-pass aggregation of an already-extracted field, zero new API calls/dependencies, zero backend schema removal). Validation risk 2/5 (touches `compute_stats()`, a function every stat pill/history row depends on — validated by running it standalone against real production data and diffing output). Value 3/5 (fills a real, previously-total gap — CWE data existed per-card since cycle 23 but had zero population-level visibility until now).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. `python3 -m py_compile scripts/aggregate.py`: OK.
+- Ran `compute_stats()` standalone (`python3 -c "import aggregate; ..."`) against the real production `docs/data/alerts.json` (528 alerts, read-only) — confirmed `by_cwe` correctly computed (`CWE-122: 50, CWE-416: 44, CWE-79: 26, ...`) and every pre-existing field (`total_alerts`, `by_severity`, `avg_risk_score`, etc.) unchanged in value versus the live `stats.json`. No writes to real data files during this step (loaded and printed only).
+- Served `docs/` on a local scratch HTTP port (8944, background process) with real production data. Patched a copy of `docs/data/stats.json` to include a synthetic `by_cwe` map for rendering verification (restored the real file via `git checkout --` immediately after, confirmed via `git diff --stat` showing no diff before commit). Browser-tool checks: `#cwe-breakdown` rendered 5 correctly-labeled `.cwe-pill` buttons; clicking `CWE-79` correctly narrowed `528 of 528` → `26 of 528` via the search box; clearing search restored `528 of 528`; existing severity pills (2 rendered), `min-risk` filter (`minrisk=50` → `7 of 528`), and `reset-filters` (clearing all filters back to `528 of 528`, empty `location.search`) all functioned with zero regression.
+- Killed the scratch server before committing.
+
+**Deploy (Step 5):**
+- Committed `1d10de0` (`scripts/aggregate.py`, `docs/app.js`, `docs/index.html`, `docs/style.css`) and pushed to `main`. Backend/schema change (new `stats.json` field) — triggered a `workflow_dispatch` verification run (`34440228287`) since this touches the pipeline: completed successfully in 56s, no errors, created 4 new GitHub issues for newly-surfaced alerts (unrelated pre-existing notify behavior, working correctly), pushed fresh data as commit `976589c`.
+- Live-verified via cache-busted curl: `https://astruzocyber.github.io/CVE/data/stats.json` now includes `by_cwe` with 10 real CWE entries (`CWE-122: 50` through `CWE-502: 7`) against live production data (532 alerts post-run).
+- Live-verified via browser tool on the production dashboard (fresh navigation, cache-busted URL): `532 of 532 alerts`, `#cwe-breakdown` rendered all 10 live pills correctly; clicking `CWE-79` correctly narrowed to `27 of 532`; `reset-filters` correctly restored `532 of 532`; theme toggle, min-risk filter, and severity pills all confirmed still present/functional — zero regression to any of the 44 prior features.
+
+**Rejected this cycle:** JSON-LD structured data, GHSA/Dependabot field-parity extensions, keyboard shortcuts (all carried-forward deferrals, unchanged reasoning), and a CWE-trend-over-time extension to `trend.csv` (rejected this cycle specifically — see scoring notes above) — the point-in-time `by_cwe` breakdown candidate cleared the bar on first pass.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs or the verification `workflow_dispatch` run. No change to call volume this cycle (new field derived entirely from already-fetched/already-extracted data, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 45. `stopped`: false.

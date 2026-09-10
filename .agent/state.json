@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 44,
+  "total_cycles": 45,
   "implemented": [
     {
       "cycle": 1,
@@ -310,9 +310,16 @@
       "title": "Add light/dark theme toggle with localStorage persistence",
       "description": "Dashboard was dark-theme-only since inception with zero accommodation for viewers who prefer light mode or triage in bright environments (wall monitors, bright offices). All colors already routed through CSS custom properties in :root, making a second theme a pure additive var-override. Added html[data-theme=light] block in docs/style.css overriding the 10 existing custom properties with a WCAG-contrast-checked light palette; theme-toggle button in docs/index.html toolbar (inherits existing print-hide and mobile-stacking rules for free); inline head script sets data-theme from localStorage/prefers-color-scheme before first paint to avoid flash-of-wrong-theme; applyTheme()/initTheme() in docs/app.js wire the toggle and persist choice. Zero new API calls, zero backend/schema changes.",
       "commit_sha": "0b5bb9e"
+    },
+    {
+      "cycle": 45,
+      "timestamp": "2026-09-10T05:20:00Z",
+      "title": "Top-CWE weakness breakdown pills on dashboard stats bar",
+      "description": "compute_stats() now emits a top-10 by_cwe map (count of alerts per CWE classification, sorted descending) alongside the existing by_severity/by_source breakdowns, built entirely from the cwe_ids field already extracted from NVD/GHSA/Dependabot responses since an earlier cycle -- zero new API calls. Frontend renders a new clickable .cwe-pill row (mirroring the existing severity/source pill pattern); clicking a pill sets the search box to that CWE ID and re-applies filters, reusing the already-CWE-aware search haystack from a prior cycle. Answers a distinct triage question (what KINDS of weaknesses/bug classes dominate the tracked population right now) that severity/source/risk-score breakdowns cannot answer.",
+      "commit_sha": "1d10de0"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T04:40:00Z",
+  "last_cycle_at": "2026-09-10T05:20:00Z",
   "stopped": false
 }
