@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 60,
+  "total_cycles": 61,
   "implemented": [
     {
       "cycle": 1,
@@ -427,6 +427,13 @@
       "title": "'Copy suppression YAML' button on each alert card",
       "description": "config/suppressions.yaml (accepted-risk/false-positive list) has been fully wired into aggregate.py (load_suppressions(), passes_filters()) since early cycles, but had zero frontend affordance -- an analyst who reviewed a CVE and determined it doesn't apply had to hand-type the exact YAML schema (cve_id, reason, expires) from memory/docs into the file. Added suppressionSnippet(alert) to docs/app.js: generates a ready-to-paste YAML list-item block with cve_id pre-filled, a placeholder reason the analyst must edit, and expires defaulted to exactly one year from today (keeps every suppression time-boxed by default, matching the file's own documented convention). New .copy-suppress-btn per card (mirrors the existing copy-md-btn pattern exactly) copies the snippet to clipboard via the same click-delegation handler used for cve-link-btn/copy-md-btn. Pure additive frontend: no new API calls, no backend/schema changes, zero cost.",
       "commit_sha": "cb4a8f2"
+    },
+    {
+      "cycle": 61,
+      "timestamp": "2026-09-10T15:26:00Z",
+      "title": "OSV.dev read-only enrichment (osv_id, osv_fixed_versions) on alert cards",
+      "description": "Scoped per the carried-forward candidate note (OSV.dev deferred as its own scope, to be done as read-only enrichment not a new ingestion source). Added fetch_osv_fix_info()/parse_osv_fixed_versions() to scripts/aggregate.py: single GET https://api.osv.dev/v1/vulns/<CVE-ID> per new/refreshed alert, 10s timeout, catches all exceptions and returns None on any failure (fail-soft, never blocks the pipeline). Populates osv_id and osv_fixed_versions (package/ecosystem/fixed-version, capped 5) fields on each alert; existing alerts missing the keys get schema-safe defaults (None/[]) backfilled on next refresh. Frontend: 'View on OSV.dev' footer link + 'Fix available: pkg (eco) -> version' line on renderCard() when data present, included in Copy-as-Markdown export. Added 6 new unit tests (36 total, up from 30) covering parse_osv_fixed_versions and the new default fields.",
+      "commit_sha": "63748f9"
     }
   ],
   "rejected": [],
