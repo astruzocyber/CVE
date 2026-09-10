@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 52,
+  "total_cycles": 53,
   "implemented": [
     {
       "cycle": 1,
@@ -366,9 +366,16 @@
       "title": "Export/import of reviewed-state (JSON) for triage handoff/backup",
       "description": "reviewedCves (cycle 48) has been localStorage-only, trapped per-browser with no way to back up or hand off triage progress to a teammate or another device. Added exportReviewedState() (Blob download of {version, exported_at, reviewed_cve_ids}) and importReviewedState() (FileReader-based, merges/unions imported IDs into the current set rather than replacing, so importing a teammate's export can't silently erase an analyst's own progress). New 'Export reviewed state' button and 'Import reviewed state' file-input label added to the toolbar. Pure additive: zero new API calls, zero backend/schema changes. Validated in-browser: export payload correct ({version:1, reviewed_cve_ids:[...]}), import correctly merged a synthetic file's CVE IDs into the live set and re-rendered reviewed-progress, malformed-file import surfaced a visible error status instead of throwing, zero regression to search filter/copy-md-btn/review-toggle-btn (532 of each still present). Deployed frontend-only; live-verified via cache-busted curl (exportReviewedState/importReviewedState present in deployed app.js, export-reviewed/import-reviewed present in deployed index.html).",
       "commit_sha": "4cff4d6"
+    },
+    {
+      "cycle": 53,
+      "timestamp": "2026-09-10T10:05:00Z",
+      "title": "Bulk 'Export Markdown report' button for filtered-view summary table",
+      "description": "Added exportMarkdownReport() to docs/app.js: builds a Markdown table (CVE, risk score, CVSS, EPSS, KEV status, affected, source) of the currently-filtered alert view (window.__lastFiltered || allAlerts), with a heading and generated-at/count line, downloaded via the same Blob/createObjectURL pattern as the existing exportCsv/exportJson. Distinct from cycle 51's per-alert Markdown copy (single-CVE detail block for one incident ticket) and cycles 32/34/37's CSV/JSON bulk export (machine-oriented flattened/raw data) -- fills the previously-total gap of pasting a filtered view (e.g. 'KEV overdue only') as a readable table into a status update, GitHub issue, or Slack/Teams post. Pure additive frontend: new function + new toolbar button + one event listener, reuses only already-rendered fields, zero new API calls, zero backend/schema changes. Validated: node --check passed; served docs/ locally with real production data (532 alerts), confirmed the button renders, captured and inspected the generated Blob content (35,091 bytes, well-formed Markdown table with correct real data), and confirmed zero regression to search/min-risk filters, reset-filters, existing export buttons, review-toggle, stats bar, breakdown pills, and trend chart. Deployed frontend-only (no workflow_dispatch needed); live-verified via cache-busted curl (exportMarkdownReport present in deployed app.js, export-md-report present in deployed index.html).",
+      "commit_sha": "ae52dc0"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T09:20:00Z",
+  "last_cycle_at": "2026-09-10T10:05:00Z",
   "stopped": false
 }
