@@ -21,6 +21,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
+sys.path.insert(0, str(ROOT / "scripts"))
 
 REQUIRED_ALERT_KEYS = {
     "cve_id", "description", "cvss_score", "risk_score",
@@ -117,8 +118,16 @@ def check_trend_csv():
         fail(f"{path} is empty (missing header row)")
         return
     header = lines[0].split(",")
-    expected_header = ["timestamp", "total_alerts", "kev_count", "kev_overdue_count",
-                        "kev_ransomware_count", "avg_epss", "avg_risk_score"]
+    # Source-of-truth: import aggregate.py's own HISTORY_CSV_HEADER constant
+    # instead of hardcoding a duplicate list here. Cycle 67 introduced a
+    # `critical_count`/`high_count` schema extension and this exact hardcoded
+    # duplicate silently went stale (still expected the pre-extension 7-column
+    # header) even though append_history()'s own doc-comment describes header
+    # upgrades as an intentional, expected form of schema evolution --
+    # importing the real constant means this check can never drift from the
+    # actual writer again.
+    from aggregate import HISTORY_CSV_HEADER
+    expected_header = HISTORY_CSV_HEADER.split(",")
     if header != expected_header:
         fail(f"{path} header mismatch: got {header}, expected {expected_header}")
     ncols = len(header)

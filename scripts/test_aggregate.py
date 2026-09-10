@@ -24,7 +24,9 @@ indirectly through compute_stats itself with synthetic alert dicts).
 """
 import os
 import sys
+import tempfile
 import unittest
+from unittest import mock
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -39,6 +41,8 @@ from aggregate import (
     parse_osv_fixed_versions,
     extract_cvss,
     extract_cvss_vector_components,
+    append_history,
+    HISTORY_CSV_HEADER,
 )
 
 
@@ -361,6 +365,76 @@ class TestParseOsvFixedVersions(unittest.TestCase):
         ]}
         result = parse_osv_fixed_versions(osv_data)
         self.assertEqual(len(result), 5)
+
+
+class TestAppendHistory(unittest.TestCase):
+    """append_history() writes docs/data/history/trend.csv -- verify the new
+    critical_count/high_count columns (added alongside the existing schema-
+    drift self-heal for avg_risk_score) round-trip correctly and that old
+    rows with fewer columns aren't touched/corrupted by the header upgrade.
+    """
+
+    def _run_with_tmp_paths(self, csv_path, fn):
+        import aggregate
+        with mock.patch.object(aggregate, "HISTORY_DIR", os.path.dirname(csv_path)), \
+             mock.patch.object(aggregate, "HISTORY_CSV_PATH", csv_path):
+            fn()
+
+    def test_new_file_gets_full_header_and_row(self):
+        with tempfile.TemporaryDirectory() as d:
+            csv_path = os.path.join(d, "trend.csv")
+            stats = {
+                "generated_at": "2026-01-01T00:00:00Z",
+                "total_alerts": 10,
+                "kev_count": 2,
+                "kev_overdue_count": 1,
+                "kev_ransomware_count": 0,
+                "avg_epss": 0.05,
+                "avg_risk_score": 42.5,
+                "by_severity": {"critical": 3, "high": 4, "medium": 2, "low": 1, "unknown": 0},
+            }
+            self._run_with_tmp_paths(csv_path, lambda: append_history(stats))
+            with open(csv_path) as f:
+                lines = f.read().strip().split("\n")
+            self.assertEqual(lines[0], HISTORY_CSV_HEADER)
+            self.assertTrue(lines[0].endswith("critical_count,high_count"))
+            row = lines[1].split(",")
+            self.assertEqual(row[-2], "3")  # critical_count
+            self.assertEqual(row[-1], "4")  # high_count
+
+    def test_stale_header_upgraded_without_touching_old_rows(self):
+        with tempfile.TemporaryDirectory() as d:
+            csv_path = os.path.join(d, "trend.csv")
+            old_header = "timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,avg_epss,avg_risk_score"
+            old_row = "2025-12-01T00:00:00Z,5,0,0,0,0.01,10.0"
+            with open(csv_path, "w") as f:
+                f.write(old_header + "\n" + old_row + "\n")
+            stats = {
+                "generated_at": "2026-01-01T00:00:00Z",
+                "total_alerts": 6, "kev_count": 0, "kev_overdue_count": 0,
+                "kev_ransomware_count": 0, "avg_epss": 0.02, "avg_risk_score": 11.0,
+                "by_severity": {"critical": 1, "high": 1},
+            }
+            self._run_with_tmp_paths(csv_path, lambda: append_history(stats))
+            with open(csv_path) as f:
+                lines = f.read().strip().split("\n")
+            self.assertEqual(lines[0], HISTORY_CSV_HEADER)
+            # Old row is untouched (still fewer columns -- schema-evolution record).
+            self.assertEqual(lines[1], old_row)
+            self.assertEqual(lines[2].split(",")[-2:], ["1", "1"])
+
+    def test_missing_severity_breakdown_writes_empty_columns(self):
+        with tempfile.TemporaryDirectory() as d:
+            csv_path = os.path.join(d, "trend.csv")
+            stats = {
+                "generated_at": "2026-01-01T00:00:00Z",
+                "total_alerts": 1, "kev_count": 0, "kev_overdue_count": 0,
+                "kev_ransomware_count": 0, "avg_epss": None, "avg_risk_score": None,
+            }
+            self._run_with_tmp_paths(csv_path, lambda: append_history(stats))
+            with open(csv_path) as f:
+                row = f.read().strip().split("\n")[1].split(",")
+            self.assertEqual(row[-2:], ["", ""])
 
 
 if __name__ == "__main__":

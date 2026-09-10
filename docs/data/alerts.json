@@ -1,5 +1,54 @@
 [
   {
+    "cve_id": "CVE-2026-87628",
+    "description": "Use after free in Cast in Google Chrome prior to 153.0.8010.36 allowed an adjacent attacker to potentially execute arbitrary code outside the sandbox via crafted network traffic. (Chromium security severity: Critical)",
+    "cvss_score": 8.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "ADJACENT_NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00168,
+    "epss_percentile": 0.06414,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 29.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.3,
+      "cvss_component": 29.1,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00168,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:21.107",
+    "nvd_last_modified": "2026-09-10T04:18:29.850",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T19:23:04.636947+00:00"
+  },
+  {
     "cve_id": "CVE-2026-87625",
     "description": "Use after free in V8 in Google Chrome prior to 153.0.8010.36 allowed a remote attacker leveraging social engineering to execute arbitrary code inside the sandbox via a crafted Chrome extension. (Chromium security severity: Medium)",
     "cvss_score": 8.8,
@@ -46,7 +95,154 @@
     "nvd_last_modified": "2026-09-10T04:18:29.690",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T18:01:14.713741+00:00"
+    "first_seen": "2026-09-10T19:23:04.636942+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87534",
+    "description": "Missing authorization in WebView in Google Chrome on on Android prior to 153.0.8010.36 allowed a remote attacker leveraging social engineering to bypass system access restrictions via crafted network traffic. (Chromium security severity: Medium)",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": 0.00174,
+    "epss_percentile": 0.06974,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00174,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:10.823",
+    "nvd_last_modified": "2026-09-10T19:17:38.190",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T19:23:04.636794+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87471",
+    "description": "Incorrect authorization in ServiceWorker in Google Chrome prior to 153.0.8010.36 allowed a remote attacker who had compromised the renderer process to bypass site isolation via a crafted HTML page. (Chromium security severity: Medium)",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-863"
+    ],
+    "epss_score": 0.00294,
+    "epss_percentile": 0.21784,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00294,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:03.663",
+    "nvd_last_modified": "2026-09-10T19:17:37.720",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T19:23:04.636654+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-88023",
+    "description": "Improper neutralization of special elements in data query logic in the GridFS component of the MongoDB PHP Library can cause a caller-supplied structured file identifier to be interpreted as a query condition rather than as a literal identifier. An authenticated user who can influence the identifier passed by an affected application may obtain stored file content beyond the intended target or cause all GridFS file chunks in the affected bucket to be removed, rendering stored file content unreadable. The affected rename operation may also rename a stored file other than the intended target.",
+    "cvss_score": 8.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-943"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 48.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.3,
+      "cvss_component": 48.4,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-10T18:18:12.457",
+    "nvd_last_modified": "2026-09-10T19:17:39.497",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T19:23:04.636558+00:00"
   },
   {
     "cve_id": "CVE-2026-73699",
@@ -92,10 +288,10 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T17:17:06.083",
-    "nvd_last_modified": "2026-09-10T17:17:06.083",
+    "nvd_last_modified": "2026-09-10T18:18:07.637",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T18:01:14.713372+00:00"
+    "first_seen": "2026-09-10T19:23:04.636553+00:00"
   },
   {
     "cve_id": "CVE-2026-71415",
@@ -829,7 +1025,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T16:17:56.543",
-    "nvd_last_modified": "2026-09-10T16:17:56.543",
+    "nvd_last_modified": "2026-09-10T19:17:35.117",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550185+00:00"
@@ -5003,7 +5199,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:11.150",
-    "nvd_last_modified": "2026-09-10T04:18:25.280",
+    "nvd_last_modified": "2026-09-10T18:41:55.070",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759508+00:00"
@@ -5052,7 +5248,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:11.047",
-    "nvd_last_modified": "2026-09-10T04:18:25.007",
+    "nvd_last_modified": "2026-09-10T18:41:00.003",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759499+00:00"
@@ -5101,7 +5297,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:10.707",
-    "nvd_last_modified": "2026-09-10T04:18:24.733",
+    "nvd_last_modified": "2026-09-10T18:34:50.483",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759491+00:00"
@@ -11513,7 +11709,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:19:02.543",
-    "nvd_last_modified": "2026-09-09T17:23:02.800",
+    "nvd_last_modified": "2026-09-10T19:17:32.557",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841509+00:00"

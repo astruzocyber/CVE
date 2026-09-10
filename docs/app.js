@@ -1202,6 +1202,10 @@ async function loadTrendChart() {
     const kevRansomware = rows.map((r) => (r[4] === "" || r[4] === undefined ? null : Number(r[4])));
     const avgEpss = rows.map((r) => (r[5] === "" ? null : Number(r[5]) * 100));
     const avgRiskScore = rows.map((r) => (r[6] === "" || r[6] === undefined ? null : Number(r[6])));
+    // critical_count/high_count columns added in a later schema revision;
+    // older rows won't have index 7/8 at all -- treat missing same as empty.
+    const criticalCount = rows.map((r) => (r[7] === "" || r[7] === undefined ? null : Number(r[7])));
+    const highCount = rows.map((r) => (r[8] === "" || r[8] === undefined ? null : Number(r[8])));
 
     document.getElementById("trend-section").hidden = false;
     new Chart(canvas, {
@@ -1258,6 +1262,24 @@ async function loadTrendChart() {
             borderColor: "#3ddc97",
             backgroundColor: "rgba(61,220,151,0.12)",
             yAxisID: "y1",
+            tension: 0.2,
+            hidden: true,
+          },
+          {
+            label: "Critical severity count",
+            data: criticalCount,
+            borderColor: "#e63946",
+            backgroundColor: "rgba(230,57,70,0.12)",
+            yAxisID: "y2",
+            tension: 0.2,
+            hidden: true,
+          },
+          {
+            label: "High severity count",
+            data: highCount,
+            borderColor: "#f4a261",
+            backgroundColor: "rgba(244,162,97,0.12)",
+            yAxisID: "y2",
             tension: 0.2,
             hidden: true,
           },

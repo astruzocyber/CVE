@@ -1034,13 +1034,14 @@ def compute_stats(alerts):
 # ---------------------------------------------------------------------------
 HISTORY_CSV_HEADER = (
     "timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,"
-    "avg_epss,avg_risk_score"
+    "avg_epss,avg_risk_score,critical_count,high_count"
 )
 
 
 def append_history(stats):
     os.makedirs(HISTORY_DIR, exist_ok=True)
     is_new = not os.path.exists(HISTORY_CSV_PATH)
+    by_severity = stats.get("by_severity") or {}
     row = [
         stats.get("generated_at", ""),
         str(stats.get("total_alerts", "")),
@@ -1049,6 +1050,16 @@ def append_history(stats):
         str(stats.get("kev_ransomware_count", "")),
         "" if stats.get("avg_epss") is None else str(stats["avg_epss"]),
         "" if stats.get("avg_risk_score") is None else str(stats["avg_risk_score"]),
+        # Severity-mix trend: how the critical/high split of the tracked
+        # population shifts over time -- distinct from avg_risk_score (a
+        # single composite number) and total_alerts (raw volume), and not
+        # derivable from either: a population could hold steady total volume
+        # and steady avg_risk_score while critical-count silently climbs as
+        # highs get reclassified/replaced by criticals, or vice versa. Both
+        # values are already computed by compute_stats()'s existing
+        # by_severity dict -- zero new API calls, zero new computation cost.
+        str(by_severity.get("critical", "")),
+        str(by_severity.get("high", "")),
     ]
 
     # Schema-drift self-heal: when a column (e.g. avg_risk_score) is added to the
