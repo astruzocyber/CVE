@@ -35,6 +35,7 @@ from aggregate import (
     extract_cwe_ghsa,
     unique_key,
     compute_stats,
+    build_final_entry,
 )
 
 
@@ -216,6 +217,20 @@ class TestComputeStats(unittest.TestCase):
     def test_empty_alerts_no_crash(self):
         stats = compute_stats([])
         self.assertEqual(stats["total_alerts"], 0)
+
+
+class TestBuildFinalEntry(unittest.TestCase):
+    def test_risk_score_prev_defaults_to_none_for_new_entry(self):
+        # build_final_entry() always produces a fresh entry (used both for
+        # genuinely-new alerts and as the scoring base before main() layers
+        # first_seen/risk_score_prev back on for already-known ones) -- it
+        # must not itself invent a risk_score_prev value out of nothing.
+        entry = {"cve_id": "CVE-2026-00001", "source": "nvd", "cvss_score": 7.5,
+                 "description": "test"}
+        final = build_final_entry(entry, kev_map={}, epss_map={})
+        self.assertIn("risk_score_prev", final)
+        self.assertIsNone(final["risk_score_prev"])
+        self.assertIsInstance(final["risk_score"], (int, float))
 
 
 if __name__ == "__main__":

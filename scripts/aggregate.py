@@ -825,6 +825,7 @@ def build_final_entry(entry, kev_map, epss_map):
         "kev_notes": kev_entry.get("notes") if in_kev else None,
         "risk_score": risk_score,
         "risk_score_breakdown": risk_breakdown,
+        "risk_score_prev": None,
         "affected": entry.get("matched_vendor_product", []),
         "matched_keywords": entry.get("matched_keywords", []),
         "source": entry.get("source"),
@@ -1105,9 +1106,15 @@ def main():
             existing_by_key[key] = final
         else:
             # Already known: keep the original first_seen, but refresh scores in case
-            # CVSS/EPSS/KEV status changed since we first saw it.
+            # CVSS/EPSS/KEV status changed since we first saw it. Also record the
+            # risk_score this alert carried *before* this refresh (risk_score_prev) so
+            # the dashboard can show a delta -- otherwise every run silently overwrites
+            # risk_score in place (EPSS/KEV refresh, cycle 6) with zero visibility into
+            # whether a CVE just got materially more or less urgent since an analyst
+            # last looked at it.
             prior = existing_by_key.get(key, final)
-            merged = {**final, "first_seen": prior.get("first_seen", final["first_seen"])}
+            merged = {**final, "first_seen": prior.get("first_seen", final["first_seen"]),
+                      "risk_score_prev": prior.get("risk_score")}
             existing_by_key[key] = merged
 
     # Existing alerts not resurfaced by this run (outside the NVD lookback window,
@@ -1126,6 +1133,7 @@ def main():
         epss_info = epss_map.get(cve_id, {})
         epss_score = epss_info.get("epss")
         risk_score, risk_breakdown = composite_risk_score(prior.get("cvss_score"), epss_score, in_kev)
+        prior["risk_score_prev"] = prior.get("risk_score")
         prior["epss_score"] = epss_score
         prior["epss_percentile"] = epss_info.get("percentile")
         prior["kev"] = in_kev

@@ -291,6 +291,12 @@ function renderCard(alert) {
       + `</span>`
     : "";
   const riskVal = typeof alert.risk_score === "number" ? alert.risk_score.toFixed(0) : "n/a";
+  const riskDelta = (typeof alert.risk_score === "number" && typeof alert.risk_score_prev === "number")
+    ? Math.round(alert.risk_score - alert.risk_score_prev)
+    : null;
+  const riskDeltaHtml = riskDelta && riskDelta !== 0
+    ? `<span class="risk-delta ${riskDelta > 0 ? "risk-up" : "risk-down"}" title="Risk score changed from ${alert.risk_score_prev.toFixed(0)} to ${alert.risk_score.toFixed(0)} since the last refresh">${riskDelta > 0 ? "\u25b2" : "\u25bc"}${riskDelta > 0 ? "+" : ""}${riskDelta}</span>`
+    : "";
   const b = alert.risk_score_breakdown;
   const breakdownHtml = b ? `
       <div class="score-breakdown" hidden>
@@ -315,6 +321,7 @@ function renderCard(alert) {
       <div class="risk-row">
         <div class="risk-bar-track"><div class="risk-bar-fill ${rClass}" style="width:${Math.min(100, alert.risk_score || 0)}%"></div></div>
         <span class="risk-label">Risk ${riskVal}/100</span>
+        ${riskDeltaHtml}
         ${toggleBtn}
       </div>
       ${breakdownHtml}
@@ -583,6 +590,19 @@ function applyFiltersAndRender() {
     if (sortBy === "cvss_score" || sortBy === "epss_score" || sortBy === "risk_score") {
       return (b[sortBy] ?? -1) - (a[sortBy] ?? -1);
     }
+    if (sortBy === "risk_delta") {
+      // Biggest risk-score *increase* since last refresh first. Entries with
+      // no prior score recorded yet (brand new, or never refreshed) sort to
+      // the end -- they have no delta, not "most urgent by delta".
+      const da = (typeof a.risk_score === "number" && typeof a.risk_score_prev === "number")
+        ? a.risk_score - a.risk_score_prev : null;
+      const db = (typeof b.risk_score === "number" && typeof b.risk_score_prev === "number")
+        ? b.risk_score - b.risk_score_prev : null;
+      if (da === null && db === null) return 0;
+      if (da === null) return 1;
+      if (db === null) return -1;
+      return db - da;
+    }
     if (sortBy === "cve_id") {
       return (a.cve_id || "").localeCompare(b.cve_id || "");
     }
@@ -653,7 +673,7 @@ function exportCsv() {
   // offline reporting/compliance tracking silently lost that data even though
   // it's visible on-screen. Purely additive columns reading existing fields --
   // no new API calls, no schema changes, no risk to existing columns/consumers.
-  const header = ["cve_id", "risk_score", "cvss_score", "epss_score", "epss_percentile", "kev", "kev_due_date",
+  const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_percentile", "kev", "kev_due_date",
     "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
     "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "matched_keywords", "published",
     "nvd_last_modified", "first_seen", "description"];
@@ -661,7 +681,7 @@ function exportCsv() {
   for (const a of rows) {
     const vc = a.cvss_vector_components || {};
     lines.push(toCsvRow([
-      a.cve_id, a.risk_score, a.cvss_score, a.epss_score, a.epss_percentile, a.kev, a.kev_due_date,
+      a.cve_id, a.risk_score, a.risk_score_prev, a.cvss_score, a.epss_score, a.epss_percentile, a.kev, a.kev_due_date,
       a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
       vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
       (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.nvd_last_modified,
