@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 65,
+  "total_cycles": 66,
   "implemented": [
     {
       "cycle": 1,
@@ -462,9 +462,16 @@
       "title": "Extend CVSS vector-component extraction to v4.0",
       "description": "extract_cvss_vector_components() now falls back to cvssMetricV40 (lowest priority, after v3.1/v3.0) so alerts that only carry a v4.0 baseScore (per cycle 64s fallback) also get exploit-chip attack-vector/complexity/privileges/user-interaction data on-card. Verified live against real NVD v4.0 record that field names/vocabulary match v3.x. 24/24 v4.0-scored alerts now have vector components (was 0/24).",
       "commit_sha": "3f2fe86"
+    },
+    {
+      "cycle": 66,
+      "timestamp": "2026-09-10T18:41:16Z",
+      "title": "Make source-breakdown pills clickable filters",
+      "description": "The severity/CWE/vendor breakdown pill rows in the stats bar (cycles 33/45/58) were all made clickable one-click drill-down filters, but the source-breakdown pill row (cycle 15) was the only remaining breakdown on the dashboard left as plain inert <span> text -- a UX inconsistency and a missed one-click filter shortcut for a real dashboard feature (filter by NVD/GHSA/Dependabot source). renderSourceBreakdown() in docs/app.js now renders a <button class=source-pill data-source=...> instead of a <span> for any source key present in the #source-filter dropdown's options (nvd/ghsa/dependabot), wired with a click handler that sets #source-filter.value and re-applies filters, mirroring the existing cwe-pill/vendor-pill click pattern almost line-for-line. Any unrecognized/future source key still renders as an inert <span> so no dead/no-op button can ever appear. docs/style.css added a button.source-pill cursor/hover rule (matching the cwe-pill/vendor-pill hover convention) without touching the existing plain .source-pill span styling. Pure additive frontend change: no aggregate.py/schema/API changes, no new API calls.",
+      "commit_sha": "f894d84"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T18:03:49.295694+00:00",
+  "last_cycle_at": "2026-09-10T18:41:16Z",
   "stopped": false
 }

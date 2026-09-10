@@ -2510,3 +2510,42 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` dry run against real NVD/CISA KEV/FIRST.org EPSS APIs and the direct pre-implementation NVD spot-check. RATE_LIMIT_EVENT: no.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 65. `stopped`: false.
+
+## Cycle 66 — 2026-09-10T18:41:16Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh (not from stale summary):** `git log` HEAD was `2fc930a` (cycle 65 log commit), `git status` clean, matched `origin/main`. `gh run list`: last several `ci.yml`/`pages-build-deployment` runs all `success` (11s-1m19s), no 429/throttle signals. `.agent/state.json`: `total_cycles`=65, both counters 0, `stopped`=false — clean baseline matching the task brief exactly. `docs/data/alerts.json`: 583 alerts (matches brief's stated post-cycle-65 baseline). Reviewed all 65 prior `implemented` entries in `.agent/state.json` to avoid duplicating any shipped feature.
+
+**Candidates considered:**
+1. **Make source-breakdown pills clickable filters** — feasibility 5/5 (near-identical port of the already-shipped `renderCweBreakdown()`/`renderVendorBreakdown()` click-to-filter pattern from cycles 45/58, reading fields already in `stats.json`, zero new API calls/dependencies); risk 1/5 (purely additive: swaps a `<span>` for a `<button>` only for source keys that exist in `#source-filter`'s actual `<option>` list, any other/future key still renders inert — cannot produce a dead button; CSS addition is scoped to the new `button.source-pill` selector and does not touch the pre-existing `.source-pill` span rule); value 3/5 (closes a real, easily-verified UX inconsistency: `renderSourceBreakdown()` — cycle 15 — was the *only* stats-bar breakdown row left as inert text after severity/CWE/vendor breakdowns were all made clickable in cycles 33/45/58, and NVD/GHSA/Dependabot source filtering is a real, already-present dropdown filter that a source pill click now shortcuts to). **CHOSEN** — best feasibility/risk ratio found this cycle; closes a genuine self-identified pattern gap in the same class as prior cycles' completeness sweeps rather than adding new speculative surface area.
+2. GHSA/Dependabot coverage expansion (`ghsa_packages`/additional `dependabot_repos`) — still flagged as needing human input on actual tech stack; carried forward unimplemented per cycles 56-65 reasoning, not something this agent can safely guess.
+3. Full risk_score history array (time series per CVE) — still deferred per cycle 56 reasoning (unbounded schema/storage growth risk); `risk_score_prev` single-value delta remains the shipped stepping stone. Blocker unchanged — not revisited.
+4. Further schema-field-to-frontend completeness sweep (checked every field in `docs/data/alerts.json` against card/CSV/Markdown rendering) — no other silently-missing field found this cycle; all 27 current alert-object keys are now rendered/exported somewhere on the dashboard.
+5. Any paid/threat-intel enrichment — not seriously considered; would violate the zero-cost constraint, rejected on principle.
+
+**Implemented (candidate 1):**
+- `docs/app.js`: `renderSourceBreakdown()` now renders a `<button type="button" class="source-pill" data-source="...">` (instead of an inert `<span>`) for any source key present in a new `filterableSources` set (`nvd`/`ghsa`/`dependabot`, matching `#source-filter`'s actual `<option>` values) — other/future source keys keep the original inert `<span>` rendering so no dead button can ever appear. Wired a click handler mirroring `renderCweBreakdown()`/`renderVendorBreakdown()`: sets `#source-filter`'s value and calls `applyFiltersAndRender()`.
+- `docs/style.css`: added a `button.source-pill` rule (`cursor: pointer`, `font: inherit`, hover/focus-visible `filter: brightness(1.25)`) matching the existing `.cwe-pill`/`.vendor-pill` hover convention, without altering the pre-existing plain `.source-pill` span styling used by both the new inert fallback and the button's base look.
+- No `aggregate.py`/schema/backend changes — pure frontend interaction fix reading already-present `stats.by_source` data.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js`: OK.
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py scripts/validate_data.py scripts/notify_github_issues.py`: OK (none touched this cycle — frontend-only change, sanity-checked anyway).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: 43/43 passed (unchanged, no scoring/parsing logic touched).
+- `python3 scripts/validate_data.py` against the existing real production `docs/data/*`: PASSED (583 alerts, 583 unique IDs, stats.json schema OK, trend.csv OK, 44/44 `getElementById` id references resolve, feeds parse OK).
+- Local browser smoke test via `python3 -m http.server` serving the real production `docs/` (583 alerts, real `data/*.json`), driven via the browser-automation tool:
+  - Confirmed `allAlerts.length === 583` after real load from production `data/alerts.json`.
+  - Confirmed `#source-breakdown` renders a single `button.source-pill[data-source="nvd"]` (current production data is 100% NVD-sourced) with 0 remaining `span.source-pill` (i.e. the button path is exercised, not silently falling back).
+  - Clicked the `nvd` pill and confirmed `#source-filter`'s value updated to `"nvd"` (filter applied correctly).
+  - Confirmed zero regression: after the pill click, searched "wordpress" -> 145/583 filtered (matches current production `by_vendor_product` count, consistent with cycles 62-65's same check), then clicked the existing `#reset-filters` button and confirmed the view returned to 583/583 with `#source-filter` back to `"all"`.
+  - Visual screenshot check: the `nvd: 583` pill renders identically in size/shape/color to the existing severity/CWE/vendor pills, no visual regression.
+- No `docs/data/*` changes this cycle (frontend-only, no `aggregate.py` touched), so no live `aggregate.py` dry-run regeneration was needed or performed — next scheduled `cve-alerts.yml` run continues to refresh data normally on its existing 4h cadence.
+
+**Deploy:** Committed `f894d84` — "Cycle 66: make source-breakdown pills clickable filters (matches severity/CWE/vendor pill pattern)" — pushed to `main` (clean fast-forward from `2fc930a`). Live CI run `34515720422`/`34515718211` (`CI Data & Frontend Validation`, multiple triggered runs from the push) -> all `success`, 10-14s. `pages-build-deployment` run `34515717693` -> `success`, 41s; confirmed via `gh api repos/astruzocyber/CVE/pages/builds/latest` that the built commit is exactly `f894d842f2219e1e13ff0dc8714ab147866f2c09` with `status: "built"`. Live-verified via cache-busted `curl`: `https://astruzocyber.github.io/CVE/app.js` contains the new `filterableSources`/`button.source-pill`/`data-source` code and the literal "Cycle 66" comment marker — the change is live in production, not just committed.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on actual tech stack, flagged not hard-rejected), full risk-score history array (deferred, schema-growth risk), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle. This cycle's change was frontend-only (no external API calls made at all) — data pipeline continues on its existing 4h schedule unaffected. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 66. `stopped`: false.
