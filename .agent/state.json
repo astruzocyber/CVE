@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 63,
+  "total_cycles": 64,
   "implemented": [
     {
       "cycle": 1,
@@ -448,9 +448,16 @@
       "title": "Show kev_date_added (KEV catalog addition date) on card, Markdown export, CSV export",
       "description": "kev_date_added (the date CISA added a CVE to the Known Exploited Vulnerabilities catalog) has been populated in the schema since the earliest cycles alongside kev_due_date, but only kev_due_date (the BOD 22-01 remediation deadline) was ever rendered on-card / exported -- the catalog-addition date itself, a distinct useful signal (how long has this KEV entry been known/tracked, independent of the remediation deadline), was silently missing from the card UI, Copy-as-Markdown export, and CSV export. Added a 'KEV added: <date>' span on renderCard() (next to CVSS/EPSS/KEV-due in the scores row, shown only when present), a '- **KEV added:** <date>' line in alertToMarkdown() (only when alert.kev is true and the field is present), and a new kev_date_added CSV column (inserted between kev and kev_due_date to keep it adjacent to its related field). Pure additive frontend change reading an already-populated schema field: zero new API calls, zero backend/schema changes, zero cost.",
       "commit_sha": "5fb3904"
+    },
+    {
+      "cycle": 64,
+      "timestamp": "2026-09-10T17:22:58Z",
+      "title": "CVSS score fallback to NVD's cvssMetricV40 when no v3.x/v2 metrics present",
+      "description": "A live sample of 200 recently-published NVD CVEs found ~34% carry ONLY a cvssMetricV40 block with no cvssMetricV31/V30/V2 fallback -- NVD is mid-migration to CVSS v4.0. extract_cvss() previously checked only v3.1/v3.0/v2 and returned (None, None) for any CVE lacking those, which silently zeroed that alert's 35% CVSS weight in the composite risk_score (redistributed to EPSS/KEV per composite_risk_score's existing weight-redistribution logic) and miscategorized it into severity 'unknown' instead of its real critical/high/medium/low bucket -- a real and growing data-accuracy defect as v4.0 adoption rises across NVD, not a cosmetic gap. v4.0's baseScore uses the identical 0-10 scale and identical critical/high/medium/low severity thresholds as v3.x, so extract_cvss() now checks cvssMetricV40 as a last-resort fallback (checked strictly after v3.1/v3.0/v2, so every CVE that already had a v3/v2 score -- the overwhelming majority today -- is scored exactly as before; this change only fills in previously-total gaps, never changes an existing score).",
+      "commit_sha": "4733fb3"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T16:38:02Z",
+  "last_cycle_at": "2026-09-10T17:22:58Z",
   "stopped": false
 }
