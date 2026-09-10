@@ -1555,3 +1555,30 @@ input debounce) cleared the bar and was implemented.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 36. `stopped`: false.
+
+## Cycle 37 — 2026-09-09
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 5 `cve-alerts.yml` runs all succeeded (34403032881, 34399421600, 34398719776, 34390363792, 34375061636), no 429/throttle signals from NVD/EPSS/GHSA/CISA/Dependabot in Actions logs, only benign Node 20 runner deprecation noise. State was clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add an "Export JSON" button for raw filtered-alert export.
+
+- **Opportunity:** The dashboard had CSV export (cycles 32/34) and a print/PDF view (cycle 35), but no way to export the raw, structurally-intact JSON objects backing the currently-filtered view. CSV export flattens/joins nested fields (`cvss_vector_components`, `risk_score_breakdown`, `kev_*` fields) into strings, which is lossy for a viewer who wants to script against this data (feed it into a SIEM, a jq/Python pipeline, or a custom alert router) — they'd otherwise have to scrape the unfiltered `docs/data/alerts.json` directly or manually reconstruct nested structure from CSV.
+- **Frontend:** Added `exportJson()` in `docs/app.js` that downloads `window.__lastFiltered` (or `allAlerts` if no filter has run) as pretty-printed JSON, mirroring the existing `exportCsv()` blob/download pattern. Added an "Export JSON" `<button id="export-json">` next to the existing "Export CSV" button in `docs/index.html`, wired via `addEventListener`. The new button lives inside the existing `.controls` container, so it inherits the existing mobile-breakpoint stacking (cycle 11) and print-media hide rule (cycle 35) with zero additional CSS needed.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure client-side `JSON.stringify` + Blob download, zero new dependencies, zero new API/network calls). Validation risk 1/5 (fully additive function + button + one event listener; does not touch `applyFiltersAndRender`, `exportCsv`, or any existing rendering path). Value 3/5 (closes a real gap for scripting/automation consumers of this public dashboard, distinct from both the CSV export and the print view — CSV loses nested structure, JSON preserves it exactly as the on-screen filtered view sees it).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. CSS untouched this cycle (no `style.css` changes needed — new button inherits existing `.controls button` rules). No `aggregate.py`/schema changes — `git status --short` confirmed only `docs/app.js` and `docs/index.html` touched, so no data-pipeline dry-run/backup/restore cycle was needed.
+- Served `docs/` on a local scratch port (8934) with real production data (516 alerts). Used the browser tool to confirm: `#export-json` button renders with correct label; calling the underlying export logic in-page produced well-formed JSON with full nested fields present (`risk_score_breakdown`, `cvss_vector_components` both confirmed present in the sample); existing search filter still worked correctly (`wordpress`: 516→132→516 on clear); `#export-csv` button still present and unaffected; stats bar (`stat-total`: 516) unaffected.
+
+**Deploy (Step 5):**
+- Committed (`f5f406e`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~60s for Pages deployment, then cache-busted curl confirmed `export-json` string present live in both `app.js` (1 occurrence) and `index.html` (1 occurrence), both 200 OK.
+- Loaded the LIVE dashboard in the browser tool with a fresh cache-busted navigation: confirmed `#export-json` button renders with text "Export JSON", `stat-total`: 516, `result-count`: "516 of 516 alerts" — zero regression. Screenshot confirmed correct production rendering of stats bar, severity pills, and historical trend chart.
+
+**Rejected this cycle:** None — the raw-JSON-export candidate cleared the bar on first pass (feasibility 5/5, validation risk 1/5, value 3/5) and was implemented.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 37. `stopped`: false.

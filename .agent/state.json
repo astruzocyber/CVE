@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 36,
+  "total_cycles": 37,
   "implemented": [
     {
       "cycle": 1,
@@ -254,9 +254,16 @@
       "title": "Add Total KEV count and KEV ransomware-use count as opt-in trend chart datasets",
       "description": "docs/data/history/trend.csv has recorded kev_count (column 3) and kev_ransomware_count (column 5) every run since cycle-1-era history tracking began, but loadTrendChart() in docs/app.js only ever parsed/plotted columns 1 (total_alerts, added cycle 26), 4 (kev_overdue_count), and 6 (avg_epss) -- the raw KEV catalog membership trend and ransomware-actively-exploited trend were invisible even though the CSV columns were already being fetched and parsed on every load. Added two more opt-in (hidden:true by default, matching cycle 26's precedent for 'Total tracked alerts') Chart.js datasets: 'Total KEV count' and 'KEV ransomware-use count', both bound to the existing hidden y2 axis so they don't visually compete with the two default-visible labeled axes (KEV overdue count / Avg EPSS). Default view is byte-for-byte visually identical to before; a viewer opts in by clicking the legend item. Pure additive frontend change: no new API calls, no backend/schema changes (both columns already existed in trend.csv), zero cost.",
       "commit_sha": "3dfd577"
+    },
+    {
+      "cycle": 37,
+      "timestamp": "2026-09-10T00:15:53.791751Z",
+      "title": "Add Export JSON button (raw filtered-alert export)",
+      "description": "The dashboard had CSV export (cycle 32/34) and a print view (cycle 35), but no way to export the raw JSON objects backing the currently-filtered view -- CSV flattens/joins nested fields (cvss_vector_components, risk_score_breakdown, kev_* fields), losing structure a viewer scripting against the data (SIEM ingestion, jq/Python pipelines, custom alert routers) would need. Added an exportJson() function and an Export JSON button next to Export CSV in the toolbar, which downloads window.__lastFiltered (or allAlerts) as pretty-printed JSON. Pure additive frontend change: no new API calls, no backend/schema changes. The new button lives inside the existing .controls container so it inherits the existing mobile-breakpoint stacking and print-media hide rules with zero extra CSS. Validated locally on scratch port with real production data (516 alerts): confirmed the button renders, exportJson() produces well-formed JSON with full nested fields (risk_score_breakdown, cvss_vector_components) present, and existing search filter/CSV export/stat bar all still work with zero regression. Live-verified on production: button renders, live app.js/index.html both serve the new code, dashboard loads with 516/516 alerts and correct stats.",
+      "commit_sha": "f5f406e"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-09T23:41:03.334258+00:00",
+  "last_cycle_at": "2026-09-10T00:15:53.791760Z",
   "stopped": false
 }
