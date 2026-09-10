@@ -359,6 +359,17 @@ class TestBuildFinalEntry(unittest.TestCase):
         self.assertIsNone(final["risk_score_prev"])
         self.assertIsInstance(final["risk_score"], (int, float))
 
+    def test_epss_score_prev_defaults_to_none_for_new_entry(self):
+        # Mirrors test_risk_score_prev_defaults_to_none_for_new_entry above:
+        # build_final_entry() must not invent an epss_score_prev value out of
+        # nothing either -- main() is the only place that layers a real prior
+        # value back on for already-known alerts.
+        entry = {"cve_id": "CVE-2026-00003", "source": "nvd", "cvss_score": 6.0,
+                 "description": "test"}
+        final = build_final_entry(entry, kev_map={}, epss_map={})
+        self.assertIn("epss_score_prev", final)
+        self.assertIsNone(final["epss_score_prev"])
+
     def test_default_osv_fields_are_empty(self):
         # OSV.dev enrichment (cycle 61) is applied later in main() for NEW
         # alerts only -- build_final_entry() itself must always default these

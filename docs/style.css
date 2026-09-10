@@ -532,6 +532,19 @@ main {
 .risk-delta.risk-up { color: #fff; background: rgba(255, 92, 92, 0.35); border: 1px solid var(--red); }
 .risk-delta.risk-down { color: #fff; background: rgba(107, 207, 127, 0.25); border: 1px solid var(--green); }
 
+/* EPSS-delta badge -- mirrors .risk-delta styling exactly (same risk-up/risk-down
+   modifier classes are shared between the two), but sized/placed inline within the
+   "scores" row next to the EPSS percentage rather than the risk bar row. */
+.epss-delta {
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+  padding: 1px 5px;
+  border-radius: 3px;
+  cursor: help;
+  margin-left: 4px;
+}
+
 .score-toggle {
   background: transparent;
   border: none;

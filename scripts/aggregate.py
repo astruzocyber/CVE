@@ -921,6 +921,7 @@ def build_final_entry(entry, kev_map, epss_map):
         "risk_score": risk_score,
         "risk_score_breakdown": risk_breakdown,
         "risk_score_prev": None,
+        "epss_score_prev": None,
         "osv_id": None,
         "osv_fixed_versions": [],
         "affected": entry.get("matched_vendor_product", []),
@@ -1280,7 +1281,14 @@ def main():
             # last looked at it.
             prior = existing_by_key.get(key, final)
             merged = {**final, "first_seen": prior.get("first_seen", final["first_seen"]),
-                      "risk_score_prev": prior.get("risk_score")}
+                      "risk_score_prev": prior.get("risk_score"),
+                      # Mirrors risk_score_prev immediately above, but for the raw EPSS
+                      # probability rather than the composite score: EPSS publishes new
+                      # scores daily and is 40% of risk_score's weight, so a risk_score
+                      # delta alone can't tell an analyst *why* urgency moved (EPSS-driven
+                      # exploitation-likelihood shift vs. a CVSS/KEV change). Zero new API
+                      # calls -- built from epss_score, already extracted every run.
+                      "epss_score_prev": prior.get("epss_score")}
             existing_by_key[key] = merged
 
     # Existing alerts not resurfaced by this run (outside the NVD lookback window,
@@ -1300,6 +1308,7 @@ def main():
         epss_score = epss_info.get("epss")
         risk_score, risk_breakdown = composite_risk_score(prior.get("cvss_score"), epss_score, in_kev)
         prior["risk_score_prev"] = prior.get("risk_score")
+        prior["epss_score_prev"] = prior.get("epss_score")
         prior["epss_score"] = epss_score
         prior["epss_percentile"] = epss_info.get("percentile")
         prior["kev"] = in_kev
@@ -1312,6 +1321,7 @@ def main():
         prior["risk_score_breakdown"] = risk_breakdown
         prior.setdefault("osv_id", None)
         prior.setdefault("osv_fixed_versions", [])
+        prior.setdefault("epss_score_prev", None)
 
     # Suppressed entries that were previously alerted should also disappear from the
     # cumulative view going forward (an analyst explicitly accepted the risk) -- but

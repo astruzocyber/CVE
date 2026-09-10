@@ -281,6 +281,16 @@ function renderCard(alert) {
   const epssPercentileHtml = typeof alert.epss_percentile === "number"
     ? ` <span class="epss-percentile"${epssPercentileTitle}>(top ${(100 - alert.epss_percentile * 100).toFixed(0)}%)</span>`
     : "";
+  // Mirrors riskDelta below, but for the raw EPSS probability rather than the
+  // composite risk_score -- risk_score blends in CVSS/KEV too, so its delta
+  // alone can't tell an analyst whether a risk_score change was actually
+  // EPSS-driven (exploitation-likelihood shift) vs. a CVSS/KEV change.
+  const epssDelta = (typeof alert.epss_score === "number" && typeof alert.epss_score_prev === "number")
+    ? alert.epss_score - alert.epss_score_prev
+    : null;
+  const epssDeltaHtml = epssDelta && Math.abs(epssDelta) >= 0.0005
+    ? `<span class="epss-delta ${epssDelta > 0 ? "risk-up" : "risk-down"}" title="EPSS changed from ${(alert.epss_score_prev * 100).toFixed(1)}% to ${(alert.epss_score * 100).toFixed(1)}% since the last refresh">${epssDelta > 0 ? "\u25b2" : "\u25bc"}${epssDelta > 0 ? "+" : ""}${(epssDelta * 100).toFixed(1)}pp</span>`
+    : "";
   const vc = alert.cvss_vector_components;
   const exploitLabels = { NETWORK: "Network", ADJACENT_NETWORK: "Adjacent", LOCAL: "Local", PHYSICAL: "Physical",
     LOW: "Low", HIGH: "High", NONE: "None", REQUIRED: "Required" };
@@ -329,7 +339,7 @@ function renderCard(alert) {
       <div class="description">${escapeHtml(alert.description || "(no description)")}</div>
       <div class="scores">
         <span>CVSS: <strong>${fmtScore(alert.cvss_score)}</strong></span>
-        <span>EPSS: <strong>${epssPct}</strong>${epssPercentileHtml}</span>
+        <span>EPSS: <strong>${epssPct}</strong>${epssPercentileHtml}${epssDeltaHtml}</span>
         ${alert.kev_date_added ? `<span title="Date this CVE was added to the CISA Known Exploited Vulnerabilities catalog">KEV added: <strong>${escapeHtml(alert.kev_date_added)}</strong></span>` : ""}
         ${alert.kev_due_date ? `<span>KEV due: <strong>${escapeHtml(alert.kev_due_date)}</strong></span>` : ""}
         ${exploitChipHtml}
@@ -733,7 +743,7 @@ function exportCsv() {
   // BOD 22-01 deadline) was silently missing from the card UI, Markdown export,
   // and CSV export. Added as a new "KEV added" line on-card (next to CVSS/EPSS),
   // in alertToMarkdown(), and as a new CSV column here.
-  const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_percentile", "kev", "kev_date_added", "kev_due_date",
+  const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_score_prev", "epss_percentile", "kev", "kev_date_added", "kev_due_date",
     "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
     "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "matched_keywords", "published",
     "nvd_last_modified", "first_seen", "osv_id", "osv_fixed_versions", "description"];
@@ -744,7 +754,7 @@ function exportCsv() {
       .map((f) => `${f.package || "?"}${f.ecosystem ? ` (${f.ecosystem})` : ""} -> ${f.fixed || "?"}`)
       .join("; ");
     lines.push(toCsvRow([
-      a.cve_id, a.risk_score, a.risk_score_prev, a.cvss_score, a.epss_score, a.epss_percentile, a.kev, a.kev_date_added, a.kev_due_date,
+      a.cve_id, a.risk_score, a.risk_score_prev, a.cvss_score, a.epss_score, a.epss_score_prev, a.epss_percentile, a.kev, a.kev_date_added, a.kev_due_date,
       a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
       vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
       (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.nvd_last_modified,
