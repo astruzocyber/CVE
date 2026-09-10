@@ -1600,3 +1600,30 @@ input debounce) cleared the bar and was implemented.
 **Rate-limit status:** Healthy across NVD, EPSS, CISA KEV, GHSA, Dependabot — no 429s/throttle signals in the last 5 runs (including this cycle's fresh dispatch run).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset — and this cycle also fixed the underlying cause of the failure that would otherwise have started counting toward that guard). `total_cycles`: 38. `stopped`: false.
+
+## Cycle 39 — 2026-09-10T01:20:00Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. Last 8 `cve-alerts.yml` runs: 7 success, 1 failure (2026-09-10T00:13:41Z — the git-race issue fixed in cycle 38, already resolved and confirmed by a subsequent successful `workflow_dispatch` run at 00:47:56Z). No 429/throttle signals from NVD/EPSS/GHSA/CISA/Dependabot in any recent run. State was clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add a "Sort: Published date (newest first)" option to the dashboard's sort dropdown.
+
+- **Opportunity:** The existing `#sort-by` dropdown had two ingestion-time-based sort options (`first_seen` newest-first as default, `first_seen_oldest` for triage backlog, added cycle 19) but no way to sort by the actual vendor/NVD `published` date — a distinct signal from `first_seen` (when the pipeline first ingested the CVE, e.g. because it newly matched the watchlist or newly entered CISA KEV), which can diverge from `published` by years for older CVEs. Verified `published` is populated on all 527/527 currently-tracked alerts (`docs/data/alerts.json`), so the sort is never degenerate.
+- **Frontend:** Added a `published` `<option>` to `#sort-by` in `docs/index.html`, and matching comparator logic in `applyFiltersAndRender()` in `docs/app.js` — descending `localeCompare` on ISO date strings, with missing values pushed to the end (not treated as newest), mirroring the existing `kev_due_date` sort's missing-value handling pattern from cycle 18.
+- **Zero-cost/risk assessment:** Feasibility 5/5 (pure client-side sort comparator on an already-existing, already-populated field, zero new dependencies/API calls). Validation risk 1/5 (purely additive — one new `<option>`, one new `if` branch in the existing sort switch, does not touch any other sort branch, filter, or rendering path). Value 2/5 (real but modest UX gap — a genuinely different triage question than the existing ingestion-time sorts, low but nonzero incremental value).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. No `aggregate.py`/schema changes — `git status --short` confirmed only `docs/app.js` and `docs/index.html` touched, so no data-pipeline dry-run/backup/restore cycle was needed.
+- Served `docs/` on a local scratch port (8956) with real production data (527 alerts). Used the browser tool to confirm: the new "Sort: Published date (newest first)" option renders in `#sort-by`, selecting it correctly reorders cards (top 5 cards all showed the most recent `published` dates), and the existing search filter still works correctly (`wordpress`: 527→133→527 on clear, respecting the documented ~1s debounce from a prior cycle). Confirmed stats bar (`stat-total`: 527) and result count unaffected.
+
+**Deploy (Step 5):**
+- Committed (`473cb44`) and pushed to `main`. Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~45s for Pages deployment, then cache-busted curl confirmed `sortBy === "published"` present in live `app.js` (200 OK) and `Published date` option text present in live `index.html` (200 OK).
+- Loaded the LIVE dashboard in the browser tool with a fresh cache-busted navigation: confirmed the `#sort-by` dropdown includes the new `published` option, `stat-total`: 527, `result-count`: "527 of 527 alerts" — zero regression.
+
+**Rejected this cycle:** None — the published-date-sort candidate cleared the bar on first pass (feasibility 5/5, validation risk 1/5, value 2/5) and was implemented.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 39. `stopped`: false.
