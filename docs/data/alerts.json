@@ -1,5 +1,1647 @@
 [
   {
+    "cve_id": "CVE-2026-71415",
+    "description": "Kirby is an open-source content management system. From 5.0.0 until 5.5.2, Kirby's REST API chunk upload handler in src/Api/Upload.php did not run the relevant upload authorization preflight in Kirby\\Api\\Upload::process() before Kirby\\Api\\Upload::processChunk() persisted chunk data. An authenticated user with the access.panel permission enabled but with files.create, files.replace, and user/users.update permissions disabled could submit requests with an Upload-Length header and leave unfinished chunks in site/cache/.uploads for 24 hours. Repeating this process could consume attacker-controlled temporary storage, prevent other users from uploading files, or prevent site logic from storing data, although final permission checks still prevented unauthorized files from reaching the content or site/accounts directories. This issue is fixed in version 5.5.2.",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": 0.00246,
+    "epss_percentile": 0.1584,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 24.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 24.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00246,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-71415",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "37e206f3ed40ad3fab2e47e055ccb19e9c207dab"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-08-31T21:17:48.057",
+    "nvd_last_modified": "2026-09-08T21:11:31.703",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550637+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-71553",
+    "description": "ApostropheCMS is an open-source Node.js content management system. In 4.32.0 and earlier, PATCH /api/v1/article/:id accepts the inherited path toString.call and passes it through the utility module to apos.util.set() and apos.util.get(), allowing an authenticated editor to overwrite the shared Object.prototype.toString function's call property and cause a persistent process-wide denial of service until restart.",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-1321"
+    ],
+    "epss_score": 0.00312,
+    "epss_percentile": 0.23882,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 24.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 24.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00312,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-71553",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "5a3746aaed49761e171c2cbfe793267c959829fd"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-08-17T20:16:46.073",
+    "nvd_last_modified": "2026-09-09T21:11:46.833",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550623+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-57163",
+    "description": "PJSIP is a free and open source multimedia communication library written in C. Prior to commit c4a151a, a stack buffer overflow exists in the GnuTLS TLS backend when parsing the Subject Alternative Name extension of a peer certificate (tls_cert_get_info() in ssl_sock_gtls.c). Only GnuTLS builds are affected (--with-gnutls); OpenSSL and Apple SecureTransport/Network.framework builds are not affected. While extracting certificate information after a TLS handshake, an incorrect buffer-size value can cause an oversized SubjectAltName entry to be written past the end of a fixed-size stack buffer. A network-positioned attacker presenting a crafted certificate \u2014 a malicious server to a connecting client, or a malicious client to a server that requests certificates \u2014 can trigger this during the TLS handshake, before any SIP-level authentication. Impact may range from unexpected application termination to control flow hijack/memory corruption. This issue has been patched via commit c4a151a.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-121"
+    ],
+    "epss_score": 0.00252,
+    "epss_percentile": 0.16703,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00252,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-57163",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "c4a151af86fadd16d9480b2603eeb2abf4fb4f78"
+      }
+    ],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-04T18:17:54.547",
+    "nvd_last_modified": "2026-09-08T21:14:35.567",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550599+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-73214",
+    "description": "Coturn is a free open source implementation of TURN and STUN Server. Prior to 4.16.0, dtls_server_input_handler() and create_new_connected_udp_socket() in src/apps/relay/dtls_listener.c retain OpenSSL dtls1_reassemble_fragment() state for a 35-byte fragmented ClientHello declaring a 650,000-byte handshake before cookie validation, allowing an unauthenticated remote sender using fresh UDP tuples to exhaust memory without TURN credentials, a completed handshake, a valid cookie, or source spoofing. This issue is fixed in version 4.16.0.",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-400",
+      "CWE-770"
+    ],
+    "epss_score": 0.00423,
+    "epss_percentile": 0.3567,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00423,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-73214",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "37e13d1d60af8f1422c01b5e9f1c6bc355d03b85"
+      }
+    ],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-11T18:18:26.773",
+    "nvd_last_modified": "2026-09-09T20:55:04.493",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550584+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87621",
+    "description": "Out of bounds write in ANGLE in Google Chrome on on Windows prior to 153.0.8010.36 allowed a remote attacker to potentially execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity: High)",
+    "cvss_score": 9.6,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-787"
+    ],
+    "epss_score": 0.00324,
+    "epss_percentile": 0.25277,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 33.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.6,
+      "cvss_component": 33.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00324,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:20.313",
+    "nvd_last_modified": "2026-09-10T04:18:29.513",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550569+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87618",
+    "description": "Incorrect reference resolution in Storage in Google Chrome on on Windows prior to 153.0.8010.36 allowed a remote attacker who had compromised the renderer process to potentially execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity: Low)",
+    "cvss_score": 8.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-706"
+    ],
+    "epss_score": 0.00323,
+    "epss_percentile": 0.25058,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 29.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.3,
+      "cvss_component": 29.1,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00323,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:19.950",
+    "nvd_last_modified": "2026-09-10T04:18:29.323",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550565+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87617",
+    "description": "Use after free in DevTools in Google Chrome prior to 153.0.8010.36 allowed a remote attacker leveraging social engineering to execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: Low)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00364,
+    "epss_percentile": 0.29666,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00364,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:19.840",
+    "nvd_last_modified": "2026-09-10T04:18:29.133",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550560+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87616",
+    "description": "Improper initialization in Views in Google Chrome on on Windows prior to 153.0.8010.36 allowed a remote attacker who had compromised the renderer process and leveraged social engineering to potentially execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity: Medium)",
+    "cvss_score": 8.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-665"
+    ],
+    "epss_score": 0.00388,
+    "epss_percentile": 0.32226,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 29.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.3,
+      "cvss_component": 29.1,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00388,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:19.730",
+    "nvd_last_modified": "2026-09-10T04:18:28.960",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550556+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87613",
+    "description": "Incorrect reference resolution in Extensions in Google Chrome prior to 153.0.8010.36 allowed a remote attacker to potentially execute arbitrary code outside the sandbox via crafted network traffic. (Chromium security severity: Medium)",
+    "cvss_score": 9.0,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-706"
+    ],
+    "epss_score": 0.0035,
+    "epss_percentile": 0.28173,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.0,
+      "cvss_component": 31.5,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0035,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:19.413",
+    "nvd_last_modified": "2026-09-10T04:18:28.790",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550551+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87612",
+    "description": "Type confusion in V8 in Google Chrome prior to 153.0.8010.36 allowed a remote attacker to execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: High)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-843"
+    ],
+    "epss_score": 0.00317,
+    "epss_percentile": 0.24352,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00317,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:19.310",
+    "nvd_last_modified": "2026-09-10T04:18:28.583",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550547+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87606",
+    "description": "Missing authorization in SiteIsolation in Google Chrome prior to 153.0.8010.36 allowed a remote attacker who had compromised the renderer process to bypass site isolation via a crafted HTML page. (Chromium security severity: Medium)",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": 0.00178,
+    "epss_percentile": 0.07472,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00178,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:18.660",
+    "nvd_last_modified": "2026-09-10T16:18:06.530",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550529+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87499",
+    "description": "Incorrect authorization in Network in Google Chrome prior to 153.0.8010.36 allowed a remote attacker who had compromised the renderer process to bypass site isolation via a crafted HTML page. (Chromium security severity: High)",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-863"
+    ],
+    "epss_score": 0.00178,
+    "epss_percentile": 0.07471,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00178,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T01:17:06.797",
+    "nvd_last_modified": "2026-09-10T16:18:05.073",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550346+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-54730",
+    "description": "authentik is an open-source identity provider. Prior to 2026.2.6 and 2026.5.5, the enterprise Google Chrome device-trust stages advance the flow without confirming that the out-of-band device attestation actually ran. Affected enterprise deployments place either a Google Chrome Endpoint stage with mode set to REQUIRED or the deprecated Google Chrome Device Trust Connector stage in an authentication flow. The device attestation occurs in a verification iframe that calls the Google Verified Access API and records the verified device on success, but the vulnerable stages treat the flow as passed as soon as the stage is submitted. An attacker who can reach such a stage, including after primary username and password authentication, can skip the verification iframe and authenticate from a device that was never verified. Where device trust is the only additional factor, that protection is fully bypassed, while other configured factors remain in force. This issue is fixed in versions 2026.2.6 and 2026.5.5.",
+    "cvss_score": 8.6,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-284",
+      "CWE-807"
+    ],
+    "epss_score": 0.00374,
+    "epss_percentile": 0.30751,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.6,
+      "cvss_component": 30.1,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00374,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-54730",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "ed54cc3b30a4511c650690cbdcd7bfbc198c02b8"
+      }
+    ],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-18T17:16:59.350",
+    "nvd_last_modified": "2026-09-08T21:02:26.047",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550206+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-55509",
+    "description": "WsgiDAV is a generic and extendable WebDAV server based on WSGI. Prior to 4.3.5, the sample MySQLBrowserProvider in wsgidav/samples/mysql_dav_provider.py concatenates the record key parsed from a request URL directly into SQL WHERE clauses. The affected _exists_record_by_primary_key, _get_field_by_primary_key, and _get_record_by_primary_key methods are part of a shipped example provider that is not enabled by default. An attacker who can access a share explicitly configured with this non-default provider can inject SQL through a normal GET request; anonymously exposed read shares permit a status-code oracle and extraction of arbitrary data reachable by the configured MySQL account. This issue is fixed in version 4.3.5.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": 0.00398,
+    "epss_percentile": 0.33282,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00398,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-55509",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "6f35776c9188f130ab044ce557015d51aaa83500"
+      }
+    ],
+    "affected": [
+      "oracle/mysql"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-28T20:18:27.810",
+    "nvd_last_modified": "2026-09-09T21:09:13.080",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550189+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-79987",
+    "description": "A remote, authenticated, non-admin Craft CMS Control Panel user with only the\u00a0accessCp\u00a0permission can execute operating system commands as the PHP web worker.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-470"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-10T16:17:56.543",
+    "nvd_last_modified": "2026-09-10T16:17:56.543",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550185+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-47156",
+    "description": "MantisBT is an open source bug tracker. Versions 2.28.3 and earlier contain a critical authentication bypass in the SOAP API's mci_check_login() function. Any user knowing any valid cookie_string can authenticate as any other user (knowing their username), including the administrator, without knowing the target's password. The vulnerability is exploitable with zero prior access on default MantisBT installations because self-registration is enabled by default ($g_allow_signup = ON). A self-registered user can use their own cookie_string (readable from their browser's MANTIS_STRING_COOKIE cookie after login) to impersonate the administrator via the SOAP API. The REST API is NOT affected. The REST API's AuthMiddleware derives the username server-side from the API token or session cookie, so the username cannot be spoofed. The Web UI is NOT affected. The Web UI authenticates via PHP session cookies (PHPSESSID) and validates the MANTIS_STRING_COOKIE against the logged-in user through auth_is_cookie_valid(). The username is derived server-side from the cookie, not supplied by the client. Version 2.28.4 contains a patch. No known workarounds are available.",
+    "cvss_score": 9.3,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-287",
+      "CWE-639"
+    ],
+    "epss_score": 0.005,
+    "epss_percentile": 0.4122,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.3,
+      "cvss_component": 32.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.005,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-47156",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "ceb74c8056753e0d4089af95bde794e47fa2ef53"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-09T17:17:21.833",
+    "nvd_last_modified": "2026-09-10T15:53:23.707",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550164+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-55250",
+    "description": "Maravel, a PHP framework oriented towards dependency injection, prior to version 10.74.0 has a high-severity Token Replay Vulnerability arising from a structural lifecycle mismatch between stateless token validation engines and high-performance relational caching layers. Any application with low cache memory that causes premature eviction to free up memory and applications running macropay-solutions/maravel-framework that utilize tymon/jwt-auth for API token authentication and blacklist management or any other package that does the same may be affected. This architectural risk might also impact native Laravel applications utilizing cache tags under specific volatile or eviction-capped environments. tymon/jwt-auth automatically probes for cache tag support. If found, it forcefully wraps 14-day token blacklist entries (jti) inside a relational tymon.jwt tag. In environments where the O(1) Atomic Lazy Eviction model is active \u2014 either natively inside Maravel-Framework v20.x or manually backported into v10.x via the explicit DI container singletons provided in PR #104 (App\\Cache\\TaggedCache and App\\Cache\\TagSet) \u2014 a strict global tracking ceiling (Container::TAGGED_CACHE_TTL_CAP_SECONDS) of 7,200 seconds (2 hours) is enforced to secure the system against memory index bloat. This ceiling forcefully truncates the 14-day blacklist lifespan down to a maximum of 2 hours, after which individual tracking keys naturally expire and disappear from the active cache window. Furthermore, because the optimized engine implements a generational version matrix to achieve O(1) flush speeds, any programmatic or manual invocation of a tag flush or reset (e.g., Cache::tags([...])->flush()) instantly bumps the internal atomic master version pointer. This shifts the computed cryptographic composite hash (sha1($this->tags->getNamespace())) for all overlapping components, rendering the entire existing index immediately unreachable. Consequently, through either natural 2-hour expiration or an intervening tag flush execution (like the cache naturally cleaning old values to free up memory), the invalidation state records are entirely wiped out. Because the tokens' physical cryptographic signatures remain structurally valid for up to 14 days, stolen, hijacked, or legitimately logged-out tokens are instantly and silently resurrected across the entire API gateway, leaving the application critically vulnerable to widespread Token Replay Attacks. Because this issue is caused by an upstream architectural assumption within the tymon/jwt-auth package rather than a core defect inside the framework, there is no direct framework version upgrade that can safely bypass this lifecycle collision without breaking business cache recycling bounds. Maravel version 10.74.0 introduced a way to backport the new fixed tagged cache from 20.x into 10.x by resolving TagSet and TaggedCache from DI, which is how this latent architectural lifecycle vulnerability was discovered. Users must apply the decoupled configuration workaround outlined below. As a workaround, make sure that cache memory size does not generate early natural evictions from cache to free up space, deleting blacklisted jwt ids before they expire. Applications must decouple flat authentication vectors from the relational tagging subsystem. This forces token identifiers to write directly to the primary cache keyspace as flat, un-tagged key-value pairs where they securely retain their unclipped 14-day lifecycle.",
+    "cvss_score": 8.7,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-294",
+      "CWE-613",
+      "CWE-672"
+    ],
+    "epss_score": 0.00552,
+    "epss_percentile": 0.44362,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.7,
+      "cvss_component": 30.4,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00552,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-08T23:17:25.573",
+    "nvd_last_modified": "2026-09-09T14:17:12.570",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550150+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-52777",
+    "description": "YesWiki is a wiki system written in PHP. Prior to version 4.6.6, there is an authenticated PHP object injection vulnerability in BazarImportAction via unserialize. This issue has been patched in version 4.6.6.",
+    "cvss_score": 9.4,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-352",
+      "CWE-502"
+    ],
+    "epss_score": 0.00215,
+    "epss_percentile": 0.11847,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 33.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.4,
+      "cvss_component": 32.9,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00215,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-52777",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "8f70a8d6b8befa0e644d03c785701dbbc55b8fd0"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-05T00:17:20.663",
+    "nvd_last_modified": "2026-09-08T21:05:26.920",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550127+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-52762",
+    "description": "YesWiki is a wiki system written in PHP. Prior to version 4.6.6, YesWiki Bazar contains a stored Server-Side Template Injection (SSTI) vulnerability in the semantic template feature that can be escalated to confirmed Remote Code Execution (RCE). An authenticated administrator can place arbitrary Twig expressions into the Semantic template (Twig) field (bn_sem_template), and that content is later executed server-side when public semantic endpoints are requested. This issue has been patched in version 4.6.6.",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-1336"
+    ],
+    "epss_score": 0.00448,
+    "epss_percentile": 0.37763,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 24.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00448,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-52762",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "89462f1577a8a1fe7fcff75e77b5058a74d8047b"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-05T00:17:18.607",
+    "nvd_last_modified": "2026-09-08T21:05:26.920",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550088+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-46636",
+    "description": "Twig is a template language for PHP. From version 1.0.0 to before version 3.27.0, SecurityPolicy::checkMethodAllowed() unconditionally whitelists all method calls on instances of Twig\\Markup. Twig\\Markup is not final, so subclasses inherit the bypass. An application that passes an object of a Markup-derived class into a sandboxed template (typically to mark a chunk of HTML as safe) inadvertently exposes every public method of that subclass to template authors, regardless of the configured allowedMethods list. This issue has been patched in version 3.27.0.",
+    "cvss_score": 8.7,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-1336"
+    ],
+    "epss_score": 0.00358,
+    "epss_percentile": 0.29086,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.7,
+      "cvss_component": 30.4,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00358,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-46636",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "04ae1bfe9463c816cf72ca0abe7eae2c77a9a9ed"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-04T22:17:17.360",
+    "nvd_last_modified": "2026-09-08T18:17:37.770",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550083+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-85591",
+    "description": "phpMyFAQ versions before 4.1.8 contain an authentication bypass vulnerability in the user control panel API endpoint that allows authenticated attackers to change account passwords without verifying the current password. Attackers with session access can submit a PUT request to the user data update endpoint with only a CSRF token to silently change any user's password, including administrators, causing irreversible account takeover and victim lockout.",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-620"
+    ],
+    "epss_score": 0.00296,
+    "epss_percentile": 0.2205,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 24.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 24.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00296,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-85591",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "33fae25ebac875a06041ce47300b554c5da715d0"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-04T12:17:22.433",
+    "nvd_last_modified": "2026-09-10T16:17:59.390",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550069+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-85590",
+    "description": "phpMyFAQ before 4.1.8 contains an authentication bypass vulnerability in its two-factor authentication (TOTP) disable functionality. The removeTwofactorConfig() handler (reachable via POST /api/user/remove-twofactor) verifies only that the user is logged in and that a valid CSRF token is supplied, then disables TOTP without requiring password re-entry or a current TOTP code. The same downgrade is also reachable inline via PUT /api/user/data/update, which accepts a plain twofactor_enabled form field under the same session+CSRF-only guard. An attacker who has hijacked a user's session can silently strip two-factor protection from any account, including administrator accounts, after which password-only authentication succeeds.",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-308"
+    ],
+    "epss_score": 0.00386,
+    "epss_percentile": 0.31993,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 24.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00386,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-85590",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "33fae25ebac875a06041ce47300b554c5da715d0"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-04T12:17:21.327",
+    "nvd_last_modified": "2026-09-08T20:05:53.177",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550064+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84361",
+    "description": "Composer is a dependency Manager for the PHP language. From 1.0 until 2.2.30 and 2.10.3, a malicious dependency package from a custom Composer repository or an untrusted composer.lock file could set source.type to perforce and source.url to an rsh: or jsh: P4PORT value. When the Perforce p4 client was installed and Composer installed the package from source through composer install or composer update, including --prefer-source, Composer\\Util\\Perforce passed the address to p4 without validation, causing p4 to run a local command with the privileges of the user or CI account. Packagist.org does not permit Perforce source metadata. This issue is fixed in versions 2.2.30 and 2.10.3.",
+    "cvss_score": 7.7,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-78"
+    ],
+    "epss_score": 0.00409,
+    "epss_percentile": 0.34376,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.7,
+      "cvss_component": 26.9,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00409,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-84361",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "dcf399dbf5a5d05b54169fe2caf018152edba181"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-01T21:18:47.023",
+    "nvd_last_modified": "2026-09-09T21:09:13.080",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550051+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-61638",
+    "description": "Wallos is an open-source, self-hostable personal subscription tracker. Prior to version 4.9.6, POST /endpoints/notifications/testemailnotifications.php accepts smtpaddress and smtpport from POST body with zero SSRF validation. PHPMailer connects to attacker-supplied host:port. Every other notification endpoint uses ssrf_helper.php but email was missed. Any authenticated user can probe internal network, cloud metadata. This issue has been patched in version 4.9.6.",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-918"
+    ],
+    "epss_score": 0.00285,
+    "epss_percentile": 0.20909,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00285,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-61638",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "b75f13d0ffa3ed7e77e8e79e4b9fd3fc528c98d3"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-31T21:17:16.950",
+    "nvd_last_modified": "2026-09-08T21:11:31.703",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550025+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-55220",
+    "description": "Pimcore is an Open Source Data & Experience Management Platform. Prior to 11.5.19, 12.3.10, and 2026.1.6, Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Hotspotimage::getDataFromResource() in models/DataObject/ClassDefinition/Data/Hotspotimage.php passes the field __hotspots object-store column to Pimcore\\Tool\\Serialize::unserialize() without an allowed-classes restriction after JSON decoding fails. An attacker with a separate capability to write crafted PHP serialized bytes into that column can instantiate available classes and trigger magic methods when an affected DataObject is loaded, which can produce arbitrary file writes or code execution through bundled gadget chains. The related ImageGallery, Block, and Video callers use the same fallback pattern, but the identified June fix changes the Hotspotimage caller only. This issue is fixed for Hotspotimage in versions 11.5.19, 12.3.10, and 2026.1.6.",
+    "cvss_score": 9.3,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-502"
+    ],
+    "epss_score": 0.00498,
+    "epss_percentile": 0.41141,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.3,
+      "cvss_component": 32.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00498,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-55220",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "71b2af87d1a50027d7a59cb9f41da1ef807d892f"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-28T20:18:26.517",
+    "nvd_last_modified": "2026-09-09T21:09:13.080",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550011+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-35445",
+    "description": "Winter CMS is a content management system built on the Laravel PHP framework. In versions prior to 1.2.13, the backend did not validate the handler name submitted through the form postback _handler POST field, allowing an authenticated backend user to invoke arbitrary controller methods, including protected, private, and action-prefixed ones. While AJAX requests validate that handler names match the on[A-Z][\\w+]* pattern, the postback path passed the submitted _handler value straight to the handler dispatcher with no such check, so any controller that exposes a public action or conditionally relaxes its $requiredPermissions check could be reached, bypassing the roles and permissions system. The built-in Users controller was affected because it set $requiredPermissions to null for the myaccount action, letting any authenticated backend user invoke user-management methods such as update_onDelete and update_onManualPasswordReset without holding the backend.manage_users permission. This issue is fixed in version 1.2.13.",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-285"
+    ],
+    "epss_score": 0.00253,
+    "epss_percentile": 0.16714,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 24.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 24.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00253,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-35445",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "e09c8d3526f3583cb6c3476a021b885088ecd4bd"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-08-26T17:16:56.397",
+    "nvd_last_modified": "2026-09-09T21:09:13.080",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.550001+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-77635",
+    "description": "CakePHP is a rapid development framework for PHP. Prior to versions 5.1.10, 5.2.15, and 5.3.7 on their respective release lines, FunctionsBuilder::jsonValue() with PostgresDriver is vulnerable to SQL injection when user-controlled data is supplied to the jsonPath parameter. This issue is fixed in versions 5.1.10, 5.2.15, and 5.3.7.",
+    "cvss_score": 9.2,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": 0.00294,
+    "epss_percentile": 0.21779,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.2,
+      "cvss_component": 32.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00294,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-77635",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "1b06accdee89c0993a8cbccc865bc43f079ed3c9"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-24T21:17:48.457",
+    "nvd_last_modified": "2026-09-09T21:06:39.057",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.549966+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-77634",
+    "description": "CakePHP is a rapid development framework for PHP. Prior to versions 4.5.12, 4.6.5, 5.1.8, 5.2.14, and 5.3.7 on their respective release lines, custom mail headers added with Message::setHeaders() or Message::addHeaders() do not have CRLF bytes removed, allowing header injection when user-controlled data is used in message headers. This issue is fixed in versions 4.5.12, 4.6.5, 5.1.8, 5.2.14, and 5.3.7.",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-93"
+    ],
+    "epss_score": 0.00312,
+    "epss_percentile": 0.23886,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00312,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-77634",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "cc9dbe1fbcb1cb6fd20eb2ebf457c9774dfa5f49"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-24T21:17:48.307",
+    "nvd_last_modified": "2026-09-09T21:06:39.057",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.549961+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-46382",
+    "description": "The Meeting Room Booking System (MRBS) is a PHP-based application for booking meeting rooms. Prior to version 1.12.2, a user-supplied private/local URI can be made to be fetched without checks. Version 1.12.2 contains a fix. No known workarounds are available.",
+    "cvss_score": 8.7,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-918"
+    ],
+    "epss_score": 0.00249,
+    "epss_percentile": 0.16199,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.7,
+      "cvss_component": 30.4,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00249,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-46382",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "38d51e05f4a0ab39820f3830ca5dcae5f34d8546"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-13T00:17:32.090",
+    "nvd_last_modified": "2026-09-09T21:02:22.660",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.549881+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-64851",
+    "description": "Grav Shortcode Core Plugin allows for the development shortcode plugins that utilize the common format utilized by WordPress and BBCode. Prior to 6.2.2, Grav Shortcode Core passes shortcode syntax through Security::detectXss() because it contains no literal less-than character, then ColorShortcode.php and related attribute handlers concatenate an attacker-controlled parameter into HTML without encoding. An account with admin.pages permission can close the generated attribute and add an event handler, creating stored cross-site scripting that executes for visitors or administrators who view the page. This issue is fixed in version 6.2.2.",
+    "cvss_score": 8.5,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.00428,
+    "epss_percentile": 0.3606,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.5,
+      "cvss_component": 29.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00428,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-64851",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "2a55eac8a2cc7f6c2d4923ab2fa7991039620597"
+      }
+    ],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-08-19T16:18:39.897",
+    "nvd_last_modified": "2026-09-09T21:13:25.910",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.549569+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-85596",
+    "description": "Traefik versions >= v3.7.0 and <= v3.7.10 contain an authentication bypass in the Kubernetes Ingress NGINX provider. The TLS option generated for an Ingress carrying the nginx.ingress.kubernetes.io/auth-tls-secret annotation was named after the Ingress namespace and name. As a result, two Ingress objects sharing the same host, the same client CA secret, and the same client-authentication mode produced two distinct TLS option names for that host. Traefik treats this as a TLS options conflict and falls back to the entry point's default TLS configuration, which does not request a client certificate, so a route configured with nginx.ingress.kubernetes.io/auth-tls-verify-client: \"on\" becomes reachable without a client certificate. Only the v3.7 line is affected; the issue is fixed in v3.7.11.",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-287"
+    ],
+    "epss_score": 0.00224,
+    "epss_percentile": 0.13023,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00224,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-85596",
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-04T12:17:23.087",
+    "nvd_last_modified": "2026-09-10T16:17:59.527",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.549548+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-75594",
+    "description": "Kirby is an open-source content management system. Prior to 4.9.5 and 5.5.2, depending on the release line, Kirby's media handler in src/Cms/Media.php allowed Kirby\\Cms\\Media::thumb() to append a path-bearing filename to a validated parent media directory. On nginx, PHP's built-in server, or Apache with AllowEncodedSlashes enabled, a remote attacker could submit encoded slash characters such as %2f in the filename and traverse outside the parent's media directory. Differences between responses for existing and nonexistent thumbnail configurations disclosed whether an arbitrary .json file existed, and a .json file containing a valid filename key could cause the referenced image to be returned and the job file to be deleted. The related file::version path in src/Filesystem/Asset.php also accepted ../ sequences outside the intended index root. This issue is fixed in versions 4.9.5 and 5.5.2.",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": 0.00513,
+    "epss_percentile": 0.42072,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00513,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-75594",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "22fbaedb7e6dd61f5def10829ba7bd7e73e0dcc9"
+      }
+    ],
+    "affected": [
+      "nginx/nginx",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-08-31T21:17:48.760",
+    "nvd_last_modified": "2026-09-08T21:11:31.703",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.549543+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-67309",
+    "description": "Traefik versions >= v3.7.0 and <= v3.7.7 contain a path traversal vulnerability in the Kubernetes Ingress NGINX provider's RewriteTarget middleware (generated from the nginx.ingress.kubernetes.io/rewrite-target annotation). When an Ingress path uses a regex that captures attacker-controlled text without requiring a path separator (e.g., path /api(.*) with rewrite target /$1), a crafted request such as /api../admin matches the public router, is rewritten to a dot-segment traversal path (/../admin), and is forwarded without post-replacement normalization validation. A backend that normalizes dot segments resolves the path to a protected endpoint (e.g., /admin) reachable only through a separate router secured with BasicAuth, DigestAuth, or ForwardAuth, resulting in route-level authentication bypass. The issue is fixed in v3.7.8.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": null,
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": 0.00492,
+    "epss_percentile": 0.40724,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00492,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-67309",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "69259c3acc9d4bdc065cb2e3b83336f7de3e7038"
+      }
+    ],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-01T13:17:00.703",
+    "nvd_last_modified": "2026-09-09T20:26:18.573",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T17:18:59.549528+00:00"
+  },
+  {
     "cve_id": "CVE-2026-81784",
     "description": "Unauthenticated PHP Object Injection in Wise Chat <= 3.4 versions.",
     "cvss_score": 8.1,
@@ -34,7 +1676,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.2,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -141,7 +1783,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:16:59.450",
-    "nvd_last_modified": "2026-09-10T13:40:57.533",
+    "nvd_last_modified": "2026-09-10T16:18:04.310",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.441444+00:00"
@@ -239,7 +1881,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T14:17:03.823",
-    "nvd_last_modified": "2026-09-10T14:17:03.823",
+    "nvd_last_modified": "2026-09-10T16:17:37.337",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.441362+00:00"
@@ -695,7 +2337,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T14:17:15.593",
-    "nvd_last_modified": "2026-09-10T15:13:07.090",
+    "nvd_last_modified": "2026-09-10T16:18:11.233",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.440825+00:00"
@@ -793,7 +2435,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:01.340",
-    "nvd_last_modified": "2026-09-10T13:08:07.880",
+    "nvd_last_modified": "2026-09-10T16:18:04.897",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T13:21:32.741462+00:00"
@@ -1695,7 +3337,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:14.723",
-    "nvd_last_modified": "2026-09-09T20:18:16.923",
+    "nvd_last_modified": "2026-09-10T16:18:06.377",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.512236+00:00"
@@ -1744,7 +3386,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:14.617",
-    "nvd_last_modified": "2026-09-09T20:19:05.917",
+    "nvd_last_modified": "2026-09-10T16:18:06.213",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.512228+00:00"
@@ -4647,7 +6289,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:17:02.907",
-    "nvd_last_modified": "2026-09-10T04:18:20.080",
+    "nvd_last_modified": "2026-09-10T17:17:06.567",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759181+00:00"
@@ -11460,7 +13102,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-07T22:17:22.163",
-    "nvd_last_modified": "2026-09-08T19:56:50.950",
+    "nvd_last_modified": "2026-09-10T16:18:02.913",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T00:17:07.248845+00:00"
@@ -13651,18 +15293,18 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.4,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-04T15:17:35.360",
-    "nvd_last_modified": "2026-09-04T16:17:57.010",
+    "nvd_last_modified": "2026-09-10T16:17:49.593",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485857+00:00",
-    "osv_id": null,
-    "osv_fixed_versions": []
+    "first_seen": "2026-09-05T15:02:54.485857+00:00"
   },
   {
     "cve_id": "CVE-2026-45221",

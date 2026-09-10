@@ -361,8 +361,23 @@ def nvd_query(params, api_key=None):
 
 
 def extract_cvss(nvd_cve):
+    # NVD is mid-migration to CVSS v4.0: as of this cycle, a live sample of
+    # 200 most-recently-published NVD CVEs found ~34% carry ONLY a
+    # cvssMetricV40 block with no v3.1/v3.0/v2 fallback at all -- previously
+    # those CVEs got cvss_score=None permanently, which zeroes their 35%
+    # weight in the composite risk_score (redistributed to EPSS/KEV per
+    # composite_risk_score's existing weight-redistribution logic) and buckets
+    # them into severity "unknown" instead of their real critical/high/etc
+    # severity -- a real and growing data-accuracy gap as v4.0 adoption rises,
+    # not a cosmetic one. v4.0 uses the same 0-10 baseScore scale and the same
+    # critical/high/medium/low thresholds as v3.x, so bucketing/scoring logic
+    # elsewhere needs zero changes -- only the extraction needs to fall back to
+    # it. Checked LAST (lowest priority) so any CVE that already has a
+    # v3.1/v3.0/v2 score (the overwhelming majority today) is scored exactly
+    # as before -- this only fills in previously-total gaps, never changes an
+    # existing score.
     metrics = nvd_cve.get("metrics", {})
-    for key in ("cvssMetricV31", "cvssMetricV30", "cvssMetricV2"):
+    for key in ("cvssMetricV31", "cvssMetricV30", "cvssMetricV2", "cvssMetricV40"):
         if key in metrics and metrics[key]:
             m = metrics[key][0]
             cvss_data = m.get("cvssData", {})

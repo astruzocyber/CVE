@@ -37,6 +37,7 @@ from aggregate import (
     compute_stats,
     build_final_entry,
     parse_osv_fixed_versions,
+    extract_cvss,
 )
 
 
@@ -84,6 +85,29 @@ class TestCompositeRiskScore(unittest.TestCase):
     def test_score_never_negative(self):
         total, bd = composite_risk_score(cvss=0.0, epss_score=0.0, in_kev=False)
         self.assertGreaterEqual(total, 0.0)
+
+
+class TestExtractCvss(unittest.TestCase):
+    def test_prefers_v31_over_v40_when_both_present(self):
+        nvd_cve = {
+            "metrics": {
+                "cvssMetricV31": [{"cvssData": {"baseScore": 7.5}}],
+                "cvssMetricV40": [{"cvssData": {"baseScore": 9.8}}],
+            }
+        }
+        score, version = extract_cvss(nvd_cve)
+        self.assertEqual(score, 7.5)
+        self.assertEqual(version, "CVSS V31")
+
+    def test_falls_back_to_v40_when_no_v3_or_v2(self):
+        nvd_cve = {"metrics": {"cvssMetricV40": [{"cvssData": {"baseScore": 8.7}}]}}
+        score, version = extract_cvss(nvd_cve)
+        self.assertEqual(score, 8.7)
+        self.assertEqual(version, "CVSS V40")
+
+    def test_no_metrics_returns_none(self):
+        self.assertEqual(extract_cvss({"metrics": {}}), (None, None))
+        self.assertEqual(extract_cvss({}), (None, None))
 
 
 class TestParseCvssV3VectorString(unittest.TestCase):
