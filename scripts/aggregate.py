@@ -947,6 +947,7 @@ def compute_stats(alerts):
     by_severity = {"critical": 0, "high": 0, "medium": 0, "low": 0, "unknown": 0}
     epss_values = []
     risk_values = []
+    cvss_values = []
     by_source = {}
     by_cwe = {}
     by_vendor_product = {}
@@ -966,6 +967,8 @@ def compute_stats(alerts):
             epss_values.append(a["epss_score"])
         if isinstance(a.get("risk_score"), (int, float)):
             risk_values.append(a["risk_score"])
+        if isinstance(cvss, (int, float)):
+            cvss_values.append(cvss)
         src = a.get("source", "unknown")
         by_source[src] = by_source.get(src, 0) + 1
         for cwe in (a.get("cwe_ids") or []):
@@ -1005,6 +1008,17 @@ def compute_stats(alerts):
         # way as avg_epss (mean of the already-computed risk_score field, no new
         # API calls or dependencies).
         "avg_risk_score": round(sum(risk_values) / len(risk_values), 1) if risk_values else None,
+        # Average CVSS base score across all currently-tracked alerts with a known
+        # score (cvss_values excludes "unknown"-severity entries with no CVSS at
+        # all, same exclusion pattern as epss_values/risk_values above) -- a
+        # distinct trend signal from avg_risk_score (which blends in EPSS/KEV and
+        # is therefore influenced by exploitation-likelihood shifts even when the
+        # underlying severity of newly-tracked CVEs is flat) and from
+        # critical_count/high_count (raw bucket counts, not a continuous average
+        # sensitive to movement within a band, e.g. 7.1 -> 8.9 stays "high" but
+        # meaningfully raises avg_cvss_score). Zero new API calls -- built from
+        # cvss_score, a field already extracted every run.
+        "avg_cvss_score": round(sum(cvss_values) / len(cvss_values), 2) if cvss_values else None,
         # Top weakness (CWE) classifications across all currently-tracked alerts,
         # sorted by count descending, capped to the top 10 to keep stats.json small
         # -- a distinct triage axis from severity/source: "what KINDS of bugs are
@@ -1034,7 +1048,7 @@ def compute_stats(alerts):
 # ---------------------------------------------------------------------------
 HISTORY_CSV_HEADER = (
     "timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,"
-    "avg_epss,avg_risk_score,critical_count,high_count"
+    "avg_epss,avg_risk_score,critical_count,high_count,avg_cvss_score"
 )
 
 
@@ -1060,6 +1074,7 @@ def append_history(stats):
         # by_severity dict -- zero new API calls, zero new computation cost.
         str(by_severity.get("critical", "")),
         str(by_severity.get("high", "")),
+        "" if stats.get("avg_cvss_score") is None else str(stats["avg_cvss_score"]),
     ]
 
     # Schema-drift self-heal: when a column (e.g. avg_risk_score) is added to the

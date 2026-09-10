@@ -1027,6 +1027,10 @@ async function loadStats() {
     if (avgRiskEl) {
       avgRiskEl.textContent = typeof stats.avg_risk_score === "number" ? stats.avg_risk_score : "-";
     }
+    const avgCvssEl = document.getElementById("stat-avg-cvss");
+    if (avgCvssEl) {
+      avgCvssEl.textContent = typeof stats.avg_cvss_score === "number" ? stats.avg_cvss_score : "-";
+    }
     renderSourceBreakdown(stats.by_source);
     renderSeverityBreakdown(stats.by_severity);
     renderCweBreakdown(stats.by_cwe);
@@ -1206,6 +1210,9 @@ async function loadTrendChart() {
     // older rows won't have index 7/8 at all -- treat missing same as empty.
     const criticalCount = rows.map((r) => (r[7] === "" || r[7] === undefined ? null : Number(r[7])));
     const highCount = rows.map((r) => (r[8] === "" || r[8] === undefined ? null : Number(r[8])));
+    // avg_cvss_score column added in a later schema revision; older rows
+    // won't have index 9 at all -- treat missing same as empty.
+    const avgCvssScore = rows.map((r) => (r[9] === "" || r[9] === undefined ? null : Number(r[9])));
 
     document.getElementById("trend-section").hidden = false;
     new Chart(canvas, {
@@ -1280,6 +1287,15 @@ async function loadTrendChart() {
             borderColor: "#f4a261",
             backgroundColor: "rgba(244,162,97,0.12)",
             yAxisID: "y2",
+            tension: 0.2,
+            hidden: true,
+          },
+          {
+            label: "Avg CVSS score",
+            data: avgCvssScore,
+            borderColor: "#00b4d8",
+            backgroundColor: "rgba(0,180,216,0.12)",
+            yAxisID: "y1",
             tension: 0.2,
             hidden: true,
           },

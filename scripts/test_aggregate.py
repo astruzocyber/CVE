@@ -294,6 +294,20 @@ class TestComputeStats(unittest.TestCase):
         stats = compute_stats([])
         self.assertEqual(stats["total_alerts"], 0)
 
+    def test_avg_cvss_score_excludes_unknown(self):
+        alerts = [
+            {"cvss_score": 9.0, "kev": False},
+            {"cvss_score": 7.0, "kev": False},
+            {"cvss_score": None, "kev": False},  # excluded from average
+        ]
+        stats = compute_stats(alerts)
+        self.assertEqual(stats["avg_cvss_score"], 8.0)
+
+    def test_avg_cvss_score_none_when_no_scores(self):
+        alerts = [{"cvss_score": None, "kev": False}]
+        stats = compute_stats(alerts)
+        self.assertIsNone(stats["avg_cvss_score"])
+
 
 class TestBuildFinalEntry(unittest.TestCase):
     def test_risk_score_prev_defaults_to_none_for_new_entry(self):
@@ -392,15 +406,17 @@ class TestAppendHistory(unittest.TestCase):
                 "avg_epss": 0.05,
                 "avg_risk_score": 42.5,
                 "by_severity": {"critical": 3, "high": 4, "medium": 2, "low": 1, "unknown": 0},
+                "avg_cvss_score": 6.5,
             }
             self._run_with_tmp_paths(csv_path, lambda: append_history(stats))
             with open(csv_path) as f:
                 lines = f.read().strip().split("\n")
             self.assertEqual(lines[0], HISTORY_CSV_HEADER)
-            self.assertTrue(lines[0].endswith("critical_count,high_count"))
+            self.assertTrue(lines[0].endswith("critical_count,high_count,avg_cvss_score"))
             row = lines[1].split(",")
-            self.assertEqual(row[-2], "3")  # critical_count
-            self.assertEqual(row[-1], "4")  # high_count
+            self.assertEqual(row[-3], "3")  # critical_count
+            self.assertEqual(row[-2], "4")  # high_count
+            self.assertEqual(row[-1], "6.5")  # avg_cvss_score
 
     def test_stale_header_upgraded_without_touching_old_rows(self):
         with tempfile.TemporaryDirectory() as d:
@@ -414,6 +430,7 @@ class TestAppendHistory(unittest.TestCase):
                 "total_alerts": 6, "kev_count": 0, "kev_overdue_count": 0,
                 "kev_ransomware_count": 0, "avg_epss": 0.02, "avg_risk_score": 11.0,
                 "by_severity": {"critical": 1, "high": 1},
+                "avg_cvss_score": 7.25,
             }
             self._run_with_tmp_paths(csv_path, lambda: append_history(stats))
             with open(csv_path) as f:
@@ -421,7 +438,7 @@ class TestAppendHistory(unittest.TestCase):
             self.assertEqual(lines[0], HISTORY_CSV_HEADER)
             # Old row is untouched (still fewer columns -- schema-evolution record).
             self.assertEqual(lines[1], old_row)
-            self.assertEqual(lines[2].split(",")[-2:], ["1", "1"])
+            self.assertEqual(lines[2].split(",")[-3:], ["1", "1", "7.25"])
 
     def test_missing_severity_breakdown_writes_empty_columns(self):
         with tempfile.TemporaryDirectory() as d:
@@ -434,7 +451,7 @@ class TestAppendHistory(unittest.TestCase):
             self._run_with_tmp_paths(csv_path, lambda: append_history(stats))
             with open(csv_path) as f:
                 row = f.read().strip().split("\n")[1].split(",")
-            self.assertEqual(row[-2:], ["", ""])
+            self.assertEqual(row[-3:], ["", "", ""])
 
 
 if __name__ == "__main__":

@@ -1,5 +1,61 @@
 [
   {
+    "cve_id": "CVE-2026-69247",
+    "description": "cryptography is a package designed to expose cryptographic primitives and recipes to Python developers. From 44.0.0 until 50.0.0, pkcs7_decrypt_der, pkcs7_decrypt_pem, and pkcs7_decrypt_smime reported the outcome of decrypting a RecipientInfo's encryptedKey in several distinguishable ways, one of which disclosed the exact length recovered from the RSA operation. The same distinction was also observable by timing. An application that decrypts attacker-supplied EnvelopedData and reflects the outcome gives the attacker a Bleichenbacher oracle against the content-encryption key. Decryption ran as RSA PKCS#1 v1.5 decrypt of encryptedKey, build an AES cipher from the result, then AES-CBC decrypt and PKCS#7 unpad. Invalid RSA padding, a valid padding with a bad key length, a correct length with a wrong key, and the real key each failed or succeeded differently. Case 1 is reachable only where the linked library lacks implicit rejection: OpenSSL 3.0 and 3.1, LibreSSL, and BoringSSL. Exploitation requires a service that auto-decrypts untrusted EnvelopedData matching the victim certificate and answers adaptively at high volume, such as an S/MIME gateway or mail filter. This issue is fixed in 50.0.0.",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-208",
+      "CWE-209"
+    ],
+    "epss_score": 0.00175,
+    "epss_percentile": 0.07152,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00175,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "osv_id": "CVE-2026-69247",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "53fccd93413a8d7f07d6d8999681f27b75cffa3f"
+      }
+    ],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-03T22:16:52.380",
+    "nvd_last_modified": "2026-09-10T20:36:14.340",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T20:44:28.494797+00:00"
+  },
+  {
     "cve_id": "CVE-2026-89049",
     "description": "A server-side request forgery issue due to improper validation of equivalent address representations in the port forwarding to remote hosts functionality in Amazon AWS Systems Manager Agent (SSM Agent) before 3.3.4851.0 on all platforms might allow an authenticated remote user to bypass the remote destination denylist and reach link-local endpoints, potentially obtaining the temporary IAM role credentials of a managed instance and acting with that role's permissions from outside the instance, via a crafted destination host value that uses an alternate representation of a denied link-local address.\n\n\n\nTo remediate this issue, users should upgrade to version 3.3.4851.0 or later.",
     "cvss_score": 9.9,
@@ -35,7 +91,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.8,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2164,7 +2220,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T01:16:59.240",
-    "nvd_last_modified": "2026-09-10T13:50:24.937",
+    "nvd_last_modified": "2026-09-10T20:17:29.340",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.441440+00:00"
