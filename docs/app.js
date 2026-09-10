@@ -3,6 +3,37 @@
 
 let allAlerts = [];
 
+// Client-side "mark as reviewed" triage state. Purely local (localStorage),
+// per-browser, never sent anywhere and never touches the shared dataset --
+// this is a per-analyst workflow aid, not shared team state. Answers a real
+// gap: on every reload the board shows all N alerts with zero memory of
+// which ones a given analyst has already triaged, forcing them to re-scan
+// the same already-handled entries every session. Stored as a Set of CVE
+// IDs under a single localStorage key; a JSON parse failure (corrupted/old
+// data) falls back to an empty set rather than throwing.
+const REVIEWED_KEY = "reviewedCves";
+function loadReviewedSet() {
+  try {
+    const raw = localStorage.getItem(REVIEWED_KEY);
+    if (!raw) return new Set();
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? new Set(arr) : new Set();
+  } catch (e) {
+    return new Set();
+  }
+}
+let reviewedCves = loadReviewedSet();
+function saveReviewedSet() {
+  try {
+    localStorage.setItem(REVIEWED_KEY, JSON.stringify([...reviewedCves]));
+  } catch (e) {}
+}
+function toggleReviewed(cveId) {
+  if (reviewedCves.has(cveId)) reviewedCves.delete(cveId);
+  else reviewedCves.add(cveId);
+  saveReviewedSet();
+}
+
 function severityClass(cvss) {
   if (cvss === null || cvss === undefined) return "";
   if (cvss >= 9.0) return "critical";
@@ -178,8 +209,10 @@ function renderCard(alert) {
   const toggleBtn = b ? `<button class="score-toggle" type="button" title="Show risk score breakdown" aria-expanded="false">breakdown &#9662;</button>` : "";
 
   const cveIdSafe = escapeHtml(alert.cve_id);
+  const isReviewed = reviewedCves.has(alert.cve_id);
+  const reviewedBtn = `<button class="review-toggle-btn${isReviewed ? " reviewed" : ""}" type="button" data-cve="${cveIdSafe}" title="${isReviewed ? "Marked reviewed -- click to unmark" : "Mark this alert as reviewed"}" aria-pressed="${isReviewed ? "true" : "false"}">${isReviewed ? "\u2713 Reviewed" : "Mark reviewed"}</button>`;
   return `
-    <div class="card" data-cve-id="${cveIdSafe}" id="alert-${cveIdSafe}">
+    <div class="card${isReviewed ? " reviewed-card" : ""}" data-cve-id="${cveIdSafe}" id="alert-${cveIdSafe}">
       <div class="card-header">
         <button class="cve-id cve-link-btn" type="button" data-cve="${cveIdSafe}" title="Copy a direct link to this alert">${cveIdSafe}</button>
         <div class="badges">${kevBadge}${ransomwareBadge}${overdueBadge}${dueSoonBadge}${sevBadge}${sourceBadge}</div>
@@ -221,6 +254,7 @@ function renderCard(alert) {
           ${alert.cve_id && /^CVE-/i.test(alert.cve_id) ? `<a href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}" target="_blank" rel="noopener">View on NVD</a>` : ""}
           ${alert.dependabot_url ? `<a href="${alert.dependabot_url}" target="_blank" rel="noopener">View alert</a>` : ""}
         </span>
+        ${reviewedBtn}
       </div>
     </div>
   `;
@@ -348,9 +382,13 @@ function readFiltersFromURL() {
     const n = Number(params.get("minepss"));
     if (Number.isFinite(n)) minEpssEl.value = n;
   }
+  const hideReviewedEl = document.getElementById("hide-reviewed");
+  if (params.has("hidereviewed") && hideReviewedEl) {
+    hideReviewedEl.checked = params.get("hidereviewed") === "1";
+  }
 }
 
-function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss) {
+function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed) {
   const params = new URLSearchParams();
   if (search) params.set("q", search);
   if (kevFilter && kevFilter !== "all") params.set("kev", kevFilter);
@@ -359,6 +397,7 @@ function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, s
   if (sortBy && sortBy !== "risk_score") params.set("sort", sortBy);
   if (typeof minRisk === "number" && !Number.isNaN(minRisk)) params.set("minrisk", String(minRisk));
   if (typeof minEpss === "number" && !Number.isNaN(minEpss)) params.set("minepss", String(minEpss));
+  if (hideReviewed) params.set("hidereviewed", "1");
   const qs = params.toString();
   const newUrl = location.pathname + (qs ? "?" + qs : "") + location.hash;
   history.replaceState(null, "", newUrl);
@@ -374,9 +413,11 @@ function applyFiltersAndRender() {
   const minRisk = minRiskRaw === "" ? null : Number(minRiskRaw);
   const minEpssRaw = document.getElementById("min-epss").value;
   const minEpss = minEpssRaw === "" ? null : Number(minEpssRaw);
-  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss);
+  const hideReviewed = document.getElementById("hide-reviewed").checked;
+  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed);
 
   let filtered = allAlerts.filter((a) => {
+    if (hideReviewed && reviewedCves.has(a.cve_id)) return false;
     if (kevFilter === "kev" && !a.kev) return false;
     if (kevFilter === "non-kev" && a.kev) return false;
     if (kevFilter === "overdue" && !isOverdue(a)) return false;
@@ -745,6 +786,28 @@ document.getElementById("card-grid").addEventListener("click", (e) => {
       navigator.clipboard.writeText(url).then(showCopied).catch(() => {});
     }
     history.replaceState(null, "", url);
+    return;
+  }
+
+  // Mark-as-reviewed toggle: local-only triage state (see reviewedCves
+  // above). Re-renders just this card in place rather than the whole grid
+  // to avoid losing scroll position / other open breakdown panels; if the
+  // "hide reviewed" filter is active, a full re-filter is needed instead
+  // since the card may need to disappear entirely.
+  const reviewBtn = e.target.closest(".review-toggle-btn");
+  if (reviewBtn) {
+    const cve = reviewBtn.dataset.cve;
+    toggleReviewed(cve);
+    const hideReviewedEl = document.getElementById("hide-reviewed");
+    if (hideReviewedEl && hideReviewedEl.checked) {
+      applyFiltersAndRender();
+    } else {
+      const card = reviewBtn.closest(".card");
+      const alert = allAlerts.find((a) => a.cve_id === cve);
+      if (card && alert) {
+        card.outerHTML = renderCard(alert);
+      }
+    }
   }
 });
 
@@ -877,6 +940,7 @@ document.getElementById("kev-filter").addEventListener("change", applyFiltersAnd
 document.getElementById("severity-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("source-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("sort-by").addEventListener("change", applyFiltersAndRender);
+document.getElementById("hide-reviewed").addEventListener("change", applyFiltersAndRender);
 let minRiskDebounceTimer = null;
 document.getElementById("min-risk").addEventListener("input", () => {
   clearTimeout(minRiskDebounceTimer);
@@ -924,6 +988,8 @@ document.getElementById("reset-filters").addEventListener("click", () => {
   document.getElementById("sort-by").value = "risk_score";
   document.getElementById("min-risk").value = "";
   document.getElementById("min-epss").value = "";
+  const hideReviewedReset = document.getElementById("hide-reviewed");
+  if (hideReviewedReset) hideReviewedReset.checked = false;
   dependencyPackageNames = null;
   const depText = document.getElementById("dep-text-input");
   const depFile = document.getElementById("dep-file-input");

@@ -124,6 +124,9 @@
       <input type="number" id="min-risk" min="0" max="100" step="1" placeholder="Min risk score" aria-label="Minimum risk score (0-100)" title="Show only alerts with composite risk score &ge; this value">
       <label for="min-epss" class="visually-hidden">Minimum EPSS probability</label>
       <input type="number" id="min-epss" min="0" max="100" step="1" placeholder="Min EPSS %" aria-label="Minimum EPSS exploitation probability (0-100)" title="Show only alerts with EPSS exploitation probability &ge; this percentage">
+      <label class="hide-reviewed-label" title="Hide alerts you've marked as reviewed on this device (local-only, not shared/synced)">
+        <input type="checkbox" id="hide-reviewed"> Hide reviewed
+      </label>
       <label for="sort-by" class="visually-hidden">Sort order</label>
       <select id="sort-by" aria-label="Sort order">
         <option value="risk_score">Sort: Risk score (high to low)</option>
@@ -138,7 +141,7 @@
       <button id="export-csv" type="button">Export CSV</button>
       <button id="export-json" type="button" title="Export the currently-filtered alerts as raw JSON for scripting/automation">Export JSON</button>
       <button id="print-view" type="button" title="Open the browser print dialog (use &quot;Save as PDF&quot; for a report)">Print / PDF</button>
-      <button id="reset-filters" type="button" title="Clear search, KEV/severity/source filters, risk/EPSS thresholds, sort, and dependency-file filter">Reset filters</button>
+      <button id="reset-filters" type="button" title="Clear search, KEV/severity/source filters, risk/EPSS thresholds, hide-reviewed, sort, and dependency-file filter">Reset filters</button>
       <button id="theme-toggle" type="button" title="Toggle light/dark theme" aria-pressed="false">🌙 Dark</button>
       <span class="count" id="result-count" aria-live="polite"></span>
     </div>
