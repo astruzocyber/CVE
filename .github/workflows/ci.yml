@@ -35,6 +35,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install pipeline dependencies
+        run: pip install -r requirements.txt
+
       - name: Syntax-check pipeline scripts
         run: |
           python -m py_compile scripts/aggregate.py scripts/notify_github_issues.py scripts/validate_data.py
