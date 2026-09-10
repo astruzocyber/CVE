@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 64,
+  "total_cycles": 65,
   "implemented": [
     {
       "cycle": 1,
@@ -455,9 +455,16 @@
       "title": "CVSS score fallback to NVD's cvssMetricV40 when no v3.x/v2 metrics present",
       "description": "A live sample of 200 recently-published NVD CVEs found ~34% carry ONLY a cvssMetricV40 block with no cvssMetricV31/V30/V2 fallback -- NVD is mid-migration to CVSS v4.0. extract_cvss() previously checked only v3.1/v3.0/v2 and returned (None, None) for any CVE lacking those, which silently zeroed that alert's 35% CVSS weight in the composite risk_score (redistributed to EPSS/KEV per composite_risk_score's existing weight-redistribution logic) and miscategorized it into severity 'unknown' instead of its real critical/high/medium/low bucket -- a real and growing data-accuracy defect as v4.0 adoption rises across NVD, not a cosmetic gap. v4.0's baseScore uses the identical 0-10 scale and identical critical/high/medium/low severity thresholds as v3.x, so extract_cvss() now checks cvssMetricV40 as a last-resort fallback (checked strictly after v3.1/v3.0/v2, so every CVE that already had a v3/v2 score -- the overwhelming majority today -- is scored exactly as before; this change only fills in previously-total gaps, never changes an existing score).",
       "commit_sha": "4733fb3"
+    },
+    {
+      "cycle": 65,
+      "timestamp": "2026-09-10T18:03:49.295702+00:00",
+      "title": "Extend CVSS vector-component extraction to v4.0",
+      "description": "extract_cvss_vector_components() now falls back to cvssMetricV40 (lowest priority, after v3.1/v3.0) so alerts that only carry a v4.0 baseScore (per cycle 64s fallback) also get exploit-chip attack-vector/complexity/privileges/user-interaction data on-card. Verified live against real NVD v4.0 record that field names/vocabulary match v3.x. 24/24 v4.0-scored alerts now have vector components (was 0/24).",
+      "commit_sha": "3f2fe86"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T17:22:58Z",
+  "last_cycle_at": "2026-09-10T18:03:49.295694+00:00",
   "stopped": false
 }
