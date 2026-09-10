@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 58,
+  "total_cycles": 59,
   "implemented": [
     {
       "cycle": 1,
@@ -413,9 +413,16 @@
       "title": "Top affected vendor/product breakdown pills (stats.by_vendor_product)",
       "description": "compute_stats() now emits a top-10 by_vendor_product map (count of alerts per vendor/product pair, sorted descending, capped to 10 -- mirrors the existing by_cwe pattern exactly), built entirely from the already-extracted `affected` field (populated on 527/532 tracked alerts at cycle start via watchlist vendor/product matches) -- zero new API calls, zero new dependencies. Frontend adds renderVendorBreakdown() in docs/app.js (clickable .vendor-pill buttons, new #vendor-breakdown container in docs/index.html, .vendor-pill/.vendor-breakdown CSS rules in docs/style.css) mirroring cycle 45's CWE-pill click-to-search pattern: clicking a pill sets the search box to that vendor/product string and re-applies filters, reusing the already affected-aware search haystack. Answers a distinct triage question from severity/source/CWE breakdowns: which of the org's actual tracked vendors/products dominate current alert volume right now (e.g. wordpress/wordpress:137 vs openssl/openssl:62 points remediation attention at very different teams) -- previously this data existed per-card but had no aggregate view. Validated: py_compile + node --check passed; ran aggregate.py live against real NVD/CISA KEV/FIRST.org EPSS APIs (LOOKBACK_DAYS=2, real GH_TOKEN) confirming by_vendor_product populates correctly end-to-end (534 alerts, top entry wordpress/wordpress:137, correctly reflecting a live 2-new-alert refresh since cycle 57); scripts/validate_data.py PASSED against the freshly-regenerated real data (534 alerts, 43/43 getElementById id references resolve including the new vendor-breakdown id); python3 -m unittest discover 30/30 passed (untouched, sanity check); local browser smoke test via python3 -m http.server served real production data, confirmed 10 vendor-pills render with correct counts and purple/accent styling, confirmed clicking php/php correctly narrowed 534->112 alerts with zero regression to the existing source/severity/CWE pills, stats bar, or trend chart. Deployed via commit 0ea532f; live CI run 34482200027 (CI Data & Frontend Validation) success in 17s, pages-build-deployment run 34482199134 success; live-verified via cache-busted curl: deployed app.js contains renderVendorBreakdown, deployed index.html contains vendor-breakdown, deployed data/stats.json contains a correctly-populated by_vendor_product map matching the local dry-run.",
       "commit_sha": "0ea532f"
+    },
+    {
+      "cycle": 59,
+      "timestamp": "2026-09-10T13:59:13Z",
+      "title": "Bulk 'Mark filtered as reviewed' toolbar button",
+      "description": "Cycle 48 added per-card mark-reviewed localStorage toggle + hide-reviewed filter, cycle 49 added an X-of-N reviewed progress indicator, but marking dozens/hundreds of alerts matching a given search/filter combo an analyst had already triaged as a batch still required clicking each card's Mark reviewed button individually. Added a #mark-filtered-reviewed toolbar button that marks every alert in window.__lastFiltered (the same currently-visible set already backing Export CSV/JSON/Markdown report) as reviewed in one click, reusing the existing reviewedCves Set/localStorage plumbing and renderReviewedProgress()/applyFiltersAndRender() unchanged. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost. Validated: node --check + py_compile passed; python3 scripts/validate_data.py PASSED (534 alerts, 44/44 getElementById id refs resolve including the new button); 30/30 unit tests passed (unchanged, no scoring logic touched). Local browser smoke test via python3 -m http.server serving real production data (534 alerts): searched 'wordpress' -> 137/534 filtered, clicked Mark filtered as reviewed, confirmed reviewed-progress updated to exactly '137 of 534 reviewed (26%)' and localStorage held exactly 137 IDs, cleared search back to 534/534, enabled Hide reviewed and confirmed it correctly narrowed to 397 of 534 (534-137) with zero regression to existing filters/search/progress indicator.",
+      "commit_sha": "c30752e"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T13:22:07Z",
+  "last_cycle_at": "2026-09-10T13:59:13Z",
   "stopped": false
 }

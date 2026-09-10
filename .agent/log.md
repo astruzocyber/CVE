@@ -2259,3 +2259,40 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals from NVD, CISA KEV, FIRST.org EPSS, GHSA, or Dependabot this cycle — not in the pre-cycle `gh run list` history review, not during the live `aggregate.py` verification run (KEV catalog 1703 entries, 704 NVD candidates pre-filter, EPSS queried for 960 CVEs, all clean; Dependabot skipped as expected since no `GH_DEPENDABOT_TOKEN` is set in this local dry-run environment — matches documented behavior, not a failure).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 58. `stopped`: false.
+
+## Cycle 59 — 2026-09-10T13:59:13Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh (not from stale summary):** `git log` HEAD was `3db7e0c` (cycle 58 log commit), `git status` clean, matched `origin/main`. `gh run list`: last `ci.yml` runs all `success`; last `cve-alerts.yml` runs all `success` (35s-2m20s), no 429/throttle signals in recent scheduled/dispatch history. `.agent/state.json`: `total_cycles`=58, both counters 0, `stopped`=false — clean baseline confirmed matching the task brief exactly.
+
+**Candidates considered:**
+1. **Bulk "Mark filtered as reviewed" toolbar button** — feasibility 5/5 (pure client-side loop over `window.__lastFiltered`, reuses the already-validated `reviewedCves` Set/localStorage/`renderReviewedProgress()`/`applyFiltersAndRender()` plumbing from cycles 48-49 verbatim, zero new API calls); risk 1/5 (additive button + handler only, cannot corrupt existing per-card toggle state since it only ever adds, never removes); value 4/5 (fills a genuine, previously-total workflow gap: an analyst who narrows the board to e.g. "everything matching a vendor-pill click" or "KEV overdue only" and wants to batch-triage that whole slice had to click each card's Mark reviewed button individually — a real friction point given the dashboard now tracks 534 alerts and triage-state tooling (cycles 48/49/52) already exists but lacked a bulk operation). **CHOSEN.**
+2. GHSA/Dependabot coverage expansion (`ghsa_packages`/additional `dependabot_repos`) — still flagged as needing human input on actual tech stack (GFR Media); carried forward unimplemented per cycles 56-58 reasoning, not something this agent can safely guess.
+3. Full risk_score history array (time series per CVE) — still deferred per cycle 56 reasoning (unbounded schema/storage growth risk); `risk_score_prev` single-value delta (cycle 56) remains the shipped stepping stone.
+4. New free data source (OSV.dev) — still deferred as its own dedicated-cycle scope; not reconsidered further this cycle since candidate 1 cleared the bar with lower risk and effort.
+5. Any paid/threat-intel enrichment — not seriously considered; would violate the zero-cost constraint, rejected on principle.
+
+**Implemented (candidate 1):**
+- `docs/index.html`: new `<button id="mark-filtered-reviewed">` in the toolbar, placed between "Print / PDF" and "Export reviewed state" (adjacent to the existing review-related controls for discoverability).
+- `docs/app.js`: new click handler wired alongside the existing `export-reviewed`/`import-reviewed-input` handlers — reads `window.__lastFiltered || allAlerts`, adds every not-yet-reviewed CVE ID in that set to `reviewedCves`, calls `saveReviewedSet()` (only if anything changed), then `applyFiltersAndRender()` + `renderReviewedProgress()` to reflect the new state immediately (including correctly hiding newly-reviewed cards if "Hide reviewed" is already checked). No changes to `aggregate.py` or any backend/schema field — this is a pure client-side, local-only triage-state feature exactly like cycles 48/49/52 it builds on.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js`: OK.
+- `python3 -m py_compile` on all touched/sanity-checked `.py` files (`aggregate.py`, `notify_github_issues.py`, `validate_data.py`, `test_aggregate.py`): OK (none actually touched this cycle — frontend-only change).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: 30/30 passed (unchanged, no scoring/parsing logic touched).
+- `python3 scripts/validate_data.py` against the existing real production `docs/data/*`: PASSED (534 alerts, 534 unique IDs, stats.json schema OK, trend.csv OK, 44/44 `getElementById` id references resolve — including the new `mark-filtered-reviewed` id, feeds parse OK).
+- Local browser smoke test via `python3 -m http.server` serving the real production `docs/` (534 alerts, real `data/*.json`), driven via the browser-automation tool:
+  - Confirmed `#mark-filtered-reviewed` renders with correct text.
+  - Typed "wordpress" into search -> narrowed to 137/534 (`window.__lastFiltered.length === 137`).
+  - Clicked "Mark filtered as reviewed" -> `reviewed-progress` updated from "0 of 534 reviewed (0%)" to "137 of 534 reviewed (26%)"; `localStorage.reviewedCves` held exactly 137 IDs — confirming only the filtered subset was marked, not the full 534.
+  - Cleared search back to 534/534, enabled "Hide reviewed" -> result count correctly narrowed to 397/534 (534-137, exact match), confirming zero regression to the existing hide-reviewed filter, search, or reviewed-progress indicator.
+- No `docs/data/*` changes this cycle (frontend-only), so no live `aggregate.py` dry-run regeneration was needed or performed — next scheduled `cve-alerts.yml` run continues to refresh data normally on its existing 4h cadence.
+
+**Deploy:** Committed `c30752e` — "Cycle 59: bulk 'Mark filtered as reviewed' toolbar button" — pushed to `main` (clean fast-forward from `3db7e0c`). Live CI run `34486090999` (`CI Data & Frontend Validation`) -> `success`, 20s. `pages-build-deployment` run `34486088979` -> `success`, 50s. Live-verified via cache-busted `curl`: `https://astruzocyber.github.io/CVE/app.js` contains `mark-filtered-reviewed` and the root page contains the button text "Mark filtered as reviewed" — change is live in production.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on actual tech stack, flagged not hard-rejected), full risk-score history array (deferred, schema-growth risk), OSV.dev integration (deferred, own-cycle scope). None violate zero-cost; all deferred on risk/scope grounds, not novelty grounds.
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle. Pre-cycle `gh run list` review of the last several `ci.yml`/`cve-alerts.yml` runs showed all `success` with no rate-limit indicators. This cycle's change was frontend-only (no external API calls made at all), so there was no live-API verification run to check for throttling — the data pipeline continues on its existing schedule unaffected.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 59. `stopped`: false.
