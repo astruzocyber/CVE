@@ -1657,3 +1657,33 @@ input debounce) cleared the bar and was implemented.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot across the 8 pre-cycle runs, the local dry-run, or the live verification `workflow_dispatch` run. One transient NVD read-timeout during the local dry-run, silently absorbed by the existing cycle-1 retry/backoff logic (non-fatal, zero manual intervention needed).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 40. `stopped`: false.
+
+## Cycle 41 — 2026-09-10T02:15:00Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 8` showed 7 success / 1 failure — the failure (2026-09-10T00:13:41Z) is the pre-cycle-38-fix git-race straggler already documented and resolved in cycles 38-40 (a subsequent `workflow_dispatch` run at 00:47:56Z and the cycle 40 verification run at 02:07:51Z both succeeded cleanly post-fix). No 429/rate-limit signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot in any recent run. State was clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add `docs/robots.txt` and `docs/sitemap.xml` for search-engine crawlability.
+
+- **Opportunity:** Cycle 12 added meta description, Open Graph/Twitter card tags, and a favicon for SEO/link-preview purposes, but auditing `docs/` found no `robots.txt` or `sitemap.xml` at all — confirmed via `search_files` (zero matches for `robots|sitemap` in `docs/`) and a live curl (both paths would have 404'd). Search crawlers had no explicit crawl-allow directive and no machine-readable pointer to the dashboard's canonical URL, a real (if modest) discoverability gap for a public, shareable security tool that cycle 12 had already started addressing but left incomplete.
+- **Frontend:** Added `docs/robots.txt` (`User-agent: * / Allow: /`, pointing at the sitemap) and `docs/sitemap.xml` (single `<url>` entry for `https://astruzocyber.github.io/CVE/` with `changefreq: hourly`, matching the pipeline's real ~4h-or-tighter update cadence — closer to hourly than daily/weekly). Added a `<link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml">` hint in `docs/index.html`'s `<head>`, next to the existing favicon/stylesheet links from cycle 12.
+- **Rejected candidates considered this cycle:**
+  - *JSON-LD structured data (schema.org Dataset/WebSite)* — real SEO value but meaningfully higher scope/validation risk to get schema.org typing right for a live-updating dataset; deferred as a distinct future candidate rather than bundled into this cycle's single-change scope.
+  - *Canonical `<link rel="canonical">` tag* — genuinely marginal value for a single-page site with no URL-parameter-driven duplicate-content risk beyond the already-additive cycle-7 query-string filters (which are share-links, not distinct crawlable pages); robots.txt/sitemap.xml closes a bigger, previously-total gap for the same "SEO completeness" theme.
+  - *Extending `nvd_last_modified` (cycle 40) to GHSA/Dependabot* — still correctly deferred per cycle 40's own reasoning (dormant in production, no live field-mapping to validate against); not revisited this cycle since nothing about that constraint has changed.
+- **Scoring:** Feasibility 5/5 (two static files + one head tag, zero new dependencies, zero new API calls, zero cost). Validation risk 1/5 (purely additive static assets and a single non-functional `<link>` tag; cannot affect any existing JS behavior, data pipeline, or rendering path). Value 2/5 (real, previously-total gap in a previously-started SEO effort; modest but genuine and low-cost to close).
+
+**Validation (Step 4):**
+- `python3 -c "import xml.dom.minidom as m; m.parse('docs/sitemap.xml')"`: parsed without error, confirming well-formed XML. `node --check docs/app.js`: OK (untouched this cycle, sanity check only). No `aggregate.py`/schema changes — `git status --short` confirmed only `docs/robots.txt`, `docs/sitemap.xml`, and `docs/index.html` touched, so no data-pipeline dry-run/backup/restore cycle was needed.
+- Served `docs/` on a local scratch port (8977, background process) with real production data (527 alerts). Curl confirmed `robots.txt` (200, correct content), `sitemap.xml` (200, correct content), `index.html` (200). Used the browser tool for a real page load: confirmed `stat-total` reads 527, `result-count` reads "527 of 527 alerts" (zero regression to existing rendering/filtering), and `document.querySelector('link[rel=sitemap]').href` correctly resolved to the local sitemap URL.
+
+**Deploy (Step 5):**
+- Committed `b8cb164` (`docs/robots.txt`, `docs/sitemap.xml`, `docs/index.html`) and pushed to `main`. Frontend/static-asset-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~60s for Pages deployment, then cache-busted curl confirmed `https://astruzocyber.github.io/CVE/robots.txt` (200, correct content) and `https://astruzocyber.github.io/CVE/sitemap.xml` (200, correct content) both live, and the `<link rel="sitemap">` tag present in the live `index.html`.
+
+**Rejected this cycle:** JSON-LD structured data and a canonical-URL tag (both deferred as noted above); the robots.txt/sitemap.xml candidate cleared the bar on first pass (feasibility 5/5, validation risk 1/5, value 2/5) and was implemented.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (static-asset-only change, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 41. `stopped`: false.

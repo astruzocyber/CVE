@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 40,
+  "total_cycles": 41,
   "implemented": [
     {
       "cycle": 1,
@@ -282,6 +282,13 @@
       "title": "Extract and surface NVD record revision date (nvd_last_modified)",
       "description": "NVD's lastModified field is present in every response already fetched for the lookback-window query (it's the field the query itself filters on) but was never propagated into the schema. Added nvd_last_modified to the NVD candidate parser in fetch_nvd_candidates() and build_final_entry() in scripts/aggregate.py, rendered as a 'Revised: <date>' badge on alert cards in docs/app.js only when it differs from the publication date (avoiding redundant noise for the common no-post-publication-edit case), and added as a new CSV export column. NVD-only for now (mirrors cycle 30's cvss_vector_components precedent -- GHSA/Dependabot expose this under different field names/semantics and are currently dormant in production). Zero new API calls, zero new dependencies. Validated: node --check and py_compile passed; ran the real aggregator against live production APIs (backgrounded dry-run, reverted local data-file diffs before commit per cycle-23 precedent), confirmed 361/527 alerts got the new field with zero schema breakage; served docs/ locally with real production data confirming correct badge rendering and zero regression to search/filter/stats. Deployed via commit d83a54c + a verification workflow_dispatch run (34428218711, success) since this touches the backend schema; live-verified via curl (286/527 alerts carrying nvd_last_modified) and a fresh browser load of the live dashboard (527/527 alerts, 195 rendered badges, zero regression to stats bar/trend chart/severity pills).",
       "commit_sha": "d83a54c"
+    },
+    {
+      "cycle": 41,
+      "timestamp": "2026-09-10T02:15:00Z",
+      "title": "Add robots.txt and sitemap.xml for search-engine crawlability",
+      "description": "The dashboard had SEO meta tags (cycle 12: description, OG/Twitter cards, favicon) but no robots.txt or sitemap.xml -- crawlers had no explicit crawl-allow signal or canonical-URL discovery hint. Added a permissive docs/robots.txt (User-agent: * / Allow: /, pointing at the sitemap) and a minimal docs/sitemap.xml listing the single dashboard page with hourly changefreq (matching the real ~4h update cadence). Added a <link rel=sitemap> hint in index.html's <head>. Pure additive static files plus one head tag: zero JS/CSS/backend/schema changes, zero new API calls, zero cost. Validated: docs/sitemap.xml parsed as well-formed XML via python3 xml.dom.minidom; node --check docs/app.js passed (untouched, sanity check); served docs/ on a local scratch port (8977), confirmed robots.txt/sitemap.xml/index.html all 200 with correct content, confirmed via browser tool the live page still rendered 527/527 alerts with zero regression and the new <link rel=sitemap> resolved correctly in the DOM. Deployed via commit b8cb164 (frontend-only, no workflow dispatch needed -- GitHub Pages auto-deploys on push); live-verified via cache-busted curl (robots.txt 200, sitemap.xml 200 with correct content, sitemap link present in live index.html).",
+      "commit_sha": "b8cb1649787f699dc2d43d177d43ccfc31da4c20"
     }
   ],
   "rejected": [],
