@@ -2157,3 +2157,37 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot. Zero new external API calls this cycle (test suite and CI-wiring changes only, no network calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 — the 2 CI failures this cycle were *self-corrected within the same cycle* via the standard iterative fix-verify loop (not carried as unresolved failures across cycle boundaries, and no bad commit ever reached the deploy-affecting `docs/`/`aggregate.py` path), so per the kill-switch definition ("if a cycle produces an error you cannot resolve within that cycle") this does not count as a failed cycle — it resolved before cycle end with a verified-green final state. `total_cycles`: 55. `stopped`: false.
+
+## Cycle 56 — 2026-09-10T12:00:22Z
+
+**Re-verified state fresh (not from stale summary):** `git log` showed cycle 55 (unit tests + CI fixes) as HEAD (667d6c8), `git status` clean, matching origin/main. `gh run list` for both workflows: `ci.yml` last 4 runs all `success` except the one mid-cycle-55 failure (34470026053, already fixed same cycle by 78dc0b1/02343d9); `cve-alerts.yml` last 5 scheduled/dispatch runs all `success` (times 35s-2m20s) — **no 429/rate-limit signals observed** in any recent run. `.agent/state.json`: total_cycles=55, consecutive_failed_cycles=0, consecutive_no_improvement=0, stopped=false — clean baseline, no hard-pause risk.
+
+**Candidates considered:**
+1. **Risk score delta tracking (risk_score_prev) + trend sort/badge** — feasibility: high (pure derived field from data already computed each run, zero new API calls); risk: low (additive field, default None, guarded rendering); value: medium-high (surfaces "this CVE just got worse" signal that CVSS/EPSS/KEV refresh already silently does but never showed to the user — directly actionable for triage). **CHOSEN.**
+2. Keyboard shortcuts for filter/sort/copy actions — feasibility: high; risk: low; value: low-medium (pure UX polish, no new information). Rejected: lower value than #1 for similar effort/risk; logged as a good future candidate, not implemented.
+3. Full risk_score history array (time series per CVE) instead of single prev value — feasibility: medium; risk: medium (unbounded schema/storage growth per CVE, more validate_data.py surface, JSON payload growth over months); value: high for trend charts. Rejected this cycle as higher-risk than the single-value delta; single-value risk_score_prev is the safe stepping stone and doesn't foreclose adding full history later.
+4. New free data source (e.g. broader GitHub Security Advisories coverage beyond current Dependabot alerts, or OSV.dev) — feasibility: medium (free API exists); risk: medium (new dedup/matching logic, new validation rules, larger surface for one cycle); value: medium-high (more coverage). Rejected for scope — good candidate for a dedicated future cycle with its own validation pass.
+5. Payment-requiring enrichment (e.g. paid threat-intel feeds) — not seriously considered; would violate zero-cost constraint, logged as rejected on principle.
+
+**Implemented (candidate 1):**
+- `scripts/aggregate.py`: in the existing-alert refresh path in `main()`, snapshot `prior["risk_score_prev"] = prior.get("risk_score")` immediately before the score is recomputed and overwritten. `build_final_entry()` sets `risk_score_prev: None` for freshly-built entries (no prior score exists yet for a CVE seen for the first time).
+- `docs/app.js`: card rendering computes a `riskDelta`/`riskDeltaHtml` badge (▲+N / ▼-N, colored) shown next to the risk score whenever both `risk_score` and `risk_score_prev` are numbers; added `risk_score_prev` as a CSV export column (header + row data, positioned right after `risk_score`); added a new `<select id="sort-by">` option `risk_delta` — "Risk increase (biggest jump first)" — sorting alerts by `risk_score - risk_score_prev` descending, with entries lacking a delta (new/never-refreshed) pushed to the end rather than treated as most-urgent.
+- `docs/index.html`: added the corresponding `<option value="risk_delta">` to the sort dropdown.
+- `docs/style.css`: added `.risk-delta` badge styling (base + `.risk-up`/`.risk-down` color variants).
+- `scripts/test_aggregate.py`: added `TestBuildFinalEntry.test_risk_score_prev_defaults_to_none_for_new_entry`, asserting `build_final_entry()` never invents a `risk_score_prev` value for a brand-new entry. 30 tests total (was 29), all passing.
+- Regenerated `docs/data/alerts.json` / `stats.json` / `history/trend.csv` via a live production run of `aggregate.py` (real NVD/KEV/EPSS/GitHub Advisories calls) to confirm `risk_score_prev` populates correctly end-to-end before committing — 532 alerts, schema-valid, no data loss/regressions vs. the pre-run backup.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile` on all touched `.py` files.
+- `node --check docs/app.js`.
+- `python3 scripts/validate_data.py` — PASSED (532 alerts, 532 unique IDs, stats.json schema OK, trend.csv OK, 42/42 getElementById IDs resolve, feeds parse OK).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` — 30/30 passed.
+- Local dashboard smoke test via `python3 -m http.server` + browser automation: confirmed `renderCard()` emits the `risk-delta`/`risk-up` badge with correct text ("▲+25") for a synthetic 55→80 score jump; confirmed the new `risk_delta` `<option>` is present in the live-rendered DOM; confirmed 532/532 alerts still render with no console errors.
+- Live post-deploy verification: `gh run view` on the triggered `ci.yml` run (34474291178) → `completed`/`success`. Cache-busted `curl` against the live Pages URL confirmed `app.js` contains `risk_delta`, `index.html` contains the new "Risk increase" option text, `style.css` contains `risk-delta`, and `data/alerts.json` (532 entries) includes the `risk_score_prev` key — change is live.
+
+**Rate-limit/API health:** No 429s or throttling observed anywhere this cycle — not in the pre-cycle `gh run list` history for either workflow, not during the live `aggregate.py` verification run against NVD/CISA KEV/FIRST.org EPSS/GitHub Advisories.
+
+**consecutive_no_improvement: 0** (reset/held at 0 — a real improvement shipped this cycle).
+**consecutive_failed_cycles: 0** (no failure this cycle).
+
+Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + Risk increase sort + badge" (pushed to main, no rebase conflicts).

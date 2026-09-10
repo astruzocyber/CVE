@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 55,
+  "total_cycles": 56,
   "implemented": [
     {
       "cycle": 1,
@@ -387,9 +387,21 @@
       "title": "Unit test suite for aggregate.py scoring/parsing logic + fix latent CI gaps it exposed",
       "description": "Added scripts/test_aggregate.py: 29 stdlib-only unittest cases covering composite_risk_score (weight redistribution on missing CVSS/EPSS, KEV flat +25 bonus, 0-100 clamping), parse_cvss_v3_vector_string (v3.0/v3.1 mapping, v4.0 correctly rejected, malformed input), extract_cwe_nvd/extract_cwe_ghsa (placeholder filtering, dedup, malformed-id rejection), unique_key, compute_stats severity bucket boundaries. All 29 passed against real aggregate.py -- no pre-existing bugs found, coverage itself is the value as a regression net for future cycles. Wired into ci.yml as a new unittest-discover step. Deploying it surfaced two real latent CI gaps from cycle 54: (1) ci.yml never ran 'pip install -r requirements.txt', so importing aggregate.py (which imports yaml) failed in the actual Actions runner (confirmed live failure, run 34470026053) even though validate_data.py never exercised this path locally. Fixed. (2) That fix, touching only .github/workflows/ci.yml, fell outside the existing paths filter and silently never re-triggered CI -- fixed by adding ci.yml/requirements.txt to the paths filter. Both fixes verified live: corrected CI workflow (run 34470191918) passed with all steps including the new unit-test step.",
       "commit_sha": "d0990b1,78dc0b1,02343d9"
+    },
+    {
+      "cycle": 56,
+      "timestamp": "2026-09-10T12:00:22Z",
+      "title": "Risk score delta tracking (risk_score_prev) + Risk-increase sort + badge",
+      "description": "aggregate.py now captures risk_score_prev when refreshing an already-known alert (snapshotting the old risk_score before it's overwritten by the recompute); brand-new entries default risk_score_prev to None (nothing to compare against yet). app.js renders a risk-delta badge on cards (e.g. \u25b2+25 / \u25bc-10) whenever both current and previous scores exist, adds risk_score_prev as a CSV export column, and adds a new 'Risk increase (biggest jump first)' sort option (entries with no delta sort to the end, not treated as most urgent). index.html got the new sort <option>; style.css got .risk-delta/.risk-up/.risk-down styling. Added TestBuildFinalEntry.test_risk_score_prev_defaults_to_none_for_new_entry to test_aggregate.py (30 tests total, all passing). Verified end-to-end by running aggregate.py live against real APIs (532 alerts, schema-valid, risk_score_prev populated) before committing that regenerated data. No rate-limit/429 signals from NVD/KEV/EPSS/GitHub Advisories during this run or in prior CI/cron history reviewed.",
+      "commit_sha": "029d4ce",
+      "rejected_alternatives": [
+        "Keyboard shortcuts for filter/sort navigation -- real usability value but pure UI polish with no data/reliability upside; deferred in favor of the risk-delta feature which surfaces genuinely new information (trend direction) not previously visible.",
+        "Historical risk_score time-series (full array per CVE, not just prev) -- higher value for trend charts but meaningfully higher risk (schema growth, storage growth unbounded over time, more validate_data.py surface) for one cycle; risk_score_prev (single last-value delta) is the low-risk stepping stone, revisit full history later.",
+        "New free data source integration (e.g. GitHub Security Advisories GraphQL beyond current Dependabot alerts) -- deferred, larger scope/higher validation risk than fits a single cycle; good candidate for a future cycle."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T11:14:00Z",
+  "last_cycle_at": "2026-09-10T12:00:22Z",
   "stopped": false
 }
