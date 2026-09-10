@@ -2030,3 +2030,35 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 51. `stopped`: false.
+
+## Cycle 52 — 2026-09-10T09:20:00Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 8`: 7 success / 1 failure — the failure (2026-09-10T00:13:41Z) is the pre-cycle-38-fix git-race straggler already documented/resolved in cycles 38-41. No 429/rate-limit signals observed. State clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add export/import of the local "reviewed-state" (mark-as-reviewed triage set) as a JSON file, for backup and handoff.
+
+- **Opportunity:** Re-read `docs/app.js`/`docs/index.html`/`docs/style.css`/`.agent/log.md`/`.agent/state.json` fresh this cycle. Grepped for `export.*reviewed`/`import.*reviewed` — zero prior implementation. Since cycle 48, `reviewedCves` has been a localStorage-only Set with no export/import path: an analyst who clears browser storage, switches machines, or wants to hand off a partially-triaged board to a teammate has no way to preserve or transfer that state — a real, previously-total gap opened by cycle 48's own feature and never closed across cycles 49-51.
+- **Frontend:** Added `exportReviewedState()` (Blob download of `{version, exported_at, reviewed_cve_ids: [...]}`, client-side only, no server) and `importReviewedState(file, statusEl)` (FileReader-based, parses the JSON, validates `reviewed_cve_ids` is an array, and **merges** (union) into the existing `reviewedCves` Set rather than replacing it — deliberately chosen so importing a teammate's file can never silently wipe an analyst's own progress). Added `#export-reviewed` button and a styled `#import-reviewed-input` file-input (wrapped in a visually-hidden-input label matching the existing button look) to the toolbar in `docs/index.html`, plus an `#import-reviewed-status` live-region span for merge-count/error feedback. New `.import-reviewed-label`/`.import-reviewed-status` CSS rules in `docs/style.css` reuse the existing `.controls button` visual language. Pure additive: zero new API calls, zero backend/schema changes.
+- **Rejected candidates considered this cycle:**
+  - *Extending `nvd_last_modified`/CVSS-vector fields to GHSA/Dependabot* — still correctly deferred (both sources dormant in production).
+  - *Keyboard shortcuts for filter controls* — still marginal value for a click-through triage audience.
+  - *CWE trend-over-time in trend.csv* — still correctly deferred per cycle 45's reasoning.
+  - *Server-synced/shared reviewed-state (e.g. via a GitHub Gist or repo file)* — rejected as it would require either a server component (violates zero-cost/static-Pages-only architecture) or writing per-analyst state back into the public repo (privacy/noise concern, and every dashboard visitor's browser would need write credentials, which is a non-starter for a public read-only Pages site). File-based export/import is the correct zero-cost analog: the user controls transfer via their own channel (Slack, email, shared drive).
+- **Scoring:** Feasibility 5/5 (pure client-side Blob/FileReader APIs, no new dependencies, mirrors the existing export-csv/export-json button pattern almost line-for-line). Validation risk 2/5 (touches the shared `reviewedCves` Set, but only via an explicit user-initiated import with a safe merge-not-replace default and a visible status message on malformed input — no auto-triggered or silent mutation path). Value 3/5 (closes a real, previously-total data-portability gap in a feature that's been live for 4 cycles with zero way to preserve or transfer its state).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. `git diff --stat` confirmed only `docs/app.js`/`docs/index.html`/`docs/style.css` touched — no `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle needed.
+- Served `docs/` on a local scratch HTTP port (8901, background process) with real production data (532 alerts). Browser-tool checks: marked 2 real alerts reviewed, confirmed the export payload's `reviewed_cve_ids` array contained exactly those 2 CVE IDs; cleared `reviewedCves`, simulated an import via a synthetic `File` object containing one already-known CVE plus one novel ID, confirmed `importReviewedState()` correctly merged both into the live Set, re-rendered `#reviewed-progress` (correctly counting only the 1 ID present in the real 532-alert dataset, excluding the synthetic non-existent ID from the denominator match — correct by design since progress is computed against `allAlerts`); simulated a malformed-file import (missing `reviewed_cve_ids` key), confirmed a visible "Import failed" status message rather than a thrown error or silent no-op.
+- Regression checks: existing search filter (`#search` present/functional), `.copy-md-btn` (532 present), `.review-toggle-btn` (532 present) — zero interference from the new controls/handlers. Cleared test `localStorage` state and killed the scratch server before committing.
+
+**Deploy (Step 5):**
+- Committed `4cff4d6` (`docs/app.js`, `docs/index.html`, `docs/style.css`) and pushed to `main` (succeeded on first attempt). Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~60s for Pages deployment, then cache-busted `curl` confirmed `exportReviewedState`/`importReviewedState` present in the live `app.js` (4 occurrences) and `export-reviewed`/`import-reviewed` present in the live `index.html` (4 occurrences).
+
+**Rejected this cycle:** Server-synced/shared reviewed-state via Gist/repo write-back (see Opportunity section — violates zero-cost static-Pages-only architecture and raises privacy/write-credential concerns for a public dashboard). Also still-deferred carried-forward items (GHSA/Dependabot field-parity extensions, keyboard shortcuts, CWE-trend-over-time).
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 52. `stopped`: false.

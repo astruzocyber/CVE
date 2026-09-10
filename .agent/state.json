@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 51,
+  "total_cycles": 52,
   "implemented": [
     {
       "cycle": 1,
@@ -359,9 +359,16 @@
       "title": "Add 'Copy as Markdown' per-alert export for incident tickets",
       "description": "Added alertToMarkdown(alert) to docs/app.js, a pure function producing a Markdown block (CVE ID heading, description, then a bullet list of CVSS/EPSS/risk score/KEV status+ransomware-use/KEV due-date/KEV required-action/source/affected packages/CWE ids/published/first-seen dates/NVD link/Dependabot link). Added a .copy-md-btn button to renderCard()'s footer (mirroring the existing .review-toggle-btn placement/styling) and a click-delegation handler on #card-grid mirroring cycle 13's .cve-link-btn copy-to-clipboard pattern exactly (navigator.clipboard.writeText, transient 'Copied!' label reverting after 1.2s, graceful no-op if Clipboard API unavailable). Closes a gap explicitly named in the task brief that had never been picked up across 50 prior cycles: bulk CSV/JSON export (cycles 34/37) and per-CVE deep-links (cycle 13) existed, but no single-alert Markdown export for pasting into incident tickets/Slack/Teams. Pure additive frontend: reuses only already-existing alert fields, zero new API calls, zero backend/schema changes. Validated: node --check passed; served docs/ locally with real production data (532 alerts), confirmed 532 .copy-md-btn elements rendered; called alertToMarkdown() directly against a real KEV/ransomware alert and confirmed every field rendered correctly; granted clipboard permissions via CDP and confirmed the full click-to-copy flow end-to-end (clipboard content set correctly, 'Copied!' feedback shown, reverted after ~1.2s); zero regression to existing search filter, review-toggle, and cve-link-btn. Deployed frontend-only (no workflow_dispatch needed); live-verified via cache-busted curl and browser tool on production (532 of 532 alerts, 532 .copy-md-btn elements rendered).",
       "commit_sha": "e9c71a8"
+    },
+    {
+      "cycle": 52,
+      "timestamp": "2026-09-10T09:20:00Z",
+      "title": "Export/import of reviewed-state (JSON) for triage handoff/backup",
+      "description": "reviewedCves (cycle 48) has been localStorage-only, trapped per-browser with no way to back up or hand off triage progress to a teammate or another device. Added exportReviewedState() (Blob download of {version, exported_at, reviewed_cve_ids}) and importReviewedState() (FileReader-based, merges/unions imported IDs into the current set rather than replacing, so importing a teammate's export can't silently erase an analyst's own progress). New 'Export reviewed state' button and 'Import reviewed state' file-input label added to the toolbar. Pure additive: zero new API calls, zero backend/schema changes. Validated in-browser: export payload correct ({version:1, reviewed_cve_ids:[...]}), import correctly merged a synthetic file's CVE IDs into the live set and re-rendered reviewed-progress, malformed-file import surfaced a visible error status instead of throwing, zero regression to search filter/copy-md-btn/review-toggle-btn (532 of each still present). Deployed frontend-only; live-verified via cache-busted curl (exportReviewedState/importReviewedState present in deployed app.js, export-reviewed/import-reviewed present in deployed index.html).",
+      "commit_sha": "4cff4d6"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T08:46:42Z",
+  "last_cycle_at": "2026-09-10T09:20:00Z",
   "stopped": false
 }
