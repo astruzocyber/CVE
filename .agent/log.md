@@ -1965,3 +1965,35 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 6 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 49. `stopped`: false.
+
+## Cycle 50 — 2026-09-10T08:20:00Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 8`: 7 success / 1 failure — the failure (2026-09-10T00:13:41Z) is the pre-cycle-38-fix git-race straggler already documented/resolved in cycles 38-41. No 429/rate-limit signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot in any recent run. State clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add a "NEW" badge (first-seen within 24h) + "New (24h) only" filter to the dashboard.
+
+- **Opportunity:** Re-read `docs/app.js`/`docs/index.html`/`.agent/log.md` fresh this cycle. Grepped for `new-alert`/`isNew`/`24h`/`new-badge` — zero prior implementation. Cycle 19 added a "First seen: Nd ago" always-visible aging badge and cycle 42/47 added numeric threshold filters (risk/EPSS), but nothing gave a binary at-a-glance answer to "did anything land on my board recently" scannable across dozens of cards at once, nor a way to isolate just those alerts. This is a genuinely new triage-relevance gap distinct from every prior filter (all filter on data attributes: KEV/severity/source/risk/EPSS/reviewed-state) — this filters on recency-of-discovery.
+- **Frontend:** Added `isNewWithin24h(alert)` (pure function comparing `first_seen` against `Date.now()` with a 24h threshold, chosen to span the pipeline's 4h run cadence) to `docs/app.js`. Added a blue `NEW` badge to `renderCard()`'s badge row (alongside existing KEV/RANSOMWARE/OVERDUE/DUE-SOON/severity/source badges) and a `#new-only` toolbar checkbox in `docs/index.html` mirroring cycle 48's `#hide-reviewed` pattern exactly: filter predicate in `applyFiltersAndRender()`, URL persistence (`newonly=1`, composing with cycle 7's shareable-filter-state), `readFiltersFromURL()`/`updateURLFromFilters()` wiring, `reset-filters` clearing, and a matching `change` event listener. Added `.badge.new-alert` CSS rule to `docs/style.css`. Pure additive: reuses the existing `first_seen` field, zero new API calls, zero backend/schema changes.
+- **Rejected candidates considered this cycle:**
+  - *Extending `nvd_last_modified`/CVSS-vector fields to GHSA/Dependabot* — still correctly deferred (both sources dormant in production, no live field to validate against); nothing has changed.
+  - *Keyboard shortcuts for filter controls* — still marginal value for a click-through triage audience; not revisited.
+  - *CWE trend-over-time in trend.csv* — still correctly deferred per cycle 45's reasoning.
+- **Scoring:** Feasibility 5/5 (small pure function + one badge + one checkbox filter mirroring an already-shipped, already-validated pattern from cycle 48 almost line-for-line; zero new API calls/dependencies/schema touch). Validation risk 1/5 (purely additive, filter predicate addition is a single new line in an already-tested function; cross-checked the filtered count against an independent standalone Python computation over real production data). Value 3/5 (fills a real, previously-total recency-awareness gap for a daily-use triage tool with 532 tracked alerts where scanning first-seen ages per-card doesn't scale).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. `git diff --stat` confirmed only `docs/app.js`/`docs/index.html`/`docs/style.css` touched — no `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle needed.
+- Standalone Python check against real production `docs/data/alerts.json` (532 alerts): alerts with `first_seen` within 24h of now = 94 — the ground-truth count to validate the UI filter against.
+- Served `docs/` on a local scratch HTTP port (8888, background process) with real production data. Browser-tool checks: initial load `532 of 532 alerts`; clicking `#new-only` correctly narrowed to `94 of 532 alerts` (matching the independent Python count) with 94 `.badge.new-alert` elements rendered and `?newonly=1` set in the URL; a fresh navigation to `?newonly=1` correctly restored the checkbox state and re-filtered to `94 of 532` on load; `reset-filters` correctly unchecked it and cleared the URL param back to `532 of 532`; existing search filter (`wordpress` → `137 of 532`) showed zero regression after reset.
+- Killed the scratch server before committing.
+
+**Deploy (Step 5):**
+- Committed `ac1fa58` (`docs/app.js`, `docs/index.html`, `docs/style.css`) and pushed to `main` via the standard pull-rebase-then-push loop (succeeded on first attempt). Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~90s for Pages deployment, then cache-busted `curl` confirmed `isNewWithin24h` present in the live `app.js` (3 occurrences) and `new-only` present in the live `index.html` (2 occurrences).
+
+**Rejected this cycle:** None new beyond the still-deferred carried-forward items (GHSA/Dependabot field-parity extensions, keyboard shortcuts, CWE-trend-over-time) — the NEW-badge/filter candidate cleared the bar on first pass.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 50. `stopped`: false.

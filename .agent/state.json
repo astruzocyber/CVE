@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 49,
+  "total_cycles": 50,
   "implemented": [
     {
       "cycle": 1,
@@ -345,9 +345,16 @@
       "title": "Add reviewed-progress indicator (X of N alerts reviewed) to toolbar",
       "description": "Cycle 48 added the per-card mark-reviewed localStorage toggle and 'Hide reviewed' filter, but gave no at-a-glance sense of overall triage completion -- an analyst had to manually count dimmed cards or toggle hide-reviewed and read the result count to gauge backlog progress. Added renderReviewedProgress() to docs/app.js, called from applyFiltersAndRender() (every render) and from the review-toggle click handler (immediate update without a full re-render): computes reviewed count against the FULL tracked alert set (allAlerts), not the currently-filtered view, since triage-completion is a distinct question from filter-match count -- renders a checkmark plus 'X of N reviewed (Y%)' into a new #reviewed-progress span in the toolbar (docs/index.html) next to the existing #result-count. Pure client-side localStorage read (reuses the existing reviewedCves Set from cycle 48), zero new API calls, zero backend/schema changes. Validated: node --check passed; served docs/ locally with real production data (532 alerts) via browser tool, confirmed initial state '0 of 532 reviewed (0%)', clicking mark-reviewed updated to '1 of 532 reviewed (0%)' immediately and persisted across a fresh page reload, confirmed the denominator stays at the full 532 (not the filtered count) when 'Hide reviewed' narrows the visible result-count to 531 of 532 -- correct by design. Deployed frontend-only (no workflow_dispatch needed); live-verified via cache-busted curl (reviewed-progress present in deployed index.html, renderReviewedProgress present 3x in deployed app.js).",
       "commit_sha": "bd448a4"
+    },
+    {
+      "cycle": 50,
+      "timestamp": "2026-09-10T08:20:00Z",
+      "title": "Add NEW (24h) badge + 'New only' filter to dashboard",
+      "description": "Added isNewWithin24h() helper (first_seen within 24h of now), a blue NEW badge on renderCard() alongside existing KEV/RANSOMWARE/OVERDUE/DUE-SOON badges, and a 'New (24h) only' toolbar checkbox mirroring the cycle-48 hide-reviewed pattern exactly: filter predicate in applyFiltersAndRender(), URL query-param persistence (newonly=1, composing with cycle 7's shareable-filter-state), and reset-filters clearing. Distinct from the existing 'First seen: Nd ago' badge (cycle 19, always-visible aging label requiring per-card reading) and 'Sort: Newest first' (requires scanning position, not a flag) -- this gives a binary at-a-glance triage signal across dozens of cards simultaneously, plus a filter to isolate just those. 24h window chosen to comfortably span the pipeline's 4h run cadence. Pure additive frontend: no new API calls, no backend/schema changes, zero cost. Validated: node --check passed; served docs/ locally with real production data (532 alerts), confirmed new-only correctly narrowed 532->94 matching an independent Python cross-check against first_seen timestamps, URL round-trip on fresh navigation (?newonly=1 restored checkbox+filter), reset-filters clearing, and zero regression to existing search filter (wordpress: 532->137). Deployed frontend-only (no workflow_dispatch needed); live-verified via cache-busted curl (isNewWithin24h present 3x in deployed app.js, new-only present 2x in deployed index.html).",
+      "commit_sha": "ac1fa58"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T07:45:00Z",
+  "last_cycle_at": "2026-09-10T08:20:00Z",
   "stopped": false
 }
