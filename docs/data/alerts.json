@@ -34,15 +34,9 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "osv_id": "CVE-2026-62243",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "3703d79669ee024f6483c9d8697ac58ba546df33"
-      }
-    ],
+    "risk_score_prev": 26.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -52,7 +46,106 @@
     "nvd_last_modified": "2026-09-10T20:46:19.780",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T21:34:18.637373+00:00"
+    "first_seen": "2026-09-10T22:17:18.077067+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-71488",
+    "description": "league/commonmark is a PHP library for parsing and rendering CommonMark Markdown. From 0.6.0 until 2.9.0, specially crafted Markdown lines can cause the parser to have quadratic time complexity when converting, because several parsing paths repeatedly rescan growing portions of a line to translate between character positions and byte positions, and the Autolink extension can also copy and validate the remaining line at every URL-like prefix, allowing an attacker who can submit Markdown for conversion to consume disproportionate CPU time with a comparatively small request. This issue is fixed in 2.9.0.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-407",
+      "CWE-1050"
+    ],
+    "epss_score": 0.00346,
+    "epss_percentile": 0.27722,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00346,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": 26.3,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-06T22:18:31.893",
+    "nvd_last_modified": "2026-09-10T20:41:33.140",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T22:17:18.076448+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-67434",
+    "description": "PHP_CodeSniffer tokenizes PHP files and detects violations of a defined set of coding standards. Prior to versions 3.13.6 and 4.0.2, PHP_CodeSniffer contains a command injection vulnerability in the code that generates the Gitblame, Hgblame, and Svnblame report formats. As a result, running PHP_CodeSniffer over untrusted files, for example in a continuous integration pipeline that scans pull requests, or on a developer machine reviewing third party code, could result in attacker controlled shell commands being executed when the Gitblame, Hgblame, or Svnblame report processes a file whose name contains shell metacharacters. Users using the default Full report, or any of the other non-blame reports, are not affected. Users on a runtime platform which does not allow filenames to contain shell metacharacters, such as \" and ;, are not affected. This issue is fixed in versions 3.13.6 and 4.0.2.",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "PASSIVE"
+    },
+    "cwe_ids": [
+      "CWE-78"
+    ],
+    "epss_score": 0.00701,
+    "epss_percentile": 0.51139,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 25.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00701,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": 25.9,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-06T22:18:21.750",
+    "nvd_last_modified": "2026-09-10T20:41:33.140",
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-10T22:17:18.076443+00:00"
   },
   {
     "cve_id": "CVE-2026-76174",
@@ -89,7 +182,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 33.1,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -138,7 +231,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 35.1,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -152,117 +245,6 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T21:34:18.636501+00:00"
-  },
-  {
-    "cve_id": "CVE-2026-71488",
-    "description": "league/commonmark is a PHP library for parsing and rendering CommonMark Markdown. From 0.6.0 until 2.9.0, specially crafted Markdown lines can cause the parser to have quadratic time complexity when converting, because several parsing paths repeatedly rescan growing portions of a line to translate between character positions and byte positions, and the Autolink extension can also copy and validate the remaining line at every URL-like prefix, allowing an attacker who can submit Markdown for conversion to consume disproportionate CPU time with a comparatively small request. This issue is fixed in 2.9.0.",
-    "cvss_score": 7.5,
-    "cvss_version": "CVSS V31",
-    "cvss_vector_components": {
-      "attack_vector": "NETWORK",
-      "attack_complexity": "LOW",
-      "privileges_required": "NONE",
-      "user_interaction": "NONE"
-    },
-    "cwe_ids": [
-      "CWE-407",
-      "CWE-1050"
-    ],
-    "epss_score": 0.00346,
-    "epss_percentile": 0.27722,
-    "kev": false,
-    "kev_date_added": null,
-    "kev_due_date": null,
-    "kev_ransomware_use": false,
-    "kev_required_action": null,
-    "kev_notes": null,
-    "risk_score": 26.3,
-    "risk_score_breakdown": {
-      "cvss_raw": 7.5,
-      "cvss_component": 26.2,
-      "cvss_weight": "35.0% of (CVSS/10)",
-      "epss_raw": 0.00346,
-      "epss_component": 0.1,
-      "epss_weight": "40.0% of EPSS probability",
-      "kev_bonus": 0.0,
-      "kev_weight": "flat +25.0 if in CISA KEV",
-      "capped": false,
-      "weight_redistributed": false
-    },
-    "risk_score_prev": null,
-    "osv_id": "CVE-2026-71488",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "a6ef6cdc308dfa39a34239c35818e75892a0e6a8"
-      }
-    ],
-    "affected": [
-      "php/php"
-    ],
-    "matched_keywords": [],
-    "source": "nvd",
-    "published": "2026-08-06T22:18:31.893",
-    "nvd_last_modified": "2026-09-10T20:41:33.140",
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-09-10T21:34:18.636384+00:00"
-  },
-  {
-    "cve_id": "CVE-2026-67434",
-    "description": "PHP_CodeSniffer tokenizes PHP files and detects violations of a defined set of coding standards. Prior to versions 3.13.6 and 4.0.2, PHP_CodeSniffer contains a command injection vulnerability in the code that generates the Gitblame, Hgblame, and Svnblame report formats. As a result, running PHP_CodeSniffer over untrusted files, for example in a continuous integration pipeline that scans pull requests, or on a developer machine reviewing third party code, could result in attacker controlled shell commands being executed when the Gitblame, Hgblame, or Svnblame report processes a file whose name contains shell metacharacters. Users using the default Full report, or any of the other non-blame reports, are not affected. Users on a runtime platform which does not allow filenames to contain shell metacharacters, such as \" and ;, are not affected. This issue is fixed in versions 3.13.6 and 4.0.2.",
-    "cvss_score": 7.3,
-    "cvss_version": "CVSS V40",
-    "cvss_vector_components": {
-      "attack_vector": "LOCAL",
-      "attack_complexity": "LOW",
-      "privileges_required": "NONE",
-      "user_interaction": "PASSIVE"
-    },
-    "cwe_ids": [
-      "CWE-78"
-    ],
-    "epss_score": 0.00701,
-    "epss_percentile": 0.51139,
-    "kev": false,
-    "kev_date_added": null,
-    "kev_due_date": null,
-    "kev_ransomware_use": false,
-    "kev_required_action": null,
-    "kev_notes": null,
-    "risk_score": 25.9,
-    "risk_score_breakdown": {
-      "cvss_raw": 7.3,
-      "cvss_component": 25.6,
-      "cvss_weight": "35.0% of (CVSS/10)",
-      "epss_raw": 0.00701,
-      "epss_component": 0.3,
-      "epss_weight": "40.0% of EPSS probability",
-      "kev_bonus": 0.0,
-      "kev_weight": "flat +25.0 if in CISA KEV",
-      "capped": false,
-      "weight_redistributed": false
-    },
-    "risk_score_prev": null,
-    "osv_id": "CVE-2026-67434",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "4c378e1a528ea066890fc2397cbdd2f94eb2fc91"
-      }
-    ],
-    "affected": [
-      "php/php"
-    ],
-    "matched_keywords": [],
-    "source": "nvd",
-    "published": "2026-08-06T22:18:21.750",
-    "nvd_last_modified": "2026-09-10T20:41:33.140",
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-09-10T21:34:18.636379+00:00"
   },
   {
     "cve_id": "CVE-2026-64638",
@@ -299,7 +281,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.7,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2623,9 +2605,12 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-09-10T07:17:03.620",
     "nvd_last_modified": "2026-09-10T15:13:07.090",
@@ -3283,7 +3268,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-10T04:17:45.480",
-    "nvd_last_modified": "2026-09-10T14:39:13.757",
+    "nvd_last_modified": "2026-09-10T21:17:18.500",
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T05:14:39.127317+00:00"
@@ -3374,9 +3359,12 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-09-10T02:16:34.180",
     "nvd_last_modified": "2026-09-10T14:39:13.757",
@@ -4563,8 +4551,11 @@
     "risk_score_prev": 30.2,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
+      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -4715,9 +4706,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
+      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7560,8 +7553,11 @@
     "risk_score_prev": 25.3,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
+      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7609,8 +7605,11 @@
     "risk_score_prev": 30.9,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
+      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7709,8 +7708,11 @@
     "risk_score_prev": 25.3,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
+      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7758,8 +7760,11 @@
     "risk_score_prev": 28.5,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
+      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7858,8 +7863,11 @@
     "risk_score_prev": 25.4,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
+      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7908,9 +7916,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
+      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
@@ -7959,9 +7969,12 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-09-09T03:17:23.523",
     "nvd_last_modified": "2026-09-09T16:17:01.133",
@@ -8008,9 +8021,12 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-09-09T03:17:23.157",
     "nvd_last_modified": "2026-09-09T15:33:47.627",

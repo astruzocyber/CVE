@@ -951,6 +951,7 @@ def compute_stats(alerts):
     by_source = {}
     by_cwe = {}
     by_vendor_product = {}
+    by_matched_keyword = {}
     for a in alerts:
         cvss = a.get("cvss_score")
         if cvss is None:
@@ -975,6 +976,8 @@ def compute_stats(alerts):
             by_cwe[cwe] = by_cwe.get(cwe, 0) + 1
         for vp in (a.get("affected") or []):
             by_vendor_product[vp] = by_vendor_product.get(vp, 0) + 1
+        for kw in (a.get("matched_keywords") or []):
+            by_matched_keyword[kw] = by_matched_keyword.get(kw, 0) + 1
 
     # KEV entries with a due date in the past and not yet resolved -- an
     # operationally meaningful "overdue remediation" count (BOD 22-01 style).
@@ -1048,6 +1051,17 @@ def compute_stats(alerts):
         # attention at a very different remediation team). Zero new API calls --
         # built entirely from data already collected each run.
         "by_vendor_product": dict(sorted(by_vendor_product.items(), key=lambda kv: kv[1], reverse=True)[:10]),
+        # Top watchlist keyword matches (from matched_keywords, populated since an
+        # early cycle to record which config/watchlist.yaml term(s) caused a CVE
+        # to surface, and already rendered as a per-card "Watchlist match" badge
+        # and included in search/CSV export) -- a distinct triage axis from
+        # severity/source/CWE/vendor: "which of OUR configured watch terms are
+        # driving current alert volume" (e.g. a spike in "wordpress" vs "wp
+        # plugin" points at a different remediation surface even within the same
+        # vendor/product). Capped to the top 10 to keep stats.json small, same
+        # convention as by_cwe/by_vendor_product. Zero new API calls -- built
+        # entirely from data already collected each run.
+        "by_matched_keyword": dict(sorted(by_matched_keyword.items(), key=lambda kv: kv[1], reverse=True)[:10]),
     }
 
 

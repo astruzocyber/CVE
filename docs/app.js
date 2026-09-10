@@ -1009,6 +1009,42 @@ function renderVendorBreakdown(byVendorProduct) {
 }
 
 
+// stats.json now includes a top-10 by_matched_keyword map, built from the
+// already-extracted `matched_keywords` field (config/watchlist.yaml term(s)
+// that caused a CVE to surface, already rendered as a per-card "Watchlist
+// match" badge since an early cycle and included in the search haystack/CSV
+// export) -- a distinct triage axis from severity/source/CWE/vendor: "which
+// of OUR configured watch terms are driving current alert volume". Mirrors
+// the by_cwe/by_vendor_product pill pattern exactly: clicking a pill sets the
+// search box to that keyword and re-applies filters, reusing the existing
+// matched_keywords-aware search haystack. Purely additive: reads an existing
+// (now-extended) stats.json field, no new API calls.
+function renderKeywordBreakdown(byMatchedKeyword) {
+  const el = document.getElementById("keyword-breakdown");
+  if (!el) return;
+  if (!byMatchedKeyword || typeof byMatchedKeyword !== "object" || Object.keys(byMatchedKeyword).length === 0) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  const entries = Object.entries(byMatchedKeyword).sort((a, b) => b[1] - a[1]);
+  el.innerHTML = entries
+    .map(([kw, count]) =>
+      `<button type="button" class="keyword-pill" data-kw="${escapeHtml(kw)}" title="Search for ${escapeHtml(kw)}">${escapeHtml(kw)}: <strong>${count}</strong></button>`
+    )
+    .join("");
+  el.hidden = false;
+  el.querySelectorAll(".keyword-pill").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const searchEl = document.getElementById("search");
+      if (!searchEl) return;
+      searchEl.value = btn.getAttribute("data-kw");
+      applyFiltersAndRender();
+    });
+  });
+}
+
+
 async function loadStats() {
   try {
     const res = await fetch("data/stats.json", { cache: "no-store" });
@@ -1039,6 +1075,7 @@ async function loadStats() {
     renderSeverityBreakdown(stats.by_severity);
     renderCweBreakdown(stats.by_cwe);
     renderVendorBreakdown(stats.by_vendor_product);
+    renderKeywordBreakdown(stats.by_matched_keyword);
   } catch {
     // stats.json is optional/may not exist yet on the very first run -- fail quietly
   }

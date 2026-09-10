@@ -325,6 +325,26 @@ class TestComputeStats(unittest.TestCase):
         stats = compute_stats(alerts)
         self.assertIsNone(stats["avg_cvss_score"])
 
+    def test_by_matched_keyword_counts_and_caps_top_10(self):
+        # Mirrors the by_cwe/by_vendor_product pattern: counts occurrences of
+        # each matched_keywords entry across alerts, sorted descending, capped
+        # to the top 10. Alerts with no matched_keywords (or an empty list)
+        # contribute nothing, matching the existing empty-list-safe `or []`
+        # pattern already used for cwe_ids/affected.
+        alerts = [
+            {"cvss_score": 5.0, "kev": False, "matched_keywords": ["wordpress", "wp plugin"]},
+            {"cvss_score": 5.0, "kev": False, "matched_keywords": ["wordpress"]},
+            {"cvss_score": 5.0, "kev": False, "matched_keywords": []},
+            {"cvss_score": 5.0, "kev": False},  # missing key entirely
+        ]
+        stats = compute_stats(alerts)
+        self.assertEqual(stats["by_matched_keyword"], {"wordpress": 2, "wp plugin": 1})
+
+    def test_by_matched_keyword_empty_when_no_matches(self):
+        alerts = [{"cvss_score": 5.0, "kev": False}]
+        stats = compute_stats(alerts)
+        self.assertEqual(stats["by_matched_keyword"], {})
+
 
 class TestBuildFinalEntry(unittest.TestCase):
     def test_risk_score_prev_defaults_to_none_for_new_entry(self):
