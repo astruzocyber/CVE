@@ -1582,3 +1582,21 @@ input debounce) cleared the bar and was implemented.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 5 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset by this success). `total_cycles`: 37. `stopped`: false.
+
+---
+
+## Cycle 38 — 2026-09-10T00:47:00Z
+
+**Step 1 health check:** No stopped flag, 0/3 failed cycles, 0/10 no-improvement at start. Checked `gh run list --workflow=cve-alerts.yml --limit 5`: found the most recent scheduled run (2026-09-10T00:13:41Z) had **failed** with `error: failed to push some refs to 'https://github.com/astruzocyber/CVE'` at the "Commit and push data changes" step — a non-fast-forward rejection, almost certainly a race between two overlapping runs (a workflow_dispatch and the 4-hourly schedule) both pushing data-file commits to `main` around the same time. No 429/rate-limit signals from NVD/EPSS/CISA KEV/GHSA/Dependabot in any of the last 5 runs — this was a git-race issue, not an API issue.
+
+**Change:** Made the aggregator workflow's data-commit push resilient to races. `.github/workflows/cve-alerts.yml`'s "Commit and push data changes" step previously did a single bare `git push` with no retry — any concurrent push (two runs overlapping) would permanently fail that step and the whole job. Replaced with a 5-attempt loop: `git pull --rebase origin main && git push`, with a randomized 5-14s backoff between attempts, and an explicit `::error::` + `exit 1` only if all 5 attempts are exhausted (so real, non-transient failures still surface clearly in Actions rather than being silently swallowed).
+
+- **Scoring:** Feasibility 5/5 (pure CI YAML change, zero new dependencies/secrets/cost). Validation risk 1/5 (only affects the git push retry logic in one step; does not touch aggregate.py, schema, or any data file; rebase-then-push is git's standard race-resolution pattern and the data files in question are machine-generated JSON/CSV with no manual edits ever made in this repo, so rebase conflicts are not a realistic risk). Value 4/5 (directly fixes an observed, reproduced pipeline failure mode — this exact race caused the immediately-preceding scheduled run to fail).
+- **Validation (Step 4):** `python3 -c "import yaml; yaml.safe_load(...)"` confirmed valid YAML. `git status --short` confirmed only the workflow file changed — no Python/frontend files touched, so no data-file backup/dry-run/restore cycle or local server was needed per Step 4's conditional gating.
+- **Deploy (Step 5):** Committed `6b367ae` and pushed to `main`. Manually triggered `gh workflow run cve-alerts.yml` to verify the fix under real conditions: run `34422809781` completed **success** in 58s. Log grep confirmed zero errors/warnings/tracebacks (excluding benign Node 20 deprecation noise). `git pull` + curl confirmed `docs/data/alerts.json` (200) and the dashboard root (200) both live and serving correctly post-run.
+
+**Rejected this cycle:** None — this candidate (fix the just-observed live pipeline failure) was the obvious highest-value, lowest-risk pick and cleared the bar on first pass.
+
+**Rate-limit status:** Healthy across NVD, EPSS, CISA KEV, GHSA, Dependabot — no 429s/throttle signals in the last 5 runs (including this cycle's fresh dispatch run).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (reset — and this cycle also fixed the underlying cause of the failure that would otherwise have started counting toward that guard). `total_cycles`: 38. `stopped`: false.
