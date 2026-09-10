@@ -2766,3 +2766,38 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during two live end-to-end `aggregate.py` runs against real NVD/CISA KEV/FIRST.org EPSS APIs. RATE_LIMIT_EVENT: no.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 72. `stopped`: false.
+
+---
+
+## Cycle 73 — 2026-09-10T23:56:22Z
+
+**Re-verified state (Step 0):** Confirmed fresh via `git status`/`git log` — HEAD was `d949380` on `main`, working tree clean, `.agent/state.json` showed `total_cycles=72`, `consecutive_no_improvement=0`, `consecutive_failed_cycles=0`, `stopped=false`. Read `scripts/aggregate.py`, `scripts/validate_data.py`, `docs/app.js`, `scripts/test_aggregate.py`, the full `.agent/state.json` "implemented" history (72 entries), and `.agent/log.md` in full before choosing a candidate.
+
+**Rate-limit / API health check (Step 1):** `gh run list --limit 8` showed the last 8 runs (`CI Data & Frontend Validation` + `pages-build-deployment`) all `completed`/`success`. No 429/throttle signals in recent history or during this cycle's own live API run (see below).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Medium/low severity counts in trend.csv** (chosen) — 5/5/4. Cycle 67 added `critical_count`/`high_count` trend columns from the already-computed `by_severity` dict but left `medium`/`low` untracked, so a shift where critical/high held steady while medium/low volume moved was invisible in the trend even though `by_severity` already captured it every run. Zero new API calls, mirrors an already-proven pattern (trailing CSV column + hidden-by-default Chart.js dataset + header self-heal, used identically in cycles 67/69/70), low validation risk since `validate_data.py`'s `check_trend_csv` already imports `HISTORY_CSV_HEADER` from `aggregate.py` as single source of truth (cycle 67's own fix), so no validator changes needed at all.
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack (repeatedly flagged/deferred cycles 56-72, not attempted again this cycle per explicit task guidance).
+3. Full `risk_score` history time-series array — still deferred per cycle 56 reasoning (unbounded schema/storage growth risk, no new information beyond what `risk_score_prev` already gives as a lower-risk stepping stone).
+4. EPSS percentile histogram — still deferred (marginal value, `epss_percentile` already shown per-card since an earlier cycle).
+5. `by_first_seen_age` histogram/bucket breakdown — still deferred (lower value, first-seen-age badges/filters already exist per-card).
+6. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1. `scripts/aggregate.py`: extended `HISTORY_CSV_HEADER` with trailing `medium_count,low_count` columns and `append_history()`'s row-builder to populate them from the existing `by_severity` dict (same `.get(key, "")` empty-on-missing convention as every other column). `docs/app.js`: added `mediumCount`/`lowCount` column parsers (indices 11/12, missing-treated-as-null per the established convention for every prior schema extension) and two new hidden-by-default Chart.js trend-chart datasets ("Medium severity count" / "Low severity count", styled consistently with the existing "Critical severity count"/"High severity count" datasets). `scripts/test_aggregate.py`: updated 3 existing `TestAppendHistory` tests (`test_new_file_gets_full_header_and_row`, `test_stale_header_upgraded_without_touching_old_rows`, `test_missing_severity_breakdown_writes_empty_columns`) to assert the new trailing columns round-trip correctly — 74 tests total (unchanged count; the fixtures already carried `medium`/`low` keys in their `by_severity` dicts, so extending assertions was sufficient, no new test method needed). `scripts/validate_data.py` required zero changes since it already imports `HISTORY_CSV_HEADER` as single source of truth.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py scripts/validate_data.py scripts/test_aggregate.py`: OK.
+- `node --check docs/app.js`: OK.
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: **74/74 passed**.
+- **Live end-to-end `aggregate.py` run** against real NVD/CISA KEV/FIRST.org EPSS APIs in an isolated `/tmp/cve_cycle73` clone (code changes copied in, `pip install -r requirements.txt`, `GH_DEPENDABOT_TOKEN=$(gh auth token)`, `LOOKBACK_DAYS=2`): KEV catalog 1705 entries, 547 NVD pre-filter candidates, 0 Dependabot candidates (astruzocyber/CVE has none open — expected, no crash/warning), EPSS queried for 878 CVEs, 264 post-filter matches, 595 total tracked alerts written. `append_history()`'s schema-drift self-heal fired correctly, upgrading the stale 11-column header to the new 13-column header while leaving historical rows untouched (confirmed in the log output). No 429/rate-limit signals in any of the four external API calls (KEV, NVD, Dependabot, EPSS).
+- `python3 scripts/validate_data.py` against the regenerated real data: **PASSED** both inside the `/tmp` isolation (595 alerts, 595 unique IDs, stats/severity/source partition checks OK, 38 trend.csv rows OK, 47/47 `getElementById` id refs resolve, feeds parse OK) and again after copying results into the repo.
+- Local browser smoke test via `python3 -m http.server 8834` serving the real, freshly-regenerated production `docs/` (595 alerts): confirmed `trend.csv`'s last row correctly carries the new `medium_count=0,low_count=0` trailing columns (the current tracked population is 100% critical/high CVSS bands, matching `stats.json`'s `by_severity`, so 0/0 is the correct real value, not a bug); confirmed zero regression to search filter (`wordpress` → 146/595 alerts, consistent with organic drift from cycle 72's 146/595 same term), stats bar (`stat-avg-cvss` = "8.45"), and the trend section (`#trend-section.hidden === false`, i.e. rendering, not hidden).
+- Live-verified via cache-busted `curl` post-deploy: `app.js` contains the new `"Medium severity count"`/`"Low severity count"` dataset labels; `data/history/trend.csv`'s latest row carries `...,144,451,8.45,1,0,0` (13 columns, matching the new header); `data/stats.json`'s `by_severity` shows `medium: 0, low: 0` matching the trend row.
+
+**Deploy:** Committed `63c5cf9` — "Cycle 73: Track medium/low severity counts in trend.csv" — pushed to `main` (clean fast-forward from `d949380`, includes regenerated production `docs/data/alerts.json`/`stats.json`/`history/trend.csv`/`feed.json`/`feed.xml` since `aggregate.py` was exercised live). Live CI run `34544328300` (`CI Data & Frontend Validation`) → `success`, 15s. `pages-build-deployment` run `34544327632` → `success`, 33s. Live-verified via `curl https://astruzocyber.github.io/CVE/` — the change is live in production per the checks above.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on actual tech stack, flagged not hard-rejected), full risk-score history array (deferred, schema-growth risk), EPSS percentile histogram (deferred, marginal value), `by_first_seen_age` histogram (deferred, lower value), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS APIs. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 73. `stopped`: false.

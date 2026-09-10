@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 72,
+  "total_cycles": 73,
   "implemented": [
     {
       "cycle": 1,
@@ -535,8 +535,24 @@
         "by_first_seen_age histogram/bucket breakdown -- still deferred (lower value, badges/filters already exist per-card)."
       ]
     }
+    ,
+    {
+      "cycle": 73,
+      "timestamp": "2026-09-10T23:56:22Z",
+      "title": "Track medium/low severity counts in trend.csv",
+      "description": "Extends cycle 67's critical_count/high_count severity-mix trend with medium_count/low_count trailing columns in trend.csv, built entirely from the already-computed by_severity dict in compute_stats() -- zero new API calls. Without these, a shift where critical/high counts held steady while medium/low volume moved was invisible in trend.csv even though by_severity already tracked it every run. Added matching hidden-by-default 'Medium severity count'/'Low severity count' Chart.js trend-chart datasets in docs/app.js (mirrors the existing critical/high dataset styling and the missing-column-treated-as-null convention used for every prior schema extension). Updated 3 existing test_aggregate.py TestAppendHistory tests (new-file-full-header, stale-header-upgrade, missing-severity-breakdown-writes-empty-columns) to assert the new trailing columns round-trip correctly -- 74 tests total (unchanged count; existing fixtures already had by_severity medium/low keys so no new test needed, just extended assertions). validate_data.py's check_trend_csv already imports HISTORY_CSV_HEADER from aggregate.py as single source of truth (cycle 67 fix), so it picked up the new header automatically with no changes needed. Validated: py_compile + node --check OK; 74/74 unit tests passed; live end-to-end aggregate.py run against real NVD/CISA KEV/FIRST.org EPSS APIs in an isolated /tmp clone (595 alerts, header self-heal fired correctly upgrading the stale 11-column header to 13 columns, no rate-limit signals observed); validate_data.py PASSED against the regenerated real data both in /tmp isolation and after copying results into the repo; local browser smoke test via python3 -m http.server confirmed zero regression to search filter (146/595 for 'wordpress'), stats bar (avg CVSS 8.45 tile), and trend section (rendered, not hidden). Deployed: commit 63c5cf9 pushed to main; CI Data & Frontend Validation run 34544328300 completed success (15s); pages-build-deployment run 34544327632 completed success (33s); live-verified via cache-busted curl against https://astruzocyber.github.io/CVE/ that app.js contains 'Medium severity count'/'Low severity count', and data/history/trend.csv's latest row carries the new medium_count=0,low_count=0 trailing columns (correctly reflecting the fact that CVSS-based severityclass buckets in the current tracked population are 100% critical/high, matching stats.json's by_severity).",
+      "commit_sha": "63c5cf9",
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack (repeatedly flagged cycles 56-72).",
+        "Full risk_score history array (time series per CVE) -- still deferred per cycle 56 reasoning (unbounded schema/storage growth risk).",
+        "Any paid/threat-intel enrichment -- violates zero-cost, rejected on principle.",
+        "EPSS percentile histogram -- still deferred per cycle 56/prior reasoning (marginal value, epss_percentile already shown per-card).",
+        "by_first_seen_age histogram/bucket breakdown -- still deferred (lower value, badges/filters already exist per-card since an earlier cycle).",
+        "A brand-new stats field entirely unrelated to severity -- scored lower than completing the existing critical/high trend pattern (mirrors an established proven low-risk pattern per the task's own scoring guidance, and closes a real, previously-unnoticed gap in an existing feature rather than adding a net-new one)."
+      ]
+    }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T23:09:42Z",
+  "last_cycle_at": "2026-09-10T23:56:22Z",
   "stopped": false
 }
