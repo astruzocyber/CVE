@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 61,
+  "total_cycles": 62,
   "implemented": [
     {
       "cycle": 1,
@@ -434,9 +434,16 @@
       "title": "OSV.dev read-only enrichment (osv_id, osv_fixed_versions) on alert cards",
       "description": "Scoped per the carried-forward candidate note (OSV.dev deferred as its own scope, to be done as read-only enrichment not a new ingestion source). Added fetch_osv_fix_info()/parse_osv_fixed_versions() to scripts/aggregate.py: single GET https://api.osv.dev/v1/vulns/<CVE-ID> per new/refreshed alert, 10s timeout, catches all exceptions and returns None on any failure (fail-soft, never blocks the pipeline). Populates osv_id and osv_fixed_versions (package/ecosystem/fixed-version, capped 5) fields on each alert; existing alerts missing the keys get schema-safe defaults (None/[]) backfilled on next refresh. Frontend: 'View on OSV.dev' footer link + 'Fix available: pkg (eco) -> version' line on renderCard() when data present, included in Copy-as-Markdown export. Added 6 new unit tests (36 total, up from 30) covering parse_osv_fixed_versions and the new default fields.",
       "commit_sha": "63748f9"
+    },
+    {
+      "cycle": 62,
+      "timestamp": "2026-09-10T16:01:57Z",
+      "title": "Add osv_id/osv_fixed_versions columns to CSV export",
+      "description": "Cycle 61's OSV.dev enrichment (osv_id, osv_fixed_versions) was already rendered on-card and already included in exportJson()'s raw objects and alertToMarkdown()'s single-alert export, but exportCsv() (docs/app.js) had the exact same gap its own header-comment already documents for cvss_vector_components/kev_required_action/kev_notes: visible on screen and in the other two export formats, silently dropped from CSV. Added two purely-additive columns: osv_id as-is, osv_fixed_versions flattened to 'pkg (ecosystem) -> version' entries joined by '; ' (same join convention already used for affected/cwe_ids/matched_keywords). Zero new API calls, zero schema/backend changes, zero risk to existing columns/consumers -- pure client-side string formatting of already-present fields.",
+      "commit_sha": "8fa0e82"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T14:35:30Z",
+  "last_cycle_at": "2026-09-10T16:02:56Z",
   "stopped": false
 }

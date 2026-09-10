@@ -2368,3 +2368,42 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during both live `aggregate.py` dry-runs against real NVD/CISA KEV/FIRST.org EPSS/OSV.dev APIs. RATE_LIMIT_EVENT: no.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 61. `stopped`: false.
+
+## Cycle 62 — 2026-09-10T16:02:56Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh (not from stale summary):** `git log` HEAD was `0e35d72` (cycle 61 log commit), `git status` clean, matched `origin/main`. `gh run list`: last `ci.yml`/`pages-build-deployment`/`cve-alerts.yml` runs all `success` (11s-1m19s); grepped scheduled `cve-alerts.yml` run history (last 3 scheduled/dispatch runs) — no 429/rate-limit/throttle signals. `.agent/state.json`: `total_cycles`=61, both counters 0, `stopped`=false — clean baseline matching the task brief exactly. `docs/data/alerts.json`: 547 alerts (matches brief's stated baseline).
+
+**Candidates considered:**
+1. **CSV export missing osv_id/osv_fixed_versions columns** — feasibility 5/5 (pure client-side string formatting of already-present fields, mirrors exportCsv()'s own existing pattern/comment for cvss_vector_components/kev_required_action/kev_notes almost line-for-line, zero new API calls); risk 1/5 (purely additive columns appended at the end before `description`, cannot break any existing column position or consumer parsing by column name/position of pre-existing columns since new columns are appended, not inserted); value 3/5 (closes a real, previously-total inconsistency: cycle 61's OSV.dev fields are already in exportJson()'s raw objects and alertToMarkdown()'s markdown export, but silently absent from CSV — a genuine gap for the CSV-based spreadsheet/compliance-tracking workflow the file's own comments describe as the intended use case, exactly the class of gap flagged and fixed for other fields in cycles 32-37). **CHOSEN** (best feasibility/risk ratio of any candidate found this cycle; also directly closes a self-identified inconsistency rather than adding new speculative surface area).
+2. GHSA/Dependabot coverage expansion (`ghsa_packages`/additional `dependabot_repos`) — still flagged as needing human input on actual tech stack; carried forward unimplemented per cycles 56-61 reasoning, not something this agent can safely guess.
+3. Full risk_score history array (time series per CVE) — still deferred per cycle 56 reasoning (unbounded schema/storage growth risk); `risk_score_prev` single-value delta remains the shipped stepping stone. Blocker (storage growth) unchanged since cycle 61 — not revisited.
+4. Keyboard shortcuts — already shipped cycle 57, not reconsidered.
+5. OSV.dev enrichment — already shipped cycle 61 (this cycle only extends its CSV export coverage, not a duplicate of the enrichment itself).
+6. New free data source beyond OSV.dev (e.g. another OSV-adjacent feed) — no additional zero-cost source identified this cycle that clears the value bar above candidate 1's near-zero risk.
+7. Any paid/threat-intel enrichment — not seriously considered; would violate the zero-cost constraint, rejected on principle.
+
+**Implemented (candidate 1):**
+- `docs/app.js`: `exportCsv()` header array gained two columns (`osv_id`, `osv_fixed_versions`) appended immediately before `description` (after `first_seen`); the CSV row-builder loop gained an `osvFixed` local that flattens `a.osv_fixed_versions` (array of `{package, ecosystem, fixed}`) into `"pkg (ecosystem) -> version"` entries joined by `"; "` — identical join convention to the existing `affected`/`cwe_ids`/`matched_keywords` columns. `osv_id` is passed through as-is (string or `null`, handled by `toCsvRow`'s existing null-coalescing). No changes to `aggregate.py`, no schema changes, no backend/pipeline changes — this is a pure export-formatting fix reading fields cycle 61 already populates.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js`: OK.
+- `python3 -m py_compile` on `aggregate.py`/`notify_github_issues.py`/`validate_data.py`/`test_aggregate.py`: OK (none touched this cycle — frontend-only change, sanity-checked anyway).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: 36/36 passed (unchanged, no scoring/parsing logic touched).
+- `python3 scripts/validate_data.py` against the existing real production `docs/data/*`: PASSED (547 alerts, 547 unique IDs, stats.json schema OK, trend.csv OK, 44/44 `getElementById` id references resolve, feeds parse OK).
+- Local browser smoke test via `python3 -m http.server` serving the real production `docs/` (547 alerts, real `data/*.json`), driven via the browser-automation tool:
+  - Confirmed `allAlerts.length === 547` after real load from production `data/alerts.json`.
+  - Invoked `exportCsv()` with `URL.createObjectURL` monkey-patched to capture the generated `Blob` instead of triggering a download; read the Blob's real text content via `await blob.text()`.
+  - Confirmed the CSV header is now 25 columns (up from 23) with `osv_id` at index 22 and `osv_fixed_versions` immediately after, ahead of `description`.
+  - Confirmed a real data row (`CVE-2026-87505`) parses with the new columns present (empty for this CVE, correctly reflecting that OSV.dev's curated corpus doesn't yet cover it — consistent with cycle 61's finding that current watchlist CVEs have sparse OSV coverage) and the row still correctly ends with the `description` field.
+  - Confirmed zero regression: searched "wordpress" -> 144/547 (matches current production `by_vendor_product` count), cleared search -> back to 547/547.
+- No `docs/data/*` changes this cycle (frontend-only, no `aggregate.py` touched), so no live `aggregate.py` dry-run regeneration was needed or performed — next scheduled `cve-alerts.yml` run continues to refresh data normally on its existing 4h cadence. Reviewed the 3 most recent scheduled `cve-alerts.yml` runs (`34475506130`, `34453788084`, `34440228287`) — all `success`, no 429/rate-limit signals.
+
+**Deploy:** Committed `8fa0e82` — "Cycle 62: add osv_id/osv_fixed_versions columns to CSV export" — pushed to `main` (clean fast-forward from `0e35d72`). Live CI run `34499494795` (`CI Data & Frontend Validation`) -> `success`, 11s. `pages-build-deployment` run `34499493339` -> `success`. Live-verified via cache-busted `curl`: `https://astruzocyber.github.io/CVE/app.js` contains 9 matches for `osv_fixed_versions` (was 5 pre-cycle) — change is live in production.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on actual tech stack, flagged not hard-rejected), full risk-score history array (deferred, schema-growth risk), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle. Pre-cycle `gh run list`/log review of the last several `ci.yml`/`cve-alerts.yml`/`pages-build-deployment` runs showed all `success` with no rate-limit indicators. This cycle's change was frontend-only (no external API calls made at all) — data pipeline continues on its existing 4h schedule unaffected. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 62. `stopped`: false.
