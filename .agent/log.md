@@ -1773,3 +1773,34 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **consecutive_no_improvement:** reset to 0 (this cycle shipped an improvement).
 **consecutive_failed_cycles:** 0.
 **total_cycles:** 43.
+
+## Cycle 44 — 2026-09-10T04:40:00Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 8`: 7 success / 1 failure (the same pre-cycle-38-fix git-race straggler already documented/resolved in cycles 38-41). No 429/rate-limit signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot in any recent run. State clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add a light/dark theme toggle to the dashboard.
+
+- **Opportunity:** The dashboard has been dark-theme-only since inception with no way to switch, despite every color already routing through CSS custom properties defined once in `:root` (checked `docs/style.css` fresh this cycle) -- making a second theme a pure additive var-override rather than a rewrite. A security-team dashboard commonly gets displayed on wall monitors or reviewed in bright offices/outdoors where a light theme is a real usability improvement, not a cosmetic one. Reviewed `.agent/log.md`/`state.json` -- no prior theme/dark-mode candidate implemented or rejected.
+- **Frontend:** Added `html[data-theme="light"]` block in `docs/style.css` overriding the 10 existing custom properties (`--bg/--bg-panel/--bg-card/--border/--text/--text-dim/--accent/--red/--orange/--yellow/--green`) with a contrast-checked light palette (severity/status colors darkened for legibility against white). Added a `#theme-toggle` button inside the existing `.controls` toolbar in `docs/index.html` (inherits print-hide and mobile-breakpoint stacking for free, zero extra CSS needed). Added a tiny inline `<script>` in `<head>` (before `style.css` loads) that reads `localStorage.getItem('theme')`, falling back to `prefers-color-scheme`, and sets `data-theme` on `<html>` before first paint -- avoiding a flash of the wrong theme on load. `applyTheme()`/`initTheme()` in `docs/app.js` wire the toggle click handler, persist the choice to `localStorage`, and update the button label (`🌙 Dark` / `☀️ Light`) and `aria-pressed` state.
+- **Rejected candidates considered this cycle:**
+  - *JSON-LD structured data* -- still deferred per cycle 41's note (distinct, higher-scope SEO candidate); not revisited.
+  - *Extending `nvd_last_modified`/`cvss_vector_components` to GHSA/Dependabot* -- still correctly deferred (both sources dormant in production, no live field to validate against); nothing has changed.
+  - *Keyboard shortcuts for filter controls* -- still marginal value for a click-through triage audience; not revisited.
+- **Scoring:** Feasibility 5/5 (pure CSS custom-property override + one button + localStorage, zero new API calls/dependencies, zero backend/schema touch). Validation risk 1/5 (purely additive: default theme unchanged pixel-for-pixel when toggle untouched, confirmed via before/after screenshot comparison). Value 3/5 (fills a real, total, previously-unaddressed accessibility/usability gap -- 44 cycles in, zero theme flexibility existed).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. `git diff --stat` confirmed only `docs/app.js`, `docs/index.html`, `docs/style.css` touched -- no `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle needed.
+- Served `docs/` on a local scratch port (8933, background process) with real production data (528 alerts). Browser-tool checks: clicking `#theme-toggle` correctly flipped `data-theme` dark->light, updated button label/`aria-pressed`, and persisted `light` to `localStorage`; a full page reload (fresh navigation, not just DOM mutation) correctly restored `data-theme="light"` from `localStorage` via the inline head script with no visible flash of the dark theme; screenshots confirmed legible text, correct badge/border/link colors, and zero layout regression to stats bar/trend chart/card grid in light mode; toggling back to dark confirmed byte-for-byte visual parity with the pre-change dark theme; `528 of 528 alerts` result count unaffected throughout.
+
+**Deploy (Step 5):**
+- Committed `0b5bb9e` (`docs/app.js`, `docs/index.html`, `docs/style.css`) and pushed to `main`. Frontend-only change -- no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~40s for Pages deployment, then cache-busted curl confirmed `theme-toggle`/`applyTheme` present in live `app.js` (5 occurrences), `theme-toggle` present in live `index.html`, and `data-theme="light"` present in live `style.css`.
+- Live-verified via browser tool on the production dashboard: fresh load showed `data-theme="dark"` (default, correct for a first-time visitor with no stored preference and a dark OS preference), clicking the live toggle correctly flipped to `data-theme="light"` with `528` total alerts still loaded -- zero regression.
+
+**Rejected this cycle:** None new beyond the still-deferred items carried from prior cycles (JSON-LD, GHSA/Dependabot field-parity extensions, keyboard shortcuts) -- the theme-toggle candidate cleared the bar on first pass.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 44. `stopped`: false.

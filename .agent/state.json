@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 43,
+  "total_cycles": 44,
   "implemented": [
     {
       "cycle": 1,
@@ -303,9 +303,16 @@
       "title": "Add avg_risk_score to stats.json + optional trend-chart dataset",
       "description": "compute_stats() computed avg_epss (mean EPSS probability) but never surfaced the mean of the composite risk_score field (35% CVSS + 40% EPSS + 25% KEV bonus) that already drives sorting/min-risk-filter/card display -- a distinct population-level signal from avg_epss (a population could have low avg EPSS but high avg risk_score if several entries are KEV-listed). Added avg_risk_score to compute_stats()'s output dict (round to 1 decimal, None if no alerts have a risk_score yet), appended as trend.csv column 7 in append_history() (backward-compatible: old 6-column rows read fine, JS treats a missing/undefined 7th column as null), rendered as a new 'Avg risk score' stat pill in docs/index.html/docs/app.js, and added as a 3rd opt-in (hidden:true by default, matching cycles 26/36 precedent) Chart.js trend-chart dataset. Pure additive: zero new API calls, zero backend schema breakage (existing avg_epss/by_severity/by_source untouched).",
       "commit_sha": "3d9a2ca"
+    },
+    {
+      "cycle": 44,
+      "timestamp": "2026-09-10T04:40:00Z",
+      "title": "Add light/dark theme toggle with localStorage persistence",
+      "description": "Dashboard was dark-theme-only since inception with zero accommodation for viewers who prefer light mode or triage in bright environments (wall monitors, bright offices). All colors already routed through CSS custom properties in :root, making a second theme a pure additive var-override. Added html[data-theme=light] block in docs/style.css overriding the 10 existing custom properties with a WCAG-contrast-checked light palette; theme-toggle button in docs/index.html toolbar (inherits existing print-hide and mobile-stacking rules for free); inline head script sets data-theme from localStorage/prefers-color-scheme before first paint to avoid flash-of-wrong-theme; applyTheme()/initTheme() in docs/app.js wire the toggle and persist choice. Zero new API calls, zero backend/schema changes.",
+      "commit_sha": "0b5bb9e"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T02:49:31Z",
+  "last_cycle_at": "2026-09-10T04:40:00Z",
   "stopped": false
 }
