@@ -1871,3 +1871,35 @@ this cycle. workflow_dispatch verification run completed in 31s with no errors.
 **Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
 
 **State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 46. `stopped`: false.
+
+## Cycle 47 — 2026-09-10T06:35:00Z
+
+**Status:** Implemented and live-verified.
+
+**Pipeline health at start of cycle:** Healthy. `gh run list --workflow=cve-alerts.yml --limit 8`: 7 success / 1 failure — the failure (2026-09-10T00:13:41Z) is the pre-cycle-38-fix git-race straggler already documented/resolved in cycles 38-41. No 429/rate-limit signals from NVD, EPSS, CISA KEV, GHSA, or Dependabot in any recent run. State clean (0/10 no-improvement, 0/3 failed) at start.
+
+**Change:** Add a minimum EPSS exploitation-probability filter to the dashboard.
+
+- **Opportunity:** Re-read `docs/index.html`/`docs/app.js` fresh this cycle. Composite `risk_score` (35% CVSS + 40% EPSS + 25% KEV bonus) has had a `min-risk` threshold filter since cycle 42, but raw `epss_score` (FIRST.org's exploitation-probability estimate, independent of CVSS severity) had no direct threshold filter of its own — only sortable via the existing `epss_score` sort option and shown per-card. A security lead wanting "show me everything with meaningful real-world exploitation likelihood regardless of CVSS severity" (a genuinely distinct triage question from the blended composite score — e.g. a medium-CVSS bug with high EPSS is a different priority signal than a critical-CVSS bug with near-zero EPSS) had no way to isolate that population directly. Grepped `.agent/log.md`/`state.json` for `min-epss`/`epss.*filter`/`epss.*threshold` — zero hits, confirming this is new.
+- **Frontend:** Added a `#min-epss` number input (0-100, interpreted as a percentage against the stored 0-1 `epss_score` probability) to the toolbar in `docs/index.html`, immediately after the existing `#min-risk` input. Added matching logic in `docs/app.js` mirroring the `min-risk` pattern exactly: `readFiltersFromURL()`/`updateURLFromFilters()` gained a `minEpss` parameter and `minepss=` URL query param (composing with the existing shareable-filter-state feature from cycle 7), `applyFiltersAndRender()` filters on `a.epss_score * 100 >= minEpss`, a 150ms-debounced `input` listener (matching the min-risk debounce), and `reset-filters` now also clears `#min-epss`. Updated the `reset-filters` button's title text to mention "risk/EPSS thresholds". Pure additive frontend change: no new API calls, no backend/schema changes (epss_score already existed), zero cost.
+- **Rejected candidates considered this cycle:**
+  - *Extending `nvd_last_modified`/CVSS-vector fields to GHSA/Dependabot* — still correctly deferred (both sources dormant in production, no live field to validate against); nothing has changed.
+  - *Keyboard shortcuts for filter controls* — still marginal value for a click-through triage audience; not revisited.
+  - *CWE trend-over-time in trend.csv* — still correctly deferred per cycle 45's reasoning.
+- **Scoring:** Feasibility 5/5 (single number input + filter predicate mirroring an already-shipped, already-validated pattern almost line-for-line; zero new API calls/dependencies/schema touch). Validation risk 1/5 (purely additive, identical shape to the already-proven min-risk filter; cross-checked the filtered count against an independent standalone Python computation over the same real data file). Value 3/5 (fills a real, previously-total gap — EPSS has been a first-class scoring input and sort key since early cycles but had zero direct threshold-isolation capability until now).
+
+**Validation (Step 4):**
+- `node --check docs/app.js`: OK. `git diff --stat` confirmed only `docs/app.js`/`docs/index.html` touched — no `aggregate.py`/schema changes, so no data-pipeline dry-run/backup/restore cycle needed.
+- Standalone Python check against real production `docs/data/alerts.json` (532 alerts): `epss_score >= 0.30` (as a 0-1 probability) matched exactly 3 alerts — the ground-truth count to validate the UI filter against.
+- Served `docs/` on a local scratch HTTP port (8977, background process) with real production data. Browser-tool checks: setting `#min-epss` to `30` correctly narrowed `532 of 532` → `3 of 532` (matching the independent Python count) and set `?minepss=30` in the URL; clearing the input restored `532 of 532`; a fresh navigation to `?minepss=30` correctly restored the input value and re-filtered to `3 of 532` on load; `reset-filters` correctly cleared it back to `532 of 532` with empty `location.search`; existing search filter (`wordpress` → `0 of 532`, correct — no currently-tracked WordPress CVE has EPSS >=30% while the stale `minepss=30` filter from the URL-restore test was still active, confirmed as expected AND-combination behavior, not a bug) and `min-risk` filter (`min-risk=50` → `8 of 532`, matching cycle 42's originally-validated count) both showed zero regression after a full reset.
+- Killed the scratch server before committing.
+
+**Deploy (Step 5):**
+- Committed `c15067e` (`docs/app.js`, `docs/index.html`) and pushed to `main` via the standard pull-rebase-then-push loop (succeeded on first attempt). Frontend-only change — no `cve-alerts.yml` dispatch needed (GitHub Pages auto-deploys on push).
+- Waited ~45s for Pages deployment, then cache-busted `curl` confirmed `min-epss` present in both the live `app.js` (4 occurrences) and `index.html` (2 occurrences).
+
+**Rejected this cycle:** None new beyond the still-deferred carried-forward items (GHSA/Dependabot field-parity extensions, keyboard shortcuts, CWE-trend-over-time) — the min-EPSS-filter candidate cleared the bar on first pass.
+
+**Rate-limit status:** No 429/throttle signals observed from NVD, EPSS, CISA KEV, GHSA, or Dependabot in the last 8 Actions runs. No change to call volume this cycle (frontend-only, zero new API calls).
+
+**State:** `consecutive_no_improvement`: 0/10 (reset by this success). `consecutive_failed_cycles`: 0/3 (no failure this cycle). `total_cycles`: 47. `stopped`: false.

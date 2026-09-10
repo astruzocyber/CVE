@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 46,
+  "total_cycles": 47,
   "implemented": [
     {
       "cycle": 1,
@@ -324,9 +324,16 @@
       "title": "Add schema.org JSON-LD Dataset structured data",
       "description": "Cycle 12 added meta description/OG/Twitter cards, cycle 41 added robots.txt/sitemap.xml, but the dashboard had zero machine-readable structured data -- deferred explicitly since cycle 41 as a 'distinct, higher-scope SEO candidate'. Added a schema.org Dataset JSON-LD block to docs/index.html head describing the dashboard as a free, zero-cost, continuously-updated vulnerability dataset with distribution links to the existing alerts.json/feed.xml/feed.json endpoints (all pre-existing, no new files) and creator/keyword metadata. This is the correct schema.org type for a continuously-updated data feed (as opposed to WebSite/Article), helping search engines and AI crawlers correctly index/attribute the dashboard as a dataset with a machine-discoverable, downloadable distribution -- distinct value from the earlier meta-tag SEO work which only targeted human-facing link previews. Pure additive head script tag: zero JS/CSS/backend/schema changes, zero new API calls, zero cost. Validated: python3 json.loads() confirmed the embedded JSON-LD is well-formed; served docs/ on a local scratch port, confirmed script tag renders correctly. Deployed via commit 0a037f2 (frontend-only, no workflow_dispatch needed); live-verified via cache-busted curl parsing the deployed JSON-LD (type: Dataset, name/description/distribution all present and correct).",
       "commit_sha": "0a037f2"
+    },
+    {
+      "cycle": 47,
+      "timestamp": "2026-09-10T06:35:00Z",
+      "title": "Add minimum EPSS probability filter to dashboard",
+      "description": "Composite risk_score has had a min-risk threshold filter since cycle 42, but EPSS (raw exploitation-probability, independent of CVSS severity) had no direct threshold filter -- only sortable/shown per-card. Added a #min-epss number input (0-100%, compared against the stored 0-1 epss_score) mirroring the existing min-risk input exactly: same 150ms debounce, same URL query-param persistence (minepss=), same reset-filters clearing. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost. Validated: node --check passed; served docs/ locally with real production data (532 alerts), confirmed minepss=30 -> 3/532 (cross-checked against standalone Python computation), URL round-trip on fresh navigation, reset-filters clearing, and zero regression to search/min-risk filters. Deployed frontend-only (no workflow_dispatch needed); live-verified via cache-busted curl (min-epss present in deployed app.js/index.html).",
+      "commit_sha": "c15067e"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-10T06:00:00Z",
+  "last_cycle_at": "2026-09-10T06:35:00Z",
   "stopped": false
 }
