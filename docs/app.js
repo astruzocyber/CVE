@@ -1267,6 +1267,10 @@ async function loadTrendChart() {
     // kev_due_soon_count column added in a later schema revision; older rows
     // won't have index 10 at all -- treat missing same as empty.
     const kevDueSoon = rows.map((r) => (r[10] === "" || r[10] === undefined ? null : Number(r[10])));
+    // medium_count/low_count columns added in a later schema revision; older
+    // rows won't have index 11/12 at all -- treat missing same as empty.
+    const mediumCount = rows.map((r) => (r[11] === "" || r[11] === undefined ? null : Number(r[11])));
+    const lowCount = rows.map((r) => (r[12] === "" || r[12] === undefined ? null : Number(r[12])));
 
     document.getElementById("trend-section").hidden = false;
     new Chart(canvas, {
@@ -1359,6 +1363,24 @@ async function loadTrendChart() {
             borderColor: "#ffd166",
             backgroundColor: "rgba(255,209,102,0.12)",
             yAxisID: "y",
+            tension: 0.2,
+            hidden: true,
+          },
+          {
+            label: "Medium severity count",
+            data: mediumCount,
+            borderColor: "#ffb703",
+            backgroundColor: "rgba(255,183,3,0.12)",
+            yAxisID: "y2",
+            tension: 0.2,
+            hidden: true,
+          },
+          {
+            label: "Low severity count",
+            data: lowCount,
+            borderColor: "#8ecae6",
+            backgroundColor: "rgba(142,202,230,0.12)",
+            yAxisID: "y2",
             tension: 0.2,
             hidden: true,
           },

@@ -1075,7 +1075,8 @@ def compute_stats(alerts):
 # ---------------------------------------------------------------------------
 HISTORY_CSV_HEADER = (
     "timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,"
-    "avg_epss,avg_risk_score,critical_count,high_count,avg_cvss_score,kev_due_soon_count"
+    "avg_epss,avg_risk_score,critical_count,high_count,avg_cvss_score,kev_due_soon_count,"
+    "medium_count,low_count"
 )
 
 
@@ -1107,6 +1108,14 @@ def append_history(stats):
         # rationale. Trailing column, same additive-schema pattern as every
         # prior trend.csv extension.
         str(stats.get("kev_due_soon_count", "")),
+        # Medium/low severity counts: completes the by_severity trend picture
+        # started by cycle 67's critical_count/high_count -- without these,
+        # a shift where critical/high counts hold steady while medium/low
+        # volume balloons (or shrinks) is invisible in trend.csv even though
+        # by_severity already tracks it every run. Trailing columns, same
+        # additive-schema self-heal pattern as every prior extension.
+        str(by_severity.get("medium", "")),
+        str(by_severity.get("low", "")),
     ]
 
     # Schema-drift self-heal: when a column (e.g. avg_risk_score) is added to the

@@ -461,12 +461,14 @@ class TestAppendHistory(unittest.TestCase):
             with open(csv_path) as f:
                 lines = f.read().strip().split("\n")
             self.assertEqual(lines[0], HISTORY_CSV_HEADER)
-            self.assertTrue(lines[0].endswith("critical_count,high_count,avg_cvss_score,kev_due_soon_count"))
+            self.assertTrue(lines[0].endswith("critical_count,high_count,avg_cvss_score,kev_due_soon_count,medium_count,low_count"))
             row = lines[1].split(",")
-            self.assertEqual(row[-4], "3")  # critical_count
-            self.assertEqual(row[-3], "4")  # high_count
-            self.assertEqual(row[-2], "6.5")  # avg_cvss_score
-            self.assertEqual(row[-1], "2")  # kev_due_soon_count
+            self.assertEqual(row[-6], "3")  # critical_count
+            self.assertEqual(row[-5], "4")  # high_count
+            self.assertEqual(row[-4], "6.5")  # avg_cvss_score
+            self.assertEqual(row[-3], "2")  # kev_due_soon_count
+            self.assertEqual(row[-2], "2")  # medium_count
+            self.assertEqual(row[-1], "1")  # low_count
 
     def test_stale_header_upgraded_without_touching_old_rows(self):
         with tempfile.TemporaryDirectory() as d:
@@ -489,7 +491,7 @@ class TestAppendHistory(unittest.TestCase):
             self.assertEqual(lines[0], HISTORY_CSV_HEADER)
             # Old row is untouched (still fewer columns -- schema-evolution record).
             self.assertEqual(lines[1], old_row)
-            self.assertEqual(lines[2].split(",")[-4:], ["1", "1", "7.25", "0"])
+            self.assertEqual(lines[2].split(",")[-6:], ["1", "1", "7.25", "0", "", ""])
 
     def test_missing_severity_breakdown_writes_empty_columns(self):
         with tempfile.TemporaryDirectory() as d:
@@ -502,7 +504,7 @@ class TestAppendHistory(unittest.TestCase):
             self._run_with_tmp_paths(csv_path, lambda: append_history(stats))
             with open(csv_path) as f:
                 row = f.read().strip().split("\n")[1].split(",")
-            self.assertEqual(row[-4:], ["", "", "", ""])
+            self.assertEqual(row[-6:], ["", "", "", "", "", ""])
 
 
 if __name__ == "__main__":
