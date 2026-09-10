@@ -394,13 +394,22 @@ def extract_cvss(nvd_cve):
 # answer a distinct triage question from the numeric score alone: a 7.5 that
 # needs local access + user interaction is a very different priority from a
 # 7.5 that's remote/no-auth/no-interaction, even though both look identical
-# as a bare CVSS number. Only implemented for NVD (CVSS v3.1/3.0 schema);
+# as a bare CVSS number. Implemented for NVD's v3.1/v3.0 schema AND, since
+# cycle 64 added v4.0 baseScore fallback, also cvssMetricV40 -- verified live
+# against a real NVD v4.0-only record (CVE-2026-71415) that cvssData still
+# exposes the identical attackVector/attackComplexity/privilegesRequired/
+# userInteraction field names and value vocabulary (NETWORK/LOW/NONE/etc) as
+# v3.x, just alongside additional v4-only fields (attackRequirements, the
+# Modified* series) this function ignores -- so no new value-mapping tables
+# are needed, only an additional key checked last (lowest priority) after
+# v3.1/v3.0, matching extract_cvss()'s own fallback-priority pattern and never
+# changing the component values for any CVE that already has a v3.x block.
 # GHSA/Dependabot advisories expose a raw vector_string in a mixed v3/v4
 # format without pre-split fields, so extraction there is left for a future
 # cycle rather than risking a mis-parsed field now.
 def extract_cvss_vector_components(nvd_cve):
     metrics = nvd_cve.get("metrics", {})
-    for key in ("cvssMetricV31", "cvssMetricV30"):
+    for key in ("cvssMetricV31", "cvssMetricV30", "cvssMetricV40"):
         if key in metrics and metrics[key]:
             cvss_data = metrics[key][0].get("cvssData", {})
             av = cvss_data.get("attackVector")

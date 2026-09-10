@@ -38,6 +38,7 @@ from aggregate import (
     build_final_entry,
     parse_osv_fixed_versions,
     extract_cvss,
+    extract_cvss_vector_components,
 )
 
 
@@ -108,6 +109,52 @@ class TestExtractCvss(unittest.TestCase):
     def test_no_metrics_returns_none(self):
         self.assertEqual(extract_cvss({"metrics": {}}), (None, None))
         self.assertEqual(extract_cvss({}), (None, None))
+
+
+class TestExtractCvssVectorComponents(unittest.TestCase):
+    def test_v31_extracted(self):
+        nvd_cve = {"metrics": {"cvssMetricV31": [{"cvssData": {
+            "attackVector": "NETWORK", "attackComplexity": "LOW",
+            "privilegesRequired": "NONE", "userInteraction": "NONE",
+        }}]}}
+        result = extract_cvss_vector_components(nvd_cve)
+        self.assertEqual(result, {
+            "attack_vector": "NETWORK", "attack_complexity": "LOW",
+            "privileges_required": "NONE", "user_interaction": "NONE",
+        })
+
+    def test_v31_preferred_over_v40_when_both_present(self):
+        # regression guard: an alert that already has a v3.1 block must never
+        # have its component values changed by the new v4.0 fallback.
+        nvd_cve = {"metrics": {
+            "cvssMetricV31": [{"cvssData": {
+                "attackVector": "LOCAL", "attackComplexity": "HIGH",
+                "privilegesRequired": "HIGH", "userInteraction": "REQUIRED",
+            }}],
+            "cvssMetricV40": [{"cvssData": {
+                "attackVector": "NETWORK", "attackComplexity": "LOW",
+                "privilegesRequired": "NONE", "userInteraction": "NONE",
+            }}],
+        }}
+        result = extract_cvss_vector_components(nvd_cve)
+        self.assertEqual(result["attack_vector"], "LOCAL")
+        self.assertEqual(result["privileges_required"], "HIGH")
+
+    def test_v40_fallback_when_no_v3(self):
+        nvd_cve = {"metrics": {"cvssMetricV40": [{"cvssData": {
+            "attackVector": "NETWORK", "attackComplexity": "LOW",
+            "privilegesRequired": "LOW", "userInteraction": "NONE",
+            "attackRequirements": "NONE",  # v4-only field, must be ignored
+        }}]}}
+        result = extract_cvss_vector_components(nvd_cve)
+        self.assertEqual(result, {
+            "attack_vector": "NETWORK", "attack_complexity": "LOW",
+            "privileges_required": "LOW", "user_interaction": "NONE",
+        })
+
+    def test_no_metrics_returns_none(self):
+        self.assertIsNone(extract_cvss_vector_components({"metrics": {}}))
+        self.assertIsNone(extract_cvss_vector_components({}))
 
 
 class TestParseCvssV3VectorString(unittest.TestCase):
