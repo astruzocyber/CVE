@@ -330,6 +330,7 @@ function renderCard(alert) {
       <div class="scores">
         <span>CVSS: <strong>${fmtScore(alert.cvss_score)}</strong></span>
         <span>EPSS: <strong>${epssPct}</strong>${epssPercentileHtml}</span>
+        ${alert.kev_date_added ? `<span title="Date this CVE was added to the CISA Known Exploited Vulnerabilities catalog">KEV added: <strong>${escapeHtml(alert.kev_date_added)}</strong></span>` : ""}
         ${alert.kev_due_date ? `<span>KEV due: <strong>${escapeHtml(alert.kev_due_date)}</strong></span>` : ""}
         ${exploitChipHtml}
       </div>
@@ -390,6 +391,7 @@ function alertToMarkdown(alert) {
   lines.push(`- **EPSS:** ${typeof alert.epss_score === "number" ? (alert.epss_score * 100).toFixed(1) + "%" : "n/a"}`);
   lines.push(`- **Risk score:** ${typeof alert.risk_score === "number" ? alert.risk_score.toFixed(0) : "n/a"}/100`);
   lines.push(`- **KEV:** ${alert.kev ? "Yes" + (alert.kev_ransomware_use ? " (known ransomware use)" : "") : "No"}`);
+  if (alert.kev && alert.kev_date_added) lines.push(`- **KEV added:** ${alert.kev_date_added}`);
   if (alert.kev && alert.kev_due_date) lines.push(`- **KEV remediation due:** ${alert.kev_due_date}`);
   if (alert.kev && alert.kev_required_action) lines.push(`- **Required action:** ${alert.kev_required_action}`);
   lines.push(`- **Source:** ${alert.source || "unknown"}`);
@@ -723,7 +725,15 @@ function exportCsv() {
   // entries joined by "; " (same join convention as affected/cwe_ids/
   // matched_keywords above) so it survives a spreadsheet's single-cell-per-
   // field model without losing the package/ecosystem/version structure.
-  const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_percentile", "kev", "kev_due_date",
+  // Cycle 63: kev_date_added (date a CVE was added to the CISA KEV catalog)
+  // has been populated in the schema since the earliest cycles and is shown
+  // nowhere on the dashboard at all -- kev_due_date (the remediation deadline)
+  // was always rendered/exported, but the catalog-addition date itself (useful
+  // for gauging how long a KEV entry has been known/tracked, distinct from the
+  // BOD 22-01 deadline) was silently missing from the card UI, Markdown export,
+  // and CSV export. Added as a new "KEV added" line on-card (next to CVSS/EPSS),
+  // in alertToMarkdown(), and as a new CSV column here.
+  const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_percentile", "kev", "kev_date_added", "kev_due_date",
     "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
     "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "matched_keywords", "published",
     "nvd_last_modified", "first_seen", "osv_id", "osv_fixed_versions", "description"];
@@ -734,7 +744,7 @@ function exportCsv() {
       .map((f) => `${f.package || "?"}${f.ecosystem ? ` (${f.ecosystem})` : ""} -> ${f.fixed || "?"}`)
       .join("; ");
     lines.push(toCsvRow([
-      a.cve_id, a.risk_score, a.risk_score_prev, a.cvss_score, a.epss_score, a.epss_percentile, a.kev, a.kev_due_date,
+      a.cve_id, a.risk_score, a.risk_score_prev, a.cvss_score, a.epss_score, a.epss_percentile, a.kev, a.kev_date_added, a.kev_due_date,
       a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
       vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
       (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.nvd_last_modified,
