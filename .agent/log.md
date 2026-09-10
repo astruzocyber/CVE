@@ -2618,3 +2618,39 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals observed anywhere this cycle. This cycle's change was validator/test-infrastructure-only (zero external API calls made) — data pipeline continues on its existing 4h schedule unaffected. RATE_LIMIT_EVENT: no.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 68. `stopped`: false.
+
+## Cycle 69 — 2026-09-10T20:47:01Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh (not from stale summary):** `git status` clean, HEAD matched `origin/main` at `cdcf86a` (cycle 68 commit) before starting. `gh run list`: last several `CI Data & Frontend Validation`/`CVE/KEV/Dependabot Alert Aggregation`/`pages-build-deployment` runs all `success`, no 429/throttle signals anywhere. `.agent/state.json`: `total_cycles`=68, both counters 0, `stopped`=false — matches task brief. `docs/data/alerts.json` at 587 alerts pre-cycle (matched brief). Reviewed all 68 prior `implemented` entries and the full `.agent/log.md` tail to avoid duplicating shipped/rejected ideas — confirmed avg CVSS averaging had never been implemented (only `avg_epss`/`avg_risk_score` existed; cycle 63's CVSS v4.0 fallback added vector *components* to per-alert display, not a fleet-wide average; cycle 67 added discrete critical/high *counts*, not a continuous CVSS average).
+
+**Candidates considered:**
+1. **Add `avg_cvss_score` to `compute_stats()`/`stats.json`/`trend.csv`/dashboard** — feasibility 5/5 (uses `cvss_score`, already extracted from NVD every run, zero new API calls, mirrors the exact `avg_epss`/`avg_risk_score` pattern and the cycle-54 header self-heal + cycle-67 additive-CSV-column precedent); risk 1/5 (purely additive field/column/UI tile; existing `avg_epss`/`avg_risk_score` tests prove the pattern is safe; verified live against real data with zero false positives); value 4/5 (closes a real, distinct trend-signal gap — `avg_risk_score` blends in EPSS/KEV weighting so it can move independently of raw severity, and cycle 67's critical/high counts are bucketed and insensitive to movement *within* a band, e.g. 7.1→8.9 stays "high" but meaningfully raises exploitability risk; a pure CVSS average gives a cleaner "is the raw severity of what we're tracking trending up or down" signal, useful alongside the EPSS/risk trend lines). **CHOSEN.**
+2. Add `avg_epss` percentile bucket distribution (histogram) to stats.json — feasibility 4/5, risk 2/5 (new nested schema shape, more validator surface), value 3/5 (marginal — the trend chart and existing breakdown pills already cover most of this need). Deferred, lower value/risk ratio than candidate 1.
+3. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack; carried forward unimplemented per cycles 56-68 reasoning, not something this agent can safely guess.
+4. Full risk_score history array (time series per CVE) — still deferred per cycle 56 reasoning (unbounded schema/storage growth risk).
+5. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented (candidate 1):**
+- `scripts/aggregate.py`: `compute_stats()` now collects `cvss_values` (skipping `None`/non-numeric, same pattern as `epss_values`/`risk_values`) and returns `avg_cvss_score` (rounded to 2 decimals, `None` if no scored alerts). `HISTORY_CSV_HEADER` extended with a trailing `avg_cvss_score` column; `append_history()` writes it from `stats["avg_cvss_score"]` (empty string if `None`) — picked up transparently by the existing cycle-54 header self-heal mechanism, verified it fired correctly live on the real production `trend.csv`.
+- `docs/index.html`: new `<div class="stat">` tile with `id="stat-avg-cvss"` in the stats bar, next to the existing `avg-risk` tile.
+- `docs/app.js`: renders `stats.avg_cvss_score` into the new tile (same `typeof === "number"` guard as `avg_risk_score`); `loadTrendChart()` parses the new trailing CSV column (tolerant of older rows lacking it, same `undefined`-safe pattern as every other column) and adds "Avg CVSS score" as a new Chart.js line dataset, hidden by default (consistent with the existing convention).
+- `scripts/test_aggregate.py`: added `test_avg_cvss_score_excludes_unknown` to `TestComputeStats`; updated the 3 existing `TestAppendHistory` fixtures/assertions for the new trailing column — 70 tests total, up from 68.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py scripts/validate_data.py scripts/notify_github_issues.py scripts/test_validate_data.py`: OK.
+- `node --check docs/app.js`: OK.
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: **70/70 passed**.
+- **Live end-to-end `aggregate.py` run** against real NVD/CISA KEV/FIRST.org EPSS APIs, run in an isolated `/tmp` copy first (`LOOKBACK_DAYS=2`) then results copied into the real repo: 589 total alerts (up from 587 pre-cycle, organic growth), `avg_cvss_score` correctly computed as `8.45`, header self-heal fired correctly on `trend.csv` (old 8-column header upgraded to 9 columns, historical rows left untouched), new trend row correctly appended with trailing `8.45`. No 429/rate-limit signals anywhere in the run.
+- `python3 scripts/validate_data.py` against the regenerated real production data: **PASSED** (589 alerts, 589 unique IDs, `stats.json` schema OK including `by_severity`/`by_source` partition checks, `trend.csv` 33 rows OK, 45/45 `getElementById` id refs resolve, feeds parse OK).
+- Local browser smoke test via `python3 -m http.server` serving the real, freshly-regenerated production `docs/` (589 alerts): confirmed `#stat-avg-cvss` renders `8.45`, `#stat-total` renders `589`, `#stat-avg-risk` renders `30.3` (unchanged); via `Chart.getChart()` confirmed all 9 expected trend datasets present with correct real last-values including the new one (`Avg CVSS score:8.45`); confirmed zero regression to the search filter (`wordpress` → `145 of 589 alerts`, cleared → `589 of 589 alerts`) or card grid via screenshot.
+- Live-verified via cache-busted `curl` post-deploy: `data/stats.json` shows `avg_cvss_score: 8.45`; `app.js` contains the new code (`grep -c` matched 4 occurrences of `avg_cvss_score`/`stat-avg-cvss`/`Avg CVSS score`); `data/history/trend.csv`'s latest row carries the new trailing `8.45` column.
+
+**Deploy:** Committed `3373e06` — "Cycle 69: track avg CVSS base score in stats.json/trend.csv/dashboard" — pushed to `main` (clean fast-forward from `cdcf86a`, includes regenerated production `docs/data/alerts.json`/`stats.json`/`seen_ids.json`/`history/trend.csv` since `aggregate.py` was exercised live; `feed.json`/`feed.xml` byte-identical, no diff). Live CI run `34528415794` (`CI Data & Frontend Validation`) → `success`, 15s. `pages-build-deployment` run `34528414553` → `success`; confirmed via `gh api repos/astruzocyber/CVE/pages/builds/latest` that the built commit is exactly `3373e0657c8a693b4e901ead6c8f3323bb3c3d76` with `status: "built"`. Live-verified via cache-busted `curl` as above — the change is live in production.
+
+**Rejected this cycle:** EPSS percentile histogram (marginal value vs. schema-risk, deferred), GHSA/Dependabot coverage expansion (needs human input on actual tech stack, flagged not hard-rejected), full risk-score history array (deferred, schema-growth risk), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS APIs. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 69. `stopped`: false.
