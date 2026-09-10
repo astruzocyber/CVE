@@ -328,6 +328,7 @@ function readFiltersFromURL() {
   const severityEl = document.getElementById("severity-filter");
   const sourceEl = document.getElementById("source-filter");
   const sortEl = document.getElementById("sort-by");
+  const minRiskEl = document.getElementById("min-risk");
   if (params.has("q")) searchEl.value = params.get("q");
   // Setting .value to an option that doesn't exist on a <select> is a no-op
   // in every browser, so an unrecognized/stale param value safely falls back
@@ -336,15 +337,22 @@ function readFiltersFromURL() {
   if (params.has("sev") && severityEl) severityEl.value = params.get("sev");
   if (params.has("source")) sourceEl.value = params.get("source");
   if (params.has("sort")) sortEl.value = params.get("sort");
+  if (params.has("minrisk") && minRiskEl) {
+    // Ignore malformed/non-numeric values rather than propagating NaN into
+    // the input, mirroring the <select> no-op-on-unrecognized-value pattern.
+    const n = Number(params.get("minrisk"));
+    if (Number.isFinite(n)) minRiskEl.value = n;
+  }
 }
 
-function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy) {
+function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk) {
   const params = new URLSearchParams();
   if (search) params.set("q", search);
   if (kevFilter && kevFilter !== "all") params.set("kev", kevFilter);
   if (severityFilter && severityFilter !== "all") params.set("sev", severityFilter);
   if (sourceFilter && sourceFilter !== "all") params.set("source", sourceFilter);
   if (sortBy && sortBy !== "risk_score") params.set("sort", sortBy);
+  if (typeof minRisk === "number" && !Number.isNaN(minRisk)) params.set("minrisk", String(minRisk));
   const qs = params.toString();
   const newUrl = location.pathname + (qs ? "?" + qs : "") + location.hash;
   history.replaceState(null, "", newUrl);
@@ -356,7 +364,9 @@ function applyFiltersAndRender() {
   const severityFilter = document.getElementById("severity-filter").value;
   const sourceFilter = document.getElementById("source-filter").value;
   const sortBy = document.getElementById("sort-by").value;
-  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy);
+  const minRiskRaw = document.getElementById("min-risk").value;
+  const minRisk = minRiskRaw === "" ? null : Number(minRiskRaw);
+  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk);
 
   let filtered = allAlerts.filter((a) => {
     if (kevFilter === "kev" && !a.kev) return false;
@@ -369,6 +379,9 @@ function applyFiltersAndRender() {
     if (kevFilter === "ransomware" && !a.kev_ransomware_use) return false;
     if (severityFilter !== "all" && severityClass(a.cvss_score) !== severityFilter) return false;
     if (!matchesSource(a, sourceFilter)) return false;
+    if (typeof minRisk === "number" && !Number.isNaN(minRisk)) {
+      if (typeof a.risk_score !== "number" || a.risk_score < minRisk) return false;
+    }
     if (dependencyPackageNames && !alertMatchesPackages(a, dependencyPackageNames)) return false;
     if (search) {
       const haystack = [
@@ -804,6 +817,11 @@ document.getElementById("kev-filter").addEventListener("change", applyFiltersAnd
 document.getElementById("severity-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("source-filter").addEventListener("change", applyFiltersAndRender);
 document.getElementById("sort-by").addEventListener("change", applyFiltersAndRender);
+let minRiskDebounceTimer = null;
+document.getElementById("min-risk").addEventListener("input", () => {
+  clearTimeout(minRiskDebounceTimer);
+  minRiskDebounceTimer = setTimeout(applyFiltersAndRender, 150);
+});
 document.getElementById("export-csv").addEventListener("click", exportCsv);
 document.getElementById("export-json").addEventListener("click", exportJson);
 document.getElementById("print-view").addEventListener("click", () => window.print());
@@ -820,6 +838,7 @@ document.getElementById("reset-filters").addEventListener("click", () => {
   document.getElementById("severity-filter").value = "all";
   document.getElementById("source-filter").value = "all";
   document.getElementById("sort-by").value = "risk_score";
+  document.getElementById("min-risk").value = "";
   dependencyPackageNames = null;
   const depText = document.getElementById("dep-text-input");
   const depFile = document.getElementById("dep-file-input");
