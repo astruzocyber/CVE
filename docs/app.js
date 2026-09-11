@@ -897,10 +897,18 @@ function exportCsv() {
   // BOD 22-01 deadline) was silently missing from the card UI, Markdown export,
   // and CSV export. Added as a new "KEV added" line on-card (next to CVSS/EPSS),
   // in alertToMarkdown(), and as a new CSV column here.
+  // Cycle 85: dependabot_url (already rendered on-card as "View alert" and in
+  // alertToMarkdown() as "Dependabot alert: ..." since early cycles) had the
+  // exact same card+Markdown-but-not-CSV gap that cycle 79's
+  // nvd_reference_links (closed in cycle 84) and osv_id (closed in cycle 62)
+  // had before it -- an analyst exporting Dependabot-sourced alerts to CSV
+  // for offline triage silently lost the direct link back to the
+  // originating GitHub Dependabot alert. Added as-is (already a plain URL
+  // string, no flattening needed); empty for non-Dependabot sources.
   const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_score_prev", "epss_percentile", "kev", "kev_date_added", "kev_due_date",
     "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
     "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "matched_keywords", "published",
-    "nvd_last_modified", "vuln_status", "first_seen", "osv_id", "osv_fixed_versions", "nvd_fix_versions", "nvd_reference_links", "description"];
+    "nvd_last_modified", "vuln_status", "first_seen", "osv_id", "osv_fixed_versions", "nvd_fix_versions", "nvd_reference_links", "dependabot_url", "description"];
   const lines = [toCsvRow(header)];
   for (const a of rows) {
     const vc = a.cvss_vector_components || {};
@@ -923,7 +931,7 @@ function exportCsv() {
       a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
       vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
       (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.nvd_last_modified,
-      a.vuln_status, a.first_seen, a.osv_id, osvFixed, nvdFixed, refLinksFlat, a.description,
+      a.vuln_status, a.first_seen, a.osv_id, osvFixed, nvdFixed, refLinksFlat, a.dependabot_url, a.description,
     ]));
   }
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });
