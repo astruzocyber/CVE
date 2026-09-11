@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 105,
+  "total_cycles": 106,
   "implemented": [
     {
       "cycle": 1,
@@ -1019,29 +1019,53 @@
       "title": "Add go.mod/pyproject.toml/Pipfile parsing to dependency filter",
       "description": "detectAndParseDependencyFile() previously only recognized package.json and requirements.txt, silently mis-parsing any other manifest format via the requirements.txt line-parser fallback. Added parseGoMod() and parseTomlDependencyNames() to docs/app.js plus content-sniffing dispatch, and updated the file-input accept list/hint text in docs/index.html. Pure additive client-side JS/HTML, zero new API calls.",
       "commit_sha": "b8a44d8"
-    }
-  ],
-  "rejected": [],
-  "last_cycle_at": "2026-09-11T19:29:00Z",
-  "stopped": false,
-  "cycles": [
+    },
     {
-      "cycle": 103,
-      "timestamp": "2026-09-11T19:29:00Z",
-      "title": "GitHub Actions status badges in README",
-      "description": "Added two native GitHub Actions status badges (cve-alerts.yml aggregation, ci.yml validation) to README.md header, each linking to the workflow's Actions run history. Zero new dependencies/services (GitHub's own badge.svg endpoint), zero backend/schema/data changes, pure documentation/UX improvement so anyone visiting the repo sees pipeline health instantly without clicking into Actions.",
-      "commit_sha": "e2a4507",
+      "cycle": 106,
+      "timestamp": "2026-09-11T21:10:00Z",
+      "title": "PWA web app manifest + mobile meta tags",
+      "description": "docs/ had no manifest.webmanifest, no theme-color meta, and no apple-mobile-web-app tags despite being fully mobile-responsive since cycle 11 -- a real installability gap. Added docs/manifest.webmanifest (standalone display, dark theme matching existing palette, reuses existing inline SVG shield icon, zero new binary assets) and linked it plus theme-color/mobile-web-app-capable/apple-mobile-web-app-* meta tags in docs/index.html <head>. Pure additive static-file + HTML head change: zero new API calls, zero backend/schema/JS changes, zero cost.",
+      "commit_sha": "1a333b7",
       "validation": {
         "py_compile": "pass (sanity, no python touched)",
         "node_check": "pass (sanity, no js touched)",
-        "unit_tests": "97/97 pass (unchanged)",
-        "validate_data": "pass (611 alerts)"
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (625 alerts, schema OK, app.js/index.html id-reference check OK)",
+        "manifest_json_valid": "pass (python3 json.load)",
+        "smoke_test": "served docs/ locally, curl confirmed manifest.webmanifest returns 200 + valid JSON and index.html links it",
+        "ci_run": "34648158974 completed success (11s)"
       },
       "rate_limit_event": false,
       "rejected_alternatives": [
-        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-102.",
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-105.",
         "Full risk_score history array -- deferred, storage-growth risk.",
-        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
+    }
+  ],
+  "rejected": [],
+  "last_cycle_at": "2026-09-11T21:10:00Z",
+  "stopped": false,
+  "cycles": [
+    {
+      "cycle": 106,
+      "timestamp": "2026-09-11T21:10:00Z",
+      "title": "PWA web app manifest + mobile meta tags",
+      "description": "docs/ had no manifest.webmanifest, no theme-color meta, and no apple-mobile-web-app tags despite being fully mobile-responsive since cycle 11 -- a real installability gap. Added docs/manifest.webmanifest (standalone display, dark theme matching existing palette, reuses existing inline SVG shield icon, zero new binary assets) and linked it plus theme-color/mobile-web-app-capable/apple-mobile-web-app-* meta tags in docs/index.html <head>. Pure additive static-file + HTML head change: zero new API calls, zero backend/schema/JS changes, zero cost.",
+      "commit_sha": "1a333b7",
+      "validation": {
+        "py_compile": "pass (sanity, no python touched)",
+        "node_check": "pass (sanity, no js touched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (625 alerts, schema OK, app.js/index.html id-reference check OK)",
+        "manifest_json_valid": "pass (python3 json.load)",
+        "smoke_test": "served docs/ locally, curl confirmed manifest.webmanifest returns 200 + valid JSON and index.html links it",
+        "ci_run": "34648158974 completed success (11s)"
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-105.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
     }

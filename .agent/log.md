@@ -3776,3 +3776,35 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `b8a44d8` — "Cycle 105: add go.mod/pyproject.toml/Pipfile parsing to dependency filter" — pushed to `origin/main` (`7dce5af..b8a44d8`).
 
 **Updated state:** `total_cycles`: 104 → 105. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 106 — 2026-09-11T21:10:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=105, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 8` (all recent aggregation/CI/Pages runs `completed success`, no 429/throttle signals). Inspected `docs/index.html` `<head>` block in full and confirmed there was no `manifest.webmanifest`, no `theme-color` meta, and no `apple-mobile-web-app-*` tags anywhere in the repo, despite the dashboard being fully mobile-responsive since cycle 11 (600px breakpoint) and already having SEO/OG/Twitter card meta since cycle 12.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **PWA web app manifest + mobile meta tags** (chosen) — 5/5/3. A real installability gap: a security analyst who wants the dashboard as a home-screen app/pinned tab on mobile (a genuinely plausible workflow for a triage tool checked frequently) got no "Add to Home Screen" prompt and no themed browser chrome color. Added `docs/manifest.webmanifest` (name/short_name/description, `display: standalone`, dark `theme_color`/`background_color` matching the existing palette, reused the existing inline SVG shield icon as the manifest icon with `any maskable` purpose — zero new binary asset needed) and linked it plus `theme-color`/`mobile-web-app-capable`/`apple-mobile-web-app-*` meta tags in `docs/index.html`. Zero new API calls, zero backend/schema/JS changes, zero cost (static file + head tags only).
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-105.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/manifest.webmanifest` (new file): PWA manifest, no external assets, valid JSON.
+- `docs/index.html`: added `<link rel="manifest">` plus `theme-color`/`mobile-web-app-capable`/`apple-mobile-web-app-capable`/`apple-mobile-web-app-status-bar-style`/`apple-mobile-web-app-title` meta tags to `<head>`.
+- No Python/JS/schema/data/workflow changes.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity, untouched).
+- `node --check docs/app.js` → exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → **98/98 tests passed** (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (625 alerts, schema OK, `app.js`/`index.html` getElementById id-reference check OK — confirms no broken references from the HTML edit).
+- Manifest JSON validated directly (`json.load`) — well-formed.
+- Local smoke test: served production `docs/` via `python3 -m http.server`, confirmed `manifest.webmanifest` returns HTTP 200 with valid JSON body, and `index.html` correctly contains the new `<link rel="manifest">` reference.
+- Deployed: commit `1a333b7` pushed to `origin/main` (`b274164..1a333b7`). `CI Data & Frontend Validation` run `34648158974` completed success (11s). `pages-build-deployment` triggered normally post-push.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-105); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (static-file + HTML head change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `1a333b7` — "Cycle 106: add PWA web app manifest + mobile meta tags" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 105 → 106. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
