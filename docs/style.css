@@ -1162,6 +1162,64 @@ footer a { color: var(--accent); }
     grid-template-columns: 1fr;
   }
 
+  /* Table view (cycle 99): the dashboard's print rules above were written
+     when card view was the only layout and cover .card/.card-grid, but
+     never touched .alerts-table/.table-view-wrapper -- added later in
+     cycle 76. An analyst who switches to table view (a legitimate,
+     button-driven state, not an edge case) and then hits "Print / PDF"
+     currently gets the raw dark-theme table verbatim: dark background,
+     light text, and colored score cells (the table-cvss-N / table-risk-N
+     classes) rendered in their on-screen accent hues -- unreadable on paper and
+     wasteful on a color printer, unlike card view's already-handled
+     light/high-contrast printout. Mirrors the exact same light-background
+     treatment card view already gets, keeps the row borders for
+     readability, reduces the dense font size slightly further so more
+     columns fit a printed page width, and reuses the same border+bold
+     (no color-only) severity signal already used for .badge/.exploit-chip
+     in this same print block so the printed table doesn't rely on color
+     the way the screen version does. Also hides the per-row "Mark
+     reviewed" table toggle buttons, which are interactive controls with
+     no meaning on a static printout (card view's equivalent
+     .review-toggle-btn is already inert on paper since cards keep their
+     full box but buttons are just visually inert there; table buttons
+     needed an explicit rule since they're plain inline elements).
+  */
+  .table-view-wrapper {
+    border: 1px solid #999;
+    overflow: visible;
+  }
+
+  .alerts-table {
+    font-size: 0.75rem;
+  }
+
+  .alerts-table th,
+  .alerts-table td {
+    border-bottom: 1px solid #999;
+    color: #111;
+    white-space: normal;
+  }
+
+  .alerts-table tbody tr:hover {
+    background: none;
+  }
+
+  .table-cvss-critical,
+  .table-risk-critical,
+  .table-cvss-high,
+  .table-risk-high,
+  .table-cvss-medium,
+  .table-risk-medium,
+  .table-cvss-low,
+  .table-risk-low {
+    color: #111 !important;
+    font-weight: 700 !important;
+  }
+
+  .table-review-toggle-btn {
+    display: none !important;
+  }
+
   .score-breakdown {
     display: block !important;
   }
