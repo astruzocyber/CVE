@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 80,
+  "total_cycles": 81,
   "implemented": [
     {
       "cycle": 1,
@@ -648,9 +648,16 @@
       "title": "Keyboard-shortcuts help modal",
       "description": "Added a discoverable keyboard-shortcuts help modal, replacing the previous non-interactive hover-only span. Opened via toolbar button, the '?' key, or backdrop/Escape/close-button dismissal. Pure frontend change, zero new API calls.",
       "commit_sha": "c775d97"
+    },
+    {
+      "cycle": 81,
+      "timestamp": "2026-09-11T07:00:00Z",
+      "title": "Add 'Hide rejected CVEs' filter checkbox",
+      "description": "Cycle 77's vuln_status tracking surfaces a REJECTED BY NVD badge on cards whose CVE ID NVD has withdrawn, but gave analysts no way to remove these from a triage view -- they had to visually spot and mentally discount each one. Added a 'Hide rejected CVEs' checkbox mirroring the exact hide-reviewed/new-only pattern: wired into applyFiltersAndRender()'s filter chain, persisted in the shareable URL via updateURLFromFilters/readFiltersFromURL (new hiderejected=1 param), and cleared by the existing Reset filters button. Zero new API calls, zero backend/schema changes -- built entirely from the vuln_status field already extracted every run since cycle 77.",
+      "commit_sha": "dd47907"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T05:11:00Z",
+  "last_cycle_at": "2026-09-11T07:00:00Z",
   "stopped": false
 }
