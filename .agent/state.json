@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 76,
+  "total_cycles": 77,
   "implemented": [
     {
       "cycle": 1,
@@ -584,9 +584,26 @@
       "title": "Add dense sortable table view toggle (card/table)",
       "description": "Every alert has been rendered exclusively as a full-width card since the dashboard's inception -- with 596 currently-tracked alerts, scanning CVSS/EPSS/Risk/KEV/Source/First-seen across the population requires extensive scrolling through cards, one field visible at a time. Added a 'Table view' toggle (button + 'v' keyboard shortcut, mirroring the existing theme-toggle/'t' pattern) that renders the exact same filtered/sorted dataset as a dense, clickable-header-sortable HTML table (CVE ID, CVSS, EPSS, Risk, KEV status, Source, First seen, Product(s)) alongside the card grid -- only one view visible at a time, choice persisted across reloads via localStorage. Clicking a sortable table header updates the existing #sort-by select and reuses applyFiltersAndRender's existing filter/sort pipeline, so table and card view never diverge in what's shown. Pure additive frontend change: new #table-view-wrapper markup in docs/index.html, renderTable()/applyViewMode()/view-toggle click+keyboard handlers in docs/app.js, .alerts-table CSS in docs/style.css. Zero new API calls, zero schema/backend changes.",
       "commit_sha": "36bf3c2738a8982e19e056ad1de39357574f1ad8"
+    },
+    {
+      "cycle": 77,
+      "timestamp": "2026-09-11T03:45:00Z",
+      "title": "Track NVD vulnStatus (rejected/disputed CVE detection)",
+      "description": "extract_vuln_status() pulls NVD's per-CVE analysis lifecycle status (Received/Awaiting Analysis/Undergoing Analysis/Analyzed/Modified/Rejected/Deferred) from the NVD API response already fetched every run -- zero new API calls. Previously invisible signal distinct from cvss_score/nvd_last_modified: whether NVD has actually finished analyzing a record, and critically, whether NVD withdrew the CVE ID entirely ('Rejected' -- duplicate, disputed, or withdrawn by the CNA), a case where the tracked CVSS/EPSS/risk_score may be stale/meaningless but a triage analyst had no way to know. Surfaced as: a dashed 'REJECTED BY NVD' badge on alert cards (only for vuln_status=='Rejected'), a new stats.json rejected_count field, a hidden-unless-nonzero 'Rejected by NVD' stat tile, and a new vuln_status CSV export column. Backward-compatible: defaults to None for pre-cycle-77 records (self-heal via setdefault, same pattern as osv_id/epss_score_prev) and for non-NVD sources (Dependabot/GHSA have no equivalent concept). Also fixed a real pre-existing CSS bug discovered during validation: '.stat[hidden]' had no display:none rule, so '.stat{display:flex}' was overriding the browser's default UA styling and the new rejected-count tile stayed visible (showing '-') even with the hidden attribute set -- fixed with an explicit '.stat[hidden]{display:none}' rule (scoped fix, only affects .stat elements using the hidden attribute, i.e. this new tile; verified no other .stat-*-tile currently uses hidden so no other visual change). Added 6 new unit tests: TestExtractVulnStatus (3), TestComputeStats.rejected_count (2), TestBuildFinalEntry.vuln_status (2, one of the counted tests overlaps naming) -- 89 tests total (up from 83 pre-cycle). Zero new API calls or dependencies.",
+      "commit_sha": "a54c6cb",
+      "validation": "py_compile scripts/aggregate.py + scripts/test_aggregate.py OK; node --check docs/app.js OK; 89/89 unit tests passed (python3 -m unittest discover -s scripts -p 'test_*.py'). Live end-to-end aggregate.py run against real NVD/CISA KEV/FIRST.org EPSS/GitHub Dependabot APIs in an isolated /tmp clone with fresh venv + requirements.txt + GH_DEPENDABOT_TOKEN=$(gh auth token): 596 alerts, exit code 0, no errors. Confirmed real vuln_status vocabulary observed in live NVD data: Analyzed, Modified, Received, Deferred, Undergoing Analysis, Awaiting Analysis (0 Rejected in current tracked population, so rejected_count=0 and the badge/tile code path for a nonzero count was verified via DOM/CSS inspection of the hidden-attribute fix rather than a live rejected example -- correctness of the extraction itself was independently verified via a live NVD API query on a sample CVE). validate_data.py PASSED against the regenerated real data (596 alerts, 596 unique CVE IDs, stats.json schema OK, trend.csv 43 rows OK, 54 getElementById references all resolve, feeds OK). Local browser smoke test via python3 -m http.server + CDP-driven Chrome (cache disabled) confirmed: stats bar renders correctly (596/144/4/1/2/1/0.8%/30.4/8.45, risk-trend tile), rejected-count tile correctly stays hidden (computedDisplay:none, verified before AND after the CSS fix -- reproduced the bug live, then confirmed the fix), search filter still works (596 cards render, filter for 'chrome' triggered without JS errors), card badges render correctly with no regression, table/card view toggle still present in DOM. Data files (alerts.json, stats.json, trend.csv) copied from the validated /tmp run into the repo and committed alongside the code changes so the deploy reflects real live data.",
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack (repeatedly flagged cycles 56-76).",
+        "Full risk_score history array (time series per CVE) -- still deferred, unbounded schema/storage growth risk.",
+        "EPSS percentile histogram -- still deferred, marginal value (epss_percentile already shown per-card).",
+        "by_first_seen_age histogram -- still deferred, lower value (badges/filters already exist per-card).",
+        "Another trend.csv trailing column (e.g. avg_epss_percentile) -- vuln_status scored higher: genuinely novel functional feature (new extracted field + new badge + new filterable signal) vs. yet another averaged trend metric, per cycle 76's explicit steer to prefer novel features when a good one is available.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T02:45:01Z",
+  "last_cycle_at": "2026-09-11T03:45:00Z",
   "stopped": false
 }
