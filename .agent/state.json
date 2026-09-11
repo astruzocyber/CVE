@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 89,
+  "total_cycles": 90,
   "implemented": [
     {
       "cycle": 1,
@@ -792,9 +792,29 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 90,
+      "timestamp": "2026-09-11T12:08:00Z",
+      "title": "Watchlist keyword-match column in table view",
+      "description": "Cycles 83/87/88/89 closed the table-view-vs-card-view parity gap for Fix/CVSS-color/Rejected/Risk-color, but matched_keywords (card view's green 'Watchlist match' badge since cycle 8, showing which watchlist.yaml term(s) caused a CVE to surface -- 168/603 currently populated) still had zero table-view representation. Added a new 'Watchlist' column to #alerts-table reading the same matched_keywords array unchanged, joined with a comma for compact display, dimmed/small-font styling to stay secondary to the color-coded CVSS/Risk columns. Pure frontend change: no new API calls, no backend/schema changes.",
+      "commit_sha": "ea05367",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (603 rows), switched to table view: confirmed all 603 rows render a table-watchlist-cell, 168 with non-\"-\" content (exact match to alerts.json matched_keywords non-empty count), sample text \"wordpress\" matches card badge. Switched back to card view: 603 cards render, no regression. Search filter for wordpress still correctly narrows to 154/603."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-89.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T11:35:00Z",
+  "last_cycle_at": "2026-09-11T12:08:00Z",
   "stopped": false
 }

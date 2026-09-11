@@ -3300,3 +3300,36 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `768ff3a` — "Cycle 89: Risk-score color-coding on Risk cell in table view" — pushed to `origin/main` (`badf085..768ff3a`, after cycle 88's state-update commit `17073b7`).
 
 **Updated state:** `total_cycles`: 88 → 89. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 90 — 2026-09-11T12:08:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -8`, full `.agent/state.json` (total_cycles=89, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Inspected `docs/data/alerts.json` schema (603 alerts, all fields listed) and grepped `docs/app.js` for every field to confirm coverage -- all fields non-zero references. Continued mining the table-view-vs-card-view parity vein that cycles 83/87/88/89 proved productive: found `matched_keywords` (card view's green "Watchlist match" badge since cycle 8) had zero references inside `renderTable()`.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Watchlist keyword-match column in table view** (chosen) — 5/5/4. Real gap: 168/603 alerts have watchlist-driven matches, invisible to an analyst bulk-scanning table view. Very low validation risk: reuses the exact existing `matched_keywords` array unchanged, no new logic/thresholds.
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-89.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms — still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/index.html`: added `<th>Watchlist</th>` to the table header.
+- `docs/app.js`: `renderTable()` now computes `watchlistLabel` from `a.matched_keywords` (joined with ", ", "-" when empty) and appends a new `<td class="table-watchlist-cell">` per row.
+- `docs/style.css`: new `.table-watchlist-cell` rule (small dimmed secondary text, consistent with Product(s) column styling).
+- No `scripts/aggregate.py`/schema/data changes — pure frontend surfacing of a field already extracted since cycle 8.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity check; no Python files touched this cycle).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` → **97/97 tests passed** (unchanged — no aggregation/scoring logic touched, pure frontend change).
+- No live `aggregate.py` run needed (no new fields, no schema changes) — existing committed `docs/data/alerts.json` (603 alerts, 168 with matched_keywords) used directly for the browser smoke test.
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background process, port 8973), drove it live via `mcp__browser_exec` (CDP, real Chrome). Loaded dashboard, switched to table view: confirmed all 603 `<tr>` rows render a `.table-watchlist-cell`, 168 with non-"-" content (exact match to `alerts.json`'s matched_keywords non-empty count), sample cell text "wordpress" consistent with card view's badge. Switched back to card view: confirmed 603 cards still render with no regression. Ran the existing "wordpress" search filter: still correctly narrows to 154/603, confirming zero regression to filter logic.
+- Deployed: commit `ea05367` pushed to `origin/main`. CI Data & Frontend Validation run `34597412713` completed success (10s); pages-build-deployment run `34597411780` in progress at time of check (prior deploy history shows consistent success).
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-89); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (pure frontend change, no live aggregation run required).
+
+**Commit SHA:** `ea05367` — "Cycle 90: Watchlist keyword-match column in table view" — pushed to `origin/main` (`24e7fe3..ea05367`).
+
+**Updated state:** `total_cycles`: 89 → 90. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
