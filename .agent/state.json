@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 100,
+  "total_cycles": 101,
   "implemented": [
     {
       "cycle": 1,
@@ -976,9 +976,31 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 101,
+      "timestamp": "2026-09-11T18:23:00Z",
+      "title": "Concurrency guard on aggregation workflow",
+      "description": "cve-alerts.yml had no concurrency control -- a scheduled run overlapping with a manual workflow_dispatch (or two dispatches) would double up every NVD/EPSS/KEV/Dependabot/GHSA API call for no benefit, needlessly increasing 429/throttle risk on shared free-tier sources, relying entirely on the existing git-push retry-with-rebase loop to avoid a lost/duplicated commit. Added concurrency: {group: cve-aggregation, cancel-in-progress: false} so overlapping triggers queue rather than race; cancel-in-progress is false so an in-flight run that already fetched/committed data is never killed mid-write.",
+      "commit_sha": "2f4a882",
+      "validation": {
+        "yaml_syntax": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "node_check": "pass (sanity, no js touched)",
+        "unit_tests": "97/97 pass (unchanged)",
+        "validate_data": "pass",
+        "pages_build": "34633029175 completed success (39s)"
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-100.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T17:50:00Z",
+  "last_cycle_at": "2026-09-11T18:23:00Z",
   "stopped": false
 }

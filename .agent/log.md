@@ -3619,3 +3619,34 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `572fe4f` -- "Cycle 100: enable pip dependency caching in GitHub Actions workflows" -- pushed to `origin/main` (`7e2d588..572fe4f`).
 
 **Updated state:** `total_cycles`: 99 -> 100. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 101 — 2026-09-11T18:23:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=100, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 8` (all recent CI/Pages/aggregation runs `completed success`, no 429/throttle signals). Inspected `docs/data/stats.json`, `docs/app.js`/`docs/style.css`/`docs/index.html` line counts, both workflow files in full, `requirements.txt`, test files, `docs/data/history/trend.csv`. Card/table-view parity (screen + print) is closed; cycle 100 opened a new CI/pipeline-infrastructure vein with pip caching -- continued in that vein.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Concurrency guard on aggregation workflow** (chosen) -- 5/5/3. `cve-alerts.yml` had zero `concurrency:` block -- a scheduled run (every 4h) overlapping with a manual `workflow_dispatch` (or two dispatches close together) would fire duplicate NVD/EPSS/KEV/Dependabot/GHSA API calls concurrently, needlessly increasing 429/throttle risk on shared free-tier sources, with only the existing git-push retry-with-rebase loop as a safety net against a lost/duplicated commit -- reactive, not preventive. Added `concurrency: {group: cve-aggregation, cancel-in-progress: false}` so a second overlapping trigger queues instead of racing; explicitly not `cancel-in-progress: true` so an already-fetched/committed run is never killed mid-write. Zero cost (native GitHub Actions feature), trivial validation risk (single declarative block, no logic touched).
+2. GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack, deferred cycles 56-100.
+3. Full risk_score history array -- still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms -- still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `.github/workflows/cve-alerts.yml`: added a `concurrency:` block (`group: cve-aggregation`, `cancel-in-progress: false`) right after the `on:` triggers, with an explanatory comment.
+- No Python/JS/schema/data changes -- workflow-config-only.
+
+**Validation performed (all passed):**
+- `python3 -c "yaml.safe_load(...)"` on the modified workflow file -> OK.
+- `python3 -m py_compile scripts/aggregate.py scripts/notify_github_issues.py scripts/validate_data.py` -> exit 0 (sanity, untouched).
+- `node --check docs/app.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> **97/97 tests passed** (unchanged).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (611 alerts, schema OK).
+- Deployed: commit `2f4a882` pushed to `origin/main`. `pages-build-deployment` run `34633029175` completed success (39s) shortly after push.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-100); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no external API calls made this cycle (workflow-config-only change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `2f4a882` -- "Cycle 101: add concurrency guard to aggregation workflow" -- pushed to `origin/main` (`f02f6cf..2f4a882`).
+
+**Updated state:** `total_cycles`: 100 -> 101. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
