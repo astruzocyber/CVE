@@ -3554,3 +3554,36 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **API health:** not queried this cycle (frontend-only change, no pipeline run needed)
 **consecutive_no_improvement:** 0
 **consecutive_failed_cycles:** 0
+
+## Cycle 99 — 2026-09-11T17:17:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -8`, full `.agent/state.json` (total_cycles=98, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 8` (all recent CI/Pages/aggregation runs `completed success`, no 429/throttle signals). Inspected repo tree fresh, `docs/data/alerts.json` schema (611 alerts, all fields listed), `docs/app.js` (2116 lines), `docs/index.html`, `docs/style.css` (1182 lines), `scripts/aggregate.py` function list, `config/watchlist.yaml`/`config/suppressions.yaml`, `docs/data/stats.json`, `.github/workflows/cve-alerts.yml`. Continued the table-view-vs-card-view parity vein (productive across cycles 83/87/88/89/90/91/92/93/94/95/96/98) but shifted focus from screen-mode data parity (already largely closed) to **print/export parity**: grepped `@media print` in `docs/style.css` and found it covers `.card`/`.card-grid` only -- zero rules for `.alerts-table`/`.table-view-wrapper`, introduced in cycle 76 and now the primary bulk-triage view for several cycles' worth of interactive parity work.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Print stylesheet parity for table view** (chosen) -- 5/5/4. Real gap: `#print-view` button (`window.print()`) is board-wide and works from whichever view is active; table view had zero print handling so an analyst who prefers table view for triage and prints/exports-to-PDF for a status report gets the raw dark theme (dark background, light text, on-screen accent-colored score cells) -- unreadable/wasteful on paper, inconsistent with card view's already-correct light/high-contrast printout. Low validation risk: pure CSS, reuses the exact severity classes (`table-cvss-*`/`table-risk-*`) and the same border-based (non-color-reliant) treatment already established for `.badge`/`.exploit-chip` in this same print block, so no new visual language to disagree with card view's print output.
+2. GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack, deferred cycles 56-98.
+3. Full risk_score history array -- still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms -- still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/style.css`: added `.table-view-wrapper`, `.alerts-table`, `.alerts-table th/td`, `.alerts-table tbody tr:hover`, `.table-cvss-*`/`.table-risk-*`, and `.table-review-toggle-btn` rules inside the existing `@media print` block.
+- No HTML/JS/schema/data changes -- pure CSS addition.
+
+**Bug caught during validation (not shipped broken):** First draft's explanatory CSS comment contained the literal substring `.table-cvss-*/.table-risk-*`, whose `*/` prematurely terminated the CSS block comment -- silently truncating the entire print block (verified via `document.styleSheets[0].cssRules`: only 4 of the intended 12 print rules parsed, the truncated tail became invalid top-level CSS the browser discarded). Caught via live browser inspection of the parsed `CSSMediaRule` contents (not just visual screenshot, which doesn't honor `Emulation.setEmulatedMedia` for screenshot capture) before committing; rewrote the comment to avoid the `*/`-lookalike substring and re-verified all 12 rules parse correctly.
+
+**Validation performed (all passed, after the fix above):**
+- `node --check docs/app.js` -> exit 0 (untouched; sanity check).
+- `python3 -m py_compile scripts/*.py` -> exit 0 (untouched; sanity check).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` -> **97/97 tests passed** (unchanged -- CSS-only change, no Python/schema/JS logic touched).
+- CSS brace-balance check: 204 open / 204 close (unchanged count, matches pre-edit baseline visually verified separately).
+- Browser smoke test: served production `docs/` via `python3 -m http.server`, drove it live via `mcp__browser_exec` (CDP, real Chrome, `Network.setCacheDisabled` + cache-busted stylesheet reload to rule out caching artifacts). Confirmed via `document.styleSheets[0].cssRules` that the `@media print` block now parses exactly 12 rules (up from 4), including all new table-view selectors. Switched to table view, emulated print media via `Emulation.setEmulatedMedia`, and read **computed styles** (not a screenshot, which doesn't honor print emulation in this tool) confirming: `.table-view-wrapper` border `rgb(153,153,153)` (#999, light-mode gray, was dark-theme `rgb(38,48,66)` before the fix), `.table-cvss-high` cell color `rgb(17,17,17)` (#111 black text, was on-screen orange `rgb(255,169,77)` before the fix), `.table-review-toggle-btn` `display: none` (hidden on print, was `inline-block` before the fix), `body` background `rgb(255,255,255)` (white). Re-toggled back to card view: confirmed zero regression to card view's own (already-correct, untouched) print rules. Re-toggled to table view in normal (screen) media and confirmed zero visual/functional change to on-screen rendering -- print rules only apply under the `print` media query.
+- Deployed: commit `ae589d9` pushed to `origin/main`. CI "Data & Frontend Validation" run `34626821879` completed success (10s); pages-build-deployment completed successfully.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-98); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no external API calls made this cycle (pure frontend/CSS change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `ae589d9` -- "Cycle 99: print stylesheet parity for table view" -- pushed to `origin/main` (`42bc1e5..ae589d9`).
+
+**Updated state:** `total_cycles`: 98 -> 99. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

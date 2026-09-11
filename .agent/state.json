@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 98,
+  "total_cycles": 99,
   "implemented": [
     {
       "cycle": 1,
@@ -947,6 +947,13 @@
       "title": "Table view parity: reviewed toggle + revised indicator",
       "description": "The table view lacked two review-state affordances already present in the card view: a 'reviewed' toggle button and a visual marker for NVD-revised records (title tooltip explaining the record was rescored/corrected since initial publication). Table rows now render a table-review-toggle-btn (mirrors card-view reviewed state via the same reviewedCves set, toggles the same localStorage-backed state) and a .table-revised-mark indicator with a full explanatory tooltip, reusing the existing isRevised computation already available per-alert. No schema/backend changes -- frontend-only, purely additive CSS class + button markup. Validated: node --check docs/app.js (pass), python3 -m py_compile scripts/*.py (pass), full unittest suite 97/97 passed, and a live browser smoke test against the built docs/ (local http.server) confirmed table view renders 611 rows with 392 revised-marks showing correct tooltip text and the Reviewed column present with no regressions to existing columns/filters.",
       "commit_sha": "80b0c75"
+    },
+    {
+      "cycle": 99,
+      "timestamp": "2026-09-11T17:17:00Z",
+      "title": "Print stylesheet parity for table view",
+      "description": "Table view (cycle 76) had zero @media print handling while card view has had full light/high-contrast print rules since early cycles -- printing from table view rendered the raw dark theme verbatim. Added matching print rules: light bg/borders on .table-view-wrapper/.alerts-table, reduced font size, black+bold severity signal on .table-cvss-*/.table-risk-* (border-based pattern matching .badge/.exploit-chip), hid .table-review-toggle-btn (meaningless on static printout). CSS-only change.",
+      "commit_sha": "ae589d9"
     }
   ],
   "rejected": [],
