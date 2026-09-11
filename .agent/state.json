@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 75,
+  "total_cycles": 76,
   "implemented": [
     {
       "cycle": 1,
@@ -577,9 +577,16 @@
         "by_first_seen_age histogram -- still deferred, lower value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 76,
+      "timestamp": "2026-09-11T02:45:01Z",
+      "title": "Add dense sortable table view toggle (card/table)",
+      "description": "Every alert has been rendered exclusively as a full-width card since the dashboard's inception -- with 596 currently-tracked alerts, scanning CVSS/EPSS/Risk/KEV/Source/First-seen across the population requires extensive scrolling through cards, one field visible at a time. Added a 'Table view' toggle (button + 'v' keyboard shortcut, mirroring the existing theme-toggle/'t' pattern) that renders the exact same filtered/sorted dataset as a dense, clickable-header-sortable HTML table (CVE ID, CVSS, EPSS, Risk, KEV status, Source, First seen, Product(s)) alongside the card grid -- only one view visible at a time, choice persisted across reloads via localStorage. Clicking a sortable table header updates the existing #sort-by select and reuses applyFiltersAndRender's existing filter/sort pipeline, so table and card view never diverge in what's shown. Pure additive frontend change: new #table-view-wrapper markup in docs/index.html, renderTable()/applyViewMode()/view-toggle click+keyboard handlers in docs/app.js, .alerts-table CSS in docs/style.css. Zero new API calls, zero schema/backend changes.",
+      "commit_sha": "36bf3c2738a8982e19e056ad1de39357574f1ad8"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T02:03:00Z",
+  "last_cycle_at": "2026-09-11T02:45:01Z",
   "stopped": false
 }

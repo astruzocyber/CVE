@@ -2863,3 +2863,40 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS/GitHub Dependabot APIs. RATE_LIMIT_EVENT: no.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 75. `stopped`: false.
+
+## Cycle 76 — 2026-09-11T02:45:01Z
+
+**Status:** Implemented, validated, deployed, live-verified.
+
+**Re-verified state fresh:** `git log`/`git status` clean, HEAD at `36a67c1` (cycle 75's log/state commit) before starting. `gh run list --limit 8`: last 8 CI/Pages runs all `success`, no 429/throttle signals. `.agent/state.json`: `total_cycles`=75, both counters 0, `stopped`=false — matched brief. Read `scripts/aggregate.py`, `scripts/validate_data.py`, `docs/app.js` (full), `docs/index.html` (full), `scripts/test_aggregate.py`, and the full `.agent/log.md`/`.agent/state.json` `implemented` history (75 entries) before choosing a candidate, per instructions, to avoid repeating cycles 67/69/70/73/74/75 (all trend.csv trailing-column/stat-tile additions).
+
+**Candidates considered (feasibility/risk/value out of 5):**
+1. **Dense sortable table view toggle (card ⇄ table)** — 5/5/4. Every alert has been rendered exclusively as a full-width card since the dashboard's inception; with 596 tracked alerts, scanning CVSS/EPSS/Risk/KEV/Source/First-seen across the population requires heavy scrolling, one field visible at a time per card. This is a genuine functional UI feature, not another metric/column — directly answers the task's steer to prefer something beyond yet-another-trend.csv-column. Built entirely from data already loaded client-side (zero new API calls), shares the exact same filter/sort pipeline as the card grid (zero divergence risk), purely additive DOM/CSS/JS. **CHOSEN.**
+2. Another trend.csv trailing column / stat tile — explicitly told to avoid repeating cycles 67/69/70/73/74/75's exact pattern unless no better candidate exists; a better candidate did exist this cycle.
+3. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack (repeatedly flagged cycles 56-75).
+4. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+5. EPSS percentile histogram / by_first_seen_age histogram — still deferred, marginal value vs. existing per-card badges.
+6. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented (candidate 1):**
+- `docs/index.html`: new `#view-toggle` button (mirrors `#theme-toggle` exactly) and `#table-view-wrapper` / `#alerts-table` markup (CVE ID, CVSS, EPSS, Risk, KEV, Source, First seen, Product(s) columns, `data-sort` attributes on sortable headers), hidden by default.
+- `docs/app.js`: new `renderTable(filtered)` (called from `applyFiltersAndRender()` right after the card grid render, using the identical already-filtered/sorted array so both views can never diverge), a thead click-delegation handler that sets `#sort-by`'s value and re-applies filters when a sortable header is clicked, `applyViewMode(mode)`/`initViewMode()` (persists choice to `localStorage.viewMode`, mirrors the existing `theme` persistence pattern), a `view-toggle` click handler, and a `v`/`V` keyboard shortcut added to the existing `keydown` handler (mirrors the `t`/`T` theme-toggle shortcut, respects the same typing-guard).
+- `docs/style.css`: new `.table-view-wrapper`/`.alerts-table`/`.table-cve-link` rules (dense, horizontally-scrollable on overflow, sortable-header hover cue), zero changes to existing card/theme CSS.
+- No `scripts/aggregate.py`/schema changes — pure frontend feature built entirely from already-loaded `allAlerts` data.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py`: OK (unchanged files, sanity check).
+- `node --check docs/app.js`: OK.
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: **76/76 passed** (unchanged — no scoring/aggregation logic touched).
+- **Live end-to-end `aggregate.py` run** against real NVD/CISA KEV/FIRST.org EPSS/GitHub Dependabot APIs in an isolated `/tmp/cve_cycle76` clone (fresh venv, `pip install -r requirements.txt`, `GH_DEPENDABOT_TOKEN=$(gh auth token)`, `LOOKBACK_DAYS=2`): KEV catalog 1705 entries, 550 NVD pre-filter candidates, 0 Dependabot candidates (expected, repo has none open), EPSS queried for 881 CVEs, 265 post-filter matches, 596 total tracked alerts written. No 429/rate-limit signals across KEV/NVD/Dependabot/EPSS calls.
+- `python3 scripts/validate_data.py` against the regenerated real data: **VALIDATION PASSED** (596 alerts, 596 unique IDs, stats.json schema + by_severity/by_source partition checks OK, trend.csv 42 rows OK, 52/52 `getElementById` id references resolve, feeds parse OK) — run both inside `/tmp` isolation and again after copying results into the repo.
+- Local browser smoke test via `python3 -m http.server` serving the real, freshly-regenerated production `docs/` (596 alerts): confirmed clicking "Table view" hides the card grid and shows the table with all 596 rows; clicking a sortable header (`CVE ID`) correctly updated `#sort-by` to `cve_id` and re-sorted (first row `CVE-2016-7255`); typing "wordpress" in search while in table view correctly narrowed to 147/596 rows (search filter unaffected by view mode); reloading the page confirmed `viewMode` persisted via `localStorage` (table view stayed active across reload, matching the theme-persistence precedent); switching back to card view confirmed all 596 cards render correctly, stats bar (`596` total), and trend chart section all render with zero regression.
+- Live-verified via cache-busted `curl` post-deploy: `app.js` contains `view-toggle`/`renderTable`/`applyViewMode` (12 occurrences); live page HTML contains `table-view-wrapper`/`alerts-table` markup (3 occurrences); `data/stats.json` shows `total_alerts: 596` live in production.
+
+**Deploy:** Committed `36bf3c2738a8982e19e056ad1de39357574f1ad8` — "Cycle 76: Add dense sortable table view toggle (card/table)" — pushed to `main` (clean fast-forward from `36a67c1`, includes regenerated production `docs/data/alerts.json`/`stats.json`/`history/trend.csv`/`feed.json`/`feed.xml` since `aggregate.py` was exercised live). CI run `34555811418` (CI Data & Frontend Validation) → success, 12s. `pages-build-deployment` run `34555809854` → success, 46s. Live-verified via `curl https://astruzocyber.github.io/CVE/` per checks above — the change is live in production.
+
+**Rejected this cycle:** Another trend.csv trailing column (explicitly discouraged this cycle per task steer, a stronger functional-feature candidate existed), GHSA/Dependabot coverage expansion (needs human input on tech stack, flagged not hard-rejected, carried forward cycles 56-75), full risk-score history array (deferred, schema-growth risk), EPSS percentile / by_first_seen_age histograms (deferred, marginal value vs. chosen candidate), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS/GitHub Dependabot APIs. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 76. `stopped`: false.
