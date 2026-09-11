@@ -2801,3 +2801,40 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 **Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS APIs. RATE_LIMIT_EVENT: no.
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 73. `stopped`: false.
+
+## Cycle 74 — 2026-09-11T00:43:22Z
+
+**Status:** Implemented, validated, deployed.
+
+**Re-verified state fresh:** `git pull --ff-only` clean fast-forward, HEAD at `47ac51a` before starting. `gh run list --limit 8`: all recent `CI Data & Frontend Validation`/`pages-build-deployment` runs `success`, no 429/throttle signals. `.agent/state.json`: `total_cycles`=73, both counters 0, `stopped`=false — matched brief. Reviewed all 73 prior `implemented` entries to avoid duplicating shipped/rejected ideas; confirmed via grep across the whole repo that `risk_increas|epss_increas|increasing_count|decreasing_count` and `new_alerts_count|new_this_run` were never previously implemented (0 matches).
+
+**Candidates considered:**
+1. **Track `new_alerts_count` (intake velocity) in `stats.json`/`trend.csv`/dashboard** — feasibility 5/5 (`new_alerts` is already computed every run for `NEW_ALERTS_PATH`/the feed pipeline; this just also surfaces `len(new_alerts)` as a stats/trend field, zero new API calls); risk 1/5 (purely additive field, follows the exact trailing-column + missing-safe-null convention proven across 8+ prior trend.csv extensions); value 4/5 (closes a real gap: every existing field describes the cumulative population's *current composition*, none answers whether *intake* is accelerating/slowing — `total_alerts` deltas are a noisy proxy since suppressions/resolutions can also shrink `total_alerts`). **CHOSEN.**
+2. Increasing/decreasing risk-score or EPSS-score trend counts (building on `risk_score_prev`/`epss_score_prev` deltas already tracked per-alert) — feasibility 4/5, risk 2/5 (needs a new per-alert comparison loop plus threshold definition), value 3/5 (useful but narrower — only surfaces movement direction for already-tracked alerts, not overall pipeline intake health). Deferred, not rejected outright — good candidate for a future cycle.
+3. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack; carried forward unimplemented per cycles 56-73.
+4. Full risk_score history array (time series per CVE) — still deferred (unbounded schema/storage growth risk).
+5. EPSS percentile histogram — still deferred (marginal value vs `epss_percentile` already shown per-card).
+6. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented (candidate 1):**
+- `scripts/aggregate.py`: `main()` now computes `stats["new_alerts_count"] = len(new_alerts)` right after `compute_stats(cumulative)`, reusing the already-materialized `new_alerts` list (no new computation/API call). `HISTORY_CSV_HEADER` extended with a trailing `new_alerts_count` column; `append_history()` writes it from `stats.get("new_alerts_count", "")` — picked up transparently by the existing header self-heal mechanism.
+- `docs/app.js`: `loadTrendChart()` parses the new trailing CSV column (`undefined`-safe, same convention as every prior column) and adds "New alerts this run" as a new Chart.js line dataset, hidden by default (consistent with existing convention).
+- `scripts/test_aggregate.py`: updated the 3 existing `TestAppendHistory` fixtures/assertions for the new trailing column — 74 tests total (unchanged count).
+- `validate_data.py` required zero changes (already imports `HISTORY_CSV_HEADER` from `aggregate.py` as single source of truth since cycle 67).
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py scripts/validate_data.py scripts/test_aggregate.py`: OK.
+- `node --check docs/app.js`: OK.
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: **74/74 passed**.
+- **Live end-to-end `aggregate.py` run** against real NVD/CISA KEV/FIRST.org EPSS/GitHub Dependabot APIs in an isolated `/tmp/cve_cycle74` clone (code changes copied in, fresh venv, `pip install -r requirements.txt`, `GH_DEPENDABOT_TOKEN=$(gh auth token)`): 595 total tracked alerts, `new_alerts_count=0` correctly computed for this run (no genuinely new CVEs since the last run), header self-heal fired correctly upgrading the stale 13-column header to 14 columns, historical rows left untouched. No 429/rate-limit signals in the ~3m16s run covering KEV/NVD/Dependabot/EPSS.
+- `python3 scripts/validate_data.py` against the regenerated real data: **PASSED** both inside `/tmp` isolation and again after copying results into the repo (595 alerts, 595 unique IDs, stats/severity/source partition checks OK, 40 trend.csv rows OK, 47/47 `getElementById` id refs resolve, feeds parse OK).
+- Local browser smoke test via `python3 -m http.server 8834` + browser tool serving the real, freshly-regenerated production `docs/`: confirmed zero regression to search filter (`wordpress` → 146/595, consistent with prior cycles), stats bar (`stat-total`=595, `stat-critical`=144), and trend section (`#trend-section.hidden === false`); Chart.js instance's dataset labels confirmed to include the new `"New alerts this run"` series alongside all 12 pre-existing series, screenshot captured showing no visual regression.
+
+**Deploy:** Committed `d634ba0` — "Cycle 74: track new_alerts_count (intake velocity) in stats.json/trend.csv/dashboard" — pushed to `main` (clean fast-forward from `47ac51a`, includes regenerated production `docs/data/alerts.json`/`stats.json`/`history/trend.csv`/`feed.json`/`feed.xml` since `aggregate.py` was exercised live).
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on actual tech stack, flagged not hard-rejected), full risk-score history array (deferred, schema-growth risk), EPSS percentile histogram (deferred, marginal value), `by_first_seen_age` histogram (deferred, lower value), increasing/decreasing risk-score trend counts (deferred to a future cycle, narrower value than intake velocity), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS/GitHub Dependabot APIs. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 74. `stopped`: false.
+
