@@ -649,6 +649,15 @@ main {
 .table-risk-high { color: var(--orange); font-weight: 600; }
 .table-risk-medium { color: var(--yellow); font-weight: 600; }
 .table-risk-low { color: var(--green); font-weight: 600; }
+
+/* Watchlist keyword-match column (cycle 90): mirrors the small dimmed
+   font-size treatment used elsewhere in the table for secondary text
+   (Product(s) cell), keeping matched-keyword terms scannable without
+   competing visually with the primary CVSS/Risk color-coded columns. */
+.table-watchlist-cell {
+  font-size: 0.85em;
+  color: var(--text-secondary, #8b949e);
+}
 .badge.source { background: rgba(79, 157, 255, 0.15); color: var(--accent); border: 1px solid var(--accent); }
 .badge.ransomware { background: rgba(255, 92, 92, 0.35); color: #fff; border: 1px solid var(--red); }
 .badge.overdue { background: rgba(255, 169, 77, 0.3); color: #fff; border: 1px solid var(--orange); }

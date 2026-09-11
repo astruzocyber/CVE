@@ -856,6 +856,18 @@ function renderTable(filtered) {
       // view has used since early cycles, so table and card views can
       // never disagree on what counts as a "critical" risk score.
       const riskCls = riskClass(a.risk_score);
+      // Watchlist keyword-match column in table view (cycle 90): card view
+      // has shown a green "Watchlist match" badge per matched keyword since
+      // cycle 8 (a.matched_keywords -- the watchlist.yaml term(s) that
+      // caused a CVE to surface), but the dense table view (cycle 76) never
+      // surfaced this signal at all -- an analyst bulk-scanning table view
+      // had no way to tell which rows were watchlist-driven vs. generic
+      // source sweep results without switching back to card view. Reuses
+      // the exact same matched_keywords field unchanged (168/603 alerts
+      // currently populated), joined with ", " for a compact single cell.
+      const watchlistLabel = Array.isArray(a.matched_keywords) && a.matched_keywords.length
+        ? a.matched_keywords.map((k) => escapeHtml(k)).join(", ")
+        : "-";
       return `<tr data-cve="${escapeHtml(a.cve_id || "")}"${isRejected ? ' class="table-row-rejected"' : ""}>
         <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a>${isRejected ? ' <span class="table-rejected-tag" title="NVD has withdrawn this CVE ID -- scores may be stale">REJECTED</span>' : ""}</td>
         <td class="${cvssSevClass ? `table-cvss-${cvssSevClass}` : ""}">${fmtScore(a.cvss_score)}</td>
@@ -866,6 +878,7 @@ function renderTable(filtered) {
         <td>${fmtDate(a.first_seen)}</td>
         <td>${escapeHtml(products)}</td>
         <td class="${hasFixAvailable(a) ? "table-fix-yes" : ""}">${escapeHtml(fixLabel)}</td>
+        <td class="table-watchlist-cell">${watchlistLabel}</td>
       </tr>`;
     })
     .join("");
