@@ -1,5 +1,161 @@
 [
   {
+    "cve_id": "CVE-2026-19991",
+    "description": "The UsersWP plugin for WordPress is vulnerable to Arbitrary File Deletion in versions up to, and including, 1.2.70 via the upload_file_remove() AJAX handler. The plugin stores the value of an account 'file' form field taken directly from $_POST when no real $_FILES upload is provided (process_account() calls uwp_validate_fields() and array_merges the result with the empty output of UsersWP_Files::validate_uploads()). At storage time the value is only checked with validate_file(), which passes any string that does not contain a literal '../'. When the value is later processed by upload_file_remove(), it is again gated with validate_file() and then normalized through uwp_get_file_relative_url(); that helper performs a global str_replace() of the uploads base URL against the stored URL, allowing a crafted URL containing embedded '..<uploads-baseurl>' tokens to collapse into '../../' traversal sequences after the last validation. The transformed value is then appended to the uploads base directory and passed to wp_delete_file() without any canonical containment check. This makes it possible for authenticated attackers, with Subscriber-level access and above, to delete arbitrary files on the affected site's server (including wp-config.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T04:17:34.990",
+    "nvd_last_modified": "2026-09-11T04:17:34.990",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-11T04:29:08.966544+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-18579",
+    "description": "The WP Photo Album Plus plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'HTTP_X_FORWARDED_FOR' parameter in all versions up to, and including, 9.2.08.003 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The nonce failure path for the getshortcodedrenderedfenodelay action serves as the log-write trigger rather than an access barrier \u2014 a deliberately failed nonce check causes wppa_log() to record the attacker-supplied X-Forwarded-For value to disk, making the exploit fully reachable by unauthenticated callers via the wp_ajax_nopriv_wppa endpoint.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T04:17:24.600",
+    "nvd_last_modified": "2026-09-11T04:17:24.600",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-11T04:29:08.966540+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-15462",
+    "description": "The Sticky Chat Widget plugin for WordPress is vulnerable to SQL Injection via the 'scw_form_fields' parameter array keys of the 'scw_save_form_data' AJAX action in versions up to, and including, 1.4.2. This is due to the save_form_data() function passing attacker-controlled POST array keys unsanitized to $wpdb->insert(), which wraps column identifiers in backticks without escaping them, allowing a backtick in an attacker-supplied key to break out of the column-identifier list into raw SQL; additionally, the use of filter_input() bypasses WordPress's wp_magic_quotes() protection, and the widget_id validation loop is skipped entirely when no valid widget_id is supplied, leaving $isValid at 1. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T04:17:20.173",
+    "nvd_last_modified": "2026-09-11T04:17:20.173",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-11T04:29:08.966535+00:00"
+  },
+  {
     "cve_id": "CVE-2026-77807",
     "description": "The AcyMailing \u2013 An Ultimate Newsletter Plugin and Marketing Automation Solution for WordPress plugin for WordPress is vulnerable to Directory Traversal in all versions up to, and including, 11.0.4 via the `user[name]` Parameter. This makes it possible for unauthenticated attackers to read the contents of arbitrary files on the server, which can contain sensitive information. Exploitation requires \"Embed images\" option in AcyMailing configuration being enabled.",
     "cvss_score": 7.5,
@@ -50,7 +206,8 @@
     "vuln_status": "Received",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-11T02:01:46.073554+00:00"
+    "first_seen": "2026-09-11T02:01:46.073554+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-62243",
@@ -99,6 +256,7 @@
     "published": "2026-08-22T13:16:39.687",
     "nvd_last_modified": "2026-09-10T20:46:19.780",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T23:09:04.683330+00:00"
@@ -150,6 +308,7 @@
     "published": "2026-09-03T13:06:07.723",
     "nvd_last_modified": "2026-09-03T18:14:11.063",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T23:09:04.682529+00:00"
@@ -202,6 +361,7 @@
     "published": "2026-08-25T13:19:30.817",
     "nvd_last_modified": "2026-09-08T11:17:44.560",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T23:09:04.682427+00:00"
@@ -254,6 +414,7 @@
     "published": "2026-08-06T22:18:31.893",
     "nvd_last_modified": "2026-09-10T20:41:33.140",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T23:09:04.682314+00:00"
@@ -305,6 +466,7 @@
     "published": "2026-08-06T22:18:21.750",
     "nvd_last_modified": "2026-09-10T20:41:33.140",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T23:09:04.682309+00:00"
@@ -358,6 +520,7 @@
     "published": "2026-08-07T18:17:20.340",
     "nvd_last_modified": "2026-09-03T17:02:54.670",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T23:09:04.681966+00:00"
@@ -410,6 +573,7 @@
     "published": "2026-08-03T22:16:52.380",
     "nvd_last_modified": "2026-09-10T20:36:14.340",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T20:44:28.494797+00:00"
@@ -462,6 +626,7 @@
     "published": "2026-09-10T19:17:42.373",
     "nvd_last_modified": "2026-09-10T19:44:21.980",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T20:10:15.040172+00:00"
@@ -515,7 +680,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T19:23:04.636947+00:00"
+    "first_seen": "2026-09-10T19:23:04.636947+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87625",
@@ -566,7 +732,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T19:23:04.636942+00:00"
+    "first_seen": "2026-09-10T19:23:04.636942+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87534",
@@ -615,6 +782,14 @@
     "published": "2026-09-09T01:17:10.823",
     "nvd_last_modified": "2026-09-10T19:17:38.190",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T19:23:04.636794+00:00"
@@ -666,6 +841,14 @@
     "published": "2026-09-09T01:17:03.663",
     "nvd_last_modified": "2026-09-10T20:52:49.090",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T19:23:04.636654+00:00"
@@ -717,6 +900,7 @@
     "published": "2026-09-10T18:18:12.457",
     "nvd_last_modified": "2026-09-10T19:54:25.810",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T19:23:04.636558+00:00"
@@ -768,6 +952,7 @@
     "published": "2026-09-10T17:17:06.083",
     "nvd_last_modified": "2026-09-10T19:58:20.507",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T19:23:04.636553+00:00"
@@ -819,6 +1004,7 @@
     "published": "2026-08-31T21:17:48.057",
     "nvd_last_modified": "2026-09-08T21:11:31.703",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550637+00:00"
@@ -870,6 +1056,7 @@
     "published": "2026-08-17T20:16:46.073",
     "nvd_last_modified": "2026-09-09T21:11:46.833",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550623+00:00"
@@ -921,6 +1108,7 @@
     "published": "2026-09-04T18:17:54.547",
     "nvd_last_modified": "2026-09-08T21:14:35.567",
     "vuln_status": "Undergoing Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550599+00:00"
@@ -973,6 +1161,7 @@
     "published": "2026-08-11T18:18:26.773",
     "nvd_last_modified": "2026-09-09T20:55:04.493",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550584+00:00"
@@ -1026,7 +1215,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T17:18:59.550569+00:00"
+    "first_seen": "2026-09-10T17:18:59.550569+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87618",
@@ -1077,7 +1267,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T17:18:59.550565+00:00"
+    "first_seen": "2026-09-10T17:18:59.550565+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87617",
@@ -1128,7 +1319,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T17:18:59.550560+00:00"
+    "first_seen": "2026-09-10T17:18:59.550560+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87616",
@@ -1179,7 +1371,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T17:18:59.550556+00:00"
+    "first_seen": "2026-09-10T17:18:59.550556+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87613",
@@ -1230,7 +1423,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T17:18:59.550551+00:00"
+    "first_seen": "2026-09-10T17:18:59.550551+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87612",
@@ -1281,7 +1475,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T17:18:59.550547+00:00"
+    "first_seen": "2026-09-10T17:18:59.550547+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87606",
@@ -1332,7 +1527,8 @@
     "vuln_status": "Undergoing Analysis",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T17:18:59.550529+00:00"
+    "first_seen": "2026-09-10T17:18:59.550529+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87499",
@@ -1381,6 +1577,14 @@
     "published": "2026-09-09T01:17:06.797",
     "nvd_last_modified": "2026-09-10T19:24:14.547",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550346+00:00"
@@ -1433,6 +1637,7 @@
     "published": "2026-08-18T17:16:59.350",
     "nvd_last_modified": "2026-09-08T21:02:26.047",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550206+00:00"
@@ -1484,6 +1689,7 @@
     "published": "2026-08-28T20:18:27.810",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550189+00:00"
@@ -1533,8 +1739,9 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T16:17:56.543",
-    "nvd_last_modified": "2026-09-10T19:58:20.507",
+    "nvd_last_modified": "2026-09-11T04:17:55.070",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550185+00:00"
@@ -1587,6 +1794,7 @@
     "published": "2026-09-09T17:17:21.833",
     "nvd_last_modified": "2026-09-10T15:53:23.707",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550164+00:00"
@@ -1640,6 +1848,7 @@
     "published": "2026-09-08T23:17:25.573",
     "nvd_last_modified": "2026-09-10T19:58:20.507",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550150+00:00"
@@ -1692,6 +1901,7 @@
     "published": "2026-09-05T00:17:20.663",
     "nvd_last_modified": "2026-09-08T21:05:26.920",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550127+00:00"
@@ -1743,6 +1953,7 @@
     "published": "2026-09-05T00:17:18.607",
     "nvd_last_modified": "2026-09-08T21:05:26.920",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550088+00:00"
@@ -1794,6 +2005,7 @@
     "published": "2026-09-04T22:17:17.360",
     "nvd_last_modified": "2026-09-08T18:17:37.770",
     "vuln_status": "Received",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550083+00:00"
@@ -1845,6 +2057,7 @@
     "published": "2026-09-04T12:17:22.433",
     "nvd_last_modified": "2026-09-10T16:17:59.390",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550069+00:00"
@@ -1896,6 +2109,7 @@
     "published": "2026-09-04T12:17:21.327",
     "nvd_last_modified": "2026-09-08T20:05:53.177",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550064+00:00"
@@ -1947,6 +2161,7 @@
     "published": "2026-09-01T21:18:47.023",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550051+00:00"
@@ -1998,6 +2213,7 @@
     "published": "2026-08-31T21:17:16.950",
     "nvd_last_modified": "2026-09-08T21:11:31.703",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550025+00:00"
@@ -2049,6 +2265,7 @@
     "published": "2026-08-28T20:18:26.517",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550011+00:00"
@@ -2102,6 +2319,7 @@
     "published": "2026-08-26T17:16:56.397",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.550001+00:00"
@@ -2153,6 +2371,7 @@
     "published": "2026-08-24T21:17:48.457",
     "nvd_last_modified": "2026-09-09T21:06:39.057",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.549966+00:00"
@@ -2204,6 +2423,7 @@
     "published": "2026-08-24T21:17:48.307",
     "nvd_last_modified": "2026-09-09T21:06:39.057",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.549961+00:00"
@@ -2255,6 +2475,7 @@
     "published": "2026-08-13T00:17:32.090",
     "nvd_last_modified": "2026-09-09T21:02:22.660",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.549881+00:00"
@@ -2308,6 +2529,7 @@
     "published": "2026-08-19T16:18:39.897",
     "nvd_last_modified": "2026-09-09T21:13:25.910",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.549569+00:00"
@@ -2359,6 +2581,7 @@
     "published": "2026-09-04T12:17:23.087",
     "nvd_last_modified": "2026-09-10T16:17:59.527",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.549548+00:00"
@@ -2413,6 +2636,7 @@
     "published": "2026-08-31T21:17:48.760",
     "nvd_last_modified": "2026-09-08T21:11:31.703",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.549543+00:00"
@@ -2464,6 +2688,7 @@
     "published": "2026-08-01T13:17:00.703",
     "nvd_last_modified": "2026-09-09T20:26:18.573",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.549528+00:00"
@@ -2515,6 +2740,7 @@
     "published": "2026-09-10T15:17:43.817",
     "nvd_last_modified": "2026-09-10T21:17:48.537",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T16:10:34.213068+00:00"
@@ -2566,6 +2792,14 @@
     "published": "2026-09-09T01:17:07.473",
     "nvd_last_modified": "2026-09-10T19:23:56.697",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:22:50.398772+00:00"
@@ -2617,6 +2851,14 @@
     "published": "2026-09-09T01:16:59.450",
     "nvd_last_modified": "2026-09-10T16:18:04.310",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.441444+00:00"
@@ -2668,6 +2910,14 @@
     "published": "2026-09-09T01:16:59.240",
     "nvd_last_modified": "2026-09-10T20:17:29.340",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.441440+00:00"
@@ -2719,6 +2969,7 @@
     "published": "2026-09-10T14:17:03.823",
     "nvd_last_modified": "2026-09-10T19:58:20.507",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.441362+00:00"
@@ -2763,16 +3014,14 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [
-      "wordpress"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T07:17:03.620",
     "nvd_last_modified": "2026-09-10T15:13:07.090",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.441104+00:00"
@@ -2828,7 +3077,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T15:19:03.441100+00:00"
+    "first_seen": "2026-09-10T15:19:03.441100+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-78361",
@@ -2881,7 +3131,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T15:19:03.441096+00:00"
+    "first_seen": "2026-09-10T15:19:03.441096+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-77771",
@@ -2934,7 +3185,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T15:19:03.441091+00:00"
+    "first_seen": "2026-09-10T15:19:03.441091+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-77770",
@@ -2987,7 +3239,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T15:19:03.441087+00:00"
+    "first_seen": "2026-09-10T15:19:03.441087+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19439",
@@ -3040,7 +3293,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T15:19:03.441056+00:00"
+    "first_seen": "2026-09-10T15:19:03.441056+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19436",
@@ -3093,7 +3347,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T15:19:03.441052+00:00"
+    "first_seen": "2026-09-10T15:19:03.441052+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-88877",
@@ -3142,6 +3397,7 @@
     "published": "2026-09-10T14:17:16.023",
     "nvd_last_modified": "2026-09-10T15:17:57.790",
     "vuln_status": "Undergoing Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.440830+00:00"
@@ -3193,6 +3449,7 @@
     "published": "2026-09-10T14:17:15.593",
     "nvd_last_modified": "2026-09-10T16:18:11.233",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.440825+00:00"
@@ -3244,6 +3501,14 @@
     "published": "2026-09-09T01:17:11.920",
     "nvd_last_modified": "2026-09-10T12:51:36.277",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T13:21:32.741924+00:00"
@@ -3295,6 +3560,14 @@
     "published": "2026-09-09T01:17:01.340",
     "nvd_last_modified": "2026-09-10T16:18:04.897",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T13:21:32.741462+00:00"
@@ -3350,7 +3623,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T05:14:39.127335+00:00"
+    "first_seen": "2026-09-10T05:14:39.127335+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-15019",
@@ -3403,7 +3677,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T05:14:39.127326+00:00"
+    "first_seen": "2026-09-10T05:14:39.127326+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-14873",
@@ -3456,7 +3731,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T05:14:39.127317+00:00"
+    "first_seen": "2026-09-10T05:14:39.127317+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2016-7255",
@@ -3503,6 +3779,7 @@
     "published": "2016-11-10T07:00:09.460",
     "nvd_last_modified": "2026-09-10T04:17:32.400",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T05:14:39.125555+00:00"
@@ -3547,16 +3824,14 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [
-      "wordpress"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T02:16:34.180",
     "nvd_last_modified": "2026-09-10T14:39:13.757",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T04:12:18.468246+00:00"
@@ -3609,6 +3884,7 @@
     "published": "2026-08-21T21:17:01.643",
     "nvd_last_modified": "2026-09-09T21:06:39.057",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.317890+00:00"
@@ -3662,6 +3938,7 @@
     "published": "2026-08-26T17:16:53.410",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.316866+00:00"
@@ -3715,6 +3992,7 @@
     "published": "2026-08-26T17:16:53.247",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.316858+00:00"
@@ -3767,6 +4045,7 @@
     "published": "2026-08-24T19:16:38.647",
     "nvd_last_modified": "2026-09-09T21:06:39.057",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.316809+00:00"
@@ -3818,6 +4097,7 @@
     "published": "2026-08-21T22:16:38.300",
     "nvd_last_modified": "2026-09-09T21:06:39.057",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.316800+00:00"
@@ -3869,6 +4149,7 @@
     "published": "2026-08-21T22:16:37.143",
     "nvd_last_modified": "2026-09-09T21:06:39.057",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.316792+00:00"
@@ -3920,6 +4201,7 @@
     "published": "2026-08-21T21:17:01.493",
     "nvd_last_modified": "2026-09-09T21:06:39.057",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.316783+00:00"
@@ -3973,6 +4255,7 @@
     "published": "2026-07-31T20:16:51.847",
     "nvd_last_modified": "2026-09-09T20:55:04.493",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.316605+00:00"
@@ -4027,6 +4310,7 @@
     "published": "2026-07-28T16:18:13.503",
     "nvd_last_modified": "2026-09-09T20:50:00.950",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.316021+00:00"
@@ -4078,6 +4362,7 @@
     "published": "2026-08-11T21:17:44.443",
     "nvd_last_modified": "2026-09-09T20:58:37.713",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.315999+00:00"
@@ -4130,6 +4415,7 @@
     "published": "2026-08-11T21:17:37.560",
     "nvd_last_modified": "2026-09-09T20:46:28.353",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.315989+00:00"
@@ -4182,6 +4468,7 @@
     "published": "2026-09-09T20:21:02.017",
     "nvd_last_modified": "2026-09-10T15:53:23.707",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.512379+00:00"
@@ -4233,6 +4520,14 @@
     "published": "2026-09-09T01:17:14.723",
     "nvd_last_modified": "2026-09-10T16:18:06.377",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.512236+00:00"
@@ -4284,6 +4579,14 @@
     "published": "2026-09-09T01:17:14.617",
     "nvd_last_modified": "2026-09-10T16:18:06.213",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.512228+00:00"
@@ -4336,6 +4639,38 @@
     "published": "2026-01-13T17:15:56.910",
     "nvd_last_modified": "2026-09-10T12:47:59.933",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "fortinet",
+        "product": "fortios",
+        "fixed": "7.0.18",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "fortinet",
+        "product": "fortios",
+        "fixed": "7.2.12",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "fortinet",
+        "product": "fortios",
+        "fixed": "7.4.9",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "fortinet",
+        "product": "fortios",
+        "fixed": "7.6.4",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "fortinet",
+        "product": "fortiswitchmanager",
+        "fixed": "7.0.6",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.511695+00:00"
@@ -4387,6 +4722,7 @@
     "published": "2026-08-13T16:19:05.620",
     "nvd_last_modified": "2026-09-09T20:35:08.537",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.511484+00:00"
@@ -4438,6 +4774,7 @@
     "published": "2026-08-13T16:19:05.480",
     "nvd_last_modified": "2026-09-09T20:35:08.537",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.511476+00:00"
@@ -4489,6 +4826,7 @@
     "published": "2026-08-11T14:17:13.863",
     "nvd_last_modified": "2026-09-09T20:46:02.457",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.511469+00:00"
@@ -4540,6 +4878,7 @@
     "published": "2026-08-10T16:19:48.607",
     "nvd_last_modified": "2026-09-09T20:35:08.537",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.511460+00:00"
@@ -4591,6 +4930,7 @@
     "published": "2026-08-03T18:16:40.210",
     "nvd_last_modified": "2026-09-09T20:40:01.933",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.511434+00:00"
@@ -4642,6 +4982,7 @@
     "published": "2026-08-03T18:16:40.053",
     "nvd_last_modified": "2026-09-09T20:40:01.933",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.511426+00:00"
@@ -4693,6 +5034,7 @@
     "published": "2026-08-03T14:16:27.630",
     "nvd_last_modified": "2026-09-09T20:40:01.933",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T20:47:04.511418+00:00"
@@ -4744,6 +5086,7 @@
     "published": "2026-09-09T17:17:53.990",
     "nvd_last_modified": "2026-09-09T20:14:00.420",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T18:40:19.508228+00:00"
@@ -4787,17 +5130,15 @@
     "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
     "published": "2026-09-09T06:17:17.830",
     "nvd_last_modified": "2026-09-09T16:17:12.477",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T18:40:19.507888+00:00"
@@ -4853,7 +5194,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-09T18:40:19.507858+00:00"
+    "first_seen": "2026-09-09T18:40:19.507858+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-14962",
@@ -4906,7 +5248,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-09T18:40:19.507848+00:00"
+    "first_seen": "2026-09-09T18:40:19.507848+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-26212",
@@ -4948,17 +5291,16 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
     "published": "2026-09-09T15:17:06.823",
     "nvd_last_modified": "2026-09-10T15:17:29.467",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T16:11:42.212988+00:00"
@@ -5012,7 +5354,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-09T15:22:38.759678+00:00"
+    "first_seen": "2026-09-09T15:22:38.759678+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87607",
@@ -5063,7 +5406,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-09T15:22:38.759669+00:00"
+    "first_seen": "2026-09-09T15:22:38.759669+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87604",
@@ -5114,7 +5458,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-09T15:22:38.759646+00:00"
+    "first_seen": "2026-09-09T15:22:38.759646+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87601",
@@ -5165,7 +5510,8 @@
     "vuln_status": "Analyzed",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-09T15:22:38.759637+00:00"
+    "first_seen": "2026-09-09T15:22:38.759637+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-87588",
@@ -5214,6 +5560,14 @@
     "published": "2026-09-09T01:17:16.683",
     "nvd_last_modified": "2026-09-10T04:18:27.700",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759626+00:00"
@@ -5265,6 +5619,14 @@
     "published": "2026-09-09T01:17:16.580",
     "nvd_last_modified": "2026-09-10T04:18:27.533",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759617+00:00"
@@ -5316,6 +5678,14 @@
     "published": "2026-09-09T01:17:16.357",
     "nvd_last_modified": "2026-09-10T04:18:27.363",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759608+00:00"
@@ -5367,6 +5737,14 @@
     "published": "2026-09-09T01:17:16.043",
     "nvd_last_modified": "2026-09-10T04:18:27.180",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759600+00:00"
@@ -5418,6 +5796,14 @@
     "published": "2026-09-09T01:17:15.930",
     "nvd_last_modified": "2026-09-10T04:18:27.020",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759591+00:00"
@@ -5469,6 +5855,14 @@
     "published": "2026-09-09T01:17:15.703",
     "nvd_last_modified": "2026-09-10T04:18:26.850",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759583+00:00"
@@ -5520,6 +5914,14 @@
     "published": "2026-09-09T01:17:15.603",
     "nvd_last_modified": "2026-09-10T04:18:26.683",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759574+00:00"
@@ -5571,6 +5973,14 @@
     "published": "2026-09-09T01:17:14.943",
     "nvd_last_modified": "2026-09-10T04:18:26.480",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759565+00:00"
@@ -5622,6 +6032,14 @@
     "published": "2026-09-09T01:17:13.443",
     "nvd_last_modified": "2026-09-10T04:18:26.300",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759556+00:00"
@@ -5673,6 +6091,14 @@
     "published": "2026-09-09T01:17:13.010",
     "nvd_last_modified": "2026-09-10T04:18:26.127",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759547+00:00"
@@ -5724,6 +6150,14 @@
     "published": "2026-09-09T01:17:12.900",
     "nvd_last_modified": "2026-09-10T04:18:25.927",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759534+00:00"
@@ -5775,6 +6209,14 @@
     "published": "2026-09-09T01:17:12.240",
     "nvd_last_modified": "2026-09-10T04:18:25.720",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759525+00:00"
@@ -5826,6 +6268,14 @@
     "published": "2026-09-09T01:17:11.697",
     "nvd_last_modified": "2026-09-10T04:18:25.523",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759517+00:00"
@@ -5877,6 +6327,14 @@
     "published": "2026-09-09T01:17:11.150",
     "nvd_last_modified": "2026-09-10T18:41:55.070",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759508+00:00"
@@ -5928,6 +6386,14 @@
     "published": "2026-09-09T01:17:11.047",
     "nvd_last_modified": "2026-09-10T18:41:00.003",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759499+00:00"
@@ -5979,6 +6445,14 @@
     "published": "2026-09-09T01:17:10.707",
     "nvd_last_modified": "2026-09-10T18:34:50.483",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759491+00:00"
@@ -6030,6 +6504,14 @@
     "published": "2026-09-09T01:17:10.360",
     "nvd_last_modified": "2026-09-10T04:18:24.527",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759482+00:00"
@@ -6081,6 +6563,14 @@
     "published": "2026-09-09T01:17:10.240",
     "nvd_last_modified": "2026-09-10T04:18:24.343",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759473+00:00"
@@ -6132,6 +6622,14 @@
     "published": "2026-09-09T01:17:10.110",
     "nvd_last_modified": "2026-09-10T04:18:24.127",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759465+00:00"
@@ -6183,6 +6681,14 @@
     "published": "2026-09-09T01:17:09.980",
     "nvd_last_modified": "2026-09-10T04:18:23.953",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759455+00:00"
@@ -6234,6 +6740,14 @@
     "published": "2026-09-09T01:17:09.853",
     "nvd_last_modified": "2026-09-10T04:18:23.773",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759444+00:00"
@@ -6285,6 +6799,14 @@
     "published": "2026-09-09T01:17:09.607",
     "nvd_last_modified": "2026-09-10T04:18:23.590",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759436+00:00"
@@ -6336,6 +6858,14 @@
     "published": "2026-09-09T01:17:09.137",
     "nvd_last_modified": "2026-09-10T04:18:23.417",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759427+00:00"
@@ -6387,6 +6917,14 @@
     "published": "2026-09-09T01:17:08.477",
     "nvd_last_modified": "2026-09-10T04:18:23.243",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759418+00:00"
@@ -6438,6 +6976,14 @@
     "published": "2026-09-09T01:17:08.267",
     "nvd_last_modified": "2026-09-10T04:18:23.040",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759409+00:00"
@@ -6489,6 +7035,14 @@
     "published": "2026-09-09T01:17:08.053",
     "nvd_last_modified": "2026-09-10T04:18:22.860",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759400+00:00"
@@ -6540,6 +7094,14 @@
     "published": "2026-09-09T01:17:07.943",
     "nvd_last_modified": "2026-09-10T04:18:22.690",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759391+00:00"
@@ -6591,6 +7153,14 @@
     "published": "2026-09-09T01:17:07.593",
     "nvd_last_modified": "2026-09-10T04:18:22.523",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759382+00:00"
@@ -6642,6 +7212,14 @@
     "published": "2026-09-09T01:17:07.347",
     "nvd_last_modified": "2026-09-10T04:18:22.360",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759372+00:00"
@@ -6693,6 +7271,14 @@
     "published": "2026-09-09T01:17:06.900",
     "nvd_last_modified": "2026-09-10T04:18:22.183",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759363+00:00"
@@ -6744,6 +7330,14 @@
     "published": "2026-09-09T01:17:06.207",
     "nvd_last_modified": "2026-09-09T17:52:51.603",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759351+00:00"
@@ -6795,6 +7389,14 @@
     "published": "2026-09-09T01:17:05.993",
     "nvd_last_modified": "2026-09-10T04:18:21.990",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759342+00:00"
@@ -6846,6 +7448,14 @@
     "published": "2026-09-09T01:17:05.663",
     "nvd_last_modified": "2026-09-10T04:18:21.650",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759324+00:00"
@@ -6897,6 +7507,14 @@
     "published": "2026-09-09T01:17:05.557",
     "nvd_last_modified": "2026-09-10T04:18:21.470",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759315+00:00"
@@ -6948,6 +7566,14 @@
     "published": "2026-09-09T01:17:05.443",
     "nvd_last_modified": "2026-09-10T04:18:21.277",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759306+00:00"
@@ -6999,6 +7625,14 @@
     "published": "2026-09-09T01:17:04.773",
     "nvd_last_modified": "2026-09-10T04:18:21.087",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759297+00:00"
@@ -7050,6 +7684,14 @@
     "published": "2026-09-09T01:17:04.660",
     "nvd_last_modified": "2026-09-10T04:18:20.920",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759287+00:00"
@@ -7101,6 +7743,14 @@
     "published": "2026-09-09T01:17:04.553",
     "nvd_last_modified": "2026-09-10T04:18:20.747",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759231+00:00"
@@ -7152,6 +7802,14 @@
     "published": "2026-09-09T01:17:03.990",
     "nvd_last_modified": "2026-09-10T04:18:20.577",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759221+00:00"
@@ -7203,6 +7861,14 @@
     "published": "2026-09-09T01:17:03.560",
     "nvd_last_modified": "2026-09-10T04:18:20.407",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759199+00:00"
@@ -7254,6 +7920,14 @@
     "published": "2026-09-09T01:17:03.227",
     "nvd_last_modified": "2026-09-10T04:18:20.243",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759190+00:00"
@@ -7305,6 +7979,14 @@
     "published": "2026-09-09T01:17:02.907",
     "nvd_last_modified": "2026-09-10T17:17:06.567",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759181+00:00"
@@ -7356,6 +8038,14 @@
     "published": "2026-09-09T01:17:02.460",
     "nvd_last_modified": "2026-09-10T04:18:19.907",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759172+00:00"
@@ -7407,6 +8097,14 @@
     "published": "2026-09-09T01:17:02.107",
     "nvd_last_modified": "2026-09-10T04:18:19.730",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759162+00:00"
@@ -7458,6 +8156,14 @@
     "published": "2026-09-09T01:17:01.883",
     "nvd_last_modified": "2026-09-10T04:18:19.570",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759153+00:00"
@@ -7509,6 +8215,14 @@
     "published": "2026-09-09T01:17:01.113",
     "nvd_last_modified": "2026-09-10T04:18:19.397",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759144+00:00"
@@ -7560,6 +8274,14 @@
     "published": "2026-09-09T01:17:00.677",
     "nvd_last_modified": "2026-09-10T04:18:19.220",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759134+00:00"
@@ -7611,6 +8333,14 @@
     "published": "2026-09-09T01:17:00.240",
     "nvd_last_modified": "2026-09-10T04:18:19.047",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759124+00:00"
@@ -7662,6 +8392,14 @@
     "published": "2026-09-09T01:17:00.027",
     "nvd_last_modified": "2026-09-10T04:18:18.867",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759115+00:00"
@@ -7713,6 +8451,14 @@
     "published": "2026-09-09T01:16:59.130",
     "nvd_last_modified": "2026-09-10T04:18:18.683",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759106+00:00"
@@ -7764,6 +8510,7 @@
     "published": "2026-09-09T14:17:10.327",
     "nvd_last_modified": "2026-09-09T20:20:21.673",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.758955+00:00"
@@ -7815,6 +8562,14 @@
     "published": "2026-09-09T01:17:05.887",
     "nvd_last_modified": "2026-09-10T12:49:02.630",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "153.0.8010.36",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T12:13:51.901953+00:00"
@@ -7868,6 +8623,7 @@
     "published": "2026-09-09T09:17:12.157",
     "nvd_last_modified": "2026-09-09T17:17:45.587",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T12:13:51.901867+00:00"
@@ -7911,17 +8667,15 @@
     "epss_score_prev": 0.00278,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
     "published": "2026-09-09T09:17:10.580",
     "nvd_last_modified": "2026-09-09T15:33:34.467",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T12:13:51.901690+00:00"
@@ -7965,17 +8719,15 @@
     "epss_score_prev": 0.00246,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
     "published": "2026-09-09T09:17:10.450",
     "nvd_last_modified": "2026-09-09T16:17:00.840",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T12:13:51.901685+00:00"
@@ -8031,7 +8783,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-09T12:13:51.901680+00:00"
+    "first_seen": "2026-09-09T12:13:51.901680+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-83593",
@@ -8072,17 +8825,15 @@
     "epss_score_prev": 0.00304,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
     "published": "2026-09-09T06:17:17.670",
     "nvd_last_modified": "2026-09-09T17:17:48.013",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T08:11:38.825885+00:00"
@@ -8126,17 +8877,15 @@
     "epss_score_prev": 0.00515,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
     "published": "2026-09-09T06:17:16.497",
     "nvd_last_modified": "2026-09-09T15:33:34.467",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T08:11:38.825878+00:00"
@@ -8192,7 +8941,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-09T04:30:11.057572+00:00"
+    "first_seen": "2026-09-09T04:30:11.057572+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-17553",
@@ -8233,17 +8983,15 @@
     "epss_score_prev": 0.00441,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
-    ],
+    "affected": [],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
     "published": "2026-09-09T04:17:56.607",
     "nvd_last_modified": "2026-09-09T15:33:34.467",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T04:30:11.057563+00:00"
@@ -8288,17 +9036,16 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
     "matched_keywords": [
-      "wordpress",
       "wp plugin"
     ],
     "source": "nvd",
     "published": "2026-09-09T03:17:24.943",
     "nvd_last_modified": "2026-09-09T15:33:47.627",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T03:21:58.699632+00:00"
@@ -8343,16 +9090,14 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [
-      "wordpress"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T03:17:23.523",
     "nvd_last_modified": "2026-09-09T16:17:01.133",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T03:21:58.699626+00:00"
@@ -8397,16 +9142,14 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [
-      "wordpress"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-09T03:17:23.157",
     "nvd_last_modified": "2026-09-09T15:33:47.627",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T03:21:58.699618+00:00"
@@ -8462,7 +9205,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-09T03:21:58.699610+00:00"
+    "first_seen": "2026-09-09T03:21:58.699610+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-64665",
@@ -8512,6 +9256,7 @@
     "published": "2026-08-06T22:18:14.103",
     "nvd_last_modified": "2026-09-08T20:51:43.490",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919374+00:00"
@@ -8563,6 +9308,7 @@
     "published": "2026-08-25T02:16:42.330",
     "nvd_last_modified": "2026-09-08T20:23:49.880",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919219+00:00"
@@ -8614,6 +9360,7 @@
     "published": "2026-08-25T02:16:42.043",
     "nvd_last_modified": "2026-09-08T20:23:49.880",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919215+00:00"
@@ -8665,6 +9412,7 @@
     "published": "2026-08-25T02:16:41.900",
     "nvd_last_modified": "2026-09-08T20:23:49.880",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919212+00:00"
@@ -8716,6 +9464,7 @@
     "published": "2026-08-25T02:16:40.843",
     "nvd_last_modified": "2026-09-08T20:23:49.880",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919207+00:00"
@@ -8767,6 +9516,7 @@
     "published": "2026-08-18T16:17:06.493",
     "nvd_last_modified": "2026-09-08T21:02:26.047",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919203+00:00"
@@ -8818,6 +9568,7 @@
     "published": "2026-08-18T12:19:32.553",
     "nvd_last_modified": "2026-09-08T20:32:39.347",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919200+00:00"
@@ -8869,6 +9620,7 @@
     "published": "2026-08-14T12:16:44.873",
     "nvd_last_modified": "2026-09-08T20:32:39.347",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919196+00:00"
@@ -8923,6 +9675,7 @@
     "published": "2026-08-03T21:16:42.563",
     "nvd_last_modified": "2026-09-08T20:41:31.497",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919187+00:00"
@@ -8974,6 +9727,7 @@
     "published": "2026-07-31T06:16:32.297",
     "nvd_last_modified": "2026-09-08T20:51:43.490",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919182+00:00"
@@ -9025,6 +9779,7 @@
     "published": "2026-07-31T06:16:31.953",
     "nvd_last_modified": "2026-09-08T20:51:43.490",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919178+00:00"
@@ -9076,6 +9831,7 @@
     "published": "2026-07-31T06:16:31.603",
     "nvd_last_modified": "2026-09-08T20:51:43.490",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919173+00:00"
@@ -9127,6 +9883,7 @@
     "published": "2026-02-18T18:24:20.757",
     "nvd_last_modified": "2026-09-08T20:17:28.360",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T00:17:38.919161+00:00"
@@ -9178,6 +9935,7 @@
     "published": "2026-09-06T18:17:22.217",
     "nvd_last_modified": "2026-09-08T16:18:15.720",
     "vuln_status": "Undergoing Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.842151+00:00"
@@ -9229,6 +9987,7 @@
     "published": "2026-09-08T17:18:37.883",
     "nvd_last_modified": "2026-09-10T04:18:18.120",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.842067+00:00"
@@ -9280,6 +10039,7 @@
     "published": "2026-09-08T16:18:35.333",
     "nvd_last_modified": "2026-09-10T14:17:09.963",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.842062+00:00"
@@ -9331,6 +10091,7 @@
     "published": "2026-09-08T18:20:59.953",
     "nvd_last_modified": "2026-09-09T14:02:02.767",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841800+00:00"
@@ -9383,6 +10144,7 @@
     "published": "2026-09-08T18:20:59.810",
     "nvd_last_modified": "2026-09-09T14:02:47.850",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841795+00:00"
@@ -9434,6 +10196,7 @@
     "published": "2026-09-08T18:20:59.490",
     "nvd_last_modified": "2026-09-09T14:04:38.900",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841791+00:00"
@@ -9485,6 +10248,14 @@
     "published": "2026-09-08T18:20:59.360",
     "nvd_last_modified": "2026-09-09T14:05:36.043",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "office_online_server",
+        "fixed": "16.0.10417.20207",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841787+00:00"
@@ -9536,6 +10307,7 @@
     "published": "2026-09-08T18:20:58.987",
     "nvd_last_modified": "2026-09-09T15:01:10.913",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841783+00:00"
@@ -9587,6 +10359,7 @@
     "published": "2026-09-08T18:20:58.860",
     "nvd_last_modified": "2026-09-09T15:03:00.630",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841779+00:00"
@@ -9638,6 +10411,7 @@
     "published": "2026-09-08T18:20:58.727",
     "nvd_last_modified": "2026-09-09T10:22:15.447",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841775+00:00"
@@ -9689,6 +10463,7 @@
     "published": "2026-09-08T18:20:58.590",
     "nvd_last_modified": "2026-09-09T15:05:07.417",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841771+00:00"
@@ -9740,6 +10515,7 @@
     "published": "2026-09-08T18:20:58.460",
     "nvd_last_modified": "2026-09-09T15:06:00.753",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841767+00:00"
@@ -9791,6 +10567,7 @@
     "published": "2026-09-08T18:20:58.313",
     "nvd_last_modified": "2026-09-09T15:07:03.067",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841762+00:00"
@@ -9842,6 +10619,7 @@
     "published": "2026-09-08T18:20:58.180",
     "nvd_last_modified": "2026-09-09T15:07:50.447",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841758+00:00"
@@ -9893,6 +10671,14 @@
     "published": "2026-09-08T18:20:58.040",
     "nvd_last_modified": "2026-09-09T13:59:42.267",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "office_online_server",
+        "fixed": "16.0.10417.20207",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841754+00:00"
@@ -9944,6 +10730,7 @@
     "published": "2026-09-08T18:20:56.437",
     "nvd_last_modified": "2026-09-09T15:12:37.780",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841750+00:00"
@@ -9995,6 +10782,7 @@
     "published": "2026-09-08T18:20:56.300",
     "nvd_last_modified": "2026-09-09T15:13:28.220",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841746+00:00"
@@ -10047,6 +10835,7 @@
     "published": "2026-09-08T18:20:56.163",
     "nvd_last_modified": "2026-09-09T12:45:47.407",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841741+00:00"
@@ -10098,6 +10887,7 @@
     "published": "2026-09-08T18:20:55.243",
     "nvd_last_modified": "2026-09-09T12:00:37.713",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841737+00:00"
@@ -10149,6 +10939,7 @@
     "published": "2026-09-08T18:20:55.103",
     "nvd_last_modified": "2026-09-09T11:59:18.850",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841732+00:00"
@@ -10200,6 +10991,7 @@
     "published": "2026-09-08T18:20:54.840",
     "nvd_last_modified": "2026-09-09T11:57:16.643",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841728+00:00"
@@ -10251,6 +11043,7 @@
     "published": "2026-09-08T18:20:54.720",
     "nvd_last_modified": "2026-09-09T19:30:06.363",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841723+00:00"
@@ -10302,6 +11095,7 @@
     "published": "2026-09-08T18:20:50.870",
     "nvd_last_modified": "2026-09-09T10:21:59.687",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841719+00:00"
@@ -10353,6 +11147,7 @@
     "published": "2026-09-08T18:20:50.367",
     "nvd_last_modified": "2026-09-09T19:04:29.790",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841715+00:00"
@@ -10404,6 +11199,7 @@
     "published": "2026-09-08T18:20:50.233",
     "nvd_last_modified": "2026-09-09T10:21:58.033",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841710+00:00"
@@ -10455,6 +11251,7 @@
     "published": "2026-09-08T18:20:48.347",
     "nvd_last_modified": "2026-09-09T10:21:52.287",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841706+00:00"
@@ -10506,6 +11303,7 @@
     "published": "2026-09-08T18:20:48.227",
     "nvd_last_modified": "2026-09-09T19:01:07.990",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841702+00:00"
@@ -10557,6 +11355,7 @@
     "published": "2026-09-08T18:20:48.100",
     "nvd_last_modified": "2026-09-09T18:53:21.737",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841697+00:00"
@@ -10608,6 +11407,7 @@
     "published": "2026-09-08T18:20:47.683",
     "nvd_last_modified": "2026-09-09T10:21:49.790",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841693+00:00"
@@ -10659,6 +11459,7 @@
     "published": "2026-09-08T18:20:47.427",
     "nvd_last_modified": "2026-09-09T18:58:55.107",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841688+00:00"
@@ -10711,6 +11512,7 @@
     "published": "2026-09-08T18:20:47.293",
     "nvd_last_modified": "2026-09-09T11:56:17.503",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841684+00:00"
@@ -10762,6 +11564,7 @@
     "published": "2026-09-08T18:20:47.163",
     "nvd_last_modified": "2026-09-09T04:20:06.370",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841679+00:00"
@@ -10813,6 +11616,7 @@
     "published": "2026-09-08T18:20:46.720",
     "nvd_last_modified": "2026-09-09T10:21:47.263",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841674+00:00"
@@ -10865,6 +11669,7 @@
     "published": "2026-09-08T18:20:46.453",
     "nvd_last_modified": "2026-09-09T10:21:46.437",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841670+00:00"
@@ -10916,6 +11721,7 @@
     "published": "2026-09-08T18:20:46.327",
     "nvd_last_modified": "2026-09-09T10:21:45.590",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841665+00:00"
@@ -10967,6 +11773,7 @@
     "published": "2026-09-08T18:20:46.200",
     "nvd_last_modified": "2026-09-09T10:21:44.700",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841661+00:00"
@@ -11018,6 +11825,7 @@
     "published": "2026-09-08T18:20:46.070",
     "nvd_last_modified": "2026-09-09T18:59:36.657",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841656+00:00"
@@ -11069,6 +11877,7 @@
     "published": "2026-09-08T18:20:45.750",
     "nvd_last_modified": "2026-09-09T10:21:43.037",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841652+00:00"
@@ -11120,6 +11929,7 @@
     "published": "2026-09-08T18:20:45.487",
     "nvd_last_modified": "2026-09-09T19:00:41.873",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841647+00:00"
@@ -11171,6 +11981,7 @@
     "published": "2026-09-08T18:20:45.360",
     "nvd_last_modified": "2026-09-09T10:21:41.350",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841643+00:00"
@@ -11222,6 +12033,7 @@
     "published": "2026-09-08T18:20:40.257",
     "nvd_last_modified": "2026-09-09T04:19:58.600",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841638+00:00"
@@ -11273,6 +12085,7 @@
     "published": "2026-09-08T18:20:39.980",
     "nvd_last_modified": "2026-09-09T19:01:32.417",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841633+00:00"
@@ -11324,6 +12137,7 @@
     "published": "2026-09-08T18:20:37.740",
     "nvd_last_modified": "2026-09-09T04:19:57.453",
     "vuln_status": "Undergoing Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841629+00:00"
@@ -11375,6 +12189,7 @@
     "published": "2026-09-08T18:20:23.387",
     "nvd_last_modified": "2026-09-09T10:21:08.393",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841624+00:00"
@@ -11426,6 +12241,7 @@
     "published": "2026-09-08T18:20:23.260",
     "nvd_last_modified": "2026-09-09T10:21:07.587",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841619+00:00"
@@ -11477,6 +12293,14 @@
     "published": "2026-09-08T18:19:51.940",
     "nvd_last_modified": "2026-09-09T17:13:10.243",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "sharepoint_server",
+        "fixed": "16.0.20326.20090",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841614+00:00"
@@ -11528,6 +12352,7 @@
     "published": "2026-09-08T18:19:51.320",
     "nvd_last_modified": "2026-09-09T19:01:55.703",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841609+00:00"
@@ -11579,6 +12404,7 @@
     "published": "2026-09-08T18:19:49.233",
     "nvd_last_modified": "2026-09-10T14:35:18.593",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841605+00:00"
@@ -11630,6 +12456,7 @@
     "published": "2026-09-08T18:19:47.843",
     "nvd_last_modified": "2026-09-09T19:02:39.217",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841600+00:00"
@@ -11681,6 +12508,7 @@
     "published": "2026-09-08T18:19:47.713",
     "nvd_last_modified": "2026-09-09T04:19:24.700",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841596+00:00"
@@ -11732,6 +12560,7 @@
     "published": "2026-09-08T18:19:47.097",
     "nvd_last_modified": "2026-09-09T10:20:03.000",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841592+00:00"
@@ -11783,6 +12612,7 @@
     "published": "2026-09-08T18:19:46.507",
     "nvd_last_modified": "2026-09-09T19:29:34.500",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841587+00:00"
@@ -11834,6 +12664,14 @@
     "published": "2026-09-08T18:19:44.593",
     "nvd_last_modified": "2026-09-09T17:14:15.230",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "sharepoint_server",
+        "fixed": "16.0.20326.20090",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841583+00:00"
@@ -11885,6 +12723,7 @@
     "published": "2026-09-08T18:19:44.280",
     "nvd_last_modified": "2026-09-09T10:19:56.993",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841577+00:00"
@@ -11936,6 +12775,14 @@
     "published": "2026-09-08T18:19:43.703",
     "nvd_last_modified": "2026-09-09T17:14:41.637",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "sharepoint_server",
+        "fixed": "16.0.20326.20094",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841571+00:00"
@@ -11987,6 +12834,7 @@
     "published": "2026-09-08T18:19:40.567",
     "nvd_last_modified": "2026-09-09T10:19:47.647",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841567+00:00"
@@ -12038,6 +12886,7 @@
     "published": "2026-09-08T18:19:39.327",
     "nvd_last_modified": "2026-09-09T19:03:14.653",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841563+00:00"
@@ -12089,6 +12938,7 @@
     "published": "2026-09-08T18:19:38.717",
     "nvd_last_modified": "2026-09-09T10:19:45.117",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841558+00:00"
@@ -12140,6 +12990,7 @@
     "published": "2026-09-08T18:19:35.740",
     "nvd_last_modified": "2026-09-09T19:23:16.340",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841554+00:00"
@@ -12191,6 +13042,7 @@
     "published": "2026-09-08T18:19:35.290",
     "nvd_last_modified": "2026-09-09T19:23:58.650",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841550+00:00"
@@ -12243,6 +13095,7 @@
     "published": "2026-09-08T18:19:33.047",
     "nvd_last_modified": "2026-09-10T14:34:24.717",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841545+00:00"
@@ -12294,6 +13147,7 @@
     "published": "2026-09-08T18:19:24.413",
     "nvd_last_modified": "2026-09-09T10:19:15.103",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841541+00:00"
@@ -12345,6 +13199,7 @@
     "published": "2026-09-08T18:19:20.740",
     "nvd_last_modified": "2026-09-10T14:30:51.420",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841536+00:00"
@@ -12396,6 +13251,7 @@
     "published": "2026-09-08T18:19:13.513",
     "nvd_last_modified": "2026-09-10T14:30:11.243",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841532+00:00"
@@ -12447,6 +13303,14 @@
     "published": "2026-09-08T18:19:11.693",
     "nvd_last_modified": "2026-09-09T17:18:01.803",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "sharepoint_server",
+        "fixed": "16.0.20326.20074",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841527+00:00"
@@ -12498,6 +13362,14 @@
     "published": "2026-09-08T18:19:11.560",
     "nvd_last_modified": "2026-09-09T17:18:36.880",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "sharepoint_server",
+        "fixed": "16.0.20326.20090",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841523+00:00"
@@ -12549,6 +13421,7 @@
     "published": "2026-09-08T18:19:08.413",
     "nvd_last_modified": "2026-09-09T19:25:58.630",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841518+00:00"
@@ -12600,6 +13473,14 @@
     "published": "2026-09-08T18:19:04.697",
     "nvd_last_modified": "2026-09-09T17:20:10.087",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "sharepoint_server",
+        "fixed": "16.0.20326.20090",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841514+00:00"
@@ -12651,6 +13532,14 @@
     "published": "2026-09-08T18:19:02.543",
     "nvd_last_modified": "2026-09-10T19:17:32.557",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "sharepoint_server",
+        "fixed": "16.0.20326.20090",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841509+00:00"
@@ -12702,6 +13591,7 @@
     "published": "2026-09-08T18:18:55.790",
     "nvd_last_modified": "2026-09-09T10:18:12.500",
     "vuln_status": "Undergoing Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841504+00:00"
@@ -12753,6 +13643,7 @@
     "published": "2026-09-08T18:18:43.203",
     "nvd_last_modified": "2026-09-09T19:26:38.950",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841500+00:00"
@@ -12804,6 +13695,14 @@
     "published": "2026-09-08T18:18:42.693",
     "nvd_last_modified": "2026-09-09T17:23:26.337",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "sharepoint_server",
+        "fixed": "16.0.20326.20090",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841495+00:00"
@@ -12855,6 +13754,14 @@
     "published": "2026-09-08T18:18:40.297",
     "nvd_last_modified": "2026-09-09T17:24:59.533",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "sharepoint_server",
+        "fixed": "16.0.20326.20082",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841490+00:00"
@@ -12906,6 +13813,14 @@
     "published": "2026-09-08T18:18:39.087",
     "nvd_last_modified": "2026-09-09T17:25:33.380",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "sharepoint_server",
+        "fixed": "16.0.20326.20090",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841486+00:00"
@@ -12957,6 +13872,7 @@
     "published": "2026-09-08T18:18:03.127",
     "nvd_last_modified": "2026-09-08T20:15:05.670",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841481+00:00"
@@ -13006,8 +13922,9 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:20:53.070",
-    "nvd_last_modified": "2026-09-10T21:17:48.087",
+    "nvd_last_modified": "2026-09-11T04:17:57.577",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841477+00:00"
@@ -13059,6 +13976,7 @@
     "published": "2026-09-08T18:20:52.940",
     "nvd_last_modified": "2026-09-09T10:22:03.917",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841471+00:00"
@@ -13108,8 +14026,9 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:20:02.413",
-    "nvd_last_modified": "2026-09-10T21:17:35.493",
+    "nvd_last_modified": "2026-09-11T04:17:48.603",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841457+00:00"
@@ -13161,6 +14080,7 @@
     "published": "2026-09-08T18:19:31.983",
     "nvd_last_modified": "2026-09-10T15:17:38.787",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841448+00:00"
@@ -13212,6 +14132,7 @@
     "published": "2026-09-08T18:19:30.837",
     "nvd_last_modified": "2026-09-09T10:19:25.413",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841438+00:00"
@@ -13261,8 +14182,9 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:19:30.663",
-    "nvd_last_modified": "2026-09-10T21:17:31.487",
+    "nvd_last_modified": "2026-09-11T04:17:48.083",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841429+00:00"
@@ -13315,6 +14237,7 @@
     "published": "2026-09-08T18:19:28.670",
     "nvd_last_modified": "2026-09-09T18:17:00.260",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841420+00:00"
@@ -13366,6 +14289,7 @@
     "published": "2026-09-08T18:19:28.490",
     "nvd_last_modified": "2026-09-08T20:17:53.090",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841411+00:00"
@@ -13417,6 +14341,7 @@
     "published": "2026-09-08T18:19:18.450",
     "nvd_last_modified": "2026-09-09T10:18:57.420",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841401+00:00"
@@ -13468,6 +14393,7 @@
     "published": "2026-09-08T18:19:15.357",
     "nvd_last_modified": "2026-09-09T04:18:50.930",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841389+00:00"
@@ -13519,6 +14445,7 @@
     "published": "2026-09-08T18:19:10.177",
     "nvd_last_modified": "2026-09-08T18:39:34.660",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841374+00:00"
@@ -13570,6 +14497,7 @@
     "published": "2026-09-08T18:19:08.667",
     "nvd_last_modified": "2026-09-09T17:17:29.133",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841340+00:00"
@@ -13622,6 +14550,7 @@
     "published": "2026-09-08T18:19:03.540",
     "nvd_last_modified": "2026-09-09T10:18:26.677",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841331+00:00"
@@ -13673,6 +14602,7 @@
     "published": "2026-09-08T18:18:59.720",
     "nvd_last_modified": "2026-09-09T10:18:20.943",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841320+00:00"
@@ -13724,6 +14654,7 @@
     "published": "2026-09-08T18:18:49.757",
     "nvd_last_modified": "2026-09-10T15:17:37.320",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841311+00:00"
@@ -13775,6 +14706,7 @@
     "published": "2026-09-08T18:18:46.527",
     "nvd_last_modified": "2026-09-10T15:17:37.153",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841302+00:00"
@@ -13826,6 +14758,7 @@
     "published": "2026-09-08T18:18:45.547",
     "nvd_last_modified": "2026-09-10T15:17:37.023",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841291+00:00"
@@ -13877,6 +14810,7 @@
     "published": "2026-09-08T18:18:38.037",
     "nvd_last_modified": "2026-09-09T17:17:26.960",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841277+00:00"
@@ -13928,6 +14862,7 @@
     "published": "2026-09-08T18:17:57.417",
     "nvd_last_modified": "2026-09-09T20:18:44.260",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841268+00:00"
@@ -13980,6 +14915,7 @@
     "published": "2026-09-08T18:17:53.350",
     "nvd_last_modified": "2026-09-08T19:18:03.737",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841258+00:00"
@@ -14031,6 +14967,7 @@
     "published": "2026-09-08T18:17:43.923",
     "nvd_last_modified": "2026-09-09T19:17:28.667",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841243+00:00"
@@ -14082,6 +15019,7 @@
     "published": "2026-09-08T18:17:43.797",
     "nvd_last_modified": "2026-09-09T17:17:24.497",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841209+00:00"
@@ -14133,6 +15071,7 @@
     "published": "2026-09-08T14:17:24.913",
     "nvd_last_modified": "2026-09-09T17:17:38.100",
     "vuln_status": "Undergoing Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T16:11:54.861261+00:00"
@@ -14182,6 +15121,7 @@
     "published": "2026-08-10T15:17:42.467",
     "nvd_last_modified": "2026-09-08T14:07:24.140",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T16:11:54.861233+00:00"
@@ -14237,7 +15177,8 @@
     "vuln_status": "Deferred",
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-08T16:11:54.861222+00:00"
+    "first_seen": "2026-09-08T16:11:54.861222+00:00",
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-16502",
@@ -14286,6 +15227,7 @@
     "published": "2026-09-08T12:16:52.443",
     "nvd_last_modified": "2026-09-08T17:17:33.050",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T16:11:54.861216+00:00"
@@ -14340,6 +15282,7 @@
     "published": "2026-09-08T10:17:14.337",
     "nvd_last_modified": "2026-09-08T13:17:31.433",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T12:14:41.566863+00:00"
@@ -14391,6 +15334,7 @@
     "published": "2026-09-07T22:17:22.163",
     "nvd_last_modified": "2026-09-10T16:18:02.913",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T00:17:07.248845+00:00"
@@ -14443,6 +15387,38 @@
     "published": "2026-01-27T16:16:14.257",
     "nvd_last_modified": "2026-09-07T13:17:27.740",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.0.19",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.3.6",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.4.4",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.5.5",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.6.1",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-07T16:10:38.799165+00:00"
@@ -14494,6 +15470,14 @@
     "published": "2026-09-07T13:20:42.460",
     "nvd_last_modified": "2026-09-09T16:20:39.770",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "thephpleague",
+        "product": "commonmark",
+        "fixed": "2.9.1",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-07T16:10:38.799152+00:00"
@@ -14548,6 +15532,7 @@
     "published": "2026-09-07T14:16:51.947",
     "nvd_last_modified": "2026-09-08T17:17:32.687",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-07T16:10:38.799133+00:00"
@@ -14601,6 +15586,7 @@
     "published": "2026-09-07T13:20:36.653",
     "nvd_last_modified": "2026-09-09T15:17:08.230",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-07T16:10:38.799125+00:00"
@@ -14653,6 +15639,38 @@
     "published": "2026-05-13T16:16:50.190",
     "nvd_last_modified": "2026-09-10T13:20:09.723",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "f5",
+        "product": "dos",
+        "fixed": "4.7.0",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "f5",
+        "product": "nginx_gateway_fabric",
+        "fixed": "1.6.2",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "f5",
+        "product": "nginx_gateway_fabric",
+        "fixed": "2.5.1",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "f5",
+        "product": "nginx_ingress_controller",
+        "fixed": "3.7.2",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "f5",
+        "product": "nginx_ingress_controller",
+        "fixed": "4.0.1",
+        "fix_type": "up_to_and_including"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-07T16:10:38.798987+00:00"
@@ -14705,6 +15723,7 @@
     "published": "2026-09-06T08:16:41.910",
     "nvd_last_modified": "2026-09-08T16:18:20.493",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648578+00:00"
@@ -14758,6 +15777,7 @@
     "published": "2026-09-06T07:16:43.427",
     "nvd_last_modified": "2026-09-08T19:09:21.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648527+00:00"
@@ -14811,6 +15831,7 @@
     "published": "2026-09-06T07:16:43.097",
     "nvd_last_modified": "2026-09-08T19:09:21.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648524+00:00"
@@ -14864,6 +15885,7 @@
     "published": "2026-09-05T07:17:14.783",
     "nvd_last_modified": "2026-09-08T19:15:18.627",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648486+00:00"
@@ -14917,6 +15939,7 @@
     "published": "2026-09-05T07:17:14.690",
     "nvd_last_modified": "2026-09-08T19:15:18.627",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648478+00:00"
@@ -14970,6 +15993,7 @@
     "published": "2026-09-05T07:17:13.090",
     "nvd_last_modified": "2026-09-08T19:09:21.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648474+00:00"
@@ -15023,6 +16047,7 @@
     "published": "2026-09-05T07:17:12.810",
     "nvd_last_modified": "2026-09-08T19:09:21.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648470+00:00"
@@ -15076,6 +16101,7 @@
     "published": "2026-09-05T07:17:12.487",
     "nvd_last_modified": "2026-09-08T19:09:21.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648462+00:00"
@@ -15129,6 +16155,7 @@
     "published": "2026-09-05T07:17:12.063",
     "nvd_last_modified": "2026-09-08T19:09:21.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648452+00:00"
@@ -15182,6 +16209,7 @@
     "published": "2026-09-05T07:17:11.467",
     "nvd_last_modified": "2026-09-08T19:09:21.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648442+00:00"
@@ -15234,6 +16262,7 @@
     "published": "2026-09-06T05:16:50.673",
     "nvd_last_modified": "2026-09-08T18:21:15.667",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T08:13:41.247750+00:00"
@@ -15287,6 +16316,7 @@
     "published": "2026-09-06T03:17:16.607",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T04:12:42.475434+00:00"
@@ -15340,6 +16370,7 @@
     "published": "2026-09-06T03:17:16.467",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T04:12:42.475430+00:00"
@@ -15393,6 +16424,7 @@
     "published": "2026-09-06T03:17:15.540",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T04:12:42.475425+00:00"
@@ -15446,6 +16478,7 @@
     "published": "2026-09-05T12:16:46.653",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521125+00:00"
@@ -15499,6 +16532,7 @@
     "published": "2026-09-05T09:16:48.880",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521122+00:00"
@@ -15552,6 +16586,7 @@
     "published": "2026-09-05T08:16:40.857",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521119+00:00"
@@ -15605,6 +16640,7 @@
     "published": "2026-09-05T08:16:40.730",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521116+00:00"
@@ -15658,6 +16694,7 @@
     "published": "2026-09-05T07:17:12.580",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521113+00:00"
@@ -15711,6 +16748,7 @@
     "published": "2026-09-05T07:17:12.163",
     "nvd_last_modified": "2026-09-08T15:18:46.693",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521109+00:00"
@@ -15764,6 +16802,7 @@
     "published": "2026-09-05T07:17:11.333",
     "nvd_last_modified": "2026-09-08T17:17:33.787",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521103+00:00"
@@ -15817,6 +16856,7 @@
     "published": "2026-09-05T07:17:11.040",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521100+00:00"
@@ -15870,6 +16910,7 @@
     "published": "2026-09-05T07:17:10.793",
     "nvd_last_modified": "2026-09-08T17:17:32.797",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521092+00:00"
@@ -15923,6 +16964,7 @@
     "published": "2026-09-05T06:17:09.950",
     "nvd_last_modified": "2026-09-08T14:17:28.073",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521086+00:00"
@@ -15976,6 +17018,7 @@
     "published": "2026-09-05T06:17:09.780",
     "nvd_last_modified": "2026-09-08T15:18:46.573",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521083+00:00"
@@ -16029,6 +17072,7 @@
     "published": "2026-09-04T07:17:08.937",
     "nvd_last_modified": "2026-09-08T19:15:18.627",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521069+00:00"
@@ -16082,6 +17126,7 @@
     "published": "2026-09-04T07:17:08.730",
     "nvd_last_modified": "2026-09-08T19:15:18.627",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521066+00:00"
@@ -16135,6 +17180,7 @@
     "published": "2026-09-04T07:17:08.487",
     "nvd_last_modified": "2026-09-04T19:17:22.257",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521062+00:00"
@@ -16188,6 +17234,7 @@
     "published": "2026-08-28T20:18:27.657",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485890+00:00"
@@ -16239,6 +17286,7 @@
     "published": "2026-06-12T21:16:22.447",
     "nvd_last_modified": "2026-09-10T13:20:17.020",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485887+00:00"
@@ -16293,6 +17341,7 @@
     "published": "2026-09-05T07:17:10.917",
     "nvd_last_modified": "2026-09-08T17:17:33.153",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485884+00:00"
@@ -16338,7 +17387,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00326,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-11325",
@@ -16381,7 +17431,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00512,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-85654",
@@ -16430,6 +17481,7 @@
     "published": "2026-09-04T18:18:05.977",
     "nvd_last_modified": "2026-09-08T14:00:33.017",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485874+00:00"
@@ -16481,6 +17533,7 @@
     "published": "2026-09-01T19:17:29.483",
     "nvd_last_modified": "2026-09-03T16:44:01.873",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485870+00:00"
@@ -16524,7 +17577,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00566,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2024-28056",
@@ -16573,6 +17627,14 @@
     "published": "2024-04-15T18:15:10.723",
     "nvd_last_modified": "2026-09-04T14:13:32.820",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "amazon",
+        "product": "aws_amplify_cli",
+        "fixed": "12.10.1",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485864+00:00"
@@ -16627,6 +17689,7 @@
     "published": "2026-09-05T06:17:09.403",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485860+00:00"
@@ -16678,6 +17741,7 @@
     "published": "2026-09-04T15:17:35.360",
     "nvd_last_modified": "2026-09-10T16:17:49.593",
     "vuln_status": "Received",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485857+00:00"
@@ -16729,6 +17793,7 @@
     "published": "2026-09-01T20:17:14.680",
     "nvd_last_modified": "2026-09-08T20:18:59.270",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485854+00:00"
@@ -16782,7 +17847,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00393,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81719",
@@ -16833,7 +17899,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.003,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81718",
@@ -16874,7 +17941,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00131,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81714",
@@ -16925,7 +17993,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00139,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81707",
@@ -16966,7 +18035,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00411,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81705",
@@ -17007,7 +18077,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00317,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81704",
@@ -17056,6 +18127,14 @@
     "published": "2026-08-27T17:21:00.993",
     "nvd_last_modified": "2026-09-03T15:09:32.657",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "jahlives",
+        "product": "openssl_encrypt",
+        "fixed": "1.4.9",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485830+00:00"
@@ -17107,6 +18186,14 @@
     "published": "2026-08-27T17:21:00.680",
     "nvd_last_modified": "2026-09-03T15:09:14.280",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "jahlives",
+        "product": "openssl_encrypt",
+        "fixed": "1.4.9",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485826+00:00"
@@ -17150,7 +18237,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00292,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81700",
@@ -17191,7 +18279,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00241,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81699",
@@ -17240,6 +18329,14 @@
     "published": "2026-08-27T17:21:00.217",
     "nvd_last_modified": "2026-09-03T15:09:04.887",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "jahlives",
+        "product": "openssl_encrypt",
+        "fixed": "1.4.9",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485815+00:00"
@@ -17283,7 +18380,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00284,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81693",
@@ -17334,7 +18432,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00343,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81692",
@@ -17375,7 +18474,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00343,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81691",
@@ -17426,7 +18526,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00198,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81690",
@@ -17477,7 +18578,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00487,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81689",
@@ -17526,6 +18628,14 @@
     "published": "2026-08-27T17:20:58.697",
     "nvd_last_modified": "2026-09-03T15:07:51.097",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "jahlives",
+        "product": "openssl_encrypt",
+        "fixed": "1.4.9",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485784+00:00"
@@ -17579,7 +18689,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00198,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81683",
@@ -17630,7 +18741,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00054,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-63076",
@@ -17671,7 +18783,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0133,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-63075",
@@ -17712,7 +18825,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0048,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-63073",
@@ -17753,7 +18867,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00929,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-63072",
@@ -17794,7 +18909,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00612,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-54874",
@@ -17835,7 +18951,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00516,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-18798",
@@ -17876,7 +18993,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.01481,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-14457",
@@ -17917,7 +19035,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00984,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74901",
@@ -17958,7 +19077,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00228,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74900",
@@ -17999,7 +19119,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00337,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74899",
@@ -18040,7 +19161,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00491,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74896",
@@ -18081,7 +19203,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00337,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74895",
@@ -18122,7 +19245,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00409,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74894",
@@ -18163,7 +19287,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00374,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74893",
@@ -18204,7 +19329,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00264,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74892",
@@ -18245,7 +19371,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00306,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74891",
@@ -18286,7 +19413,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00284,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74889",
@@ -18327,7 +19455,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00201,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74888",
@@ -18368,7 +19497,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00167,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74886",
@@ -18409,7 +19539,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00376,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74884",
@@ -18450,7 +19581,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00266,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74883",
@@ -18491,7 +19623,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00257,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74882",
@@ -18532,7 +19665,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00126,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74880",
@@ -18573,7 +19707,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00307,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74879",
@@ -18614,7 +19749,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00259,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74878",
@@ -18655,7 +19791,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00398,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74877",
@@ -18696,7 +19833,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00248,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74876",
@@ -18737,7 +19875,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00201,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74875",
@@ -18778,7 +19917,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00179,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74874",
@@ -18819,7 +19959,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00255,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-74872",
@@ -18860,7 +20001,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0046,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-14456",
@@ -18901,7 +20043,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00729,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-54876",
@@ -18942,7 +20085,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00261,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-66402",
@@ -18983,7 +20127,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00286,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-50010",
@@ -19032,6 +20177,20 @@
     "published": "2026-06-12T16:16:31.180",
     "nvd_last_modified": "2026-09-10T13:20:25.037",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "netty",
+        "product": "netty",
+        "fixed": "4.1.135",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "netty",
+        "product": "netty",
+        "fixed": "4.2.15",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485660+00:00"
@@ -19084,6 +20243,38 @@
     "published": "2026-06-09T17:17:19.277",
     "nvd_last_modified": "2026-09-07T13:20:09.227",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "1.0.2zq",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "1.1.1zh",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.0.21",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.4.6",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.5.7",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485657+00:00"
@@ -19135,6 +20326,14 @@
     "published": "2026-03-18T00:16:19.273",
     "nvd_last_modified": "2026-09-10T13:17:59.900",
     "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "pyopenssl",
+        "product": "pyopenssl",
+        "fixed": "26.0.0",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485654+00:00"
@@ -19178,7 +20377,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.01492,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-85053",
@@ -19227,6 +20427,14 @@
     "published": "2026-09-03T20:17:27.163",
     "nvd_last_modified": "2026-09-08T16:17:19.103",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.82",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485647+00:00"
@@ -19278,6 +20486,14 @@
     "published": "2026-09-03T20:17:26.420",
     "nvd_last_modified": "2026-09-08T16:18:03.150",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.82",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485644+00:00"
@@ -19329,6 +20545,14 @@
     "published": "2026-09-03T20:17:26.077",
     "nvd_last_modified": "2026-09-08T16:18:19.217",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.82",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485640+00:00"
@@ -19380,6 +20604,14 @@
     "published": "2026-09-03T20:17:25.610",
     "nvd_last_modified": "2026-09-08T16:18:44.350",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.82",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485637+00:00"
@@ -19431,6 +20663,14 @@
     "published": "2026-09-03T20:17:25.160",
     "nvd_last_modified": "2026-09-08T16:19:00.230",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.82",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485633+00:00"
@@ -19482,6 +20722,14 @@
     "published": "2026-09-03T20:17:24.690",
     "nvd_last_modified": "2026-09-08T16:19:18.940",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.82",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485630+00:00"
@@ -19533,6 +20781,20 @@
     "published": "2026-09-03T20:17:24.210",
     "nvd_last_modified": "2026-09-08T14:55:04.093",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.82",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "google",
+        "product": "v8",
+        "fixed": "15.3.48",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485627+00:00"
@@ -19584,6 +20846,14 @@
     "published": "2026-09-03T20:17:23.890",
     "nvd_last_modified": "2026-09-08T16:19:32.307",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.82",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485622+00:00"
@@ -19635,6 +20905,14 @@
     "published": "2026-09-03T20:17:23.270",
     "nvd_last_modified": "2026-09-08T16:27:14.397",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.82",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485619+00:00"
@@ -19686,6 +20964,14 @@
     "published": "2026-09-03T20:17:22.727",
     "nvd_last_modified": "2026-09-08T16:27:28.243",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.82",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485615+00:00"
@@ -19737,6 +21023,14 @@
     "published": "2026-09-02T00:18:29.310",
     "nvd_last_modified": "2026-09-03T17:35:02.620",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485612+00:00"
@@ -19788,6 +21082,14 @@
     "published": "2026-09-02T00:18:29.203",
     "nvd_last_modified": "2026-09-08T17:42:21.657",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485609+00:00"
@@ -19839,6 +21141,14 @@
     "published": "2026-09-02T00:18:29.097",
     "nvd_last_modified": "2026-09-08T17:46:26.977",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485606+00:00"
@@ -19890,6 +21200,14 @@
     "published": "2026-09-02T00:18:28.983",
     "nvd_last_modified": "2026-09-03T17:37:11.523",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485602+00:00"
@@ -19941,6 +21259,14 @@
     "published": "2026-09-02T00:18:28.873",
     "nvd_last_modified": "2026-09-03T17:37:49.767",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485598+00:00"
@@ -19992,6 +21318,14 @@
     "published": "2026-09-02T00:18:28.770",
     "nvd_last_modified": "2026-09-03T17:15:27.770",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485595+00:00"
@@ -20043,6 +21377,14 @@
     "published": "2026-09-02T00:18:28.550",
     "nvd_last_modified": "2026-09-03T17:18:25.873",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485592+00:00"
@@ -20094,6 +21436,14 @@
     "published": "2026-09-02T00:18:28.443",
     "nvd_last_modified": "2026-09-03T17:09:46.783",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485588+00:00"
@@ -20145,6 +21495,14 @@
     "published": "2026-09-02T00:18:28.337",
     "nvd_last_modified": "2026-09-03T17:10:07.703",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485585+00:00"
@@ -20196,6 +21554,14 @@
     "published": "2026-09-02T00:18:28.217",
     "nvd_last_modified": "2026-09-08T17:51:40.953",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485581+00:00"
@@ -20247,6 +21613,14 @@
     "published": "2026-09-02T00:18:27.447",
     "nvd_last_modified": "2026-09-03T17:11:55.957",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485578+00:00"
@@ -20298,6 +21672,14 @@
     "published": "2026-09-02T00:18:27.340",
     "nvd_last_modified": "2026-09-03T17:12:27.413",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485575+00:00"
@@ -20349,6 +21731,14 @@
     "published": "2026-09-02T00:18:27.230",
     "nvd_last_modified": "2026-09-03T17:12:44.213",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "152.0.7977.75",
+        "fix_type": "before"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485572+00:00"
@@ -20392,7 +21782,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00278,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-82072",
@@ -20433,7 +21824,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00289,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79290",
@@ -20474,7 +21866,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00373,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79282",
@@ -20515,7 +21908,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.004,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79275",
@@ -20556,7 +21950,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00466,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79266",
@@ -20597,7 +21992,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00279,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79263",
@@ -20638,7 +22034,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00307,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79257",
@@ -20679,7 +22076,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00373,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79256",
@@ -20720,7 +22118,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00446,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79245",
@@ -20761,7 +22160,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00103,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79244",
@@ -20802,7 +22202,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00303,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79240",
@@ -20843,7 +22244,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00373,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79235",
@@ -20884,7 +22286,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00373,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79232",
@@ -20925,7 +22328,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00373,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79231",
@@ -20966,7 +22370,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00417,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79230",
@@ -21007,7 +22412,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00303,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79227",
@@ -21048,7 +22454,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0033,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79226",
@@ -21089,7 +22496,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.003,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79224",
@@ -21130,7 +22538,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00327,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79223",
@@ -21171,7 +22580,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00233,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79215",
@@ -21212,7 +22622,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00373,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79210",
@@ -21253,7 +22664,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00409,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79202",
@@ -21294,7 +22706,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00466,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79200",
@@ -21335,7 +22748,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00373,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79198",
@@ -21376,7 +22790,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00373,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79148",
@@ -21417,7 +22832,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00263,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79090",
@@ -21458,7 +22874,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00391,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79072",
@@ -21499,7 +22916,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00312,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79058",
@@ -21540,7 +22958,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00321,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79020",
@@ -21581,7 +23000,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00358,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79011",
@@ -21622,7 +23042,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00444,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-78892",
@@ -21663,7 +23084,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00086,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-20280",
@@ -21712,6 +23134,7 @@
     "published": "2026-09-02T17:17:33.580",
     "nvd_last_modified": "2026-09-03T13:04:39.930",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485454+00:00"
@@ -21763,6 +23186,7 @@
     "published": "2026-09-02T17:17:33.420",
     "nvd_last_modified": "2026-09-03T13:04:39.750",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485450+00:00"
@@ -21814,6 +23238,7 @@
     "published": "2026-09-02T17:17:33.267",
     "nvd_last_modified": "2026-09-03T13:04:39.583",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485447+00:00"
@@ -21865,6 +23290,7 @@
     "published": "2026-09-02T17:17:33.110",
     "nvd_last_modified": "2026-09-03T16:37:52.170",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485443+00:00"
@@ -21918,7 +23344,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00252,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-20275",
@@ -21967,6 +23394,7 @@
     "published": "2026-09-02T17:17:32.790",
     "nvd_last_modified": "2026-09-03T13:04:39.407",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485436+00:00"
@@ -22018,6 +23446,7 @@
     "published": "2026-09-02T17:17:32.630",
     "nvd_last_modified": "2026-09-04T14:17:18.423",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485433+00:00"
@@ -22069,6 +23498,26 @@
     "published": "2026-08-18T21:17:24.900",
     "nvd_last_modified": "2026-09-04T13:19:43.750",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "oracle",
+        "product": "mysql_cluster",
+        "fixed": "8.0.48",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "oracle",
+        "product": "mysql_cluster",
+        "fixed": "8.4.11",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "oracle",
+        "product": "mysql_cluster",
+        "fixed": "9.7.2",
+        "fix_type": "up_to_and_including"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485429+00:00"
@@ -22122,7 +23571,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00363,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-60623",
@@ -22171,6 +23621,7 @@
     "published": "2026-07-21T22:18:02.830",
     "nvd_last_modified": "2026-09-03T18:34:06.343",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485422+00:00"
@@ -22222,6 +23673,7 @@
     "published": "2026-07-21T22:17:59.050",
     "nvd_last_modified": "2026-09-03T18:33:44.787",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485418+00:00"
@@ -22273,6 +23725,7 @@
     "published": "2026-07-21T22:17:34.510",
     "nvd_last_modified": "2026-09-03T18:34:02.120",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485414+00:00"
@@ -22324,6 +23777,7 @@
     "published": "2026-07-21T22:17:20.497",
     "nvd_last_modified": "2026-09-03T18:26:07.257",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485411+00:00"
@@ -22375,6 +23829,7 @@
     "published": "2026-07-21T22:17:20.383",
     "nvd_last_modified": "2026-09-03T18:26:03.270",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485407+00:00"
@@ -22426,6 +23881,14 @@
     "published": "2025-04-15T21:16:00.043",
     "nvd_last_modified": "2026-09-03T18:52:44.433",
     "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "oracle",
+        "product": "mysql_connector\\/j",
+        "fixed": "9.2.0",
+        "fix_type": "up_to_and_including"
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485403+00:00"
@@ -22480,6 +23943,7 @@
     "published": "2026-09-05T12:16:46.790",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485399+00:00"
@@ -22535,6 +23999,7 @@
     "published": "2026-09-05T07:17:11.657",
     "nvd_last_modified": "2026-09-08T17:17:33.913",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485396+00:00"
@@ -22591,6 +24056,7 @@
     "published": "2026-09-05T06:17:10.080",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485392+00:00"
@@ -22642,6 +24108,7 @@
     "published": "2026-09-05T00:17:20.520",
     "nvd_last_modified": "2026-09-08T21:05:26.920",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485389+00:00"
@@ -22693,6 +24160,7 @@
     "published": "2026-09-05T00:17:19.963",
     "nvd_last_modified": "2026-09-08T21:05:26.920",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485386+00:00"
@@ -22744,6 +24212,7 @@
     "published": "2026-09-05T00:17:19.827",
     "nvd_last_modified": "2026-09-08T21:05:26.920",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485383+00:00"
@@ -22795,6 +24264,7 @@
     "published": "2026-09-05T00:17:19.683",
     "nvd_last_modified": "2026-09-08T21:05:26.920",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485379+00:00"
@@ -22847,6 +24317,7 @@
     "published": "2026-09-05T00:17:19.540",
     "nvd_last_modified": "2026-09-08T21:05:26.920",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485376+00:00"
@@ -22899,6 +24370,7 @@
     "published": "2026-09-05T00:17:19.393",
     "nvd_last_modified": "2026-09-09T17:17:22.047",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485372+00:00"
@@ -22950,6 +24422,7 @@
     "published": "2026-09-04T18:17:55.437",
     "nvd_last_modified": "2026-09-10T15:13:07.090",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485369+00:00"
@@ -23006,6 +24479,7 @@
     "published": "2026-09-04T14:17:17.480",
     "nvd_last_modified": "2026-09-08T13:12:58.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485366+00:00"
@@ -23057,6 +24531,7 @@
     "published": "2026-09-04T12:17:24.177",
     "nvd_last_modified": "2026-09-08T20:05:53.177",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485362+00:00"
@@ -23111,6 +24586,7 @@
     "published": "2026-09-04T10:17:13.340",
     "nvd_last_modified": "2026-09-08T19:09:21.310",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485359+00:00"
@@ -23165,6 +24641,7 @@
     "published": "2026-09-04T05:17:13.013",
     "nvd_last_modified": "2026-09-07T12:17:16.933",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485355+00:00"
@@ -23216,6 +24693,7 @@
     "published": "2026-09-03T17:17:29.400",
     "nvd_last_modified": "2026-09-07T12:17:20.830",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485273+00:00"
@@ -23267,6 +24745,7 @@
     "published": "2026-09-03T17:17:25.673",
     "nvd_last_modified": "2026-09-05T02:17:18.017",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485269+00:00"
@@ -23318,6 +24797,7 @@
     "published": "2026-09-03T17:17:25.547",
     "nvd_last_modified": "2026-09-03T18:17:28.370",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485265+00:00"
@@ -23369,6 +24849,7 @@
     "published": "2026-09-02T20:17:39.210",
     "nvd_last_modified": "2026-09-03T13:06:15.767",
     "vuln_status": "Received",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485262+00:00"
@@ -23423,6 +24904,7 @@
     "published": "2026-09-02T15:17:39.410",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485258+00:00"
@@ -23477,6 +24959,7 @@
     "published": "2026-09-02T15:17:38.413",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485255+00:00"
@@ -23528,6 +25011,7 @@
     "published": "2026-09-02T12:17:13.287",
     "nvd_last_modified": "2026-09-03T14:17:01.987",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485251+00:00"
@@ -23581,7 +25065,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00482,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-84374",
@@ -23631,6 +25116,7 @@
     "published": "2026-09-01T22:17:19.293",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485244+00:00"
@@ -23682,6 +25168,7 @@
     "published": "2026-09-01T22:17:18.987",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485240+00:00"
@@ -23733,6 +25220,7 @@
     "published": "2026-09-01T21:18:36.310",
     "nvd_last_modified": "2026-09-08T20:18:59.270",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485237+00:00"
@@ -23784,6 +25272,7 @@
     "published": "2026-09-01T12:17:48.723",
     "nvd_last_modified": "2026-09-08T20:18:59.270",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485233+00:00"
@@ -23827,7 +25316,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00313,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81891",
@@ -23876,6 +25366,7 @@
     "published": "2026-08-31T21:17:52.757",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485226+00:00"
@@ -23927,6 +25418,7 @@
     "published": "2026-08-31T21:17:52.460",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485222+00:00"
@@ -23970,7 +25462,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00572,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-55634",
@@ -24020,6 +25513,7 @@
     "published": "2026-08-28T20:18:29.627",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485215+00:00"
@@ -24071,6 +25565,7 @@
     "published": "2026-08-28T20:18:29.487",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485212+00:00"
@@ -24114,7 +25609,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.02315,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81525",
@@ -24155,7 +25651,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00273,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-54718",
@@ -24204,6 +25701,7 @@
     "published": "2026-08-27T20:17:49.817",
     "nvd_last_modified": "2026-09-09T21:09:13.080",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485202+00:00"
@@ -24257,7 +25755,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00367,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-78293",
@@ -24298,7 +25797,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00237,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-78292",
@@ -24339,7 +25839,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00525,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-78286",
@@ -24380,7 +25881,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00525,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-78276",
@@ -24421,7 +25923,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00503,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-78257",
@@ -24462,7 +25965,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00482,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-80428",
@@ -24511,6 +26015,7 @@
     "published": "2026-08-26T16:16:45.100",
     "nvd_last_modified": "2026-09-10T20:48:45.067",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485177+00:00"
@@ -24562,6 +26067,7 @@
     "published": "2026-08-25T23:17:59.860",
     "nvd_last_modified": "2026-09-03T05:15:09.570",
     "vuln_status": "Received",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485174+00:00"
@@ -24605,7 +26111,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0043,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-75574",
@@ -24646,7 +26153,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00364,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76635",
@@ -24687,7 +26195,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00353,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76214",
@@ -24728,7 +26237,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00292,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76213",
@@ -24769,7 +26279,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00332,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76208",
@@ -24810,7 +26321,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00298,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76207",
@@ -24851,7 +26363,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00255,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76205",
@@ -24892,7 +26405,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00288,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-75918",
@@ -24933,7 +26447,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00341,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-52608",
@@ -24974,7 +26489,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0061,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-72557",
@@ -25023,6 +26539,7 @@
     "published": "2026-08-11T12:17:41.547",
     "nvd_last_modified": "2026-09-03T17:51:18.670",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485135+00:00"
@@ -25074,6 +26591,7 @@
     "published": "2026-08-11T12:17:41.377",
     "nvd_last_modified": "2026-09-03T17:51:18.670",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485132+00:00"
@@ -25125,6 +26643,7 @@
     "published": "2026-08-11T12:17:40.733",
     "nvd_last_modified": "2026-09-03T17:51:46.420",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485128+00:00"
@@ -25168,7 +26687,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00535,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-70554",
@@ -25209,7 +26729,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00851,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-70553",
@@ -25250,7 +26771,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.01203,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-39932",
@@ -25291,7 +26813,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.03679,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-69088",
@@ -25332,7 +26855,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00234,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-49332",
@@ -25381,6 +26905,7 @@
     "published": "2026-07-28T13:18:46.067",
     "nvd_last_modified": "2026-09-08T11:17:42.267",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485104+00:00"
@@ -25434,6 +26959,7 @@
     "published": "2026-09-02T15:17:37.127",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485100+00:00"
@@ -25487,6 +27013,7 @@
     "published": "2026-09-02T15:17:36.450",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485097+00:00"
@@ -25542,7 +27069,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00304,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-82183",
@@ -25593,6 +27121,7 @@
     "published": "2026-09-02T06:17:19.987",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485089+00:00"
@@ -25646,6 +27175,7 @@
     "published": "2026-09-02T06:17:19.773",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485086+00:00"
@@ -25699,6 +27229,7 @@
     "published": "2026-09-02T06:17:19.667",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485082+00:00"
@@ -25752,6 +27283,7 @@
     "published": "2026-09-02T06:17:18.487",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485076+00:00"
@@ -25808,7 +27340,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00718,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-77792",
@@ -25859,6 +27392,7 @@
     "published": "2026-09-02T06:17:18.063",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485069+00:00"
@@ -25912,6 +27446,7 @@
     "published": "2026-09-02T06:17:17.130",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485066+00:00"
@@ -25965,6 +27500,7 @@
     "published": "2026-09-02T06:17:16.840",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485062+00:00"
@@ -26019,6 +27555,7 @@
     "published": "2026-09-02T06:17:16.643",
     "nvd_last_modified": "2026-09-03T17:50:37.690",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485059+00:00"
@@ -26077,7 +27614,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00646,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-12865",
@@ -26128,6 +27666,7 @@
     "published": "2026-09-02T06:17:15.917",
     "nvd_last_modified": "2026-09-03T17:49:19.180",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485052+00:00"
@@ -26181,6 +27720,7 @@
     "published": "2026-09-02T06:17:15.817",
     "nvd_last_modified": "2026-09-03T17:49:19.180",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485049+00:00"
@@ -26237,7 +27777,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00291,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-14982",
@@ -26289,6 +27830,7 @@
     "published": "2026-09-02T03:16:47.663",
     "nvd_last_modified": "2026-09-04T03:17:40.097",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485042+00:00"
@@ -26334,7 +27876,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0057,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-18550",
@@ -26387,7 +27930,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00326,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19914",
@@ -26430,7 +27974,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00468,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-75921",
@@ -26473,7 +28018,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00628,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19952",
@@ -26517,7 +28063,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0078,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19806",
@@ -26570,7 +28117,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00396,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19796",
@@ -26613,7 +28161,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00241,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19573",
@@ -26656,7 +28205,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00241,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-75865",
@@ -26700,7 +28250,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00513,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-82229",
@@ -26743,7 +28294,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00146,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-75133",
@@ -26794,6 +28346,7 @@
     "published": "2026-08-31T16:19:11.227",
     "nvd_last_modified": "2026-09-08T20:18:59.270",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485001+00:00"
@@ -26849,6 +28402,7 @@
     "published": "2026-08-31T15:17:37.503",
     "nvd_last_modified": "2026-09-08T20:18:59.270",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.484997+00:00"
@@ -26895,7 +28449,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00288,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-81660",
@@ -26938,7 +28493,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00276,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76585",
@@ -26981,7 +28537,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00276,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-14307",
@@ -27024,7 +28581,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00164,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-15980",
@@ -27067,7 +28625,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00454,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-15369",
@@ -27111,7 +28670,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00397,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-75807",
@@ -27154,7 +28714,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00289,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-14494",
@@ -27197,7 +28758,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00693,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-77012",
@@ -27240,7 +28802,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00204,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-77007",
@@ -27283,7 +28846,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00256,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76586",
@@ -27326,7 +28890,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00208,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76548",
@@ -27369,7 +28934,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00187,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-16947",
@@ -27412,7 +28978,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0024,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-16600",
@@ -27455,7 +29022,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00201,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-16259",
@@ -27498,7 +29066,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00277,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-16061",
@@ -27541,7 +29110,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00262,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-10522",
@@ -27592,6 +29162,7 @@
     "published": "2026-08-29T06:16:57.717",
     "nvd_last_modified": "2026-09-03T16:17:23.077",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.484931+00:00"
@@ -27638,7 +29209,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00255,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-5934",
@@ -27682,7 +29254,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0019,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-79996",
@@ -27725,7 +29298,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00316,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76581",
@@ -27769,7 +29343,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00339,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-6286",
@@ -27812,7 +29387,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00444,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-5097",
@@ -27856,7 +29432,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00412,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19423",
@@ -27899,7 +29476,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00279,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19084",
@@ -27942,7 +29520,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00316,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-14558",
@@ -27986,7 +29565,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00533,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-77365",
@@ -28029,7 +29609,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0031,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-76053",
@@ -28072,7 +29653,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00304,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-18983",
@@ -28117,7 +29699,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00503,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-18978",
@@ -28161,7 +29744,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00274,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-18324",
@@ -28204,7 +29788,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00304,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19092",
@@ -28248,7 +29833,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.01498,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-32566",
@@ -28291,7 +29877,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0045,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-32564",
@@ -28334,7 +29921,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00342,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-78333",
@@ -28377,7 +29965,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00276,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-78137",
@@ -28420,7 +30009,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00281,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-77018",
@@ -28463,7 +30053,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00406,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-77017",
@@ -28506,7 +30097,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00249,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-77016",
@@ -28549,7 +30141,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00241,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19715",
@@ -28593,7 +30186,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00256,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-19223",
@@ -28636,7 +30230,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.0037,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-13415",
@@ -28679,7 +30274,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00257,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-13598",
@@ -28722,7 +30318,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00299,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-65640",
@@ -28773,6 +30370,7 @@
     "published": "2026-08-17T21:16:46.470",
     "nvd_last_modified": "2026-09-03T17:02:54.670",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.484825+00:00"
@@ -28826,6 +30424,7 @@
     "published": "2026-08-12T06:18:55.103",
     "nvd_last_modified": "2026-09-03T13:04:35.540",
     "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.484822+00:00"
@@ -28871,7 +30470,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00348,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-78689",
@@ -28920,6 +30520,7 @@
     "published": "2026-09-02T16:17:25.667",
     "nvd_last_modified": "2026-09-03T13:06:10.270",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.484814+00:00"
@@ -28973,7 +30574,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00372,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-77180",
@@ -29022,6 +30624,7 @@
     "published": "2026-09-02T16:17:23.407",
     "nvd_last_modified": "2026-09-03T13:06:08.600",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.484806+00:00"
@@ -29073,6 +30676,7 @@
     "published": "2026-09-02T16:17:18.663",
     "nvd_last_modified": "2026-09-03T13:06:00.047",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.484787+00:00"
@@ -29124,6 +30728,7 @@
     "published": "2026-09-02T16:17:14.917",
     "nvd_last_modified": "2026-09-03T16:37:52.170",
     "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.484783+00:00"
@@ -29171,7 +30776,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00502,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-80208",
@@ -29212,7 +30818,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00312,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   },
   {
     "cve_id": "CVE-2026-18485",
@@ -29253,6 +30860,7 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "epss_score_prev": 0.00114,
-    "vuln_status": null
+    "vuln_status": null,
+    "nvd_fix_versions": []
   }
 ]

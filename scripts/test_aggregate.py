@@ -40,6 +40,7 @@ from aggregate import (
     compute_stats,
     build_final_entry,
     parse_osv_fixed_versions,
+    extract_nvd_fix_versions,
     extract_cvss,
     extract_cvss_vector_components,
     append_history,
@@ -486,6 +487,80 @@ class TestParseOsvFixedVersions(unittest.TestCase):
         ]}
         result = parse_osv_fixed_versions(osv_data)
         self.assertEqual(len(result), 5)
+
+
+class TestExtractNvdFixVersions(unittest.TestCase):
+    def test_extracts_fix_from_version_end_excluding(self):
+        nvd_cve = {
+            "configurations": [{
+                "nodes": [{
+                    "cpeMatch": [{
+                        "vulnerable": True,
+                        "criteria": "cpe:2.3:a:apache:log4j:*:*:*:*:*:*:*:*",
+                        "versionEndExcluding": "2.3.1",
+                    }],
+                }],
+            }],
+        }
+        result = extract_nvd_fix_versions(nvd_cve)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["vendor"], "apache")
+        self.assertEqual(result[0]["product"], "log4j")
+        self.assertEqual(result[0]["fixed"], "2.3.1")
+        self.assertEqual(result[0]["fix_type"], "before")
+
+    def test_version_end_including_sets_fix_type(self):
+        nvd_cve = {"configurations": [{"nodes": [{"cpeMatch": [{
+            "vulnerable": True,
+            "criteria": "cpe:2.3:o:cisco:ios:*:*:*:*:*:*:*:*",
+            "versionEndIncluding": "15.6",
+        }]}]}]}
+        result = extract_nvd_fix_versions(nvd_cve)
+        self.assertEqual(result[0]["fix_type"], "up_to_and_including")
+
+    def test_non_vulnerable_match_ignored(self):
+        nvd_cve = {"configurations": [{"nodes": [{"cpeMatch": [{
+            "vulnerable": False,
+            "criteria": "cpe:2.3:a:foo:bar:*:*:*:*:*:*:*:*",
+            "versionEndExcluding": "1.0",
+        }]}]}]}
+        self.assertEqual(extract_nvd_fix_versions(nvd_cve), [])
+
+    def test_no_version_bound_ignored(self):
+        nvd_cve = {"configurations": [{"nodes": [{"cpeMatch": [{
+            "vulnerable": True,
+            "criteria": "cpe:2.3:a:foo:bar:*:*:*:*:*:*:*:*",
+        }]}]}]}
+        self.assertEqual(extract_nvd_fix_versions(nvd_cve), [])
+
+    def test_missing_configurations_returns_empty(self):
+        self.assertEqual(extract_nvd_fix_versions({}), [])
+
+    def test_malformed_input_does_not_raise(self):
+        self.assertEqual(extract_nvd_fix_versions({"configurations": "bad"}), [])
+        self.assertEqual(extract_nvd_fix_versions({"configurations": [{"nodes": "bad"}]}), [])
+        self.assertEqual(extract_nvd_fix_versions(
+            {"configurations": [{"nodes": [{"cpeMatch": "bad"}]}]}), [])
+
+    def test_dedupes_and_caps_at_five(self):
+        matches = [{
+            "vulnerable": True,
+            "criteria": f"cpe:2.3:a:vendor{i}:product{i}:*:*:*:*:*:*:*:*",
+            "versionEndExcluding": f"1.{i}.0",
+        } for i in range(8)]
+        # Add a duplicate of the first entry to verify dedup doesn't consume a slot twice
+        matches.insert(0, dict(matches[0]))
+        nvd_cve = {"configurations": [{"nodes": [{"cpeMatch": matches}]}]}
+        result = extract_nvd_fix_versions(nvd_cve)
+        self.assertEqual(len(result), 5)
+
+    def test_malformed_criteria_ignored(self):
+        nvd_cve = {"configurations": [{"nodes": [{"cpeMatch": [{
+            "vulnerable": True,
+            "criteria": "not-a-cpe-string",
+            "versionEndExcluding": "1.0",
+        }]}]}]}
+        self.assertEqual(extract_nvd_fix_versions(nvd_cve), [])
 
 
 class TestAppendHistory(unittest.TestCase):

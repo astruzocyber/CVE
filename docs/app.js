@@ -389,6 +389,21 @@ function renderCard(alert) {
           const items = fixed.map(f => `${escapeHtml(f.package || "?")}${f.ecosystem ? ` (${escapeHtml(f.ecosystem)})` : ""} \u2192 ${escapeHtml(f.fixed || "?")}`).join(", ");
           return `<div class="osv-fixed" title="Fixed version(s) per OSV.dev">Fix available: ${items}</div>`;
         })()}
+        ${(() => {
+          // nvd_fix_versions (cycle 78, NVD configurations CPE-match parsing)
+          // covers the population OSV.dev never curates: vendor/OS/hardware
+          // CVEs (Windows, Cisco IOS, PAN-OS, browsers, firmware, etc.) that
+          // still carry a precise "fixed in version X" boundary in NVD's own
+          // CPE match data. Zero new API calls -- parsed from the NVD
+          // response already fetched every run. Renders only when non-empty.
+          const nfixed = alert.nvd_fix_versions;
+          if (!Array.isArray(nfixed) || nfixed.length === 0) return "";
+          const items = nfixed.map(f => {
+            const rel = f.fix_type === "up_to_and_including" ? "next release after" : "before";
+            return `${escapeHtml(f.vendor || "?")} ${escapeHtml(f.product || "?")} \u2192 fixed ${rel} ${escapeHtml(f.fixed || "?")}`;
+          }).join(", ");
+          return `<div class="osv-fixed" title="Fixed version(s) per NVD CPE match data">Fix available (NVD): ${items}</div>`;
+        })()}
         ${copyMdBtn}
         ${copySuppressBtn}
         ${reviewedBtn}
@@ -422,6 +437,9 @@ function alertToMarkdown(alert) {
   if (alert.dependabot_url) lines.push(`- **Dependabot alert:** ${alert.dependabot_url}`);
   if (Array.isArray(alert.osv_fixed_versions) && alert.osv_fixed_versions.length) {
     lines.push(`- **Fix available (OSV.dev):** ${alert.osv_fixed_versions.map(f => `${f.package || "?"}${f.ecosystem ? ` (${f.ecosystem})` : ""} -> ${f.fixed || "?"}`).join(", ")}`);
+  }
+  if (Array.isArray(alert.nvd_fix_versions) && alert.nvd_fix_versions.length) {
+    lines.push(`- **Fix available (NVD):** ${alert.nvd_fix_versions.map(f => `${f.vendor || "?"} ${f.product || "?"} -> fixed ${f.fix_type === "up_to_and_including" ? "next release after" : "before"} ${f.fixed || "?"}`).join(", ")}`);
   }
   if (alert.osv_id) lines.push(`- **OSV.dev:** https://osv.dev/vulnerability/${encodeURIComponent(alert.osv_id)}`);
   return lines.join("\n");
@@ -823,19 +841,24 @@ function exportCsv() {
   const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_score_prev", "epss_percentile", "kev", "kev_date_added", "kev_due_date",
     "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
     "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "matched_keywords", "published",
-    "nvd_last_modified", "vuln_status", "first_seen", "osv_id", "osv_fixed_versions", "description"];
+    "nvd_last_modified", "vuln_status", "first_seen", "osv_id", "osv_fixed_versions", "nvd_fix_versions", "description"];
   const lines = [toCsvRow(header)];
   for (const a of rows) {
     const vc = a.cvss_vector_components || {};
     const osvFixed = (a.osv_fixed_versions || [])
       .map((f) => `${f.package || "?"}${f.ecosystem ? ` (${f.ecosystem})` : ""} -> ${f.fixed || "?"}`)
       .join("; ");
+    // nvd_fix_versions (cycle 78): same flatten-to-string convention as
+    // osv_fixed_versions above, for CSV's single-cell-per-field model.
+    const nvdFixed = (a.nvd_fix_versions || [])
+      .map((f) => `${f.vendor || "?"} ${f.product || "?"} -> fixed ${f.fix_type === "up_to_and_including" ? "next release after" : "before"} ${f.fixed || "?"}`)
+      .join("; ");
     lines.push(toCsvRow([
       a.cve_id, a.risk_score, a.risk_score_prev, a.cvss_score, a.epss_score, a.epss_score_prev, a.epss_percentile, a.kev, a.kev_date_added, a.kev_due_date,
       a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
       vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
       (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.nvd_last_modified,
-      a.vuln_status, a.first_seen, a.osv_id, osvFixed, a.description,
+      a.vuln_status, a.first_seen, a.osv_id, osvFixed, nvdFixed, a.description,
     ]));
   }
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });

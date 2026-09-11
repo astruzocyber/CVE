@@ -501,6 +501,65 @@ def extract_vuln_status(nvd_cve):
     return nvd_cve.get("vulnStatus")
 
 
+def extract_nvd_fix_versions(nvd_cve):
+    """Parse NVD's own `configurations` CPE match data (already present in
+    every NVD CVE response we already fetch every run -- zero new API calls)
+    for "fixed in version X" signal, distinct from cycle 61's OSV.dev
+    enrichment: OSV.dev only has records for a minority of CVEs (primarily
+    open-source package ecosystems reachable via a per-CVE network lookup
+    that can 404), while NVD's CPE match criteria cover vendor/OS/hardware
+    CVEs (Windows, Cisco IOS, PAN-OS, browsers, etc.) that OSV never carries
+    -- exactly the CVSS/vendor-product-heavy population this dashboard's own
+    watchlist targets. A CPE match node marked vulnerable=true with a
+    versionEndExcluding ("fixed in this version or later") or
+    versionEndIncluding ("last vulnerable version is this one, next release
+    is fixed") bound tells an analyst the exact version boundary to patch to,
+    a signal previously totally absent for any non-open-source-package CVE.
+    CPE criteria strings are colon-delimited: cpe:2.3:part:vendor:product:...
+    -- vendor/product are extracted from fixed positions 3/4 (index 2/3 after
+    the leading "cpe:2.3:part" pair), matching the well-documented CPE 2.3
+    formatted-string binding spec. Returns [] (not None) on any missing/
+    malformed shape rather than raising -- configurations is absent for some
+    older/rejected CVEs and this must never break the pipeline. Deduplicated
+    by (vendor, product, fixed) and capped to 5 entries, mirroring
+    parse_osv_fixed_versions()'s existing cap exactly.
+    """
+    fixes = []
+    seen = set()
+    for config in nvd_cve.get("configurations", []) or []:
+        if not isinstance(config, dict):
+            continue
+        for node in config.get("nodes", []) or []:
+            if not isinstance(node, dict):
+                continue
+            for match in node.get("cpeMatch", []) or []:
+                if not isinstance(match, dict) or not match.get("vulnerable"):
+                    continue
+                bound = match.get("versionEndExcluding") or match.get("versionEndIncluding")
+                if not bound:
+                    continue
+                criteria = match.get("criteria", "")
+                parts = criteria.split(":")
+                if len(parts) < 5 or parts[0] != "cpe":
+                    continue
+                vendor, product = parts[3], parts[4]
+                if not vendor or not product:
+                    continue
+                key = (vendor, product, bound)
+                if key in seen:
+                    continue
+                seen.add(key)
+                fixes.append({
+                    "vendor": vendor,
+                    "product": product,
+                    "fixed": bound,
+                    "fix_type": "before" if match.get("versionEndExcluding") else "up_to_and_including",
+                })
+                if len(fixes) >= 5:
+                    return fixes
+    return fixes
+
+
 def extract_cwe_nvd(nvd_cve):
     ids = []
     for w in nvd_cve.get("weaknesses", []) or []:
@@ -580,6 +639,7 @@ def fetch_nvd_candidates(watchlist, api_key):
                 # which "published" alone can never reveal for an old CVE.
                 "nvd_last_modified": cve.get("lastModified"),
                 "vuln_status": extract_vuln_status(cve),
+                "nvd_fix_versions": extract_nvd_fix_versions(cve),
                 "matched_vendor_product": [],
                 "matched_keywords": [],
                 "source": "nvd",
@@ -955,6 +1015,7 @@ def build_final_entry(entry, kev_map, epss_map):
         # no equivalent concept) -- absence itself is meaningful (not
         # applicable) rather than a gap to fill in.
         "vuln_status": entry.get("vuln_status"),
+        "nvd_fix_versions": entry.get("nvd_fix_versions", []),
         "severity": entry.get("severity"),
         "dependabot_url": entry.get("dependabot_url"),
         "first_seen": datetime.now(timezone.utc).isoformat(),
@@ -1414,6 +1475,12 @@ def main():
         # not-resurfaced alerts), so it simply stays whatever it already
         # was, defaulting to None for pre-cycle-77 records.
         prior.setdefault("vuln_status", None)
+        # Backfill for records written before this cycle's NVD `configurations`
+        # CPE-match parsing existed -- same self-heal pattern as vuln_status
+        # above. Not re-fetched here (no fresh NVD response for a
+        # not-resurfaced alert this run); stays whatever it already was,
+        # defaulting to [] for pre-cycle-78 records until NVD resurfaces them.
+        prior.setdefault("nvd_fix_versions", [])
 
     # Suppressed entries that were previously alerted should also disappear from the
     # cumulative view going forward (an analyst explicitly accepted the risk) -- but
