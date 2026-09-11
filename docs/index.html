@@ -161,7 +161,7 @@
       <button id="reset-filters" type="button" title="Clear search, KEV/severity/source filters, risk/EPSS thresholds, hide-reviewed, new-only, sort, and dependency-file filter (shortcut: r)">Reset filters</button>
       <button id="theme-toggle" type="button" title="Toggle light/dark theme (shortcut: t)" aria-pressed="false">🌙 Dark</button>
       <button id="view-toggle" type="button" title="Toggle between card view and a dense sortable table view (shortcut: v)" aria-pressed="false">☰ Table view</button>
-      <span class="kbd-hint" title="Keyboard shortcuts: / focus search, Esc unfocus, r reset filters, t toggle theme, v toggle view">⌨ shortcuts</span>
+      <button type="button" id="kbd-hint-btn" class="kbd-hint" title="Show keyboard shortcuts (shortcut: ?)" aria-haspopup="dialog">⌨ shortcuts</button>
       <span class="count" id="result-count" aria-live="polite"></span>
       <span class="reviewed-progress" id="reviewed-progress" aria-live="polite" title="How many of all tracked alerts you've marked reviewed on this device (local-only, not shared/synced)"></span>
       <span class="import-reviewed-status" id="import-reviewed-status" aria-live="polite"></span>
@@ -215,6 +215,23 @@
       its score. Subscribe to <a href="feed.xml">feed.xml</a> or
       <a href="feed.json">feed.json</a> for newly-added CISA KEV entries.</p>
   </footer>
+
+  <div id="shortcuts-modal" class="shortcuts-modal" hidden role="dialog" aria-modal="true" aria-labelledby="shortcuts-modal-title">
+    <div class="shortcuts-modal-content">
+      <div class="shortcuts-modal-header">
+        <h2 id="shortcuts-modal-title">Keyboard shortcuts</h2>
+        <button type="button" id="shortcuts-modal-close" aria-label="Close keyboard shortcuts">&times;</button>
+      </div>
+      <dl class="shortcuts-list">
+        <dt><kbd>/</kbd></dt><dd>Focus search</dd>
+        <dt><kbd>Esc</kbd></dt><dd>Unfocus current field / close this dialog</dd>
+        <dt><kbd>r</kbd></dt><dd>Reset filters</dd>
+        <dt><kbd>t</kbd></dt><dd>Toggle light/dark theme</dd>
+        <dt><kbd>v</kbd></dt><dd>Toggle card/table view</dd>
+        <dt><kbd>?</kbd></dt><dd>Show/hide this shortcuts help</dd>
+      </dl>
+    </div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   <script src="app.js"></script>

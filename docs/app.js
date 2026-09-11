@@ -1698,6 +1698,28 @@ document.getElementById("reset-filters").addEventListener("click", () => {
   applyFiltersAndRender();
 });
 
+// Keyboard-shortcuts help modal (cycle 80): opened via the toolbar button,
+// the "?" key, or closed via its own close button, Escape, or clicking the
+// dimmed backdrop. Mirrors the existing .score-breakdown hidden-attribute
+// toggle pattern used throughout the app -- no new state management needed.
+function openShortcutsModal() {
+  const modal = document.getElementById("shortcuts-modal");
+  if (modal) modal.hidden = false;
+}
+function closeShortcutsModal() {
+  const modal = document.getElementById("shortcuts-modal");
+  if (modal) modal.hidden = true;
+}
+function isShortcutsModalOpen() {
+  const modal = document.getElementById("shortcuts-modal");
+  return modal && !modal.hidden;
+}
+document.getElementById("kbd-hint-btn")?.addEventListener("click", openShortcutsModal);
+document.getElementById("shortcuts-modal-close")?.addEventListener("click", closeShortcutsModal);
+document.getElementById("shortcuts-modal")?.addEventListener("click", (e) => {
+  if (e.target && e.target.id === "shortcuts-modal") closeShortcutsModal();
+});
+
 // Keyboard shortcuts for the most common triage actions -- prior to this,
 // every filter/search/reset action required a mouse click, real friction for
 // a security-team tool where analysts triage dozens/hundreds of alerts in a
@@ -1717,10 +1739,20 @@ document.addEventListener("keydown", (e) => {
     return;
   }
   if (e.key === "Escape") {
+    if (isShortcutsModalOpen()) {
+      closeShortcutsModal();
+      return;
+    }
     if (isTyping && t.blur) t.blur();
     return;
   }
   if (isTyping) return;
+  if (e.key === "?") {
+    e.preventDefault();
+    if (isShortcutsModalOpen()) closeShortcutsModal();
+    else openShortcutsModal();
+    return;
+  }
   if (e.key === "r" || e.key === "R") {
     e.preventDefault();
     document.getElementById("reset-filters").click();

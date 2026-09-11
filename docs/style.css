@@ -334,8 +334,100 @@ main {
   color: var(--text-dim);
   font-size: 0.78rem;
   opacity: 0.7;
-  cursor: help;
+  cursor: pointer;
   white-space: nowrap;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+}
+
+.kbd-hint:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Keyboard-shortcuts help modal (cycle 80): the toolbar's "shortcuts" hint
+   was previously a plain non-interactive <span> with only a hover title --
+   invisible on touch devices and easy to miss entirely. Now an actual button
+   opening a small dialog listing every shortcut, dismissible via the close
+   button, Escape, or clicking the dimmed backdrop. Mirrors the existing
+   .score-breakdown show/hide pattern (hidden attribute toggled by JS) and
+   the app's existing --bg-panel/--border/--text-dim theme variables so it
+   matches light/dark theme automatically with zero new CSS variables. */
+.shortcuts-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.shortcuts-modal[hidden] {
+  display: none;
+}
+
+.shortcuts-modal-content {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  max-width: 360px;
+  width: 90%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.shortcuts-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.shortcuts-modal-header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+#shortcuts-modal-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+#shortcuts-modal-close:hover {
+  color: inherit;
+}
+
+.shortcuts-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 14px;
+  margin: 0;
+}
+
+.shortcuts-list dt {
+  text-align: right;
+}
+
+.shortcuts-list dd {
+  margin: 0;
+  color: var(--text-dim);
+}
+
+.shortcuts-list kbd {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-family: monospace;
+  font-size: 0.85rem;
 }
 
 .import-reviewed-label {
@@ -981,6 +1073,7 @@ footer a { color: var(--accent); }
   .dep-filter,
   .controls,
   .cve-link-btn::after,
+  .shortcuts-modal,
   #empty-state {
     display: none !important;
   }
