@@ -1081,6 +1081,14 @@ async function loadStats() {
     if (avgCvssEl) {
       avgCvssEl.textContent = typeof stats.avg_cvss_score === "number" ? stats.avg_cvss_score : "-";
     }
+    const riskTrendEl = document.getElementById("stat-risk-trend");
+    if (riskTrendEl) {
+      const up = stats.risk_increasing_count;
+      const down = stats.risk_decreasing_count;
+      riskTrendEl.textContent = (typeof up === "number" && typeof down === "number")
+        ? `\u25b2${up} / \u25bc${down}`
+        : "-";
+    }
     renderSourceBreakdown(stats.by_source);
     renderSeverityBreakdown(stats.by_severity);
     renderCweBreakdown(stats.by_cwe);
@@ -1274,6 +1282,11 @@ async function loadTrendChart() {
     // new_alerts_count column added in a later schema revision; older rows
     // won't have index 13 at all -- treat missing same as empty.
     const newAlertsCount = rows.map((r) => (r[13] === "" || r[13] === undefined ? null : Number(r[13])));
+    // risk_increasing_count/risk_decreasing_count columns added in a later
+    // schema revision; older rows won't have indices 14/15 at all -- treat
+    // missing same as empty.
+    const riskIncreasing = rows.map((r) => (r[14] === "" || r[14] === undefined ? null : Number(r[14])));
+    const riskDecreasing = rows.map((r) => (r[15] === "" || r[15] === undefined ? null : Number(r[15])));
 
     document.getElementById("trend-section").hidden = false;
     new Chart(canvas, {
@@ -1393,6 +1406,24 @@ async function loadTrendChart() {
             borderColor: "#06d6a0",
             backgroundColor: "rgba(6,214,160,0.12)",
             yAxisID: "y",
+            tension: 0.2,
+            hidden: true,
+          },
+          {
+            label: "Risk increasing (count)",
+            data: riskIncreasing,
+            borderColor: "#ef476f",
+            backgroundColor: "rgba(239,71,111,0.12)",
+            yAxisID: "y2",
+            tension: 0.2,
+            hidden: true,
+          },
+          {
+            label: "Risk decreasing (count)",
+            data: riskDecreasing,
+            borderColor: "#06a77d",
+            backgroundColor: "rgba(6,167,125,0.12)",
+            yAxisID: "y2",
             tension: 0.2,
             hidden: true,
           },

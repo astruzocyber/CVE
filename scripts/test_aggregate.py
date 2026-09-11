@@ -345,6 +345,27 @@ class TestComputeStats(unittest.TestCase):
         stats = compute_stats(alerts)
         self.assertEqual(stats["by_matched_keyword"], {})
 
+    def test_risk_increasing_decreasing_counts(self):
+        # Mirrors the frontend's per-card risk-delta badge logic exactly:
+        # round both scores to the nearest int before comparing, so this
+        # aggregate always agrees with how many badges show up/down arrows.
+        alerts = [
+            {"cvss_score": 5.0, "kev": False, "risk_score": 60, "risk_score_prev": 40},  # up
+            {"cvss_score": 5.0, "kev": False, "risk_score": 30.4, "risk_score_prev": 30.2},  # rounds equal, no change
+            {"cvss_score": 5.0, "kev": False, "risk_score": 20, "risk_score_prev": 50},  # down
+            {"cvss_score": 5.0, "kev": False, "risk_score": 10, "risk_score_prev": None},  # no prior, ignored
+            {"cvss_score": 5.0, "kev": False, "risk_score": 15},  # no prior key at all, ignored
+        ]
+        stats = compute_stats(alerts)
+        self.assertEqual(stats["risk_increasing_count"], 1)
+        self.assertEqual(stats["risk_decreasing_count"], 1)
+
+    def test_risk_increasing_decreasing_counts_zero_when_no_deltas(self):
+        alerts = [{"cvss_score": 5.0, "kev": False, "risk_score": 50}]
+        stats = compute_stats(alerts)
+        self.assertEqual(stats["risk_increasing_count"], 0)
+        self.assertEqual(stats["risk_decreasing_count"], 0)
+
 
 class TestBuildFinalEntry(unittest.TestCase):
     def test_risk_score_prev_defaults_to_none_for_new_entry(self):
@@ -457,20 +478,24 @@ class TestAppendHistory(unittest.TestCase):
                 "avg_cvss_score": 6.5,
                 "kev_due_soon_count": 2,
                 "new_alerts_count": 4,
+                "risk_increasing_count": 3,
+                "risk_decreasing_count": 1,
             }
             self._run_with_tmp_paths(csv_path, lambda: append_history(stats))
             with open(csv_path) as f:
                 lines = f.read().strip().split("\n")
             self.assertEqual(lines[0], HISTORY_CSV_HEADER)
-            self.assertTrue(lines[0].endswith("critical_count,high_count,avg_cvss_score,kev_due_soon_count,medium_count,low_count,new_alerts_count"))
+            self.assertTrue(lines[0].endswith("critical_count,high_count,avg_cvss_score,kev_due_soon_count,medium_count,low_count,new_alerts_count,risk_increasing_count,risk_decreasing_count"))
             row = lines[1].split(",")
-            self.assertEqual(row[-7], "3")  # critical_count
-            self.assertEqual(row[-6], "4")  # high_count
-            self.assertEqual(row[-5], "6.5")  # avg_cvss_score
-            self.assertEqual(row[-4], "2")  # kev_due_soon_count
-            self.assertEqual(row[-3], "2")  # medium_count
-            self.assertEqual(row[-2], "1")  # low_count
-            self.assertEqual(row[-1], "4")  # new_alerts_count
+            self.assertEqual(row[-9], "3")  # critical_count
+            self.assertEqual(row[-8], "4")  # high_count
+            self.assertEqual(row[-7], "6.5")  # avg_cvss_score
+            self.assertEqual(row[-6], "2")  # kev_due_soon_count
+            self.assertEqual(row[-5], "2")  # medium_count
+            self.assertEqual(row[-4], "1")  # low_count
+            self.assertEqual(row[-3], "4")  # new_alerts_count
+            self.assertEqual(row[-2], "3")  # risk_increasing_count
+            self.assertEqual(row[-1], "1")  # risk_decreasing_count
 
     def test_stale_header_upgraded_without_touching_old_rows(self):
         with tempfile.TemporaryDirectory() as d:
@@ -487,6 +512,8 @@ class TestAppendHistory(unittest.TestCase):
                 "avg_cvss_score": 7.25,
                 "kev_due_soon_count": 0,
                 "new_alerts_count": 6,
+                "risk_increasing_count": 2,
+                "risk_decreasing_count": 0,
             }
             self._run_with_tmp_paths(csv_path, lambda: append_history(stats))
             with open(csv_path) as f:
@@ -494,7 +521,7 @@ class TestAppendHistory(unittest.TestCase):
             self.assertEqual(lines[0], HISTORY_CSV_HEADER)
             # Old row is untouched (still fewer columns -- schema-evolution record).
             self.assertEqual(lines[1], old_row)
-            self.assertEqual(lines[2].split(",")[-7:], ["1", "1", "7.25", "0", "", "", "6"])
+            self.assertEqual(lines[2].split(",")[-9:], ["1", "1", "7.25", "0", "", "", "6", "2", "0"])
 
     def test_missing_severity_breakdown_writes_empty_columns(self):
         with tempfile.TemporaryDirectory() as d:
@@ -507,7 +534,7 @@ class TestAppendHistory(unittest.TestCase):
             self._run_with_tmp_paths(csv_path, lambda: append_history(stats))
             with open(csv_path) as f:
                 row = f.read().strip().split("\n")[1].split(",")
-            self.assertEqual(row[-7:], ["", "", "", "", "", "", ""])
+            self.assertEqual(row[-9:], ["", "", "", "", "", "", "", "", ""])
 
 
 if __name__ == "__main__":

@@ -953,6 +953,19 @@ def compute_stats(alerts):
     by_cwe = {}
     by_vendor_product = {}
     by_matched_keyword = {}
+    # Count of currently-tracked alerts whose composite risk_score moved up or
+    # down since the last refresh -- mirrors the exact rounding/threshold logic
+    # the frontend already uses for the per-card risk-delta badge (round both
+    # values to the nearest int, compare), so this stat always agrees with
+    # "how many risk-delta badges are showing up/down arrows right now" without
+    # needing to inspect every card. Distinct from avg_risk_score (a single
+    # blended snapshot number) and from risk_score_prev itself (only visible
+    # per-card, never aggregated) -- this answers "is the tracked population's
+    # risk profile trending up or down overall, and by how many entries" at a
+    # glance. Zero new API calls -- built entirely from risk_score/
+    # risk_score_prev, both already computed/stored every run since cycle 72.
+    risk_increasing = 0
+    risk_decreasing = 0
     for a in alerts:
         cvss = a.get("cvss_score")
         if cvss is None:
@@ -979,6 +992,14 @@ def compute_stats(alerts):
             by_vendor_product[vp] = by_vendor_product.get(vp, 0) + 1
         for kw in (a.get("matched_keywords") or []):
             by_matched_keyword[kw] = by_matched_keyword.get(kw, 0) + 1
+        rs = a.get("risk_score")
+        rsp = a.get("risk_score_prev")
+        if isinstance(rs, (int, float)) and isinstance(rsp, (int, float)):
+            delta = round(rs) - round(rsp)
+            if delta > 0:
+                risk_increasing += 1
+            elif delta < 0:
+                risk_decreasing += 1
 
     # KEV entries with a due date in the past and not yet resolved -- an
     # operationally meaningful "overdue remediation" count (BOD 22-01 style).
@@ -1063,6 +1084,15 @@ def compute_stats(alerts):
         # convention as by_cwe/by_vendor_product. Zero new API calls -- built
         # entirely from data already collected each run.
         "by_matched_keyword": dict(sorted(by_matched_keyword.items(), key=lambda kv: kv[1], reverse=True)[:10]),
+        # Aggregate risk-trend counts: how many currently-tracked alerts have a
+        # composite risk_score that moved up/down since the last refresh (see
+        # the risk_increasing/risk_decreasing computation above for the full
+        # rationale). Answers "is the tracked population's risk profile
+        # trending up or down overall" at a glance, distinct from avg_risk_score
+        # (a single blended snapshot) and risk_score_prev (only visible
+        # per-card). Zero new API calls.
+        "risk_increasing_count": risk_increasing,
+        "risk_decreasing_count": risk_decreasing,
     }
 
 
@@ -1076,7 +1106,7 @@ def compute_stats(alerts):
 HISTORY_CSV_HEADER = (
     "timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,"
     "avg_epss,avg_risk_score,critical_count,high_count,avg_cvss_score,kev_due_soon_count,"
-    "medium_count,low_count,new_alerts_count"
+    "medium_count,low_count,new_alerts_count,risk_increasing_count,risk_decreasing_count"
 )
 
 
@@ -1120,6 +1150,11 @@ def append_history(stats):
         # comment in main() for full rationale. Trailing column, same additive-
         # schema self-heal pattern as every prior trend.csv extension.
         "" if stats.get("new_alerts_count") is None else str(stats["new_alerts_count"]),
+        # Aggregate risk-trend counts: see compute_stats()'s risk_increasing/
+        # risk_decreasing comment for full rationale. Trailing columns, same
+        # additive-schema self-heal pattern as every prior trend.csv extension.
+        str(stats.get("risk_increasing_count", "")),
+        str(stats.get("risk_decreasing_count", "")),
     ]
 
     # Schema-drift self-heal: when a column (e.g. avg_risk_score) is added to the
