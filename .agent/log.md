@@ -3682,3 +3682,33 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `1b4f82a` -- "Cycle 102: add timeout-minutes guard to both workflow jobs" -- pushed to `origin/main` (`25d78a5..1b4f82a`).
 
 **Updated state:** `total_cycles`: 101 -> 102. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 103 — 2026-09-11T19:29:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=102, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 8` (all recent CI/Pages/aggregation runs `completed success`, no 429/throttle signals). Inspected both workflow files, `docs/app.js` function list (50 top-level functions -- card/table view parity now essentially exhaustive), `docs/index.html` head/meta block, `scripts/aggregate.py` function list and `compute_stats()` in full, `README.md`. Card/table-view parity and CI/pipeline-infrastructure veins (cycles 76-102) are both largely mined out; shifted to a documentation/visibility gap.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **GitHub Actions status badges in README** (chosen) -- 5/5/3. `README.md` had zero live status indicators for either workflow (`cve-alerts.yml` aggregation, `ci.yml` validation) despite both being visible/public -- a visitor or future maintainer had to manually click into the Actions tab to know if the pipeline was currently healthy, a basic expectation for any public automated-pipeline repo. Added two native GitHub badge.svg links (`https://github.com/astruzocyber/CVE/actions/workflows/<file>/badge.svg`) at the top of the README, each linking to that workflow's run history. Zero cost (GitHub's own badge endpoint, no third-party service like shields.io needed), zero new dependencies, auto-updates on every run with no maintenance. Trivial validation risk: markdown-only change, no code/schema/data touched.
+2. GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack, deferred cycles 56-102.
+3. Full risk_score history array -- still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms -- still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `README.md`: added two GitHub Actions workflow status badges directly under the title, each linking to the corresponding workflow's Actions page.
+- No Python/JS/schema/data/workflow-YAML changes -- documentation-only.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `node --check docs/app.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> **97/97 tests passed** (unchanged).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (611 alerts, schema OK, stats.json/trend.csv/feeds all checked against live data).
+- Deployed: commit `e2a4507` pushed to `origin/main`. `pages-build-deployment` run `34639081605` triggered normally post-push (in_progress at check time, standard ~40s duration, no prior failure pattern on this workflow).
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-102); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no external API calls made this cycle (documentation-only change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `e2a4507` -- "Cycle 103: add GitHub Actions status badges to README" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 102 -> 103. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

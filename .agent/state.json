@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 102,
+  "total_cycles": 103,
   "implemented": [
     {
       "cycle": 1,
@@ -998,29 +998,34 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 103,
+      "timestamp": "2026-09-11T19:29:00Z",
+      "title": "GitHub Actions status badges in README",
+      "description": "README had zero live status indicators for either workflow (cve-alerts.yml aggregation, ci.yml validation) -- a visitor/collaborator had to click into Actions manually to know if the pipeline was currently healthy. Added two GitHub-native workflow status badges (github.com/.../actions/workflows/<file>/badge.svg, zero cost, zero external service, auto-updates on every run) at the top of README.md, each linking to its workflow's Actions page.",
+      "commit_sha": "e2a4507"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T18:56:00Z",
+  "last_cycle_at": "2026-09-11T19:29:00Z",
   "stopped": false,
   "cycles": [
     {
-      "cycle": 102,
-      "timestamp": "2026-09-11T18:56:00Z",
-      "title": "timeout-minutes guard on both workflow jobs",
-      "description": "cve-alerts.yml gained a concurrency queue (cancel-in-progress:false) in cycle 101 but had no job-level timeout-minutes -- a hung run (e.g. stalled HTTP request ignoring code-level timeouts) would sit in the concurrency group forever, queueing out every subsequent scheduled/manual trigger indefinitely with no self-recovery. Added timeout-minutes:10 to the aggregation job (generous headroom over typical seconds-to-low-minutes runtime) and timeout-minutes:5 to the CI validate job. Zero cost, native GitHub Actions field, no logic touched.",
-      "commit_sha": "1b4f82a",
+      "cycle": 103,
+      "timestamp": "2026-09-11T19:29:00Z",
+      "title": "GitHub Actions status badges in README",
+      "description": "Added two native GitHub Actions status badges (cve-alerts.yml aggregation, ci.yml validation) to README.md header, each linking to the workflow's Actions run history. Zero new dependencies/services (GitHub's own badge.svg endpoint), zero backend/schema/data changes, pure documentation/UX improvement so anyone visiting the repo sees pipeline health instantly without clicking into Actions.",
+      "commit_sha": "e2a4507",
       "validation": {
-        "yaml_syntax": "pass (both workflow files)",
         "py_compile": "pass (sanity, no python touched)",
         "node_check": "pass (sanity, no js touched)",
         "unit_tests": "97/97 pass (unchanged)",
-        "validate_data": "pass (611 alerts)",
-        "ci_run": "34636106838 completed success (14s)"
+        "validate_data": "pass (611 alerts)"
       },
       "rate_limit_event": false,
       "rejected_alternatives": [
-        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-101.",
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-102.",
         "Full risk_score history array -- deferred, storage-growth risk.",
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
