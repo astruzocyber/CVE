@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 82,
+  "total_cycles": 83,
   "implemented": [
     {
       "cycle": 1,
@@ -662,9 +662,16 @@
       "title": "Add 'Fix available only' filter checkbox",
       "description": "Cycle 61 (OSV.dev osv_fixed_versions) and cycle 78 (NVD CPE-derived nvd_fix_versions) both extract and render 'known fix version' data on cards, but gave analysts no way to filter the whole board down to only alerts with a known remediation path. Added a 'Fix available only' checkbox mirroring the exact hide-rejected/hide-reviewed/new-only pattern: a new hasFixAvailable(alert) helper (true if either osv_fixed_versions or nvd_fix_versions is a non-empty array) wired into applyFiltersAndRender()'s filter chain, persisted in the shareable URL via updateURLFromFilters/readFiltersFromURL (new hasfixonly=1 param), and cleared by the existing Reset filters button. Zero new API calls, zero backend/schema changes -- built entirely from the two fix-version fields already extracted every run since cycles 61/78.",
       "commit_sha": "fe4d809"
+    },
+    {
+      "cycle": 83,
+      "timestamp": "2026-09-11T08:11:00Z",
+      "title": "Add 'Fix' column to table view",
+      "description": "Cycle 76's dense sortable table view never surfaced the fix-available signal that card view has shown since cycle 61 (osv_fixed_versions) and cycle 78 (nvd_fix_versions), and that cycle 82's 'Fix available only' checkbox filters the whole board on -- a gap where switching to table view for bulk scanning silently dropped a triage-relevant column present everywhere else in the dashboard. Added a 'Fix' column to #alerts-table reusing the existing hasFixAvailable(alert) predicate unchanged (renders 'Yes' in green when either osv_fixed_versions or nvd_fix_versions is non-empty, '-' otherwise), so table view, card view, and the filter checkbox can never disagree on which alerts have a known remediation path. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost.",
+      "commit_sha": "56ee952"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T07:30:00Z",
+  "last_cycle_at": "2026-09-11T08:11:00Z",
   "stopped": false
 }
