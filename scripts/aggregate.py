@@ -1107,6 +1107,18 @@ def compute_stats(alerts):
     # tracked population. Zero new API calls -- built from vuln_status,
     # already extracted every run as of cycle 77.
     rejected_count = 0
+    # Distribution of currently-tracked alerts by how long ago first_seen was,
+    # bucketed into operationally meaningful triage windows. first_seen has
+    # been captured per-alert since the pipeline's inception and already
+    # backs the per-card "First seen: Nd ago" age badge and the
+    # oldest-first/newest-first sort options -- but there has never been an
+    # aggregate view answering "how is our current backlog distributed by
+    # age" at a glance (e.g. is triage keeping up, or is a growing pile of
+    # >30-day-old alerts going stale?). Distinct from new_alerts_count (only
+    # the <24h bucket) and from first_seen itself (only visible per-card).
+    # Zero new API calls -- built entirely from first_seen, already stored.
+    by_age_bucket = {"0-1d": 0, "1-7d": 0, "7-30d": 0, "30d+": 0}
+    now_utc = datetime.now(timezone.utc)
     for a in alerts:
         cvss = a.get("cvss_score")
         if cvss is None:
@@ -1143,6 +1155,23 @@ def compute_stats(alerts):
                 risk_decreasing += 1
         if a.get("vuln_status") == "Rejected":
             rejected_count += 1
+        fs = a.get("first_seen")
+        if isinstance(fs, str):
+            try:
+                fs_dt = datetime.fromisoformat(fs.replace("Z", "+00:00"))
+                if fs_dt.tzinfo is None:
+                    fs_dt = fs_dt.replace(tzinfo=timezone.utc)
+                age_days = (now_utc - fs_dt).total_seconds() / 86400.0
+                if age_days < 1:
+                    by_age_bucket["0-1d"] += 1
+                elif age_days < 7:
+                    by_age_bucket["1-7d"] += 1
+                elif age_days < 30:
+                    by_age_bucket["7-30d"] += 1
+                else:
+                    by_age_bucket["30d+"] += 1
+            except ValueError:
+                pass
 
     # KEV entries with a due date in the past and not yet resolved -- an
     # operationally meaningful "overdue remediation" count (BOD 22-01 style).
@@ -1238,6 +1267,7 @@ def compute_stats(alerts):
         # per-card). Zero new API calls.
         "risk_increasing_count": risk_increasing,
         "risk_decreasing_count": risk_decreasing,
+        "by_age_bucket": by_age_bucket,
     }
 
 

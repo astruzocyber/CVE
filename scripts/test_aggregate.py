@@ -308,6 +308,27 @@ class TestComputeStats(unittest.TestCase):
         stats = compute_stats([])
         self.assertEqual(stats["total_alerts"], 0)
 
+    def test_by_age_bucket(self):
+        from datetime import datetime, timedelta, timezone
+        now = datetime.now(timezone.utc)
+
+        def iso(delta_days):
+            return (now - timedelta(days=delta_days)).isoformat()
+
+        alerts = [
+            {"cvss_score": 5.0, "kev": False, "first_seen": iso(0.5)},   # 0-1d
+            {"cvss_score": 5.0, "kev": False, "first_seen": iso(3)},     # 1-7d
+            {"cvss_score": 5.0, "kev": False, "first_seen": iso(15)},    # 7-30d
+            {"cvss_score": 5.0, "kev": False, "first_seen": iso(45)},    # 30d+
+            {"cvss_score": 5.0, "kev": False, "first_seen": None},       # ignored
+            {"cvss_score": 5.0, "kev": False, "first_seen": "not-a-date"},  # ignored
+        ]
+        stats = compute_stats(alerts)
+        self.assertEqual(stats["by_age_bucket"]["0-1d"], 1)
+        self.assertEqual(stats["by_age_bucket"]["1-7d"], 1)
+        self.assertEqual(stats["by_age_bucket"]["7-30d"], 1)
+        self.assertEqual(stats["by_age_bucket"]["30d+"], 1)
+
     def test_kev_due_soon_count_excludes_overdue_and_far_future(self):
         from datetime import datetime, timedelta, timezone
         today = datetime.now(timezone.utc).date()

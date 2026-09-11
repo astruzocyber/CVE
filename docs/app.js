@@ -1507,6 +1507,42 @@ function renderKeywordBreakdown(byMatchedKeyword) {
   });
 }
 
+// stats.json now includes by_age_bucket (cycle 104): a fixed-order
+// distribution of currently-tracked alerts by first_seen age ("0-1d",
+// "1-7d", "7-30d", "30d+"), answering "how is our current backlog
+// distributed by age" at a glance -- distinct from new_alerts_count (only
+// the <24h bucket) and the per-card age badge (only visible one card at a
+// time). No matching filter control exists for this axis (unlike
+// severity/CWE/vendor/keyword), so pills render as inert (non-clickable)
+// info, same fallback pattern already used for unrecognized source keys in
+// renderSourceBreakdown(). Fixed bucket order (not sorted by count) since
+// the buckets form a natural chronological sequence, not an arbitrary
+// top-N ranking.
+function renderAgeBreakdown(byAgeBucket) {
+  const el = document.getElementById("age-breakdown");
+  if (!el) return;
+  const order = ["0-1d", "1-7d", "7-30d", "30d+"];
+  if (!byAgeBucket || typeof byAgeBucket !== "object") {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  const entries = order
+    .map((bucket) => [bucket, byAgeBucket[bucket]])
+    .filter(([, count]) => typeof count === "number" && count > 0);
+  if (entries.length === 0) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  el.innerHTML = entries
+    .map(([bucket, count]) =>
+      `<span class="age-pill" title="First seen ${escapeHtml(bucket)} ago">${escapeHtml(bucket)}: <strong>${count}</strong></span>`
+    )
+    .join("");
+  el.hidden = false;
+}
+
 
 async function loadStats() {
   try {
@@ -1561,6 +1597,7 @@ async function loadStats() {
     renderCweBreakdown(stats.by_cwe);
     renderVendorBreakdown(stats.by_vendor_product);
     renderKeywordBreakdown(stats.by_matched_keyword);
+    renderAgeBreakdown(stats.by_age_bucket);
   } catch {
     // stats.json is optional/may not exist yet on the very first run -- fail quietly
   }
