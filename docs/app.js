@@ -836,8 +836,18 @@ function renderTable(filtered) {
       // for cards, so table and card views can never disagree on what
       // counts as "critical" vs "high" etc.
       const cvssSevClass = severityClass(a.cvss_score);
-      return `<tr data-cve="${escapeHtml(a.cve_id || "")}">
-        <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a></td>
+      // REJECTED-by-NVD indicator in table view (cycle 88): card view has
+      // shown a "REJECTED BY NVD" badge since cycle 77 (vuln_status ==
+      // "Rejected" means NVD has withdrawn the CVE ID -- duplicate,
+      // disputed, or withdrawn by the CNA -- so its CVSS/EPSS/risk scores
+      // may be stale/meaningless), and cycle 81 added a board-wide "Hide
+      // rejected CVEs" filter built on the same field -- but the dense
+      // table view (cycle 76) never surfaced this signal at all, so an
+      // analyst bulk-scanning table view (with the hide-rejected filter
+      // off) had zero visual cue that a row's scores might be stale.
+      const isRejected = a.vuln_status === "Rejected";
+      return `<tr data-cve="${escapeHtml(a.cve_id || "")}"${isRejected ? ' class="table-row-rejected"' : ""}>
+        <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a>${isRejected ? ' <span class="table-rejected-tag" title="NVD has withdrawn this CVE ID -- scores may be stale">REJECTED</span>' : ""}</td>
         <td class="${cvssSevClass ? `table-cvss-${cvssSevClass}` : ""}">${fmtScore(a.cvss_score)}</td>
         <td>${typeof a.epss_score === "number" ? (a.epss_score * 100).toFixed(1) + "%" : "-"}</td>
         <td>${fmtScore(a.risk_score, 0)}</td>

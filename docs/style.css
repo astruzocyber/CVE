@@ -652,6 +652,16 @@ main {
 .badge.new-alert { background: rgba(79, 157, 255, 0.3); color: #fff; border: 1px solid var(--accent); font-weight: 700; }
 .badge.rejected { background: repeating-linear-gradient(45deg, rgba(160,160,160,0.35), rgba(160,160,160,0.35) 6px, rgba(120,120,120,0.35) 6px, rgba(120,120,120,0.35) 12px); color: #fff; border: 1px solid #999; font-weight: 700; }
 
+/* REJECTED-by-NVD indicator in table view (cycle 88): mirrors the card
+   view's .badge.rejected signal (vuln_status == "Rejected" means NVD has
+   withdrawn the CVE ID -- scores may be stale) so bulk/table-mode triage
+   never silently drops this warning that card view has shown since cycle
+   77. Dims the whole row (matches the visual weight of the striped card
+   badge without a heavy background on every cell) and adds a small
+   inline tag next to the CVE ID link. */
+.table-row-rejected { opacity: 0.6; }
+.table-rejected-tag { background: repeating-linear-gradient(45deg, rgba(160,160,160,0.35), rgba(160,160,160,0.35) 4px, rgba(120,120,120,0.35) 4px, rgba(120,120,120,0.35) 8px); color: #fff; border: 1px solid #999; font-weight: 700; font-size: 0.65rem; padding: 1px 4px; border-radius: 3px; }
+
 .risk-row {
   display: flex;
   align-items: center;
