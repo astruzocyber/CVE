@@ -1030,8 +1030,31 @@ function renderTable(filtered) {
       // card views can never disagree on reviewed state.
       const isRowReviewed = reviewedCves.has(a.cve_id);
       const reviewedCellHtml = `<button class="table-review-toggle-btn${isRowReviewed ? " reviewed" : ""}" type="button" data-cve="${escapeHtml(a.cve_id || "")}" title="${isRowReviewed ? "Marked reviewed -- click to unmark" : "Mark this alert as reviewed"}" aria-pressed="${isRowReviewed ? "true" : "false"}">${isRowReviewed ? "\u2713" : "Mark"}</button>`;
+      // Revised-since-publication indicator in table view (cycle 98): card
+      // view has shown a "Revised: <date>" badge since nvd_last_modified
+      // tracking was added -- rendered only when NVD's last-modified date
+      // differs from the published date (i.e. NVD has actually revised the
+      // record: rescored CVSS, corrected CWE/description, etc. post
+      // publication) -- but the dense table view (cycle 76) never surfaced
+      // this signal at all, so an analyst bulk-scanning table view had no
+      // way to tell a freshly-revised record (whose CVSS/CWE/description
+      // may have just changed) from a stable one without switching back to
+      // card view. Reuses the exact same day-string comparison card view
+      // uses (nvd_last_modified vs published, compared at calendar-day
+      // granularity) so table and card views can never disagree on which
+      // rows count as "revised". Rendered as a small superscript-style
+      // marker next to the CVE ID (not a full column) to keep the dense
+      // table lightweight, per the same "compact cell, tooltip for detail"
+      // convention already used for CWE and KEV columns.
+      const isRevised = (() => {
+        if (!a.nvd_last_modified || !a.published) return false;
+        return String(a.nvd_last_modified).slice(0, 10) !== String(a.published).slice(0, 10);
+      })();
+      const revisedMarkHtml = isRevised
+        ? ` <span class="table-revised-mark" title="NVD has revised this record since initial publication (rescored CVSS, corrected CWE/description, etc.) -- last modified ${escapeHtml(fmtDate(a.nvd_last_modified))}">\u270e</span>`
+        : "";
       return `<tr data-cve="${escapeHtml(a.cve_id || "")}"${isRejected ? ' class="table-row-rejected"' : ""}>
-        <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a>${isRejected ? ' <span class="table-rejected-tag" title="NVD has withdrawn this CVE ID -- scores may be stale">REJECTED</span>' : ""}</td>
+        <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a>${isRejected ? ' <span class="table-rejected-tag" title="NVD has withdrawn this CVE ID -- scores may be stale">REJECTED</span>' : ""}${revisedMarkHtml}</td>
         <td class="${cvssSevClass ? `table-cvss-${cvssSevClass}` : ""}">${fmtScore(a.cvss_score)}</td>
         <td>${typeof a.epss_score === "number" ? (a.epss_score * 100).toFixed(1) + "%" : "-"}${tableEpssDeltaHtml}</td>
         <td class="${riskCls ? `table-risk-${riskCls}` : ""}">${fmtScore(a.risk_score, 0)}${tableRiskDeltaHtml}</td>
