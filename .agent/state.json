@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 94,
+  "total_cycles": 95,
   "implemented": [
     {
       "cycle": 1,
@@ -893,9 +893,29 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 95,
+      "timestamp": "2026-09-11T14:56:00Z",
+      "title": "Attack Vector column in table view",
+      "description": "Card view has shown an 'exploit chip' (attack vector -- Network/Adjacent/Local/Physical -- plus a 'no auth/interaction' flag when privileges_required and user_interaction are both NONE) via alert.cvss_vector_components since cycles 30/31 -- a genuinely high-value triage signal since a network-exploitable, no-auth, no-interaction bug is far more urgent than an identical CVSS score requiring local access -- but the dense table view (cycle 76) never surfaced it. Added a new 'Attack Vector' column to #alerts-table reading the same cvss_vector_components field unchanged, mirroring card view's label mapping and no-auth/interaction suffix as plain text. No backend/schema changes.",
+      "commit_sha": "8295fcc",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (609 cards), switched to table view (609 rows, 12 header columns): confirmed 455 rows show a non-'-' Attack Vector value, sample 'Local'. Cross-checked against card view's own .exploit-chip count: also exactly 455 -- no disagreement between views. Search filter for wordpress still correctly narrows to 160/609."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-94.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T14:21:39Z",
+  "last_cycle_at": "2026-09-11T14:56:00Z",
   "stopped": false
 }

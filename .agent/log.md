@@ -3456,3 +3456,34 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `1730be1` -- "Cycle 94: CWE (weakness) column in table view" -- pushed to `origin/main` (`8042bad..1730be1`).
 
 **Updated state:** `total_cycles`: 93 -> 94. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 95 -- 2026-09-11T14:56:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=94, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Inspected `docs/data/alerts.json` schema (609 alerts, all fields listed) and grepped `docs/app.js` for every field's usage in `renderTable()` vs `renderCard()`. Continued the table-view-vs-card-view parity vein that cycles 83/87/88/89/90/91/92/93/94 proved productive: found `cvss_vector_components` (attack vector / complexity / privileges / user-interaction, rendered as an "exploit chip" on card view since cycles 30/31) had zero representation in the dense table view (cycle 76).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Attack Vector column in table view** (chosen) -- 5/5/5. Real gap: whether a CVE is exploitable over the network with no auth/interaction is a materially different triage priority than one requiring local access, at the same CVSS score -- already surfaced on card view but invisible in table view. Very low validation risk: reuses the exact existing `cvss_vector_components` field and label mapping unchanged, plain text (no chip styling) to keep dense rows lightweight, zero new logic to disagree with card view.
+2. GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack, deferred cycles 56-94.
+3. Full risk_score history array -- still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms -- still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/index.html`: added an `<th>Attack Vector</th>` column header to `#alerts-table`.
+- `docs/app.js`: `renderTable()` now computes `attackVectorLabel` from `a.cvss_vector_components` (local `tableExploitLabels` map mirroring card view's `exploitLabels`, plus the same "(no auth/interaction)" suffix logic when `privileges_required`/`user_interaction` are both `NONE`), appended as a new `<td>` per row.
+- No `scripts/aggregate.py`/schema/data changes -- pure frontend surfacing of a field already present and rendered elsewhere (card view's exploit chip).
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity check; no Python files touched).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` -> **97/97 tests passed** (unchanged -- no aggregation/scoring logic touched, pure frontend change).
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background, port 8995), drove it live via `mcp__browser_exec` (CDP, real Chrome). Loaded dashboard (609 cards, 609 of 609 alerts). Switched to table view: confirmed 609 rows render with a 12th header column ("Attack Vector"), 455 rows with a non-"-" value, sample "Local". Cross-checked against card view's own `.exploit-chip` count: also exactly 455 -- no disagreement between views. Switched back to card view (609 cards, no regression). "wordpress" search filter still correctly narrows to 160/609.
+- Deployed: commit `8295fcc` pushed to `origin/main`. CI "Data & Frontend Validation" run `34613117662` completed success (13s); pages-build-deployment in progress at time of check (prior deploy history shows consistent success).
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-94); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no external API calls made this cycle (pure frontend change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `8295fcc` -- "Cycle 95: Attack Vector column in table view" -- pushed to `origin/main` (`1c8f665..8295fcc`).
+
+**Updated state:** `total_cycles`: 94 -> 95. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
