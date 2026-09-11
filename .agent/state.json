@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 101,
+  "total_cycles": 102,
   "implemented": [
     {
       "cycle": 1,
@@ -1001,6 +1001,30 @@
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T18:23:00Z",
-  "stopped": false
+  "last_cycle_at": "2026-09-11T18:56:00Z",
+  "stopped": false,
+  "cycles": [
+    {
+      "cycle": 102,
+      "timestamp": "2026-09-11T18:56:00Z",
+      "title": "timeout-minutes guard on both workflow jobs",
+      "description": "cve-alerts.yml gained a concurrency queue (cancel-in-progress:false) in cycle 101 but had no job-level timeout-minutes -- a hung run (e.g. stalled HTTP request ignoring code-level timeouts) would sit in the concurrency group forever, queueing out every subsequent scheduled/manual trigger indefinitely with no self-recovery. Added timeout-minutes:10 to the aggregation job (generous headroom over typical seconds-to-low-minutes runtime) and timeout-minutes:5 to the CI validate job. Zero cost, native GitHub Actions field, no logic touched.",
+      "commit_sha": "1b4f82a",
+      "validation": {
+        "yaml_syntax": "pass (both workflow files)",
+        "py_compile": "pass (sanity, no python touched)",
+        "node_check": "pass (sanity, no js touched)",
+        "unit_tests": "97/97 pass (unchanged)",
+        "validate_data": "pass (611 alerts)",
+        "ci_run": "34636106838 completed success (14s)"
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-101.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
+    }
+  ]
 }

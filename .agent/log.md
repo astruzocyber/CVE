@@ -3650,3 +3650,35 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `2f4a882` -- "Cycle 101: add concurrency guard to aggregation workflow" -- pushed to `origin/main` (`f02f6cf..2f4a882`).
 
 **Updated state:** `total_cycles`: 100 -> 101. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 102 — 2026-09-11T18:56:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=101, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 8` (all recent CI/Pages/aggregation runs `completed success`, no 429/throttle signals). Inspected both workflow files in full, `requirements.txt`, `scripts/aggregate.py` function list, `docs/data/stats.json`, `docs/index.html` head, README. Continued the CI/pipeline-infrastructure vein opened at cycle 100 (pip caching) and extended at cycle 101 (concurrency guard).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **timeout-minutes guard on both workflow jobs** (chosen) -- 5/5/3. Cycle 101 added `concurrency: {group: cve-aggregation, cancel-in-progress: false}` to `cve-alerts.yml` to prevent overlapping API-call storms, but neither job had a `timeout-minutes` ceiling. Without one, a hung run (e.g. an HTTP request that somehow evades the code's own request-level timeouts, or a GitHub-Actions-runner-level stall) would sit in the concurrency group indefinitely -- queueing out every subsequent scheduled (every 4h) and manual trigger with no self-recovery, silently starving the whole pipeline. Added `timeout-minutes: 10` to the aggregation job (generous headroom over typical seconds-to-low-minutes runtime) and `timeout-minutes: 5` to the CI validate job (which normally completes in ~10-14s). Zero cost (native GitHub Actions field), trivial validation risk (single declarative int, no logic touched), and a natural companion to the queueing behavior added last cycle -- a queue without a self-clearing ceiling is an incomplete safety mechanism.
+2. GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack, deferred cycles 56-101.
+3. Full risk_score history array -- still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms -- still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `.github/workflows/cve-alerts.yml`: added `timeout-minutes: 10` to the `aggregate` job, with an explanatory comment tying it to the cycle-101 concurrency guard.
+- `.github/workflows/ci.yml`: added `timeout-minutes: 5` to the `validate` job.
+- No Python/JS/schema/data changes -- workflow-config-only.
+
+**Validation performed (all passed):**
+- `python3 -c "yaml.safe_load(...)"` on both modified workflow files -> OK.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `node --check docs/app.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> **97/97 tests passed** (unchanged).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (611 alerts, schema OK, stats.json/trend.csv/feeds all checked against live data).
+- Deployed: commit `1b4f82a` pushed to `origin/main`. CI "Data & Frontend Validation" run `34636106838` completed success (14s); pages-build-deployment triggered normally.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-101); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no external API calls made this cycle (workflow-config-only change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `1b4f82a` -- "Cycle 102: add timeout-minutes guard to both workflow jobs" -- pushed to `origin/main` (`25d78a5..1b4f82a`).
+
+**Updated state:** `total_cycles`: 101 -> 102. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
