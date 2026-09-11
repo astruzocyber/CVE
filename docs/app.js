@@ -810,8 +810,23 @@ function renderTable(filtered) {
   if (!tbody) return;
   tbody.innerHTML = filtered
     .map((a) => {
+      // Ransomware indicator in table view's KEV column (cycle 93): card
+      // view has shown a distinct red "RANSOMWARE" badge (from
+      // kev_ransomware_use -- CISA KEV's flag for known ransomware
+      // campaign use, the highest-priority triage signal on the board)
+      // alongside the KEV/OVERDUE/DUE SOON badges since early cycles, and
+      // it already drives a dedicated "ransomware" KEV-filter option and
+      // the stats-bar ransomware count -- but the dense table view (cycle
+      // 76) collapsed every KEV entry into a plain "KEV"/"OVERDUE"/"DUE
+      // SOON" string with zero ransomware signal, so an analyst
+      // bulk-scanning table view (without the ransomware filter active)
+      // had no way to see which rows were known-ransomware without
+      // switching back to card view. Reuses the exact same
+      // kev_ransomware_use field unchanged, appended as a " (RANSOMWARE)"
+      // suffix so it composes with any of the existing three KEV states.
       const kevLabel = a.kev
-        ? (isOverdue(a) ? "OVERDUE" : (typeof daysUntilDue(a) === "number" && daysUntilDue(a) <= 7 ? "DUE SOON" : "KEV"))
+        ? (isOverdue(a) ? "OVERDUE" : (typeof daysUntilDue(a) === "number" && daysUntilDue(a) <= 7 ? "DUE SOON" : "KEV")) +
+          (a.kev_ransomware_use ? " (RANSOMWARE)" : "")
         : "-";
       const products = (a.affected || []).slice(0, 3).join(", ") || "-";
       // "Fix" column (cycle 83): the card view has shown "Fix available: ..."
