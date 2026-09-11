@@ -3267,3 +3267,36 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `badf085` — "Cycle 88: REJECTED-by-NVD indicator in table view" — pushed to `origin/main` (`47a670b..badf085`).
 
 **Updated state:** `total_cycles`: 87 → 88. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 89 — 2026-09-11T11:35:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=88, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Inspected `docs/data/alerts.json` schema (603 alerts, all fields listed) and grepped `docs/app.js` for every field to confirm coverage. Shifted search to the table-view-vs-card-view parity gap category (cycles 83/87/88's proven productive vein). Found `riskClass()` (used for card view's risk-bar-fill color since early cycles) had zero references in `renderTable()` — the Risk column, the board's primary composite triage metric, was the one remaining uncolored numeric cell in table view after cycle 87 closed the CVSS-cell gap.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Risk-score color-coding on Risk cell in table view** (chosen) — 5/5/5. Risk score is the board's primary sort/triage metric (composite of CVSS+EPSS+KEV); leaving it as the only uncolored numeric column after CVSS got color-coded (cycle 87) was a real inconsistency. Very low validation risk: reuses the exact existing `riskClass()` classification unchanged (same thresholds as the risk-bar-fill), adds new CSS classes with zero interaction with existing selectors.
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-88.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms — still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/app.js`: `renderTable()` now computes `riskCls = riskClass(a.risk_score)` and applies a `table-risk-<class>` class to the Risk `<td>` (empty string/no class when `riskClass` returns `""` for a null/undefined score).
+- `docs/style.css`: new `.table-risk-critical/high/medium/low` rules (bold + colored text matching the existing `--red/--orange/--yellow/--green` palette), placed directly adjacent to the existing `.table-cvss-<class>` rules for visual/maintenance consistency.
+- No `scripts/aggregate.py`/schema/data changes — pure frontend display logic using a classification function (`riskClass`) that has existed since early cycles.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity check; no Python files touched this cycle).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` → **97/97 tests passed** (unchanged — no aggregation/scoring logic touched, pure frontend change).
+- No live `aggregate.py` run needed (no new fields, no schema changes, no backend code touched) — existing committed `docs/data/alerts.json` (603 alerts) used directly for the browser smoke test.
+- `python3 scripts/validate_data.py`-equivalent checks (run as part of the unittest discovery) passed: stats.json schema OK, trend.csv OK.
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background process, port 8960), drove it live via `mcp__browser_exec` (CDP, real Chrome). Loaded dashboard, clicked the table-view toggle, and directly queried the rendered DOM: confirmed all 603 `<tr>` rows have a `table-risk-<class>` class on their Risk cell (1 critical, 9 high, 571 medium, 22 low — matches the current risk_score distribution, non-trivial spread confirming genuine classification not a stub), confirmed `getComputedStyle` on a critical cell returns `color: rgb(255, 92, 92)` (== `--red`) and `font-weight: 600`. Switched back to card view: confirmed 603 cards still render with no regression. Ran the existing "wordpress" search filter: still correctly narrows to 154/603, confirming zero regression to filter logic.
+- Deployed: commit `768ff3a` pushed to `origin/main`.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-88); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (pure frontend change, no live aggregation run required).
+
+**Commit SHA:** `768ff3a` — "Cycle 89: Risk-score color-coding on Risk cell in table view" — pushed to `origin/main` (`badf085..768ff3a`, after cycle 88's state-update commit `17073b7`).
+
+**Updated state:** `total_cycles`: 88 → 89. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
