@@ -2119,6 +2119,123 @@ document.getElementById("theme-toggle").addEventListener("click", () => {
 // pasted dependency file active had to clear each control individually to
 // get back to the unfiltered board. Deliberately does NOT touch a #alert-...
 // hash (a direct deep-link to one card is a distinct concern from filters).
+// Saved filter views (new): the URL-query-param sharing (cycle 7) already
+// makes a single filter combination shareable via link, but there was no way
+// to persist several named combinations locally for repeated re-use (e.g. a
+// security lead who checks "KEV overdue, critical severity" every morning
+// and "wordpress + fix available" every week previously had to either
+// bookmark two separate URLs outside the app or re-set every control by
+// hand each time). Stores an array of {name, qs} in localStorage, where qs
+// is exactly the query-string produced by the existing updateURLFromFilters
+// convention -- so saved views compose for free with every existing filter
+// axis (search/kev/severity/source/sort/minrisk/minepss/hide-reviewed/
+// new-only/hide-rejected/has-fix-only) with zero duplicated filter logic.
+const SAVED_VIEWS_KEY = "cve_dashboard_saved_views_v1";
+
+function loadSavedViews() {
+  try {
+    const raw = localStorage.getItem(SAVED_VIEWS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    // Corrupted/foreign localStorage value -- fail soft to "no saved views"
+    // rather than throwing and breaking the rest of the toolbar.
+    return [];
+  }
+}
+
+function persistSavedViews(views) {
+  try {
+    localStorage.setItem(SAVED_VIEWS_KEY, JSON.stringify(views));
+  } catch (e) {
+    // Storage full/unavailable (private browsing) -- silently no-op, matches
+    // the fail-soft convention used by reviewedCves persistence elsewhere.
+  }
+}
+
+function renderSavedViewsSelect() {
+  const select = document.getElementById("saved-views-select");
+  const deleteBtn = document.getElementById("delete-view-btn");
+  if (!select) return;
+  const views = loadSavedViews();
+  const previousValue = select.value;
+  select.innerHTML = "";
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "Saved views...";
+  select.appendChild(placeholder);
+  for (const v of views) {
+    const opt = document.createElement("option");
+    opt.value = v.name;
+    opt.textContent = v.name;
+    select.appendChild(opt);
+  }
+  // Restore selection if it still exists after a save/delete, else fall back
+  // to the placeholder rather than silently landing on an unrelated option.
+  select.value = views.some((v) => v.name === previousValue) ? previousValue : "";
+  if (deleteBtn) deleteBtn.disabled = !select.value;
+}
+
+renderSavedViewsSelect();
+
+document.getElementById("save-view-btn")?.addEventListener("click", () => {
+  // Reuses the exact query string the toolbar already produces for the
+  // currently-active filters (updateURLFromFilters keeps location.search in
+  // sync on every applyFiltersAndRender call), so there is zero duplicated
+  // filter-serialization logic and a saved view can never drift out of sync
+  // with what shareable links (cycle 7) already encode.
+  const qs = location.search;
+  const name = (window.prompt("Name this saved view (e.g. \"KEV overdue, critical\"):") || "").trim();
+  if (!name) return;
+  const views = loadSavedViews().filter((v) => v.name !== name);
+  views.push({ name, qs });
+  persistSavedViews(views);
+  renderSavedViewsSelect();
+  const select = document.getElementById("saved-views-select");
+  if (select) select.value = name;
+  const deleteBtn = document.getElementById("delete-view-btn");
+  if (deleteBtn) deleteBtn.disabled = false;
+});
+
+document.getElementById("saved-views-select")?.addEventListener("change", (e) => {
+  const name = e.target.value;
+  const deleteBtn = document.getElementById("delete-view-btn");
+  if (deleteBtn) deleteBtn.disabled = !name;
+  if (!name) return;
+  const view = loadSavedViews().find((v) => v.name === name);
+  if (!view) return;
+  // Apply the saved query string exactly like a shared link would. First
+  // reset every control to its default (mirrors reset-filters' field list)
+  // so a saved view that OMITS an axis (e.g. no kev= param) actually clears
+  // it, rather than leaving whatever the previously-selected view left
+  // behind -- readFiltersFromURL alone only ever sets fields present in the
+  // params, it never clears ones that are absent.
+  document.getElementById("search").value = "";
+  document.getElementById("kev-filter").value = "all";
+  document.getElementById("severity-filter").value = "all";
+  document.getElementById("source-filter").value = "all";
+  document.getElementById("sort-by").value = "risk_score";
+  document.getElementById("min-risk").value = "";
+  document.getElementById("min-epss").value = "";
+  const hr = document.getElementById("hide-reviewed"); if (hr) hr.checked = false;
+  const no = document.getElementById("new-only"); if (no) no.checked = false;
+  const hrj = document.getElementById("hide-rejected"); if (hrj) hrj.checked = false;
+  const hfo = document.getElementById("has-fix-only"); if (hfo) hfo.checked = false;
+  history.replaceState(null, "", location.pathname + (view.qs || "") + location.hash);
+  readFiltersFromURL();
+  applyFiltersAndRender();
+});
+
+document.getElementById("delete-view-btn")?.addEventListener("click", () => {
+  const select = document.getElementById("saved-views-select");
+  const name = select ? select.value : "";
+  if (!name) return;
+  if (!window.confirm(`Delete saved view "${name}"?`)) return;
+  const views = loadSavedViews().filter((v) => v.name !== name);
+  persistSavedViews(views);
+  renderSavedViewsSelect();
+});
+
 document.getElementById("reset-filters").addEventListener("click", () => {
   document.getElementById("search").value = "";
   document.getElementById("kev-filter").value = "all";
