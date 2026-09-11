@@ -883,6 +883,20 @@ function renderTable(filtered) {
       const watchlistLabel = Array.isArray(a.matched_keywords) && a.matched_keywords.length
         ? a.matched_keywords.map((k) => escapeHtml(k)).join(", ")
         : "-";
+      // CWE (Common Weakness Enumeration) column in table view (cycle 94):
+      // card view has shown a "Weakness: CWE-XXX" row (clickable badges
+      // linking to cwe.mitre.org) since early cycles via alert.cwe_ids, but
+      // the dense table view (cycle 76) never surfaced this signal at all --
+      // an analyst bulk-scanning table view had no way to see the underlying
+      // vulnerability class (e.g. CWE-79 XSS, CWE-89 SQLi) without switching
+      // back to card view. Reuses the exact same cwe_ids field unchanged
+      // (already used by card view, CSV export, and search), joined with
+      // ", " for a compact single cell -- no new CSS/logic to disagree with
+      // card view on content, though table cells are plain text (no links)
+      // to keep the dense view lightweight.
+      const cweLabel = Array.isArray(a.cwe_ids) && a.cwe_ids.length
+        ? a.cwe_ids.map((c) => escapeHtml(c)).join(", ")
+        : "-";
       // Risk-score trend delta in table view (cycle 91): card view has shown
       // a risk-delta badge (up/down arrow + point change since the last
       // refresh, via .risk-delta/.risk-up/.risk-down CSS) since it was added
@@ -924,6 +938,7 @@ function renderTable(filtered) {
         <td>${escapeHtml(products)}</td>
         <td class="${hasFixAvailable(a) ? "table-fix-yes" : ""}">${escapeHtml(fixLabel)}</td>
         <td class="table-watchlist-cell">${watchlistLabel}</td>
+        <td class="table-cwe-cell">${cweLabel}</td>
       </tr>`;
     })
     .join("");
