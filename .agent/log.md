@@ -3170,3 +3170,36 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `e4e76e2` — "Cycle 85: Add 'dependabot_url' column to CSV export" — pushed to `origin/main` (`c10b468..e4e76e2`, on top of `c532aa3`'s state-log commit).
 
 **Updated state:** `total_cycles`: 84 → 85. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 86 — 2026-09-11T09:55:00Z
+
+**Re-verified state before acting:** `git pull` (already up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=85, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Grepped `docs/app.js` for every field present in `docs/data/alerts.json` (`python3` key dump: `cvss_vector_components`, `cwe_ids`, `epss_percentile`, `epss_score_prev`, `kev_notes`, `kev_required_action`, `nvd_last_modified`, `risk_score_breakdown`, `risk_score_prev`, `published`, `severity`, `cvss_version`) against their usage in `docs/app.js` — found `cvss_version` (0 matches) as the one schema field with zero references anywhere in the frontend, unlike every other field which is at least referenced somewhere.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Surface `cvss_version` on card, Markdown export, CSV export** (chosen) — 5/5/4. Confirmed via direct `alerts.json` inspection that `cvss_version` carries real variance in current production data (573 `CVSS V31`, 29 `CVSS V40`, 1 `CVSS V30`) — a genuine, non-trivial signal: NVD's CVSS v4.0 uses a materially different metric set/weighting than v3.x, so two cards both showing "CVSS 8.8" are not necessarily directly comparable without knowing the rubric, and this was completely invisible to analysts before this change. Very low validation risk: pure additive display of an already-extracted field, no parsing/normalization risk beyond a simple regex with a safe pass-through fallback for unrecognized strings (e.g. GHSA's "GHSA CVSS" label).
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-85.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms — still marginal value vs. the chosen candidate.
+5. Another trend.csv trailing column — deprioritized again per cycles 76-85's explicit steer toward novel functional/usability/data-completeness fixes over another averaged metric.
+6. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/app.js`: new `cvssVersionText(raw)` helper (regex-normalizes `"CVSS V31"` -> `"v3.1"`, `"CVSS V40"` -> `"v4.0"`, pass-through unchanged for non-matching strings like `"GHSA CVSS"`, returns `null` for falsy input) and `cvssVersionLabel(raw)` (wraps the text in a `<span class="cvss-version">` with a tooltip, or empty string if no version). Wired into `renderCard()` (small label appended after the CVSS score in the `.scores` div), `alertToMarkdown()` (`"(vX.Y)"` suffix on the `- **CVSS:**` line), and `exportCsv()` (new `cvss_version` header column and row value, inserted directly after `cvss_score` in both the header array and row-push array).
+- `docs/style.css`: new `.cvss-version` rule (0.72rem, dimmed `--text-dim`, 0.85 opacity) so the label reads as a secondary annotation, not competing visually with the primary CVSS score.
+- No `scripts/aggregate.py`/schema/data changes — pure frontend surfacing of a field already extracted and stored by `aggregate.py`'s `extract_cvss()` since the earliest cycles.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity check; no Python files touched this cycle).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` → **97/97 tests passed** (unchanged from cycle 85 — no aggregation/scoring logic touched, pure frontend change).
+- No live `aggregate.py` run or data regeneration was needed this cycle (no new fields, no schema changes, no backend code touched) — the existing committed `docs/data/alerts.json` (603 alerts, `cvss_version` populated on all 603: 573 `CVSS V31`/29 `CVSS V40`/1 `CVSS V30`) was used directly for the browser smoke test below.
+- Browser smoke test: served the current production `docs/` tree via `python3 -m http.server` (port 8930), drove it live via `mcp__browser_exec` (CDP, real Chrome). Confirmed 603 cards render, all 603 show a `.cvss-version` label, and the label-count distribution (`v3.1: 573, v4.0: 29, v3.0: 1`) matches the direct `alerts.json` inspection exactly. Intercepted `URL.createObjectURL` at runtime, clicked the real `#export-csv` button, and read the actual generated `Blob`'s text content back: confirmed the CSV header includes `cvss_version` in the correct position (directly after `cvss_score`), and a real data row (`CVE-2016-7255`) shows `CVSS V31` populated correctly in that column. Called `alertToMarkdown()` directly in-page on a real card's alert object and confirmed the CVSS line renders as `"- **CVSS:** 7.8 (v3.1)"`. Confirmed zero regression to existing features: search filter for "wordpress" still correctly narrows to 154/603.
+- Deployed: commit `500feae` pushed to `origin/main`. CI Data & Frontend Validation run `34586616485` completed success (12s); pages-build-deployment run `34586611975` completed (in progress at time of push, prior deploy history shows consistent success).
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-85); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); another trend.csv trailing column (scored lower per cycles 76-85's steer); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (pure frontend change, no live aggregation run required).
+
+**Commit SHA:** `500feae` — "Cycle 86: Surface cvss_version (CVSS scoring rubric) on card, Markdown, CSV" — pushed to `origin/main` (`7692b4a..500feae`).
+
+**Updated state:** `total_cycles`: 85 → 86. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

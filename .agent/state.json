@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 85,
+  "total_cycles": 86,
   "implemented": [
     {
       "cycle": 1,
@@ -711,9 +711,30 @@
         "Another trend.csv trailing column -- scored lower per cycles 76-84's steer toward novel/consistency fixes.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 86,
+      "timestamp": "2026-09-11T09:55:00Z",
+      "title": "Surface cvss_version (CVSS scoring rubric) on card, Markdown, CSV",
+      "description": "cvss_version (raw strings like 'CVSS V31', 'CVSS V40', 'CVSS V30', or GHSA's 'GHSA CVSS' label) has been extracted and stored on every alert since the earliest cycles (scripts/aggregate.py's extract_cvss()) but was never surfaced anywhere on the dashboard: not on-card, not in alertToMarkdown(), not in CSV export. Confirmed via direct inspection of docs/data/alerts.json that this is a genuine, non-trivial signal, not cosmetic: 573/603 current alerts are CVSS v3.1, 29/603 are CVSS v4.0 (a materially different metric set/weighting than v3.x), and 1/603 is v3.0 -- meaning two cards both reading 'CVSS 8.8' may not be directly comparable without knowing which rubric produced the score, and an analyst previously had no way to tell without digging into the raw NVD record. Added new cvssVersionText()/cvssVersionLabel() helpers in docs/app.js normalizing 'CVSS V31' -> 'v3.1' (pass-through unchanged for non-matching strings like 'GHSA CVSS'), wired into renderCard() (small dimmed label next to the CVSS score, new .cvss-version CSS rule), alertToMarkdown() ('(vX.Y)' suffix on the CVSS line), and exportCsv() (new cvss_version column, inserted directly after cvss_score). No backend/schema/data changes -- purely a frontend surfacing of an already-extracted field.",
+      "commit_sha": "500feae",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (603 cards render, 603 of 603 alerts). Confirmed all 603 cards show a .cvss-version label, with counts matching alerts.json exactly (v3.1: 573, v4.0: 29, v3.0: 1). Intercepted URL.createObjectURL to capture the real CSV export blob: header includes cvss_version in correct position (after cvss_score), sample row shows 'CVSS V31' populated correctly. Called alertToMarkdown() directly on a real card's alert object: confirmed CSV line reads '- **CVSS:** 7.8 (v3.1)'. Confirmed zero regression: search filter for 'wordpress' still correctly narrows to 154/603."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-85.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Another trend.csv trailing column -- scored lower per cycles 76-85's steer toward novel/consistency fixes.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T09:20:00Z",
+  "last_cycle_at": "2026-09-11T09:55:00Z",
   "stopped": false
 }
