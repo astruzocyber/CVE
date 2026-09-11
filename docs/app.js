@@ -796,6 +796,17 @@ function renderTable(filtered) {
         ? (isOverdue(a) ? "OVERDUE" : (typeof daysUntilDue(a) === "number" && daysUntilDue(a) <= 7 ? "DUE SOON" : "KEV"))
         : "-";
       const products = (a.affected || []).slice(0, 3).join(", ") || "-";
+      // "Fix" column (cycle 83): the card view has shown "Fix available: ..."
+      // lines (osv_fixed_versions since cycle 61, nvd_fix_versions since
+      // cycle 78) and cycle 82 added a board-wide "Fix available only"
+      // filter built on the same two fields via hasFixAvailable() -- but
+      // the dense table view (cycle 76) never surfaced this signal at all,
+      // so switching to table view for bulk scanning silently dropped a
+      // triage-relevant column present everywhere else. Reuses the exact
+      // same hasFixAvailable() predicate the filter checkbox already uses,
+      // so table and card/filter views can never disagree on which alerts
+      // count as having a fix.
+      const fixLabel = hasFixAvailable(a) ? "Yes" : "-";
       return `<tr data-cve="${escapeHtml(a.cve_id || "")}">
         <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a></td>
         <td>${fmtScore(a.cvss_score)}</td>
@@ -805,6 +816,7 @@ function renderTable(filtered) {
         <td>${escapeHtml(a.source || "-")}</td>
         <td>${fmtDate(a.first_seen)}</td>
         <td>${escapeHtml(products)}</td>
+        <td class="${hasFixAvailable(a) ? "table-fix-yes" : ""}">${escapeHtml(fixLabel)}</td>
       </tr>`;
     })
     .join("");
