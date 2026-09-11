@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 86,
+  "total_cycles": 87,
   "implemented": [
     {
       "cycle": 1,
@@ -732,9 +732,29 @@
         "Another trend.csv trailing column -- scored lower per cycles 76-85's steer toward novel/consistency fixes.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 87,
+      "timestamp": "2026-09-11T10:30:00Z",
+      "title": "Severity color-coding on CVSS cell in table view",
+      "description": "Card view has shown a colored severity badge (critical/high/medium/low via .badge.<class> CSS) since early cycles, but the dense table view (cycle 76) rendered the raw CVSS number as plain black/white text with zero color signal -- a real gap for bulk/table-mode triage where scanning for red/orange rows is far faster than reading every numeric score. Added a cvssSevClass computed from the existing severityClass() helper (same classification card view already uses) and wired it onto the CVSS <td> in renderTable() as a new table-cvss-<class> class; added matching .table-cvss-critical/high/medium/low CSS rules (bold + colored text, no background/border to keep dense rows scannable) directly adjacent to the existing .badge.<class> rules in docs/style.css so the two color palettes stay visually consistent and are trivially kept in sync.",
+      "commit_sha": "4962a4d",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard, switched to table view: confirmed all 603 rows classified (145 critical, 458 high, 0 medium, 0 low, 0 unclassified), computed CSS color for a critical cell is rgb(255,92,92) with font-weight 600 matching --red. Switched back to card view: 603 cards render, no regression. Search filter for wordpress still correctly narrows to 154/603."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-86.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T09:55:00Z",
+  "last_cycle_at": "2026-09-11T10:30:00Z",
   "stopped": false
 }

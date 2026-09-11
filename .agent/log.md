@@ -3203,3 +3203,35 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `500feae` — "Cycle 86: Surface cvss_version (CVSS scoring rubric) on card, Markdown, CSV" — pushed to `origin/main` (`7692b4a..500feae`).
 
 **Updated state:** `total_cycles`: 85 → 86. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 87 — 2026-09-11T10:30:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=86, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Grepped `docs/app.js` for every card-only visual affordance vs. its table-view equivalent, looking specifically for a signal shown on cards but silently dropped in the dense table view (the same category of gap cycle 83 closed for the "Fix" column).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Severity color-coding on CVSS cell in table view** (chosen) — 5/5/4. Confirmed via direct code read that `renderCard()` shows a colored severity badge (critical=red/high=orange/medium=yellow/low=green, via `.badge.<class>`) but `renderTable()`'s CVSS `<td>` rendered plain uncolored text -- for a security-team tool where table view exists specifically for fast bulk scanning, the absence of the one color signal that makes bulk severity scanning fast is a real usability gap, not cosmetic. Very low validation risk: reuses the exact existing `severityClass()` classification (same thresholds as cards, cannot diverge) and adds new CSS classes that don't touch any existing selector.
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-86.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms — still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/app.js`: `renderTable()` now computes `cvssSevClass = severityClass(a.cvss_score)` and applies a `table-cvss-<class>` class to the CVSS `<td>` (empty string, no class, when `severityClass` returns `""` for a null/undefined score).
+- `docs/style.css`: new `.table-cvss-critical/high/medium/low` rules (bold + colored text matching the existing `--red/--orange/--yellow/--green` palette, no background/border to keep dense table rows readable) placed directly adjacent to the existing `.badge.<class>` rules for visual/maintenance consistency.
+- No `scripts/aggregate.py`/schema/data changes — pure frontend display logic using a classification function (`severityClass`) that has existed since early cycles.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity check; no Python files touched this cycle).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` → **97/97 tests passed** (unchanged — no aggregation/scoring logic touched, pure frontend change).
+- No live `aggregate.py` run needed (no new fields, no schema changes, no backend code touched) — existing committed `docs/data/alerts.json` (603 alerts) used directly for the browser smoke test.
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background process, port 8940), drove it live via `mcp__browser_exec` (CDP, real Chrome). Loaded dashboard, clicked table-view toggle, and directly queried the rendered DOM: confirmed all 603 `<tr>` rows have a `table-cvss-<class>` class on their CVSS cell (145 critical, 458 high, 0 medium, 0 low, 0 unclassified -- matches the current data distribution), confirmed `getComputedStyle` on a critical cell returns `color: rgb(255, 92, 92)` (== `--red`) and `font-weight: 600`. Switched back to card view: confirmed 603 cards still render with no regression. Ran the existing "wordpress" search filter: still correctly narrows to 154/603, confirming zero regression to filter logic.
+- Deployed: commit `4962a4d` pushed to `origin/main`.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-86); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (pure frontend change, no live aggregation run required).
+
+**Commit SHA:** `4962a4d` — "Cycle 87: Severity color-coding on CVSS cell in table view" — pushed to `origin/main` (`d1aafe9..4962a4d`).
+
+**Updated state:** `total_cycles`: 86 → 87. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
