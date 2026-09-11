@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 99,
+  "total_cycles": 100,
   "implemented": [
     {
       "cycle": 1,
@@ -954,9 +954,31 @@
       "title": "Print stylesheet parity for table view",
       "description": "Table view (cycle 76) had zero @media print handling while card view has had full light/high-contrast print rules since early cycles -- printing from table view rendered the raw dark theme verbatim. Added matching print rules: light bg/borders on .table-view-wrapper/.alerts-table, reduced font size, black+bold severity signal on .table-cvss-*/.table-risk-* (border-based pattern matching .badge/.exploit-chip), hid .table-review-toggle-btn (meaningless on static printout). CSS-only change.",
       "commit_sha": "ae589d9"
+    },
+    {
+      "cycle": 100,
+      "timestamp": "2026-09-11T17:50:00Z",
+      "title": "Enable pip dependency caching in GitHub Actions workflows",
+      "description": "ci.yml and cve-alerts.yml both cold-installed pip deps (requests, PyYAML) on every run (aggregation runs 6x/day, CI on every push) despite requirements.txt changing rarely. Added cache: pip to both actions/setup-python@v5 steps -- zero cost (built-in feature, keyed on requirements.txt hash), reduces redundant PyPI hits and setup time, lowers risk of a very frequently-run public pipeline getting throttled by PyPI as a shared free resource.",
+      "commit_sha": "572fe4f",
+      "validation": {
+        "yaml_syntax": "pass (both workflow files)",
+        "py_compile": "pass (sanity, no python touched)",
+        "node_check": "pass (sanity, no js touched)",
+        "unit_tests": "97/97 pass (unchanged)",
+        "validate_data": "pass",
+        "ci_run": "34629978914 completed success (10s)"
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-99.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T15:31:00Z",
+  "last_cycle_at": "2026-09-11T17:50:00Z",
   "stopped": false
 }

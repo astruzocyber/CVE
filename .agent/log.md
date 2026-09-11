@@ -3587,3 +3587,35 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `ae589d9` -- "Cycle 99: print stylesheet parity for table view" -- pushed to `origin/main` (`42bc1e5..ae589d9`).
 
 **Updated state:** `total_cycles`: 98 -> 99. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 100 — 2026-09-11T17:50:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=99, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Inspected `docs/data/alerts.json` schema (611 alerts), `docs/app.js`/`docs/style.css`/`docs/index.html` line counts, `scripts/aggregate.py` stats function, `.github/workflows/cve-alerts.yml` and `.github/workflows/ci.yml` in full. Card-view/table-view parity (the productive vein since cycle 76) is now essentially closed across screen and print modes; shifted focus to pipeline/CI infrastructure, an area not touched since the retry-with-backoff cycles (1-3, 5).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Enable pip dependency caching in GitHub Actions workflows** (chosen) -- 5/5/3. Both `ci.yml` and `cve-alerts.yml` cold-install `requirements.txt` (requests, PyYAML) on every single run -- the aggregation workflow runs 6x/day on a schedule plus any manual dispatch, and CI runs on every push touching `docs/**`/`scripts/**`. `actions/setup-python@v5` has built-in `cache: pip` support (keyed on `requirements.txt` hash) at zero additional cost. Real value is modest (2 tiny deps, fast installs already) but non-zero: reduces redundant PyPI index requests from a very-frequently-run public pipeline, shaving setup time and reducing (already low) risk of PyPI-side throttling on a shared free resource -- good-citizen practice. Trivial validation risk: single well-documented GitHub-native flag, no logic touched.
+2. GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack, deferred cycles 56-99.
+3. Full risk_score history array -- still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms -- still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `.github/workflows/ci.yml`: added `cache: "pip"` to the `actions/setup-python@v5` step.
+- `.github/workflows/cve-alerts.yml`: added `cache: "pip"` to its own `actions/setup-python@v5` step.
+- No Python/JS/schema/data changes -- workflow-config-only.
+
+**Validation performed (all passed):**
+- `python3 -c "yaml.safe_load(...)"` on both workflow files -> OK (syntax valid).
+- `python3 -m py_compile scripts/aggregate.py scripts/notify_github_issues.py scripts/validate_data.py` -> exit 0 (sanity, untouched).
+- `node --check docs/app.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` -> **97/97 tests passed** (unchanged).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (611 alerts, schema OK, stats.json/trend.csv/feeds all checked against live data).
+- Deployed: commit `572fe4f` pushed to `origin/main`. CI "Data & Frontend Validation" run `34629978914` completed success (10s); pages-build-deployment triggered normally.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-99); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no external API calls made this cycle (workflow-config-only change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `572fe4f` -- "Cycle 100: enable pip dependency caching in GitHub Actions workflows" -- pushed to `origin/main` (`7e2d588..572fe4f`).
+
+**Updated state:** `total_cycles`: 99 -> 100. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
