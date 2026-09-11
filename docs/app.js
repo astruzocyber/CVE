@@ -883,10 +883,25 @@ function renderTable(filtered) {
       const tableRiskDeltaHtml = tableRiskDelta && tableRiskDelta !== 0
         ? ` <span class="risk-delta ${tableRiskDelta > 0 ? "risk-up" : "risk-down"}" title="Risk score changed from ${a.risk_score_prev.toFixed(0)} to ${a.risk_score.toFixed(0)} since the last refresh">${tableRiskDelta > 0 ? "\u25b2" : "\u25bc"}${tableRiskDelta > 0 ? "+" : ""}${tableRiskDelta}</span>`
         : "";
+      // EPSS-delta indicator in table view (cycle 92): card view has shown
+      // an EPSS-delta badge (up/down arrow + percentage-point change since
+      // the last refresh, via .epss-delta/.risk-up/.risk-down CSS) since
+      // epss_score_prev tracking was added, but the dense table view
+      // (cycle 76) never surfaced it -- cycle 91 closed the identical gap
+      // for the Risk column but flagged this as the direct follow-up.
+      // Reuses the exact same computation and CSS classes card view uses
+      // (epss_score - epss_score_prev, >= 0.0005 threshold to avoid
+      // noise), so table and card views can never disagree on direction.
+      const tableEpssDelta = (typeof a.epss_score === "number" && typeof a.epss_score_prev === "number")
+        ? a.epss_score - a.epss_score_prev
+        : null;
+      const tableEpssDeltaHtml = tableEpssDelta && Math.abs(tableEpssDelta) >= 0.0005
+        ? ` <span class="epss-delta ${tableEpssDelta > 0 ? "risk-up" : "risk-down"}" title="EPSS changed from ${(a.epss_score_prev * 100).toFixed(1)}% to ${(a.epss_score * 100).toFixed(1)}% since the last refresh">${tableEpssDelta > 0 ? "\u25b2" : "\u25bc"}${tableEpssDelta > 0 ? "+" : ""}${(tableEpssDelta * 100).toFixed(1)}pp</span>`
+        : "";
       return `<tr data-cve="${escapeHtml(a.cve_id || "")}"${isRejected ? ' class="table-row-rejected"' : ""}>
         <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a>${isRejected ? ' <span class="table-rejected-tag" title="NVD has withdrawn this CVE ID -- scores may be stale">REJECTED</span>' : ""}</td>
         <td class="${cvssSevClass ? `table-cvss-${cvssSevClass}` : ""}">${fmtScore(a.cvss_score)}</td>
-        <td>${typeof a.epss_score === "number" ? (a.epss_score * 100).toFixed(1) + "%" : "-"}</td>
+        <td>${typeof a.epss_score === "number" ? (a.epss_score * 100).toFixed(1) + "%" : "-"}${tableEpssDeltaHtml}</td>
         <td class="${riskCls ? `table-risk-${riskCls}` : ""}">${fmtScore(a.risk_score, 0)}${tableRiskDeltaHtml}</td>
         <td>${escapeHtml(kevLabel)}</td>
         <td>${escapeHtml(a.source || "-")}</td>
