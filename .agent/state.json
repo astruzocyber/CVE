@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 95,
+  "total_cycles": 96,
   "implemented": [
     {
       "cycle": 1,
@@ -913,9 +913,29 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 96,
+      "timestamp": "2026-09-11T15:31:00Z",
+      "title": "Reviewed toggle button in table view",
+      "description": "Card view has offered a Mark reviewed button (backed by the existing reviewedCves Set/localStorage state and the stats-bar reviewed-progress count) since early cycles, but the dense table view (cycle 76) had no way to mark or even see an alerts reviewed status without switching back to card view -- a real gap for bulk-scanning triage workflows, the exact use case table view exists for. Added a Reviewed column with a table-review-toggle-btn per row (Mark / checkmark), reusing the exact same reviewedCves.has()/toggleReviewed() state mutation card views own handler uses. Initially attached the click handler inside the card-grid delegated listener (a bug -- table rows live outside card-grid so clicks never fired); caught this during browser smoke testing and moved it to a dedicated listener on alerts-table-body instead, verified working end-to-end after the fix.",
+      "commit_sha": "d086332",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (609 cards, 609 of 609 alerts), switched to table view (609 rows, 13 header columns). First attempt: clicking the new table Reviewed button did nothing (handler dead-attached inside card-grid listener). Fixed by attaching a dedicated click listener to alerts-table-body. Re-tested: click marks CVE-2016-7255 reviewed (button -> checkmark, class += .reviewed, reviewed-progress -> 1 of 609), switched to card view and confirmed the same CVEs card shows .reviewed-card and Reviewed button text (cross-view state agreement confirmed), switched back to table and unmarked (button -> Mark, progress -> 0 of 609). Confirmed zero regression to search filter (wordpress: 160/609, using bubbling input event + 150ms debounce)."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-95.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T14:56:00Z",
+  "last_cycle_at": "2026-09-11T15:31:00Z",
   "stopped": false
 }

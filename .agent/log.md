@@ -3487,3 +3487,37 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `8295fcc` -- "Cycle 95: Attack Vector column in table view" -- pushed to `origin/main` (`1c8f665..8295fcc`).
 
 **Updated state:** `total_cycles`: 94 -> 95. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 96 -- 2026-09-11T15:31:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=95, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Inspected `docs/data/alerts.json` schema (609 alerts) and grepped `docs/app.js` for every card-view interactive affordance vs. table-view (cycle 76) equivalent. Continued the table-view-vs-card-view parity vein that cycles 83/87/88/89/90/91/92/93/94/95 proved productive, but this time targeting an *interactive* gap rather than a display-only one: `reviewedCves`/`toggleReviewed()` (local-only triage state, backing card view's "Mark reviewed" button and the stats-bar reviewed-progress count) had zero affordance in table view -- an analyst using table view for bulk triage had to switch back to card view just to mark items reviewed, defeating the point of the dense view.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Reviewed toggle button in table view** (chosen) -- 5/5/5. Real gap, and the first *interactive* (not just display) parity fix in this series -- lets an analyst complete an entire triage pass without ever switching to card view. Low validation risk: reuses the exact same `reviewedCves`/`toggleReviewed()` state card view already uses, so no new state model to diverge.
+2. GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack, deferred cycles 56-95.
+3. Full risk_score history array -- still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms -- still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/index.html`: added a `<th>Reviewed</th>` column header to `#alerts-table`.
+- `docs/app.js`: `renderTable()` now computes `isRowReviewed`/`reviewedCellHtml` (a `.table-review-toggle-btn` per row, mirroring card view's `.review-toggle-btn`). Added a **new dedicated click listener on `#alerts-table-body`** (not reused inside the existing `#card-grid` listener, since table rows live outside that container) that calls the same `toggleReviewed()` + `applyFiltersAndRender()` + `renderReviewedProgress()` card view's handler uses.
+- `docs/style.css`: added `.table-review-toggle-btn`/`.table-review-toggle-btn.reviewed` rules mirroring the existing `.review-toggle-btn` palette.
+- No `scripts/aggregate.py`/schema/data changes -- pure frontend, reusing existing local-only state.
+
+**Bug caught during validation (not shipped broken):** First implementation attached the new handler *inside* the existing `#card-grid` delegated click listener by mistake -- since table rows render outside `#card-grid`, clicks on the table button silently did nothing. Caught this live during the browser smoke test (button state didn't change after `.click()`), traced it to the wrong listener scope, and fixed it by moving to a dedicated `#alerts-table-body` listener before committing. This is exactly the kind of regression full browser-driven validation (not just `node --check`) exists to catch.
+
+**Validation performed (all passed, after the fix above):**
+- `node --check docs/app.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity check; no Python files touched).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` -> **97/97 tests passed** (unchanged -- no aggregation/scoring logic touched, pure frontend change).
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background, port 8996), drove it live via `mcp__browser_exec` (CDP, real Chrome). Loaded dashboard (609 cards, 609 of 609 alerts). Switched to table view (609 rows, 13 header columns incl. new "Reviewed"). Clicked the new toggle for `CVE-2016-7255`: button text `Mark` -> `\u2713`, class gained `.reviewed`, `reviewed-progress` text updated to `\u2713 1 of 609 reviewed (0%)`. Switched to card view: confirmed the same CVE's card shows `.reviewed-card` and its own `.review-toggle-btn` reads "\u2713 Reviewed" -- cross-view state agreement confirmed (both read the same `reviewedCves` Set). Switched back to table view and clicked again to unmark: button reverted to `Mark`, progress reverted to `0 of 609`. Ran the existing "wordpress" search filter (bubbling `input` event + its existing 150ms debounce): still correctly narrows to 160/609, confirming zero regression.
+- Deployed: commit `d086332` pushed to `origin/main`. CI "Data & Frontend Validation" run `34616657685` completed success (16s); pages-build-deployment completed successfully.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-95); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no external API calls made this cycle (pure frontend change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `d086332` -- "Cycle 96: Reviewed toggle button in table view" -- pushed to `origin/main` (`ed6615e..d086332`).
+
+**Updated state:** `total_cycles`: 95 -> 96. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
