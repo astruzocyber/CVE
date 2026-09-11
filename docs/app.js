@@ -846,11 +846,21 @@ function renderTable(filtered) {
       // analyst bulk-scanning table view (with the hide-rejected filter
       // off) had zero visual cue that a row's scores might be stale.
       const isRejected = a.vuln_status === "Rejected";
+      // Risk-score color-coding on the Risk cell (cycle 89): cycle 87 added
+      // the same CVSS-column color treatment reusing severityClass(), but
+      // the composite Risk column (the board's primary sort/triage metric,
+      // combining CVSS+EPSS+KEV) was left as plain uncolored text -- the
+      // single most important number on the row had the least visual
+      // salience. Reuses the exact same riskClass() classification (and
+      // the risk-bar-fill's own critical/high/medium/low thresholds) card
+      // view has used since early cycles, so table and card views can
+      // never disagree on what counts as a "critical" risk score.
+      const riskCls = riskClass(a.risk_score);
       return `<tr data-cve="${escapeHtml(a.cve_id || "")}"${isRejected ? ' class="table-row-rejected"' : ""}>
         <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a>${isRejected ? ' <span class="table-rejected-tag" title="NVD has withdrawn this CVE ID -- scores may be stale">REJECTED</span>' : ""}</td>
         <td class="${cvssSevClass ? `table-cvss-${cvssSevClass}` : ""}">${fmtScore(a.cvss_score)}</td>
         <td>${typeof a.epss_score === "number" ? (a.epss_score * 100).toFixed(1) + "%" : "-"}</td>
-        <td>${fmtScore(a.risk_score, 0)}</td>
+        <td class="${riskCls ? `table-risk-${riskCls}` : ""}">${fmtScore(a.risk_score, 0)}</td>
         <td>${escapeHtml(kevLabel)}</td>
         <td>${escapeHtml(a.source || "-")}</td>
         <td>${fmtDate(a.first_seen)}</td>
