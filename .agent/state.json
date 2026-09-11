@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 83,
+  "total_cycles": 84,
   "implemented": [
     {
       "cycle": 1,
@@ -669,9 +669,30 @@
       "title": "Add 'Fix' column to table view",
       "description": "Cycle 76's dense sortable table view never surfaced the fix-available signal that card view has shown since cycle 61 (osv_fixed_versions) and cycle 78 (nvd_fix_versions), and that cycle 82's 'Fix available only' checkbox filters the whole board on -- a gap where switching to table view for bulk scanning silently dropped a triage-relevant column present everywhere else in the dashboard. Added a 'Fix' column to #alerts-table reusing the existing hasFixAvailable(alert) predicate unchanged (renders 'Yes' in green when either osv_fixed_versions or nvd_fix_versions is non-empty, '-' otherwise), so table view, card view, and the filter checkbox can never disagree on which alerts have a known remediation path. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost.",
       "commit_sha": "56ee952"
+    },
+    {
+      "cycle": 84,
+      "timestamp": "2026-09-11T08:45:00Z",
+      "title": "Add 'nvd_reference_links' column to CSV export",
+      "description": "Cycle 79's nvd_reference_links (vendor advisory/patch/release-notes links parsed from NVD references array) was already rendered on cards and in the Markdown export (alertToMarkdown) but missing from CSV export -- a gap where an analyst bulk-exporting to CSV for offline triage/spreadsheet analysis silently lost the vendor remediation links that card/Markdown views show. Added a new nvd_reference_links CSV column, flattened to 'Tag: url' pairs joined by '; ' (same convention as the existing osv_fixed_versions/nvd_fix_versions columns), placed directly before the description column at the end of the header. Pure additive frontend change: no new API calls, no backend/schema changes, zero cost.",
+      "commit_sha": "c10b468",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (603 cards, 603 of 603 alerts, no regression), intercepted URL.createObjectURL to capture the actual CSV export blob and confirmed real header includes nvd_reference_links and a real row contains populated Tag:url data matching card/Markdown rendering"
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "Another trend.csv trailing column -- scored lower per cycles 76-83's steer.",
+        "GHSA/Dependabot coverage expansion -- still needs human input on tech stack, deferred cycles 56-83.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T08:11:00Z",
+  "last_cycle_at": "2026-09-11T08:45:00Z",
   "stopped": false
 }

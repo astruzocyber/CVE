@@ -3107,3 +3107,34 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHAs:** `56ee952` — "Cycle 83: Add 'Fix' column to table view" (code) and `4944fce` — "Cycle 83: regenerate data (live aggregate.py run, 603 alerts)" (data) — both pushed to `origin/main` (`0101171..4944fce`).
 
 **Updated state:** `total_cycles`: 82 → 83. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 84 — 2026-09-11T08:45:00Z
+
+**Re-verified state before acting:** `git pull` (already up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=83, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false, 83-entry `implemented` array), `gh run list --limit 8` (last 8 CI/Pages runs all `success`, no 429/throttle signals). Grepped `docs/app.js` for `nvd_reference_links` and every other extracted field vs. their presence in the CSV export header/row builder (`exportCsv`/`toCsvRow` area) to find an unaddressed gap.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Add `nvd_reference_links` column to CSV export** (chosen) — 5/5/4. Confirmed via direct code read that cycle 79's `nvd_reference_links` (vendor advisory/patch/release-notes links, extracted from NVD's `references` array on every run since cycle 79) is rendered on alert cards and in the Markdown export (`alertToMarkdown`) but is the only fix/reference-adjacent field (unlike `osv_fixed_versions`/`nvd_fix_versions`, both present) missing from the CSV export's header array and row builder — a genuine, previously-unaddressed inconsistency between three parallel export/render surfaces that should stay in sync, not a re-implementation. Very low validation risk: pure additive column following the exact same flatten-to-string convention already used for `osv_fixed_versions`/`nvd_fix_versions` in the same function.
+2. Another trend.csv trailing column — deprioritized again per cycles 76-83's explicit steer toward novel functional/usability features/consistency fixes over another averaged metric.
+3. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-83.
+4. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+5. EPSS percentile / by_first_seen_age histograms — still marginal value vs. the chosen candidate.
+6. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/app.js`: `exportCsv()`'s `header` array gained `"nvd_reference_links"` (inserted directly before the trailing `"description"` column); a new `refLinksFlat` variable flattens `alert.nvd_reference_links` (array of `{url, tags}`) to `"Tag: url"` pairs joined by `"; "` (mirrors the exact convention already used for `osvFixed`/`nvdFixed` in the same function); wired into the row-push array in the same position as the header.
+- No `scripts/aggregate.py`/schema/data changes — pure frontend export-consistency fix using a field already extracted and rendered elsewhere since cycle 79.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity check; no Python files touched this cycle).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` → **97/97 tests passed** (unchanged from cycle 83 — no aggregation/scoring logic touched, pure frontend change).
+- No live `aggregate.py` run or data regeneration was needed this cycle (no new fields, no schema changes, no backend code touched) — the existing committed `docs/data/alerts.json` (603 alerts, populated `nvd_reference_links` on 174+ entries per cycle 79's original verification) was used directly for the browser smoke test below.
+- Browser smoke test: served the current production `docs/` tree via `python3 -m http.server` (port 8912), drove it live via `mcp__browser_exec` (CDP, real Chrome). Confirmed zero regression first: 603 cards render, `603 of 603 alerts` result count correct. Then intercepted `URL.createObjectURL` at runtime, clicked the real `#export-csv` button, and read the actual generated `Blob`'s text content back: confirmed the CSV header row now includes `nvd_reference_links` (between `nvd_fix_versions` and `description`), confirmed a real data row for a live CVE (with populated `kev`/`kev_due_date`/etc. fields) round-trips correctly through `toCsvRow`, and located rows containing real `Vendor Advisory`/`Patch`/`Release Notes` tag strings in the exported CSV text — confirming the new column is not just structurally present but actually carries real vendor-link data end-to-end from `alerts.json` through the export function to the downloaded file content.
+
+**Rejected this cycle:** Another trend.csv trailing column (scored lower per cycles 76-83's steer); GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-83); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (pure frontend change, no live aggregation run required).
+
+**Commit SHA:** `c10b468` — "Cycle 84: Add 'nvd_reference_links' column to CSV export" — pushed to `origin/main` (`80c14c7..c10b468`).
+
+**Updated state:** `total_cycles`: 83 → 84. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
