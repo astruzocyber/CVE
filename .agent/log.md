@@ -3542,3 +3542,15 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **RATE_LIMIT_EVENT: no** -- no external API calls made this cycle (pure frontend change, no live aggregation run required); recent scheduled CI/Pages runs all completed successfully with no 429/throttle signals.
 
 **Updated state:** `total_cycles`: 96 -> 97. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 98 — 2026-09-11T16:36:00Z
+**Implemented:** Table view parity: reviewed toggle + revised indicator
+- Added `table-review-toggle-btn` to table rows (mirrors card-view reviewed state via shared `reviewedCves` set/localStorage)
+- Added `.table-revised-mark` tooltip indicator for NVD-revised records in table rows
+- Frontend-only, additive, no schema/backend changes
+- Validation: `node --check docs/app.js` OK, `python3 -m py_compile scripts/*.py` OK, `unittest` 97/97 passed, live browser smoke test on local http.server confirmed 611 rows render, 392 revised-marks with correct tooltips, Reviewed column intact, no regressions
+- Commit: 80b0c75
+**Rejected:** none this cycle
+**API health:** not queried this cycle (frontend-only change, no pipeline run needed)
+**consecutive_no_improvement:** 0
+**consecutive_failed_cycles:** 0

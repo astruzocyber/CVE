@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 97,
+  "total_cycles": 98,
   "implemented": [
     {
       "cycle": 1,
@@ -940,6 +940,13 @@
       "title": "Human-readable CWE names as tooltips (card + table view)",
       "description": "CWE IDs (e.g. CWE-416) have been shown as bare numeric badges/cells since early cycles (card view badges since inception, table view cell since cycle 94) with no indication of what the weakness class actually is -- an analyst had to open a new tab to cwe.mitre.org or already know the numbering by heart. Added a static curated CWE_NAMES lookup map (numeric ID -> human name) covering all 97 distinct CWE IDs present in the current tracked-alert dataset plus common adjacent ones, and a cweName() helper. Card view badges now show \"CWE-XXX (Name)\" as the label with a richer title tooltip; table view cells keep the compact bare ID as visible text (dense-view convention preserved) but gain a title tooltip with the full name on hover. Zero new API calls (static data, no live fetch -- MITRE CWE taxonomy changes rarely so a hardcoded map carries no staleness risk worth a live dependency), zero backend/schema changes, zero cost. Unrecognized/future CWE IDs fall back to the prior behavior (bare ID, no name) rather than breaking.",
       "commit_sha": "43a29e3"
+    },
+    {
+      "cycle": 98,
+      "timestamp": "2026-09-11T16:36:00Z",
+      "title": "Table view parity: reviewed toggle + revised indicator",
+      "description": "The table view lacked two review-state affordances already present in the card view: a 'reviewed' toggle button and a visual marker for NVD-revised records (title tooltip explaining the record was rescored/corrected since initial publication). Table rows now render a table-review-toggle-btn (mirrors card-view reviewed state via the same reviewedCves set, toggles the same localStorage-backed state) and a .table-revised-mark indicator with a full explanatory tooltip, reusing the existing isRevised computation already available per-alert. No schema/backend changes -- frontend-only, purely additive CSS class + button markup. Validated: node --check docs/app.js (pass), python3 -m py_compile scripts/*.py (pass), full unittest suite 97/97 passed, and a live browser smoke test against the built docs/ (local http.server) confirmed table view renders 611 rows with 392 revised-marks showing correct tooltip text and the Reviewed column present with no regressions to existing columns/filters.",
+      "commit_sha": "80b0c75"
     }
   ],
   "rejected": [],
