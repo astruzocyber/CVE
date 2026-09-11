@@ -825,9 +825,20 @@ function renderTable(filtered) {
       // so table and card/filter views can never disagree on which alerts
       // count as having a fix.
       const fixLabel = hasFixAvailable(a) ? "Yes" : "-";
+      // Severity color-coding on the CVSS cell (cycle 87): card view has
+      // shown a colored severity badge (critical/high/medium/low, via the
+      // existing .badge.<class> CSS rules) since early cycles, but the
+      // dense table view (cycle 76) rendered the raw CVSS number in plain
+      // text with zero color signal -- a real gap for bulk/table-mode
+      // triage, where scanning for red/orange rows is far faster than
+      // reading every numeric score. Reuses the exact same severityClass()
+      // classification and .badge.<class> color palette already defined
+      // for cards, so table and card views can never disagree on what
+      // counts as "critical" vs "high" etc.
+      const cvssSevClass = severityClass(a.cvss_score);
       return `<tr data-cve="${escapeHtml(a.cve_id || "")}">
         <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a></td>
-        <td>${fmtScore(a.cvss_score)}</td>
+        <td class="${cvssSevClass ? `table-cvss-${cvssSevClass}` : ""}">${fmtScore(a.cvss_score)}</td>
         <td>${typeof a.epss_score === "number" ? (a.epss_score * 100).toFixed(1) + "%" : "-"}</td>
         <td>${fmtScore(a.risk_score, 0)}</td>
         <td>${escapeHtml(kevLabel)}</td>

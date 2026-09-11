@@ -635,6 +635,16 @@ main {
 .badge.high { background: rgba(255, 169, 77, 0.15); color: var(--orange); border: 1px solid var(--orange); }
 .badge.medium { background: rgba(255, 217, 61, 0.15); color: var(--yellow); border: 1px solid var(--yellow); }
 .badge.low { background: rgba(87, 204, 153, 0.15); color: var(--green); border: 1px solid var(--green); }
+
+/* Table-view CVSS cell severity color-coding (cycle 87): reuses the exact
+   severityClass() classification card view's .badge.<class> already uses,
+   so a "critical" cell here always means the same threshold as a card's
+   critical badge. Bold + colored text (no background/border, unlike the
+   card badge) keeps dense table rows scannable without visual clutter. */
+.table-cvss-critical { color: var(--red); font-weight: 600; }
+.table-cvss-high { color: var(--orange); font-weight: 600; }
+.table-cvss-medium { color: var(--yellow); font-weight: 600; }
+.table-cvss-low { color: var(--green); font-weight: 600; }
 .badge.source { background: rgba(79, 157, 255, 0.15); color: var(--accent); border: 1px solid var(--accent); }
 .badge.ransomware { background: rgba(255, 92, 92, 0.35); color: #fff; border: 1px solid var(--red); }
 .badge.overdue { background: rgba(255, 169, 77, 0.3); color: #fff; border: 1px solid var(--orange); }
