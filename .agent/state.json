@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 77,
+  "total_cycles": 78,
   "implemented": [
     {
       "cycle": 1,
@@ -601,9 +601,24 @@
         "Another trend.csv trailing column (e.g. avg_epss_percentile) -- vuln_status scored higher: genuinely novel functional feature (new extracted field + new badge + new filterable signal) vs. yet another averaged trend metric, per cycle 76's explicit steer to prefer novel features when a good one is available.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 78,
+      "timestamp": "2026-09-11T04:45:00Z",
+      "title": "Parse NVD CPE configurations for fix-version data",
+      "description": "extract_nvd_fix_versions() parses the `configurations` CPE match data already present in every NVD CVE response fetched every run (zero new API calls) to surface 'fixed in version X' signal for vendor/OS/hardware CVEs (Windows, Cisco IOS, PAN-OS, browsers, firmware, etc.) that OSV.dev never curates -- cycle 61's OSV.dev enrichment only covers open-source package ecosystems reachable via a per-CVE network lookup. A CPE match marked vulnerable=true with a versionEndExcluding ('fixed in this version or later') or versionEndIncluding ('next release after this is fixed') bound gives an analyst the exact version boundary to patch to, previously totally absent for any non-package-ecosystem CVE. New nvd_fix_versions field (vendor/product/fixed/fix_type, capped at 5, deduped) added to build_final_entry, backfilled to [] for pre-cycle-78 records in the untouched-alert refresh loop, and rendered on the card UI, Markdown export, and CSV export alongside the existing osv_fixed_versions field it complements.",
+      "commit_sha": "2ba438c",
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack (deferred cycles 56-77).",
+        "Full risk_score history array (time series per CVE) -- still deferred, unbounded schema/storage growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- still deferred, marginal value vs. chosen candidate.",
+        "Another trend.csv trailing column -- scored lower per cycle 76/77's explicit steer to prefer a genuinely novel functional feature over another averaged metric when a good one is available.",
+        "Keyboard-shortcuts help modal / print stylesheet -- viable UI conveniences but lower value than a new data-coverage signal this cycle.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T03:45:00Z",
+  "last_cycle_at": "2026-09-11T04:45:00Z",
   "stopped": false
 }
