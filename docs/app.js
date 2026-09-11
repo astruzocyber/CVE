@@ -619,9 +619,27 @@ function readFiltersFromURL() {
   if (params.has("hiderejected") && hideRejectedEl) {
     hideRejectedEl.checked = params.get("hiderejected") === "1";
   }
+  const hasFixOnlyEl = document.getElementById("has-fix-only");
+  if (params.has("hasfixonly") && hasFixOnlyEl) {
+    hasFixOnlyEl.checked = params.get("hasfixonly") === "1";
+  }
 }
 
-function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed, newOnly, hideRejected) {
+// Whether an alert has a known fix-version signal from either enrichment
+// source: cycle 61's OSV.dev osv_fixed_versions (open-source package
+// ecosystems) or cycle 78's NVD-configurations-derived nvd_fix_versions
+// (vendor/OS/hardware CVEs). Shared by the "Fix available only" filter
+// below and kept in sync with the two "Fix available" card-render checks
+// this mirrors (see renderCard's osv_fixed_versions/nvd_fix_versions
+// handling above).
+function hasFixAvailable(alert) {
+  return (
+    (Array.isArray(alert.osv_fixed_versions) && alert.osv_fixed_versions.length > 0) ||
+    (Array.isArray(alert.nvd_fix_versions) && alert.nvd_fix_versions.length > 0)
+  );
+}
+
+function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed, newOnly, hideRejected, hasFixOnly) {
   const params = new URLSearchParams();
   if (search) params.set("q", search);
   if (kevFilter && kevFilter !== "all") params.set("kev", kevFilter);
@@ -633,6 +651,7 @@ function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, s
   if (hideReviewed) params.set("hidereviewed", "1");
   if (newOnly) params.set("newonly", "1");
   if (hideRejected) params.set("hiderejected", "1");
+  if (hasFixOnly) params.set("hasfixonly", "1");
   const qs = params.toString();
   const newUrl = location.pathname + (qs ? "?" + qs : "") + location.hash;
   history.replaceState(null, "", newUrl);
@@ -651,12 +670,14 @@ function applyFiltersAndRender() {
   const hideReviewed = document.getElementById("hide-reviewed").checked;
   const newOnly = document.getElementById("new-only").checked;
   const hideRejected = document.getElementById("hide-rejected").checked;
-  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed, newOnly, hideRejected);
+  const hasFixOnly = document.getElementById("has-fix-only").checked;
+  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed, newOnly, hideRejected, hasFixOnly);
 
   let filtered = allAlerts.filter((a) => {
     if (hideReviewed && reviewedCves.has(a.cve_id)) return false;
     if (newOnly && !isNewWithin24h(a)) return false;
     if (hideRejected && a.vuln_status === "Rejected") return false;
+    if (hasFixOnly && !hasFixAvailable(a)) return false;
     if (kevFilter === "kev" && !a.kev) return false;
     if (kevFilter === "non-kev" && a.kev) return false;
     if (kevFilter === "overdue" && !isOverdue(a)) return false;
@@ -1607,6 +1628,7 @@ document.getElementById("sort-by").addEventListener("change", applyFiltersAndRen
 document.getElementById("hide-reviewed").addEventListener("change", applyFiltersAndRender);
 document.getElementById("new-only").addEventListener("change", applyFiltersAndRender);
 document.getElementById("hide-rejected").addEventListener("change", applyFiltersAndRender);
+document.getElementById("has-fix-only").addEventListener("change", applyFiltersAndRender);
 let minRiskDebounceTimer = null;
 document.getElementById("min-risk").addEventListener("input", () => {
   clearTimeout(minRiskDebounceTimer);
@@ -1698,6 +1720,8 @@ document.getElementById("reset-filters").addEventListener("click", () => {
   if (newOnlyReset) newOnlyReset.checked = false;
   const hideRejectedReset = document.getElementById("hide-rejected");
   if (hideRejectedReset) hideRejectedReset.checked = false;
+  const hasFixOnlyReset = document.getElementById("has-fix-only");
+  if (hasFixOnlyReset) hasFixOnlyReset.checked = false;
   dependencyPackageNames = null;
   const depText = document.getElementById("dep-text-input");
   const depFile = document.getElementById("dep-file-input");
