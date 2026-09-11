@@ -3,6 +3,69 @@
 
 let allAlerts = [];
 
+// Human-readable names for CWE (Common Weakness Enumeration) IDs, keyed by
+// numeric ID (no "CWE-" prefix). CWE IDs have been shown as bare badges
+// (card view) and a bare joined cell (table view, cycle 94) since they were
+// added -- an analyst unfamiliar with the numbering (e.g. "is CWE-416 the
+// bad one?") had to open a new tab to cwe.mitre.org just to know what class
+// of bug a row represents. This is a small static curated map (not a live
+// API call -- MITRE's CWE list is a fixed taxonomy that changes rarely, and
+// a live fetch would add an external dependency risk for zero benefit over
+// a literal table) covering every CWE ID actually observed in the current
+// tracked-alert dataset (97 distinct IDs as of this cycle) plus a handful of
+// other very common ones, so unrecognized/future IDs simply fall back to no
+// name shown (existing behavior), never a broken link or blank lookup.
+const CWE_NAMES = {
+  "20": "Improper Input Validation", "22": "Path Traversal", "36": "Absolute Path Traversal",
+  "59": "Link Following", "73": "External Control of File Name/Path", "74": "Injection",
+  "76": "Equivalent Special Element Injection", "78": "OS Command Injection", "79": "Cross-Site Scripting (XSS)",
+  "89": "SQL Injection", "93": "CRLF Injection", "94": "Code Injection", "95": "Eval Injection",
+  "98": "PHP File Inclusion", "119": "Improper Restriction of Memory Buffer Bounds",
+  "120": "Buffer Copy without Checking Size (Classic Buffer Overflow)", "121": "Stack-based Buffer Overflow",
+  "122": "Heap-based Buffer Overflow", "125": "Out-of-bounds Read", "129": "Improper Validation of Array Index",
+  "131": "Incorrect Calculation of Buffer Size", "180": "Incorrect Behavior Order: Validate Before Canonicalize",
+  "184": "Incomplete List of Disallowed Inputs", "190": "Integer Overflow or Wraparound",
+  "193": "Off-by-one Error", "197": "Numeric Truncation Error", "200": "Exposure of Sensitive Information",
+  "208": "Observable Timing Discrepancy", "209": "Generation of Error Message Containing Sensitive Info",
+  "250": "Execution with Unnecessary Privileges", "269": "Improper Privilege Management",
+  "276": "Incorrect Default Permissions", "284": "Improper Access Control", "285": "Improper Authorization",
+  "287": "Improper Authentication", "290": "Authentication Bypass by Spoofing",
+  "294": "Authentication Bypass by Capture-replay", "297": "Improper Validation of Certificate with Host Mismatch",
+  "306": "Missing Authentication for Critical Function", "308": "Use of Single-factor Authentication",
+  "311": "Missing Encryption of Sensitive Data", "312": "Cleartext Storage of Sensitive Information",
+  "319": "Cleartext Transmission of Sensitive Information", "330": "Use of Insufficiently Random Values",
+  "345": "Insufficient Verification of Data Authenticity", "347": "Improper Verification of Cryptographic Signature",
+  "352": "Cross-Site Request Forgery (CSRF)", "362": "Race Condition", "367": "Time-of-check Time-of-use (TOCTOU) Race Condition",
+  "400": "Uncontrolled Resource Consumption", "407": "Inefficient Regular Expression Complexity (ReDoS)",
+  "415": "Double Free", "416": "Use After Free", "427": "Uncontrolled Search Path Element",
+  "434": "Unrestricted Upload of File with Dangerous Type", "436": "Interpretation Conflict",
+  "441": "Server-Side Request Forgery (SSRF)-adjacent Proxy/Confused Deputy", "459": "Incomplete Cleanup",
+  "470": "Unsafe Reflection", "476": "NULL Pointer Dereference", "480": "Use of Incorrect Operator",
+  "502": "Deserialization of Untrusted Data", "506": "Embedded Malicious Code",
+  "613": "Insufficient Session Expiration", "620": "Unverified Password Change",
+  "636": "Not Failing Securely ('Failing Open')", "639": "Insecure Direct Object Reference (IDOR)",
+  "664": "Improper Control of a Resource Through its Lifetime", "665": "Improper Initialization",
+  "668": "Exposure of Resource to Wrong Sphere", "672": "Operation on a Resource after Expiration or Release",
+  "682": "Incorrect Calculation", "691": "Insufficient Control Flow Management",
+  "693": "Protection Mechanism Failure", "697": "Incorrect Comparison", "703": "Improper Check/Handling of Exceptional Conditions",
+  "704": "Incorrect Type Conversion or Cast", "706": "Use of Incorrectly-resolved Name or Reference",
+  "707": "Improper Neutralization", "770": "Allocation of Resources Without Limits or Throttling",
+  "787": "Out-of-bounds Write", "789": "Uncontrolled Memory Allocation",
+  "807": "Reliance on Untrusted Inputs in a Security Decision", "825": "Expired Pointer Dereference",
+  "843": "Type Confusion", "862": "Missing Authorization", "863": "Incorrect Authorization",
+  "908": "Use of Uninitialized Resource", "916": "Use of Password Hash With Insufficient Computational Effort",
+  "918": "Server-Side Request Forgery (SSRF)", "941": "Incorrectly Specified Destination in a Communication Channel",
+  "943": "Improper Neutralization of Special Elements in Data Query Logic",
+  "1050": "Excessive Platform Resource Consumption within a Loop",
+  "1284": "Improper Validation of Specified Quantity in Input", "1289": "Improper Validation of Unsafe Equivalence in Input",
+  "1321": "Improperly Controlled Modification of Object Prototype Attributes (Prototype Pollution)",
+  "1336": "Improper Neutralization of Special Elements Used in a Template Engine",
+};
+function cweName(cweId) {
+  const num = String(cweId || "").replace(/^CWE-/i, "");
+  return CWE_NAMES[num] || null;
+}
+
 // Client-side "mark as reviewed" triage state. Purely local (localStorage),
 // per-browser, never sent anywhere and never touches the shared dataset --
 // this is a per-analyst workflow aid, not shared team state. Answers a real
@@ -296,8 +359,11 @@ function renderCard(alert) {
   const cweHtml = cweIds.length
     ? `<div class="cwe-row">Weakness: ${cweIds.map((c) => {
         const num = c.replace(/^CWE-/i, "");
+        const name = cweName(c);
+        const title = name ? `${escapeHtml(c)}: ${escapeHtml(name)}` : `View ${escapeHtml(c)} on cwe.mitre.org`;
+        const label = name ? `${escapeHtml(c)} (${escapeHtml(name)})` : escapeHtml(c);
         return /^\d+$/.test(num)
-          ? `<a class="badge cwe" href="https://cwe.mitre.org/data/definitions/${num}.html" target="_blank" rel="noopener" title="View ${escapeHtml(c)} on cwe.mitre.org">${escapeHtml(c)}</a>`
+          ? `<a class="badge cwe" href="https://cwe.mitre.org/data/definitions/${num}.html" target="_blank" rel="noopener" title="${title}">${label}</a>`
           : `<span class="badge cwe">${escapeHtml(c)}</span>`;
       }).join("")}</div>`
     : "";
@@ -895,7 +961,12 @@ function renderTable(filtered) {
       // card view on content, though table cells are plain text (no links)
       // to keep the dense view lightweight.
       const cweLabel = Array.isArray(a.cwe_ids) && a.cwe_ids.length
-        ? a.cwe_ids.map((c) => escapeHtml(c)).join(", ")
+        ? a.cwe_ids.map((c) => {
+            const name = cweName(c);
+            return name
+              ? `<span title="${escapeHtml(c)}: ${escapeHtml(name)}">${escapeHtml(c)}</span>`
+              : escapeHtml(c);
+          }).join(", ")
         : "-";
       // Risk-score trend delta in table view (cycle 91): card view has shown
       // a risk-delta badge (up/down arrow + point change since the last
