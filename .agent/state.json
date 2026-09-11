@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 90,
+  "total_cycles": 91,
   "implemented": [
     {
       "cycle": 1,
@@ -812,9 +812,30 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 91,
+      "timestamp": "2026-09-11T12:41:00Z",
+      "title": "Risk-score trend delta indicator in table view",
+      "description": "Card view has shown a risk-delta badge (up/down arrow + point change since the last score refresh, via .risk-delta/.risk-up/.risk-down CSS) since risk_score_prev tracking was added, but the dense table view (cycle 76) never surfaced this signal -- an analyst bulk-scanning table view had no way to see which rows just got materially riskier/safer without switching back to card view. Added tableRiskDelta computation (identical to card view's riskDelta: Math.round(risk_score - risk_score_prev)) in renderTable(), appended as a .risk-delta span next to the Risk cell value, reusing the exact same .risk-delta/.risk-up/.risk-down CSS classes card view already defines -- zero new CSS, zero new logic, guaranteed to never disagree with card view on direction/magnitude.",
+      "commit_sha": "8cbb92a",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (609 cards, 609 of 609 alerts, no regression), switched to table view (609 rows), confirmed 0 rows currently have a risk_score_prev delta != 0 (consistent between card and table view -- genuine current-data state, not a bug). Verified the new code path's logic directly via node with a synthetic risk_score=80/risk_score_prev=50 input, producing the exact expected '<span class=\"risk-delta risk-up\">\u25b2+30</span>' output matching card view's identical computation."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-90.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "EPSS-delta indicator in table view -- deferred to next cycle, same pattern, splitting into separate cycles per one-change-per-cycle discipline.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T12:08:00Z",
+  "last_cycle_at": "2026-09-11T12:41:00Z",
   "stopped": false
 }

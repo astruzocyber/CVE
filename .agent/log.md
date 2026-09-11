@@ -3333,3 +3333,34 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `ea05367` — "Cycle 90: Watchlist keyword-match column in table view" — pushed to `origin/main` (`24e7fe3..ea05367`).
 
 **Updated state:** `total_cycles`: 89 → 90. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 91 — 2026-09-11T12:41:00Z
+
+**Re-verified state before acting:** `git pull` (fast-forward, picked up new alerts.json/stats.json/trend.csv/seen_ids.json from the scheduled aggregation run), full `.agent/state.json` (total_cycles=90, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Inspected `docs/data/alerts.json` schema (609 alerts now, up from 603) and grepped `docs/app.js` for every field -- all fields have references. Continued mining the table-view-vs-card-view parity vein that cycles 83/87/88/89/90 proved productive: found `risk_score_prev` (card view's risk-delta up/down badge, reused by cycle 89's Risk cell for color but not for the delta itself) had zero references inside `renderTable()`.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Risk-score trend delta indicator in table view** (chosen) — 5/5/5. Real gap: the composite Risk column (primary triage metric, colored since cycle 89) still didn't show *direction of change* in table view, only its current value -- an analyst bulk-scanning table view for "what just got worse" had to switch to card view to see any delta at all. Very low validation risk: reuses the exact existing `risk_score - risk_score_prev` computation and exact existing `.risk-delta`/`.risk-up`/`.risk-down` CSS classes card view already defines, zero new CSS/logic to get wrong.
+2. EPSS-delta indicator in table view — same pattern, deferred to a future cycle to keep one-change-per-cycle discipline.
+3. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-90.
+4. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+5. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/app.js`: `renderTable()` now computes `tableRiskDelta` (identical formula to card view's `riskDelta`: `Math.round(risk_score - risk_score_prev)`) and `tableRiskDeltaHtml`, appended inside the existing Risk `<td>` next to the score value. Reuses card view's exact `.risk-delta`/`.risk-up`/`.risk-down` CSS classes unchanged -- no new CSS added.
+- No `scripts/aggregate.py`/schema/data changes — pure frontend surfacing of fields (`risk_score`, `risk_score_prev`) already present and already rendered elsewhere.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity check; no Python files touched this cycle).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` → **97/97 tests passed** (unchanged — no aggregation/scoring logic touched, pure frontend change).
+- No live `aggregate.py` run needed (no new fields, no schema changes) — existing committed `docs/data/alerts.json` (609 alerts, freshly pulled from the scheduled run) used directly for the browser smoke test.
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background process, port 8991), drove it live via `mcp__browser_exec` (CDP, real Chrome). Loaded dashboard: confirmed 609 cards render (matches alerts.json count, no regression). Switched to table view: 609 rows render, 0 with a non-zero `.risk-delta` (correct — current dataset has 0 alerts with a materially changed risk_score_prev this refresh cycle; confirmed consistent between card view's own `.risk-delta` count, also 0, ruling out a table-view-specific bug). Verified the actual new code logic directly via `node -e` with a synthetic `risk_score=80/risk_score_prev=50` input: produced the exact expected `<span class="risk-delta risk-up" ...>▲+30</span>` output, byte-identical in structure/format to card view's existing `riskDeltaHtml` computation.
+- Deployed: commit `8cbb92a` pushed to `origin/main`. CI Data & Frontend Validation run `34600253048` completed success (10s); pages-build-deployment run `34600251942` in progress at time of check (prior deploy history shows consistent success).
+
+**Rejected this cycle:** EPSS-delta indicator in table view (same pattern, deferred to next cycle for one-change-per-cycle discipline); GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-90); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (pure frontend change, no live aggregation run required); the scheduled aggregation run that landed via `git pull` (609 alerts, up from 603) completed successfully per `gh run list`.
+
+**Commit SHA:** `8cbb92a` — "Cycle 91: Risk-score trend delta indicator in table view" — pushed to `origin/main` (`828487b..8cbb92a`).
+
+**Updated state:** `total_cycles`: 90 → 91. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
