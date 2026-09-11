@@ -131,6 +131,24 @@ function fmtScore(v, digits = 1) {
   return typeof v === "number" ? v.toFixed(digits) : "n/a";
 }
 
+// cvss_version arrives from NVD/GHSA as raw strings like "CVSS V31", "CVSS V40",
+// "CVSS V30", or "GHSA CVSS" (a source-specific label, not an NVD version code).
+// Normalizes to a compact human label (e.g. "v3.1", "v4.0") for display; NVD's
+// CVSS v4.0 scores use a materially different metric set/weighting than v3.x, so
+// surfacing the version is a real signal, not cosmetic -- an analyst comparing two
+// "CVSS 8.8" cards should know if they were scored on different rubrics.
+function cvssVersionText(raw) {
+  if (!raw) return null;
+  const m = /^CVSS V(\d)(\d)$/.exec(raw);
+  if (m) return `v${m[1]}.${m[2]}`;
+  return raw; // e.g. "GHSA CVSS" -- pass through as-is, still informative
+}
+
+function cvssVersionLabel(raw) {
+  const text = cvssVersionText(raw);
+  return text ? ` <span class="cvss-version" title="CVSS scoring version">${escapeHtml(text)}</span>` : "";
+}
+
 function fmtDate(iso) {
   if (!iso) return "unknown";
   try {
@@ -347,7 +365,7 @@ function renderCard(alert) {
       ${breakdownHtml}
       <div class="description">${escapeHtml(alert.description || "(no description)")}</div>
       <div class="scores">
-        <span>CVSS: <strong>${fmtScore(alert.cvss_score)}</strong></span>
+        <span>CVSS: <strong>${fmtScore(alert.cvss_score)}</strong>${cvssVersionLabel(alert.cvss_version)}</span>
         <span>EPSS: <strong>${epssPct}</strong>${epssPercentileHtml}${epssDeltaHtml}</span>
         ${alert.kev_date_added ? `<span title="Date this CVE was added to the CISA Known Exploited Vulnerabilities catalog">KEV added: <strong>${escapeHtml(alert.kev_date_added)}</strong></span>` : ""}
         ${alert.kev_due_date ? `<span>KEV due: <strong>${escapeHtml(alert.kev_due_date)}</strong></span>` : ""}
@@ -437,7 +455,7 @@ function alertToMarkdown(alert) {
   lines.push("");
   if (alert.description) lines.push(alert.description);
   lines.push("");
-  lines.push(`- **CVSS:** ${fmtScore(alert.cvss_score)}`);
+  lines.push(`- **CVSS:** ${fmtScore(alert.cvss_score)}${cvssVersionText(alert.cvss_version) ? ` (${cvssVersionText(alert.cvss_version)})` : ""}`);
   lines.push(`- **EPSS:** ${typeof alert.epss_score === "number" ? (alert.epss_score * 100).toFixed(1) + "%" : "n/a"}`);
   lines.push(`- **Risk score:** ${typeof alert.risk_score === "number" ? alert.risk_score.toFixed(0) : "n/a"}/100`);
   lines.push(`- **KEV:** ${alert.kev ? "Yes" + (alert.kev_ransomware_use ? " (known ransomware use)" : "") : "No"}`);
@@ -905,7 +923,20 @@ function exportCsv() {
   // for offline triage silently lost the direct link back to the
   // originating GitHub Dependabot alert. Added as-is (already a plain URL
   // string, no flattening needed); empty for non-Dependabot sources.
-  const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_score_prev", "epss_percentile", "kev", "kev_date_added", "kev_due_date",
+  // Cycle 86: cvss_version (CVSS scoring rubric version -- "CVSS V31",
+  // "CVSS V40", "CVSS V30", or GHSA's own "GHSA CVSS" label) has been
+  // extracted and stored on every alert since the earliest cycles but was
+  // never surfaced anywhere: not on-card, not in alertToMarkdown(), not in
+  // CSV. This is a genuine data-completeness gap, not cosmetic -- NVD's
+  // CVSS v4.0 (29 of 603 current alerts) uses a materially different metric
+  // set/weighting than v3.x (573 alerts) or v3.0 (1 alert), so two cards
+  // both reading "CVSS 8.8" may not be directly comparable if scored on
+  // different rubrics, and an analyst had no way to know without digging
+  // into the raw NVD record. Added a compact "vX.Y" label next to the CVSS
+  // score on-card (new cvssVersionText()/cvssVersionLabel() helpers,
+  // normalizing "CVSS V31" -> "v3.1"), a "(vX.Y)" suffix in
+  // alertToMarkdown(), and a new cvss_version CSV column here.
+  const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "cvss_version", "epss_score", "epss_score_prev", "epss_percentile", "kev", "kev_date_added", "kev_due_date",
     "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
     "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "matched_keywords", "published",
     "nvd_last_modified", "vuln_status", "first_seen", "osv_id", "osv_fixed_versions", "nvd_fix_versions", "nvd_reference_links", "dependabot_url", "description"];
@@ -927,7 +958,7 @@ function exportCsv() {
       .map((r) => `${(r.tags && r.tags[0]) || "Reference"}: ${r.url}`)
       .join("; ");
     lines.push(toCsvRow([
-      a.cve_id, a.risk_score, a.risk_score_prev, a.cvss_score, a.epss_score, a.epss_score_prev, a.epss_percentile, a.kev, a.kev_date_added, a.kev_due_date,
+      a.cve_id, a.risk_score, a.risk_score_prev, a.cvss_score, a.cvss_version, a.epss_score, a.epss_score_prev, a.epss_percentile, a.kev, a.kev_date_added, a.kev_due_date,
       a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
       vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
       (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.nvd_last_modified,
