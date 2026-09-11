@@ -702,9 +702,77 @@ function applyFiltersAndRender() {
     emptyState.hidden = true;
     grid.innerHTML = filtered.map(renderCard).join("");
   }
+  renderTable(filtered);
 
   window.__lastFiltered = filtered;
 }
+
+// Dense sortable table view: an alternative to the card grid for triaging
+// large alert counts (hundreds of cards requires a lot of scrolling; a table
+// lets an analyst scan CVE/CVSS/EPSS/Risk/KEV/Source/First-seen columns at a
+// glance, side by side, sortable by click). Shares the exact same filtered
+// dataset as the card grid (computed once in applyFiltersAndRender) so both
+// views always agree; only one is visible at a time via #view-toggle.
+function renderTable(filtered) {
+  const tbody = document.getElementById("alerts-table-body");
+  if (!tbody) return;
+  tbody.innerHTML = filtered
+    .map((a) => {
+      const kevLabel = a.kev
+        ? (isOverdue(a) ? "OVERDUE" : (typeof daysUntilDue(a) === "number" && daysUntilDue(a) <= 7 ? "DUE SOON" : "KEV"))
+        : "-";
+      const products = (a.affected || []).slice(0, 3).join(", ") || "-";
+      return `<tr data-cve="${escapeHtml(a.cve_id || "")}">
+        <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a></td>
+        <td>${fmtScore(a.cvss_score)}</td>
+        <td>${typeof a.epss_score === "number" ? (a.epss_score * 100).toFixed(1) + "%" : "-"}</td>
+        <td>${fmtScore(a.risk_score, 0)}</td>
+        <td>${escapeHtml(kevLabel)}</td>
+        <td>${escapeHtml(a.source || "-")}</td>
+        <td>${fmtDate(a.first_seen)}</td>
+        <td>${escapeHtml(products)}</td>
+      </tr>`;
+    })
+    .join("");
+}
+
+// Client-side click-to-sort on table headers -- reuses the exact same
+// sort-by values already wired to #sort-by (kept in sync both ways) so
+// switching to table view, sorting a column, then switching back to card
+// view preserves the same order instead of resetting to the default.
+document.getElementById("alerts-table")?.querySelector("thead")?.addEventListener("click", (e) => {
+  const th = e.target.closest("th[data-sort]");
+  if (!th) return;
+  const sortBy = document.getElementById("sort-by");
+  if (sortBy) {
+    sortBy.value = th.dataset.sort;
+    applyFiltersAndRender();
+  }
+});
+
+function applyViewMode(mode) {
+  const grid = document.getElementById("card-grid");
+  const tableWrapper = document.getElementById("table-view-wrapper");
+  const btn = document.getElementById("view-toggle");
+  const isTable = mode === "table";
+  if (grid) grid.hidden = isTable;
+  if (tableWrapper) tableWrapper.hidden = !isTable;
+  if (btn) {
+    btn.textContent = isTable ? "\u25a4 Card view" : "\u2630 Table view";
+    btn.setAttribute("aria-pressed", String(isTable));
+  }
+  try { localStorage.setItem("viewMode", mode); } catch (e) {}
+}
+(function initViewMode() {
+  let saved = "cards";
+  try { saved = localStorage.getItem("viewMode") || "cards"; } catch (e) {}
+  applyViewMode(saved);
+})();
+document.getElementById("view-toggle")?.addEventListener("click", () => {
+  const grid = document.getElementById("card-grid");
+  const currentlyTable = grid ? grid.hidden : false;
+  applyViewMode(currentlyTable ? "cards" : "table");
+});
 
 function toCsvRow(fields) {
   return fields
@@ -1596,6 +1664,11 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "t" || e.key === "T") {
     e.preventDefault();
     document.getElementById("theme-toggle").click();
+    return;
+  }
+  if (e.key === "v" || e.key === "V") {
+    e.preventDefault();
+    document.getElementById("view-toggle")?.click();
     return;
   }
 });
