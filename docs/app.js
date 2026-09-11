@@ -900,7 +900,7 @@ function exportCsv() {
   const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_score_prev", "epss_percentile", "kev", "kev_date_added", "kev_due_date",
     "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
     "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "matched_keywords", "published",
-    "nvd_last_modified", "vuln_status", "first_seen", "osv_id", "osv_fixed_versions", "nvd_fix_versions", "description"];
+    "nvd_last_modified", "vuln_status", "first_seen", "osv_id", "osv_fixed_versions", "nvd_fix_versions", "nvd_reference_links", "description"];
   const lines = [toCsvRow(header)];
   for (const a of rows) {
     const vc = a.cvss_vector_components || {};
@@ -912,12 +912,18 @@ function exportCsv() {
     const nvdFixed = (a.nvd_fix_versions || [])
       .map((f) => `${f.vendor || "?"} ${f.product || "?"} -> fixed ${f.fix_type === "up_to_and_including" ? "next release after" : "before"} ${f.fixed || "?"}`)
       .join("; ");
+    // nvd_reference_links (cycle 79): already rendered on cards and in the
+    // Markdown export (alertToMarkdown) but was missing from CSV export --
+    // this closes that gap using the same flatten-to-string convention.
+    const refLinksFlat = (a.nvd_reference_links || [])
+      .map((r) => `${(r.tags && r.tags[0]) || "Reference"}: ${r.url}`)
+      .join("; ");
     lines.push(toCsvRow([
       a.cve_id, a.risk_score, a.risk_score_prev, a.cvss_score, a.epss_score, a.epss_score_prev, a.epss_percentile, a.kev, a.kev_date_added, a.kev_due_date,
       a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
       vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
       (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.nvd_last_modified,
-      a.vuln_status, a.first_seen, a.osv_id, osvFixed, nvdFixed, a.description,
+      a.vuln_status, a.first_seen, a.osv_id, osvFixed, nvdFixed, refLinksFlat, a.description,
     ]));
   }
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });
