@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 106,
+  "total_cycles": 107,
   "implemented": [
     {
       "cycle": 1,
@@ -1041,30 +1041,50 @@
         "Full risk_score history array -- deferred, storage-growth risk.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
-    }
-  ],
-  "rejected": [],
-  "last_cycle_at": "2026-09-11T21:10:00Z",
-  "stopped": false,
-  "cycles": [
+    },
     {
-      "cycle": 106,
-      "timestamp": "2026-09-11T21:10:00Z",
-      "title": "PWA web app manifest + mobile meta tags",
-      "description": "docs/ had no manifest.webmanifest, no theme-color meta, and no apple-mobile-web-app tags despite being fully mobile-responsive since cycle 11 -- a real installability gap. Added docs/manifest.webmanifest (standalone display, dark theme matching existing palette, reuses existing inline SVG shield icon, zero new binary assets) and linked it plus theme-color/mobile-web-app-capable/apple-mobile-web-app-* meta tags in docs/index.html <head>. Pure additive static-file + HTML head change: zero new API calls, zero backend/schema/JS changes, zero cost.",
-      "commit_sha": "1a333b7",
+      "cycle": 107,
+      "timestamp": "2026-09-11T21:47:00Z",
+      "title": "Named saved filter views (localStorage)",
+      "description": "Cycle 7 made a single filter combination shareable via URL query params, but there was no way to persist multiple named combinations locally for repeated re-use. Added a Saved views dropdown + Save/Delete buttons to the toolbar. Stores {name, qs} pairs in localStorage where qs is exactly the query string updateURLFromFilters() already produces -- zero duplicated filter-serialization logic. Loading a view resets every control to default first then re-applies readFiltersFromURL()+applyFiltersAndRender(). Pure additive client-side JS+HTML, zero new API calls, zero backend/schema changes, zero cost. Fails soft on corrupted/unavailable localStorage.",
+      "commit_sha": "fa48b99",
       "validation": {
+        "node_check": "pass",
         "py_compile": "pass (sanity, no python touched)",
-        "node_check": "pass (sanity, no js touched)",
         "unit_tests": "98/98 pass (unchanged)",
-        "validate_data": "pass (625 alerts, schema OK, app.js/index.html id-reference check OK)",
-        "manifest_json_valid": "pass (python3 json.load)",
-        "smoke_test": "served docs/ locally, curl confirmed manifest.webmanifest returns 200 + valid JSON and index.html links it",
-        "ci_run": "34648158974 completed success (11s)"
+        "validate_data": "pass (625 alerts, schema OK, id-reference check OK)",
+        "browser_smoke_test": "pass -- save-view captured current filter qs into localStorage, reset-filters cleared controls, selecting saved view restored q=wordpress&kev=kev filters and URL, delete-view removed it and left dropdown empty",
+        "ci_run": "34651022292 completed success (10s)"
       },
       "rate_limit_event": false,
       "rejected_alternatives": [
-        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-105.",
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-106.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
+    }
+  ],
+  "rejected": [],
+  "last_cycle_at": "2026-09-11T21:47:00Z",
+  "stopped": false,
+  "cycles": [
+    {
+      "cycle": 107,
+      "timestamp": "2026-09-11T21:47:00Z",
+      "title": "Named saved filter views (localStorage)",
+      "description": "Cycle 7 made a single filter combination shareable via URL query params, but there was no way to persist multiple named combinations locally for repeated re-use. Added a Saved views dropdown + Save/Delete buttons to the toolbar. Stores {name, qs} pairs in localStorage where qs is exactly the query string updateURLFromFilters() already produces -- zero duplicated filter-serialization logic. Loading a view resets every control to default first then re-applies readFiltersFromURL()+applyFiltersAndRender(). Pure additive client-side JS+HTML, zero new API calls, zero backend/schema changes, zero cost. Fails soft on corrupted/unavailable localStorage.",
+      "commit_sha": "fa48b99",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (625 alerts, schema OK, id-reference check OK)",
+        "browser_smoke_test": "pass -- save-view captured current filter qs into localStorage, reset-filters cleared controls, selecting saved view restored q=wordpress&kev=kev filters and URL, delete-view removed it and left dropdown empty",
+        "ci_run": "34651022292 completed success (10s)"
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-106.",
         "Full risk_score history array -- deferred, storage-growth risk.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]

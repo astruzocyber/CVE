@@ -3808,3 +3808,34 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `1a333b7` — "Cycle 106: add PWA web app manifest + mobile meta tags" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 105 → 106. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 107 — 2026-09-11T21:47:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=106, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 8` (all recent aggregation/CI/Pages runs `completed success`, no 429/throttle signals). Inspected the toolbar in `docs/index.html`, `readFiltersFromURL()`/`updateURLFromFilters()`/`applyFiltersAndRender()` in `docs/app.js`, and confirmed cycle 7's URL-query-param sharing had no persistent-storage counterpart: a viewer could share one filter combination via link but not save/recall several named combinations locally.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Named saved filter views (localStorage)** (chosen) — 5/5/4. Real recurring-triage-workflow gap: a security lead who checks the same 2-3 filter combinations daily/weekly had to re-set every control by hand each time, since cycle 7's URL sharing only covers ad-hoc one-off shares, not personal recall. Reuses the exact query-string format `updateURLFromFilters()` already produces — zero duplicated serialization logic, zero drift risk between the two features.
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-106.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/index.html`: added `#saved-views-select` dropdown + `#save-view-btn`/`#delete-view-btn` buttons to the toolbar.
+- `docs/app.js`: `loadSavedViews()`/`persistSavedViews()`/`renderSavedViewsSelect()` (fail-soft on corrupted/unavailable localStorage), save/change/delete handlers. Loading a view resets every filter control to default (mirrors `reset-filters`' field list) before applying the saved query string, so an axis omitted from an older saved view is actually cleared rather than left over.
+- No Python/schema/data/workflow changes — frontend-only.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 98/98 tests passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (625 alerts, schema OK, `app.js`/`index.html` getElementById id-reference check OK).
+- Live browser smoke test (headless Chrome via CDP, real DOM events, served production `docs/` locally on port 8931): set `q=wordpress&kev=kev` filters, clicked Save view (stubbed `window.prompt` to return a name), confirmed the option appeared in the dropdown and localStorage held `[{"name":"test-view-1","qs":"?q=wordpress&kev=kev"}]`; clicked Reset filters, confirmed both controls and URL cleared; selected the saved view from the dropdown, confirmed both controls AND the URL were correctly restored to `q=wordpress&kev=kev`; clicked Delete view (stubbed `window.confirm` to return true), confirmed the option and localStorage entry were removed.
+- Deployed: commit `fa48b99` pushed to `origin/main` (`933f11d..fa48b99`). `CI Data & Frontend Validation` run `34651022292` completed success (10s). `pages-build-deployment` triggered normally post-push.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-106); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (frontend-only change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `fa48b99` — "Cycle 107: add named saved filter views (localStorage)" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 106 → 107. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
