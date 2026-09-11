@@ -3364,3 +3364,34 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `8cbb92a` — "Cycle 91: Risk-score trend delta indicator in table view" — pushed to `origin/main` (`828487b..8cbb92a`).
 
 **Updated state:** `total_cycles`: 90 → 91. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 92 — 2026-09-11T13:15:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=91, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages/Aggregation runs `completed success`, no 429/throttle signals). Inspected `docs/data/alerts.json` schema (609 alerts, all fields listed) and grepped `docs/app.js` for `epss_score_prev`/`epssDelta` usage. Continued the table-view-vs-card-view parity vein that cycles 83/87/88/89/90/91 proved productive: cycle 91's own log explicitly flagged "EPSS-delta indicator in table view — same pattern, deferred to next cycle" as its rejected-but-queued alternative — confirmed the EPSS `<td>` in `renderTable()` still rendered plain `X.X%` text with zero delta indicator, unlike the Risk column closed last cycle.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **EPSS-delta indicator in table view** (chosen) — 5/5/5. Real gap explicitly queued by the prior cycle. Very low validation risk: reuses the exact existing `epss_score - epss_score_prev` computation (with the same 0.0005 noise threshold) and exact existing `.epss-delta`/`.risk-up`/`.risk-down` CSS classes card view already defines, zero new CSS/logic to get wrong.
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-91.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms — still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/app.js`: `renderTable()` now computes `tableEpssDelta` (identical formula to card view's `epssDelta`: `epss_score - epss_score_prev`, gated on the same `Math.abs(delta) >= 0.0005` noise threshold) and `tableEpssDeltaHtml`, appended inside the existing EPSS `<td>` next to the percentage value. Reuses card view's exact `.epss-delta`/`.risk-up`/`.risk-down` CSS classes unchanged — no new CSS added.
+- No `scripts/aggregate.py`/schema/data changes — pure frontend surfacing of fields (`epss_score`, `epss_score_prev`) already present and already rendered elsewhere (card view).
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity check; no Python files touched this cycle).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` → **97/97 tests passed** (unchanged — no aggregation/scoring logic touched, pure frontend change).
+- No live `aggregate.py` run needed (no new fields, no schema changes) — existing committed `docs/data/alerts.json` (609 alerts) used directly for the browser smoke test.
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background process, port 8999), drove it live via `mcp__browser_exec` (CDP, real Chrome). Loaded dashboard: 609 alerts confirmed loaded. Switched to table view (`#view-toggle` click): 609 rows render, 0 with a non-empty `.epss-delta` cell (correct — current dataset has 0 alerts with a materially changed `epss_score_prev` this refresh cycle; confirmed consistent with card view's own `.epss-delta` count, also 0, ruling out a table-view-specific bug). Verified the actual new code logic directly via `node -e` with a synthetic `epss_score=0.42/epss_score_prev=0.10` input: produced the exact expected `<span class="epss-delta risk-up" ...>▲+32.0pp</span>` output, byte-identical in structure/format to card view's existing `epssDeltaHtml` computation. Confirmed zero regression to the existing "wordpress" search filter (160/609) and to card-view rendering (609 cards) after switching back.
+- Deployed: commit `8865be1` pushed to `origin/main`.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-91); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (pure frontend change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `8865be1` — "Cycle 92: EPSS-delta indicator in table view" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 91 → 92. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

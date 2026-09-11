@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 91,
+  "total_cycles": 92,
   "implemented": [
     {
       "cycle": 1,
@@ -833,9 +833,29 @@
         "EPSS-delta indicator in table view -- deferred to next cycle, same pattern, splitting into separate cycles per one-change-per-cycle discipline.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 92,
+      "timestamp": "2026-09-11T13:15:00Z",
+      "title": "EPSS-delta indicator in table view",
+      "description": "Cycle 91 closed the risk-score trend delta gap in table view and explicitly flagged the identical gap for EPSS as the direct follow-up. Card view has shown an EPSS-delta badge (up/down arrow + percentage-point change since the last refresh, via .epss-delta/.risk-up/.risk-down CSS, >=0.0005 threshold to avoid float noise) since epss_score_prev tracking was added, but the dense table view (cycle 76) never surfaced it -- an analyst bulk-scanning table view had no way to see which rows' exploitation probability just moved without switching back to card view. Added tableEpssDelta computation in renderTable() (identical formula to card view's epssDelta: epss_score - epss_score_prev) appended inside the existing EPSS <td>, reusing the exact same .epss-delta/.risk-up/.risk-down CSS classes card view already defines -- zero new CSS, zero new logic, guaranteed to never disagree with card view on direction/magnitude.",
+      "commit_sha": "8865be1",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (609 cards render, 609 of 609 alerts, no regression), switched to table view (609 rows), confirmed 0 rows currently have a non-zero EPSS delta (consistent between card view's own .epss-delta count, also 0 -- genuine current-data state, not a bug). Verified the new code path's logic directly via node with synthetic epss_score=0.42/epss_score_prev=0.10 input, producing the exact expected '<span class=\"epss-delta risk-up\" ...>\u25b2+32.0pp</span>' output matching card view's identical computation. Confirmed zero regression to search filter (wordpress: 160/609) and switching back to card view (609 cards render)."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-91.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T12:41:00Z",
+  "last_cycle_at": "2026-09-11T13:15:00Z",
   "stopped": false
 }
