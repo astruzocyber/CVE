@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 78,
+  "total_cycles": 79,
   "implemented": [
     {
       "cycle": 1,
@@ -616,9 +616,34 @@
         "Keyboard-shortcuts help modal / print stylesheet -- viable UI conveniences but lower value than a new data-coverage signal this cycle.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 79,
+      "timestamp": "2026-09-11T05:11:00Z",
+      "title": "Surface NVD vendor advisory/patch links on alert cards",
+      "description": "extract_nvd_reference_links() parses the `references` array already present in every NVD CVE response fetched every run (zero new API calls) to extract genuine remediation-relevant outbound links: entries tagged Vendor Advisory, Patch, or Release Notes (broad Third Party Advisory/Mailing List/Exploit/press tags excluded to avoid low-value noise). Distinct from cycle 78's nvd_fix_versions (a parsed version boundary) and the existing generic 'View on NVD' link (which only ever points at NVD's own record, never the vendor's own advisory/patch page) -- previously an analyst on a non-KEV card had no direct path to the vendor's own remediation material without manually searching for it. New nvd_reference_links field (list of {url, tags}, deduped by URL, capped at 5) wired into build_final_entry, backfilled to [] for pre-cycle-79 records in the untouched-alert refresh loop (self-heal pattern matching vuln_status/nvd_fix_versions), and rendered on the card UI (as clickable links labeled by tag) and the Markdown copy export.",
+      "commit_sha": "b17e5e3",
+      "validation": {
+        "py_compile": "pass",
+        "node_check": "pass",
+        "unit_tests": "97/97 pass (up from 91; added TestExtractNvdReferenceLinks with 6 cases)",
+        "live_e2e_run": "pass -- isolated /tmp/cve-cycle79 clone, fresh venv, GH_DEPENDABOT_TOKEN via gh auth token, real NVD/CISA KEV/FIRST.org EPSS/GitHub Dependabot APIs. 599 total alerts, 3 new alerts, KEV catalog 1705 entries, EPSS queried for 1059 CVEs, 397 post-filter matches. 174/599 alerts have non-empty nvd_reference_links (e.g. CVE-2026-87534 -> chromereleases.googleblog.com Release Notes/Vendor Advisory + issues.chromium.org Patch), confirming extraction works against real current NVD data.",
+        "validate_data": "PASSED -- 599 alerts, 599 unique CVE IDs, stats.json schema + partition checks OK, trend.csv 46 rows OK, 54/54 getElementById references resolve, feeds OK.",
+        "browser_smoke_test": "pass -- served regenerated docs/ via python3 -m http.server, loaded dashboard: stats bar correct (599 total/144 critical/4 KEV), 599 cards rendered in #card-grid, search filter narrows to 1 result for an exact CVE ID and resets to 599, table view toggle shows #alerts-table, 'Vendor links:' text confirmed present and rendering real vendor URLs on cards with nvd_reference_links data -- no regressions to existing features.",
+        "live_prod_verify": "confirmed via curl against https://astruzocyber.github.io/CVE/ post-deploy: alerts.json shows 599 total / 174 with nvd_reference_links, index.html 200, app.js contains nvd_reference_links references."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "Another trend.csv trailing column -- scored lower per cycles 76-78's explicit steer to prefer a genuinely novel functional feature over another averaged metric when a good one is available.",
+        "GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack (deferred cycles 56-78).",
+        "Full risk_score history array (time series per CVE) -- still deferred, unbounded schema/storage growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- still deferred, marginal value vs. chosen candidate.",
+        "Keyboard-shortcuts help modal / print stylesheet -- viable UI conveniences but lower value than a new data-coverage/usability signal this cycle.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T04:45:00Z",
+  "last_cycle_at": "2026-09-11T05:11:00Z",
   "stopped": false
 }
