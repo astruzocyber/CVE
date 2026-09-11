@@ -927,6 +927,24 @@ function renderTable(filtered) {
       const tableEpssDeltaHtml = tableEpssDelta && Math.abs(tableEpssDelta) >= 0.0005
         ? ` <span class="epss-delta ${tableEpssDelta > 0 ? "risk-up" : "risk-down"}" title="EPSS changed from ${(a.epss_score_prev * 100).toFixed(1)}% to ${(a.epss_score * 100).toFixed(1)}% since the last refresh">${tableEpssDelta > 0 ? "\u25b2" : "\u25bc"}${tableEpssDelta > 0 ? "+" : ""}${(tableEpssDelta * 100).toFixed(1)}pp</span>`
         : "";
+      // Attack Vector column in table view (cycle 95): card view has shown
+      // an "exploit chip" (attack vector -- Network/Adjacent/Local/Physical
+      // -- plus a "no auth/interaction" flag when privileges_required and
+      // user_interaction are both NONE) via alert.cvss_vector_components
+      // since cycles 30/31, a genuinely high-value triage signal (a
+      // network-exploitable, no-auth, no-interaction bug is far more
+      // urgent than an identical CVSS score requiring local access), but
+      // the dense table view (cycle 76) never surfaced it -- an analyst
+      // bulk-scanning table view had no way to see exploitability
+      // preconditions without switching back to card view. Reuses the
+      // exact same exploitLabels map and cvss_vector_components field
+      // unchanged, so table and card views can never disagree.
+      const tvc = a.cvss_vector_components;
+      const tableExploitLabels = { NETWORK: "Network", ADJACENT_NETWORK: "Adjacent", LOCAL: "Local", PHYSICAL: "Physical" };
+      const attackVectorLabel = tvc && tvc.attack_vector
+        ? escapeHtml(tableExploitLabels[tvc.attack_vector] || tvc.attack_vector) +
+          (tvc.privileges_required === "NONE" && tvc.user_interaction === "NONE" ? " (no auth/interaction)" : "")
+        : "-";
       return `<tr data-cve="${escapeHtml(a.cve_id || "")}"${isRejected ? ' class="table-row-rejected"' : ""}>
         <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a>${isRejected ? ' <span class="table-rejected-tag" title="NVD has withdrawn this CVE ID -- scores may be stale">REJECTED</span>' : ""}</td>
         <td class="${cvssSevClass ? `table-cvss-${cvssSevClass}` : ""}">${fmtScore(a.cvss_score)}</td>
@@ -939,6 +957,7 @@ function renderTable(filtered) {
         <td class="${hasFixAvailable(a) ? "table-fix-yes" : ""}">${escapeHtml(fixLabel)}</td>
         <td class="table-watchlist-cell">${watchlistLabel}</td>
         <td class="table-cwe-cell">${cweLabel}</td>
+        <td>${escapeHtml(attackVectorLabel)}</td>
       </tr>`;
     })
     .join("");
