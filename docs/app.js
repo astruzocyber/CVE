@@ -615,9 +615,13 @@ function readFiltersFromURL() {
   if (params.has("newonly") && newOnlyEl) {
     newOnlyEl.checked = params.get("newonly") === "1";
   }
+  const hideRejectedEl = document.getElementById("hide-rejected");
+  if (params.has("hiderejected") && hideRejectedEl) {
+    hideRejectedEl.checked = params.get("hiderejected") === "1";
+  }
 }
 
-function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed, newOnly) {
+function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed, newOnly, hideRejected) {
   const params = new URLSearchParams();
   if (search) params.set("q", search);
   if (kevFilter && kevFilter !== "all") params.set("kev", kevFilter);
@@ -628,6 +632,7 @@ function updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, s
   if (typeof minEpss === "number" && !Number.isNaN(minEpss)) params.set("minepss", String(minEpss));
   if (hideReviewed) params.set("hidereviewed", "1");
   if (newOnly) params.set("newonly", "1");
+  if (hideRejected) params.set("hiderejected", "1");
   const qs = params.toString();
   const newUrl = location.pathname + (qs ? "?" + qs : "") + location.hash;
   history.replaceState(null, "", newUrl);
@@ -645,11 +650,13 @@ function applyFiltersAndRender() {
   const minEpss = minEpssRaw === "" ? null : Number(minEpssRaw);
   const hideReviewed = document.getElementById("hide-reviewed").checked;
   const newOnly = document.getElementById("new-only").checked;
-  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed, newOnly);
+  const hideRejected = document.getElementById("hide-rejected").checked;
+  updateURLFromFilters(search, kevFilter, severityFilter, sourceFilter, sortBy, minRisk, minEpss, hideReviewed, newOnly, hideRejected);
 
   let filtered = allAlerts.filter((a) => {
     if (hideReviewed && reviewedCves.has(a.cve_id)) return false;
     if (newOnly && !isNewWithin24h(a)) return false;
+    if (hideRejected && a.vuln_status === "Rejected") return false;
     if (kevFilter === "kev" && !a.kev) return false;
     if (kevFilter === "non-kev" && a.kev) return false;
     if (kevFilter === "overdue" && !isOverdue(a)) return false;
@@ -1599,6 +1606,7 @@ document.getElementById("source-filter").addEventListener("change", applyFilters
 document.getElementById("sort-by").addEventListener("change", applyFiltersAndRender);
 document.getElementById("hide-reviewed").addEventListener("change", applyFiltersAndRender);
 document.getElementById("new-only").addEventListener("change", applyFiltersAndRender);
+document.getElementById("hide-rejected").addEventListener("change", applyFiltersAndRender);
 let minRiskDebounceTimer = null;
 document.getElementById("min-risk").addEventListener("input", () => {
   clearTimeout(minRiskDebounceTimer);
@@ -1688,6 +1696,8 @@ document.getElementById("reset-filters").addEventListener("click", () => {
   if (hideReviewedReset) hideReviewedReset.checked = false;
   const newOnlyReset = document.getElementById("new-only");
   if (newOnlyReset) newOnlyReset.checked = false;
+  const hideRejectedReset = document.getElementById("hide-rejected");
+  if (hideRejectedReset) hideRejectedReset.checked = false;
   dependencyPackageNames = null;
   const depText = document.getElementById("dep-text-input");
   const depFile = document.getElementById("dep-file-input");

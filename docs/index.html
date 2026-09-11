@@ -136,6 +136,9 @@
       <label class="hide-reviewed-label" title="Show only alerts first seen on the dashboard within the last 24 hours">
         <input type="checkbox" id="new-only"> New (24h) only
       </label>
+      <label class="hide-reviewed-label" title="Hide CVEs that NVD has withdrawn (Rejected status) -- their CVSS/EPSS/risk scores may be stale or meaningless">
+        <input type="checkbox" id="hide-rejected"> Hide rejected CVEs
+      </label>
       <label for="sort-by" class="visually-hidden">Sort order</label>
       <select id="sort-by" aria-label="Sort order">
         <option value="risk_score">Sort: Risk score (high to low)</option>
@@ -158,7 +161,7 @@
         Import reviewed state
         <input type="file" id="import-reviewed-input" accept=".json" aria-label="Import reviewed state JSON file">
       </label>
-      <button id="reset-filters" type="button" title="Clear search, KEV/severity/source filters, risk/EPSS thresholds, hide-reviewed, new-only, sort, and dependency-file filter (shortcut: r)">Reset filters</button>
+      <button id="reset-filters" type="button" title="Clear search, KEV/severity/source filters, risk/EPSS thresholds, hide-reviewed, new-only, hide-rejected, sort, and dependency-file filter (shortcut: r)">Reset filters</button>
       <button id="theme-toggle" type="button" title="Toggle light/dark theme (shortcut: t)" aria-pressed="false">🌙 Dark</button>
       <button id="view-toggle" type="button" title="Toggle between card view and a dense sortable table view (shortcut: v)" aria-pressed="false">☰ Table view</button>
       <button type="button" id="kbd-hint-btn" class="kbd-hint" title="Show keyboard shortcuts (shortcut: ?)" aria-haspopup="dialog">⌨ shortcuts</button>
