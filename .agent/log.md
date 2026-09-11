@@ -3521,3 +3521,24 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `d086332` -- "Cycle 96: Reviewed toggle button in table view" -- pushed to `origin/main` (`ed6615e..d086332`).
 
 **Updated state:** `total_cycles`: 95 -> 96. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 97 (2026-09-11)
+
+**Implemented:** Human-readable CWE names as tooltips (card + table view).
+
+**Why:** CWE IDs (e.g. CWE-416) had been shown as bare numeric badges (card view, since inception) and a bare joined cell (table view, cycle 94) with no indication of the actual weakness class -- an analyst had to already know the CWE numbering or open a new tab to cwe.mitre.org. Added a static curated `CWE_NAMES` map (numeric ID -> human-readable name) covering all 97 distinct CWE IDs present in the current tracked-alert dataset (verified via `docs/data/alerts.json`) plus common adjacent ones, and a `cweName()` helper. Card view badge labels now read "CWE-XXX (Name)" with a richer hover tooltip; table view keeps the compact bare-ID text (dense-view convention preserved) but gains a `title` tooltip with the full name. Unrecognized/future CWE IDs fall back silently to the prior bare-ID behavior.
+
+**Why static, not a live CWE API call:** MITRE's CWE taxonomy is a fixed, slow-changing list. A live fetch would add an external dependency/failure mode for zero real benefit over a literal lookup table, and would need to run every pipeline cycle for no data-freshness gain. Zero-cost and zero new API calls.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity check; no Python files touched).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` -> **97/97 tests passed** (unchanged -- pure frontend change, no aggregation/scoring logic touched).
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background, port 8997), drove it live via `mcp__browser_exec` (CDP, real Chrome) against the current 609-alert dataset. Card view: confirmed a CWE-94 badge now reads "CWE-94 (Code Injection)" with `title="CWE-94: Code Injection"`. Switched to table view: confirmed the CWE cell keeps compact "CWE-94" text but gained `title="CWE-94: Code Injection"` on the inner span. Re-ran the existing "wordpress" search filter: still correctly narrows to 160/609, zero console errors, confirming zero regression to search/filter/table-view logic.
+- Deployed: commit pushed to `origin/main`.
+
+**Rejected this cycle:** none new -- reused the established rejection list (GHSA/Dependabot expansion needs human input, full risk_score history array deferred on storage-growth risk, paid/threat-intel enrichment rejected on zero-cost principle).
+
+**RATE_LIMIT_EVENT: no** -- no external API calls made this cycle (pure frontend change, no live aggregation run required); recent scheduled CI/Pages runs all completed successfully with no 429/throttle signals.
+
+**Updated state:** `total_cycles`: 96 -> 97. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

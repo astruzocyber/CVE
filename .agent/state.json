@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 96,
+  "total_cycles": 97,
   "implemented": [
     {
       "cycle": 1,
@@ -933,6 +933,13 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 97,
+      "timestamp": "2026-09-11T16:06:20.976933Z",
+      "title": "Human-readable CWE names as tooltips (card + table view)",
+      "description": "CWE IDs (e.g. CWE-416) have been shown as bare numeric badges/cells since early cycles (card view badges since inception, table view cell since cycle 94) with no indication of what the weakness class actually is -- an analyst had to open a new tab to cwe.mitre.org or already know the numbering by heart. Added a static curated CWE_NAMES lookup map (numeric ID -> human name) covering all 97 distinct CWE IDs present in the current tracked-alert dataset plus common adjacent ones, and a cweName() helper. Card view badges now show \"CWE-XXX (Name)\" as the label with a richer title tooltip; table view cells keep the compact bare ID as visible text (dense-view convention preserved) but gain a title tooltip with the full name on hover. Zero new API calls (static data, no live fetch -- MITRE CWE taxonomy changes rarely so a hardcoded map carries no staleness risk worth a live dependency), zero backend/schema changes, zero cost. Unrecognized/future CWE IDs fall back to the prior behavior (bare ID, no name) rather than breaking.",
+      "commit_sha": "43a29e3"
     }
   ],
   "rejected": [],
