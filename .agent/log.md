@@ -3745,3 +3745,34 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `d933859` — "Cycle 104: add by_age_bucket first-seen age distribution breakdown" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 103 → 104. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 105 — 2026-09-11T20:35:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=104, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 8` (all recent aggregation/CI/Pages runs `completed success`, no 429/throttle signals). Inspected `scripts/aggregate.py` function list, `docs/app.js` function list (50 functions), `docs/index.html` dep-filter section, and confirmed `detectAndParseDependencyFile()` only branched on `package.json` (JSON-starts-with-`{`) vs. everything else falling through to `parseRequirementsTxt()` — silently mis-parsing (empty or garbage matches) any other real-world manifest format.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **go.mod / pyproject.toml (Poetry + PEP 621) / Pipfile parsing for the dependency filter** (chosen) — 5/5/4. The dependency-file filter is a genuinely differentiated feature (client-side, zero-upload package matching against the tracked alert set) but silently failed for Go and modern-Python-tooling users — a real coverage gap, not a cosmetic one, since the previous fallback produced wrong/empty results with no error surfaced. Added `parseGoMod()` (single-line and block `require()` forms, matches both full module path and last path segment for max substring-match recall) and `parseTomlDependencyNames()` (handles `[tool.poetry.dependencies]`/`[tool.poetry.group.*.dependencies]` tables, PEP 621 `[project]` `dependencies` array, and Pipfile `[packages]`/`[dev-packages]` tables — a minimal targeted parser, not a general TOML parser, sufficient for these known table shapes). Dispatch via content-sniffing in `detectAndParseDependencyFile()` (checks for `module`+`go` directives, or known TOML table headers, before falling back to requirements.txt). Zero new API calls, zero backend/schema changes, pure additive client-side JS + updated file-input accept list/hint text in `docs/index.html`.
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-104.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/app.js`: added `parseGoMod()`, `parseTomlDependencyNames()`, updated `detectAndParseDependencyFile()` dispatch logic.
+- `docs/index.html`: updated `dep-file-input` accept list (`.mod,.toml,Pipfile` added) and hint text to name the newly-supported formats.
+- No Python/schema/data/workflow changes — frontend-only.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- Sandboxed `vm` smoke test of `parseGoMod()`/`parseTomlDependencyNames()`/`detectAndParseDependencyFile()` against synthetic go.mod (single-line + block `require`) and pyproject.toml (PEP 621 array + Poetry table) fixtures → all package names extracted correctly, no false positives (e.g. `python` version pin correctly excluded from Poetry table).
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → **98/98 tests passed** (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (625 alerts, schema OK, stats.json/trend.csv/feeds all checked, `app.js`/`index.html` getElementById id-reference check OK — confirms no broken DOM references from the HTML edit).
+- Deployed: commit `b8a44d8` pushed to `origin/main`. `CI Data & Frontend Validation` run `34645311309` completed success (12s). `pages-build-deployment` triggered normally post-push.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-104); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (frontend-only change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `b8a44d8` — "Cycle 105: add go.mod/pyproject.toml/Pipfile parsing to dependency filter" — pushed to `origin/main` (`7dce5af..b8a44d8`).
+
+**Updated state:** `total_cycles`: 104 → 105. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

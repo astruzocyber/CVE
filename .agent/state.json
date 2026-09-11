@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 104,
+  "total_cycles": 105,
   "implemented": [
     {
       "cycle": 1,
@@ -1012,6 +1012,13 @@
       "title": "by_age_bucket first-seen age distribution breakdown",
       "description": "Added a new stats.json field by_age_bucket (0-1d/1-7d/7-30d/30d+ counts) computed from the already-stored first_seen field in compute_stats(). Answers \"how is our current triage backlog distributed by age\" at a glance -- a gap not covered by new_alerts_count (only <24h) or the per-card age badge (one card at a time). Rendered as a new inert pill row (#age-breakdown) in docs/app.js/index.html/style.css, following the same breakdown-pill visual pattern as severity/cwe/vendor/keyword, but non-clickable since no matching filter control exists for this axis (same fallback used for unrecognized source pills). Zero new API calls, zero schema-breaking changes (additive field only). Added test_by_age_bucket unit test (98/98 passing). Regenerated live docs/data/stats.json via compute_stats() offline (preserving existing generated_at timestamp) so the new field is populated immediately rather than waiting for the next scheduled aggregation run; verified total_alerts unchanged (611) and validate_data.py passed both before and after.",
       "commit_sha": "d933859"
+    },
+    {
+      "cycle": 105,
+      "timestamp": "2026-09-11T20:35:00Z",
+      "title": "Add go.mod/pyproject.toml/Pipfile parsing to dependency filter",
+      "description": "detectAndParseDependencyFile() previously only recognized package.json and requirements.txt, silently mis-parsing any other manifest format via the requirements.txt line-parser fallback. Added parseGoMod() and parseTomlDependencyNames() to docs/app.js plus content-sniffing dispatch, and updated the file-input accept list/hint text in docs/index.html. Pure additive client-side JS/HTML, zero new API calls.",
+      "commit_sha": "b8a44d8"
     }
   ],
   "rejected": [],
