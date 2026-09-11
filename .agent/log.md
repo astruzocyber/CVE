@@ -2838,3 +2838,28 @@ Commit: `029d4ce` — "Cycle 56: risk score delta tracking (risk_score_prev) + R
 
 **State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 74. `stopped`: false.
 
+
+## Cycle 75 — 2026-09-11T02:03:00Z
+
+**Status:** Implemented, validated, deployed.
+
+**Re-verified state fresh:** `git status` at cycle start showed an *uncommitted* working-tree diff (docs/app.js, docs/index.html, scripts/aggregate.py, scripts/test_aggregate.py) left over from a prior run that was apparently interrupted before it could validate/commit — a full candidate ("risk_increasing_count/risk_decreasing_count" aggregate trend tracking) was already coded, matching the established trailing-column + hidden-by-default Chart.js dataset + header self-heal convention used in every prior trend.csv extension (cycles 67/69/70/73/74). Per the kill-switch/no-runaway-breakage principle, treated this as work-in-progress requiring full fresh validation before merging (not blind trust of a prior session's unverified state) rather than discarding it or re-implementing from scratch.
+
+**Rate-limit / API health check:** `gh run list --limit 8` at cycle start: all recent CI/Pages runs `success`, no 429/throttle signals in history.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py`: OK.
+- `node --check docs/app.js`: OK.
+- `python3 -m unittest discover -s scripts -p 'test_*.py'`: **76/76 passed** (2 new tests for risk_increasing/decreasing counting logic, including the "rounds equal, no change" edge case and the "no prior value, ignored" case).
+- **Live end-to-end `aggregate.py` run** against real NVD/CISA KEV/FIRST.org EPSS/GitHub Dependabot APIs in an isolated `/tmp/cve_cycle75` clone (fresh venv, `pip install -r requirements.txt`, `GH_DEPENDABOT_TOKEN=$(gh auth token)`, `LOOKBACK_DAYS=2`): KEV catalog 1705 entries, 548 NVD pre-filter candidates, 0 Dependabot candidates (expected — repo has none open), EPSS queried for 879 CVEs, 265 post-filter matches, 596 total tracked alerts written. Header self-heal fired correctly upgrading the stale 14-column header to 16 columns, historical rows untouched. No 429/rate-limit signals across KEV/NVD/Dependabot/EPSS calls. Result: `risk_increasing_count=0`, `risk_decreasing_count=0` (correctly reflects that no tracked alert's risk_score moved since the last real refresh — a legitimate real value, not a bug).
+- `python3 scripts/validate_data.py` against the regenerated real data: **PASSED** (596 alerts, 596 unique IDs, stats/severity/source partition checks OK, 41 trend.csv rows OK, feeds OK).
+- Local browser smoke test via `python3 -m http.server` serving the real, freshly-regenerated production `docs/` (596 alerts): confirmed new `#stat-risk-trend` tile renders `▲0 / ▼0` correctly; confirmed zero regression to search filter (`wordpress` → 147/596, consistent with organic drift from cycle 74's 146/595).
+- Live-verified via cache-busted `curl` post-deploy: `app.js` contains `risk_increasing_count`/`stat-risk-trend`; `data/stats.json` shows `risk_increasing_count=0, risk_decreasing_count=0, total_alerts=596` live in production.
+
+**Deploy:** Committed `542d3ed` — "Cycle 75: Track risk_increasing_count/risk_decreasing_count trend, add risk-trend stat tile" — pushed to `main`. CI run `34553071701` (CI Data & Frontend Validation) → success, 13s. `pages-build-deployment` run `34553070795` → success, 42s. Live-verified in production per checks above.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input on tech stack, flagged not hard-rejected, carried forward cycles 56-74), full risk-score history array (deferred, schema-growth risk), EPSS percentile histogram (deferred, marginal value), `by_first_seen_age` histogram (deferred, lower value), paid/threat-intel enrichment (violates zero-cost, rejected on principle).
+
+**Rate-limit status:** No 429/throttle signals observed anywhere this cycle, including during the live end-to-end `aggregate.py` run against real NVD/CISA KEV/FIRST.org EPSS/GitHub Dependabot APIs. RATE_LIMIT_EVENT: no.
+
+**State:** `consecutive_no_improvement`: 0/10 (reset — real improvement shipped). `consecutive_failed_cycles`: 0/3 (no failure). `total_cycles`: 75. `stopped`: false.

@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 74,
+  "total_cycles": 75,
   "implemented": [
     {
       "cycle": 1,
@@ -534,8 +534,7 @@
         "EPSS percentile histogram -- still deferred per cycle 56/prior reasoning (marginal value, epss_percentile already shown per-card).",
         "by_first_seen_age histogram/bucket breakdown -- still deferred (lower value, badges/filters already exist per-card)."
       ]
-    }
-    ,
+    },
     {
       "cycle": 73,
       "timestamp": "2026-09-10T23:56:22Z",
@@ -550,8 +549,7 @@
         "by_first_seen_age histogram/bucket breakdown -- still deferred (lower value, badges/filters already exist per-card since an earlier cycle).",
         "A brand-new stats field entirely unrelated to severity -- scored lower than completing the existing critical/high trend pattern (mirrors an established proven low-risk pattern per the task's own scoring guidance, and closes a real, previously-unnoticed gap in an existing feature rather than adding a net-new one)."
       ]
-    }
-    ,
+    },
     {
       "cycle": 74,
       "timestamp": "2026-09-11T00:43:22Z",
@@ -565,9 +563,23 @@
         "EPSS percentile histogram -- still deferred per prior reasoning (marginal value, epss_percentile already shown per-card).",
         "by_first_seen_age histogram/bucket breakdown -- still deferred (lower value, badges/filters already exist per-card since an earlier cycle)."
       ]
+    },
+    {
+      "cycle": 75,
+      "timestamp": "2026-09-11T02:03:00Z",
+      "title": "Track risk_increasing_count/risk_decreasing_count aggregate trend + dashboard tile",
+      "description": "Found this candidate already fully implemented and passing local tests but uncommitted in the working tree at cycle start (interrupted prior run). compute_stats() now counts, across all currently-tracked alerts, how many have risk_score vs risk_score_prev rounded-delta > 0 (increasing) or < 0 (decreasing) -- mirrors the existing per-card risk-delta badge rounding/threshold logic exactly so the aggregate always agrees with what badges are showing. Exposed as new risk_increasing_count/risk_decreasing_count fields in stats.json, trailing columns in trend.csv (HISTORY_CSV_HEADER extended, same additive self-heal convention as every prior extension), a new hidden-by-default Chart.js trend dataset pair in docs/app.js, and a new stat tile (#stat-risk-trend, shown as \u25b2N / \u25bcN) in docs/index.html. Zero new API calls -- built entirely from risk_score/risk_score_prev, both already computed/stored every run since cycle 72.",
+      "commit_sha": "542d3ed",
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack (cycles 56-74).",
+        "Full risk_score history array (time series per CVE) -- still deferred, unbounded schema/storage growth risk.",
+        "EPSS percentile histogram -- still deferred, marginal value.",
+        "by_first_seen_age histogram -- still deferred, lower value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T00:43:22Z",
+  "last_cycle_at": "2026-09-11T02:03:00Z",
   "stopped": false
 }
