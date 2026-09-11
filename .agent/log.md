@@ -3712,3 +3712,36 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `e2a4507` -- "Cycle 103: add GitHub Actions status badges to README" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 102 -> 103. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 104 — 2026-09-11T20:00:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=103, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 5` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Inspected `compute_stats()` in full, `stats.json` schema keys, existing breakdown-pill pattern (source/severity/cwe/vendor/keyword) in `docs/app.js`/`docs/index.html`/`docs/style.css`, and confirmed no `by_age_bucket`/age-distribution stat existed anywhere despite `first_seen` already backing a per-card age badge and oldest-first sort since an earlier cycle.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **`by_age_bucket` first-seen age distribution stat + breakdown pill row** (chosen) — 5/5/4. Fills a real aggregate-visibility gap: "how is our triage backlog distributed by age" was answerable only per-card (age badge) or partially (new_alerts_count, <24h only), never as a population-wide view. Zero new API calls, built entirely from `first_seen` (already stored every run).
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-103.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms — the general concept was subsumed by candidate 1 this cycle (this IS that histogram), no longer a separate deferred item going forward.
+5. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `scripts/aggregate.py`: `compute_stats()` now buckets every currently-tracked alert's `first_seen` age into `{"0-1d","1-7d","7-30d","30d+"}` and returns it as `by_age_bucket` in the stats dict. Malformed/missing `first_seen` values are skipped (never crash the aggregation run).
+- `docs/app.js`: new `renderAgeBreakdown()` (fixed chronological bucket order, inert `<span>` pills since no matching filter control exists for this axis — consistent with the existing fallback pattern for unrecognized source keys), wired into `loadStats()`.
+- `docs/index.html` / `docs/style.css`: new `#age-breakdown` container + `.age-pill` styling matching the existing breakdown-pill visual language.
+- `scripts/test_aggregate.py`: added `test_by_age_bucket` (4 synthetic ages across all buckets + 2 malformed/missing values confirmed ignored without crashing).
+- Regenerated live `docs/data/stats.json` offline via `compute_stats()` against the current `alerts.json` (preserving the existing `generated_at` timestamp so staleness detection isn't falsely reset) so the new field is populated immediately rather than waiting up to 4h for the next scheduled aggregation run. Verified `total_alerts` unchanged (611) before/after.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py` → exit 0.
+- `node --check docs/app.js` → exit 0.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → **98/98 tests passed** (97 prior + 1 new).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED, both before and after the offline stats.json regeneration (611 alerts, schema OK, `by_severity`/`by_source` partition checks OK, trend.csv/feeds all OK).
+- Deployed: commit `d933859` pushed to `origin/main`. `CI Data & Frontend Validation` run `34642159725` completed success (12s). `pages-build-deployment` run `34642159244` completed success (44s).
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-103); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no live external API calls made this cycle (stats.json regeneration ran offline against already-committed `alerts.json`, no NVD/EPSS/KEV/GHSA/Dependabot HTTP calls); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `d933859` — "Cycle 104: add by_age_bucket first-seen age distribution breakdown" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 103 → 104. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
