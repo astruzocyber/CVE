@@ -945,6 +945,20 @@ function renderTable(filtered) {
         ? escapeHtml(tableExploitLabels[tvc.attack_vector] || tvc.attack_vector) +
           (tvc.privileges_required === "NONE" && tvc.user_interaction === "NONE" ? " (no auth/interaction)" : "")
         : "-";
+      // Reviewed toggle in table view (cycle 96): card view has offered a
+      // "Mark reviewed" button (backed by the existing reviewedCves
+      // Set/localStorage state, see toggleReviewed()) since it was added
+      // for local-only triage tracking, and the stats bar already shows a
+      // reviewed-progress count reading the same state -- but the dense
+      // table view (cycle 76) had no way to mark or even see an alert's
+      // reviewed status without switching back to card view, which
+      // defeats the point of bulk-scanning many rows at once. Reuses the
+      // exact same reviewedCves.has() check and a dedicated
+      // .table-review-toggle-btn delegated click handler (below) that
+      // calls the same toggleReviewed() used by card view, so table and
+      // card views can never disagree on reviewed state.
+      const isRowReviewed = reviewedCves.has(a.cve_id);
+      const reviewedCellHtml = `<button class="table-review-toggle-btn${isRowReviewed ? " reviewed" : ""}" type="button" data-cve="${escapeHtml(a.cve_id || "")}" title="${isRowReviewed ? "Marked reviewed -- click to unmark" : "Mark this alert as reviewed"}" aria-pressed="${isRowReviewed ? "true" : "false"}">${isRowReviewed ? "\u2713" : "Mark"}</button>`;
       return `<tr data-cve="${escapeHtml(a.cve_id || "")}"${isRejected ? ' class="table-row-rejected"' : ""}>
         <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a>${isRejected ? ' <span class="table-rejected-tag" title="NVD has withdrawn this CVE ID -- scores may be stale">REJECTED</span>' : ""}</td>
         <td class="${cvssSevClass ? `table-cvss-${cvssSevClass}` : ""}">${fmtScore(a.cvss_score)}</td>
@@ -958,10 +972,28 @@ function renderTable(filtered) {
         <td class="table-watchlist-cell">${watchlistLabel}</td>
         <td class="table-cwe-cell">${cweLabel}</td>
         <td>${escapeHtml(attackVectorLabel)}</td>
+        <td>${reviewedCellHtml}</td>
       </tr>`;
     })
     .join("");
 }
+
+// Click delegation for the Reviewed toggle button in table view (cycle 96):
+// attached to the table body (not #card-grid, which only covers card view's
+// own click delegation) so the mark/unmark action works regardless of which
+// view is currently visible. Reuses the exact same toggleReviewed() state
+// mutation card view's own handler uses, so table and card views can never
+// disagree on reviewed state; re-renders via applyFiltersAndRender() since
+// renderTable() is already a cheap full-rebuild with no per-row
+// breakdown/expand state to preserve (unlike renderCard()'s single-card
+// in-place patch).
+document.getElementById("alerts-table-body")?.addEventListener("click", (e) => {
+  const btn = e.target.closest(".table-review-toggle-btn");
+  if (!btn) return;
+  toggleReviewed(btn.dataset.cve);
+  applyFiltersAndRender();
+  renderReviewedProgress();
+});
 
 // Client-side click-to-sort on table headers -- reuses the exact same
 // sort-by values already wired to #sort-by (kept in sync both ways) so
