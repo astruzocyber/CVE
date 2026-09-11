@@ -3395,3 +3395,33 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `8865be1` — "Cycle 92: EPSS-delta indicator in table view" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 91 → 92. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 93 — 2026-09-11T13:48:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=92, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 8` (all recent CI/Pages/Aggregation runs `completed success`, no 429/throttle signals). Inspected `docs/data/alerts.json` schema (609 alerts) and grepped `docs/app.js` for every field for coverage. Continued the table-view-vs-card-view parity vein (cycles 83/87/88/89/90/91/92): found `kev_ransomware_use` was surfaced in `renderTable()`'s KEV label logic (`kevLabel`) only implicitly -- the plain KEV/OVERDUE/DUE SOON string carried no ransomware signal, unlike card view's distinct red RANSOMWARE badge, the "ransomware" KEV-filter option, and the stats-bar ransomware count, all of which already key off this exact field.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Ransomware indicator in table view's KEV column** (chosen) — 5/5/5. Real gap: CISA KEV's ransomware flag is the highest-priority triage signal on the board (drives its own filter and stats count) but was invisible in table view. Very low validation risk: appends unchanged `kev_ransomware_use` as a text suffix to the existing `kevLabel` computation, zero new CSS/logic to disagree with card view.
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-92.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms — still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/app.js`: `renderTable()`'s `kevLabel` computation now appends `" (RANSOMWARE)"` when `a.kev_ransomware_use` is true, composing with all three existing KEV states (KEV/DUE SOON/OVERDUE).
+- No `scripts/aggregate.py`/schema/data changes — pure frontend surfacing of a field already present and already used elsewhere (card badge, filter, stats count).
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity check; no Python files touched).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` → **97/97 tests passed** (unchanged — no aggregation/scoring logic touched).
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background, port 8991), drove it live via `mcp__browser_exec` (CDP, real Chrome). Loaded dashboard (609 cards). Switched to table view (609 rows): confirmed exactly 1 row shows `"OVERDUE (RANSOMWARE)"` in the KEV column. Cross-checked against card view's `.badge.ransomware` count: also exactly 1 — no disagreement between views. Switched back to card view: 609 cards render, no regression. Ran the existing "wordpress" search filter: still correctly narrows to 160/609, confirming zero regression to filter logic.
+- Deployed: commit `71c9696` pushed to `origin/main`.
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-92); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (pure frontend change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `71c9696` — "Cycle 93: Ransomware indicator in table view's KEV column" — pushed to `origin/main` (`b6f4fd1..71c9696`).
+
+**Updated state:** `total_cycles`: 92 → 93. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 92,
+  "total_cycles": 93,
   "implemented": [
     {
       "cycle": 1,
@@ -853,9 +853,29 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 93,
+      "timestamp": "2026-09-11T13:48:00Z",
+      "title": "Ransomware indicator in table view's KEV column",
+      "description": "Card view has shown a distinct red RANSOMWARE badge (kev_ransomware_use -- CISA KEV's flag for known ransomware campaign use, the highest-priority triage signal on the board) since early cycles, driving a dedicated 'ransomware' KEV-filter option and the stats-bar ransomware count -- but the dense table view (cycle 76) collapsed every KEV entry into a plain KEV/OVERDUE/DUE SOON string with zero ransomware signal, so an analyst bulk-scanning table view without the ransomware filter active had no way to see which rows were known-ransomware without switching to card view. Appended a ' (RANSOMWARE)' suffix to the existing kevLabel computation in renderTable(), reusing kev_ransomware_use unchanged. No backend/schema changes.",
+      "commit_sha": "71c9696",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (609 cards), switched to table view (609 rows): confirmed 1 row shows 'OVERDUE (RANSOMWARE)' in the KEV column, matching card view's own .badge.ransomware count (also 1). Switched back to card view: 609 cards render, no regression. Search filter for wordpress still correctly narrows to 160/609."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-92.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T13:15:00Z",
+  "last_cycle_at": "2026-09-11T13:48:00Z",
   "stopped": false
 }
