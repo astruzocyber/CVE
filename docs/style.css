@@ -96,6 +96,10 @@ header h1 {
   min-width: 90px;
 }
 
+.stat[hidden] {
+  display: none;
+}
+
 .stat-value {
   font-size: 1.4rem;
   font-weight: 700;
@@ -111,6 +115,7 @@ header h1 {
 .stat-critical .stat-value,
 .stat-ransomware .stat-value { color: var(--red); }
 .stat-overdue .stat-value { color: var(--orange); }
+.stat-rejected .stat-value { color: #999; }
 .stat-due-soon .stat-value { color: var(--yellow); }
 .stat-kev .stat-value { color: var(--yellow); }
 
@@ -533,6 +538,7 @@ main {
 .badge.overdue { background: rgba(255, 169, 77, 0.3); color: #fff; border: 1px solid var(--orange); }
 .badge.due-soon { background: rgba(255, 217, 61, 0.2); color: #fff; border: 1px solid var(--yellow); }
 .badge.new-alert { background: rgba(79, 157, 255, 0.3); color: #fff; border: 1px solid var(--accent); font-weight: 700; }
+.badge.rejected { background: repeating-linear-gradient(45deg, rgba(160,160,160,0.35), rgba(160,160,160,0.35) 6px, rgba(120,120,120,0.35) 6px, rgba(120,120,120,0.35) 12px); color: #fff; border: 1px solid #999; font-weight: 700; }
 
 .risk-row {
   display: flex;

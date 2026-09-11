@@ -481,6 +481,26 @@ def extract_description(nvd_cve):
 _CWE_ID_RE = re.compile(r"^CWE-\d+$")
 
 
+def extract_vuln_status(nvd_cve):
+    """NVD's per-CVE analysis lifecycle status ("Received", "Awaiting Analysis",
+    "Undergoing Analysis", "Analyzed", "Modified", "Rejected", "Deferred").
+    Present on every NVD CVE response but never previously extracted, even
+    though it answers a question distinct from cvss_score/nvd_last_modified:
+    whether NVD has actually finished analyzing this record at all. A CVE in
+    "Received"/"Awaiting Analysis"/"Undergoing Analysis" can carry no CVSS
+    score yet (or a CNA-supplied placeholder score NVD hasn't verified),
+    meaning 35% of composite_risk_score's weight is being redistributed onto
+    signal that may still change once NVD finishes analysis -- previously
+    invisible to a triage analyst reading the dashboard. "Rejected" is the
+    sharpest case: NVD withdrew the CVE ID entirely (duplicate, disputed,
+    withdrawn by the CNA), so any card still showing it needs an explicit
+    "don't trust this one" signal rather than silently looking like any other
+    tracked alert. Zero new API calls -- this is a field already present in
+    every NVD response we already fetch every run.
+    """
+    return nvd_cve.get("vulnStatus")
+
+
 def extract_cwe_nvd(nvd_cve):
     ids = []
     for w in nvd_cve.get("weaknesses", []) or []:
@@ -559,6 +579,7 @@ def fetch_nvd_candidates(watchlist, api_key):
                 # publication (rescored CVSS, corrected CWE, edited description),
                 # which "published" alone can never reveal for an old CVE.
                 "nvd_last_modified": cve.get("lastModified"),
+                "vuln_status": extract_vuln_status(cve),
                 "matched_vendor_product": [],
                 "matched_keywords": [],
                 "source": "nvd",
@@ -929,6 +950,11 @@ def build_final_entry(entry, kev_map, epss_map):
         "source": entry.get("source"),
         "published": entry.get("published"),
         "nvd_last_modified": entry.get("nvd_last_modified"),
+        # NVD analysis lifecycle status -- see extract_vuln_status() docstring
+        # for full rationale. None for non-NVD sources (Dependabot/GHSA have
+        # no equivalent concept) -- absence itself is meaningful (not
+        # applicable) rather than a gap to fill in.
+        "vuln_status": entry.get("vuln_status"),
         "severity": entry.get("severity"),
         "dependabot_url": entry.get("dependabot_url"),
         "first_seen": datetime.now(timezone.utc).isoformat(),
@@ -966,6 +992,14 @@ def compute_stats(alerts):
     # risk_score_prev, both already computed/stored every run since cycle 72.
     risk_increasing = 0
     risk_decreasing = 0
+    # Count of currently-tracked alerts NVD has withdrawn entirely (see
+    # extract_vuln_status() rationale) -- surfaces at a glance how many
+    # cards on the dashboard may carry stale/meaningless CVSS/EPSS/risk
+    # scores that NVD itself no longer stands behind, without requiring an
+    # analyst to spot the per-card badge one at a time across the whole
+    # tracked population. Zero new API calls -- built from vuln_status,
+    # already extracted every run as of cycle 77.
+    rejected_count = 0
     for a in alerts:
         cvss = a.get("cvss_score")
         if cvss is None:
@@ -1000,6 +1034,8 @@ def compute_stats(alerts):
                 risk_increasing += 1
             elif delta < 0:
                 risk_decreasing += 1
+        if a.get("vuln_status") == "Rejected":
+            rejected_count += 1
 
     # KEV entries with a due date in the past and not yet resolved -- an
     # operationally meaningful "overdue remediation" count (BOD 22-01 style).
@@ -1034,6 +1070,8 @@ def compute_stats(alerts):
         "kev_ransomware_count": ransomware_count,
         "kev_overdue_count": overdue_kev,
         "kev_due_soon_count": due_soon_kev,
+        # See rejected_count computation above for full rationale.
+        "rejected_count": rejected_count,
         "by_severity": by_severity,
         "by_source": by_source,
         "avg_epss": round(sum(epss_values) / len(epss_values), 4) if epss_values else None,
@@ -1370,6 +1408,12 @@ def main():
         prior.setdefault("osv_id", None)
         prior.setdefault("osv_fixed_versions", [])
         prior.setdefault("epss_score_prev", None)
+        # Backfill for records written before vuln_status existed (cycle 77) --
+        # self-heal pattern matching osv_id/osv_fixed_versions above. Not
+        # re-queried here (this loop has no fresh NVD response for
+        # not-resurfaced alerts), so it simply stays whatever it already
+        # was, defaulting to None for pre-cycle-77 records.
+        prior.setdefault("vuln_status", None)
 
     # Suppressed entries that were previously alerted should also disappear from the
     # cumulative view going forward (an analyst explicitly accepted the risk) -- but

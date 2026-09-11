@@ -252,6 +252,15 @@ function renderCard(alert) {
     ? `<span class="badge due-soon">DUE SOON (${dueSoonDays}d)</span>`
     : "";
   const newBadge = isNewWithin24h(alert) ? `<span class="badge new-alert">NEW</span>` : "";
+  // NVD withdrew this CVE ID entirely (duplicate, disputed, or withdrawn by
+  // the CNA) -- see extract_vuln_status() in aggregate.py for full rationale.
+  // Surfaced as a loud, distinct badge (not just another severity/source
+  // badge) because a rejected CVE ID carries fundamentally different meaning
+  // than any other tracked alert: any CVSS/EPSS/risk_score on the card may
+  // be stale/meaningless data NVD itself no longer stands behind.
+  const rejectedBadge = alert.vuln_status === "Rejected"
+    ? `<span class="badge rejected" title="NVD has withdrawn this CVE ID (duplicate, disputed, or withdrawn by the CNA) -- scores below may be stale">REJECTED BY NVD</span>`
+    : "";
   const sevBadge = sevClass
     ? `<span class="badge ${sevClass}">${sevClass}</span>`
     : "";
@@ -327,7 +336,7 @@ function renderCard(alert) {
     <div class="card${isReviewed ? " reviewed-card" : ""}" data-cve-id="${cveIdSafe}" id="alert-${cveIdSafe}">
       <div class="card-header">
         <button class="cve-id cve-link-btn" type="button" data-cve="${cveIdSafe}" title="Copy a direct link to this alert">${cveIdSafe}</button>
-        <div class="badges">${newBadge}${kevBadge}${ransomwareBadge}${overdueBadge}${dueSoonBadge}${sevBadge}${sourceBadge}</div>
+        <div class="badges">${newBadge}${rejectedBadge}${kevBadge}${ransomwareBadge}${overdueBadge}${dueSoonBadge}${sevBadge}${sourceBadge}</div>
       </div>
       <div class="risk-row">
         <div class="risk-bar-track"><div class="risk-bar-fill ${rClass}" style="width:${Math.min(100, alert.risk_score || 0)}%"></div></div>
@@ -814,7 +823,7 @@ function exportCsv() {
   const header = ["cve_id", "risk_score", "risk_score_prev", "cvss_score", "epss_score", "epss_score_prev", "epss_percentile", "kev", "kev_date_added", "kev_due_date",
     "kev_ransomware_use", "kev_required_action", "kev_notes", "attack_vector", "attack_complexity",
     "privileges_required", "user_interaction", "source", "affected", "cwe_ids", "matched_keywords", "published",
-    "nvd_last_modified", "first_seen", "osv_id", "osv_fixed_versions", "description"];
+    "nvd_last_modified", "vuln_status", "first_seen", "osv_id", "osv_fixed_versions", "description"];
   const lines = [toCsvRow(header)];
   for (const a of rows) {
     const vc = a.cvss_vector_components || {};
@@ -826,7 +835,7 @@ function exportCsv() {
       a.kev_ransomware_use, a.kev_required_action, a.kev_notes, vc.attack_vector, vc.attack_complexity,
       vc.privileges_required, vc.user_interaction, a.source, (a.affected || []).join("; "),
       (a.cwe_ids || []).join("; "), (a.matched_keywords || []).join("; "), a.published, a.nvd_last_modified,
-      a.first_seen, a.osv_id, osvFixed, a.description,
+      a.vuln_status, a.first_seen, a.osv_id, osvFixed, a.description,
     ]));
   }
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });
@@ -1156,6 +1165,20 @@ async function loadStats() {
       riskTrendEl.textContent = (typeof up === "number" && typeof down === "number")
         ? `\u25b2${up} / \u25bc${down}`
         : "-";
+    }
+    // See rejected_count's rationale in aggregate.py's compute_stats() --
+    // hidden entirely when zero (the common case) rather than showing a
+    // permanent "0" tile, consistent with stat-due-soon's null-guard above.
+    const rejectedTile = document.getElementById("stat-rejected-tile");
+    const rejectedEl = document.getElementById("stat-rejected");
+    if (rejectedTile && rejectedEl) {
+      const rejected = stats.rejected_count;
+      if (typeof rejected === "number" && rejected > 0) {
+        rejectedEl.textContent = rejected;
+        rejectedTile.hidden = false;
+      } else {
+        rejectedTile.hidden = true;
+      }
     }
     renderSourceBreakdown(stats.by_source);
     renderSeverityBreakdown(stats.by_severity);

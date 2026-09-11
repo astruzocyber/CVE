@@ -35,6 +35,7 @@ from aggregate import (
     parse_cvss_v3_vector_string,
     extract_cwe_nvd,
     extract_cwe_ghsa,
+    extract_vuln_status,
     unique_key,
     compute_stats,
     build_final_entry,
@@ -246,6 +247,17 @@ class TestExtractCweGhsa(unittest.TestCase):
         self.assertEqual(extract_cwe_ghsa(obj), [])
 
 
+class TestExtractVulnStatus(unittest.TestCase):
+    def test_extracts_status(self):
+        self.assertEqual(extract_vuln_status({"vulnStatus": "Analyzed"}), "Analyzed")
+
+    def test_extracts_rejected(self):
+        self.assertEqual(extract_vuln_status({"vulnStatus": "Rejected"}), "Rejected")
+
+    def test_missing_status_is_none(self):
+        self.assertIsNone(extract_vuln_status({}))
+
+
 class TestUniqueKey(unittest.TestCase):
     def test_combines_cve_and_source(self):
         self.assertEqual(unique_key({"cve_id": "CVE-2024-1234", "source": "nvd"}),
@@ -366,6 +378,20 @@ class TestComputeStats(unittest.TestCase):
         self.assertEqual(stats["risk_increasing_count"], 0)
         self.assertEqual(stats["risk_decreasing_count"], 0)
 
+    def test_rejected_count(self):
+        alerts = [
+            {"cvss_score": 9.0, "kev": False, "vuln_status": "Rejected"},
+            {"cvss_score": 5.0, "kev": False, "vuln_status": "Analyzed"},
+            {"cvss_score": 5.0, "kev": False},
+        ]
+        stats = compute_stats(alerts)
+        self.assertEqual(stats["rejected_count"], 1)
+
+    def test_rejected_count_zero_when_none_rejected(self):
+        alerts = [{"cvss_score": 5.0, "kev": False, "vuln_status": "Analyzed"}]
+        stats = compute_stats(alerts)
+        self.assertEqual(stats["rejected_count"], 0)
+
 
 class TestBuildFinalEntry(unittest.TestCase):
     def test_risk_score_prev_defaults_to_none_for_new_entry(self):
@@ -402,6 +428,18 @@ class TestBuildFinalEntry(unittest.TestCase):
         self.assertIn("osv_id", final)
         self.assertIsNone(final["osv_id"])
         self.assertEqual(final["osv_fixed_versions"], [])
+
+    def test_vuln_status_propagated(self):
+        entry = {"cve_id": "CVE-2026-00004", "source": "nvd", "cvss_score": 5.0,
+                 "description": "test", "vuln_status": "Rejected"}
+        final = build_final_entry(entry, kev_map={}, epss_map={})
+        self.assertEqual(final["vuln_status"], "Rejected")
+
+    def test_vuln_status_defaults_to_none(self):
+        entry = {"cve_id": "CVE-2026-00005", "source": "dependabot", "cvss_score": 5.0,
+                 "description": "test"}
+        final = build_final_entry(entry, kev_map={}, epss_map={})
+        self.assertIsNone(final["vuln_status"])
 
 
 class TestParseOsvFixedVersions(unittest.TestCase):
