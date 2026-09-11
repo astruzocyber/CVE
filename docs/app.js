@@ -868,11 +868,26 @@ function renderTable(filtered) {
       const watchlistLabel = Array.isArray(a.matched_keywords) && a.matched_keywords.length
         ? a.matched_keywords.map((k) => escapeHtml(k)).join(", ")
         : "-";
+      // Risk-score trend delta in table view (cycle 91): card view has shown
+      // a risk-delta badge (up/down arrow + point change since the last
+      // refresh, via .risk-delta/.risk-up/.risk-down CSS) since it was added
+      // for score-refresh tracking, but the dense table view (cycle 76) never
+      // surfaced this signal -- an analyst bulk-scanning table view had no
+      // way to see which rows just got materially riskier/safer without
+      // switching back to card view. Reuses the exact same computation card
+      // view uses (risk_score - risk_score_prev) and the exact same CSS
+      // classes, so table and card views can never disagree on direction.
+      const tableRiskDelta = (typeof a.risk_score === "number" && typeof a.risk_score_prev === "number")
+        ? Math.round(a.risk_score - a.risk_score_prev)
+        : null;
+      const tableRiskDeltaHtml = tableRiskDelta && tableRiskDelta !== 0
+        ? ` <span class="risk-delta ${tableRiskDelta > 0 ? "risk-up" : "risk-down"}" title="Risk score changed from ${a.risk_score_prev.toFixed(0)} to ${a.risk_score.toFixed(0)} since the last refresh">${tableRiskDelta > 0 ? "\u25b2" : "\u25bc"}${tableRiskDelta > 0 ? "+" : ""}${tableRiskDelta}</span>`
+        : "";
       return `<tr data-cve="${escapeHtml(a.cve_id || "")}"${isRejected ? ' class="table-row-rejected"' : ""}>
         <td><a href="#alert-${escapeHtml(a.cve_id || "")}" class="table-cve-link">${escapeHtml(a.cve_id || "")}</a>${isRejected ? ' <span class="table-rejected-tag" title="NVD has withdrawn this CVE ID -- scores may be stale">REJECTED</span>' : ""}</td>
         <td class="${cvssSevClass ? `table-cvss-${cvssSevClass}` : ""}">${fmtScore(a.cvss_score)}</td>
         <td>${typeof a.epss_score === "number" ? (a.epss_score * 100).toFixed(1) + "%" : "-"}</td>
-        <td class="${riskCls ? `table-risk-${riskCls}` : ""}">${fmtScore(a.risk_score, 0)}</td>
+        <td class="${riskCls ? `table-risk-${riskCls}` : ""}">${fmtScore(a.risk_score, 0)}${tableRiskDeltaHtml}</td>
         <td>${escapeHtml(kevLabel)}</td>
         <td>${escapeHtml(a.source || "-")}</td>
         <td>${fmtDate(a.first_seen)}</td>
