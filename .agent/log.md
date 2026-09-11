@@ -3138,3 +3138,35 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `c10b468` — "Cycle 84: Add 'nvd_reference_links' column to CSV export" — pushed to `origin/main` (`80c14c7..c10b468`).
 
 **Updated state:** `total_cycles`: 83 → 84. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 85 — 2026-09-11T09:20:00Z
+
+**Re-verified state before acting:** `git pull` (already up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=84, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 5` (all recent CI/Pages runs `completed success`). Grepped `docs/app.js` for every card/Markdown-rendered field (`dependabot_url`, `cvss_version`, `severity`) against the CSV export header/row builder to find an unaddressed export-consistency gap, following the exact pattern that found `nvd_reference_links` in cycle 84.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Add `dependabot_url` column to CSV export** (chosen) — 5/5/4. Confirmed via direct code read that `dependabot_url` is rendered on alert cards ("View alert" link, line 378) and in `alertToMarkdown()` ("Dependabot alert: ...", line 453) but was absent from the CSV export header/row builder — the exact same gap pattern cycle 84 closed for `nvd_reference_links` and cycle 62 closed for `osv_id`. Very low validation risk: plain string field, no flattening logic needed, single-line addition to both header and row arrays.
+2. Another trend.csv trailing column — deprioritized again per cycles 76-84's explicit steer toward novel functional/usability features/consistency fixes over another averaged metric.
+3. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-84.
+4. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+5. EPSS percentile / by_first_seen_age histograms — still marginal value vs. the chosen candidate.
+6. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/app.js`: `exportCsv()`'s `header` array gained `"dependabot_url"` (inserted directly before the trailing `"description"` column, after `"nvd_reference_links"`); wired into the row-push array in the same position as the header, referenced as-is (`a.dependabot_url`, already a plain URL string requiring no flattening).
+- No `scripts/aggregate.py`/schema/data changes — pure frontend export-consistency fix using a field already extracted and rendered elsewhere since early cycles.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity check; no Python files touched this cycle).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` → **97/97 tests passed** (unchanged from cycle 84 — no aggregation/scoring logic touched, pure frontend change).
+- No live `aggregate.py` run or data regeneration was needed this cycle (no new fields, no schema changes, no backend code touched) — the existing committed `docs/data/alerts.json` (603 alerts, 0 Dependabot-sourced — repo currently has no open Dependabot alerts, confirmed by direct inspection) was used directly for the browser smoke test below.
+- Browser smoke test: served the current production `docs/` tree via `python3 -m http.server` (port 8925), drove it live via `mcp__browser_exec` (CDP, real Chrome). Confirmed zero regression first: 603 cards render, `603 of 603 alerts` result count correct. Then intercepted `URL.createObjectURL` at runtime, clicked the real `#export-csv` button, and read the actual generated `Blob`'s text content back: confirmed the CSV header row now includes `dependabot_url` in the correct position (between `nvd_reference_links` and `description`); confirmed via direct `alerts.json` inspection that 0 of 603 currently-tracked alerts have `source=='dependabot'` (repo has no open Dependabot alerts right now), so an all-empty column this cycle is the correct, expected behavior — not a bug, and will populate automatically the moment a real Dependabot alert is tracked, since the field is already extracted every run. Confirmed zero regression to existing features: search filter for "wordpress" still correctly narrows to 154/603, `reset-filters` correctly restores 603/603.
+- Deployed: commit `e4e76e2` pushed to `origin/main`. CI Data & Frontend Validation run `34583713628` completed success (11s); pages-build-deployment run `34583712713` queued at push time (prior deploy history shows consistent success).
+
+**Rejected this cycle:** Another trend.csv trailing column (scored lower per cycles 76-84's steer); GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-84); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (pure frontend change, no live aggregation run required).
+
+**Commit SHA:** `e4e76e2` — "Cycle 85: Add 'dependabot_url' column to CSV export" — pushed to `origin/main` (`c10b468..e4e76e2`, on top of `c532aa3`'s state-log commit).
+
+**Updated state:** `total_cycles`: 84 → 85. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 84,
+  "total_cycles": 85,
   "implemented": [
     {
       "cycle": 1,
@@ -690,9 +690,30 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 85,
+      "timestamp": "2026-09-11T09:20:00Z",
+      "title": "Add 'dependabot_url' column to CSV export",
+      "description": "dependabot_url (already rendered on-card as 'View alert' and in alertToMarkdown() as 'Dependabot alert: ...' since early cycles) had the exact same card+Markdown-but-not-CSV gap that cycle 79's nvd_reference_links (closed cycle 84) and osv_id (closed cycle 62) had before it -- an analyst exporting Dependabot-sourced alerts to CSV for offline triage silently lost the direct link back to the originating GitHub Dependabot alert. Added as a new dependabot_url CSV column (plain URL string, no flattening needed), placed directly before the description column, empty for non-Dependabot sources. Pure additive frontend change in exportCsv(): no new API calls, no backend/schema changes.",
+      "commit_sha": "e4e76e2",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (603 cards, 603 of 603 alerts, no regression), intercepted URL.createObjectURL to capture the actual CSV export blob and confirmed header includes dependabot_url in correct position between nvd_reference_links and description; confirmed 0 rows have dependabot-sourced data (verified directly against alerts.json: 0 currently-tracked alerts have source=='dependabot', so an all-empty column this cycle is correct, not a bug); confirmed zero regression to search filter (wordpress: 154/603) and reset-filters"
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on tech stack, deferred cycles 56-84.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Another trend.csv trailing column -- scored lower per cycles 76-84's steer toward novel/consistency fixes.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T08:45:00Z",
+  "last_cycle_at": "2026-09-11T09:20:00Z",
   "stopped": false
 }
