@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 93,
+  "total_cycles": 94,
   "implemented": [
     {
       "cycle": 1,
@@ -873,9 +873,29 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 94,
+      "timestamp": "2026-09-11T14:21:00Z",
+      "title": "CWE (weakness) column in table view",
+      "description": "Card view has shown a 'Weakness: CWE-XXX' row (clickable badges linking to cwe.mitre.org) via alert.cwe_ids since early cycles, but the dense table view (cycle 76) never surfaced this signal -- an analyst bulk-scanning table view had no way to see the underlying vulnerability class (e.g. CWE-79 XSS, CWE-89 SQLi) without switching back to card view. Added a new 'CWE' column to #alerts-table reading the same cwe_ids array unchanged (already used by card view, CSV export, and search), comma-joined for compact plain-text display in renderTable(). Pure frontend change: no new API calls, no backend/schema changes, zero cost.",
+      "commit_sha": "1730be1",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (609 cards, 609 of 609 alerts), switched to table view: confirmed 609 rows render with .table-cwe-cell, 453 with non-'-' content, exact match to card view's own .cwe-row count (also 453). Search filter for wordpress still correctly narrows to 160/609 in card view after toggling back."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-93.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T13:48:00Z",
+  "last_cycle_at": "2026-09-11T14:21:39Z",
   "stopped": false
 }

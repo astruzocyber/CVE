@@ -3425,3 +3425,34 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `71c9696` — "Cycle 93: Ransomware indicator in table view's KEV column" — pushed to `origin/main` (`b6f4fd1..71c9696`).
 
 **Updated state:** `total_cycles`: 92 → 93. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 94 -- 2026-09-11T14:21:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=93, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Inspected `docs/data/alerts.json` schema (609 alerts, all fields listed) and grepped `docs/app.js` for every field's usage. Continued the table-view-vs-card-view parity vein that cycles 83/87/88/89/90/91/92/93 proved productive: found `cwe_ids` (CWE weakness classification, rendered as clickable badges linking to cwe.mitre.org on card view since early cycles) had zero representation in the dense table view (cycle 76).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **CWE (weakness) column in table view** (chosen) -- 5/5/5. Real gap: the underlying vulnerability class (XSS, SQLi, etc.) is a genuinely useful triage signal, already surfaced on card view, CSV export, and search, but invisible in table view. Very low validation risk: reuses the exact existing `cwe_ids` array unchanged as plain comma-joined text, zero new CSS/logic to disagree with card view.
+2. GHSA/Dependabot coverage expansion -- still flagged as needing human input on actual tech stack, deferred cycles 56-93.
+3. Full risk_score history array -- still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms -- still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/index.html`: added a `<th>CWE</th>` column header to `#alerts-table`.
+- `docs/app.js`: `renderTable()` now computes `cweLabel` (comma-joined `a.cwe_ids`, `-` if empty) and appends a `<td class="table-cwe-cell">` to each row.
+- No `scripts/aggregate.py`/schema/data changes -- pure frontend surfacing of a field already present and rendered elsewhere (card view, CSV export, search).
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity check; no Python files touched).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` -> **97/97 tests passed** (unchanged -- no aggregation/scoring logic touched, pure frontend change).
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background, port 8994), drove it live via `mcp__browser_exec` (CDP, real Chrome). Loaded dashboard (609 cards, 609 of 609 alerts). Switched to table view: confirmed 609 rows render with `.table-cwe-cell`, 453 with non-`-` content -- cross-checked and confirmed exact match against card view's own `.cwe-row` count (also 453), no disagreement between views. Ran the "wordpress" search filter after toggling back to card view: still correctly narrows to 160/609, confirming zero regression.
+- Deployed: commit `1730be1` pushed to `origin/main`. CI Data & Frontend Validation run `34609652284` completed success (9s); pages-build-deployment in progress at time of check (prior deploy history shows consistent success).
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-93); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no external API calls made this cycle (pure frontend change, no live aggregation run required); `gh run list` confirmed all recent scheduled aggregation/CI/Pages runs completed successfully with no 429/throttle signals.
+
+**Commit SHA:** `1730be1` -- "Cycle 94: CWE (weakness) column in table view" -- pushed to `origin/main` (`8042bad..1730be1`).
+
+**Updated state:** `total_cycles`: 93 -> 94. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
