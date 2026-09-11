@@ -560,6 +560,47 @@ def extract_nvd_fix_versions(nvd_cve):
     return fixes
 
 
+def extract_nvd_reference_links(nvd_cve):
+    """Parse NVD's `references` array (already present in every NVD CVE
+    response we already fetch every run -- zero new API calls) for genuine
+    vendor patch/advisory links, distinct from the existing kev_notes-derived
+    links (cycle 28) which only ever populate for the small minority of
+    alerts that are also CISA KEV-listed. Every NVD-sourced alert already
+    carries a full `references` array, but until now the only outbound link
+    rendered on non-KEV cards was the generic "View on NVD" link -- an
+    analyst had no direct path to the vendor's own advisory or patch/fix
+    page without manually searching for it themselves.
+
+    Each reference has a `url` and a `tags` list (e.g. "Vendor Advisory",
+    "Patch", "Third Party Advisory", "Release Notes", "Mailing List",
+    "Exploit", ...). Only the subset of tags that represent genuine
+    remediation-relevant material for a triage analyst are kept (Vendor
+    Advisory, Patch, Release Notes) -- broad "Third Party Advisory"/mailing
+    list/issue-tracker/press links are excluded to avoid drowning the
+    signal in low-value noise. Returns [] (not None) on any missing/
+    malformed shape, deduplicated by URL and capped to 5 entries, mirroring
+    extract_nvd_fix_versions()'s existing cap/dedup convention exactly.
+    """
+    _WANTED_TAGS = {"Vendor Advisory", "Patch", "Release Notes"}
+    links = []
+    seen = set()
+    for ref in nvd_cve.get("references", []) or []:
+        if not isinstance(ref, dict):
+            continue
+        url = ref.get("url")
+        if not url or url in seen:
+            continue
+        tags = ref.get("tags") or []
+        matched = [t for t in tags if t in _WANTED_TAGS]
+        if not matched:
+            continue
+        seen.add(url)
+        links.append({"url": url, "tags": matched})
+        if len(links) >= 5:
+            break
+    return links
+
+
 def extract_cwe_nvd(nvd_cve):
     ids = []
     for w in nvd_cve.get("weaknesses", []) or []:
@@ -640,6 +681,7 @@ def fetch_nvd_candidates(watchlist, api_key):
                 "nvd_last_modified": cve.get("lastModified"),
                 "vuln_status": extract_vuln_status(cve),
                 "nvd_fix_versions": extract_nvd_fix_versions(cve),
+                "nvd_reference_links": extract_nvd_reference_links(cve),
                 "matched_vendor_product": [],
                 "matched_keywords": [],
                 "source": "nvd",
@@ -1016,6 +1058,10 @@ def build_final_entry(entry, kev_map, epss_map):
         # applicable) rather than a gap to fill in.
         "vuln_status": entry.get("vuln_status"),
         "nvd_fix_versions": entry.get("nvd_fix_versions", []),
+        # See extract_nvd_reference_links() docstring for full rationale.
+        # [] (not None) for non-NVD sources (Dependabot/GHSA) -- consistent
+        # with nvd_fix_versions' existing convention.
+        "nvd_reference_links": entry.get("nvd_reference_links", []),
         "severity": entry.get("severity"),
         "dependabot_url": entry.get("dependabot_url"),
         "first_seen": datetime.now(timezone.utc).isoformat(),
@@ -1481,6 +1527,9 @@ def main():
         # not-resurfaced alert this run); stays whatever it already was,
         # defaulting to [] for pre-cycle-78 records until NVD resurfaces them.
         prior.setdefault("nvd_fix_versions", [])
+        # Backfill for records written before nvd_reference_links existed
+        # (cycle 79) -- same self-heal pattern as nvd_fix_versions above.
+        prior.setdefault("nvd_reference_links", [])
 
     # Suppressed entries that were previously alerted should also disappear from the
     # cumulative view going forward (an analyst explicitly accepted the risk) -- but

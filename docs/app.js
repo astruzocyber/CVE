@@ -404,6 +404,22 @@ function renderCard(alert) {
           }).join(", ");
           return `<div class="osv-fixed" title="Fixed version(s) per NVD CPE match data">Fix available (NVD): ${items}</div>`;
         })()}
+        ${(() => {
+          // nvd_reference_links (cycle 79, NVD references array tag-filtering)
+          // gives an analyst a direct path to the vendor's own advisory or
+          // patch/release-notes page, distinct from nvd_fix_versions (a parsed
+          // version boundary) and from the generic "View on NVD" link (which
+          // only ever points at NVD's own record, never the vendor's).
+          // Zero new API calls -- parsed from the NVD response already
+          // fetched every run. Renders only when non-empty.
+          const refLinks = alert.nvd_reference_links;
+          if (!Array.isArray(refLinks) || refLinks.length === 0) return "";
+          const items = refLinks.map(r => {
+            const label = (r.tags && r.tags[0]) || "Reference";
+            return `<a href="${escapeHtml(r.url)}" target="_blank" rel="noopener">${escapeHtml(label)}</a>`;
+          }).join(" &middot; ");
+          return `<div class="osv-fixed" title="Vendor advisory / patch / release notes links per NVD">Vendor links: ${items}</div>`;
+        })()}
         ${copyMdBtn}
         ${copySuppressBtn}
         ${reviewedBtn}
@@ -442,6 +458,9 @@ function alertToMarkdown(alert) {
     lines.push(`- **Fix available (NVD):** ${alert.nvd_fix_versions.map(f => `${f.vendor || "?"} ${f.product || "?"} -> fixed ${f.fix_type === "up_to_and_including" ? "next release after" : "before"} ${f.fixed || "?"}`).join(", ")}`);
   }
   if (alert.osv_id) lines.push(`- **OSV.dev:** https://osv.dev/vulnerability/${encodeURIComponent(alert.osv_id)}`);
+  if (Array.isArray(alert.nvd_reference_links) && alert.nvd_reference_links.length) {
+    lines.push(`- **Vendor links:** ${alert.nvd_reference_links.map(r => `[${(r.tags && r.tags[0]) || "Reference"}](${r.url})`).join(", ")}`);
+  }
   return lines.join("\n");
 }
 

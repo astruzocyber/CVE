@@ -41,6 +41,7 @@ from aggregate import (
     build_final_entry,
     parse_osv_fixed_versions,
     extract_nvd_fix_versions,
+    extract_nvd_reference_links,
     extract_cvss,
     extract_cvss_vector_components,
     append_history,
@@ -561,6 +562,54 @@ class TestExtractNvdFixVersions(unittest.TestCase):
             "versionEndExcluding": "1.0",
         }]}]}]}
         self.assertEqual(extract_nvd_fix_versions(nvd_cve), [])
+
+
+class TestExtractNvdReferenceLinks(unittest.TestCase):
+    """extract_nvd_reference_links() (cycle 79) -- parses NVD's `references`
+    array for Vendor Advisory/Patch/Release Notes tagged links only."""
+
+    def test_wanted_tags_kept(self):
+        nvd_cve = {"references": [
+            {"url": "https://vendor.example/advisory", "tags": ["Vendor Advisory"]},
+            {"url": "https://vendor.example/patch", "tags": ["Patch"]},
+            {"url": "https://vendor.example/notes", "tags": ["Release Notes"]},
+        ]}
+        result = extract_nvd_reference_links(nvd_cve)
+        self.assertEqual(len(result), 3)
+        self.assertEqual(result[0]["url"], "https://vendor.example/advisory")
+        self.assertEqual(result[0]["tags"], ["Vendor Advisory"])
+
+    def test_unwanted_tags_excluded(self):
+        nvd_cve = {"references": [
+            {"url": "https://third.example/x", "tags": ["Third Party Advisory"]},
+            {"url": "https://list.example/y", "tags": ["Mailing List"]},
+            {"url": "https://exploit.example/z", "tags": ["Exploit"]},
+        ]}
+        self.assertEqual(extract_nvd_reference_links(nvd_cve), [])
+
+    def test_ref_with_multiple_tags_matches_if_any_wanted(self):
+        nvd_cve = {"references": [
+            {"url": "https://vendor.example/a", "tags": ["Exploit", "Vendor Advisory"]},
+        ]}
+        result = extract_nvd_reference_links(nvd_cve)
+        self.assertEqual(len(result), 1)
+        self.assertIn("Vendor Advisory", result[0]["tags"])
+
+    def test_dedupes_by_url_and_caps_at_five(self):
+        refs = [{"url": f"https://vendor.example/{i}", "tags": ["Patch"]} for i in range(8)]
+        refs.insert(0, dict(refs[0]))  # duplicate URL should not consume an extra slot
+        nvd_cve = {"references": refs}
+        result = extract_nvd_reference_links(nvd_cve)
+        self.assertEqual(len(result), 5)
+
+    def test_missing_references_returns_empty(self):
+        self.assertEqual(extract_nvd_reference_links({}), [])
+
+    def test_malformed_input_does_not_raise(self):
+        self.assertEqual(extract_nvd_reference_links({"references": "bad"}), [])
+        self.assertEqual(extract_nvd_reference_links({"references": ["bad"]}), [])
+        self.assertEqual(extract_nvd_reference_links({"references": [{"url": None, "tags": ["Patch"]}]}), [])
+        self.assertEqual(extract_nvd_reference_links({"references": [{"url": "https://x", "tags": None}]}), [])
 
 
 class TestAppendHistory(unittest.TestCase):
