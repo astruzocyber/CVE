@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 87,
+  "total_cycles": 88,
   "implemented": [
     {
       "cycle": 1,
@@ -752,9 +752,29 @@
         "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 88,
+      "timestamp": "2026-09-11T11:02:00Z",
+      "title": "REJECTED-by-NVD indicator in table view",
+      "description": "Card view has shown a 'REJECTED BY NVD' badge since cycle 77 (vuln_status == 'Rejected' means NVD has withdrawn the CVE ID -- scores may be stale) and cycle 81 added a board-wide 'Hide rejected CVEs' filter on the same field, but the dense table view (cycle 76) never surfaced this signal at all -- an analyst bulk-scanning table view (with the hide-rejected filter off) had zero visual cue that a row's CVSS/EPSS/risk scores might be stale/meaningless. Added a dimmed row (.table-row-rejected, opacity 0.6) and a small inline REJECTED tag next to the CVE ID link, reusing the same vuln_status field and striped color treatment as the existing card badge. Pure frontend change: no new API calls, no backend/schema changes.",
+      "commit_sha": "badf085",
+      "validation": {
+        "node_check": "pass",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "97/97 pass (unchanged, no aggregation logic touched)",
+        "browser_smoke_test": "pass -- served production docs/ via http.server, loaded live dashboard (603 alerts, 0 currently Rejected). Confirmed zero regression: 603 cards/rows render, search filter for wordpress still narrows to 154/603. Injected a synthetic Rejected alert client-side (allAlerts[0].vuln_status='Rejected') to confirm new table row class (.table-row-rejected), REJECTED tag, and computed opacity 0.6 actually render correctly."
+      },
+      "rate_limit_event": false,
+      "rejected_alternatives": [
+        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-87.",
+        "Full risk_score history array -- deferred, storage-growth risk.",
+        "EPSS percentile / by_first_seen_age histograms -- deferred, marginal value.",
+        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
+      ]
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T10:30:00Z",
+  "last_cycle_at": "2026-09-11T11:02:00Z",
   "stopped": false
 }

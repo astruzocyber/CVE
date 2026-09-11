@@ -3235,3 +3235,35 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `4962a4d` — "Cycle 87: Severity color-coding on CVSS cell in table view" — pushed to `origin/main` (`d1aafe9..4962a4d`).
 
 **Updated state:** `total_cycles`: 86 → 87. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 88 — 2026-09-11T11:02:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, clean tree), `git log --oneline -5`, full `.agent/state.json` (total_cycles=87, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 6` (all recent CI/Pages runs `completed success`, no 429/throttle signals). Inspected `docs/data/alerts.json` schema (603 alerts, all fields listed) and cross-referenced usage counts against `docs/app.js` for every field -- all fields have >=5 references except none at zero (cycle 86 closed the last zero-reference field, `cvss_version`). Shifted search to the same category cycle 83 and 87 mined successfully: card-view-only affordances silently missing from the dense table view. Found `vuln_status === "Rejected"` (card view's "REJECTED BY NVD" badge since cycle 77, plus cycle 81's board-wide hide-rejected filter) had zero table-view representation.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **REJECTED-by-NVD indicator in table view** (chosen) — 5/5/4. Confirmed via direct code read that `renderCard()` renders a striped "REJECTED BY NVD" badge (`.badge.rejected`) and `applyFiltersAndRender()` has a hide-rejected filter checkbox (cycle 81), both built on `vuln_status === "Rejected"`, but `renderTable()` had zero reference to `vuln_status` anywhere -- an analyst using table view for bulk scanning (with the hide-rejected filter left off, the default) had no way to know a row's CVSS/EPSS/risk scores might be stale from an NVD-withdrawn CVE ID. Very low validation risk: reuses the exact existing `vuln_status` field and mirrors the card badge's striped color treatment, no new logic/thresholds to get wrong.
+2. GHSA/Dependabot coverage expansion — still flagged as needing human input on actual tech stack, deferred cycles 56-87.
+3. Full risk_score history array (time series per CVE) — still deferred, unbounded schema/storage growth risk.
+4. EPSS percentile / by_first_seen_age histograms — still marginal value vs. chosen candidate.
+5. Any paid/threat-intel enrichment — rejected on principle, violates the zero-cost constraint.
+
+**Implemented:** Candidate 1.
+- `docs/app.js`: `renderTable()` now computes `isRejected = a.vuln_status === "Rejected"`, applies a `table-row-rejected` class to the `<tr>` when true, and appends a small inline `<span class="table-rejected-tag">REJECTED</span>` next to the CVE ID link (mirrors the card badge's tooltip text).
+- `docs/style.css`: new `.table-row-rejected` rule (opacity 0.6, dims the whole row without a heavy per-cell background) and `.table-rejected-tag` rule (same striped gradient + border treatment as the existing `.badge.rejected`, scaled down for inline table use), placed directly adjacent to `.badge.rejected` for visual/maintenance consistency.
+- No `scripts/aggregate.py`/schema/data changes — pure frontend surfacing of a field already extracted since cycle 77.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → exit 0.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity check; no Python files touched this cycle).
+- `python3 -m unittest discover -s scripts -p 'test_*.py'` → **97/97 tests passed** (unchanged — no aggregation/scoring logic touched, pure frontend change).
+- No live `aggregate.py` run needed (no new fields, no schema changes, no backend code touched) — existing committed `docs/data/alerts.json` (603 alerts, 0 currently `vuln_status=="Rejected"`) used directly for the browser smoke test.
+- Browser smoke test: served production `docs/` via `python3 -m http.server` (background process, port 8951), drove it live via `mcp__browser_exec` (CDP, real Chrome). First confirmed zero regression on real data: 603 cards render (`603 of 603 alerts`), switched to table view -- 603 rows render, 0 with `.table-row-rejected` (correct, matches the 0-Rejected real dataset), search filter for "wordpress" still correctly narrows table rows to 154/603. Then injected a synthetic `vuln_status: "Rejected"` alert client-side (`allAlerts[0] = Object.assign(...)` + `applyFiltersAndRender()`) to directly verify the new code path: confirmed the row gained the `table-row-rejected` class, the `.table-rejected-tag` element rendered with text "REJECTED", and `getComputedStyle(row).opacity` read `"0.6"` exactly as coded.
+- Deployed: commit `badf085` pushed to `origin/main`. CI Data & Frontend Validation run `34592086274` completed success (11s); pages-build-deployment run `34592084536` in progress at time of check (prior deploy history shows consistent success).
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (needs human input, deferred cycles 56-87); full risk_score history array (deferred, storage-growth risk); EPSS percentile / by_first_seen_age histograms (deferred, marginal value); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (pure frontend change, no live aggregation run required).
+
+**Commit SHA:** `badf085` — "Cycle 88: REJECTED-by-NVD indicator in table view" — pushed to `origin/main` (`47a670b..badf085`).
+
+**Updated state:** `total_cycles`: 87 → 88. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
