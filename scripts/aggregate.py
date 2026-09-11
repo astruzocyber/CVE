@@ -1076,7 +1076,7 @@ def compute_stats(alerts):
 HISTORY_CSV_HEADER = (
     "timestamp,total_alerts,kev_count,kev_overdue_count,kev_ransomware_count,"
     "avg_epss,avg_risk_score,critical_count,high_count,avg_cvss_score,kev_due_soon_count,"
-    "medium_count,low_count"
+    "medium_count,low_count,new_alerts_count"
 )
 
 
@@ -1116,6 +1116,10 @@ def append_history(stats):
         # additive-schema self-heal pattern as every prior extension.
         str(by_severity.get("medium", "")),
         str(by_severity.get("low", "")),
+        # Alert-velocity signal (new_alerts_count): see stats["new_alerts_count"]
+        # comment in main() for full rationale. Trailing column, same additive-
+        # schema self-heal pattern as every prior trend.csv extension.
+        "" if stats.get("new_alerts_count") is None else str(stats["new_alerts_count"]),
     ]
 
     # Schema-drift self-heal: when a column (e.g. avg_risk_score) is added to the
@@ -1357,6 +1361,20 @@ def main():
 
     cumulative = sorted(existing_by_key.values(), key=lambda a: a.get("first_seen", ""), reverse=True)
     stats = compute_stats(cumulative)
+    # Alert-velocity signal: how many brand-new CVEs this single run surfaced
+    # (already computed above as `new_alerts`, written separately to
+    # NEW_ALERTS_PATH for the notification/feed pipeline) -- distinct from
+    # every existing stats.json/trend.csv field, all of which describe the
+    # *cumulative* tracked population's current composition (severity mix,
+    # KEV counts, averages) but none of which answer "is intake accelerating
+    # or slowing down over time". A security lead watching the trend chart
+    # could previously only infer intake rate indirectly by eyeballing
+    # total_alerts deltas between rows (noisy: total_alerts can also shrink
+    # when suppressions/resolutions happen, silently masking a real intake
+    # spike). Zero new API calls or dependencies -- new_alerts is already
+    # computed by this same function every run, this just also surfaces its
+    # count in stats.json/trend.csv instead of only in new_alerts.json.
+    stats["new_alerts_count"] = len(new_alerts)
 
     save_json_file(ALERTS_PATH, cumulative)
     save_json_file(SEEN_PATH, sorted(seen_ids))

@@ -1271,6 +1271,9 @@ async function loadTrendChart() {
     // rows won't have index 11/12 at all -- treat missing same as empty.
     const mediumCount = rows.map((r) => (r[11] === "" || r[11] === undefined ? null : Number(r[11])));
     const lowCount = rows.map((r) => (r[12] === "" || r[12] === undefined ? null : Number(r[12])));
+    // new_alerts_count column added in a later schema revision; older rows
+    // won't have index 13 at all -- treat missing same as empty.
+    const newAlertsCount = rows.map((r) => (r[13] === "" || r[13] === undefined ? null : Number(r[13])));
 
     document.getElementById("trend-section").hidden = false;
     new Chart(canvas, {
@@ -1381,6 +1384,15 @@ async function loadTrendChart() {
             borderColor: "#8ecae6",
             backgroundColor: "rgba(142,202,230,0.12)",
             yAxisID: "y2",
+            tension: 0.2,
+            hidden: true,
+          },
+          {
+            label: "New alerts this run",
+            data: newAlertsCount,
+            borderColor: "#06d6a0",
+            backgroundColor: "rgba(6,214,160,0.12)",
+            yAxisID: "y",
             tension: 0.2,
             hidden: true,
           },
