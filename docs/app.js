@@ -605,9 +605,79 @@ function parseRequirementsTxt(text) {
   return names;
 }
 
+function parseGoMod(text) {
+  // go.mod: module names appear either on a single "require x/y v1.2.3" line
+  // or inside a "require (\n  x/y v1.2.3\n  ...\n)" block. We only need the
+  // module path (last path segment is usually the meaningful package name,
+  // but we keep the full path too since alert descriptions/affected fields
+  // may reference either form) -- add both the full path and its last
+  // segment to maximize substring-match recall against alert text.
+  const names = new Set();
+  const lines = text.split("\n");
+  let inRequireBlock = false;
+  for (let raw of lines) {
+    const line = raw.trim();
+    if (/^require\s*\(/.test(line)) { inRequireBlock = true; continue; }
+    if (inRequireBlock && line.startsWith(")")) { inRequireBlock = false; continue; }
+    let m = null;
+    if (inRequireBlock) {
+      m = line.match(/^([^\s]+)\s+v[0-9]/);
+    } else {
+      m = line.match(/^require\s+([^\s]+)\s+v[0-9]/);
+    }
+    if (m) {
+      const modPath = m[1].toLowerCase();
+      names.add(modPath);
+      const segments = modPath.split("/");
+      names.add(segments[segments.length - 1]);
+    }
+  }
+  return names;
+}
+
+function parseTomlDependencyNames(text) {
+  // Minimal TOML dependency-table parser for pyproject.toml (Poetry/PEP 621)
+  // and Pipfile -- not a full TOML parser (out of scope for a client-side
+  // dependency-name extractor), just enough to pull package names out of the
+  // handful of table shapes these files actually use:
+  //   [tool.poetry.dependencies]        name = "^1.2" | name = { version = "..." }
+  //   [project]                         dependencies = ["name>=1.0", ...]
+  //   [packages] / [dev-packages]       name = "*"    (Pipfile)
+  const names = new Set();
+  const lines = text.split("\n");
+  const depTableRe = /^\[(tool\.poetry\.(dependencies|dev-dependencies|group\.[^.\]]+\.dependencies)|packages|dev-packages)\]/;
+  let inDepTable = false;
+  for (let raw of lines) {
+    const line = raw.trim();
+    if (line.startsWith("[")) {
+      inDepTable = depTableRe.test(line);
+      continue;
+    }
+    if (inDepTable) {
+      const m = line.match(/^["']?([A-Za-z0-9._-]+)["']?\s*=/);
+      if (m && m[1].toLowerCase() !== "python") names.add(m[1].toLowerCase());
+    }
+  }
+  // PEP 621 [project] dependencies = ["name>=1.0", "name2"] array form --
+  // scan the whole text since it's a single bracketed array, not a table.
+  const arrayMatch = text.match(/dependencies\s*=\s*\[([^\]]*)\]/s);
+  if (arrayMatch) {
+    const items = arrayMatch[1].match(/["']([^"']+)["']/g) || [];
+    for (const item of items) {
+      const nameMatch = item.replace(/["']/g, "").match(/^([A-Za-z0-9._-]+)/);
+      if (nameMatch) names.add(nameMatch[1].toLowerCase());
+    }
+  }
+  return names;
+}
+
 function detectAndParseDependencyFile(text) {
   const trimmed = text.trim();
   if (trimmed.startsWith("{")) return parsePackageJson(trimmed);
+  if (/^module\s+\S+/m.test(trimmed) && /^go\s+[0-9]/m.test(trimmed)) return parseGoMod(trimmed);
+  if (/^\[tool\.poetry/m.test(trimmed) || /^\[project\]/m.test(trimmed) || /^\[packages\]/m.test(trimmed) || /^\[dev-packages\]/m.test(trimmed)) {
+    return parseTomlDependencyNames(trimmed);
+  }
   return parseRequirementsTxt(trimmed);
 }
 
