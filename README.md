@@ -1,5 +1,8 @@
 # CVE / KEV / Dependabot Alert Dashboard
 
+[![CVE/KEV/Dependabot Alert Aggregation](https://github.com/astruzocyber/CVE/actions/workflows/cve-alerts.yml/badge.svg)](https://github.com/astruzocyber/CVE/actions/workflows/cve-alerts.yml)
+[![CI Data & Frontend Validation](https://github.com/astruzocyber/CVE/actions/workflows/ci.yml/badge.svg)](https://github.com/astruzocyber/CVE/actions/workflows/ci.yml)
+
 A fully automated, zero-cost vulnerability alert system. Runs entirely on free
 tiers: GitHub Actions (scheduled cron), free public security APIs, and GitHub
 Pages for the dashboard. No database, no server, no paid services.
