@@ -1,5 +1,119 @@
 [
   {
+    "cve_id": "CVE-2026-53952",
+    "description": "GetSimple CMS is a content management system (CMS), and GetSimple CMS CE is the community edition of that CMS. A logic flaw in GetSimple CMS (v3.4.0a and below) and GetSimpleCMS-CE (v3.3.22 and below) allows unauthenticated attackers to create a new administrator account. The application features an automated security control designed to delete the sensitive `admin/setup.php` file post-installation. However, this control is neutralized by a self-exclusion bug within the deletion logic, leaving the setup script accessible for unauthorized account creation even after a legitimate installation is completed. As of time of publication, no known patched versions are available.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-285",
+      "CWE-306",
+      "CWE-489"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:17:14.060",
+    "nvd_last_modified": "2026-09-11T20:17:14.060",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-12T00:14:11.866327+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-7888",
+    "description": "Concrete CMS below 9.5.3 is vulnerable to PHP Object Injection via unserialize()\ncalls in the Workflow, Form block, and File/Set components that lack the\nallowed_classes restriction. The Form block and File/Set sinks were addressed in\n9.5.2; the Workflow component sinks were addressed in 9.5.3. An unauthenticated\nattacker may trigger arbitrary PHP object instantiation if a malicious serialized\npayload has been placed in the database. Thanks XananasX7 and Sanjorn Keeratirungsan\n(dizconnect) for independently reporting the original components, and sh4d0byss for\nreporting the Workflow component wasn't fixed in 9.5.2. The Concrete CMS security team gave this\nvulnerability a CVSS v.4.0 score of 8.4 with vector CVSS:4.0/AV:L/AC:L/AT:N/PR:H/UI:N/\nVC:H/VI:H/VA:H/SC:N/SI:N/SA:N.",
+    "cvss_score": 8.4,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-502"
+    ],
+    "epss_score": 0.00175,
+    "epss_percentile": 0.07081,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 29.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.4,
+      "cvss_component": 29.4,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00175,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-7888",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "8fe9708072c3815a5df719b592e4b23b43b4ff7a"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-06-03T19:16:38.910",
+    "nvd_last_modified": "2026-09-11T20:18:54.320",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-12T00:14:11.864896+00:00"
+  },
+  {
     "cve_id": "CVE-2026-87654",
     "description": "Buffer overflow in ANGLE in Google Chrome on on Windows prior to 153.0.8010.36 allowed a remote attacker to execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity: High)",
     "cvss_score": 9.6,
@@ -34,8 +148,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00361,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -102,8 +216,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00316,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -170,8 +284,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.2,
+    "epss_score_prev": 0.00276,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -238,8 +352,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00358,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -306,8 +420,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.2,
+    "epss_score_prev": 0.00266,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -374,8 +488,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.8,
+    "epss_score_prev": 0.00395,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -442,8 +556,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.2,
+    "epss_score_prev": 0.00366,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -510,8 +624,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00316,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -578,8 +692,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00316,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -646,8 +760,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00308,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -714,7 +828,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 51.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -724,8 +838,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-11T19:17:43.583",
-    "nvd_last_modified": "2026-09-11T19:17:43.583",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-11T21:17:12.010",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -767,7 +881,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -777,8 +891,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-11T19:17:43.337",
-    "nvd_last_modified": "2026-09-11T19:17:43.337",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-11T21:17:02.457",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -820,7 +934,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -830,8 +944,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-11T19:17:43.207",
-    "nvd_last_modified": "2026-09-11T19:17:43.207",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-11T21:17:11.897",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -873,7 +987,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -883,7 +997,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-11T17:18:58.907",
-    "nvd_last_modified": "2026-09-11T17:35:59.770",
+    "nvd_last_modified": "2026-09-11T21:17:13.967",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1405,7 +1519,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-11T04:18:04.617",
-    "nvd_last_modified": "2026-09-11T13:24:07.133",
+    "nvd_last_modified": "2026-09-11T21:17:58.797",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1460,7 +1574,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-11T04:17:58.947",
-    "nvd_last_modified": "2026-09-11T13:24:07.133",
+    "nvd_last_modified": "2026-09-11T21:17:19.997",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1571,7 +1685,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-11T04:17:34.990",
-    "nvd_last_modified": "2026-09-11T13:24:07.133",
+    "nvd_last_modified": "2026-09-11T21:17:09.150",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1627,7 +1741,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-11T04:17:24.600",
-    "nvd_last_modified": "2026-09-11T13:24:07.133",
+    "nvd_last_modified": "2026-09-11T21:17:08.770",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1682,7 +1796,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-11T04:17:20.480",
-    "nvd_last_modified": "2026-09-11T13:24:07.133",
+    "nvd_last_modified": "2026-09-11T21:17:08.637",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1793,7 +1907,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-11T00:19:23.037",
-    "nvd_last_modified": "2026-09-11T13:24:07.133",
+    "nvd_last_modified": "2026-09-11T21:17:16.053",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11279,7 +11393,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-09T08:17:21.997",
-    "nvd_last_modified": "2026-09-09T15:33:34.467",
+    "nvd_last_modified": "2026-09-11T21:17:15.663",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11671,7 +11785,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-09T03:17:23.157",
-    "nvd_last_modified": "2026-09-09T15:33:47.627",
+    "nvd_last_modified": "2026-09-11T21:17:08.367",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -18282,10 +18396,30 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T14:17:24.913",
-    "nvd_last_modified": "2026-09-09T17:17:38.100",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-09-11T20:33:42.980",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "xenforo",
+        "product": "xenforo",
+        "fixed": "2.3.13",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://xenforo.com/community/threads/security-fixes-released-for-all-xenforo-and-media-gallery-versions-2-2-0-2-3-12.239856/",
+        "tags": [
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://xenforo.com/community/threads/xenforo-2-3-13-and-add-ons-released-includes-security-fixes.239857/",
+        "tags": [
+          "Release Notes"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T16:11:54.861261+00:00"
@@ -22136,22 +22270,23 @@
     "description": "Issue summary: OpenSSL CMP password based protection verification only\nchecks whether the protectionAlg parameter was not NULL and not its\nASN.1 type, before treating it as a PBMParameter. A crafted message can\ncontain a parameter of a different type, which is then dereferenced as an\ninvalid pointer.\n\nImpact summary: A remote, unauthenticated attacker can crash an application\nacting as a CMP server that accepts PBM-protected messages, or a CMP client\ntalking to a malicious or intercepted CMP server, resulting in a Denial of\nService.\n\nCWE: CWE-476: NULL Pointer Dereference\n\nDescription: When verifying the password-based MAC protection of a CMP\nmessage, OpenSSL library reads the protectionAlg algorithm parameter with\nX509_ALGOR_get0(), which returns both the parameter type and its value\npointer. The value is then cast to an ASN1_STRING and treated as the\nexpected PBMParameter after only checking that pointer is not NULL. The\nparameter type returned by X509_ALGOR_get0() was never consulted.\n\nThis happens during protection verification, before any MAC is computed, so\nno knowledge of the PBM shared secret is required; the only precondition is\nthat PBM verification is reachable. On the server side this is reached from\nOSSL_CMP_SRV_process_request() for any application that stands up a CMP\nserver accepting PBM-protected messages, and on the client side from CMP\nresponse validation against a malicious or on-path (MITM) server. The\nreliable consequence is a denial of service; there is no memory disclosure,\nno controlled memory write, and no path to code execution. CMP is a\nspecialized feature that an application must explicitly enable.\n\nFIPS impact: no\nAs the CMP code lives outside the FIPS module boundary, no FIPS modules\nare affected by this CVE.",
     "cvss_score": 7.5,
     "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-476"
+    ],
     "epss_score": 0.0133,
     "epss_percentile": 0.69396,
     "kev": false,
     "kev_date_added": null,
     "kev_due_date": null,
-    "affected": [
-      "openssl/openssl"
-    ],
-    "matched_keywords": [],
-    "source": "nvd",
-    "published": "2026-08-25T13:19:26.543",
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485774+00:00",
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.7,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -22165,36 +22300,108 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "kev_notes": null,
     "risk_score_prev": 26.7,
+    "epss_score_prev": 0.0133,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.0133,
-    "vuln_status": null,
-    "nvd_fix_versions": [],
-    "nvd_reference_links": []
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-25T13:19:26.543",
+    "nvd_last_modified": "2026-09-11T21:17:12.460",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.0.22",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.4.7",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.5.8",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.6.4",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "4.0.2",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/openssl/openssl/commit/37882aa2e0256e1072442a8f62f7db45b995c45b",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/a17cc8d612ecff6d94a9b7ca8b5283ddf5ff570e",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/a1f348ccb328c3afbd4ba6883f9b7c813c043259",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/a7af46a92d0ce19a90e669ef56d2576a07924226",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/cdacfff557389abfa9e4615abded2ec984517d6c",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-05T15:02:54.485774+00:00"
   },
   {
     "cve_id": "CVE-2026-63075",
     "description": "Issue summary: When OpenSSL processes QUIC traffic from a peer that repeatedly\nsends ack-eliciting packets while not acknowledging ACK-only responses, the\nQUIC stack can retain ACK-only packet metadata for the lifetime of the\nconnection.\n\nImpact summary: A remote peer that can complete a QUIC handshake can\ncause connection-scoped memory growth which may lead to Denial of Service\nthrough memory exhaustion, especially with sustained traffic or many concurrent\nQUIC connections.\n\nCWE: CWE-770: Allocation of Resources Without Limits or Throttling\n\nDescription: When the OpenSSL QUIC stack sends an ACK-only packet,\nthere is no requirement by the QUIC protocol that the peer will acknowledge\nthat ACK-only packet (i.e. it is itself not ack-eliciting). However, the OpenSSL\nimplementation stores the metadata about the ACK frames regardless.\nIn and of itself that's ok, but if a malicious peer establishes a connection, and\nthen drives the connection such that ACK-only packets are forced from the \nOpenSSL implementation peer (i.e., by sending numerous PING frames),\nand then withholding any subsequent acks for ack-eliciting data, like\nlegitimate data, said malicious peer can force inappropriate memory growth\non the OpenSSL peer, potentially leading to a Denial of Service.\n\nThe fix is to ensure that we account for the transmission of the ACK-only\npacket in the packet histories high and low watermark without actually storing\nthe ACK-only packet metadata itself.\n\nFIPS impact: no\nThe OpenSSL FIPS module is not affected as the QUIC code is\noutside the FIPS module boundary.",
     "cvss_score": 7.5,
     "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-770"
+    ],
     "epss_score": 0.0048,
     "epss_percentile": 0.39991,
     "kev": false,
     "kev_date_added": null,
     "kev_due_date": null,
-    "affected": [
-      "openssl/openssl"
-    ],
-    "matched_keywords": [],
-    "source": "nvd",
-    "published": "2026-08-25T13:19:26.413",
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485771+00:00",
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -22208,36 +22415,102 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "kev_notes": null,
     "risk_score_prev": 26.4,
+    "epss_score_prev": 0.0048,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.0048,
-    "vuln_status": null,
-    "nvd_fix_versions": [],
-    "nvd_reference_links": []
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-25T13:19:26.413",
+    "nvd_last_modified": "2026-09-11T21:17:05.403",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.4.7",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.5.8",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.6.4",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "4.0.2",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/openssl/openssl/commit/7308946576b12e64b8be53bcf0a120354b2b42bc",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/7c98d79738549df92868e7dd9be4bbf061eed709",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/bf84721c2548351176e367e6de505792f0118dc6",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/c902e5f16d6a9e130e96d3ca6d8f64d71652e393",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://openssl-library.org/news/secadv/20260825.txt",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-05T15:02:54.485771+00:00"
   },
   {
     "cve_id": "CVE-2026-63073",
     "description": "Issue summary: OpenSSL CMP response validation passed an unexpected response\nsender distinguished name directly as the format string to `ERR_raise_data()`.\n\nImpact summary: A malicious or intercepted CMP endpoint can crash a CMP client\nthat enforces an expected sender or uses a pinned server certificate whose\nsubject becomes the default expected sender.\n\nCWE: CWE-134 (Use of Externally-Controlled Format String)\n\nDescription: When validating a received CMP message, ossl_cmp_msg_check_update()\nconverts the peer-supplied sender distinguished name with X509_NAME_oneline()\nand passes it directly as the format argument to ERR_raise_data(). Percent\ncharacters survive the conversion, so a sender DN such as \"CN=%s%n\" reaches\nBIO_vsnprintf() as an attacker-controlled format string with no matching variadic\narguments. This path is only reached when the caller configures an expected\nsender or pins a server certificate, which is the normal configuration for a\nCMP client validating server responses.\n\nSince the attacker controls the format string but none of the variadic\narguments, such specifiers as %s and %n dereference or write through unrelated\nstack contents and crash the client. The reliable consequence is a denial of\nservice, when the response comes from a malicious or intercepted CMP endpoint.\nThere is no controlled memory write, arbitrary-address read, or reliable path\nto remote code execution.\n\nFIPS impact: no\n\nNo FIPS modules are affected by this issue, as the CMP protocol\nimplementation is outside the OpenSSL FIPS module boundary.",
     "cvss_score": 9.8,
     "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-134"
+    ],
     "epss_score": 0.00929,
     "epss_percentile": 0.58536,
     "kev": false,
     "kev_date_added": null,
     "kev_due_date": null,
-    "affected": [
-      "openssl/openssl"
-    ],
-    "matched_keywords": [],
-    "source": "nvd",
-    "published": "2026-08-25T13:19:26.147",
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485768+00:00",
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.7,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -22251,36 +22524,102 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "kev_notes": null,
     "risk_score_prev": 34.7,
+    "epss_score_prev": 0.00929,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.00929,
-    "vuln_status": null,
-    "nvd_fix_versions": [],
-    "nvd_reference_links": []
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-25T13:19:26.147",
+    "nvd_last_modified": "2026-09-11T21:16:45.633",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.4.7",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.5.8",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.6.4",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "4.0.2",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/openssl/openssl/commit/0cc20b322639919aa423e90799d9a57c3b4b76ca",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/6a0acc072b4d37a7cac1252a29c1ce1f00c5ec29",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/7eb2e3ec9d1d4f35c8022fccd4b03398b3f33e21",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/a7e5a6eea8fd3ccca6b6fbba031a5fbf8a3d93b4",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://openssl-library.org/news/secadv/20260825.txt",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-05T15:02:54.485768+00:00"
   },
   {
     "cve_id": "CVE-2026-63072",
     "description": "Issue summary: OpenSSL CMS decryption sizes the key-unwrap output buffer based\non querying the unwrapped key size, but the AES-WRAP-PAD unwrap primitive\ncan write and cleanse more bytes than that query reports, causing an 8-byte\nout-of-bounds heap write.\n\nImpact summary: An attacker who supplies a crafted CMS message can trigger a\ndeterministic 8-byte out-of-bounds heap write when the victim decrypts it\nwith CMS_decrypt(), corrupting the heap and typically resulting in a Denial\nof Service.\n\nCWE: CWE-787: Out-of-bounds Write\n\nDescription: The key-wrap OID is potentially attacker-controlled on the wire.\nCMS unwrapping allows both id-aesNNN-wrap-pad and id-aesNNN-wrap ciphers.\nAn attacker can take a legitimate message and change a single OID byte to\nselect the padded variant while leaving the message otherwise valid. Since\nthe unwrap key is derived from the recipient's private operation (ECDH key\nagreement or ML-KEM decapsulation), the RFC 5649 integrity check cannot\npass, and the decryption fails with integrity failure.\n\nThe write is a fixed-size (8-byte), fixed-value (zero) heap overflow\nimmediately past the allocation, requires no special configuration, and is\nreachable from the public CMS_decrypt() function. The consequence is\na heap corruption leading to a Denial of Service. The fix in the CMS code\nsizes the unwrap output buffer for the worst case so a failed unwrap cannot\nwrite past the allocation.\n\nFIPS impact: no\n\nAs the CMS code lives outside the FIPS module boundary, no FIPS\nmodules are affected by this CVE.",
     "cvss_score": 7.5,
     "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-787"
+    ],
     "epss_score": 0.00612,
     "epss_percentile": 0.47342,
     "kev": false,
     "kev_date_added": null,
     "kev_due_date": null,
-    "affected": [
-      "openssl/openssl"
-    ],
-    "matched_keywords": [],
-    "source": "nvd",
-    "published": "2026-08-25T13:19:26.010",
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485764+00:00",
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -22294,36 +22633,108 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "kev_notes": null,
     "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00612,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.00612,
-    "vuln_status": null,
-    "nvd_fix_versions": [],
-    "nvd_reference_links": []
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-25T13:19:26.010",
+    "nvd_last_modified": "2026-09-11T21:16:34.287",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.0.22",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.4.7",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.5.8",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.6.4",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "4.0.2",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/openssl/openssl/commit/2a3dac874c8057c1f0186849bf1ede1ae7b6b756",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/87784ad619af36b8807c2044b3940006fccc1e42",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/9530a5fd1aacaeccdced4478ea2340a480613335",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/9ec2f6d2ae2bcad907cf7ee38584855bafe4979a",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/a0c8ec557d9cac078f032d76cdf684fe743eb382",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-05T15:02:54.485764+00:00"
   },
   {
     "cve_id": "CVE-2026-54874",
     "description": "Issue summary: Receiving a DTLS record for a future epoch while a handshake\nis in progress causes OpenSSL to buffer far more memory than the record\nitself requires.\n\nImpact summary: A peer can use a small amount of network traffic to make an\nOpenSSL DTLS endpoint retain a disproportionately large amount of memory,\nwhich may lead to a Denial of Service.\n\nCWE: CWE-405: Asymmetric Resource Consumption (Amplification)\n\nDescription: While a DTLS handshake is in progress, a peer may legitimately\nhave already moved on to the next epoch (for example, having sent its\nChangeCipherSpec and Finished messages) before the local endpoint has\nprocessed the same transition, typically because of reordering on the\nunderlying UDP transport. OpenSSL buffers such early records so that they\ncan be processed once the local endpoint catches up.\n\nBuffering a record currently retains the entire read buffer it arrived in,\nwhich is sized to hold the largest possible DTLS record (around 16\nkilobytes), rather than just the bytes that make up the record itself. Up\nto 100 such records may be buffered per connection. As a result, a peer\nthat sends a stream of small forged records claiming to belong to the next\nepoch can cause an OpenSSL DTLS endpoint to retain around 1.7 megabytes of\nmemory, despite sending only a small fraction of that amount of data over\nthe network.\n\nAn attacker therefore gains a memory amplification factor of around 1200,\nand can multiply the effect across as many associations as it is able to\nopen, making this a remote memory exhaustion Denial of Service risk for\nDTLS servers. Since the memory retained per connection remains bounded,\nand any limit an application already places on the number of concurrent\nassociations also bounds the total exposure, this issue has been assessed\nas Low severity.\n\nFIPS impact: no\n\nNo FIPS modules are affected by this issue as the affected code is outside\nthe OpenSSL FIPS module boundary.\n\nOpenSSL 4.0, 3.6, 3.5, 3.4, 3.0, 1.1.1 and 1.0.2 are vulnerable to this\nissue.\n\nOpenSSL 4.0 users should upgrade to OpenSSL 4.0.2.\nOpenSSL 3.6 users should upgrade to OpenSSL 3.6.4.\nOpenSSL 3.5 users should upgrade to OpenSSL 3.5.8.\nOpenSSL 3.4 users should upgrade to OpenSSL 3.4.7.\nOpenSSL 3.0 users should upgrade to OpenSSL 3.0.22.\n\nPremium support customers only:\nOpenSSL 1.1.1 users should upgrade to OpenSSL 1.1.1zi\nOpenSSL 1.0.2 users should upgrade to OpenSSL 1.0.2zr\n\nThis issue was reported on 18 May 2026 by Amazon Web Services.\nThe fix has been developed by Matt Caswell.\n\n-- cut (non-publishing metadata for internal use) --\nReported by: Amazon Web Services\nFixed by: Matt Caswell",
     "cvss_score": 7.5,
     "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-405"
+    ],
     "epss_score": 0.00516,
     "epss_percentile": 0.423,
     "kev": false,
     "kev_date_added": null,
     "kev_due_date": null,
-    "affected": [
-      "openssl/openssl"
-    ],
-    "matched_keywords": [],
-    "source": "nvd",
-    "published": "2026-08-25T13:19:24.033",
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485761+00:00",
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.4,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -22337,14 +22748,85 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "kev_notes": null,
     "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00516,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.00516,
-    "vuln_status": null,
-    "nvd_fix_versions": [],
-    "nvd_reference_links": []
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-25T13:19:24.033",
+    "nvd_last_modified": "2026-09-11T21:16:28.067",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "1.0.2zr",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "1.1.1zi",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.0.22",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.4.7",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.5.8",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/openssl/openssl/commit/4808b5d64176451f3d93d87d0ac9c81a9b13fb23",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/7110cb2f75806d0bf809eb2f90790d477900be40",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/a0c8ec557d9cac078f032d76cdf684fe743eb382",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/cc0c6710917cd5eec001b297355d2ba723505107",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/f52ffc11b90737ac89083909618dc2e1f42c561c",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-05T15:02:54.485761+00:00"
   },
   {
     "cve_id": "CVE-2026-18798",
@@ -22394,22 +22876,23 @@
     "description": "Issue summary: In a server or client configuration with RFC7250 Raw Public Keys (RPKs)\nenabled, and only the private key (with no associated certificate) configured locally,\na NULL pointer dereference may occur when the remote peer solicits raw public keys and\nalso sends the typically omitted \"signature_algorithms_cert\" TLS extension.\n\nImpact summary: The impact is limited to a possible Denial of Service as a result of\nan application abort, no data disclosure or remote command execution are possible.\n\nCWE: CWE-476: NULL Pointer Dereference\n\nDescription: While a passing comment in sample code in the documentation suggests\nthat key-only RPK configurations are supported, the best-practice RPK configuration\nis to always configure a corresponding certificate (possibly self-signed or\nsigned by any convenient CA).\n\nWhen the private key is configured along with a matching certificate, the\n\"signature_algorithms_cert\" extension is handled reliably even without the\nfix, and peer clients or servers that don't support raw public keys may be\nable to complete a TLS connection by pinning or verifying the corresponding\ncertificate or its public key.\n\nDeployments that prefer to configure just a private key with no certificate\nneed to upgrade to an updated release as noted below.\n\nFIPS impact: no\n\nNo FIPS modules are affected by this issue, as the SSL protocol implementation\nis outside the OpenSSL FIPS module boundary.",
     "cvss_score": 7.5,
     "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-476"
+    ],
     "epss_score": 0.00984,
     "epss_percentile": 0.60293,
     "kev": false,
     "kev_date_added": null,
     "kev_due_date": null,
-    "affected": [
-      "openssl/openssl"
-    ],
-    "matched_keywords": [],
-    "source": "nvd",
-    "published": "2026-08-25T13:17:49.533",
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485754+00:00",
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 26.6,
     "risk_score_breakdown": {
       "cvss_raw": 7.5,
@@ -22423,14 +22906,79 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "kev_notes": null,
     "risk_score_prev": 26.6,
+    "epss_score_prev": 0.00984,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.00984,
-    "vuln_status": null,
-    "nvd_fix_versions": [],
-    "nvd_reference_links": []
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-25T13:17:49.533",
+    "nvd_last_modified": "2026-09-11T21:14:35.873",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.4.7",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.5.8",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "3.6.4",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "4.0.2",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/openssl/openssl/commit/1e8c398db67404babd3e5af999bb6bd86f720c76",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/581aaa0f0a35d214740f0fe1f5283ec41f1212e1",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/d0af20478688a6aa2f59d61caa3f82136b181d7f",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/openssl/openssl/commit/dad836b071da6579510c968615848ba03cac593b",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://openssl-library.org/news/secadv/20260825.txt",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-05T15:02:54.485754+00:00"
   },
   {
     "cve_id": "CVE-2026-74901",
