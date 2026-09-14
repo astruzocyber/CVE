@@ -1245,10 +1245,35 @@ document.getElementById("view-toggle")?.addEventListener("click", () => {
   applyViewMode(currentlyTable ? "cards" : "table");
 });
 
+// Cycle 126: CSV formula-injection guard (CWE-1236 / OWASP CSV Injection).
+// Why: exportCsv() flattens fields sourced from NVD/GHSA/Dependabot/OSV --
+// descriptions, reference-link labels, affected product strings, CWE IDs,
+// etc. -- all external, non-curated text. If any such field happens to start
+// with =, +, -, @, a tab, or CR, Excel/LibreOffice/Google Sheets will treat
+// the cell as a formula when the analyst opens the exported CSV, which can
+// range from a garbled cell to (via legacy DDE-style payloads some of these
+// apps still honor) a genuine local code-execution vector -- a real risk for
+// a security-team tool whose entire purpose is exporting externally-sourced
+// text for offline triage. No prior cycle addressed this (grep of
+// .agent/log.md confirms toCsvRow has only ever had quote/comma/newline
+// escaping since it was introduced). Fix follows the standard OWASP
+// mitigation: any field whose *first* character is one of those triggers
+// gets a leading single-quote prefix, which every major spreadsheet app
+// renders as literal text instead of evaluating it as a formula, while a
+// leading quote on an already-plain-text cell is otherwise invisible/inert.
+// This intentionally does not touch JSON export (exportJson, cycle 33) or
+// the Markdown report (exportMarkdownReport, cycle 51) -- neither is opened
+// by a spreadsheet application, so the formula-injection vector does not
+// apply to them, and this stays a minimal, single-function change.
+const CSV_FORMULA_TRIGGER_RE = /^[=+\-@\t\r]/;
+function csvFormulaGuard(s) {
+  return CSV_FORMULA_TRIGGER_RE.test(s) ? `'${s}` : s;
+}
 function toCsvRow(fields) {
   return fields
     .map((f) => {
-      const s = f === null || f === undefined ? "" : String(f);
+      const raw = f === null || f === undefined ? "" : String(f);
+      const s = csvFormulaGuard(raw);
       return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
     })
     .join(",");
