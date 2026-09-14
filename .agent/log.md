@@ -4581,3 +4581,32 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `4f84cf9` -- "Cycle 135: publish JSON Schema for alerts.json data contract" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 134 -> 135. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 136 — 2026-09-14T19:14:02Z
+
+**Re-verified state before acting:** `git pull` clean at `8905c44`/`4f84cf9` (fast-forwarded to latest), `.agent/state.json` (total_cycles=135, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 15` -- all workflows `success` since cycle 132's live-verified CI fix, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T16:29:05Z (669 alerts, fresh, within schedule). Reviewed `docs/index.html` `<head>` line-by-line against the existing URL-query-param search feature (`?q=<term>`, cycle 7): found no `<link rel="search">` / OpenSearch descriptor, meaning browsers (Firefox, legacy Chrome-based) have no way to offer "Add search engine to browser" for site-specific CVE/keyword search from the omnibox.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **OpenSearch descriptor (`docs/opensearch.xml` + `<link rel="search">`)** (chosen) -- 5/5/3. Pure additive: one new static XML file (reuses existing favicon-32.png), one new `<head>` line. Zero JS/schema/pipeline/API changes, zero cost, zero risk (passive browser discovery, not blocked by existing CSP since it's a `<link>` fetch not script/style/img/connect).
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` -- still deferred, needs human input on tech stack (deferred cycles 56-135).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/opensearch.xml` (new). `docs/index.html`: added `<link rel="search" type="application/opensearchdescription+xml" title="CVE Alerts" href="opensearch.xml">` after the JSON Feed alternate link.
+
+**Validation performed (all passed):**
+- `python3 -c "import xml.dom.minidom as m; m.parse('docs/opensearch.xml')"` -> XML OK.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (669 alerts, schema OK incl. alerts.schema.json check: 0 violations, id-reference check OK, feeds OK).
+- Live browser/HTTP smoke test: served `docs/` locally on port 9099, confirmed `/opensearch.xml` returns HTTP 200 with valid parseable XML matching the OpenSearch 1.1 spec, confirmed `link[rel=search]` renders in the served `index.html`.
+- Pushed `fd36992` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34885634212` completed success (29s); Pages build/deploy `34885632581` completed success (40s).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (static frontend-only change); no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `fd36992` -- "Cycle 136: add OpenSearch descriptor for browser search-bar integration" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 135 -> 136. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

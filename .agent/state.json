@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 135,
+  "total_cycles": 136,
   "implemented": [
     {
       "cycle": 1,
@@ -1367,10 +1367,28 @@
         "pages_build": "34882183292 in_progress at check time (consistent with normal deploy latency)"
       },
       "rate_limit_event": false
+    },
+    {
+      "cycle": 136,
+      "timestamp": "2026-09-14T19:14:02Z",
+      "title": "Add OpenSearch descriptor for browser search-bar integration",
+      "description": "Dashboard already supports ?q=<term> deep-linkable search (cycle 7), but browsers had no way to discover this and offer 'Add search engine' / omnibox integration -- a real, standard, zero-cost UX affordance for a tool a security lead might want to search directly from their browser's address bar. Added docs/opensearch.xml (OpenSearch 1.1 descriptor pointing Url template at ?q={searchTerms}, self-referencing url, existing favicon-32.png as Image) and a <link rel=search> tag in docs/index.html <head>. Pure additive: new static XML file + one head line, zero JS/backend/schema/API changes, zero cost, zero risk (browsers fetch this passively, doesn't affect page render or CSP since it's not script/style/img/connect -- verified no CSP directive blocks link rel=search discovery).",
+      "commit_sha": "fd36992",
+      "validation": {
+        "xml_parse": "pass (python3 xml.dom.minidom)",
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (docs/app.js, docs/sw.js, docs/theme-init.js, sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged, no Python touched)",
+        "validate_data": "pass (669 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 9099, confirmed /opensearch.xml returns HTTP 200 with valid XML, confirmed link rel=search tag present in served index.html",
+        "ci_run": "34885634212 completed success (29s)",
+        "pages_build": "34885632581 completed success (40s)"
+      },
+      "rate_limit_event": false
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T18:39:59Z",
+  "last_cycle_at": "2026-09-14T19:14:02Z",
   "stopped": false,
   "cycles": [
     {
@@ -1640,6 +1658,24 @@
         "browser_smoke_test": "pass -- served docs/ locally on port 9066, confirmed link[rel=canonical].href resolves to https://astruzocyber.github.io/CVE/, 669/669 cards rendered via real browser navigation",
         "ci_run": "34875667849 completed success (10s)",
         "pages_build": "34875666482 in_progress/waiting at check time (consistent with normal deploy latency)"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 136,
+      "timestamp": "2026-09-14T19:14:02Z",
+      "title": "Add OpenSearch descriptor for browser search-bar integration",
+      "description": "Dashboard already supports ?q=<term> deep-linkable search (cycle 7), but browsers had no way to discover this and offer 'Add search engine' / omnibox integration -- a real, standard, zero-cost UX affordance for a tool a security lead might want to search directly from their browser's address bar. Added docs/opensearch.xml (OpenSearch 1.1 descriptor pointing Url template at ?q={searchTerms}, self-referencing url, existing favicon-32.png as Image) and a <link rel=search> tag in docs/index.html <head>. Pure additive: new static XML file + one head line, zero JS/backend/schema/API changes, zero cost, zero risk (browsers fetch this passively, doesn't affect page render or CSP since it's not script/style/img/connect -- verified no CSP directive blocks link rel=search discovery).",
+      "commit_sha": "fd36992",
+      "validation": {
+        "xml_parse": "pass (python3 xml.dom.minidom)",
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (docs/app.js, docs/sw.js, docs/theme-init.js, sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged, no Python touched)",
+        "validate_data": "pass (669 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 9099, confirmed /opensearch.xml returns HTTP 200 with valid XML, confirmed link rel=search tag present in served index.html",
+        "ci_run": "34885634212 completed success (29s)",
+        "pages_build": "34885632581 completed success (40s)"
       },
       "rate_limit_event": false
     }
