@@ -23,6 +23,7 @@ extract_cwe_ghsa, unique_key, compute_stats's severity bucketing (exercised
 indirectly through compute_stats itself with synthetic alert dicts).
 """
 import os
+import re
 import sys
 import tempfile
 import unittest
@@ -718,6 +719,55 @@ class TestAppendHistory(unittest.TestCase):
             with open(csv_path) as f:
                 row = f.read().strip().split("\n")[1].split(",")
             self.assertEqual(row[-9:], ["", "", "", "", "", "", "", "", ""])
+
+
+class TestWriteSitemap(unittest.TestCase):
+    """write_sitemap() must emit a <lastmod> in valid W3C Datetime format
+    (no fractional seconds) per the Sitemaps protocol, even though
+    generated_at_iso arrives with microsecond precision from
+    datetime.isoformat() elsewhere in the pipeline (cycle 142 fix --
+    previously untested, the gap that let this ship without a regression
+    guard in the first place)."""
+
+    def _run_with_tmp_path(self, sitemap_path, fn):
+        import aggregate
+        with mock.patch.object(aggregate, "SITEMAP_PATH", sitemap_path):
+            fn()
+
+    def test_strips_microseconds_from_generated_at(self):
+        import aggregate
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "sitemap.xml")
+            self._run_with_tmp_path(
+                path, lambda: aggregate.write_sitemap("2026-09-14T20:11:17.873552+00:00")
+            )
+            with open(path) as f:
+                content = f.read()
+            self.assertIn("<lastmod>2026-09-14T20:11:17+00:00</lastmod>", content)
+            self.assertNotIn("873552", content)
+
+    def test_missing_generated_at_falls_back_to_now_without_microseconds(self):
+        import aggregate
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "sitemap.xml")
+            self._run_with_tmp_path(path, lambda: aggregate.write_sitemap(None))
+            with open(path) as f:
+                content = f.read()
+            match = re.search(r"<lastmod>([^<]+)</lastmod>", content)
+            self.assertIsNotNone(match)
+            # Valid W3C-DTF complete-seconds form has no '.' fractional component.
+            self.assertNotIn(".", match.group(1))
+
+    def test_malformed_generated_at_left_untouched(self):
+        import aggregate
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "sitemap.xml")
+            self._run_with_tmp_path(
+                path, lambda: aggregate.write_sitemap("not-a-real-timestamp")
+            )
+            with open(path) as f:
+                content = f.read()
+            self.assertIn("<lastmod>not-a-real-timestamp</lastmod>", content)
 
 
 if __name__ == "__main__":
