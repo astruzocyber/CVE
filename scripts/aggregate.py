@@ -91,6 +91,7 @@ HISTORY_CSV_PATH = os.path.join(HISTORY_DIR, "trend.csv")
 KEV_SNAPSHOT_PATH = os.path.join(DATA_DIR, "kev_snapshot.json")
 FEED_JSON_PATH = os.path.join(REPO_ROOT, "docs", "feed.json")
 FEED_XML_PATH = os.path.join(REPO_ROOT, "docs", "feed.xml")
+SITEMAP_PATH = os.path.join(REPO_ROOT, "docs", "sitemap.xml")
 SITE_URL = "https://astruzocyber.github.io/CVE/"
 
 KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
@@ -1449,6 +1450,35 @@ def build_kev_feed(kev_map):
     print(f"Wrote KEV feed: {len(all_items)} items to {FEED_JSON_PATH} and {FEED_XML_PATH}")
 
 
+def write_sitemap(generated_at_iso):
+    """Write docs/sitemap.xml with a real <lastmod> reflecting the actual
+    last successful pipeline run, instead of the static file (committed once
+    in an earlier cycle and never updated since) which gave crawlers no
+    freshness signal despite advertising <changefreq>hourly</changefreq> --
+    a stale, misleading claim for a site that in fact updates every run.
+    Falls back to the current UTC time if generated_at_iso is missing/invalid
+    so the sitemap is never left without a lastmod value."""
+    lastmod = generated_at_iso
+    if not lastmod:
+        lastmod = datetime.now(timezone.utc).isoformat()
+    # Sitemap protocol wants a date (YYYY-MM-DD) or full W3C datetime; use the
+    # full ISO-8601 timestamp (already includes timezone offset) unchanged.
+    sitemap = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        "  <url>\n"
+        f"    <loc>{SITE_URL}</loc>\n"
+        f"    <lastmod>{lastmod}</lastmod>\n"
+        "    <changefreq>hourly</changefreq>\n"
+        "    <priority>1.0</priority>\n"
+        "  </url>\n"
+        "</urlset>\n"
+    )
+    with open(SITEMAP_PATH, "w") as f:
+        f.write(sitemap)
+    print(f"Wrote sitemap: lastmod={lastmod} to {SITEMAP_PATH}")
+
+
 def main():
     nvd_api_key = os.environ.get("NVD_API_KEY", "").strip() or None
     gh_token = os.environ.get("GH_DEPENDABOT_TOKEN", "").strip() or None
@@ -1607,6 +1637,7 @@ def main():
     save_json_file(STATS_PATH, stats)
     append_history(stats)
     build_kev_feed(kev_map)
+    write_sitemap(stats.get("generated_at"))
 
     print(f"Wrote {len(cumulative)} total alerts to {ALERTS_PATH}")
     print(f"Wrote {len(new_alerts)} NEW alerts to {NEW_ALERTS_PATH}")
