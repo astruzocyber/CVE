@@ -1,5 +1,408 @@
 [
   {
+    "cve_id": "CVE-2026-57579",
+    "description": "Alchemy is an open source content management system engine written in Ruby on Rails. Prior to 7.4.15, 8.0.15, 8.1.14, and 8.2.6, the unauthenticated GET /api/pages/nested endpoint implemented by Api::PagesController#nested in app/controllers/alchemy/api/pages_controller.rb returns an unfiltered page tree because it performs no authorization and does not scope descendants by the caller's ability. Anonymous callers can retrieve restricted and unpublished page metadata that the sibling show action denies. When elements=true is supplied, PageTreeSerializer also returns element and ingredient content from restricted pages because PageTreePreloader and the serializer do not apply an ability check to those records. This issue is fixed in versions 7.4.15, 8.0.15, 8.1.14, and 8.2.6.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-09-14T17:17:49.267",
+    "nvd_last_modified": "2026-09-14T18:17:58.063",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-14T20:11:16.694656+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-54182",
+    "description": "backpack/crud provides Create, Read, Update & Delete (CRUD) functions for Backpack, a collection of Laravel packages that help users build custom administration panels. Prior to 4.1.70, 5.6.2, 6.8.13, and 7.0.36, Backpack\\CRUD\\Stats::makeCurlRequest in src/Stats.php is reached from BackpackServiceProvider::boot() and constructs a shell command with a URL influenced by the HTTP Host header, which it passes to exec() without adequate shell neutralization. An unauthenticated attacker whose malformed Host value reaches PHP can inject operating-system commands when exec() and curl are available and the 1-in-100 random gate is reached. Repeated requests can reach the random gate. Successful exploitation executes commands as the web-server user, exposing environment secrets, files, and reachable services and permitting data modification or service disruption. Common reverse-proxy Host validation and hardened PHP configurations that disable exec() reduce reachability but do not correct the vulnerable construction. This issue is fixed in versions 4.1.70, 5.6.2, 6.8.13, and 7.0.36.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-20",
+      "CWE-78",
+      "CWE-116"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-14T18:17:53.380",
+    "nvd_last_modified": "2026-09-14T19:17:30.167",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-14T20:11:16.694596+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-54087",
+    "description": "EasyAdmin is a fast and modern admin generator for Symfony applications. From 5.0.0 until 5.0.13, FileField and ImageField can accept browser-executable uploads while templates/crud/field/file.html.twig links to stored files for inline same-origin rendering without a download attribute or Content-Disposition attachment header. When uploads are stored under the public web root, an attacker with access to an affected form can upload HTML through FileField or SVG through ImageField, and JavaScript executes in an authenticated administrator's origin when the file is opened from the backend. Exploitation requires a privilege gap between the uploader and viewer. The issue can expose session or CSRF tokens and enable privilege escalation, but does not permit PHP or PHTML code execution because Symfony guessExtension does not produce those stored extensions. This issue is fixed in version 5.0.13.",
+    "cvss_score": 7.6,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-79",
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 44.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.6,
+      "cvss_component": 44.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-14T18:17:51.930",
+    "nvd_last_modified": "2026-09-14T19:17:26.610",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-14T20:11:16.694586+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89023",
+    "description": "ThemeAtelier Domain For Sale plugin for WordPress before 3.5.2 contains a missing authorization vulnerability in its REST API endpoints that allows unauthenticated attackers to access and manipulate protected resources. Attackers can retrieve stored offer records, delete arbitrary offers by numeric identifier, and access dashboard statistics to disclose bidder contact information, offer details, messages, verification tokens, and business data.",
+    "cvss_score": 8.6,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 50.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.6,
+      "cvss_component": 50.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-14T19:17:55.287",
+    "nvd_last_modified": "2026-09-14T19:17:55.287",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-14T20:11:16.694552+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-88011",
+    "description": "Traefik is an open source HTTP reverse proxy and load balancer. Prior to 2.11.56, and from 3.0.0 until 3.7.12, a client-supplied dot-form header such as X.Authenticated.User survives ForwardAuth replacement and underscoreHeadersStrategy because Go treats it as distinct from X-Authenticated-User while normalization-prone CGI, WSGI, PHP, and NGINX backends collapse both names. A backend can consequently consume the client value instead of the identity Traefik asserted, allowing identity spoofing for any header managed by Traefik. The aliasHeadersStrategy protection is disabled by default and must be configured as delete or reject. The mitigation is available in 2.11.56 and 3.7.12.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-290"
+    ],
+    "epss_score": 0.00246,
+    "epss_percentile": 0.15959,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00246,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-88011",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "d87731461f0c7beb6fdbcc5a5655a44ce56e537a"
+      }
+    ],
+    "affected": [
+      "nginx/nginx",
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-10T16:18:07.933",
+    "nvd_last_modified": "2026-09-14T19:59:27.843",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "traefik",
+        "product": "traefik",
+        "fixed": "2.11.56",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "traefik",
+        "product": "traefik",
+        "fixed": "3.7.12",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/traefik/traefik/commit/0331801c72329e0eaeb850e53ccce87c57fbecf8",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/traefik/traefik/pull/13720",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/traefik/traefik/releases/tag/v2.11.56",
+        "tags": [
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/traefik/traefik/releases/tag/v3.7.12",
+        "tags": [
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/traefik/traefik/security/advisories/GHSA-rf44-j88r-hh8c",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-14T20:11:16.694294+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-88879",
+    "description": "Traefik is an HTTP reverse proxy and load balancer. In Traefik v1.x, v2.x through v2.11.55, and v3.0.0 through v3.7.11, header names are canonicalized only on dashes, so X-Auth-User, X_Auth_User and X.Auth.User are treated as three distinct headers by Traefik, while backends that derive variable names from header names (CGI, WSGI, PHP, NGINX and others) collapse them into a single variable. A client can therefore smuggle a dot-form alias of a header that Traefik manages past the middleware managing it \u2014 for example supplying X.Authenticated.User alongside the canonical X-Authenticated-User written by the ForwardAuth middleware \u2014 causing such a backend to read the client-supplied value instead of the identity Traefik asserted. In the tested configuration (PHP 8.2 built-in SAPI over an HTTP/1 backend path), Go's lexical header ordering makes the attacker-supplied value win deterministically, so a client that ForwardAuth admits as a low-privilege identity can be treated by the backend as a different user or role. Any header Traefik sets is affected, not only ForwardAuth's. This is an incomplete fix for GHSA-x677-9fxg-v5c5, which blocked only the underscore form. Fixed in v2.11.56 and v3.7.12, which add the aliasHeadersStrategy entry-point option; because it defaults to 'keep' for backwards compatibility, it must be explicitly set to 'delete' or 'reject' for the fix to take effect. Unmaintained release lines will not receive a patch.",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-290"
+    ],
+    "epss_score": 0.00265,
+    "epss_percentile": 0.18438,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00265,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-88879",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "d87731461f0c7beb6fdbcc5a5655a44ce56e537a"
+      }
+    ],
+    "affected": [
+      "nginx/nginx",
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-10T14:17:16.337",
+    "nvd_last_modified": "2026-09-14T19:58:33.037",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "traefik",
+        "product": "traefik",
+        "fixed": "2.11.56",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "traefik",
+        "product": "traefik",
+        "fixed": "3.7.12",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/traefik/traefik/security/advisories/GHSA-rf44-j88r-hh8c",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-14T20:11:16.694276+00:00"
+  },
+  {
     "cve_id": "CVE-2026-87608",
     "description": "Improper certificate validation in FedCM in Google Chrome prior to 153.0.8010.36 allowed a remote attacker leveraging social engineering to bypass web origin policy via crafted network traffic. (Chromium security severity: Low)",
     "cvss_score": 7.5,
@@ -34,8 +437,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00148,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -87,8 +490,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00178,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -140,7 +543,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -193,8 +596,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.2,
+    "epss_score_prev": 0.00428,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -248,7 +651,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -303,9 +706,9 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2026-42055",
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.06537,
+    "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
       "nginx/nginx"
@@ -449,8 +852,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 54.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.1,
+    "epss_score_prev": 0.00485,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -502,8 +905,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00233,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -557,8 +960,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00276,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -612,8 +1015,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00263,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -667,8 +1070,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 58.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.1,
+    "epss_score_prev": 0.00277,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -722,8 +1125,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00274,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -777,8 +1180,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00202,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -832,8 +1235,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.0019,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -887,8 +1290,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00257,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -942,8 +1345,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 47.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00189,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -952,7 +1355,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-13T00:17:07.203",
-    "nvd_last_modified": "2026-09-13T00:17:07.203",
+    "nvd_last_modified": "2026-09-14T19:18:07.567",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2062,7 +2465,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-12T13:16:50.940",
-    "nvd_last_modified": "2026-09-14T13:51:41.830",
+    "nvd_last_modified": "2026-09-14T17:17:42.707",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2231,7 +2634,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-12T08:16:24.377",
-    "nvd_last_modified": "2026-09-14T13:51:41.830",
+    "nvd_last_modified": "2026-09-14T17:17:51.410",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2398,7 +2801,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-11T20:17:14.060",
-    "nvd_last_modified": "2026-09-11T20:17:14.060",
+    "nvd_last_modified": "2026-09-14T19:17:26.103",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -7725,10 +8128,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-10T14:17:16.023",
-    "nvd_last_modified": "2026-09-10T15:17:57.790",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-09-14T19:57:56.327",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "traefik",
+        "product": "traefik",
+        "fixed": "3.7.12",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/traefik/traefik/security/advisories/GHSA-cjr6-pf59-jq29",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T15:19:03.440830+00:00"
@@ -24647,7 +25065,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.7,
-    "epss_score_prev": 0.0133,
+    "epss_score_prev": 0.0135,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -24979,8 +25397,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00612,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.00676,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
