@@ -3949,3 +3949,32 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `0a04976` — "Cycle 111: add Dependabot config for github-actions/pip ecosystems" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 110 → 111. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 112 — 2026-09-14T05:35:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, no new aggregation commits since 7ee68bd), full `.agent/state.json` (total_cycles=111, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 15` across all 4 workflows (aggregation, CI, cancel-stale-queued watchdog, stale-data-alert, plus dependabot PR auto-merge CI runs from cycle 111) -- all success, no queued/stuck runs, no 429/throttle signals. Inspected `docs/index.html` `<head>` and found zero CSP header/meta tag, and one inline `<script>` (theme pre-paint init) plus one inline `style=` attribute in `docs/app.js` (risk-bar width%).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Content-Security-Policy meta tag** (chosen) -- 5/4/5. Real defense-in-depth gap: the dashboard renders third-party API-sourced strings (NVD/GHSA CVE descriptions, CWE names, vendor/product identifiers) into the DOM, and has zero CSP as a backstop against any future XSS-class bug in that rendering path -- notably concerning for a *security* tool. Native browser feature via `<meta http-equiv>` (works on GitHub Pages static hosting, no server config needed, zero cost). Required externalizing the one inline `<script>` to a new same-origin file so `script-src 'self'` (no `unsafe-inline`) could be enforced; kept `style-src 'self' 'unsafe-inline'` since removing it would require refactoring one inline risk-bar width into a CSS custom property, a larger risk-to-value change deferred to a future cycle.
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-111).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Refactor inline risk-bar style to a CSS custom property (to drop `style-src unsafe-inline` entirely) -- deferred to a future cycle as a smaller follow-on, not blocking this cycle's CSP win.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. New file `docs/theme-init.js` (externalized pre-paint theme script, identical logic). Modified `docs/index.html`: replaced the inline `<script>` with `<script src="theme-init.js">`, added a `<meta http-equiv="Content-Security-Policy">` tag (`default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'`).
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` and `node --check docs/theme-init.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (661 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally (`python3 -m http.server 8917`), loaded via the browser tool -- page loaded correctly under the new CSP (no console violations), `theme-init.js` ran pre-paint (`data-theme=dark` matching prior default behavior), clicking `#theme-toggle` correctly switched to `light`, `typeof Chart === "function"` confirming the allowlisted jsdelivr CDN script loaded, trend chart section un-hid, and all 661/661 alert cards rendered with zero regression.
+- Pushed `e2a47b1` to `origin/main` (clean fast-forward, no rebase conflicts).
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); CSS-custom-property refactor of the inline risk-bar style to drop `style-src unsafe-inline` (deferred, smaller follow-on); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `e2a47b1` -- "Cycle 112: add Content-Security-Policy meta tag, externalize theme-init inline script" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 111 -> 112. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

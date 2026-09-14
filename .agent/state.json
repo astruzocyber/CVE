@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 111,
+  "total_cycles": 112,
   "implemented": [
     {
       "cycle": 1,
@@ -1090,10 +1090,17 @@
       "title": "Add .github/dependabot.yml for github-actions and pip ecosystems",
       "description": "Repo had zero automated dependency-update mechanism for its own pinned versions (actions/checkout@v4, actions/setup-python@v5 across 3 workflows; requests/PyYAML in requirements.txt) -- security patches to these would only ever be noticed manually. Added .github/dependabot.yml (weekly interval) covering github-actions and pip ecosystems. Zero cost (native GitHub feature, free on any repo), zero risk to the pipeline (Dependabot only opens PRs, never auto-merges, so nothing deploys without a subsequent human/agent-reviewed merge+validation cycle).",
       "commit_sha": "0a04976"
+    },
+    {
+      "cycle": 112,
+      "timestamp": "2026-09-14T05:35:00Z",
+      "title": "Content-Security-Policy meta tag + externalized theme-init script",
+      "description": "Added a strict default-src 'self' CSP meta tag to docs/index.html (script-src allowlists only the existing Chart.js jsdelivr CDN; style-src needs unsafe-inline for one existing inline risk-bar width% style; all others locked to 'self'/'none'). Required extracting the sole pre-existing inline <script> (theme pre-paint init) to a new same-origin docs/theme-init.js so script-src 'self' can be enforced without an unsafe-inline carve-out for scripts. Zero API/schema changes.",
+      "commit_sha": "e2a47b1"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T05:00:00Z",
+  "last_cycle_at": "2026-09-14T05:35:00Z",
   "stopped": false,
   "cycles": [
     {
@@ -1135,6 +1142,20 @@
         "node_check": "pass (sanity, no js touched)",
         "unit_tests": "98/98 pass (unchanged)",
         "validate_data": "pass (schema OK)"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 112,
+      "timestamp": "2026-09-14T05:35:00Z",
+      "title": "Content-Security-Policy meta tag + externalized theme-init script",
+      "commit_sha": "e2a47b1",
+      "validation": {
+        "node_check": "pass (docs/app.js, docs/theme-init.js)",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (661 alerts, schema OK)",
+        "browser_smoke_test": "pass -- localhost:8917 loaded under new CSP, no console violations, theme-init ran pre-paint (dark default), theme-toggle worked, Chart.js CDN loaded + trend chart rendered, 661/661 alert cards rendered"
       },
       "rate_limit_event": false
     }
