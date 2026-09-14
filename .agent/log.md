@@ -4765,3 +4765,31 @@ Continued the fresh-eyes accuracy review from cycles 138-141 into areas not yet 
 **Commit SHA:** `a22776e` — "Cycle 142: fix sitemap.xml lastmod to valid W3C-DTF (strip microseconds)" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 141 -> 142. `consecutive_no_improvement`: 2 -> 0 (shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 143 — 2026-09-14T23:05:00Z
+
+**Re-verified state before acting:** `git pull` clean (fast-forwarded to `be3d17f`/matching origin/main), `.agent/state.json` (total_cycles=142, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 10` — all workflows `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4997/5000 remaining, healthy. Re-ran `python3 scripts/validate_data.py` fresh (VALIDATION PASSED, 675 alerts, schema OK, 0 violations, id-reference OK, feeds OK) and `python3 -m unittest discover -s scripts -p "test_*.py"` (98/98 pass) from clean checkout.
+
+Reviewed cycle 142's shipped fix (`write_sitemap()` W3C-DTF microsecond strip) and noted it shipped with zero dedicated unit-test coverage — the log for that cycle explicitly said "sitemap generation has no dedicated unit test." This is the same class of gap that let the *original* bug (fractional-seconds lastmod, and separately the osv_fixed_versions schema-type bug in cycle 138) ship undetected in the first place: correctness fixes without a regression guard can silently regress on a future refactor.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Add `TestWriteSitemap` unit tests covering the cycle-142 fix** (chosen) — 5/5/4. Closes a real coverage gap on a function that already had one production bug ship silently; pure test-only change (zero production code touched), zero regression risk by construction, directly serves the operator's stated priority of accuracy/reliability over feature breadth.
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-142, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. Added `TestWriteSitemap` to `scripts/test_aggregate.py` with 3 cases: microsecond-precision `generated_at` is truncated to exact `YYYY-MM-DDThh:mm:ss+00:00`; `None` input falls back to `now()` with no fractional-seconds component (checked via absence of `.` in the captured `<lastmod>` value); malformed non-ISO input is left untouched by the fail-soft except path. Uses `mock.patch.object(aggregate, "SITEMAP_PATH", <tmp path>)` to isolate from the real `docs/sitemap.xml`, matching the existing `TestAppendHistory._run_with_tmp_paths` pattern already used elsewhere in the same test file.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py` → exit 0.
+- `python3 -m unittest discover -s scripts -p "test_*.py" -v` → **101/101 passed** (98 previous + 3 new `TestWriteSitemap` cases), `OK`.
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (675 alerts, schema OK, 0 violations, id-reference OK, feeds OK) — unaffected, test-only change.
+- Pushed `cab316b` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34907186112` completed success (12s); Pages build/deploy `34907185783` in_progress at check time (consistent with normal deploy latency).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (test-only change, no pipeline run); `gh api rate_limit` showed 4997/5000 remaining; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `cab316b` — "Cycle 143: add regression tests for write_sitemap() W3C-DTF fix" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 142 -> 143. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
