@@ -1,0 +1,24 @@
+# CVE / KEV / Dependabot Vulnerability Alert Dashboard
+
+> Free, zero-cost, static vulnerability alert dashboard aggregating CISA KEV, NVD, FIRST.org EPSS,
+> GitHub Security Advisories (GHSA), and Dependabot alerts into a single composite risk score.
+> Rebuilt automatically on a recurring schedule via GitHub Actions. No login, no API key, no cost.
+
+This file follows the llms.txt convention (https://llmstxt.org/) to help AI agents and LLMs
+discover and correctly use this site's machine-readable data without scraping rendered HTML.
+
+## Primary data (machine-readable, no auth required)
+
+- [Alerts dataset](https://astruzocyber.github.io/CVE/data/alerts.json): full current alert list — CVE ID, CVSS, EPSS, KEV status/due date, composite risk_score, source, affected products, first_seen.
+- [JSON Schema for alerts dataset](https://astruzocyber.github.io/CVE/data/alerts.schema.json): Draft-07 schema documenting every field, type, enum, and range in alerts.json — validate against this before consuming.
+- [Summary stats](https://astruzocyber.github.io/CVE/data/stats.json): totals, KEV/overdue/due-soon counts, severity/source/CWE breakdowns, averages, generation timestamp (staleness check).
+- [RSS feed](https://astruzocyber.github.io/CVE/feed.xml) / [JSON Feed](https://astruzocyber.github.io/CVE/feed.json): new/updated alerts as a syndication feed.
+- [OpenSearch descriptor](https://astruzocyber.github.io/CVE/opensearch.xml): `?q={searchTerms}` deep-linked search.
+- [Sitemap](https://astruzocyber.github.io/CVE/sitemap.xml)
+
+## Notes for agents
+
+- Data updates on a recurring GitHub Actions schedule (see `generated_at` in stats.json to check freshness; treat as stale if older than 20 hours).
+- `risk_score` (0-100) is a composite of CVSS, EPSS exploit-probability, and CISA KEV presence/urgency — see the schema's description fields for the exact weighting notes.
+- Source code, pipeline, and validation logic are public: https://github.com/astruzocyber/CVE
+- No authentication, no rate limits imposed by this site; be a good citizen of upstream free-tier APIs (NVD, FIRST.org, CISA) if you re-run the pipeline yourself — it already has retry/backoff built in.
