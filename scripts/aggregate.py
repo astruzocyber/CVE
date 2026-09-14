@@ -1461,8 +1461,18 @@ def write_sitemap(generated_at_iso):
     lastmod = generated_at_iso
     if not lastmod:
         lastmod = datetime.now(timezone.utc).isoformat()
-    # Sitemap protocol wants a date (YYYY-MM-DD) or full W3C datetime; use the
-    # full ISO-8601 timestamp (already includes timezone offset) unchanged.
+    # Sitemap protocol requires W3C Datetime (https://www.w3.org/TR/NOTE-datetime),
+    # whose "complete date plus hours, minutes and seconds" form has NO
+    # fractional-seconds component: YYYY-MM-DDThh:mm:ssTZD only. generated_at_iso
+    # comes from datetime.isoformat() on a value with microsecond precision
+    # (e.g. "2026-09-14T20:11:17.873552+00:00"), which is not valid W3C-DTF and
+    # can fail strict sitemap validators/crawlers. Strip the fractional-seconds
+    # component (if present) before writing lastmod, without touching the
+    # timezone offset.
+    try:
+        lastmod = datetime.fromisoformat(lastmod).replace(microsecond=0).isoformat()
+    except (ValueError, TypeError):
+        pass  # leave lastmod as-is if it's not a parseable ISO datetime
     sitemap = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
