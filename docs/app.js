@@ -318,6 +318,11 @@ function kevNotesLinksHtml(notes) {
   ).join(" &middot; ")}</div>`;
 }
 
+function riskWidthClass(pct) {
+  const bucket = Math.max(0, Math.min(100, Math.round((pct || 0) / 5) * 5));
+  return `risk-w-${bucket}`;
+}
+
 function renderCard(alert) {
   const sevClass = severityClass(alert.cvss_score);
   const rClass = riskClass(alert.risk_score);
@@ -423,7 +428,7 @@ function renderCard(alert) {
         <div class="badges">${newBadge}${rejectedBadge}${kevBadge}${ransomwareBadge}${overdueBadge}${dueSoonBadge}${sevBadge}${sourceBadge}</div>
       </div>
       <div class="risk-row">
-        <div class="risk-bar-track"><div class="risk-bar-fill ${rClass}" style="width:${Math.min(100, alert.risk_score || 0)}%"></div></div>
+        <div class="risk-bar-track"><div class="risk-bar-fill ${rClass} ${riskWidthClass(alert.risk_score)}"></div></div>
         <span class="risk-label">Risk ${riskVal}/100</span>
         ${riskDeltaHtml}
         ${toggleBtn}
