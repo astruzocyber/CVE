@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 108,
+  "total_cycles": 109,
   "implemented": [
     {
       "cycle": 1,
@@ -1069,32 +1069,31 @@
       "title": "Queue-watchdog workflow: auto-cancel stuck queued aggregation runs",
       "description": "Detected in-flight incident on cycle start: aggregation run 34737259541 had sat in queued status for >20 hours (created 2026-09-13T04:10Z), blocking the cve-aggregation concurrency group and causing 4 subsequent scheduled triggers to also queue/get cancelled -- dashboard data was stale for ~24h (last stats.json update 2026-09-13T00:14Z) with zero self-recovery mechanism. Manually cancelled the stuck run this cycle (safe: a queued run has made zero API calls/writes), which immediately let the next pending run start and complete successfully (data now fresh as of 2026-09-14T00:22Z). Root-caused and fixed structurally: added .github/workflows/queue-watchdog.yml, a lightweight 15-minute-cadence workflow (its own concurrency group, no shared lock with cve-alerts.yml) that lists queued cve-alerts.yml runs via gh api and cancels any still queued past a 30-minute threshold, freeing the concurrency group automatically next time this happens. Manually dispatched and verified clean run (exit success, correctly reported \"No queued aggregation runs found\" once the stuck run was cleared).",
       "commit_sha": "40633fc"
+    },
+    {
+      "cycle": 109,
+      "timestamp": "2026-09-14T00:58:00Z",
+      "title": "Remove duplicate queue-watchdog.yml (superseded by cancel-stale-queued.yml)",
+      "description": "Detected a human collaborator had independently committed .github/workflows/cancel-stale-queued.yml (commit 70d951d) solving the exact same 2026-09-13 stuck-queued-run incident as my own cycle-108 queue-watchdog.yml -- both running every 15 minutes against the same gh api endpoint to cancel stale-queued cve-alerts.yml runs, doubling scheduled-workflow overhead for zero added benefit. Kept cancel-stale-queued.yml (more thoroughly validated against a real subshell/FOUND_ANY bug) and removed queue-watchdog.yml. No queued runs found stuck at cycle start (gh api confirmed empty); both prior watchdogs had been firing successfully every 15 min since cycle 108.",
+      "commit_sha": "b45f735"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-11T21:47:00Z",
+  "last_cycle_at": "2026-09-14T00:58:00Z",
   "stopped": false,
   "cycles": [
     {
-      "cycle": 107,
-      "timestamp": "2026-09-11T21:47:00Z",
-      "title": "Named saved filter views (localStorage)",
-      "description": "Cycle 7 made a single filter combination shareable via URL query params, but there was no way to persist multiple named combinations locally for repeated re-use. Added a Saved views dropdown + Save/Delete buttons to the toolbar. Stores {name, qs} pairs in localStorage where qs is exactly the query string updateURLFromFilters() already produces -- zero duplicated filter-serialization logic. Loading a view resets every control to default first then re-applies readFiltersFromURL()+applyFiltersAndRender(). Pure additive client-side JS+HTML, zero new API calls, zero backend/schema changes, zero cost. Fails soft on corrupted/unavailable localStorage.",
-      "commit_sha": "fa48b99",
+      "cycle": 109,
+      "timestamp": "2026-09-14T00:58:00Z",
+      "title": "Remove duplicate queue-watchdog.yml (superseded by cancel-stale-queued.yml)",
+      "commit_sha": "b45f735",
       "validation": {
-        "node_check": "pass",
-        "py_compile": "pass (sanity, no python touched)",
-        "unit_tests": "98/98 pass (unchanged)",
-        "validate_data": "pass (625 alerts, schema OK, id-reference check OK)",
-        "browser_smoke_test": "pass -- save-view captured current filter qs into localStorage, reset-filters cleared controls, selecting saved view restored q=wordpress&kev=kev filters and URL, delete-view removed it and left dropdown empty",
-        "ci_run": "34651022292 completed success (10s)"
+        "yaml_syntax": "pass (remaining workflow)",
+        "unit_tests": "98/98 pass",
+        "validate_data": "pass (661 alerts, schema OK)",
+        "ci_run": "verified pages-build-deployment triggered normally post-push"
       },
-      "rate_limit_event": false,
-      "rejected_alternatives": [
-        "GHSA/Dependabot coverage expansion -- still needs human input on actual tech stack, deferred cycles 56-106.",
-        "Full risk_score history array -- deferred, storage-growth risk.",
-        "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
-      ]
+      "rate_limit_event": false
     }
   ]
 }
