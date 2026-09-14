@@ -3921,3 +3921,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `148ed7d` — "Cycle 110: add server-side stale-data GitHub Issue alert" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 109 → 110. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 111 — 2026-09-14T05:00:00Z
+
+**Re-verified state before acting:** `git pull` (fresh — pulled a new routine `chore: update vulnerability alert data [skip ci]` aggregation commit `7ee68bd`), full `.agent/state.json` (total_cycles=110, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 15` across all 4 workflows (aggregation, CI, cancel-stale-queued watchdog, stale-data-alert) — all recent runs `success`, no queued/stuck runs, no 429/throttle signals. Inspected full repo tree and `.github/` (4 workflow files, no `dependabot.yml`).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Add `.github/dependabot.yml` (github-actions + pip ecosystems)** (chosen) — 5/5/4. Confirmed via `grep -n "uses:"` that 3 workflows pin `actions/checkout@v4` and `actions/setup-python@v5`, and `requirements.txt` pins `requests`/`PyYAML` with floor versions only — the repo had zero automated mechanism to surface security patches/updates to any of these; a stale pinned Action or vulnerable transitive dependency version would go unnoticed indefinitely. Native GitHub feature, zero cost on any repo, and structurally safe: Dependabot only opens PRs, never auto-merges, so it cannot alter what's actually deployed without a subsequent reviewed merge+validation cycle (mine or a human's).
+2. GHSA/Dependabot *alerts* coverage expansion (distinct from this candidate — that's about widening which package ecosystems get scanned for CVEs feeding the dashboard's own alert data) — still deferred, needs human input on actual tech stack (deferred cycles 56-110).
+3. Full risk_score history array — still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. New file `.github/dependabot.yml`: `version: 2`, two `updates` entries (`github-actions` and `pip`, both `directory: "/"`, `interval: weekly`, labeled `dependencies`+ecosystem). No changes to any workflow, script, or data file.
+
+**Validation performed (all passed):**
+- `python3 -c "import yaml; yaml.safe_load(open('.github/dependabot.yml'))"` → parses cleanly (also passed `write_file`'s built-in YAML lint on first write).
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity, untouched).
+- `node --check docs/app.js` → exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (schema OK, id-reference check OK, feeds OK).
+- Committed `91f909b`; `git push` hit a legitimate non-conflicting fast-forward rejection (the routine `chore: update vulnerability alert data` aggregation commit `7ee68bd` had landed on `origin/main` between my pull and push); resolved cleanly with `git pull --rebase` (no conflicts, pure fast-forward of the automated data commit) then pushed successfully as `0a04976`.
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (workflow-config-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `0a04976` — "Cycle 111: add Dependabot config for github-actions/pip ecosystems" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 110 → 111. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
