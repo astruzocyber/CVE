@@ -1911,6 +1911,30 @@ async function loadTrendChart() {
     const riskDecreasing = rows.map((r) => (r[15] === "" || r[15] === undefined ? null : Number(r[15])));
 
     document.getElementById("trend-section").hidden = false;
+
+    // The canvas is otherwise opaque to screen readers/assistive tech (WCAG
+    // 1.1.1 Non-text Content) -- Chart.js renders to a raster surface with no
+    // text alternative of its own. Build a concise plain-language summary from
+    // the same parsed rows the chart itself uses (first/last data point plus
+    // the metrics visible-by-default: total alerts, avg EPSS, avg risk score,
+    // KEV overdue) and expose it via aria-label on the canvas (role="img" set
+    // in markup) so AT users get equivalent information without needing to
+    // interpret the rendered lines.
+    const firstLabel = labels[0];
+    const lastLabel = labels[labels.length - 1];
+    const lastTotal = totalAlerts[totalAlerts.length - 1];
+    const lastEpss = avgEpss[avgEpss.length - 1];
+    const lastRisk = avgRiskScore[avgRiskScore.length - 1];
+    const lastOverdue = kevOverdue[kevOverdue.length - 1];
+    const fmt = (v, suffix = "") => (v === null || Number.isNaN(v) ? "unknown" : `${Math.round(v * 10) / 10}${suffix}`);
+    const summary =
+      `Historical trend chart, ${rows.length} data point${rows.length === 1 ? "" : "s"} ` +
+      `from ${firstLabel} to ${lastLabel}. Latest (${lastLabel}): ` +
+      `${fmt(lastTotal)} total tracked alerts, avg EPSS ${fmt(lastEpss, "%")}, ` +
+      `avg risk score ${fmt(lastRisk)}, ${fmt(lastOverdue)} KEV entries overdue. ` +
+      `Additional datasets can be toggled via the legend below the chart.`;
+    canvas.setAttribute("aria-label", summary);
+
     new Chart(canvas, {
       type: "line",
       data: {
