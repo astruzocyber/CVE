@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 130,
+  "total_cycles": 131,
   "implemented": [
     {
       "cycle": 1,
@@ -1283,10 +1283,27 @@
         "pages_build": "34861762366 in_progress at check time (consistent with normal deploy latency)"
       },
       "rate_limit_event": false
+    },
+    {
+      "cycle": 131,
+      "timestamp": "2026-09-14T15:56:32Z",
+      "title": "Add rel=alternate feed autodiscovery links (RSS/JSON Feed) to <head>",
+      "description": "feed.xml and feed.json existed and were linked from body copy and JSON-LD, but had no <link rel=\"alternate\"> autodiscovery tags in <head> -- the standard mechanism browsers/feed readers/RSS aggregators use to auto-detect a page's feeds without a user manually finding the link in prose. Added two lines to docs/index.html <head>: rel=alternate type=application/rss+xml for feed.xml and rel=alternate type=application/feed+json for feed.json. Pure additive HTML head change, zero JS/schema/pipeline/API changes, zero cost.",
+      "commit_sha": "c3710ea",
+      "validation": {
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (docs/app.js, docs/sw.js, docs/theme-init.js, sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged, no Python touched)",
+        "validate_data": "pass (663 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 9044, confirmed 2 rel=alternate link tags present in index.html, feed.xml and feed.json both HTTP 200",
+        "ci_run": "34865443643 completed success (15s)",
+        "pages_build": "34865442820 in_progress at check time (consistent with normal deploy latency)"
+      },
+      "rate_limit_event": false
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T15:22:51Z",
+  "last_cycle_at": "2026-09-14T15:56:32Z",
   "stopped": false,
   "cycles": [
     {
@@ -1518,6 +1535,13 @@
         "ci_run": "34861764387 completed success (13s)",
         "pages_build": "34861762366 in_progress at check time (consistent with normal deploy latency)"
       },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 131,
+      "timestamp": "2026-09-14T15:56:32Z",
+      "title": "Add rel=alternate feed autodiscovery links (RSS/JSON Feed)",
+      "commit_sha": "c3710ea",
       "rate_limit_event": false
     }
   ]

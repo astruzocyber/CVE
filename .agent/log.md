@@ -4444,3 +4444,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `5d53203` -- "Cycle 130: add RFC 9116 security.txt vulnerability-disclosure policy" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 129 -> 130. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 131 — 2026-09-14T15:56:32Z
+
+**Re-verified state before acting:** `git pull` clean at `035d655`, `.agent/state.json` (total_cycles=130, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 12` -- all 4 workflows `success`, no queued/stuck runs, no 429/throttle signals. Reviewed `docs/index.html` `<head>` top-to-bottom against `docs/feed.xml`/`docs/feed.json` (both present since earlier cycles, referenced in body copy and JSON-LD `distribution`): found no `<link rel="alternate">` autodiscovery tags -- the standard mechanism browsers, feed readers, and RSS aggregators use to auto-detect a page's available feeds without a user manually finding the prose link mid-page.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **`<link rel="alternate">` feed autodiscovery tags** (chosen) -- 5/5/3. Pure additive `<head>` change: two lines, `type="application/rss+xml"` for `feed.xml` and `type="application/feed+json"` for `feed.json`. Zero JS/schema/pipeline/API changes, zero cost, zero risk (head-only, no existing tag touched).
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` -- still deferred, needs human input on tech stack (deferred cycles 56-130).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/index.html`: added 2 `<link rel="alternate">` tags after the existing sitemap link.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (663 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser/HTTP smoke test: served `docs/` locally on port 9044, confirmed 2 `rel="alternate"` tags present in the served `index.html`, confirmed `feed.xml` and `feed.json` both return HTTP 200.
+- Pushed `c3710ea` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34865443643` completed success (15s); Pages build/deploy `34865442820` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (static HTML-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `c3710ea` -- "Cycle 131: add rel=alternate feed autodiscovery links (RSS/JSON Feed)" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 130 -> 131. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
