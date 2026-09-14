@@ -1864,7 +1864,13 @@ function highlightFromHash() {
     `.card[id="${CSS.escape(location.hash.slice(1))}"]`
   );
   if (!target) return;
-  target.scrollIntoView({ behavior: "smooth", block: "center" });
+  const prefersReducedMotion = window.matchMedia
+    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    : false;
+  target.scrollIntoView({
+    behavior: prefersReducedMotion ? "auto" : "smooth",
+    block: "center",
+  });
   target.classList.add("highlighted");
   setTimeout(() => target.classList.remove("highlighted"), 2500);
 }
