@@ -1,0 +1,102 @@
+name: Stale Data Alert
+
+# Server-side companion to the client-side stale banner (docs/app.js
+# checkStaleness(), cycle 9). That banner only warns a visitor who happens
+# to load the dashboard during a stale window -- nobody is notified during
+# the (potentially many) hours before the next page load. The 2026-09-13
+# incident (aggregation stuck ~24h, see cancel-stale-queued.yml) showed
+# this gap concretely: the underlying pipeline stall was only discovered
+# and fixed by a human/agent manually inspecting run history, not by any
+# automated alert.
+#
+# This workflow runs independently of the aggregation pipeline (its own
+# concurrency group, read-only w.r.t. data) and periodically checks
+# docs/data/stats.json's generated_at timestamp on the live main branch.
+# If the data is older than STALE_THRESHOLD_HOURS, it opens (or leaves
+# open) a single GitHub Issue tagged data-staleness -- deduplicated by
+# checking for an existing open issue with that label first, so repeated
+# stale checks don't spam new issues every 30 minutes. Once the pipeline
+# recovers and produces fresh data, this workflow auto-closes any open
+# staleness issue it previously filed.
+#
+# Zero cost: native Actions schedule + GITHUB_TOKEN issue API, no new
+# secrets, no external services, runs in a few seconds.
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: stale-data-alert
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  STALE_THRESHOLD_HOURS: 20
+
+jobs:
+  check-staleness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check stats.json freshness and file/close a staleness issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          if [ ! -f docs/data/stats.json ]; then
+            echo "::warning::docs/data/stats.json not found -- skipping staleness check."
+            exit 0
+          fi
+
+          GENERATED_AT=$(python3 -c "import json; print(json.load(open('docs/data/stats.json')).get('generated_at',''))")
+          if [ -z "${GENERATED_AT}" ]; then
+            echo "::warning::stats.json has no generated_at field -- skipping staleness check."
+            exit 0
+          fi
+
+          GENERATED_EPOCH=$(date -u -d "${GENERATED_AT}" +%s)
+          NOW_EPOCH=$(date -u +%s)
+          AGE_HOURS=$(( (NOW_EPOCH - GENERATED_EPOCH) / 3600 ))
+          THRESHOLD="${STALE_THRESHOLD_HOURS}"
+
+          echo "Data generated_at=${GENERATED_AT}, age=${AGE_HOURS}h, threshold=${THRESHOLD}h"
+
+          EXISTING_ISSUE=$(gh api "repos/${REPO}/issues?state=open&labels=data-staleness&per_page=5" --jq '.[0].number // empty')
+
+          if [ "${AGE_HOURS}" -ge "${THRESHOLD}" ]; then
+            if [ -n "${EXISTING_ISSUE}" ]; then
+              echo "Data is stale (${AGE_HOURS}h >= ${THRESHOLD}h) -- issue #${EXISTING_ISSUE} already open, leaving it."
+            else
+              echo "Data is stale (${AGE_HOURS}h >= ${THRESHOLD}h) -- filing a new issue."
+              BODY_FILE=$(mktemp)
+              {
+                echo "The aggregation pipeline last successful data refresh (docs/data/stats.json generated_at) was **${GENERATED_AT}**, which is now ${AGE_HOURS} hours ago -- past the ${THRESHOLD}h staleness threshold (5x the normal 4h schedule)."
+                echo ""
+                echo "This usually means the CVE/KEV/Dependabot Alert Aggregation workflow has stopped running, is failing, or a run is stuck queued (see cancel-stale-queued.yml). Check: https://github.com/${REPO}/actions/workflows/cve-alerts.yml"
+                echo ""
+                echo "This issue was filed automatically and will auto-close once fresh data is detected."
+              } > "${BODY_FILE}"
+              gh api "repos/${REPO}/issues" -X POST \
+                -f title="Dashboard data is stale (${AGE_HOURS}h since last update)" \
+                -F body=@"${BODY_FILE}" \
+                -f "labels[]=data-staleness" >/dev/null
+            fi
+          else
+            echo "Data is fresh (${AGE_HOURS}h < ${THRESHOLD}h)."
+            if [ -n "${EXISTING_ISSUE}" ]; then
+              echo "Closing previously-open staleness issue #${EXISTING_ISSUE} (data has recovered)."
+              gh api "repos/${REPO}/issues/${EXISTING_ISSUE}" -X PATCH -f state=closed >/dev/null
+              gh api "repos/${REPO}/issues/${EXISTING_ISSUE}/comments" -X POST \
+                -f body="Data is fresh again as of this check (generated_at=${GENERATED_AT}, age=${AGE_HOURS}h). Auto-closing." >/dev/null
+            fi
+          fi
