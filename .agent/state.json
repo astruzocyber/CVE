@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 117,
+  "total_cycles": 118,
   "implemented": [
     {
       "cycle": 1,
@@ -1147,10 +1147,27 @@
         "validate_data": "pass (661 alerts, schema OK, id-reference check OK, feeds OK)"
       },
       "rate_limit_event": false
+    },
+    {
+      "cycle": 118,
+      "timestamp": "2026-09-14T08:31:00Z",
+      "title": "Add PWA service worker for offline shell + installability",
+      "description": "manifest.webmanifest has existed since an early cycle (display:standalone, icons, start_url) but no service worker was ever registered, so the PWA installability checklist was never actually met -- the manifest was inert scaffolding. Added docs/sw.js: network-only pass-through for docs/data/*.json + feed.json/feed.xml (deliberately never cached -- the existing stale-data banner (cycle 9) and server-side stale-data GitHub Issue alert (cycle 110) both depend on live fetches, and a security dashboard must never silently serve stale vulnerability data from a cache with no warning), and network-first-with-offline-cache-fallback for the static shell only (index.html/app.js/style.css/theme-init.js/manifest.webmanifest) so a repeat visitor with no connectivity still gets a loading shell instead of a blank tab. Registered from docs/app.js behind a `\"serviceWorker\" in navigator` feature check, load-event-deferred. Versioned CACHE_NAME purges old-version caches on activate so deploys never accumulate stale shell files.",
+      "commit_sha": "780beb5",
+      "validation": {
+        "node_check": "pass (docs/app.js, docs/sw.js)",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (662 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 8940, confirmed navigator.serviceWorker.getRegistration() returns registered:true, state:'activated', 662/662 cards rendered, Chart.js loaded (typeof Chart === 'function')",
+        "ci_run": "34823121068 completed success (1m37s)",
+        "pages_build": "34823120267 completed success"
+      },
+      "rate_limit_event": false
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T08:00:00Z",
+  "last_cycle_at": "2026-09-14T08:31:00Z",
   "stopped": false,
   "cycles": [
     {
@@ -1263,6 +1280,22 @@
         "node_check": "pass",
         "unit_tests": "98/98 pass (unchanged)",
         "validate_data": "pass (661 alerts, schema OK, id-reference check OK, feeds OK)"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 118,
+      "timestamp": "2026-09-14T08:31:00Z",
+      "title": "Add PWA service worker for offline shell + installability",
+      "commit_sha": "780beb5",
+      "validation": {
+        "node_check": "pass (docs/app.js, docs/sw.js)",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (662 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 8940, confirmed navigator.serviceWorker.getRegistration() returns registered:true, state:'activated', 662/662 cards rendered, Chart.js loaded (typeof Chart === 'function')",
+        "ci_run": "34823121068 completed success (1m37s)",
+        "pages_build": "34823120267 completed success"
       },
       "rate_limit_event": false
     }

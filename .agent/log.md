@@ -4089,3 +4089,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `dc124e7` -- "Cycle 117: resolve requests dependabot bump conflict, pin >=2.34.2" -- pushed to `origin/main`. (PRs #373/#374/#375 merged as squash commits with their own SHAs; #376 closed without merge, superseded by `dc124e7`.)
 
 **Updated state:** `total_cycles`: 116 -> 117. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 118 — 2026-09-14T08:31:00Z
+
+**Re-verified state before acting:** `git pull` (up to date at 74d3188), full `.agent/state.json` (total_cycles=117, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 20` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `gh issue list --state open` = 30 open vulnerability-alert issues (correctly filed by notify_github_issues.py), `gh pr list --state all` = 0 open PRs (cycle 117's Dependabot merges all landed cleanly). Reviewed `docs/manifest.webmanifest` (exists, well-formed, has been present since an early cycle) and confirmed via `find docs -iname "sw.js"` that no service worker was ever registered -- a manifest with zero service worker means the PWA installability checklist (Chrome/Edge/Android requirement) was never actually satisfied; the manifest has been inert scaffolding this whole time.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Register a PWA service worker for offline shell + real installability** (chosen) -- 5/4/4. Closes a genuine functionality gap (manifest.webmanifest doing nothing without a SW) rather than a cosmetic one. Designed conservatively for this site's specific risk (must never serve stale vulnerability data silently): network-only for all `docs/data/*.json`/feed.json/feed.xml, network-first-with-offline-fallback for the static shell only. Feasible at zero cost (pure static JS file + one `serviceWorker.register()` call, no build tooling, no new dependencies). Moderate-not-trivial validation risk since a buggy SW can break every subsequent page load for repeat visitors (mitigated by network-first strategy + versioned cache + thorough live browser smoke test before shipping).
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-117).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. New `docs/sw.js` (install/activate/fetch handlers, versioned `CACHE_NAME`, network-only data-path passthrough, network-first shell caching). `docs/app.js`: added a feature-detected, load-event-deferred `navigator.serviceWorker.register("sw.js")` call at the bottom of the file.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js docs/sw.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (662 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 8940 via `python3 -m http.server`, loaded via a real browser tool navigation -- confirmed `navigator.serviceWorker.getRegistration()` returns `{registered: true, scope: "http://localhost:8940/", state: "activated"}`, 662/662 alert cards rendered, `typeof Chart === "function"` confirmed Chart.js/CDN/CSP/SRI stack from prior cycles unaffected by the new SW-intercepted fetch path.
+- Pushed `780beb5` to `origin/main` (clean, no conflicts, no intervening aggregation commits). Live-verified post-push: CI run `34823121068` completed success (1m37s), Pages build/deploy `34823120267` completed success.
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `780beb5` -- "Cycle 118: add PWA service worker for offline shell + installability" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 117 -> 118. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
