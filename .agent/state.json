@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 136,
+  "total_cycles": 137,
   "implemented": [
     {
       "cycle": 1,
@@ -1385,10 +1385,27 @@
         "pages_build": "34885632581 completed success (40s)"
       },
       "rate_limit_event": false
+    },
+    {
+      "cycle": 137,
+      "timestamp": "2026-09-14T19:46:48Z",
+      "title": "Add docs/llms.txt (AI-agent discoverability guide)",
+      "description": "The dashboard's public JSON API (alerts.json, alerts.schema.json, stats.json, feeds) had no machine-readable pointer file for AI agents/LLMs to discover it without scraping rendered HTML -- llms.txt (llmstxt.org) is an emerging free, zero-cost convention analogous to robots.txt/sitemap.xml but aimed at LLM consumers, listing canonical data endpoints, freshness-check guidance, and risk_score semantics. Added docs/llms.txt and a <link rel=alternate type=text/plain> discovery tag in docs/index.html <head>. Pure additive: new static text file + one head line, zero JS/backend/schema/API changes, zero cost, zero risk (not blocked by CSP since it's a passive link fetch, not script/style/img/connect).",
+      "commit_sha": "5626be1",
+      "validation": {
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (docs/app.js, docs/sw.js, docs/theme-init.js, sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged, no Python touched)",
+        "validate_data": "pass (669 alerts, schema OK incl. alerts.schema.json check: 0 violations, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 9111, confirmed /llms.txt returns HTTP 200 with correct content-type text/plain, confirmed link[rel=alternate][href=llms.txt] renders in served index.html",
+        "ci_run": "34888956666 completed success (19s)",
+        "pages_build": "34888955570 in_progress at check time (consistent with normal deploy latency)"
+      },
+      "rate_limit_event": false
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T19:14:02Z",
+  "last_cycle_at": "2026-09-14T19:46:48Z",
   "stopped": false,
   "cycles": [
     {
@@ -1677,6 +1694,13 @@
         "ci_run": "34885634212 completed success (29s)",
         "pages_build": "34885632581 completed success (40s)"
       },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 137,
+      "timestamp": "2026-09-14T19:46:48Z",
+      "title": "Add docs/llms.txt (AI-agent discoverability guide)",
+      "commit_sha": "5626be1",
       "rate_limit_event": false
     }
   ]

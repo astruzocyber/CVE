@@ -4610,3 +4610,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `fd36992` -- "Cycle 136: add OpenSearch descriptor for browser search-bar integration" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 135 -> 136. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 137 — 2026-09-14T19:46:48Z
+
+**Re-verified state before acting:** `git pull` clean at `fd36992`/`8905c44` (fast-forwarded to latest), `.agent/state.json` (total_cycles=136, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 10` -- all workflows `success`, Pages deploy for cycle 136 completed, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T16:29:05Z (669 alerts, fresh, within schedule). Reviewed `docs/index.html` `<head>` again and the full `docs/` static-asset surface: found robots.txt, sitemap.xml, opensearch.xml, RSS/JSON Feed autodiscovery, and a schema.org ld+json Dataset block already present -- but no `llms.txt`, the emerging free convention (llmstxt.org) for pointing AI agents/LLMs at canonical machine-readable endpoints without scraping rendered HTML. Relevant for this specific project since its public data (alerts.json + published JSON Schema, stats.json, feeds) is explicitly built to be consumed by external automation.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Add `docs/llms.txt` + `<link rel="alternate">` discovery tag** (chosen) -- 5/5/3. Pure additive: one new static text file, one new `<head>` line. Zero JS/schema/pipeline/API changes, zero cost, zero risk (passive link fetch, not blocked by existing CSP since it isn't script/style/img/connect).
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` -- still deferred, needs human input on tech stack (deferred cycles 56-136).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/llms.txt` (new): lists alerts.json, alerts.schema.json, stats.json, RSS/JSON Feed, OpenSearch descriptor, sitemap, staleness-check guidance (20h threshold matching the existing stale-banner logic), and a risk_score semantics note. `docs/index.html`: added `<link rel="alternate" type="text/plain" title="llms.txt (AI agent guide)" href="llms.txt">` after the OpenSearch `<link rel="search">` tag.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (669 alerts, schema OK incl. alerts.schema.json check: 0 violations, id-reference check OK, feeds OK).
+- Live browser/HTTP smoke test: served `docs/` locally on port 9111, confirmed `/llms.txt` returns HTTP 200 with `text/plain` content-type and correct body, confirmed `link[rel=alternate][href=llms.txt]` renders in the served `index.html`.
+- Pushed `5626be1` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34888956666` completed success (19s); Pages build/deploy `34888955570` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (static frontend-only change); no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `5626be1` -- "Cycle 137: add llms.txt AI-agent discoverability guide" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 136 -> 137. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
