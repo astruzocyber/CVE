@@ -4718,3 +4718,21 @@ Conducted a deliberately broad fresh-eyes review this cycle (not relying on reme
 **RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (review-only, no pipeline run); no 429/throttle signals in any recent run logs across all workflows.
 
 **Updated state:** `total_cycles`: 139 -> 140. `consecutive_no_improvement`: 0 -> 1 (no candidate shipped this cycle). `consecutive_failed_cycles`: 0 (unchanged, cycle did not fail — clean review, just no actionable gap found). `stopped`: false (unchanged).
+
+## Cycle 141 — 2026-09-14T22:00:00Z
+
+**Re-verified state before acting:** `git pull` clean at `f98baec` (fast-forwarded, HEAD matches origin/main), `.agent/state.json` (total_cycles=140, consecutive_no_improvement=1, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 8` — all workflows `success` (CI, pages-build-deployment, Stale Data Alert, Cancel Stale Queued Aggregation Runs), no queued/stuck runs, no 429/throttle signals. Re-ran `python3 scripts/validate_data.py` fresh (VALIDATION PASSED, 675 alerts, schema OK, 0 violations, id-reference OK, feeds OK) and `python3 -m unittest discover -s scripts -p "test_*.py"` (98/98 pass) from clean checkout.
+
+Reviewed: full alert field set for schema/export parity (all 30 fields consistent across card/table/CSV/Markdown export paths post cycles 138-139 fixes); GitHub Actions workflow cron schedules (cve-alerts.yml every 4h, stale-data-alert.yml every 15min w/ 20h threshold margin, cancel-stale-queued.yml every 30min) — all sane, no overlap/race issues; sitemap.xml/robots.txt/llms.txt/security.txt/opensearch.xml all present, valid, and consistent with live URL; watchlist.yaml vendor/product coverage — still generic (GFR-Media-style placeholder set), narrowing to real tech stack still requires human input, correctly deferred since cycle 56.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-140, unchanged reasoning).
+2. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+3. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+4. Cosmetic/no-op changes considered but rejected as not clearing the value bar — would be change for its own sake, not a real gap.
+
+**Implemented:** None. No candidate this cycle cleared the feasibility/risk/value bar as a genuine improvement.
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (review-only); no 429/throttle signals in any recent run logs across all workflows.
+
+**Updated state:** `total_cycles`: 140 -> 141. `consecutive_no_improvement`: 1 -> 2. `consecutive_failed_cycles`: 0 (unchanged). `stopped`: false (unchanged).
