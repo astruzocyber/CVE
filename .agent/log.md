@@ -4793,3 +4793,35 @@ Reviewed cycle 142's shipped fix (`write_sitemap()` W3C-DTF microsecond strip) a
 **Commit SHA:** `cab316b` — "Cycle 143: add regression tests for write_sitemap() W3C-DTF fix" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 142 -> 143. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 144 — 2026-09-14T23:35:00Z
+
+**Re-verified state before acting:** `git pull` clean (fast-forwarded to `be3d17f`/`cab316b`, matching origin/main), `.agent/state.json` (total_cycles=143, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 10` — all workflows `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4999/5000 remaining, healthy. Re-ran `python3 scripts/validate_data.py` fresh (VALIDATION PASSED, 675 alerts, schema OK, 0 violations, id-reference OK, feeds OK) and `python3 -m unittest discover -s scripts -p "test_*.py"` (101/101 pass, including cycle-143's new sitemap tests) from clean checkout.
+
+Continuing the fresh-eyes spec-compliance review from cycles 138/142/143 (which found real bugs: osv_fixed_versions schema-type mismatch, sitemap.xml lastmod fractional-seconds violation) into the one machine-consumed static file not yet audited: `docs/feed.xml` (the RSS 2.0 mirror of the KEV JSON Feed, built by `build_kev_feed()`). Found: `<pubDate>` elements (per-item) were written directly from `date_published`, which is `datetime.now(timezone.utc).isoformat()` -- ISO 8601 with fractional seconds, e.g. `2026-09-14T20:11:17.916400+00:00`. RSS 2.0's spec (based on RFC 822) requires pubDate in RFC 822 date format, e.g. `Mon, 14 Sep 2026 20:11:17 +0000` -- the ISO 8601 form is out of spec and risks silent rejection or mis-parsing by strict RSS readers/validators, the same class of "looks right, fails real-world consumers" bug as the two prior fixes. Also noted `<channel>` had no `<lastBuildDate>`, an RSS 2.0-recommended element consumers use to detect feed freshness (this dashboard already has a stale-data banner concept on the frontend; the feed lacked the equivalent signal for external readers).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Fix feed.xml pubDate to RFC 822 + add lastBuildDate** (chosen) — 5/5/3. Same class of real spec-compliance bug as the sitemap fix (cycle 142), in a file real RSS readers actually parse. Pure Python fix using stdlib `email.utils.format_datetime`, fail-soft (leaves value untouched if unparseable, matching the sitemap fix's philosophy), zero schema/frontend/API changes, zero cost, zero regression risk.
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-143, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `scripts/aggregate.py`: added `from email.utils import format_datetime` import and an `rfc822(iso_str)` helper inside `build_kev_feed()` that parses `date_published` via `datetime.fromisoformat()` and re-emits via `format_datetime(dt, usegmt=True)`, wrapped in `try/except (ValueError, TypeError)` that leaves the raw value untouched on parse failure (fail-soft). Applied to each item's `<pubDate>` and added a spec-recommended `<lastBuildDate>` (current time, same RFC 822 formatting) to `<channel>`. Regenerated `docs/feed.xml` locally from the existing `docs/feed.json` data (no new NVD/EPSS/KEV/Dependabot/GHSA API calls) so the live file reflects the fix immediately rather than waiting for the next scheduled aggregation run.
+
+**Also closed the same test-coverage gap pattern flagged in cycle 143:** added `TestBuildKevFeedRss` to `scripts/test_aggregate.py` (2 cases): valid RFC 822 output that round-trips through `email.utils.parsedate_to_datetime` for both per-item `pubDate` and channel `lastBuildDate`; malformed `date_published` left untouched by the fail-soft except path. Added a top-level `import json` to the test file (previously absent, needed for the new tests' fixture setup).
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py` → exit 0.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → **103/103 passed** (101 previous + 2 new `TestBuildKevFeedRss` cases), `OK`. (One iteration: the first test version's `assertNotIn("T", pubdate)` false-failed because the literal "GMT" zone suffix contains a 'T' character unrelated to the ISO 8601 date/time separator being tested for — fixed by excluding "GMT" before the substring check; not a functional bug, a test-assertion bug caught immediately by the test run itself.)
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (675 alerts, schema OK, 0 violations, id-reference OK, feeds OK) — feed.xml presence+parse check passed on the regenerated file.
+- `node --check docs/app.js` → pass (untouched, sanity).
+- `python3 -c "import xml.dom.minidom as m; m.parse('docs/feed.xml')"` → confirmed well-formed XML post-regeneration.
+- Pushed `334dc90` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34909783403` completed success (10s); Pages build/deploy `34909782036` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (pipeline code fix + local regeneration from existing feed.json only); `gh api rate_limit` showed 4999/5000 remaining; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `334dc90` — "Cycle 144: fix feed.xml pubDate to RFC 822 (RSS 2.0 spec) + add lastBuildDate" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 143 -> 144. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
