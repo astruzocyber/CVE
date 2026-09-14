@@ -69,6 +69,7 @@ import urllib.parse
 import urllib.request
 import urllib.error
 from datetime import datetime, timedelta, timezone, date
+from email.utils import format_datetime
 
 try:
     import yaml
@@ -1426,12 +1427,30 @@ def build_kev_feed(kev_map):
     def esc(s):
         return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
+    def rfc822(iso_str):
+        # RSS 2.0 (per the spec, based on RFC 822) requires pubDate in RFC 822
+        # date format (e.g. "Mon, 14 Sep 2026 20:11:17 +0000"), not ISO 8601.
+        # date_published is produced via datetime.now(timezone.utc).isoformat(),
+        # which emits ISO 8601 w/ fractional seconds -- out of spec for RSS
+        # readers/validators (same class of bug as the sitemap lastmod fix in
+        # a prior cycle). Fail-soft: leave the raw value untouched if it isn't
+        # a parseable ISO datetime, rather than dropping the item or crashing.
+        if not iso_str:
+            return ""
+        try:
+            dt = datetime.fromisoformat(iso_str)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return format_datetime(dt, usegmt=True)
+        except (ValueError, TypeError):
+            return iso_str
+
     rss_items = "\n".join(
         f"    <item>\n"
         f"      <title>{esc(item.get('title'))}</title>\n"
         f"      <link>{esc(item.get('url'))}</link>\n"
         f"      <guid isPermaLink=\"false\">{esc(item.get('id'))}</guid>\n"
-        f"      <pubDate>{esc(item.get('date_published'))}</pubDate>\n"
+        f"      <pubDate>{esc(rfc822(item.get('date_published')))}</pubDate>\n"
         f"      <description>{esc(item.get('content_text'))}</description>\n"
         f"    </item>"
         for item in all_items
@@ -1442,6 +1461,7 @@ def build_kev_feed(kev_map):
         f"  <title>New CISA KEV Entries</title>\n"
         f"  <link>{SITE_URL}</link>\n"
         f"  <description>Newly-added CISA Known Exploited Vulnerabilities.</description>\n"
+        f"  <lastBuildDate>{esc(format_datetime(datetime.now(timezone.utc), usegmt=True))}</lastBuildDate>\n"
         f"{rss_items}\n"
         "</channel></rss>\n"
     )

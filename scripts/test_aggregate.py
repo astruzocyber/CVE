@@ -22,6 +22,7 @@ composite_risk_score, parse_cvss_v3_vector_string, extract_cwe_nvd,
 extract_cwe_ghsa, unique_key, compute_stats's severity bucketing (exercised
 indirectly through compute_stats itself with synthetic alert dicts).
 """
+import json
 import os
 import re
 import sys
@@ -768,6 +769,90 @@ class TestWriteSitemap(unittest.TestCase):
             with open(path) as f:
                 content = f.read()
             self.assertIn("<lastmod>not-a-real-timestamp</lastmod>", content)
+
+
+class TestBuildKevFeedRss(unittest.TestCase):
+    """build_kev_feed()'s RSS 2.0 mirror must emit <pubDate> in RFC 822 date
+    format per the RSS 2.0 spec, even though date_published is stored as ISO
+    8601 (with fractional seconds) elsewhere in the pipeline -- the same
+    class of spec-compliance gap fixed for sitemap.xml's <lastmod> above,
+    applied here to feed.xml's <pubDate>/<lastBuildDate>."""
+
+    def _run_with_tmp_paths(self, snapshot_path, feed_json_path, feed_xml_path, fn):
+        import aggregate
+        with mock.patch.object(aggregate, "KEV_SNAPSHOT_PATH", snapshot_path), \
+             mock.patch.object(aggregate, "FEED_JSON_PATH", feed_json_path), \
+             mock.patch.object(aggregate, "FEED_XML_PATH", feed_xml_path):
+            fn()
+
+    def test_pubdate_is_rfc822_not_iso8601(self):
+        import aggregate
+        with tempfile.TemporaryDirectory() as d:
+            snap = os.path.join(d, "kev_snapshot.json")
+            feed_json = os.path.join(d, "feed.json")
+            feed_xml = os.path.join(d, "feed.xml")
+            with open(snap, "w") as f:
+                json.dump([], f)
+            kev_map = {
+                "CVE-2026-99999": {
+                    "vulnerabilityName": "Test Vuln",
+                    "shortDescription": "desc",
+                    "dateAdded": "2026-09-14",
+                    "dueDate": "2026-10-05",
+                    "vendorProject": "Vendor",
+                    "product": "Product",
+                    "knownRansomwareCampaignUse": "Unknown",
+                }
+            }
+            self._run_with_tmp_paths(
+                snap, feed_json, feed_xml,
+                lambda: aggregate.build_kev_feed(kev_map),
+            )
+            with open(feed_xml) as f:
+                content = f.read()
+            match = re.search(r"<pubDate>([^<]+)</pubDate>", content)
+            self.assertIsNotNone(match)
+            pubdate = match.group(1)
+            # RFC 822 format has no ISO 8601 'T' date/time separator (distinct
+            # from the literal "GMT" zone suffix) or fractional seconds.
+            self.assertNotIn("T", pubdate.replace("GMT", ""))
+            self.assertNotIn(".", pubdate)
+            self.assertTrue(pubdate.endswith("GMT"))
+            # Must be parseable by the standard RFC 822 parser.
+            from email.utils import parsedate_to_datetime
+            parsedate_to_datetime(pubdate)  # raises if invalid
+            # lastBuildDate must also be present and RFC 822-valid.
+            lb_match = re.search(r"<lastBuildDate>([^<]+)</lastBuildDate>", content)
+            self.assertIsNotNone(lb_match)
+            parsedate_to_datetime(lb_match.group(1))
+
+    def test_malformed_date_published_left_untouched(self):
+        import aggregate
+        with tempfile.TemporaryDirectory() as d:
+            snap = os.path.join(d, "kev_snapshot.json")
+            feed_json = os.path.join(d, "feed.json")
+            feed_xml = os.path.join(d, "feed.xml")
+            with open(snap, "w") as f:
+                json.dump([], f)
+            with open(feed_json, "w") as f:
+                json.dump({
+                    "version": "https://jsonfeed.org/version/1",
+                    "title": "New CISA KEV Entries",
+                    "items": [{
+                        "id": "CVE-2020-00000",
+                        "title": "CVE-2020-00000: Old entry",
+                        "content_text": "desc",
+                        "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-00000",
+                        "date_published": "not-a-real-timestamp",
+                    }],
+                }, f)
+            self._run_with_tmp_paths(
+                snap, feed_json, feed_xml,
+                lambda: aggregate.build_kev_feed({}),
+            )
+            with open(feed_xml) as f:
+                content = f.read()
+            self.assertIn("<pubDate>not-a-real-timestamp</pubDate>", content)
 
 
 if __name__ == "__main__":
