@@ -2314,13 +2314,51 @@ document.getElementById("reset-filters").addEventListener("click", () => {
 // the "?" key, or closed via its own close button, Escape, or clicking the
 // dimmed backdrop. Mirrors the existing .score-breakdown hidden-attribute
 // toggle pattern used throughout the app -- no new state management needed.
+//
+// Cycle 122: the modal has carried role="dialog" aria-modal="true" since
+// cycle 80, but never actually implemented the ARIA dialog contract those
+// attributes promise -- opening it didn't move focus inside, Tab could
+// still reach every filter/search/card control behind the dimmed backdrop
+// (no focus trap), and closing it didn't return focus to whatever triggered
+// it (a screen-reader/keyboard-only user would lose their place entirely).
+// aria-modal="true" tells assistive tech "everything outside is inert", so
+// shipping it without the behavior to match is actively misleading, not
+// just an omission. Fixed with a minimal, dependency-free focus trap:
+// lastFocusedBeforeModal remembers the trigger element; openShortcutsModal
+// moves focus to the close button; a keydown listener scoped to the modal
+// cycles Tab/Shift+Tab between its first and last focusable elements; and
+// closeShortcutsModal restores focus to whatever had it before opening
+// (falls back to the toolbar's own hint button if the original trigger was
+// removed from the DOM in the meantime). Pure additive JS, no HTML/CSS
+// changes, no new dependencies, zero API/schema impact.
+let lastFocusedBeforeModal = null;
+
+function getModalFocusable(modal) {
+  return Array.from(
+    modal.querySelectorAll(
+      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+  ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+}
+
 function openShortcutsModal() {
   const modal = document.getElementById("shortcuts-modal");
-  if (modal) modal.hidden = false;
+  if (!modal) return;
+  lastFocusedBeforeModal = document.activeElement;
+  modal.hidden = false;
+  const closeBtn = document.getElementById("shortcuts-modal-close");
+  (closeBtn || getModalFocusable(modal)[0])?.focus();
 }
 function closeShortcutsModal() {
   const modal = document.getElementById("shortcuts-modal");
-  if (modal) modal.hidden = true;
+  if (!modal) return;
+  modal.hidden = true;
+  const restoreTo =
+    lastFocusedBeforeModal && document.contains(lastFocusedBeforeModal)
+      ? lastFocusedBeforeModal
+      : document.getElementById("kbd-hint-btn");
+  restoreTo?.focus();
+  lastFocusedBeforeModal = null;
 }
 function isShortcutsModalOpen() {
   const modal = document.getElementById("shortcuts-modal");
@@ -2330,6 +2368,25 @@ document.getElementById("kbd-hint-btn")?.addEventListener("click", openShortcuts
 document.getElementById("shortcuts-modal-close")?.addEventListener("click", closeShortcutsModal);
 document.getElementById("shortcuts-modal")?.addEventListener("click", (e) => {
   if (e.target && e.target.id === "shortcuts-modal") closeShortcutsModal();
+});
+// Focus trap: while open, Tab/Shift+Tab cycle only within the modal's
+// focusable elements instead of escaping to the (aria-hidden-by-intent)
+// background content.
+document.getElementById("shortcuts-modal")?.addEventListener("keydown", (e) => {
+  if (e.key !== "Tab") return;
+  const modal = document.getElementById("shortcuts-modal");
+  if (!modal || modal.hidden) return;
+  const focusable = getModalFocusable(modal);
+  if (focusable.length === 0) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault();
+    last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault();
+    first.focus();
+  }
 });
 
 // Keyboard shortcuts for the most common triage actions -- prior to this,
