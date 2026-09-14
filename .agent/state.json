@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 115,
+  "total_cycles": 116,
   "implemented": [
     {
       "cycle": 1,
@@ -1118,10 +1118,25 @@
       "title": "Add no-referrer Referrer-Policy meta tag",
       "description": "docs/index.html had no Referrer-Policy control -- outbound links to NVD, Dependabot, GHSA, and other reference URLs on alert cards would leak the dashboard's own URL (including any query-string filter state from cycle 7's shareable filters, e.g. ?q=wordpress&kev=kev) via the Referer header to third-party sites. Added <meta name=\"referrer\" content=\"no-referrer\"> to suppress the Referer header on all outbound navigation/requests -- pure additive, zero-cost, zero API/schema/JS changes, complements cycle 112-114's CSP/SRI hardening pass.",
       "commit_sha": "686b14e"
+    },
+    {
+      "cycle": 116,
+      "timestamp": "2026-09-14T07:25:00Z",
+      "title": "CSS color-scheme dark/light for native form control theming",
+      "description": "The dashboard has a fully-built dark/light theme toggle (since early cycles) but style.css never declared the CSS `color-scheme` property, so browser-native UI elements (checkboxes, select dropdowns, scrollbars) always rendered with light-mode OS chrome regardless of the active data-theme -- a visible mismatch against the dark palette that most visitors use by default. Added `color-scheme: dark` to :root and `color-scheme: light` to html[data-theme=light] in docs/style.css (re-cascades automatically on the existing data-theme attribute toggle, zero JS changes needed) plus a <meta name=color-scheme content='dark light'> early hint in docs/index.html <head> for pre-CSS-load native rendering. Pure additive CSS/HTML, zero API/schema/JS changes, zero cost.",
+      "commit_sha": "4b82bb9",
+      "validation": {
+        "node_check": "pass (docs/app.js, sanity, untouched)",
+        "py_compile": "pass (sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (661 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 8930, confirmed getComputedStyle(document.documentElement).colorScheme === 'dark' by default and correctly flips to 'light' on theme-toggle click, 661/661 cards rendered, Chart.js loaded (typeof Chart === 'function')"
+      },
+      "rate_limit_event": false
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T07:00:00Z",
+  "last_cycle_at": "2026-09-14T07:25:00Z",
   "stopped": false,
   "cycles": [
     {
@@ -1207,6 +1222,20 @@
         "unit_tests": "98/98 pass (unchanged)",
         "validate_data": "pass (661 alerts, schema OK, id-reference check OK, feeds OK)",
         "browser_smoke_test": "pass -- served docs/ locally on port 8919, confirmed document.querySelector('meta[name=referrer]').content === 'no-referrer', 661/661 cards rendered, Chart.js loaded (typeof Chart === 'function')"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 116,
+      "timestamp": "2026-09-14T07:25:00Z",
+      "title": "CSS color-scheme dark/light for native form control theming",
+      "commit_sha": "4b82bb9",
+      "validation": {
+        "node_check": "pass (docs/app.js, sanity, untouched)",
+        "py_compile": "pass (sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (661 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 8930, confirmed getComputedStyle(document.documentElement).colorScheme === 'dark' by default and correctly flips to 'light' on theme-toggle click, 661/661 cards rendered, Chart.js loaded (typeof Chart === 'function')"
       },
       "rate_limit_event": false
     }

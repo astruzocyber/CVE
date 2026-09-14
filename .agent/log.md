@@ -4034,3 +4034,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `e5b77ef` -- "Cycle 114: add SRI hash + crossorigin to Chart.js CDN script tag" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 113 -> 114. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 116 — 2026-09-14T07:25:00Z
+
+**Re-verified state before acting:** `git pull` (up to date), full `.agent/state.json` (total_cycles=115, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 20` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T04:10:57Z (661 alerts), fresh (<20h threshold). Scanned `docs/style.css`/`docs/theme-init.js` for the existing dark/light theme system.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **CSS `color-scheme` property for dark/light theme** (chosen) -- 5/5/4. Real UX gap: the site has had a fully-built dark/light theme toggle since early cycles, but native browser-rendered UI (checkboxes, `<select>` dropdowns, scrollbars) always rendered with light-mode OS chrome regardless of active theme, since `color-scheme` was never declared -- a visible mismatch most visitors would hit by default (dark is the default theme). Pure CSS addition, zero risk, zero cost.
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-115).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/style.css`: added `color-scheme: dark` to `:root` and `color-scheme: light` to `html[data-theme="light"]`. `docs/index.html`: added `<meta name="color-scheme" content="dark light">` to `<head>` as an early hint before CSS loads.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` -> exit 0 (sanity, untouched).
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (661 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 8930, loaded via the browser tool -- confirmed `getComputedStyle(document.documentElement).colorScheme === "dark"` by default, correctly flipped to `"light"` after clicking `#theme-toggle`, 661/661 cards rendered, `typeof Chart === "function"` confirmed Chart.js/CDN/CSP/SRI stack from prior cycles still intact.
+- Pushed `4b82bb9` to `origin/main` (clean, no conflicts).
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `4b82bb9` -- "Cycle 116: add CSS color-scheme dark/light to fix native form control theming" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 115 -> 116. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
