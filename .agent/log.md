@@ -4670,3 +4670,33 @@ Re-ran `python3 scripts/validate_data.py` from a completely clean checkout as pa
 **Commit SHA:** `c34ae6e` -- "Cycle 138: fix osv_fixed_versions schema type + add jsdelivr preconnect" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 137 -> 138. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement -- and specifically a validation-accuracy fix). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 139 — 2026-09-14T20:54:41Z
+
+**Re-verified state before acting:** `git pull` clean at `0c75943`/`c34ae6e` (fast-forwarded to latest), `.agent/state.json` (total_cycles=138, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 10` -- all workflows `success`, Pages deploy for cycle 138 completed, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T20:11:17Z (675 alerts, fresh, within schedule). Re-ran `python3 scripts/validate_data.py`, `python3 -m unittest discover -s scripts -p "test_*.py"` (98/98 pass) fresh from clean checkout to avoid trusting remembered state -- both passed cleanly.
+
+Line-by-line review of `docs/app.js` export paths (CSV, JSON, Markdown) looking for the same class of "safety net that looks real but isn't" bug caught in cycle 138 (schema mismatch). Found: the card-view "View on NVD" link (cycle 10, `docs/app.js` line 466) correctly guards with `alert.cve_id && /^CVE-/i.test(alert.cve_id)` because GHSA-only advisories (no CVE assigned) get `alert.cve_id` set to a `GHSA-XXXX-XXXX-XXXX` identifier, not a `CVE-` id -- and `https://nvd.nist.gov/vuln/detail/GHSA-...` is a broken/meaningless URL. But `alertToMarkdown()` (cycle 51, the single-alert Markdown export used for pasting into tickets/Slack/incident docs) had the *exact same field* with *no guard at all*, unconditionally emitting an invalid NVD link line for every GHSA-only alert exported this way.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Fix `alertToMarkdown()` NVD-link guard to match card-view** (chosen) -- 5/5/4. Corrects a real data-accuracy bug in an export path a security analyst would paste directly into an incident ticket or Slack message -- exactly the "accuracy over feature breadth" priority the operator has repeatedly emphasized. Pure JS fix (3 lines), zero backend/schema/API changes, zero cost, zero regression risk (only removes an already-wrong line for a subset of alerts; unaffected for the majority CVE-identified alerts).
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` -- still deferred, needs human input on tech stack (deferred cycles 56-138).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/app.js`: `alertToMarkdown()`'s unconditional `- **NVD:** ...` line now wrapped in the identical `alert.cve_id && /^CVE-/i.test(alert.cve_id)` guard already used by the card-view link.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (675 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 9188, called `alertToMarkdown()` directly against a synthetic GHSA-only alert object (confirmed no `nvd.nist.gov` substring in the output) and a synthetic CVE alert object (confirmed `nvd.nist.gov` line present, unaffected).
+- Pushed `6ae2fcc` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34895727458` completed success (12s); Pages build/deploy `34895726405` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend export-path bugfix only); no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `6ae2fcc` -- "Cycle 139: fix alertToMarkdown() emitting invalid NVD link for GHSA-only alerts" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 138 -> 139. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement -- a data-accuracy fix). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 138,
+  "total_cycles": 139,
   "implemented": [
     {
       "cycle": 1,
@@ -1400,6 +1400,23 @@
         "browser_smoke_test": "pass -- served docs/ locally on port 9111, confirmed /llms.txt returns HTTP 200 with correct content-type text/plain, confirmed link[rel=alternate][href=llms.txt] renders in served index.html",
         "ci_run": "34888956666 completed success (19s)",
         "pages_build": "34888955570 in_progress at check time (consistent with normal deploy latency)"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 139,
+      "timestamp": "2026-09-14T20:54:41Z",
+      "title": "Fix alertToMarkdown() emitting invalid NVD link for GHSA-only alerts",
+      "description": "Card-view NVD link (cycle 10) guards with /^CVE-/i.test(alert.cve_id), but the markdown single-alert export path (alertToMarkdown, cycle 51) had no such guard, producing a broken/wrong nvd.nist.gov URL for every GHSA-only advisory pasted into a ticket/Slack message. Added the identical guard.",
+      "commit_sha": "6ae2fcc",
+      "validation": {
+        "node_check": "pass (docs/app.js)",
+        "py_compile": "pass (sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged, no Python touched)",
+        "validate_data": "pass (675 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 9188, exercised alertToMarkdown() directly in a real browser: confirmed a synthetic GHSA-only alert omits nvd.nist.gov from its markdown export while a synthetic CVE alert still includes it",
+        "ci_run": "34895727458 completed success (12s)",
+        "pages_build": "34895726405 in_progress at check time (consistent with normal deploy latency)"
       },
       "rate_limit_event": false
     }
