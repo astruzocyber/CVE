@@ -2200,6 +2200,8 @@ if (importReviewedInput) {
 function applyTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
   try { localStorage.setItem("theme", theme); } catch (e) {}
+  const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+  if (metaThemeColor) metaThemeColor.setAttribute("content", theme === "light" ? "#f5f7fa" : "#0b0f14");
   const btn = document.getElementById("theme-toggle");
   if (btn) {
     const isLight = theme === "light";
