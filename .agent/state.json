@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 114,
+  "total_cycles": 115,
   "implemented": [
     {
       "cycle": 1,
@@ -1111,10 +1111,17 @@
       "title": "Add Subresource Integrity (SRI) hash + crossorigin to Chart.js CDN script tag",
       "description": "docs/index.html loads Chart.js from the jsdelivr CDN (script-src allowlisted since cycle 112's CSP) with no SRI hash -- a supply-chain gap where a CDN compromise or MITM could silently swap in malicious JS with the browser none the wiser, notably concerning for a security-focused dashboard. Downloaded the exact pinned version (chart.js@4.4.4/dist/chart.umd.min.js) locally, computed its real sha384 digest (openssl dgst -sha384 -binary | openssl base64), and added integrity=\"sha384-...\" plus crossorigin=\"anonymous\" (required for SRI cross-origin fetches) to the existing <script> tag. Zero new dependencies, zero API/schema changes, zero cost -- pure static HTML attribute addition. If jsdelivr ever serves a byte-different file for this pinned version (compromise or CDN bug), the browser will refuse to execute it and the trend chart will fail closed (hidden/no-op) rather than running untrusted code.",
       "commit_sha": "e5b77ef"
+    },
+    {
+      "cycle": 115,
+      "timestamp": "2026-09-14T07:00:00Z",
+      "title": "Add no-referrer Referrer-Policy meta tag",
+      "description": "docs/index.html had no Referrer-Policy control -- outbound links to NVD, Dependabot, GHSA, and other reference URLs on alert cards would leak the dashboard's own URL (including any query-string filter state from cycle 7's shareable filters, e.g. ?q=wordpress&kev=kev) via the Referer header to third-party sites. Added <meta name=\"referrer\" content=\"no-referrer\"> to suppress the Referer header on all outbound navigation/requests -- pure additive, zero-cost, zero API/schema/JS changes, complements cycle 112-114's CSP/SRI hardening pass.",
+      "commit_sha": "686b14e"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T06:17:00Z",
+  "last_cycle_at": "2026-09-14T07:00:00Z",
   "stopped": false,
   "cycles": [
     {
@@ -1186,6 +1193,20 @@
         "browser_smoke_test": "pass -- served docs/ locally on port 8918, loaded via real browser: typeof Chart === 'function' confirmed SRI hash matched and script executed, 661/661 cards rendered, zero console errors",
         "ci_run": "34812834650 completed success (10s)",
         "pages_build": "34812834135 completed success (39s)"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 115,
+      "timestamp": "2026-09-14T07:00:00Z",
+      "title": "Add no-referrer Referrer-Policy meta tag",
+      "commit_sha": "686b14e",
+      "validation": {
+        "node_check": "pass (docs/app.js, sanity, untouched)",
+        "py_compile": "pass (sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (661 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 8919, confirmed document.querySelector('meta[name=referrer]').content === 'no-referrer', 661/661 cards rendered, Chart.js loaded (typeof Chart === 'function')"
       },
       "rate_limit_event": false
     }
