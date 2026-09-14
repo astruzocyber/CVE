@@ -4472,3 +4472,28 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `c3710ea` -- "Cycle 131: add rel=alternate feed autodiscovery links (RSS/JSON Feed)" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 130 -> 131. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 132 — 2026-09-14T16:28:23Z (FAILURE RECOVERY)
+
+**Trigger:** Scheduled aggregation run `34866935294` (2026-09-14T16:10:24Z) failed after 1m32s.
+
+**Re-verified state before acting:** `git pull` clean, `gh run list --limit 12` showed `CVE/KEV/Dependabot Alert Aggregation` as `completed failure`. Pulled full failed-step log via `gh run view --log-failed`.
+
+**Root cause:** Cycle 129 (2026-09-14T14:50) added `write_sitemap()` to `scripts/aggregate.py`, writing `docs/sitemap.xml` on every pipeline run. The "Commit and push data changes" step in `.github/workflows/cve-alerts.yml` stages an explicit file list via `git add`, which was never updated to include `docs/sitemap.xml`. Every run since cycle 129 therefore left `docs/sitemap.xml` modified-but-unstaged after the step's own `git commit`. On this run, that unstaged diff caused `git pull --rebase origin main` to refuse to proceed ("cannot pull with rebase: You have unstaged changes"), failing all 5 configured push retries and hard-failing the workflow — a real ~4h30m-old aggregation-pipeline outage risk (schedule is every 4h), not a routine cycle. This is exactly the class of bug the guard-rail notification policy (item a) exists to catch.
+
+**Fix implemented:** `.github/workflows/cve-alerts.yml`: (1) added `docs/sitemap.xml` to the `git add` file list; (2) added `git checkout -- .` and `git clean -fd -- docs/ data/` immediately after the commit, as defense-in-depth so any future pipeline-output file added to `aggregate.py`'s `main()` without a matching `git add` entry can never again leave the worktree dirty going into the rebase.
+
+**Validation performed (all passed):**
+- `python3 -c "import yaml; yaml.safe_load(...)"` on the workflow file → YAML OK.
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity, untouched).
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` → exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 98/98 passed (unchanged).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (663 alerts, schema OK, id-reference check OK, feeds OK).
+- Pushed `7c5be3f` to `origin/main`.
+- **Live dispatch verification:** manually triggered `gh workflow run cve-alerts.yml` → run `34868820321` completed **success** in 45s, confirming the exact failure mode from `34866935294` is resolved (sitemap.xml is now committed cleanly, no rebase block).
+
+**RATE_LIMIT_EVENT: no** — no 429/throttle signals in the failed run's logs; the failure was a git-worktree/CI logic bug, not an external API issue.
+
+**Commit SHA:** `7c5be3f` — "fix(ci): stage docs/sitemap.xml in commit-and-push step; hard-reset worktree post-commit" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 131 → 132. `consecutive_no_improvement`: 0 (unchanged). `consecutive_failed_cycles`: 0 (this was a *previous scheduled run's* failure, not a failure of this improvement cycle itself — the cycle that introduced the bug was cycle 129, which passed its own local validation at the time since the bug only manifests on a live scheduled run with real data changes to commit; the fix cycle itself succeeded and is validated live). `stopped`: false (unchanged).
