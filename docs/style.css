@@ -42,6 +42,31 @@ html[data-theme="light"] {
   border: 0;
 }
 
+/* Skip-to-content link: off-screen until keyboard-focused (WCAG 2.4.1 Bypass
+   Blocks). This dashboard's header contains a long h1/subtitle/meta/stale-banner
+   plus up to 7 stat/breakdown blocks before the first interactive control
+   (the search input) -- keyboard and screen-reader users had no way to bypass
+   that chain and land directly on the filters without tabbing through it every
+   single page load. Reuses the existing --blue/--bg design tokens so it looks
+   native to the dashboard rather than a generic browser-default skip link. */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0.5rem;
+  z-index: 1000;
+  padding: 0.6rem 1rem;
+  background: var(--blue, #4f9dff);
+  color: #0b0f14;
+  font-weight: 600;
+  border-radius: 0 0 6px 6px;
+  text-decoration: none;
+  transition: top 0.15s ease-in-out;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
 
 body {
   margin: 0;
