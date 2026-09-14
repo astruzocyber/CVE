@@ -509,10 +509,35 @@ main {
 .alerts-table th[data-sort] {
   cursor: pointer;
   user-select: none;
+  position: relative;
+  padding-right: 20px;
 }
 
 .alerts-table th[data-sort]:hover {
   color: var(--accent, #4f9dff);
+}
+
+.alerts-table th[data-sort]:focus-visible {
+  outline: 2px solid var(--accent, #4f9dff);
+  outline-offset: -2px;
+}
+
+/* Active-sort column/direction indicator (this cycle): mirrors the
+   aria-sort attribute set by updateSortHeaderIndicators() in app.js so
+   sighted users get the same "which column, which direction" signal
+   screen readers get from aria-sort -- previously neither existed and a
+   sorted table gave zero visual feedback about the applied order. */
+.alerts-table th[data-sort][aria-sort="ascending"],
+.alerts-table th[data-sort][aria-sort="descending"] {
+  color: var(--accent, #4f9dff);
+}
+
+.alerts-table th[data-sort][aria-sort="ascending"]::after {
+  content: " \2191";
+}
+
+.alerts-table th[data-sort][aria-sort="descending"]::after {
+  content: " \2193";
 }
 
 .alerts-table tbody tr:hover {

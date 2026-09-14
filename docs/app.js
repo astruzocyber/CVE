@@ -947,6 +947,8 @@ function applyFiltersAndRender() {
 // dataset as the card grid (computed once in applyFiltersAndRender) so both
 // views always agree; only one is visible at a time via #view-toggle.
 function renderTable(filtered) {
+  const sortByEl = document.getElementById("sort-by");
+  if (sortByEl) updateSortHeaderIndicators(sortByEl.value);
   const tbody = document.getElementById("alerts-table-body");
   if (!tbody) return;
   tbody.innerHTML = filtered
@@ -1168,9 +1170,50 @@ document.getElementById("alerts-table-body")?.addEventListener("click", (e) => {
 // sort-by values already wired to #sort-by (kept in sync both ways) so
 // switching to table view, sorting a column, then switching back to card
 // view preserves the same order instead of resetting to the default.
+//
+// aria-sort indicator + keyboard activation (this cycle): the table
+// headers have been click-to-sortable since cycle 76, but gave zero visual
+// or accessibility signal of which column (and direction) the board was
+// actually sorted by -- a real usability gap for a dense triage table
+// meant for fast scanning, and an accessibility gap since aria-sort is the
+// standard ARIA mechanism for sortable-column tables (screen readers
+// announce it, and sighted users get no arrow/highlight at all currently).
+// updateSortHeaderIndicators() below sets aria-sort on the matching header
+// (ascending for cve_id/first_seen-oldest-style fields is out of scope --
+// this reuses the SAME single sort-by value already driving the dropdown,
+// so it can only be "the current column, active" vs "not active"; direction
+// nuance (asc/desc) is inferred from the existing sort semantics baked into
+// applyFiltersAndRender's comparator, which the CSS content marker mirrors
+// via a single ::after arrow rather than duplicating the comparator's
+// per-field direction logic here) and clears it from all others, called
+// once after every renderTable() so it can never drift out of sync with
+// the actual applied sort. Added keydown (Enter/Space) handling so the
+// newly-added tabindex=0/role=button headers are keyboard-activatable,
+// matching native <button> semantics for the ARIA role now applied.
+const SORT_DIRECTION_DESC = new Set(["risk_score", "cvss_score", "epss_score", "first_seen"]);
+function updateSortHeaderIndicators(sortBy) {
+  document.querySelectorAll("#alerts-table thead th[data-sort]").forEach((th) => {
+    if (th.dataset.sort === sortBy) {
+      th.setAttribute("aria-sort", SORT_DIRECTION_DESC.has(sortBy) ? "descending" : "ascending");
+    } else {
+      th.setAttribute("aria-sort", "none");
+    }
+  });
+}
 document.getElementById("alerts-table")?.querySelector("thead")?.addEventListener("click", (e) => {
   const th = e.target.closest("th[data-sort]");
   if (!th) return;
+  const sortBy = document.getElementById("sort-by");
+  if (sortBy) {
+    sortBy.value = th.dataset.sort;
+    applyFiltersAndRender();
+  }
+});
+document.getElementById("alerts-table")?.querySelector("thead")?.addEventListener("keydown", (e) => {
+  const th = e.target.closest("th[data-sort]");
+  if (!th) return;
+  if (e.key !== "Enter" && e.key !== " ") return;
+  e.preventDefault();
   const sortBy = document.getElementById("sort-by");
   if (sortBy) {
     sortBy.value = th.dataset.sort;
