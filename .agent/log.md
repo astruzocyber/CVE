@@ -4006,3 +4006,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `2df82b7` -- "Cycle 113: drop CSP style-src unsafe-inline via CSS width classes for risk bars" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 112 -> 113. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 114 — 2026-09-14T06:17:00Z
+
+**Re-verified state before acting:** `git pull` (up to date, no new aggregation commits since 7ba16ea), full `.agent/state.json` (total_cycles=113, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 15` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. Inspected `docs/index.html` `<head>`: cycle 112's CSP `script-src` allowlists `https://cdn.jsdelivr.net` for the Chart.js CDN script tag, but the `<script>` tag itself had no `integrity`/`crossorigin` attribute.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **SRI hash on the Chart.js CDN script tag** (chosen) -- 5/5/4. Real supply-chain gap: CSP allowlisting a CDN origin protects against arbitrary third-party script injection but does nothing to verify the *specific file served from that origin* hasn't been tampered with (CDN compromise, cache poisoning, MITM on a misconfigured network) -- SRI is the complementary defense-in-depth control. Zero cost: pure static HTML attribute, no build step, no new dependency (computed the sha384 digest locally against the exact pinned CDN URL/version already in use).
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-113).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/index.html`: added `integrity="sha384-NrKB+u6Ts6AtkIhwPixiKTzgSKNblyhlk0Sohlgar9UHUBzai/sgnNNWWd291xqt"` and `crossorigin="anonymous"` to the existing Chart.js `<script>` tag. Hash computed by downloading the exact pinned URL (`https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js`) and running `openssl dgst -sha384 -binary | openssl base64 -A`.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` -> exit 0 (sanity, untouched).
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (661 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 8918, loaded via a real browser -- `typeof Chart === "function"` confirmed the SRI hash matched and the script executed (a mismatched hash would have silently blocked execution, which would show as `Chart` undefined and the trend chart failing to render), 661/661 alert cards rendered, zero console errors.
+- Pushed `e5b77ef` to `origin/main` (clean rebase, no conflicts). Live-verified post-push: CI run `34812834650` completed success (10s), Pages build/deploy `34812834135` completed success (39s).
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change, one jsdelivr CDN fetch for hash computation, no auth/rate-limit-relevant API); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `e5b77ef` -- "Cycle 114: add SRI hash + crossorigin to Chart.js CDN script tag" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 113 -> 114. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

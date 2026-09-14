@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 113,
+  "total_cycles": 114,
   "implemented": [
     {
       "cycle": 1,
@@ -1104,10 +1104,17 @@
       "title": "Drop CSP style-src unsafe-inline via CSS width classes for risk bars",
       "description": "Cycle 112 shipped a CSP meta tag but had to keep style-src 'unsafe-inline' because renderCard() set risk-bar width via an inline style= attribute (the only inline style in the codebase). Replaced it with a data-driven CSS class (risk-w-N, 5%-bucketed, 21 classes in style.css) computed by a new riskWidthClass() helper, removed the inline style attribute entirely, and tightened the CSP meta tag's style-src to 'self' only (dropped 'unsafe-inline'). Verified with a live local browser smoke test: 661/661 cards render with correctly proportional risk-bar widths (e.g. 85% score measured at 164.1px of a 193.1px track = 85.0%), critical/high color classes unaffected, theme toggle and score-breakdown toggle still functional post-change -- zero regressions under the stricter policy.",
       "commit_sha": "2df82b7"
+    },
+    {
+      "cycle": 114,
+      "timestamp": "2026-09-14T06:17:00Z",
+      "title": "Add Subresource Integrity (SRI) hash + crossorigin to Chart.js CDN script tag",
+      "description": "docs/index.html loads Chart.js from the jsdelivr CDN (script-src allowlisted since cycle 112's CSP) with no SRI hash -- a supply-chain gap where a CDN compromise or MITM could silently swap in malicious JS with the browser none the wiser, notably concerning for a security-focused dashboard. Downloaded the exact pinned version (chart.js@4.4.4/dist/chart.umd.min.js) locally, computed its real sha384 digest (openssl dgst -sha384 -binary | openssl base64), and added integrity=\"sha384-...\" plus crossorigin=\"anonymous\" (required for SRI cross-origin fetches) to the existing <script> tag. Zero new dependencies, zero API/schema changes, zero cost -- pure static HTML attribute addition. If jsdelivr ever serves a byte-different file for this pinned version (compromise or CDN bug), the browser will refuse to execute it and the trend chart will fail closed (hidden/no-op) rather than running untrusted code.",
+      "commit_sha": "e5b77ef"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T05:35:00Z",
+  "last_cycle_at": "2026-09-14T06:17:00Z",
   "stopped": false,
   "cycles": [
     {
@@ -1163,6 +1170,22 @@
         "unit_tests": "98/98 pass (unchanged)",
         "validate_data": "pass (661 alerts, schema OK)",
         "browser_smoke_test": "pass -- localhost:8917 loaded under new CSP, no console violations, theme-init ran pre-paint (dark default), theme-toggle worked, Chart.js CDN loaded + trend chart rendered, 661/661 alert cards rendered"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 114,
+      "timestamp": "2026-09-14T06:17:00Z",
+      "title": "Add Subresource Integrity (SRI) hash + crossorigin to Chart.js CDN script tag",
+      "commit_sha": "e5b77ef",
+      "validation": {
+        "node_check": "pass (docs/app.js)",
+        "py_compile": "pass (sanity, no python touched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (661 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 8918, loaded via real browser: typeof Chart === 'function' confirmed SRI hash matched and script executed, 661/661 cards rendered, zero console errors",
+        "ci_run": "34812834650 completed success (10s)",
+        "pages_build": "34812834135 completed success (39s)"
       },
       "rate_limit_event": false
     }
