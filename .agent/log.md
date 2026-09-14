@@ -4388,3 +4388,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `0f814f7` -- "Cycle 128: add custom 404.html page" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 127 -> 128. `consecutive_no_improvement`: 1 -> 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 129 — 2026-09-14T14:50:09Z
+
+**Re-verified state before acting:** `git pull` clean at `0f814f7`, `.agent/state.json` (total_cycles=128, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 12` -- all 4 workflows `success`, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T12:14:06Z (663 alerts). Reviewed `docs/robots.txt`/`docs/sitemap.xml` (added cycle ~63) against `scripts/aggregate.py`: confirmed via `git log --oneline --all -- docs/sitemap.xml` the file has exactly one commit ever (its creation) -- it is a static artifact that has never been touched by the pipeline since, despite claiming `<changefreq>hourly</changefreq>` to search crawlers. A genuine, previously-undetected accuracy gap: the sitemap makes a freshness claim the file itself never honors.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Dynamic sitemap.xml lastmod on every pipeline run** (chosen) -- 5/5/3. Pure additive pipeline change: new `write_sitemap(generated_at_iso)` in `aggregate.py`, called from `main()` right after `build_kev_feed()`, writes `<lastmod>` from `stats["generated_at"]` (with a UTC-now fallback if missing). Zero new API calls, zero schema/frontend changes, zero cost.
+2. GHSA/Dependabot package-level coverage expansion -- still deferred, needs human input on tech stack (deferred cycles 56-128).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `scripts/aggregate.py`: added `SITEMAP_PATH` constant, `write_sitemap()` function, and a call site in `main()`.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py` -> exit 0.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed.
+- Directly exercised `write_sitemap()` with a real `generated_at` value from the current `stats.json` -- output XML matched expected structure, `xml.dom.minidom.parse()` confirmed well-formed.
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (663 alerts, schema OK, id-reference check OK, feeds OK).
+- `git diff --stat` confirmed only `docs/sitemap.xml` (1 line changed: added `<lastmod>`) and `scripts/aggregate.py` (31 lines added) touched -- no unintended file changes.
+- Pushed `c4fbfbc` to `origin/main`. Live-verified post-push: CI run `34858200327` completed success (20s); Pages build/deploy `34858198378` queued at check time (consistent with normal deploy latency).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (pipeline-code-only change, tested locally without a live run); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `c4fbfbc` -- "Cycle 129: write dynamic sitemap.xml lastmod on every pipeline run" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 128 -> 129. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

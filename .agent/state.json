@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 128,
+  "total_cycles": 129,
   "implemented": [
     {
       "cycle": 1,
@@ -1259,10 +1259,17 @@
         "pages_build": "34854598307 in_progress at check time (consistent with normal deploy latency)"
       },
       "rate_limit_event": false
+    },
+    {
+      "cycle": 129,
+      "timestamp": "2026-09-14T14:50:09Z",
+      "title": "Dynamic sitemap.xml lastmod written every pipeline run",
+      "description": "Static docs/sitemap.xml (added cycle ~63-ish) was committed once and never updated -- crawlers got no freshness signal despite the file claiming <changefreq>hourly</changefreq>. Added write_sitemap() to aggregate.py, called from main() after every successful run, writing <lastmod> from stats[generated_at] (falls back to current UTC time if missing). Pure additive pipeline change: one new function, one new call site, zero schema/API/frontend changes.",
+      "commit_sha": "c4fbfbc"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T14:16:59Z",
+  "last_cycle_at": "2026-09-14T14:50:09Z",
   "stopped": false,
   "cycles": [
     {
