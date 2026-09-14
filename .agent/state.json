@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 129,
+  "total_cycles": 130,
   "implemented": [
     {
       "cycle": 1,
@@ -1266,10 +1266,27 @@
       "title": "Dynamic sitemap.xml lastmod written every pipeline run",
       "description": "Static docs/sitemap.xml (added cycle ~63-ish) was committed once and never updated -- crawlers got no freshness signal despite the file claiming <changefreq>hourly</changefreq>. Added write_sitemap() to aggregate.py, called from main() after every successful run, writing <lastmod> from stats[generated_at] (falls back to current UTC time if missing). Pure additive pipeline change: one new function, one new call site, zero schema/API/frontend changes.",
       "commit_sha": "c4fbfbc"
+    },
+    {
+      "cycle": 130,
+      "timestamp": "2026-09-14T15:22:51Z",
+      "title": "Add RFC 9116 security.txt vulnerability-disclosure policy",
+      "description": "docs/.well-known/security.txt was absent. Added standard Contact (GitHub Security Advisories + Issues, both verified reachable via curl), Canonical, Preferred-Languages, Expires fields per RFC 9116. Pure additive static file, zero JS/schema/pipeline/API changes, zero cost.",
+      "commit_sha": "5d53203",
+      "validation": {
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (docs/app.js, docs/sw.js, docs/theme-init.js, sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged, no Python touched)",
+        "validate_data": "pass (663 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 9033, confirmed /.well-known/security.txt returns HTTP 200 with correct RFC 9116 content, confirmed index.html unaffected",
+        "ci_run": "34861764387 completed success (13s)",
+        "pages_build": "34861762366 in_progress at check time (consistent with normal deploy latency)"
+      },
+      "rate_limit_event": false
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T14:50:09Z",
+  "last_cycle_at": "2026-09-14T15:22:51Z",
   "stopped": false,
   "cycles": [
     {
@@ -1484,6 +1501,23 @@
       "timestamp": "2026-09-14T14:16:59Z",
       "title": "Add custom docs/404.html page",
       "commit_sha": "0f814f7",
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 130,
+      "timestamp": "2026-09-14T15:22:51Z",
+      "title": "Add RFC 9116 security.txt vulnerability-disclosure policy",
+      "description": "docs/.well-known/security.txt was absent. Added standard Contact (GitHub Security Advisories + Issues, both verified reachable via curl), Canonical, Preferred-Languages, Expires fields per RFC 9116. Pure additive static file, zero JS/schema/pipeline/API changes, zero cost.",
+      "commit_sha": "5d53203",
+      "validation": {
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (docs/app.js, docs/sw.js, docs/theme-init.js, sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged, no Python touched)",
+        "validate_data": "pass (663 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 9033, confirmed /.well-known/security.txt returns HTTP 200 with correct RFC 9116 content, confirmed index.html unaffected",
+        "ci_run": "34861764387 completed success (13s)",
+        "pages_build": "34861762366 in_progress at check time (consistent with normal deploy latency)"
+      },
       "rate_limit_event": false
     }
   ]

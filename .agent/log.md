@@ -4416,3 +4416,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `c4fbfbc` -- "Cycle 129: write dynamic sitemap.xml lastmod on every pipeline run" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 128 -> 129. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 130 — 2026-09-14T15:22:51Z
+
+**Re-verified state before acting:** `git pull` clean at `cf41610`, `.agent/state.json` (total_cycles=129, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 12` -- all 4 workflows `success`, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T12:14:06Z (663 alerts). Reviewed repo top-to-bottom for gaps not yet covered by the prior 129 cycles: checked `docs/robots.txt`/`sitemap.xml` (both current), `docs/manifest.webmanifest` (icons present), `@media print` (present since earlier cycle), CWE/by_source/KEV breakdowns (all rendered). Found: no `docs/.well-known/security.txt` -- a genuine gap specifically notable for a security-tooling repo, since RFC 9116 is the IETF-standard machine-readable path for researchers/scanners to find a vulnerability-disclosure contact, and its absence is itself flagged by common security-posture scanners.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **RFC 9116 `docs/.well-known/security.txt`** (chosen) -- 5/5/3. Pure additive static file: `Contact` (GitHub Security Advisories + Issues, both verified reachable via `curl` returning 302 redirect to a valid login/form page), `Canonical`, `Preferred-Languages: en`, `Expires` (1 year out, per RFC 9116 recommendation). Zero JS/schema/pipeline/API changes, zero cost, zero risk (new file only).
+2. GHSA/Dependabot package-level coverage expansion -- still deferred, needs human input on tech stack (deferred cycles 56-129).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. New file `docs/.well-known/security.txt`.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (663 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser/HTTP smoke test: served `docs/` locally on port 9033, confirmed `GET /.well-known/security.txt` returns HTTP 200 with the exact expected RFC 9116 content, confirmed `/index.html` unaffected.
+- Pushed `5d53203` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34861764387` completed success (13s); Pages build/deploy `34861762366` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (static-file-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `5d53203` -- "Cycle 130: add RFC 9116 security.txt vulnerability-disclosure policy" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 129 -> 130. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
