@@ -3839,3 +3839,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `fa48b99` — "Cycle 107: add named saved filter views (localStorage)" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 106 → 107. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 108 — 2026-09-14T00:24:00Z
+
+**Re-verified state before acting:** `git pull` (up to date), full `.agent/state.json` (total_cycles=107, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --workflow=cve-alerts.yml --limit 15`. This surfaced an active production incident: run `34737259541` (created 2026-09-13T04:10:16Z) was still `status: queued` >20 hours later, and every subsequent scheduled trigger (34747027907, 34756459488, 34767756136, 34779918766) had been forced into `queued` then `completed/cancelled` in sequence behind it due to the `cve-aggregation` concurrency group (added cycle 101) never clearing. Confirmed via `docs/data/stats.json`: `generated_at` was frozen at `2026-09-13T00:14:40Z` — the dashboard had been silently serving ~24h-stale data.
+
+**Immediate remediation (this cycle):** `gh run cancel 34737259541` — safe because a run still in `queued` status has made zero HTTP/API calls and zero writes, so nothing is lost. This freed the concurrency group; the next pending run (34792104922) immediately transitioned queued→in_progress→completed/success within ~1 minute. Verified `stats.json.generated_at` advanced to `2026-09-14T00:22:24Z` and a fresh commit (`08c36ae`) landed on `main`. Pipeline is healthy again.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Queue-watchdog workflow (auto-cancel stuck queued runs)** (chosen) — 5/5/5. This exact failure mode (a run stuck in GitHub-Actions-side `queued` state, not a hang *after* a runner picks it up) was not covered by any existing safeguard: cycle 101's `concurrency` group and cycle 102's `timeout-minutes: 10` both only bound behavior *after* a runner is assigned. A transient Actions-scheduling hiccup that never assigns a runner at all had no self-clearing mechanism and would recur indefinitely without a human noticing and manually cancelling (as this cycle just did). High value (data-freshness is the dashboard's entire value proposition; it silently degraded for a full day), low risk (own independent concurrency group, only ever cancels runs in `queued` — never `in_progress` — so it cannot kill a run that's actually fetched data or is mid-commit), zero cost (native Actions feature, `*/15 * * * *` schedule on a public repo = free).
+2. Add a `stale-data` GitHub Issue auto-filed if `stats.json.generated_at` exceeds N hours (server-side companion to cycle 9's client-side stale banner) — real gap (the client-side banner cycle 9 added only alerts a visitor who happens to load the page during the stale window; nobody was alerted the *first* ~20 of the 24 stale hours since no one loaded the page). Deferred, not rejected: today's incident is now structurally prevented by candidate 1, and this is a reasonable next-layer defense-in-depth candidate for a future cycle once queue-watchdog's real-world behavior is observed for a few days.
+3. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. New file `.github/workflows/queue-watchdog.yml`: schedule `*/15 * * * *` + `workflow_dispatch`, `permissions: {actions: write}`, single job listing `cve-alerts.yml` runs with `status=queued` via `gh api repos/${repo}/actions/workflows/cve-alerts.yml/runs?status=queued`, computing queued-age from `created_at`, and POSTing `.../runs/{id}/cancel` for any run queued past `QUEUE_TIMEOUT_MINUTES=30`. No changes to `cve-alerts.yml`, `scripts/`, `docs/`, or the data schema.
+
+**Validation performed (all passed):**
+- `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/queue-watchdog.yml'))"` → parses cleanly (confirmed the `on:` → boolean-`True`-key artifact is a harmless PyYAML quirk shared by the pre-existing, already-working `cve-alerts.yml`, not a defect in the new file).
+- `python3 -m py_compile scripts/*.py` → exit 0 (untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → all passing (untouched).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (661 alerts, schema OK).
+- Pushed (`40633fc`), then live-verified with a real `gh workflow run queue-watchdog.yml` manual dispatch: run `34792607775` completed `success` in 6s, log correctly printed `"No queued aggregation runs found. Nothing to do."` (accurate — the incident run was already cleared manually this cycle).
+
+**Rejected this cycle:** server-side stale-data GitHub Issue alert (deferred to a future cycle, not rejected outright); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — the incident was a GitHub Actions runner-scheduling stall, not an external-API 429/throttle. No NVD/EPSS/KEV/Dependabot/GHSA rate-limit signals observed in any run logs this cycle.
+
+**Commit SHA:** `40633fc` — "Cycle 108: add queue-watchdog workflow to auto-cancel stuck queued aggregation runs" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 107 → 108. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged — this cycle succeeded; the incident predated this cycle's start and was remediated + structurally fixed within it, not caused by it). `stopped`: false (unchanged).

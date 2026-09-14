@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 107,
+  "total_cycles": 108,
   "implemented": [
     {
       "cycle": 1,
@@ -1062,6 +1062,13 @@
         "Full risk_score history array -- deferred, storage-growth risk.",
         "Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint."
       ]
+    },
+    {
+      "cycle": 108,
+      "timestamp": "2026-09-14T00:24:00Z",
+      "title": "Queue-watchdog workflow: auto-cancel stuck queued aggregation runs",
+      "description": "Detected in-flight incident on cycle start: aggregation run 34737259541 had sat in queued status for >20 hours (created 2026-09-13T04:10Z), blocking the cve-aggregation concurrency group and causing 4 subsequent scheduled triggers to also queue/get cancelled -- dashboard data was stale for ~24h (last stats.json update 2026-09-13T00:14Z) with zero self-recovery mechanism. Manually cancelled the stuck run this cycle (safe: a queued run has made zero API calls/writes), which immediately let the next pending run start and complete successfully (data now fresh as of 2026-09-14T00:22Z). Root-caused and fixed structurally: added .github/workflows/queue-watchdog.yml, a lightweight 15-minute-cadence workflow (its own concurrency group, no shared lock with cve-alerts.yml) that lists queued cve-alerts.yml runs via gh api and cancels any still queued past a 30-minute threshold, freeing the concurrency group automatically next time this happens. Manually dispatched and verified clean run (exit success, correctly reported \"No queued aggregation runs found\" once the stuck run was cleared).",
+      "commit_sha": "40633fc"
     }
   ],
   "rejected": [],
