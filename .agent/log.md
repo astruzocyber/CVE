@@ -4316,3 +4316,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `c713a07` -- "Cycle 125: prefers-reduced-motion support (WCAG 2.3.3)" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 124 -> 125. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 126 — 2026-09-14T13:09:00Z
+
+**Re-verified state before acting:** `git pull` (up to date at f128fc9), full `.agent/state.json` (total_cycles=125, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 12` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `gh pr list --state all` -- last 4 Dependabot bumps (2 merged, 2 closed), no new interference. `docs/data/stats.json` generated_at=2026-09-14T12:14:06Z (663 alerts). Reviewed `docs/app.js` export functions (`exportCsv`/`exportJson`/`exportMarkdownReport`) top-to-bottom for gaps not yet covered by the prior 125 cycles. Found: `toCsvRow()` (the CSV cell-escaping helper used by `exportCsv()`, unchanged since introduction per grep of `.agent/log.md`) only escaped quotes/commas/newlines -- it never guarded against CSV/formula injection (CWE-1236, OWASP CSV Injection). Every CSV column sources external, non-curated text from NVD/GHSA/Dependabot/OSV (descriptions, reference-link labels, affected-product strings, etc.); if any such upstream field happened to start with `=`, `+`, `-`, `@`, a tab, or CR, Excel/LibreOffice/Google Sheets would evaluate the cell as a formula on open -- a real local-execution-adjacent risk (legacy DDE-style payloads) for a security tool whose entire purpose is exporting externally-sourced text for offline triage/compliance reporting. Confirmed via grep: no prior cycle addressed this; a genuine, previously-undetected security gap in the export path itself (distinct from all prior cycles' pipeline-reliability, data-coverage, and accessibility work).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **CSV formula-injection guard in `toCsvRow()`** (chosen) -- 5/5/4. Pure additive JS: new `csvFormulaGuard()` helper prefixes a leading `'` on any field whose first character is `=`/`+`/`-`/`@`/tab/CR (standard OWASP mitigation, renders as literal text in every major spreadsheet app), called from `toCsvRow()` before the existing quote/comma/newline escaping. Zero HTML/CSS/schema/pipeline/API changes, zero cost, low risk (touches one helper function, doesn't alter JSON/Markdown export paths which aren't opened by spreadsheet apps so the vector doesn't apply there).
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-125).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/app.js`: added `CSV_FORMULA_TRIGGER_RE` and `csvFormulaGuard()` immediately before `toCsvRow()`; `toCsvRow()` now runs every stringified field through the guard before the existing quote-escaping logic.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (663 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 9010, real browser navigation -- confirmed 663/663 `.card` elements rendered, `typeof Chart === "function"`. Directly exercised `csvFormulaGuard()`/`toCsvRow()` in the live DOM: `"=SUM(A1)"` -> `"'=SUM(A1)"`, `"+1234"` -> `"'+1234"`, `"normal text"` -> unchanged, and a full row containing a formula-injection payload (`=cmd|'/c calc'!A1`) correctly rendered with the leading-quote guard plus existing comma/quote escaping intact.
+- Pushed `82cbbaa` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34847540460` completed success (17s), Pages build/deploy `34847538491` queued at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `82cbbaa` -- "Cycle 126: CSV formula-injection guard (CWE-1236) on exported CSV columns" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 125 -> 126. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
