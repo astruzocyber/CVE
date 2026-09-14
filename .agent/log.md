@@ -3893,3 +3893,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `b45f735` (workflow removal) + `cd4fd51` (state update) — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 108 → 109. `consecutive_no_improvement`: 0 (reset, shipped a hygiene fix). `consecutive_failed_cycles`: 0 (unchanged). `stopped`: false (unchanged).
+
+## Cycle 110 — 2026-09-14T01:32:00Z
+
+**Re-verified state before acting:** `git pull` (up to date), `.agent/state.json` (total_cycles=109, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --workflow=cve-alerts.yml --limit 8` (all recent runs completed success/cancelled-as-expected, no currently-queued/stuck runs; last successful aggregation `34792104922`, `stats.json.generated_at` fresh at `2026-09-14T00:22:24Z`). Checked `.github/workflows/` (3 files: `cve-alerts.yml`, `ci.yml`, `cancel-stale-queued.yml`) and confirmed the cycle-108-flagged deferred candidate — a server-side stale-data GitHub Issue alert — was still unimplemented.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Server-side stale-data GitHub Issue alert** (chosen) — 5/5/5. Real gap: cycle 9's client-side stale banner only warns a visitor who happens to load the dashboard during a stale window; during the 2026-09-13 incident (aggregation stuck ~20h) nobody was alerted for most of that window because no one loaded the page. `cancel-stale-queued.yml` now self-heals the *cause*, but there was still no notification layer for the *symptom* (stale data) in general, including causes other than a stuck queue (e.g. a genuinely failing run). Zero cost (native Actions schedule + `GITHUB_TOKEN` issues API), low risk (read-only w.r.t. pipeline data, own concurrency group, dedup via label check prevents issue spam, auto-closes on recovery).
+2. GHSA/Dependabot coverage expansion — still deferred, needs human input on actual tech stack (deferred cycles 56-109).
+3. Full risk_score history array — still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. New file `.github/workflows/stale-data-alert.yml`: schedule `*/30 * * * *` + `workflow_dispatch`, `permissions: {contents: read, issues: write}`, own concurrency group `stale-data-alert`. Reads `docs/data/stats.json`'s `generated_at`, computes age in hours, and if `>= STALE_THRESHOLD_HOURS` (20h, matching the cycle-9 client-side banner threshold) files a `data-staleness`-labeled issue (deduplicated — checks for an existing open one first) with a body describing the staleness and pointing at the aggregation workflow; if data is fresh and a staleness issue is open, closes it with an explanatory comment. No changes to `cve-alerts.yml`, `scripts/`, `docs/`, or the data schema.
+
+**Validation performed (all passed):**
+- `python3 -c "import yaml; yaml.safe_load(...)"` on the new workflow file → parses cleanly (also caught by `write_file`'s built-in YAML lint on first attempt, which correctly rejected an earlier draft with an unescaped colon in a heredoc-body string before it ever touched disk).
+- `python3 -m py_compile scripts/*.py` → exit 0 (sanity, untouched).
+- `node --check docs/app.js` → exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (661 alerts, schema OK).
+- Pushed `148ed7d`, then live-verified with a real `gh workflow run stale-data-alert.yml` manual dispatch: run `34796185715` completed `success` in 12s, log correctly computed `Data generated_at=2026-09-14T00:22:24.676236+00:00, age=1h, threshold=20h` and printed `Data is fresh (1h < 20h)` — took no action, which is the correct behavior for genuinely fresh data (no false positive).
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (deferred, needs human input); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (workflow-file-only change, verification used only the GitHub Actions/Issues API against this repo); no 429/throttle signals in recent aggregation/CI run logs.
+
+**Commit SHA:** `148ed7d` — "Cycle 110: add server-side stale-data GitHub Issue alert" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 109 → 110. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
