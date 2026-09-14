@@ -43,7 +43,7 @@
       "risk_score_breakdown": { "type": ["object", "null"], "description": "Explains exactly how risk_score was computed for this alert (component values/weights, whether the score was capped or weights were redistributed)." },
       "risk_score_prev": { "type": ["number", "null"] },
       "osv_id": { "type": ["string", "null"] },
-      "osv_fixed_versions": { "type": "array", "items": { "type": "string" } },
+      "osv_fixed_versions": { "type": "array", "items": { "type": "object", "properties": { "package": { "type": ["string", "null"] }, "ecosystem": { "type": ["string", "null"] }, "fixed": { "type": "string" } }, "required": ["fixed"] }, "description": "Up to 5 {package, ecosystem, fixed} entries parsed from OSV.dev fixed-version events (see parse_osv_fixed_versions() in scripts/aggregate.py). package/ecosystem are nullable when OSV omits package metadata for the affected range." },
       "affected": { "type": "array", "items": { "type": "string" }, "description": "vendor/product strings (NVD CPE-derived or Dependabot ecosystem/package) matched by the watchlist/dependency filters." },
       "matched_keywords": { "type": "array", "items": { "type": "string" } },
       "source": { "type": "string", "enum": ["nvd", "ghsa", "dependabot"] },
