@@ -3978,3 +3978,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `e2a47b1` -- "Cycle 112: add Content-Security-Policy meta tag, externalize theme-init inline script" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 111 -> 112. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 113 — 2026-09-14T06:15:00Z
+
+**Re-verified state before acting:** `git pull` (up to date), full `.agent/state.json` (total_cycles=112, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 15` across all 4 workflows (aggregation, CI, cancel-stale-queued watchdog, stale-data-alert, plus all 4 dependabot cycle-111 update PRs) -- all `success`, no queued/stuck runs, no 429/throttle signals. Confirmed cycle-111's 4 Dependabot PRs (actions/checkout@7, actions/setup-python@7, requests>=2.34.2, pyyaml>=6.0.3) had already auto-merged cleanly via CI green + Dependabot auto-merge config, no action needed there. Re-read cycle-112's explicit deferred candidate: "Refactor inline risk-bar style to a CSS custom property (to drop `style-src unsafe-inline` entirely)".
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Drop CSP `style-src 'unsafe-inline'` by replacing the one inline `style=` attribute with CSS classes** (chosen) -- 5/4/4. Direct completion of cycle 112's deferred follow-on: `grep -n 'style='` found exactly one remaining inline style in the whole codebase (`renderCard()`'s risk-bar width). `unsafe-inline` on `style-src` is a real (if narrower than script-src) XSS-adjacent gap -- it would let an attacker who found any HTML-injection point in the render path set arbitrary CSS (e.g. `position:fixed` overlays for clickjacking/phishing overlays, or CSS-based data exfiltration via `background:url()` -- though `img-src`/`connect-src` already constrain that). Zero cost, no new dependencies.
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-112).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/app.js`: added `riskWidthClass(pct)` (rounds to nearest 5%, clamped 0-100) and replaced the risk-bar's `style="width:...%"` with a `risk-w-N` class appended alongside the existing severity class. `docs/style.css`: added 21 discrete `.risk-w-0` through `.risk-w-100` width classes (step 5). `docs/index.html`: tightened CSP `style-src 'self' 'unsafe-inline'` -> `style-src 'self'`.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (661 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally, loaded via the browser tool under the new stricter CSP -- page loaded with zero visible breakage, 661/661 cards rendered, measured actual pixel widths of 5 risk bars against their tracks (e.g. `risk-w-85` measured 164.125px/193.094px = 85.0%, `risk-w-60` measured 115.859px/193.109px = 60.0%) confirming the class-based width mechanism matches the prior inline-style behavior exactly within the 5%-bucket precision tradeoff (max possible visual drift: ±2.5 percentage points, imperceptible on a 6px-tall bar). Confirmed severity color classes (critical=red, high=orange) still apply correctly alongside the new width class. Exercised the theme toggle (dark->light, worked) and a score-breakdown toggle (opened, worked) post-change to confirm the CSP tightening didn't silently break unrelated inline-adjacent behaviors.
+- Pushed `2df82b7` to `origin/main` (clean rebase onto one intervening `d1ee783` state-update commit, no conflicts).
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `2df82b7` -- "Cycle 113: drop CSP style-src unsafe-inline via CSS width classes for risk bars" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 112 -> 113. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

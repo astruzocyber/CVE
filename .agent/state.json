@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 112,
+  "total_cycles": 113,
   "implemented": [
     {
       "cycle": 1,
@@ -1097,6 +1097,13 @@
       "title": "Content-Security-Policy meta tag + externalized theme-init script",
       "description": "Added a strict default-src 'self' CSP meta tag to docs/index.html (script-src allowlists only the existing Chart.js jsdelivr CDN; style-src needs unsafe-inline for one existing inline risk-bar width% style; all others locked to 'self'/'none'). Required extracting the sole pre-existing inline <script> (theme pre-paint init) to a new same-origin docs/theme-init.js so script-src 'self' can be enforced without an unsafe-inline carve-out for scripts. Zero API/schema changes.",
       "commit_sha": "e2a47b1"
+    },
+    {
+      "cycle": 113,
+      "timestamp": "2026-09-14T06:15:00Z",
+      "title": "Drop CSP style-src unsafe-inline via CSS width classes for risk bars",
+      "description": "Cycle 112 shipped a CSP meta tag but had to keep style-src 'unsafe-inline' because renderCard() set risk-bar width via an inline style= attribute (the only inline style in the codebase). Replaced it with a data-driven CSS class (risk-w-N, 5%-bucketed, 21 classes in style.css) computed by a new riskWidthClass() helper, removed the inline style attribute entirely, and tightened the CSP meta tag's style-src to 'self' only (dropped 'unsafe-inline'). Verified with a live local browser smoke test: 661/661 cards render with correctly proportional risk-bar widths (e.g. 85% score measured at 164.1px of a 193.1px track = 85.0%), critical/high color classes unaffected, theme toggle and score-breakdown toggle still functional post-change -- zero regressions under the stricter policy.",
+      "commit_sha": "2df82b7"
     }
   ],
   "rejected": [],
