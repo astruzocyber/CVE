@@ -4203,3 +4203,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `25c93d5` -- "Cycle 121: real PNG favicons/apple-touch-icon + PWA manifest PNG icons" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 120 -> 121. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 122 — 2026-09-14T10:51:53Z
+
+**Re-verified state before acting:** `git pull` (up to date at 935f291), full `.agent/state.json` (total_cycles=121, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 20` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `gh pr list --state all` -- last 4 were Dependabot bumps, already merged/closed cycle 117, no new open PRs. `gh issue list --state open` = normal ongoing vulnerability-alert issues (30 open, correctly filed). `docs/data/stats.json` generated_at=2026-09-14T08:12:48Z (662 alerts). Reviewed the keyboard-shortcuts help modal (`docs/index.html` `#shortcuts-modal`, `docs/app.js` `openShortcutsModal`/`closeShortcutsModal`, cycle 80): the markup carries `role="dialog" aria-modal="true"` but the JS never moved focus into the modal on open, never trapped Tab/Shift+Tab inside it, and never restored focus to the trigger on close -- a real accessibility gap masked by attributes that promise behavior the code didn't implement.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Focus trap + focus restore for keyboard-shortcuts modal** (chosen) -- 5/5/4. Genuine, previously-undetected accessibility defect: `aria-modal="true"` tells assistive tech everything outside the dialog is inert, but keyboard/screen-reader users could still Tab out into background filter/card controls, and closing the modal dropped focus to `<body>` instead of returning it to the trigger. Pure additive JS (new `lastFocusedBeforeModal` variable, `getModalFocusable()` helper, one `keydown` listener scoped to the modal), zero HTML/CSS/schema/API changes, zero cost. Low risk: fully isolated to the already-optional shortcuts-modal feature, doesn't touch data pipeline, filters, sort, or rendering of alert cards/table.
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-121).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/app.js`: `openShortcutsModal()` now records `document.activeElement` before showing the modal and moves focus to the close button; `closeShortcutsModal()` restores focus to the recorded trigger (falling back to `#kbd-hint-btn` if it was removed from the DOM); a new `keydown` listener on `#shortcuts-modal` intercepts Tab/Shift+Tab and wraps focus between the modal's first and last focusable elements so it can never escape to the backdrop content while open.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (662 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 8981 via `python3 -m http.server`, loaded via a real browser navigation -- confirmed 662/662 `.card` elements rendered, `typeof Chart === "function"`. Functionally exercised the fix directly in the live DOM: `#kbd-hint-btn` click correctly moved focus to `#shortcuts-modal-close`; dispatching a Shift+Tab `keydown` on the modal (only one focusable element present, the close button) correctly re-focused the same element rather than escaping the modal; clicking the close button hid the modal and restored focus to `#kbd-hint-btn`.
+- Pushed `b95aeea` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34835277176` completed success (12s), Pages build/deploy `34835276870` completed success (44s).
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `b95aeea` -- "Cycle 122: focus trap + focus restore for keyboard-shortcuts modal" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 121 -> 122. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

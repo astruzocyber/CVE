@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 121,
+  "total_cycles": 122,
   "implemented": [
     {
       "cycle": 1,
@@ -1203,10 +1203,17 @@
       "title": "Real PNG favicons/apple-touch-icon + PWA manifest PNG icons",
       "description": "Site relied solely on an inline data-URI SVG for favicon/manifest icons since early cycles. Gap: Safari/iOS home-screen install (apple-touch-icon) does not honor data-URI SVG favicons and falls back to a screenshot thumbnail instead of the branded shield icon; the PWA manifest (cycle 118 SW) only declared one SVG icon, and some install surfaces prefer concrete raster sizes. Rendered assets/source/icon-square.svg (same shield mark) to 32x32 favicon, 180x180 apple-touch-icon, 192x192/512x512 manifest PNGs via rsvg-convert (already installed, zero new deps/cost). Added link tags to index.html and two manifest icon entries; existing SVG favicon kept first. Validated: full test suite (98/98), validate_data.py PASSED (662 alerts), manifest JSON-parses, PNG dims verified, live browser smoke test confirmed hrefs resolve/662 cards render/Chart.js/SW intact.",
       "commit_sha": "25c93d5"
+    },
+    {
+      "cycle": 122,
+      "timestamp": "2026-09-14T10:51:53Z",
+      "title": "Focus trap + focus restore for keyboard-shortcuts modal",
+      "description": "The keyboard-shortcuts help modal (cycle 80) has carried role=\"dialog\" aria-modal=\"true\" since its introduction but never implemented the behavior those attributes promise: opening it via the toolbar button/'?' key did not move focus inside, Tab could still reach every filter/search/card control behind the dimmed backdrop (no focus trap), and closing it did not return focus to whatever triggered it -- a real accessibility bug, since aria-modal=\"true\" tells assistive tech everything outside is inert while the actual DOM behavior contradicted that. Added lastFocusedBeforeModal (remembers the trigger element), a getModalFocusable() helper, focus-to-close-button on open, a keydown listener scoped to the modal that cycles Tab/Shift+Tab between first/last focusable elements, and focus-restore-to-trigger (falling back to the toolbar hint button) on close. Pure additive JS in docs/app.js only, no HTML/CSS/schema/API changes, zero cost.",
+      "commit_sha": "b95aeea"
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T09:41:00Z",
+  "last_cycle_at": "2026-09-14T10:51:53Z",
   "stopped": false,
   "cycles": [
     {
@@ -1351,6 +1358,22 @@
         "browser_smoke_test": "pass -- served docs/ locally on port 8960, clicked table view then CVSS header, confirmed aria-sort=descending on CVSS th / none on others, 662 cards rendered, typeof Chart === function; screenshot confirmed visible blue accent + down-arrow on CVSS column header with correctly-descending CVSS values below it",
         "ci_run": "34829290826 completed success (18s)",
         "pages_build": "34829289650 queued at check time"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 122,
+      "timestamp": "2026-09-14T10:51:53Z",
+      "title": "Focus trap + focus restore for keyboard-shortcuts modal",
+      "commit_sha": "b95aeea",
+      "validation": {
+        "node_check": "pass (docs/app.js)",
+        "py_compile": "pass (sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (662 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 8981, confirmed 662/662 cards rendered, typeof Chart === 'function'; verified openShortcutsModal() moves focus to the close button, Shift+Tab from the close button (only focusable element) correctly re-wraps within the modal instead of escaping, and closeShortcutsModal() restores focus to the original trigger (kbd-hint-btn)",
+        "ci_run": "34835277176 completed success (12s)",
+        "pages_build": "34835276870 completed success (44s)"
       },
       "rate_limit_event": false
     }
