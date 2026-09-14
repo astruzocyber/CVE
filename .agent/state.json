@@ -1,7 +1,7 @@
 {
-  "consecutive_no_improvement": 2,
+  "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 141,
+  "total_cycles": 142,
   "implemented": [
     {
       "cycle": 1,
@@ -1417,6 +1417,22 @@
         "browser_smoke_test": "pass -- served docs/ locally on port 9188, exercised alertToMarkdown() directly in a real browser: confirmed a synthetic GHSA-only alert omits nvd.nist.gov from its markdown export while a synthetic CVE alert still includes it",
         "ci_run": "34895727458 completed success (12s)",
         "pages_build": "34895726405 in_progress at check time (consistent with normal deploy latency)"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 142,
+      "timestamp": "2026-09-14T22:31:53Z",
+      "title": "Fix sitemap.xml lastmod to valid W3C-DTF (strip microseconds)",
+      "description": "write_sitemap() passed generated_at_iso straight through from datetime.isoformat(), which on the microsecond-precision timestamps this pipeline produces (e.g. 2026-09-14T20:11:17.873552+00:00) yields a string that is NOT valid W3C Datetime per the sitemaps.org protocol spec -- the 'complete date plus hours, minutes and seconds' form is YYYY-MM-DDThh:mm:ssTZD with no fractional-seconds component. Strict sitemap validators/some crawlers could reject or mis-parse this. Fixed by parsing with datetime.fromisoformat() and re-emitting with microsecond=0, preserving the timezone offset; the None-fallback path gets the same treatment via the same parse-and-truncate step. Falls back safely (leaves value as-is) if the input isn't a parseable ISO datetime, matching the function's existing fail-soft philosophy.",
+      "commit_sha": "a22776e",
+      "validation": {
+        "py_compile": "pass",
+        "unit_tests": "98/98 pass",
+        "validate_data": "pass (675 alerts, schema OK, id-reference check OK, feeds OK)",
+        "manual_check": "called write_sitemap() directly with both a real microsecond timestamp and None; confirmed output lastmod in both cases is YYYY-MM-DDThh:mm:ss+00:00 (no fractional seconds), then restored sitemap.xml to the real current generated_at value before commit",
+        "ci_run": "34904579422 completed success (10s)",
+        "pages_build": "34904579036 in_progress at check time (consistent with normal deploy latency)"
       },
       "rate_limit_event": false
     }

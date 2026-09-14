@@ -4736,3 +4736,32 @@ Reviewed: full alert field set for schema/export parity (all 30 fields consisten
 **RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (review-only); no 429/throttle signals in any recent run logs across all workflows.
 
 **Updated state:** `total_cycles`: 140 -> 141. `consecutive_no_improvement`: 1 -> 2. `consecutive_failed_cycles`: 0 (unchanged). `stopped`: false (unchanged).
+
+## Cycle 142 — 2026-09-14T22:31:53Z
+
+**Re-verified state before acting:** `git pull` clean (fast-forwarded to `7ef2657`/matching origin/main), `.agent/state.json` (total_cycles=141, consecutive_no_improvement=2, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 8` — all workflows `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4999/5000 remaining, healthy. Re-ran `python3 scripts/validate_data.py` fresh (VALIDATION PASSED, 675 alerts, schema OK, 0 violations, id-reference OK, feeds OK) and `python3 -m unittest discover -s scripts -p "test_*.py"` (98/98 pass) from clean checkout.
+
+Continued the fresh-eyes accuracy review from cycles 138-141 into areas not yet inspected: GitHub Actions workflow files, dependency/PR status (no open Dependabot PRs, rate limit healthy), and static-file generators (sitemap.xml, robots.txt, feeds). Found: `write_sitemap()` in `scripts/aggregate.py` emits `<lastmod>` directly from `generated_at_iso`, which comes from Python's `datetime.isoformat()` at microsecond precision (e.g. `2026-09-14T20:11:17.873552+00:00`). The Sitemaps protocol (sitemaps.org) requires W3C Datetime format, whose "complete date plus hours, minutes and seconds" variant is strictly `YYYY-MM-DDThh:mm:ssTZD` with **no fractional-seconds component** — the microsecond suffix is out of spec and risks being rejected or mis-parsed by strict sitemap validators/crawlers, silently undermining the very freshness signal this field exists to provide (same class of issue as cycles 138/139's export-path bugs: a correctness feature that looks right but emits invalid output for real production data).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Fix sitemap `lastmod` to strip fractional seconds / emit valid W3C-DTF** (chosen) — 5/5/3. Corrects a real spec-compliance bug in a machine-consumed field (sitemap crawlers/validators), consistent with the operator's stated priority of accuracy over feature breadth. Pure Python fix (parse-and-truncate), zero schema/frontend/API changes, zero cost, zero regression risk (fail-soft: falls back to the unmodified value if the input isn't a parseable ISO datetime).
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-141, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `scripts/aggregate.py`: `write_sitemap()` now parses `lastmod` with `datetime.fromisoformat()` and re-emits via `.replace(microsecond=0).isoformat()`, applied uniformly to both the `generated_at_iso`-provided path and the `datetime.now(timezone.utc)` fallback path, wrapped in a `try/except (ValueError, TypeError)` that leaves the value untouched if parsing fails (fail-soft, matches existing function philosophy).
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py` → exit 0.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 98/98 passed (unchanged; sitemap generation has no dedicated unit test but the change is isolated and covered by manual verification below).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (675 alerts, schema OK, id-reference check OK, feeds OK) — unaffected, sitemap.xml is not part of the validated schema set.
+- Manual verification: called `write_sitemap()` directly in a REPL with both a real microsecond-precision timestamp string and `None`; confirmed output `lastmod` in both cases is exactly `YYYY-MM-DDThh:mm:ss+00:00` (no fractional seconds, timezone offset preserved), then re-ran `write_sitemap()` with the real current `stats.json` `generated_at` value to restore `docs/sitemap.xml` to its correct current-data state before committing (avoided committing a stale/synthetic timestamp from testing).
+- Pushed `a22776e` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34904579422` completed success (10s); Pages build/deploy `34904579036` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (pipeline code fix + local verification only); `gh api rate_limit` showed 4999/5000 remaining; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `a22776e` — "Cycle 142: fix sitemap.xml lastmod to valid W3C-DTF (strip microseconds)" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 141 -> 142. `consecutive_no_improvement`: 2 -> 0 (shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
