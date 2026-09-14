@@ -3867,3 +3867,29 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `40633fc` — "Cycle 108: add queue-watchdog workflow to auto-cancel stuck queued aggregation runs" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 107 → 108. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged — this cycle succeeded; the incident predated this cycle's start and was remediated + structurally fixed within it, not caused by it). `stopped`: false (unchanged).
+
+## Cycle 109 — 2026-09-14T00:58:00Z
+
+**Re-verified state before acting:** `git pull` (up to date), `.agent/state.json` (total_cycles=108, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --workflow=cve-alerts.yml --limit 10` (no runs currently queued; the cycle-108 incident run and its backlog had already cleared and completed successfully — last aggregation run 34792104922 success, generated_at 2026-09-14T00:22:24Z, fresh). Also checked `.github/workflows/` and found a second, independently-committed watchdog: `cancel-stale-queued.yml` (commit `70d951d`, human collaborator, pushed 2026-09-13T20:27:22-04:00) solving the *identical* incident as my own cycle-108 `queue-watchdog.yml` — both on a `*/15 * * * *` schedule cancelling stale-queued `cve-alerts.yml` runs via the same `gh api` endpoint.
+
+**Candidates considered:**
+1. **Remove duplicate watchdog** (chosen) — 5/5/4. Two workflows independently polling/cancelling against the same target every 15 minutes is pure waste (still zero-cost on Actions minutes, but doubles GitHub API call volume for identical effect, and diverging duplicate logic is a latent maintenance/drift risk). `cancel-stale-queued.yml` had more explicit validation documented (caught and fixed a real `while read`-subshell bug that silently drops the found-flag). Removed `queue-watchdog.yml`, kept `cancel-stale-queued.yml`.
+2. GHSA/Dependabot coverage expansion — still deferred, needs human input on tech stack.
+3. Server-side stale-data GitHub Issue alert (flagged cycle 108 as a future candidate) — deferred again; watchdog consolidation took priority as the more urgent hygiene fix this cycle.
+4. Any paid/threat-intel enrichment — rejected on principle.
+
+**Implemented:** Candidate 1. Deleted `.github/workflows/queue-watchdog.yml`. No other file changes.
+
+**Validation performed (all passed):**
+- `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/cancel-stale-queued.yml'))"` → parses cleanly.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (661 alerts, schema OK).
+- Pushed `b45f735`; confirmed `pages-build-deployment` triggered normally post-push, and both `Aggregation Queue Watchdog` and `Cancel Stale Queued Aggregation Runs` had been firing every 15 min leading up to this cycle with no queued runs found (i.e., no incident was masked/missed during the brief window both existed).
+
+**Rejected this cycle:** GHSA/Dependabot coverage expansion (deferred, needs human input); server-side stale-data Issue alert (deferred to a future cycle); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (workflow-file-only change); no 429/throttle signals in recent run logs.
+
+**Commit SHA:** `b45f735` (workflow removal) + `cd4fd51` (state update) — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 108 → 109. `consecutive_no_improvement`: 0 (reset, shipped a hygiene fix). `consecutive_failed_cycles`: 0 (unchanged). `stopped`: false (unchanged).
