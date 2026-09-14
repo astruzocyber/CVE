@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 120,
+  "total_cycles": 121,
   "implemented": [
     {
       "cycle": 1,
@@ -1196,6 +1196,13 @@
         "pages_build": "34829289650 queued at check time"
       },
       "rate_limit_event": false
+    },
+    {
+      "cycle": 121,
+      "timestamp": "2026-09-14T10:16:00Z",
+      "title": "Real PNG favicons/apple-touch-icon + PWA manifest PNG icons",
+      "description": "Site relied solely on an inline data-URI SVG for favicon/manifest icons since early cycles. Gap: Safari/iOS home-screen install (apple-touch-icon) does not honor data-URI SVG favicons and falls back to a screenshot thumbnail instead of the branded shield icon; the PWA manifest (cycle 118 SW) only declared one SVG icon, and some install surfaces prefer concrete raster sizes. Rendered assets/source/icon-square.svg (same shield mark) to 32x32 favicon, 180x180 apple-touch-icon, 192x192/512x512 manifest PNGs via rsvg-convert (already installed, zero new deps/cost). Added link tags to index.html and two manifest icon entries; existing SVG favicon kept first. Validated: full test suite (98/98), validate_data.py PASSED (662 alerts), manifest JSON-parses, PNG dims verified, live browser smoke test confirmed hrefs resolve/662 cards render/Chart.js/SW intact.",
+      "commit_sha": "25c93d5"
     }
   ],
   "rejected": [],

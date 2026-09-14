@@ -4173,3 +4173,33 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `97a9af6` -- "Cycle 120: table-view sort column indicator (aria-sort + arrow) and keyboard sort activation" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 119 -> 120. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 121 — 2026-09-14T10:16:00Z
+
+**Re-verified state before acting:** `git pull` (up to date at f3cebbf), full `.agent/state.json` (total_cycles=120, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 8` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `gh pr list --state all` -- last 4 were Dependabot bumps, already merged/closed cycle 117, no new open PRs. Scanned `docs/index.html` head block and `docs/manifest.webmanifest`: confirmed favicon/manifest icons are exclusively an inline data-URI SVG (no `apple-touch-icon`, no raster manifest icons) -- a real gap since Safari/iOS PWA install ignores data-URI SVG favicons.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Real PNG favicons/apple-touch-icon + manifest PNG icons** (chosen) -- 5/5/3. Closes a genuine cross-browser PWA/bookmark gap left over from the cycle-118 service-worker/installability work: iOS home-screen add and some Android/manifest validators don't render the SVG-only setup correctly. Pure static asset generation via `rsvg-convert` (already installed, used in cycle 119), zero new runtime code, zero API calls, zero cost.
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-120).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. New `assets/source/icon-square.svg` (source, reuses existing shield mark), rendered to `docs/favicon-32.png`, `docs/apple-touch-icon.png` (180x180), `docs/icon-192.png`, `docs/icon-512.png` via `rsvg-convert`. `docs/index.html`: added `<link rel="icon" type="image/png" sizes="32x32">` and `<link rel="apple-touch-icon" sizes="180x180">` (existing inline-SVG favicon link kept first/untouched). `docs/manifest.webmanifest`: added the two new PNG icon entries after the existing SVG `any` entry.
+
+**Validation performed (all passed):**
+- `python3 -c "json.load(open('docs/manifest.webmanifest'))"` -> valid JSON.
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, untouched).
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (662 alerts, schema OK, id-reference check OK, feeds OK).
+- `file` on all 4 new PNGs confirmed correct dimensions/format (32x32, 180x180, 192x192, 512x512, all RGBA).
+- Live browser smoke test: served `docs/` locally on port 8971, real browser navigation confirmed `link[sizes="32x32"]`/`link[rel="apple-touch-icon"]` hrefs resolve and return HTTP 200, 662/662 `.card` elements rendered, `typeof Chart === "function"`, `navigator.serviceWorker` present/unaffected (sw.js untouched -- its existing network-first shell caching covers the new static assets automatically).
+- Pushed `25c93d5` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34832313500` completed success (16s), Pages build/deploy `34832312865` completed success (41s).
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (static asset change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `25c93d5` -- "Cycle 121: real PNG favicons/apple-touch-icon + PWA manifest PNG icons" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 120 -> 121. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
