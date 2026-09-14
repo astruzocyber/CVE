@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://astruzocyber.github.io/CVE/data/alerts.schema.json",
+  "title": "CVE/KEV/EPSS/Dependabot Alert Dashboard -- alerts.json data contract",
+  "description": "Documents the public JSON data API served at docs/data/alerts.json (also mirrored fields in feed.json). This file changes only when a pipeline cycle intentionally adds/changes a field -- consumers building automation against alerts.json can pin to this schema to detect breaking changes. Not enforced at runtime (the dashboard itself is fail-soft against missing/extra fields by design); this is documentation-as-code plus an optional external validation aid for third-party integrations.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "cve_id", "description", "cvss_score", "risk_score",
+      "epss_score", "kev", "source", "first_seen", "severity"
+    ],
+    "properties": {
+      "cve_id": {
+        "type": "string",
+        "pattern": "^CVE-\\d{4}-\\d{4,}$",
+        "description": "Canonical CVE identifier; unique across the array."
+      },
+      "description": { "type": "string" },
+      "cvss_score": { "type": ["number", "null"], "minimum": 0, "maximum": 10 },
+      "cvss_version": { "type": ["string", "null"] },
+      "cvss_vector_components": {
+        "type": ["object", "null"],
+        "description": "Parsed subset of the CVSS vector string used for the 'exploit chip' UI (attack vector/complexity/privileges/user interaction). Absent for CVEs with no parseable CVSS vector.",
+        "properties": {
+          "attack_vector": { "type": "string" },
+          "attack_complexity": { "type": "string" },
+          "privileges_required": { "type": "string" },
+          "user_interaction": { "type": "string" }
+        }
+      },
+      "cwe_ids": { "type": "array", "items": { "type": "string", "pattern": "^CWE-\\d+$" } },
+      "epss_score": { "type": ["number", "null"], "minimum": 0, "maximum": 1, "description": "FIRST.org EPSS exploitation-probability score (0-1), refreshed every run for all tracked alerts regardless of NVD lookback window." },
+      "epss_percentile": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+      "epss_score_prev": { "type": ["number", "null"], "description": "epss_score from the previous refresh, used to render the up/down delta indicator." },
+      "kev": { "type": "boolean", "description": "True if this CVE is present in the CISA Known Exploited Vulnerabilities catalog." },
+      "kev_date_added": { "type": ["string", "null"], "format": "date" },
+      "kev_due_date": { "type": ["string", "null"], "format": "date", "description": "CISA BOD 22-01 remediation deadline for KEV entries." },
+      "kev_ransomware_use": { "type": "boolean" },
+      "kev_required_action": { "type": ["string", "null"] },
+      "kev_notes": { "type": ["string", "null"] },
+      "risk_score": { "type": "number", "minimum": 0, "maximum": 100, "description": "Composite score: 35% normalized CVSS + 40% EPSS probability + flat +25 KEV bonus (capped at 100, weights redistributed if a component is missing)." },
+      "risk_score_breakdown": { "type": ["object", "null"], "description": "Explains exactly how risk_score was computed for this alert (component values/weights, whether the score was capped or weights were redistributed)." },
+      "risk_score_prev": { "type": ["number", "null"] },
+      "osv_id": { "type": ["string", "null"] },
+      "osv_fixed_versions": { "type": "array", "items": { "type": "string" } },
+      "affected": { "type": "array", "items": { "type": "string" }, "description": "vendor/product strings (NVD CPE-derived or Dependabot ecosystem/package) matched by the watchlist/dependency filters." },
+      "matched_keywords": { "type": "array", "items": { "type": "string" } },
+      "source": { "type": "string", "enum": ["nvd", "ghsa", "dependabot"] },
+      "published": { "type": ["string", "null"], "format": "date-time" },
+      "nvd_last_modified": { "type": ["string", "null"], "format": "date-time" },
+      "vuln_status": { "type": ["string", "null"], "description": "e.g. 'Rejected' when NVD has withdrawn the CVE -- rendered as a REJECTED badge, not removed from the feed." },
+      "nvd_fix_versions": { "type": "array", "items": { "type": "object" } },
+      "nvd_reference_links": { "type": "array", "items": { "type": "object" } },
+      "severity": { "type": ["string", "null"], "enum": ["critical", "high", "medium", "low", null] },
+      "dependabot_url": { "type": ["string", "null"], "format": "uri" },
+      "first_seen": { "type": "string", "format": "date-time", "description": "Timestamp this CVE first appeared in the dataset; never updated by later score-refresh cycles." }
+    }
+  }
+}

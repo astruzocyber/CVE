@@ -214,8 +214,51 @@ def check_feeds():
     print("feeds: feed.json/feed.xml presence+parse checked")
 
 
+def check_alerts_schema_json():
+    """Validates docs/data/alerts.json against the published JSON Schema at
+    docs/data/alerts.schema.json (added as a documented, versionable data
+    contract for third-party consumers of the public API). Uses the
+    `jsonschema` package when available (already a transitive dependency in
+    this environment); falls back to a warn-only skip if it isn't installed
+    anywhere validate_data.py runs, so this never becomes a hard CI
+    dependency requirement -- consistent with the zero-cost/stdlib-first
+    posture of the rest of this pipeline."""
+    schema_path = DOCS / "data" / "alerts.schema.json"
+    alerts_path = DOCS / "data" / "alerts.json"
+    if not schema_path.exists():
+        warn(f"{schema_path} missing -- skipping schema validation")
+        return
+    try:
+        schema = json.loads(schema_path.read_text())
+    except Exception as e:
+        fail(f"{schema_path} is not valid JSON: {e}")
+        return
+    if not alerts_path.exists():
+        return  # already reported by check_alerts_json()
+    try:
+        alerts = json.loads(alerts_path.read_text())
+    except Exception:
+        return  # already reported by check_alerts_json()
+    try:
+        import jsonschema
+    except ImportError:
+        warn("jsonschema package not installed -- skipped alerts.schema.json validation (non-fatal, CI still enforces REQUIRED_ALERT_KEYS/type checks above)")
+        return
+    validator = jsonschema.Draft7Validator(schema)
+    schema_errors = sorted(validator.iter_errors(alerts), key=lambda e: list(e.path))
+    if schema_errors:
+        for e in schema_errors[:20]:
+            loc = "/".join(str(p) for p in e.path) or "(root)"
+            fail(f"alerts.schema.json violation at {loc}: {e.message}")
+        if len(schema_errors) > 20:
+            fail(f"...and {len(schema_errors) - 20} more alerts.schema.json violations")
+    else:
+        print(f"alerts.schema.json: {len(alerts)} alerts validated against published JSON Schema, 0 violations")
+
+
 def main():
     check_alerts_json()
+    check_alerts_schema_json()
     check_stats_json()
     check_trend_csv()
     check_js_html_consistency()
