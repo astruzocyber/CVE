@@ -4117,3 +4117,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `780beb5` -- "Cycle 118: add PWA service worker for offline shell + installability" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 117 -> 118. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 119 — 2026-09-14T09:06:00Z
+
+**Re-verified state before acting:** `git pull` (up to date at 74d3188), full `.agent/state.json` (total_cycles=118, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 20` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `gh pr list --state all` = 0 open PRs. `gh issue list --state open` = normal ongoing vulnerability-alert issues (correctly filed). `docs/data/stats.json` generated_at=2026-09-14T08:12:48Z (662 alerts), fresh. Scanned `docs/index.html` head block: found `og:title`/`og:description`/`twitter:card` present since early cycles but no `og:image`/`twitter:image` -- confirmed via grep no image/icon assets exist in `docs/` beyond the inline SVG favicon.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Open Graph/Twitter card image for link previews** (chosen) -- 5/5/4. Real gap: a security dashboard meant to be shared in incident/Slack/Teams channels had zero visual in link previews (bare text card), likely hurting click-through and trust signal when analysts share alert links. Pure static asset (generated once via `rsvg-convert` from a new branded SVG reusing the existing shield icon/palette, checked into `assets/source/`), zero new runtime dependencies, zero API calls, zero cost.
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-118).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. New `assets/source/og-image.svg` (1200x630 branded source), rendered to `docs/og-image.png` via `rsvg-convert` (already installed, zero new deps). `docs/index.html`: added `og:image`/`og:image:width`/`og:image:height`/`og:image:alt`/`twitter:image`, upgraded `twitter:card` from `summary` to `summary_large_image`.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, untouched).
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (662 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 8951, confirmed `og-image.png` returns HTTP 200 `image/png` (86988 bytes), `meta[property="og:image"]`/`meta[name="twitter:image"]` content resolve to the correct absolute Pages URL, 662/662 `.card` elements rendered, `typeof Chart === "function"`, `navigator.serviceWorker` present/unaffected by the SW cache-path change from cycle 118.
+- Pushed `f39f534` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34826150485` completed success (10s), Pages build/deploy `34826149365` queued/deploying at time of check.
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only static asset change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `f39f534` -- "Cycle 119: add Open Graph/Twitter card image for link-preview sharing" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 118 -> 119. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

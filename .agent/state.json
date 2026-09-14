@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 118,
+  "total_cycles": 119,
   "implemented": [
     {
       "cycle": 1,
@@ -1162,6 +1162,21 @@
         "browser_smoke_test": "pass -- served docs/ locally on port 8940, confirmed navigator.serviceWorker.getRegistration() returns registered:true, state:'activated', 662/662 cards rendered, Chart.js loaded (typeof Chart === 'function')",
         "ci_run": "34823121068 completed success (1m37s)",
         "pages_build": "34823120267 completed success"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 119,
+      "timestamp": "2026-09-14T09:06:00Z",
+      "title": "Open Graph/Twitter card image for link-preview sharing",
+      "description": "Site had og:title/og:description/twitter:card meta since early cycles but no og:image/twitter:image, so shared links rendered as bare text cards with no visual in Slack/Teams/Discord/X previews -- hurting click-through for a security-alert dashboard meant to be shared in incident channels. Generated a 1200x630 branded PNG (docs/og-image.png) via rsvg-convert from a new assets/source/og-image.svg (reuses existing brand shield icon/palette), wired og:image (+width/height/alt) and twitter:image, upgraded twitter:card from summary to summary_large_image. Static asset, zero API calls, zero cost.",
+      "commit_sha": "f39f534",
+      "validation": {
+        "node_check": "pass (app.js/sw.js/theme-init.js untouched)",
+        "py_compile": "pass (scripts untouched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (662 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 8951, confirmed og-image.png serves HTTP 200 image/png, og:image/twitter:image meta content correct, 662/662 alert cards rendered, typeof Chart === 'function', navigator.serviceWorker present/unaffected"
       },
       "rate_limit_event": false
     }
