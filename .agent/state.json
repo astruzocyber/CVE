@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 122,
+  "total_cycles": 123,
   "implemented": [
     {
       "cycle": 1,
@@ -1210,7 +1210,8 @@
       "title": "Focus trap + focus restore for keyboard-shortcuts modal",
       "description": "The keyboard-shortcuts help modal (cycle 80) has carried role=\"dialog\" aria-modal=\"true\" since its introduction but never implemented the behavior those attributes promise: opening it via the toolbar button/'?' key did not move focus inside, Tab could still reach every filter/search/card control behind the dimmed backdrop (no focus trap), and closing it did not return focus to whatever triggered it -- a real accessibility bug, since aria-modal=\"true\" tells assistive tech everything outside is inert while the actual DOM behavior contradicted that. Added lastFocusedBeforeModal (remembers the trigger element), a getModalFocusable() helper, focus-to-close-button on open, a keydown listener scoped to the modal that cycles Tab/Shift+Tab between first/last focusable elements, and focus-restore-to-trigger (falling back to the toolbar hint button) on close. Pure additive JS in docs/app.js only, no HTML/CSS/schema/API changes, zero cost.",
       "commit_sha": "b95aeea"
-    }
+    },
+    "Skip-to-content link for keyboard/screen-reader users"
   ],
   "rejected": [],
   "last_cycle_at": "2026-09-14T10:51:53Z",
@@ -1376,6 +1377,20 @@
         "pages_build": "34835276870 completed success (44s)"
       },
       "rate_limit_event": false
+    },
+    {
+      "cycle": 123,
+      "timestamp": "2026-09-14T11:27:45Z",
+      "title": "Skip-to-content link for keyboard/screen-reader users",
+      "description": "Added an off-screen-until-focused skip link (docs/index.html body top, href=#search) styled via new .skip-link/.skip-link:focus rules in docs/style.css reusing existing --blue design token. Closes a WCAG 2.4.1 Bypass Blocks gap: the header (h1/subtitle/meta/stale-banner + up to 7 stat/breakdown blocks) preceded the first interactive control (search input) with no way for keyboard/screen-reader users to skip it.",
+      "commit_sha": "61cf19c",
+      "validation": {
+        "node_check": "pass (docs/app.js, docs/sw.js, docs/theme-init.js unchanged, exit 0 sanity)",
+        "py_compile": "pass (scripts/*.py unchanged, exit 0 sanity)",
+        "unittest": "98/98 passed",
+        "validate_data": "VALIDATION PASSED (662 alerts, schema OK, id-reference OK, feeds OK)",
+        "browser_smoke_test": "served docs/ locally on port 8991; confirmed skip-link exists with href=#search, focus moves top:-100px -> 0 on :focus (screenshot verified visible blue pill), click navigates to #search (location.hash confirmed), 662/662 cards rendered, Chart.js loaded (typeof Chart === 'function')"
+      }
     }
   ]
 }

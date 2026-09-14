@@ -4231,3 +4231,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `b95aeea` -- "Cycle 122: focus trap + focus restore for keyboard-shortcuts modal" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 121 -> 122. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 123 — 2026-09-14T11:27:45Z
+
+**Re-verified state before acting:** `git pull` (up to date at 0df054f), full `.agent/state.json` (total_cycles=122, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 20` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `gh pr list --state all` -- last 4 were Dependabot bumps, already merged/closed cycle 117, no new open PRs. `gh issue list --state open` = normal ongoing vulnerability-alert issues (30 open, correctly filed). `docs/data/stats.json` generated_at=2026-09-14T08:12:48Z (662 alerts). Reviewed `docs/index.html`'s document structure top-to-bottom: the `<body>` opens directly into `<header>` containing h1/subtitle/meta/stale-banner plus up to 7 conditionally-shown stat/breakdown blocks (`stats-bar`, `source-breakdown`, `severity-breakdown`, `cwe-breakdown`, `vendor-breakdown`, `keyword-breakdown`, `age-breakdown`) before the first interactive control (the `#search` input inside `<main>`) -- confirmed via grep that no `skip-link`/"skip to content" pattern exists anywhere in the codebase despite this being a long, content-heavy header. A real WCAG 2.4.1 (Bypass Blocks) gap: keyboard and screen-reader users have no way to jump past the repeated header chain to reach filters/search on every single page load.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Skip-to-content link (WCAG 2.4.1 Bypass Blocks)** (chosen) -- 5/5/4. Genuine, previously-undetected accessibility gap distinct from cycle 122's modal focus-trap fix (that covered an optional dialog; this covers the mandatory first-load navigation path every keyboard/AT user hits). Pure additive HTML+CSS: one `<a href="#search" class="skip-link">` as the first body child, off-screen (`top: -100px`) until `:focus` moves it to `top: 0`, reusing the existing `--blue`/`--bg` design tokens. Zero JS, zero API calls, zero schema/pipeline changes, zero cost.
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-122).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/index.html`: added `<a href="#search" class="skip-link">Skip to search and filters</a>` as the first element inside `<body>`, before `<header>`. `docs/style.css`: new `.skip-link` (`position: absolute; top: -100px;` off-screen by default, accent-blue background, rounded bottom corners) and `.skip-link:focus` (`top: 0`) rules placed immediately after the existing `.visually-hidden` utility class.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, untouched).
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (662 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 8991 via `python3 -m http.server`, loaded via a real browser navigation -- confirmed 662/662 `.card` elements rendered, `typeof Chart === "function"`. Functionally exercised the fix directly in the live DOM: `.skip-link` found with `href="#search"`, programmatically focusing it moved `document.activeElement` to the link (computed `top` still `-100px` pre-focus as expected via `:focus` pseudo-class, confirmed visually), clicking it set `location.hash` to `#search`. Screenshot confirmed the skip link renders as a visible blue pill top-left when focused, with the rest of the dashboard (stats bar, source/severity/CWE/vendor/keyword/age breakdowns, historical trend chart) unaffected.
+- Pushed `61cf19c` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34838322024` completed success (10s), Pages build/deploy `34838319558` in progress at time of check (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `61cf19c` -- "Cycle 123: add skip-to-content link for keyboard/screen-reader users" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 122 -> 123. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
