@@ -538,7 +538,9 @@ function alertToMarkdown(alert) {
   if ((alert.cwe_ids || []).length) lines.push(`- **Weakness (CWE):** ${alert.cwe_ids.join(", ")}`);
   lines.push(`- **Published:** ${fmtDate(alert.published)}`);
   lines.push(`- **First seen (tracked):** ${fmtDate(alert.first_seen)}`);
-  lines.push(`- **NVD:** https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}`);
+  if (alert.cve_id && /^CVE-/i.test(alert.cve_id)) {
+    lines.push(`- **NVD:** https://nvd.nist.gov/vuln/detail/${encodeURIComponent(alert.cve_id)}`);
+  }
   if (alert.dependabot_url) lines.push(`- **Dependabot alert:** ${alert.dependabot_url}`);
   if (Array.isArray(alert.osv_fixed_versions) && alert.osv_fixed_versions.length) {
     lines.push(`- **Fix available (OSV.dev):** ${alert.osv_fixed_versions.map(f => `${f.package || "?"}${f.ecosystem ? ` (${f.ecosystem})` : ""} -> ${f.fixed || "?"}`).join(", ")}`);
