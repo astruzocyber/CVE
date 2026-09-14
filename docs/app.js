@@ -2343,3 +2343,17 @@ readFiltersFromURL();
 setupDependencyFilter();
 loadData();
 loadTrendChart();
+
+// Register the PWA service worker (docs/sw.js) so manifest.webmanifest's
+// long-standing install metadata actually results in an installable app
+// with an offline-capable static shell -- see sw.js for the caching
+// strategy rationale (network-only for vulnerability data, network-first
+// with offline cache fallback for the static shell only). Feature-detected
+// and wrapped so browsers without service worker support (or a page served
+// over plain HTTP in local dev) degrade silently with zero functional
+// impact on the dashboard itself.
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
