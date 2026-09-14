@@ -4344,3 +4344,19 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `82cbbaa` -- "Cycle 126: CSV formula-injection guard (CWE-1236) on exported CSV columns" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 125 -> 126. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 127 — 2026-09-14T13:43:58Z
+
+**Repo state re-verified fresh:** git pull clean (no drift), all 4 workflows green (CI Data & Frontend Validation, pages build/deploy, Stale Data Alert, Cancel Stale Queued Aggregation Runs — most recent runs all `success`). 98/98 Python unit tests pass. `validate_data.py` passes: schema OK, id-reference OK, feeds OK, stats.json partitions OK. No 429/throttle signals in any recent run logs.
+
+**Candidates surveyed this cycle:** CSP/security-header meta tags (Permissions-Policy — checked, no additional safe-to-set directive found that isn't already covered by existing strict CSP); GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` `ghsa_packages: []` (still deferred — requires human input on actual dependency/tech stack, cannot safely guess package names without risking irrelevant noise or missed real coverage); print stylesheet, ARIA labeling, reduced-motion, CSV formula-injection guard, retry/backoff on all 5 external HTTP call sites, EPSS/KEV refresh for aged-out alerts — all already implemented in prior cycles (124 total). No new low-risk, zero-cost, validation-passable candidate identified this cycle that isn't already implemented or already correctly deferred pending human input.
+
+**Implemented:** none this cycle.
+
+**Rejected:** none new — reconfirmed prior deferrals (GHSA package list needs human tech-stack input; full risk_score history array still flagged as storage-growth risk; any paid/threat-intel enrichment still rejected on zero-cost principle).
+
+**RATE_LIMIT_EVENT: no** — no external API calls made this cycle (survey-only, no pipeline run triggered outside normal schedule); no 429/throttle signals in any recent workflow run logs.
+
+**consecutive_no_improvement:** 1 (reset at cycle 126 when CSV formula-injection guard shipped; this is cycle 1 of the current no-improvement streak, well below the 10-cycle stop threshold).
+
+**consecutive_failed_cycles:** 0 (unchanged).
