@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Keep GitHub Actions used by our workflows (checkout, setup-python) current.
+  # Zero cost: Dependabot is a native free GitHub feature on any repo (public
+  # or private). It only opens PRs for a human/agent to review and merge --
+  # it never auto-merges, so it cannot break the pipeline on its own.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
+  # Keep our two Python runtime dependencies (requests, PyYAML) current for
+  # security patches. Same zero-cost, PR-only guarantee as above.
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "python"
