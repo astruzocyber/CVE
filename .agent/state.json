@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 133,
+  "total_cycles": 134,
   "implemented": [
     {
       "cycle": 1,
@@ -1333,10 +1333,27 @@
         "pages_build": "34872275376 in_progress at check time (consistent with normal deploy latency)"
       },
       "rate_limit_event": false
+    },
+    {
+      "cycle": 134,
+      "timestamp": "2026-09-14T17:35:23Z",
+      "title": "Add rel=canonical link tag to index.html",
+      "description": "docs/index.html had og:url/og:image and JSON-LD url all pointing to the canonical https://astruzocyber.github.io/CVE/ but no <link rel=canonical> tag in <head> -- the standard signal search engines use to consolidate ranking signals and avoid duplicate-content ambiguity (relevant since the site is served identically at the apex path and could theoretically be crawled via query-string variants from the URL-query-param filter sharing feature added in cycle 7). Added a single <link rel=canonical href=https://astruzocyber.github.io/CVE/> tag after the stylesheet link. Pure additive HTML <head> change: zero JS/schema/pipeline/API changes, zero cost.",
+      "commit_sha": "8905c44",
+      "validation": {
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (docs/app.js, docs/sw.js, docs/theme-init.js, sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged, no Python touched)",
+        "validate_data": "pass (669 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 9066, confirmed link[rel=canonical].href resolves to https://astruzocyber.github.io/CVE/, 669/669 cards rendered via real browser navigation",
+        "ci_run": "34875667849 completed success (10s)",
+        "pages_build": "34875666482 in_progress/waiting at check time (consistent with normal deploy latency)"
+      },
+      "rate_limit_event": false
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T17:02:15Z",
+  "last_cycle_at": "2026-09-14T17:35:23Z",
   "stopped": false,
   "cycles": [
     {
@@ -1590,6 +1607,22 @@
         "browser_smoke_test": "pass -- served docs/ locally on port 9055, confirmed theme-color meta starts at #0b0f14, flips to #f5f7fa on toggle to light, flips back to #0b0f14 on toggle to dark, 669/669 cards rendered throughout",
         "ci_run": "34872275680 completed success (17s)",
         "pages_build": "34872275376 in_progress at check time (consistent with normal deploy latency)"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 134,
+      "timestamp": "2026-09-14T17:35:23Z",
+      "title": "Add rel=canonical link tag to index.html",
+      "commit_sha": "8905c44",
+      "validation": {
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (docs/app.js, docs/sw.js, docs/theme-init.js, sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged, no Python touched)",
+        "validate_data": "pass (669 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 9066, confirmed link[rel=canonical].href resolves to https://astruzocyber.github.io/CVE/, 669/669 cards rendered via real browser navigation",
+        "ci_run": "34875667849 completed success (10s)",
+        "pages_build": "34875666482 in_progress/waiting at check time (consistent with normal deploy latency)"
       },
       "rate_limit_event": false
     }

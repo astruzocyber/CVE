@@ -4525,3 +4525,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `f0c62f2` -- "Cycle 133: sync theme-color meta tag with active dark/light theme" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 132 -> 133. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 134 — 2026-09-14T17:35:23Z
+
+**Re-verified state before acting:** `git pull` clean at `5c5b189`, `.agent/state.json` (total_cycles=133, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 12` -- all workflows `success` since cycle 132's live-verified CI fix, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T16:29:05Z (669 alerts, fresh). Reviewed `docs/index.html` `<head>` line-by-line: found `og:url`/`og:image`/JSON-LD `url` all point to the canonical `https://astruzocyber.github.io/CVE/`, but no `<link rel="canonical">` tag exists -- the standard mechanism search engines use to consolidate ranking signals for a URL that can be reached with query-string variants (the URL-query-param filter-sharing feature from cycle 7 means `?kev=1&sort=risk` etc. are all valid, crawlable, distinct-URL views of the same canonical page).
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **`<link rel="canonical">` tag** (chosen) -- 5/5/3. Pure additive single `<head>` line pointing at the existing canonical URL already used in `og:url`. Zero JS/schema/pipeline/API changes, zero cost, zero risk (head-only, no existing tag touched).
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` -- still deferred, needs human input on tech stack (deferred cycles 56-133).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/index.html`: added `<link rel="canonical" href="https://astruzocyber.github.io/CVE/">` after the stylesheet link.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (669 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 9066, navigated with a real browser tab, confirmed `document.querySelector('link[rel=canonical]').href` resolves to `https://astruzocyber.github.io/CVE/` and 669/669 alert cards rendered with zero regression.
+- Pushed `8905c44` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34875667849` completed success (10s); Pages build/deploy `34875666482` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (static HTML-only change); no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `8905c44` -- "Cycle 134: add rel=canonical link tag to index.html" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 133 -> 134. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
