@@ -4288,3 +4288,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `e0b5347` -- "Cycle 124: accessible text summary (role=img + aria-label) for trend chart" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 123 -> 124. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 125 — 2026-09-14T12:36:15Z
+
+**Re-verified state before acting:** `git pull` (up to date at f128fc9), full `.agent/state.json` (total_cycles=124, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 12` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `gh pr list --state all` -- last 4 Dependabot bumps (2 merged, 1 closed, 1 closed), no new interference. `docs/data/stats.json` generated_at=2026-09-14T12:14:06Z (663 alerts). Reviewed `docs/style.css` and `docs/app.js` for the `prefers-reduced-motion` candidate explicitly deferred at cycle 124 (scored 5/5/2 there as "real but marginal"): re-examined and found it's broader than initially scoped -- besides the 6 short CSS `transition:` rules, `highlightFromHash()` in `docs/app.js` triggers a native `scrollIntoView({behavior:"smooth"})` on every CVE deep-link visit, which is a genuine, potentially-disorienting programmatic scroll animation (not a sub-300ms micro-interaction) -- a real WCAG 2.3.3 (Animation from Interactions) case for a user with a vestibular disorder who has set the OS-level reduce-motion preference. Confirmed via grep: no `prefers-reduced-motion` rule existed anywhere in the codebase before this cycle.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **`prefers-reduced-motion` support (CSS blanket rule + JS scrollIntoView guard)** (chosen) -- 5/5/3. Re-scored up from cycle 124's 5/5/2 after discovering the smooth-scroll interaction, which is the stronger WCAG 2.3.3 case than the micro-transitions alone. Pure additive CSS (`@media (prefers-reduced-motion: reduce)` collapsing all transition/animation durations to near-zero and forcing `scroll-behavior: auto`) plus one small JS guard in `highlightFromHash()` (checks `matchMedia`, uses `behavior: "auto"` instead of `"smooth"` when set). Zero functional/visual end-state change, zero HTML/schema/API changes, zero cost. Low risk: doesn't touch data pipeline, filters, sort, card rendering logic, or any existing transition's end-state -- only its duration.
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-124).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/style.css`: added `@media (prefers-reduced-motion: reduce)` block (universal selector, `animation-duration`/`animation-iteration-count`/`transition-duration: 0.001ms !important`, `scroll-behavior: auto !important`) placed after the existing mobile breakpoint, before the print stylesheet. `docs/app.js`: `highlightFromHash()` now checks `window.matchMedia("(prefers-reduced-motion: reduce)").matches` and passes `behavior: "auto"` instead of `"smooth"` to `scrollIntoView` when true (guarded for environments without `matchMedia`).
+
+**Validation performed (all passed):**
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (663 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 8999 via `python3 -m http.server`, loaded via real browser navigation -- confirmed 663/663 `.card` elements rendered, `typeof Chart === "function"`, and confirmed via `document.styleSheets` iteration that the new `prefers-reduced-motion` media rule is present and parses correctly in the loaded stylesheet.
+- Pushed `c713a07` to `origin/main` (clean, no conflicts, one intervening `git pull` for a concurrent data-refresh commit). Live-verified post-push: CI run `34844317923` completed success (15s), Pages build/deploy `34844317496` completed success (44s).
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `c713a07` -- "Cycle 125: prefers-reduced-motion support (WCAG 2.3.3)" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 124 -> 125. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
