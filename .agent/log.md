@@ -4497,3 +4497,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `7c5be3f` — "fix(ci): stage docs/sitemap.xml in commit-and-push step; hard-reset worktree post-commit" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 131 → 132. `consecutive_no_improvement`: 0 (unchanged). `consecutive_failed_cycles`: 0 (this was a *previous scheduled run's* failure, not a failure of this improvement cycle itself — the cycle that introduced the bug was cycle 129, which passed its own local validation at the time since the bug only manifests on a live scheduled run with real data changes to commit; the fix cycle itself succeeded and is validated live). `stopped`: false (unchanged).
+
+## Cycle 133 — 2026-09-14T17:02:15Z
+
+**Re-verified state before acting:** `git pull` clean, `.agent/state.json` (total_cycles=132, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 12` -- all 4 workflows `success` since cycle 132's live-verified fix, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T16:29:05Z (669 alerts, fresh). Reviewed repo for gaps: `docs/index.html` `<head>` PWA/meta tags, `docs/manifest.webmanifest`, `docs/theme-init.js` and `applyTheme()` in `docs/app.js`. Found: `<meta name="theme-color">` was a single hardcoded dark value (#0b0f14), never updated when the user's theme is (or switches to) light -- a real, visible browser-chrome/page-theme mismatch, especially relevant since the manifest declares `"display": "standalone"` (PWA install) where the OS uses theme-color to paint the title bar/status bar.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Dynamic theme-color meta sync** (chosen) -- 5/5/3. Pure additive: update the meta tag's `content` attribute in both the pre-paint `theme-init.js` path and the runtime `applyTheme()` toggle handler. Zero backend/schema/API changes, zero cost, zero risk (attribute write only, no new elements/dependencies).
+2. GHSA/Dependabot package-level coverage expansion -- still deferred, needs human input on tech stack (deferred cycles 56-132).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/theme-init.js` (pre-paint sync) and `docs/app.js` `applyTheme()` (runtime toggle sync).
+
+**Validation performed (all passed):**
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (669 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 9055, confirmed initial `theme-color` = #0b0f14 with `data-theme=dark`; clicked theme-toggle -> `data-theme=light`, `theme-color` correctly flipped to #f5f7fa; toggled back -> both reverted to dark values; confirmed 669/669 cards rendered throughout with zero regression.
+- Pushed `f0c62f2` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34872275680` completed success (17s); Pages build/deploy `34872275376` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (static frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `f0c62f2` -- "Cycle 133: sync theme-color meta tag with active dark/light theme" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 132 -> 133. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
