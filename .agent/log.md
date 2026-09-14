@@ -4553,3 +4553,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `8905c44` -- "Cycle 134: add rel=canonical link tag to index.html" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 133 -> 134. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 135 — 2026-09-14T18:39:59Z
+
+**Re-verified state before acting:** `git pull` clean at `8a803d5`, `.agent/state.json` (total_cycles=134, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 12` -- all workflows `success` since cycle 132's live-verified CI fix, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T16:29:05Z (669 alerts, fresh). Reviewed the full field surface of `docs/data/alerts.json` (29 distinct keys, types enumerated via a scratch script) and `scripts/validate_data.py`'s `REQUIRED_ALERT_KEYS` set: found the dashboard's public JSON API has never had a formal, versionable schema -- only an 8-key informal required-set and prose in README. A real gap for a "dashboard" whose data is also explicitly documented as a public feed (feed.xml/feed.json, sitemap, RSS/JSON Feed autodiscovery from cycle 131) that third parties could reasonably build automation against.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Publish `docs/data/alerts.schema.json` (JSON Schema Draft-07) + wire into `validate_data.py`** (chosen) -- 5/5/4. Pure additive: new schema file, new validation function (uses already-installed `jsonschema` package, warn-only skip if absent so never a hard new dependency), one new footer link. Zero pipeline/API/schema-of-record changes, zero cost, zero risk (documentation + an *additional* validation layer, doesn't touch existing checks).
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` -- still deferred, needs human input on tech stack (deferred cycles 56-134).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/data/alerts.schema.json` (new, Draft-07 schema covering all 29 alert fields with types/enums/ranges/patterns). `scripts/validate_data.py`: added `check_alerts_schema_json()`, called from `main()` right after `check_alerts_json()`. `docs/index.html`: added a footer paragraph linking to `data/alerts.json` and `data/alerts.schema.json` for integrators.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py` -> exit 0.
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no existing Python logic touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (669 alerts, **new**: "alerts.schema.json: 669 alerts validated against published JSON Schema, 0 violations", id-reference check OK, feeds OK).
+- Live browser/HTTP smoke test: served `docs/` locally on port 9077, confirmed `/data/alerts.schema.json` returns HTTP 200 with valid parseable JSON, confirmed the new footer link text renders in the served `index.html`.
+- Pushed `4f84cf9` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34882184366` completed success (11s); Pages build/deploy `34882183292` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (validation-tooling + static HTML change only); no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `4f84cf9` -- "Cycle 135: publish JSON Schema for alerts.json data contract" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 134 -> 135. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
