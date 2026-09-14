@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 119,
+  "total_cycles": 120,
   "implemented": [
     {
       "cycle": 1,
@@ -1179,10 +1179,27 @@
         "browser_smoke_test": "pass -- served docs/ locally on port 8951, confirmed og-image.png serves HTTP 200 image/png, og:image/twitter:image meta content correct, 662/662 alert cards rendered, typeof Chart === 'function', navigator.serviceWorker present/unaffected"
       },
       "rate_limit_event": false
+    },
+    {
+      "cycle": 120,
+      "timestamp": "2026-09-14T09:41:00Z",
+      "title": "Table-view sort column indicator (aria-sort + arrow) + keyboard sort activation",
+      "description": "Table headers have been click-to-sortable since cycle 76 but gave zero visual or accessibility signal of which column/direction the board was actually sorted by. Added updateSortHeaderIndicators() (sets aria-sort=ascending/descending on the active data-sort <th>, none on the rest, called from renderTable() so it can never drift), a CSS ::after arrow + accent color on the active header, and Enter/Space keydown handling so the newly tabindex=0/role=button headers are keyboard-activatable. Pure additive frontend change, zero API/schema/pipeline changes, zero cost.",
+      "commit_sha": "97a9af6",
+      "validation": {
+        "node_check": "pass (docs/app.js)",
+        "py_compile": "pass (sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (662 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 8960, clicked table view then CVSS header, confirmed aria-sort=descending on CVSS th / none on others, 662 cards rendered, typeof Chart === function; screenshot confirmed visible blue accent + down-arrow on CVSS column header with correctly-descending CVSS values below it",
+        "ci_run": "34829290826 completed success (18s)",
+        "pages_build": "34829289650 queued at check time"
+      },
+      "rate_limit_event": false
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T08:31:00Z",
+  "last_cycle_at": "2026-09-14T09:41:00Z",
   "stopped": false,
   "cycles": [
     {
@@ -1311,6 +1328,22 @@
         "browser_smoke_test": "pass -- served docs/ locally on port 8940, confirmed navigator.serviceWorker.getRegistration() returns registered:true, state:'activated', 662/662 cards rendered, Chart.js loaded (typeof Chart === 'function')",
         "ci_run": "34823121068 completed success (1m37s)",
         "pages_build": "34823120267 completed success"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 120,
+      "timestamp": "2026-09-14T09:41:00Z",
+      "title": "Table-view sort column indicator (aria-sort + arrow) + keyboard sort activation",
+      "commit_sha": "97a9af6",
+      "validation": {
+        "node_check": "pass (docs/app.js)",
+        "py_compile": "pass (sanity, untouched)",
+        "unit_tests": "98/98 pass (unchanged)",
+        "validate_data": "pass (662 alerts, schema OK, id-reference check OK, feeds OK)",
+        "browser_smoke_test": "pass -- served docs/ locally on port 8960, clicked table view then CVSS header, confirmed aria-sort=descending on CVSS th / none on others, 662 cards rendered, typeof Chart === function; screenshot confirmed visible blue accent + down-arrow on CVSS column header with correctly-descending CVSS values below it",
+        "ci_run": "34829290826 completed success (18s)",
+        "pages_build": "34829289650 queued at check time"
       },
       "rate_limit_event": false
     }

@@ -4145,3 +4145,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `f39f534` -- "Cycle 119: add Open Graph/Twitter card image for link-preview sharing" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 118 -> 119. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 120 — 2026-09-14T09:41:00Z
+
+**Re-verified state before acting:** `git pull` (up to date at 21a243a), full `.agent/state.json` (total_cycles=119, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 20` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `gh pr list --state all` = 0 open PRs. `gh issue list --state open` = normal ongoing vulnerability-alert issues. `docs/data/stats.json` generated_at=2026-09-14T08:12:48Z (662 alerts), fresh. Reviewed `docs/index.html`'s table-view `<thead>` and `docs/app.js`'s click-to-sort handler (cycle 76): headers have had `data-sort` + click delegation since cycle 76 and stayed unchanged through cycles 77-119, but carry no `aria-sort` attribute and no visual indicator of the active sort column/direction -- confirmed via grep that `aria-sort` appears nowhere in the codebase.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Table-view sort column indicator (aria-sort + visual arrow) + keyboard activation** (chosen) -- 5/5/4. Real, previously-undetected usability/accessibility gap: a dense sortable table with zero feedback on current sort state forces a viewer to remember which header they last clicked, and the plain `<th>` elements had no `tabindex`/`role` despite being click-activated (keyboard users could not sort at all). Pure additive frontend change (new function + CSS rules + two attribute additions per header), zero new API calls, zero backend/schema changes, zero cost. Low risk: purely visual/ARIA, reuses the exact same `data-sort` values and `applyFiltersAndRender()` sort pipeline unchanged.
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-119).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/index.html`: added `tabindex="0" role="button" aria-sort="..."` to the 4 sortable `<th>` elements (defaulting the pre-selected `risk_score` column to `descending`, others to `none`). `docs/app.js`: added `SORT_DIRECTION_DESC` set + `updateSortHeaderIndicators(sortBy)` (sets aria-sort on the matching header, clears the rest), called from the top of `renderTable()` so it can never drift out of sync regardless of trigger (header click, dropdown change, reset-filters, saved-view load, URL param). Added a `keydown` listener on the table `<thead>` for Enter/Space so the now keyboard-focusable headers are keyboard-activatable. `docs/style.css`: `::after` arrow content (↑/↓) + accent color on the active `[aria-sort="ascending"/"descending"]` header, plus a `:focus-visible` outline.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (662 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 8960, clicked table-view toggle then the CVSS header via a real browser navigation -- confirmed `aria-sort="descending"` on the CVSS `<th>` and `"none"` on Risk/CVE ID headers, 662/662 rows/cards rendered, `typeof Chart === "function"`. Screenshot confirmed the CVSS header renders in accent blue with a visible down-arrow, with CVSS values correctly descending (10.0, 10.0, 10.0, ... down to 9.8) beneath it.
+- Pushed `97a9af6` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34829290826` completed success (18s), Pages build/deploy `34829289650` queued at check time.
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `97a9af6` -- "Cycle 120: table-view sort column indicator (aria-sort + arrow) and keyboard sort activation" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 119 -> 120. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
