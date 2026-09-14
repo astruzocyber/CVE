@@ -4062,3 +4062,30 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `4b82bb9` -- "Cycle 116: add CSS color-scheme dark/light to fix native form control theming" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 115 -> 116. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 117 — 2026-09-14T08:00:00Z
+
+**Re-verified state before acting:** `git pull` (up to date at 4b82bb9/7d30754), full `.agent/state.json` (total_cycles=116, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 20` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T04:10:57Z (661 alerts), fresh. Checked `gh pr list --state all` and found 4 open Dependabot PRs from cycle 111 (#373-376) that had been sitting open with green CI since 2026-09-14T04:38 -- never merged, meaning cycle 111's dependency-update mechanism had opened PRs but nothing actually landed them on main.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Merge the 4 open Dependabot PRs** (chosen) -- 5/5/3. All 4 had green `validate` CI checks (py_compile/node_check/unit_tests/validate_data all pass per ci.yml). Low risk: version-floor bumps only (actions/checkout v4->v7, actions/setup-python v5->v7, PyYAML>=6.0.1->6.0.3, requests>=2.31.0->2.34.2), no code logic changes. Real value: closes the loop on cycle 111's Dependabot setup, which is otherwise inert if nothing ever merges the PRs it opens.
+2. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-116).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. Merged #373 (actions/checkout v7), #374 (actions/setup-python v7), #375 (PyYAML>=6.0.3) via `gh pr merge --squash --delete-branch`, all clean fast-forwards. #376 (requests>=2.34.2) failed with a GraphQL merge-conflict error (an intervening main commit had touched the same single-line `requirements.txt`) -- resolved manually by editing `requirements.txt` directly on main (`requests>=2.31.0` -> `>=2.34.2`) and closing PR #376 with an explanatory comment pointing to the manual resolution commit.
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/*.py` -> exit 0.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (661 alerts, schema OK, id-reference check OK, feeds OK).
+- `node --check docs/app.js docs/theme-init.js` -> exit 0.
+- Pushed `dc124e7` to `origin/main` (clean).
+
+**Rejected this cycle:** GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot-alerts/GHSA calls this cycle (dependency-merge + CI/pipeline validation only); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `dc124e7` -- "Cycle 117: resolve requests dependabot bump conflict, pin >=2.34.2" -- pushed to `origin/main`. (PRs #373/#374/#375 merged as squash commits with their own SHAs; #376 closed without merge, superseded by `dc124e7`.)
+
+**Updated state:** `total_cycles`: 116 -> 117. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
