@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 137,
+  "total_cycles": 138,
   "implemented": [
     {
       "cycle": 1,
@@ -1405,7 +1405,7 @@
     }
   ],
   "rejected": [],
-  "last_cycle_at": "2026-09-14T19:46:48Z",
+  "last_cycle_at": "2026-09-14T20:20:26Z",
   "stopped": false,
   "cycles": [
     {
@@ -1701,6 +1701,24 @@
       "timestamp": "2026-09-14T19:46:48Z",
       "title": "Add docs/llms.txt (AI-agent discoverability guide)",
       "commit_sha": "5626be1",
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 138,
+      "timestamp": "2026-09-14T20:20:26Z",
+      "title": "Fix osv_fixed_versions schema type bug + jsdelivr preconnect",
+      "description": "Fresh re-verification of docs/data/alerts.schema.json (published cycle 135) against real live alerts.json output found the schema declared osv_fixed_versions items as plain strings while parse_osv_fixed_versions() in scripts/aggregate.py has always emitted {package, ecosystem, fixed} objects -- meaning the schema-validation layer added in cycle 135 has been silently FAILING on every run since (2 violations, alerts index 4 and 5). Corrected the schema to the real always-emitted object shape. Also added <link rel=preconnect>/<link rel=dns-prefetch> for https://cdn.jsdelivr.net (Chart.js CDN, the only external origin allowed by CSP) ahead of the deferred script tag.",
+      "commit_sha": "c34ae6e",
+      "validation": {
+        "json_syntax": "pass (alerts.schema.json)",
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (docs/app.js, docs/sw.js, docs/theme-init.js)",
+        "unit_tests": "98/98 pass (unchanged, no Python logic touched, only schema doc)",
+        "validate_data": "FAILED before fix (2 schema violations on real data), PASSED after fix (675 alerts, schema OK, 0 violations, id-reference OK, feeds OK)",
+        "browser_smoke_test": "pass -- confirmed via live browser against local docs/ server: link[rel=preconnect][href=cdn.jsdelivr.net] present, 675/675 cards rendered, typeof Chart === 'function'",
+        "ci_run": "34892313831 completed success (13s)",
+        "pages_build": "34892310750 in_progress at check time (consistent with normal deploy latency)"
+      },
       "rate_limit_event": false
     }
   ]

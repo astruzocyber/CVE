@@ -4638,3 +4638,35 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `5626be1` -- "Cycle 137: add llms.txt AI-agent discoverability guide" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 136 -> 137. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 138 — 2026-09-14T20:20:26Z
+
+**Re-verified state before acting:** `git pull` clean at `5f2e690` (fast-forwarded to latest), `.agent/state.json` (total_cycles=137, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 10` -- all workflows `success`, Pages deploy for cycle 137 completed, no queued/stuck runs, no 429/throttle signals. `docs/data/stats.json` generated_at=2026-09-14T20:11:17Z (675 alerts, fresh, within schedule).
+
+Re-ran `python3 scripts/validate_data.py` from a completely clean checkout as part of fresh state re-verification (not assuming the cycle-135 schema-validation feature was still correct) and found it **FAILING**: `alerts.schema.json violation at 4/osv_fixed_versions/0` and `at 5/osv_fixed_versions/0` -- `{'package': None, 'ecosystem': None, 'fixed': '...'}` is not of type `string`. Traced the root cause: `docs/data/alerts.schema.json` (published cycle 135) declared `osv_fixed_versions` items as `{"type": "string"}`, but `parse_osv_fixed_versions()` in `scripts/aggregate.py` has *always* emitted `{package, ecosystem, fixed}` objects (verified by reading the function body directly). This means the schema-validation safety layer added in cycle 135 has been silently broken (failing) on every run that has any alert with real OSV fixed-version data since it shipped -- exactly the class of "safety net that looks real but isn't" bug the operator cares most about catching.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Fix `osv_fixed_versions` schema type to match real emitted shape** (chosen) -- 5/5/5. Corrects an active validation-accuracy bug (highest priority per operator's stated preference for accuracy/anti-hallucination safeguards over feature breadth). Pure schema-documentation fix, zero pipeline/data changes, zero cost, zero regression risk (only makes an already-broken check pass by describing reality correctly).
+2. **`<link rel=preconnect>`/`dns-prefetch` for jsdelivr CDN** (bundled into this cycle alongside #1 since both are tiny, independent, zero-risk head-only changes and the log emphasizes a real fix took priority) -- 5/5/2. Standard performance optimization for the one external origin already allowed by CSP.
+3. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` -- still deferred, needs human input on tech stack (deferred cycles 56-137).
+4. Full risk_score history array -- still deferred, storage-growth risk.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidates 1+2. `docs/data/alerts.schema.json`: `osv_fixed_versions` items now typed as `{package: string|null, ecosystem: string|null, fixed: string (required)}` matching `parse_osv_fixed_versions()`'s real output exactly. `docs/index.html`: added `<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>` and `<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">` before the stylesheet link.
+
+**Validation performed (all passed):**
+- `python3 -c "import json; json.load(open('docs/data/alerts.schema.json'))"` -> JSON syntax OK.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python logic touched, only a schema documentation file).
+- `python3 scripts/validate_data.py` -> confirmed **FAILED** before the fix (2 real schema violations against live 675-alert data), then **VALIDATION PASSED** after the fix (675 alerts, schema OK incl. alerts.schema.json check: 0 violations, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally, confirmed via a real browser tab that `link[rel=preconnect][href="https://cdn.jsdelivr.net"]` is present in the DOM, 675/675 alert cards rendered, `typeof Chart === 'function'` (Chart.js still loads correctly under CSP with the new preconnect hint).
+- Pushed `c34ae6e` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34892313831` completed success (13s); Pages build/deploy `34892310750` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (schema-documentation fix + static HTML change only); no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `c34ae6e` -- "Cycle 138: fix osv_fixed_versions schema type + add jsdelivr preconnect" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 137 -> 138. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement -- and specifically a validation-accuracy fix). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
