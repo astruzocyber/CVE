@@ -4360,3 +4360,31 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **consecutive_no_improvement:** 1 (reset at cycle 126 when CSV formula-injection guard shipped; this is cycle 1 of the current no-improvement streak, well below the 10-cycle stop threshold).
 
 **consecutive_failed_cycles:** 0 (unchanged).
+
+## Cycle 128 — 2026-09-14T14:16:59Z
+
+**Re-verified state before acting:** `git pull` clean at `b144d2a`, full `.agent/state.json` (total_cycles=127, consecutive_no_improvement=1, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 12` across all 4 workflows -- all `success`, one `Stale Data Alert` queued/completing normally, no queued/stuck runs, no 429/throttle signals. `gh pr list --state all` -- last 4 Dependabot bumps (2 merged, 2 closed), no new interference. `docs/data/stats.json` generated_at=2026-09-14T12:14:06Z (663 alerts). Reviewed `docs/` directory listing top-to-bottom for gaps not yet covered by the prior 127 cycles. Found: no `404.html` present -- GitHub Pages serves its generic platform 404 for any unmatched path under the site (mistyped/stale bookmarked links, broken external references), with zero branding, no CSP/theme consistency with the rest of the dashboard, and no way back to the live data. Confirmed via grep of `.agent/log.md`: no prior cycle touched this.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Custom `docs/404.html`** (chosen) -- 5/5/3. GitHub Pages auto-serves a `404.html` at the repo/site root for unmatched paths on Pages sites, zero configuration needed beyond the file's presence. Pure additive static file matching the existing dark theme (reuses `theme-init.js`, `style.css`, matching CSP/referrer-policy/favicon), explains the likely cause and links back to `./`. Zero JS/schema/pipeline/API changes, zero cost, zero risk to any existing page (new file, no existing file touched).
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` `ghsa_packages` -- still deferred, needs human input on actual tech stack (deferred cycles 56-127).
+3. Full risk_score history array -- still deferred, storage-growth risk.
+4. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. New file `docs/404.html`: matches dashboard's dark theme (`theme-init.js`, `style.css` variables), strict CSP/referrer-policy/`noindex` robots meta, favicon, brief explanation, and a link back to `./`.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0 (sanity, unchanged).
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (663 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 9022 via `python3 -m http.server`, real browser navigation to `/404.html` confirmed correct dark-theme rendering, `h1` text "404 — Page not found", home link `href="./"`; separately confirmed `/index.html` unaffected (663/663 `.card` elements rendered, `typeof Chart === "function"`).
+- Pushed `0f814f7` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34854599276` completed success (41s); Pages build/deploy `34854598307` in_progress at check time (consistent with normal deploy latency seen in all prior cycles).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (static-file-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `0f814f7` -- "Cycle 128: add custom 404.html page" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 127 -> 128. `consecutive_no_improvement`: 1 -> 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
