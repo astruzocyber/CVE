@@ -1,0 +1,69 @@
+name: Cancel Stale Queued Aggregation Runs
+
+# Watchdog for the failure mode observed 2026-09-13: a scheduled
+# CVE/KEV/Dependabot Alert Aggregation run got stuck in GitHub Actions'
+# `queued` state (a transient runner-capacity delay, not a bug in our
+# workflow). Because cve-alerts.yml uses
+# `concurrency: {group: cve-aggregation, cancel-in-progress: false}` to
+# stop overlapping runs from double-hitting NVD/EPSS/KEV/Dependabot/GHSA,
+# every later 4-hourly trigger queued behind the stuck one instead of
+# running -- and cve-alerts.yml's own `timeout-minutes: 10` only bounds a
+# run's *execution* time, so it does nothing for a run that never leaves
+# `queued`. That silently stalled data updates for ~20 hours until a human
+# noticed and cancelled the backlog by hand.
+#
+# This job runs independently (its own concurrency group, no dependency on
+# cve-alerts.yml's state) and cancels any cve-alerts.yml run still in
+# `queued` after 30 minutes, so the pipeline self-heals without manual
+# intervention. Zero cost: native Actions API call via the default
+# GITHUB_TOKEN, no new secrets, runs in a few seconds.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # check every 15 min; 30-min staleness threshold gives 2 checks of margin
+  workflow_dispatch: {}
+
+concurrency:
+  group: cancel-stale-queued-watchdog
+  cancel-in-progress: false
+
+permissions:
+  actions: write
+
+jobs:
+  cancel-stale:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Cancel cve-alerts.yml runs queued for more than 30 minutes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          THRESHOLD_EPOCH=$(( $(date -u +%s) - 1800 ))
+          FOUND_ANY=0
+          # status=queued restricts results to the GH-side state this watchdog exists
+          # to catch; per_page=50 is far above the number of scheduled runs that could
+          # ever legitimately stack up (schedule is every 4h, this checks every 15m).
+          # Note: deliberately NOT piping into `while read` -- that runs the loop
+          # in a subshell, silently discarding FOUND_ANY back in the parent shell
+          # (verified locally: without process substitution FOUND_ANY stays 0
+          # even when runs are found, producing a false "nothing to do" message).
+          while IFS=$'\t' read -r run_id created_at; do
+            FOUND_ANY=1
+            created_epoch=$(date -u -d "${created_at}" +%s)
+            age_minutes=$(( ($(date -u +%s) - created_epoch) / 60 ))
+            if [ "${created_epoch}" -lt "${THRESHOLD_EPOCH}" ]; then
+              echo "Cancelling stale queued run ${run_id} (queued ${age_minutes}m ago, since ${created_at})"
+              if ! gh api -X POST "repos/${REPO}/actions/runs/${run_id}/cancel" >/dev/null; then
+                echo "::warning::Failed to cancel run ${run_id} (may have already left the queue)"
+              fi
+            else
+              echo "Run ${run_id} queued ${age_minutes}m ago (since ${created_at}) -- within the 30m grace period, leaving it alone"
+            fi
+          done < <(gh api "repos/${REPO}/actions/workflows/cve-alerts.yml/runs?status=queued&per_page=50" \
+            --jq '.workflow_runs[] | [.id, .created_at] | @tsv')
+          if [ "${FOUND_ANY}" -eq 0 ]; then
+            echo "No queued cve-alerts.yml runs found -- nothing to do."
+          fi
