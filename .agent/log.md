@@ -4259,3 +4259,32 @@ Confirmed via `osv_fixed_versions`/`nvd_fix_versions`/`has-fix`/`hasFix` grep ac
 **Commit SHA:** `61cf19c` -- "Cycle 123: add skip-to-content link for keyboard/screen-reader users" -- pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 122 -> 123. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 124 — 2026-09-14T12:02:02Z
+
+**Re-verified state before acting:** `git pull` (up to date at 22cfaed), full `.agent/state.json` (total_cycles=123, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false), `gh run list --limit 15` across all 4 workflows -- all `success`, no queued/stuck runs, no 429/throttle signals. `gh pr list --state all` -- last 4 were Dependabot bumps (2 merged, 1 open awaiting review, 1 closed), no new interference. `gh issue list --state open` = 30 open ongoing vulnerability-alert issues, correctly filed, nothing abnormal. Reviewed `docs/index.html`/`docs/app.js`/`docs/style.css`/`scripts/aggregate.py`/`scripts/validate_data.py` top-to-bottom for gaps not yet covered by the prior 123 cycles. Found: the `#trend-chart` `<canvas>` (Chart.js line chart, `docs/app.js` `loadTrendChart()`) had no `role`/`aria-label`/text alternative at all -- a canvas is opaque to screen readers by default (WCAG 1.1.1 Non-text Content), so a blind/screen-reader user landing on the "Historical trend" section got zero information about the 12 toggleable trend series (total alerts, KEV counts, avg EPSS/risk/CVSS, severity breakdowns, etc.) despite 8+ prior cycles (26/54/58/66/67/68/69/71/72/73) having invested in enriching that same chart's *visual* data. Confirmed via grep of `.agent/log.md` that no prior cycle touched chart accessibility (only the shortcuts-modal focus-trap in cycle 122 and skip-link in cycle 123 addressed unrelated a11y gaps) -- a genuine, previously-undetected gap.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Accessible text summary (`role="img"` + dynamically-generated `aria-label`) for the trend-chart canvas** (chosen) -- 5/5/4. Pure additive JS: parses the same CSV rows already fetched/parsed for the chart itself (zero new data/API calls), builds a one-sentence plain-language summary (date range, data-point count, and the 4 metrics visible-by-default: total alerts, avg EPSS, avg risk score, KEV overdue) and sets it as `aria-label` on the canvas element (`role="img"` added in markup). Zero HTML structural changes beyond the one attribute, zero CSS, zero schema/pipeline changes, zero cost, zero risk to any existing filter/sort/export/table functionality since it only touches the chart-loading code path.
+2. Add `prefers-reduced-motion` media query to disable/shorten the existing 0.15s-0.3s CSS transitions -- feasibility 5/5, risk 1/5, value 2/5 (real but genuinely marginal: existing transitions are all sub-300ms micro-interactions, not scroll/parallax/auto-play animation that WCAG 2.3.3 primarily targets). Lower value than candidate 1's WCAG 1.1.1 gap on a data-bearing chart. Deferred.
+3. GHSA/Dependabot alerts coverage expansion -- still deferred, needs human input on actual tech stack (deferred cycles 56-123).
+4. Full risk_score history array -- still deferred, storage-growth risk.
+5. Any paid/threat-intel enrichment -- rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/index.html`: added `role="img" aria-label="Historical trend chart. Loading summary..."` to `#trend-chart` (placeholder label present before JS runs, e.g. if Chart.js CDN is blocked). `docs/app.js`: `loadTrendChart()` now computes `summary` from the already-parsed `rows`/`labels`/`totalAlerts`/`avgEpss`/`avgRiskScore`/`kevOverdue` arrays (first/last date range, latest values for the 4 default-visible metrics, rounded to 1 decimal, `null`/missing values reported as "unknown") and calls `canvas.setAttribute("aria-label", summary)` before constructing the `Chart` instance, replacing the placeholder with real data.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js docs/sw.js docs/theme-init.js` -> exit 0.
+- `python3 -m py_compile scripts/*.py` -> exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` -> 98/98 passed (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` -> VALIDATION PASSED (662 alerts, schema OK, id-reference check OK, feeds OK).
+- Live browser smoke test: served `docs/` locally on port 8995 via `python3 -m http.server`, loaded via a real browser navigation -- confirmed 662/662 `.card` elements rendered, `typeof Chart === "function"`. Functionally exercised the fix directly in the live DOM: `#trend-chart` has `role="img"` and `aria-label` = `"Historical trend chart, 63 data points from 2026-09-09T00:57:04.796881+00:00 to 2026-09-14T08:12:48.211500+00:00. Latest (2026-09-14T08:12:48.211500+00:00): 662 total tracked alerts, avg EPSS 0.8%, avg risk score 30.4, 2 KEV entries overdue. Additional datasets can be toggled via the legend below the chart."`, `#trend-section` correctly un-hidden -- confirming the placeholder was correctly replaced with real computed data matching the live dataset.
+- Pushed `e0b5347` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34841222135` completed success (11s), Pages build/deploy `34841220607` completed success (58s).
+
+**Rejected this cycle:** `prefers-reduced-motion` media query (real but marginal value given existing transitions are all sub-300ms micro-interactions); GHSA/Dependabot alerts coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** -- no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend-only change); no 429/throttle signals in any recent run logs across all 4 workflows.
+
+**Commit SHA:** `e0b5347` -- "Cycle 124: accessible text summary (role=img + aria-label) for trend chart" -- pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 123 -> 124. `consecutive_no_improvement`: 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
