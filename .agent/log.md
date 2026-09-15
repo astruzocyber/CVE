@@ -5035,3 +5035,24 @@ Re-read `.agent/log.md`/`state.json` full history to avoid repeats. Fresh read o
 **Commit SHA:** `4e19303` — "Cycle 151: auto-close GitHub issues when CVE added to config/suppressions.yaml" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 150 -> 151. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL alerts remain. This closes a real, previously-unaddressed gap between the pipeline's suppression logic and the issue-tracker's visible state -- config/suppressions.yaml currently has zero entries (an empty list), so this feature has no immediate effect on the 21 currently-open vulnerability-alert issues, but is now live infrastructure ready for the first time an analyst actually suppresses something.
+
+## Cycle 152 — 2026-09-15T14:20:00Z
+
+**Re-verified state before acting:** `git pull` clean (up to date with `origin/main` at `4e19303`). `.agent/state.json` (total_cycles=151, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 10` — all workflows `success` (CI, CodeQL, Pages deploy, Stale Data Alert, Cancel Stale Queued), no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4987/5000 remaining, healthy. `gh api repos/astruzocyber/CVE/code-scanning/alerts` — zero open CodeQL alerts (both prior fixed). `gh api repos/astruzocyber/CVE/dependabot/alerts` and `.../secret-scanning/alerts` — both empty, clean.
+
+Re-read `.agent/log.md` full history (152 prior cycles) to avoid repeats. Fresh review this cycle: `scripts/aggregate.py` (nvd_query/fetch_nvd_candidates rate-limit handling, compute_stats/append_history trend schema), `scripts/close_suppressed_issues.py` + its wiring into `cve-alerts.yml` (confirmed step present and correctly ordered), `docs/sw.js` (PWA cache strategy, confirmed still network-only for data/network-first for shell — no staleness risk), `docs/index.html` CSP header (still strict allowlist, no gaps), `requirements.txt` (jsonschema now present per cycle 150 fix), `config/watchlist.yaml`/`suppressions.yaml` (unchanged, suppressions still empty), repo `.git` size (4.6M, no bloat concern), `docs/data/history/trend.csv` (71 rows, 8.0K, growing at expected append-only rate, no storage concern). Grepped all scripts/workflows for TODO/FIXME/XXX — only a benign code comment matched, no real gap.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-151, unchanged reasoning).
+2. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+3. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+4. CSP `report-uri`/`report-to` violation reporting — would require a free report-collector endpoint; no zero-cost first-party option exists without standing up new infrastructure (report-uri.com free tier has volume caps and is a third-party dependency risk for a security tool); deferred as not clearly net-positive vs. added complexity.
+5. Reviewed all 5 workflow files, `requirements.txt`, CSP, PWA service worker, schema validation, suppression/issue sync (cycle 151) — all found functioning as designed, no drift or gap detected this cycle.
+
+**Implemented:** None. No candidate this cycle cleared the value/risk bar — the project is in a mature, comprehensively-hardened state (reliability retries, accuracy refresh/schema validation, accessibility, security headers, CodeQL-clean, dependency-hygiene, suppression/issue-tracker sync all verified live and functioning). This is a genuine "nothing found" cycle, not a failure.
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA pipeline calls this cycle (review-only, no code changes); `gh api rate_limit` showed 4987/5000 remaining; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** none — no changes made this cycle.
+
+**Updated state:** `total_cycles`: 151 -> 152. `consecutive_no_improvement`: 0 -> 1. `consecutive_failed_cycles`: 0 (unchanged, cycle did not fail — nothing to revert). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.
