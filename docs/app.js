@@ -307,8 +307,26 @@ function kevNotesLinksHtml(notes) {
     const m = part.match(urlRe);
     if (!m) continue;
     const url = m[1];
-    if (/nvd\.nist\.gov/i.test(url)) continue;
-    if (/bod-26-04|forensics-triage/i.test(url)) continue;
+    // Exclude boilerplate links (redundant NVD link, BOD 26-04 directive,
+    // Forensics Triage Requirements) by parsed hostname/path rather than an
+    // unanchored substring regex -- a substring check like /nvd\.nist\.gov/
+    // would also match an unrelated URL that merely contains that text
+    // somewhere in its path/query (e.g. a tracking redirect), incorrectly
+    // suppressing a genuine vendor advisory link. Fails safe: any URL that
+    // fails to parse is kept (still not shown unless it's a real http(s)
+    // link matched by urlRe above).
+    let hostname = "";
+    let pathAndQuery = "";
+    try {
+      const parsed = new URL(url);
+      hostname = parsed.hostname.toLowerCase();
+      pathAndQuery = (parsed.pathname + parsed.search).toLowerCase();
+    } catch {
+      hostname = "";
+      pathAndQuery = "";
+    }
+    if (hostname === "nvd.nist.gov" || hostname.endsWith(".nvd.nist.gov")) continue;
+    if (pathAndQuery.includes("bod-26-04") || pathAndQuery.includes("forensics-triage")) continue;
     const label = part.slice(0, m.index).replace(/:$/, "").trim();
     links.push({ url, label: label || "Vendor advisory" });
   }
