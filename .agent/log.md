@@ -5004,3 +5004,34 @@ Re-read `.agent/log.md`/`state.json` cycle-146-149 history to avoid repeats. Did
 **Commit SHA:** `e49b418` — "Cycle 150: add jsonschema to requirements.txt so CI actually enforces alerts.schema.json" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 149 -> 150. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL alerts remain.
+
+## Cycle 151 — 2026-09-15T13:41:00Z
+
+**Re-verified state before acting:** `git pull` clean (fast-forwarded to `e49b418`, matching origin/main). `.agent/state.json` (total_cycles=150, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 10` — all workflows `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4999/5000 remaining, healthy. `gh api repos/astruzocyber/CVE/code-scanning/alerts` — both prior alerts confirmed `state:fixed`, zero open CodeQL alerts. `gh pr list`/`gh issue list --state open` reviewed (21 open vuln-alert issues, all legitimate active triage items, none stale).
+
+Re-read `.agent/log.md`/`state.json` full history to avoid repeats. Fresh read of `config/suppressions.yaml` + `scripts/aggregate.py`'s `load_suppressions()`/suppression-filter usage, and `scripts/notify_github_issues.py`. Found a real, verified gap: suppressions are fully wired into the pipeline's *filtering* (excluded from `alerts.json`, no new issue opened, resurfaces on expiry) but nothing in the codebase or any workflow ever touches an issue *already open* before the suppression was added — grepped for `close_suppressed`/`auto-close.*suppress` across scripts and workflows, zero hits. An analyst suppressing a CVE via the documented workflow (notify_github_issues.py's own triage checklist tells them to do exactly this) gets a silently-orphaned open issue with no automated cleanup, unlike the stale-data-alert workflow which already demonstrates the auto-close-on-recovery pattern this project uses elsewhere.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Auto-close GitHub issues for newly-suppressed CVEs** (chosen) — 5/5/5. Concrete, verified gap in the trust/accuracy layer (suppression list existing without a corresponding issue-tracker effect is exactly the kind of "believed vs actual" drift the user has repeatedly valued fixing, e.g. cycle 150's jsonschema gap). Zero cost (native Issues API, GITHUB_TOKEN already available in the same job). Low risk: read-then-close only, matches by exact suppressed ID substring in title (CVE/GHSA IDs are precise unique tokens), never creates/edits/deletes issue content, only acts on issues in `open` state (idempotent — safe to re-run every cycle), fails soft on any API error without failing the job.
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-150, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+5. Bump `actions/checkout`/`actions/setup-python`/`github/codeql-action` pinned SHAs — checked latest tag SHAs via `gh api`, all three already match what's pinned in the workflows (no-op, nothing to do).
+
+**Implemented:** Candidate 1. New `scripts/close_suppressed_issues.py`: imports `load_suppressions()` directly from `aggregate.py` (no duplicated YAML/expiry parsing), fetches all open `vulnerability-alert`-labeled issues via paginated GitHub REST, closes any whose title contains an active suppressed CVE/GHSA ID with an explanatory comment citing the suppression reason (`state_reason: not_planned`), using the same 3-attempt 429/5xx backoff pattern as `notify_github_issues.py`. Wired into `.github/workflows/cve-alerts.yml` as a new step immediately after "Notify via GitHub Issues", using the same `GITHUB_TOKEN` (already scoped `issues: write` in that workflow's `permissions:` block — no new secret/scope needed).
+
+**Validation performed (all passed):**
+- New `scripts/test_close_suppressed_issues.py`: 2 unit tests, fully mocking `urllib.request.urlopen` (zero real network calls, no token required) — (1) empty suppressions map makes zero API calls; (2) a suppressed CVE's matching open issue gets exactly one `PATCH .../issues/<n>` close call while a non-matching open issue is never touched.
+- `python3 -m py_compile` on all touched/new `.py` files → exit 0.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → **105/105 passed** (103 prior + 2 new).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (682 alerts, `alerts.schema.json` 0 violations, stats/trend/feeds all OK) — unaffected, this change touches no data files.
+- `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/cve-alerts.yml'))"` → pass.
+- Pushed `4e19303` to `origin/main` (clean, no conflicts). Live-verified post-push: `CI Data & Frontend Validation` run `34976629264` success (25s); `CodeQL Security Scanning` run `34976629236` success (1m3s, zero new alerts introduced); `pages build and deployment` run `34976628245` success (42s, unaffected — no `docs/` files touched); `Stale Data Alert` run `34976718456` success (unrelated scheduled run, confirms no interference).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint); Action version bumps (checked, already current).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (new script + workflow wiring, validated via mocks only); `gh api rate_limit` showed 4996-4999/5000 remaining throughout; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `4e19303` — "Cycle 151: auto-close GitHub issues when CVE added to config/suppressions.yaml" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 150 -> 151. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL alerts remain. This closes a real, previously-unaddressed gap between the pipeline's suppression logic and the issue-tracker's visible state -- config/suppressions.yaml currently has zero entries (an empty list), so this feature has no immediate effect on the 21 currently-open vulnerability-alert issues, but is now live infrastructure ready for the first time an analyst actually suppresses something.
