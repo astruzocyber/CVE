@@ -1,0 +1,61 @@
+name: CodeQL Security Scanning
+
+# Static-analysis security scan of this project's OWN code (the Python
+# aggregation pipeline and the frontend JS), distinct from the CVE/KEV/EPSS
+# data this dashboard aggregates about *other* projects. GitHub Advanced
+# Security's CodeQL analysis is free for public repositories (no billing,
+# no external service, no secrets beyond the built-in GITHUB_TOKEN) --
+# it was not previously enabled despite the repo being public, leaving a
+# real gap: a tool whose entire purpose is flagging vulnerabilities in
+# other software had no automated scan of its own code for the same class
+# of issues (injection, unsafe deserialization, XSS in the hand-rolled
+# escapeHtml()/DOM-building JS, etc).
+#
+# Zero cost: public repo = free CodeQL minutes. Read-only permissions plus
+# the minimum security-events:write CodeQL needs to upload SARIF results
+# to the repo's Security tab. Runs independently of the aggregation
+# pipeline and the CI validation workflow -- cannot affect data freshness,
+# schema validation, or site deploy in any way.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**/*.js"
+      - "scripts/**/*.py"
+      - ".github/workflows/codeql.yml"
+  pull_request:
+    paths:
+      - "docs/**/*.js"
+      - "scripts/**/*.py"
+  schedule:
+    # Weekly full scan catches newly-published CodeQL query-pack rules
+    # against unchanged code, not just diffs on push.
+    - cron: "0 6 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["python", "javascript"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
