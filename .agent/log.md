@@ -5172,3 +5172,27 @@ Fresh review this cycle: `docs/sitemap.xml`/`robots.txt` correct and consistent;
 **Commit SHA:** none — no changes made this cycle.
 
 **Updated state:** `total_cycles`: 156 -> 157. `consecutive_no_improvement`: 2 -> 3. `consecutive_failed_cycles`: 0 (unchanged). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.
+
+## Cycle 158 — 2026-09-15T17:24:00Z
+
+**Re-verified state before acting:** `git pull` clean (up to date). `.agent/state.json` (total_cycles=157, consecutive_no_improvement=3, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 8` — all recent workflow runs `success` (Cancel Stale Queued, Stale Data Alert, pages-build-deployment, CVE/KEV/Dependabot Alert Aggregation), no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4997/5000 remaining, healthy.
+
+Re-ran full validation suite fresh: `python3 -m unittest discover -s scripts` → all pass. `python3 scripts/validate_data.py` → VALIDATION PASSED (684 alerts, schema 0 violations, stats/trend/feeds all OK).
+
+**Candidates considered:**
+1. Client-side rendering performance (debounce/pagination/virtualization) — verified: search/min-risk/min-epss inputs already debounced (150ms), dataset size (684 alerts) is small enough that full re-render on filter change is not a real perf issue; no gap found.
+2. HTTP compression/caching on GitHub Pages data assets — verified via live curl: gzip content-encoding + cache-control already applied automatically by GitHub Pages/Fastly CDN; no action possible or needed.
+3. CWE/weakness classification display — verified already implemented (cweName() lookup, badge with mitre.org link, present in both card and table views, CSV/markdown export, filter search index).
+4. EPSS percentile display — verified already implemented (title tooltip + "(top N%)" badge on card).
+5. CI pip caching, workflow permissions least-privilege, feed/sitemap consistency — re-verified all correct, no gap (repeat of last cycle's findings, still true).
+6. GHSA/Dependabot package-level watchlist expansion — still deferred, needs human input on actual tech stack (deferred since cycle 56, unchanged).
+7. Full risk_score time-series history array — still deferred, storage-growth risk, no new angle.
+8. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** None. No candidate cleared the value/risk bar this cycle. Project remains in a mature, comprehensively-hardened state after 157 completed cycles; broad and repeated review across pipeline reliability, frontend UX/accessibility/performance, SEO, security posture, and data schema continues to find full coverage with no regressions.
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA pipeline calls this cycle (review-only); `gh api rate_limit` showed 4997/5000 remaining; no 429/throttle signals in any recent run logs.
+
+**Commit SHA:** none — no changes made this cycle.
+
+**Updated state:** `total_cycles`: 157 -> 158. `consecutive_no_improvement`: 3 -> 4. `consecutive_failed_cycles`: 0 (unchanged). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.
