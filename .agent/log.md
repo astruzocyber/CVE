@@ -5242,3 +5242,28 @@ Re-ran full validation suite fresh: `python3 -m unittest discover -s scripts -p 
 **Commit SHA:** none — no changes made this cycle.
 
 **Updated state:** `total_cycles`: 159 -> 160. `consecutive_no_improvement`: 0 -> 1. `consecutive_failed_cycles`: 0 (unchanged). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.
+
+## Cycle 161 — 2026-09-15T19:02:00Z
+
+**Re-verified state before acting:** `git pull` clean (up to date at `9cd44c9`, cycle 160's no-improvement update). `.agent/state.json` (total_cycles=160, consecutive_no_improvement=1, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 10` — all recent runs `success` (Cancel Stale Queued x2, Stale Data Alert, pages-build-deployment, CI Data & Frontend Validation, CodeQL), no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4999/5000 remaining, healthy.
+
+Re-ran full validation suite fresh: `python3 -m unittest discover -s scripts -p "test_*.py"` → 105/105 pass. `python3 scripts/validate_data.py` → VALIDATION PASSED (684 alerts, schema 0 violations, stats/trend/feeds/id-refs all OK).
+
+**Fresh review found a real bug, same class as cycle 159's NVD fix:** `fetch_ghsa_advisories()` in `scripts/aggregate.py` requests `per_page=100` (GHSA's max page size) per package but never followed the API's Link-header (`rel="next"`) pagination — unlike `fetch_dependabot_alerts()`, which correctly follows Link-header pagination for the same GitHub API family. Any package matching more than 100 GHSA advisories would silently drop everything past the first page, with zero error or log line. Currently dormant in production: `config/watchlist.yaml`'s `ghsa_packages` list is empty (pending vendor tech-stack input, deferred since cycle 56), so this function has made zero live calls and caused zero real data loss to date — but it's a genuine latent correctness gap that would silently degrade coverage the moment that config is ever populated, exactly mirroring the NVD truncation bug fixed last cycle.
+
+**Implemented:** Added Link-header following to `fetch_ghsa_advisories()` (same RFC 5988 parsing pattern already used in `fetch_dependabot_alerts()`), capped at 21 pages (2100 advisories) as a runaway guard against a malformed/looping Link header, with an explicit `stderr` warning if the cap is hit before pagination naturally ends. Extracted the per-advisory parsing body into a small `_ghsa_page_results()` helper so it can run once per page instead of once per package. Retry-with-backoff on 429/5xx is preserved per-page, inherited unchanged from the existing per-page attempt loop.
+
+**Validation:**
+- `python3 -m py_compile scripts/aggregate.py` → pass.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 105/105 pass (unchanged).
+- Synthetic functional smoke test: mocked `urllib.request.urlopen`/`time.sleep`, simulated a package with 250 advisories split across 3 Link-header-paginated pages (100+100+50) — confirmed `fetch_ghsa_advisories()` made exactly 3 calls and returned all 250 results (previously would have silently returned only the first 100). Test passed.
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (684 alerts, schema OK 0 violations, stats/trend/feeds all OK) — unaffected, no data files touched (logic-only fix in a currently-dormant code path since `ghsa_packages` is empty; will only visibly change output once that list is populated and a package exceeds 100 advisories).
+- Pushed `dce40ad` to `origin/main`. Live-verified: `CI Data & Frontend Validation` run `35011198360` completed `success` (12s); CodeQL (`35011198352`) and `pages build and deployment` (`35011196171`) were still `in_progress`/`queued` at check time (consistent with normal deploy latency, non-blocking).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion itself (deferred cycles 56-160, still needs human input on tech stack — this cycle only hardened the currently-dormant fetch path, did not populate it); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no live NVD/EPSS/KEV/Dependabot/GHSA pipeline calls this cycle (code fix only, validated via mocks, no real API traffic generated); `gh api rate_limit` showed 4998/5000 remaining after push; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `dce40ad` — "Fix silent GHSA advisory truncation: paginate advisories beyond 100 per package" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 160 -> 161. `consecutive_no_improvement`: 1 -> 0 (reset, shipped a real fix). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.

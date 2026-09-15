@@ -1,7 +1,7 @@
 {
-  "consecutive_no_improvement": 1,
+  "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 160,
+  "total_cycles": 161,
   "implemented": [
     {
       "cycle": 1,
@@ -1565,6 +1565,12 @@
       "title": "Fix silent NVD result truncation: paginate keywordSearch beyond 200 results",
       "description": "fetch_nvd_candidates() never compared totalResults to the number of vulnerabilities actually returned on a resultsPerPage=200 page, so any search term matching >200 CVEs in the lookback window silently lost results with no error. Added startIndex-based pagination (NVD documented param), capped at 10 extra pages as a runaway guard, with stderr warnings on partial fetch. Not currently triggering in production (129-134 total candidates across 25 terms) but closes a real latent data-loss gap.",
       "commit_sha": "7a7dd00"
+    },
+    {
+      "cycle": 161,
+      "timestamp": "2026-09-15T19:02:00Z",
+      "title": "Fix silent GHSA advisory truncation: paginate beyond 100 per package",
+      "commit_sha": "dce40ad"
     }
   ],
   "rejected": [],
