@@ -1,5 +1,139 @@
 [
   {
+    "cve_id": "CVE-2026-60163",
+    "description": "Vulnerability in the MySQL Server, MySQL Cluster product of Oracle MySQL (component: Server: Group Replication Plugin).  Supported versions that are affected are MySQL Server: 8.4.0-8.4.10, 9.7.0-9.7.1; MySQL Cluster: 8.0.0-8.0.47, 8.4.0-8.4.10 and  9.7.0-9.7.1. Easily exploitable vulnerability allows unauthenticated attacker with logon to the infrastructure where MySQL Server, MySQL Cluster executes to compromise MySQL Server, MySQL Cluster.  Successful attacks of this vulnerability can result in takeover of MySQL Server, MySQL Cluster. CVSS 3.1 Base Score 8.4 (Confidentiality, Integrity and Availability impacts).  CVSS Vector: (CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H).",
+    "cvss_score": 8.4,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-284"
+    ],
+    "epss_score": 0.0026,
+    "epss_percentile": 0.17808,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 29.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.4,
+      "cvss_component": 29.4,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0026,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-60163",
+    "osv_fixed_versions": [],
+    "affected": [
+      "oracle/mysql"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-07-21T22:17:17.003",
+    "nvd_last_modified": "2026-09-15T04:18:08.553",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "oracle",
+        "product": "mysql_server",
+        "fixed": "8.4.10",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "oracle",
+        "product": "mysql_cluster",
+        "fixed": "8.0.47",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "oracle",
+        "product": "mysql_cluster",
+        "fixed": "8.4.10",
+        "fix_type": "up_to_and_including"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://www.oracle.com/security-alerts/cpujul2026.html",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-15T08:12:38.725300+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-75983",
+    "description": "The Eventin \u2013 Event Calendar, Tickets, Registration, Booking & WooCommerce plugin for WordPress is vulnerable to Privilege Escalation in all versions up to, and including, 4.1.23. This is due to the `PermissionManager::manage_permissions()` function being registered as a callback on WordPress core's `map_meta_cap` filter and unconditionally returning the always-true `'exist'` primitive for every capability check whenever the evaluated user ID is 1, without scoping this behavior to plugin-specific capabilities. This makes it possible for authenticated attackers whose account is user ID 1, even subscribers, to pass every WordPress capability check, including `manage_options`, `edit_plugins`, `edit_themes`, `promote_users`, and `update_core`, thereby elevating their privileges to administrator-equivalent power and achieving full site takeover, including remote code execution via the plugin and theme editors. Exploitation is only impactful when user ID 1 has been deliberately demoted to a lower-privilege role as a common administrator-account hardening practice; on default installations where user ID 1 retains the administrator role, no incremental privilege gain occurs.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-269"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-15T07:16:29.743",
+    "nvd_last_modified": "2026-09-15T07:16:29.743",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-15T08:12:38.725173+00:00"
+  },
+  {
     "cve_id": "CVE-2026-90846",
     "description": "A vulnerability has been found in PHPGurukul Daily Expense Tracker System 1.1. Impacted is an unknown function of the file /dets/forgot-password.php. The manipulation of the argument email/contactno leads to sql injection. The attack is possible to be carried out remotely. The exploit has been disclosed to the public and may be used.",
     "cvss_score": 7.3,
@@ -35,7 +169,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -89,7 +223,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -143,7 +277,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -196,7 +330,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -15638,8 +15772,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-06T18:17:22.217",
-    "nvd_last_modified": "2026-09-11T20:06:12.563",
-    "vuln_status": "Analyzed",
+    "nvd_last_modified": "2026-09-15T07:16:30.157",
+    "vuln_status": "Modified",
     "nvd_fix_versions": [
       {
         "vendor": "haxx",
