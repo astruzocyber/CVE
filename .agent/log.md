@@ -4886,3 +4886,35 @@ Cycle 145 shipped CodeQL security scanning (Python + JS). Its first real run (`3
 **Commit SHA:** `781160a` — "Cycle 146: fix CodeQL js/incomplete-sanitization in exportMarkdownReport() + fix flaky RFC822 pubDate test" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 145 -> 146. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 147 — 2026-09-15T11:22:00Z
+
+**Re-verified state before acting:** `git pull` clean (fast-forwarded to `c09a575`, matching origin/main). `.agent/state.json` (total_cycles=146, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 15` — all workflows `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4999/5000 remaining, healthy. Re-ran `python3 scripts/validate_data.py` fresh (VALIDATION PASSED, 682 alerts, schema OK, 0 violations, id-reference OK, feeds OK) and `python3 -m unittest discover -s scripts -p "test_*.py"` (103/103 pass) from clean checkout. Confirmed via `gh api repos/astruzocyber/CVE/code-scanning/alerts` that cycle 146's fix (`js/incomplete-sanitization`) shows `state:fixed` and no other open alerts existed under the default query pack.
+
+Reviewed `.github/workflows/codeql.yml` (added cycle 145) for coverage depth: `github/codeql-action/init` was using the implicit `queries: default` pack (high-precision subset only). CodeQL's `security-extended` pack adds broader/lower-confidence security queries (more XSS/injection/regex/crypto variants) at zero additional cost for a public repo — same billing model, only marginally longer analysis time, well within the existing 15-minute job timeout.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Upgrade CodeQL init to `security-extended` query pack** (chosen) — 5/5/4. Zero cost (query selection doesn't affect public-repo billing), zero regression risk (analysis-only workflow, cannot touch pipeline/frontend/schema/deploy), directly extends cycle 145's investment in dogfooding security scanning on the project's own code.
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-146, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. Added `queries: security-extended` to the `github/codeql-action/init@v3` step in `.github/workflows/codeql.yml` for both the `python` and `javascript` matrix legs, with an inline comment explaining the zero-cost/risk rationale.
+
+**Validation performed (all passed):**
+- `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/codeql.yml'))"` → pass, valid YAML.
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py scripts/validate_data.py scripts/notify_github_issues.py` → exit 0 (sanity, untouched).
+- `node --check docs/app.js` → pass (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 103/103 passed (unchanged).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (682 alerts, schema OK, 0 violations, id-reference OK, feeds OK) — unaffected, workflow-only change.
+- Pushed `1d187b9` to `origin/main` (clean, no conflicts). Live-verified post-push: CodeQL run `34963082448` completed `success` (1m7s) for both matrix legs under the new extended pack.
+
+**New finding surfaced by this cycle's own change (queued, NOT fixed this cycle — one-change-per-cycle rule):** the `security-extended` pack's first run flagged a new open alert, `js/regex/missing-regexp-anchor` (high), in `docs/app.js:310` inside `kevNotesLinksHtml()` — the URL-extraction regex `/(https?:\/\/\S+)/` used to pull vendor-advisory links out of free-text CISA KEV `notes` fields is unanchored, so CodeQL flags it as a pattern that "may match anywhere" if ever reused in a host-trust decision. Current usage is link *extraction* only (rendered via existing `escapeHtml()`, not used for any authorization/trust decision), so exploitability is low, but it's still worth tightening for defense-in-depth and to close the alert cleanly. Deferred to next cycle to respect one-change-per-cycle.
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (workflow-only change); `gh api rate_limit` showed 4998-4999/5000 remaining throughout; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `1d187b9` — "Cycle 147: upgrade CodeQL to security-extended query pack" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 146 -> 147. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
