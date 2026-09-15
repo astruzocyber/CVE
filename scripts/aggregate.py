@@ -648,6 +648,21 @@ def fetch_nvd_candidates(watchlist, api_key):
     delay = 0.7 if api_key else 6.5  # stay under 50/30s (key) or 5/30s (no key)
 
     print(f"Querying NVD for {len(search_terms)} search terms (lookback {lookback_days}d)...")
+    # NVD caps each response page at resultsPerPage (we request the API max of
+    # 200). A single keywordSearch term returning more than 200 matches in the
+    # lookback window (e.g. a broad vendor/product pair like "microsoft
+    # windows" during a busy Patch Tuesday period) previously had its excess
+    # results silently dropped -- totalResults was fetched into the schema
+    # validation check but never compared against len(vulnerabilities), so
+    # page 2+ was never requested and CVEs beyond the first 200 for that term
+    # simply vanished from candidates with no error, no log line, nothing.
+    # This paginates via NVD's documented startIndex parameter whenever a
+    # term's totalResults exceeds what the first page returned, capped at 10
+    # extra pages (2200 results) as a sane runaway guard against a malformed
+    # totalResults value looping forever -- a real term returning that many
+    # matches in an 8-day (or 2-day CI) window would itself be a data anomaly
+    # worth surfacing, not silently paginating through unbounded.
+    MAX_EXTRA_PAGES = 10
     for kind, term, vendor, product in search_terms:
         params = {
             "keywordSearch": term,
@@ -659,7 +674,30 @@ def fetch_nvd_candidates(watchlist, api_key):
         time.sleep(delay)
         if not result:
             continue
-        vulns = result.get("vulnerabilities", [])
+        vulns = list(result.get("vulnerabilities", []))
+        total_results = result.get("totalResults", len(vulns))
+        page = 0
+        while len(vulns) < total_results and page < MAX_EXTRA_PAGES:
+            page += 1
+            page_params = dict(params, startIndex=page * 200)
+            page_result = nvd_query(page_params, api_key)
+            time.sleep(delay)
+            if not page_result:
+                print(f"  WARNING: NVD pagination fetch failed for term "
+                      f"'{term}' page {page} (startIndex={page * 200}); "
+                      f"proceeding with {len(vulns)}/{total_results} results "
+                      f"for this term.", file=sys.stderr)
+                break
+            vulns.extend(page_result.get("vulnerabilities", []))
+        if len(vulns) < total_results:
+            print(f"  WARNING: NVD term '{term}' has totalResults="
+                  f"{total_results} but only {len(vulns)} were fetched "
+                  f"after {page} extra page(s) (MAX_EXTRA_PAGES cap or "
+                  f"repeated fetch failure) -- some matches for this term "
+                  f"may be missing this run.", file=sys.stderr)
+        elif page > 0:
+            print(f"  NVD term '{term}': paginated {page} extra page(s) to "
+                  f"retrieve all {total_results} results.")
         for v in vulns:
             cve = v.get("cve", {})
             cve_id = cve.get("id")
