@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 148,
+  "total_cycles": 149,
   "implemented": [
     {
       "cycle": 1,
@@ -1519,6 +1519,22 @@
         "ci_run": "success",
         "codeql_run": "success",
         "pages_build": "success"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 149,
+      "timestamp": "2026-09-15T12:30:00Z",
+      "title": "Add concurrency cancel-in-progress to ci.yml and codeql.yml",
+      "commit_sha": "c6ff0b3",
+      "validation": {
+        "yaml_syntax": "pass (both workflow files)",
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (sanity, untouched)",
+        "unit_tests": "103/103 pass (unchanged)",
+        "validate_data": "pass (682 alerts, schema OK, 0 violations, id-reference OK, feeds OK)",
+        "ci_run": "34969484113 completed success (16s)",
+        "codeql_run": "34969483977 in_progress at check time (consistent with normal 15-min analysis window)"
       },
       "rate_limit_event": false
     }

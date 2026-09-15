@@ -4946,3 +4946,32 @@ Reviewed `.github/workflows/codeql.yml` (added cycle 145) for coverage depth: `g
 **Commit SHA:** `22bd21a` — "Cycle 148: fix CodeQL js/regex/missing-regexp-anchor in kevNotesLinksHtml()" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 147 -> 148. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL alerts remain.
+
+## Cycle 149 — 2026-09-15T12:16:00Z
+
+**Re-verified state before acting:** `git pull` clean (fast-forwarded to `22bd21a`, matching origin/main). `.agent/state.json` (total_cycles=148, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 10` — all workflows `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4999/5000 remaining, healthy. `gh api repos/astruzocyber/CVE/code-scanning/alerts` — both prior alerts (#1 js/incomplete-sanitization, #2 js/regex/missing-regexp-anchor) confirmed `state:fixed`, zero open CodeQL alerts. Re-ran `python3 scripts/validate_data.py` fresh (VALIDATION PASSED, 682 alerts, schema OK, 0 violations, id-reference OK, feeds OK) and `python3 -m unittest discover -s scripts -p "test_*.py"` (103/103 pass) from clean checkout.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Add `concurrency: cancel-in-progress` to `ci.yml` and `codeql.yml`** (chosen) — 5/5/3. Reviewed all 5 workflow files: `cancel-stale-queued.yml`, `cve-alerts.yml`, and `stale-data-alert.yml` already had a `concurrency` block; `ci.yml` and `codeql.yml` (both push-triggered on every commit to main, and this project pushes roughly every 30 minutes) did not, meaning a burst of close-together pushes could queue redundant, already-superseded validation/analysis runs. Pure workflow-YAML addition, zero effect on data pipeline, schema, or frontend; cannot regress any existing feature; consistent with the pattern the other 3 workflows already establish.
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-148, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+5. Reviewed `docs/index.html`/`docs/app.js` for further CodeQL-adjacent hardening (CSP, SRI, referrer-policy) — already comprehensive (CSP with strict allowlist, SRI hash on the Chart.js CDN script, `referrer` no-referrer meta, all present from prior cycles); no gap found this cycle.
+
+**Implemented:** Candidate 1. Added identical `concurrency: { group: <workflow>-${{ github.workflow }}-${{ github.ref }}, cancel-in-progress: true }` blocks to `.github/workflows/ci.yml` and `.github/workflows/codeql.yml`, each with an inline comment explaining the rationale, mirroring the existing pattern in the other 3 workflow files.
+
+**Validation performed (all passed):**
+- `python3 -c "import yaml; yaml.safe_load(...)"` on both modified files → pass.
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py scripts/validate_data.py scripts/notify_github_issues.py` → exit 0 (sanity, untouched).
+- `node --check docs/app.js` → pass (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 103/103 passed (unchanged).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (682 alerts, schema OK, 0 violations, id-reference OK, feeds OK) — unaffected, workflow-only change.
+- Pushed `c6ff0b3` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34969484113` completed success (16s); CodeQL run `34969483977` in_progress at check time (consistent with normal ~1min analysis window seen in prior cycles); Pages build/deploy unaffected (this change touches no `docs/` files).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (workflow-only change); `gh api rate_limit` showed 4999/5000 remaining; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `c6ff0b3` — "Cycle 149: add concurrency cancel-in-progress to ci.yml and codeql.yml" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 148 -> 149. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL alerts remain.
