@@ -38,6 +38,15 @@ permissions:
   contents: read
   security-events: write
 
+# Cancel superseded runs on the same ref (mirrors ci.yml): avoids redundant
+# CodeQL analysis queuing up when several commits land on main close
+# together (this repo's autonomous improver pushes roughly every 30
+# minutes). Zero cost impact either way (public repo = free CodeQL
+# minutes), just avoids queue buildup and stale-commit analysis runs.
+concurrency:
+  group: codeql-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     runs-on: ubuntu-latest

@@ -27,6 +27,18 @@ on:
 permissions:
   contents: read
 
+# Cancel superseded runs on the same ref: this repo's autonomous improver
+# pushes to main roughly every 30 minutes, and each push re-triggers this
+# workflow. Without concurrency control, a burst of pushes (e.g. manual
+# intervention plus the next scheduled cycle landing close together) queues
+# redundant validation runs for commits that are already stale by the time
+# they'd start. Cost is already zero either way (public repo = unlimited
+# free Actions minutes), but this avoids queue buildup and gets the
+# validation result for the latest commit back faster.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
