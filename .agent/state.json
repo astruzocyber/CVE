@@ -1,7 +1,7 @@
 {
-  "consecutive_no_improvement": 4,
+  "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 158,
+  "total_cycles": 159,
   "implemented": [
     {
       "cycle": 1,
@@ -1558,6 +1558,13 @@
       "title": "Add scripts/close_suppressed_issues.py to CI syntax-check step",
       "description": "scripts/close_suppressed_issues.py (added cycle 151) was missing from ci.yml's py_compile syntax-check list, meaning a future syntax error in it would go undetected by the always-on CI regression guard until the actual pipeline run failed. Added it to the existing command alongside the other pipeline scripts.",
       "commit_sha": "b6b56c6"
+    },
+    {
+      "cycle": 159,
+      "timestamp": "2026-09-15T17:58:00Z",
+      "title": "Fix silent NVD result truncation: paginate keywordSearch beyond 200 results",
+      "description": "fetch_nvd_candidates() never compared totalResults to the number of vulnerabilities actually returned on a resultsPerPage=200 page, so any search term matching >200 CVEs in the lookback window silently lost results with no error. Added startIndex-based pagination (NVD documented param), capped at 10 extra pages as a runaway guard, with stderr warnings on partial fetch. Not currently triggering in production (129-134 total candidates across 25 terms) but closes a real latent data-loss gap.",
+      "commit_sha": "7a7dd00"
     }
   ],
   "rejected": [],

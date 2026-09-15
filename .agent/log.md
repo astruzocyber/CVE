@@ -5196,3 +5196,28 @@ Re-ran full validation suite fresh: `python3 -m unittest discover -s scripts` �
 **Commit SHA:** none — no changes made this cycle.
 
 **Updated state:** `total_cycles`: 157 -> 158. `consecutive_no_improvement`: 3 -> 4. `consecutive_failed_cycles`: 0 (unchanged). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.
+
+## Cycle 159 — 2026-09-15T17:58:00Z
+
+**Re-verified state before acting:** `git pull` clean (up to date at `2ca7633`... latest before this cycle's commit). `.agent/state.json` (total_cycles=158, consecutive_no_improvement=4, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 8` — all recent workflow runs `success` (Cancel Stale Queued x2, Stale Data Alert, pages-build-deployment), no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4999/5000 remaining, healthy. Open CodeQL/Dependabot/secret-scanning alerts: 0.
+
+Re-ran full validation suite fresh: `python3 -m unittest discover -s scripts` → 105/105 pass. `python3 scripts/validate_data.py` → VALIDATION PASSED (684 alerts, schema OK 0 violations, stats/trend/feeds all OK).
+
+**Fresh review found a real bug:** `fetch_nvd_candidates()` in `scripts/aggregate.py` requests `resultsPerPage=200` (NVD's max page size) per search term, but the response's `totalResults` field was fetched (for schema validation) and then discarded — never compared against the actual `len(vulnerabilities)` returned. Any single vendor/product pair or keyword matching more than 200 CVEs within the lookback window (2d in CI, 8d default) would silently drop every result past the first page, with zero error, log line, or visible symptom. Checked live CI logs across the last 3 aggregation runs (16:10, 12:13, 08:12 UTC): current real-world load is 25 search terms yielding 129-134 total candidates combined — well under 200 per term — so this has not caused actual data loss yet, but it's a genuine latent correctness gap that would silently degrade coverage during a high-CVE-volume period (e.g. a major vendor's Patch Tuesday) without any way to detect it.
+
+**Implemented:** Added NVD `startIndex`-based pagination (NVD's documented pagination parameter) that fires only when `totalResults > len(vulnerabilities)` after the first page, capped at 10 extra pages (2200 results) as a runaway guard against a malformed `totalResults` looping forever, with an explicit `stderr` warning if a paginated fetch fails partway (proceeds with partial results for that term rather than blocking the whole run) and a warning if the cap is hit before `totalResults` is satisfied. Zero schema/API-contract changes, zero new dependencies, same `nvd_query()` retry-with-backoff wrapper reused for extra pages (so 429/5xx handling is inherited automatically).
+
+**Validation:**
+- `python3 -m py_compile scripts/aggregate.py` → pass.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 105/105 pass (unchanged).
+- Synthetic functional smoke test: mocked `nvd_query`/`time.sleep`, simulated a term with `totalResults=450` split across 3 pages (200+200+50) — confirmed `fetch_nvd_candidates()` made exactly 3 calls (`startIndex` 0, 200, 400) and returned all 450 candidates (previously would have silently returned only the first 200). Test passed.
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (684 alerts, schema OK 0 violations, stats/trend/feeds all OK) — unaffected, no data files touched by this change (logic-only fix, will only visibly change output on a future run where some term exceeds 200 matches).
+- Pushed `7a7dd00` to `origin/main`. Live-verified: `CI Data & Frontend Validation` run `35004566512` completed `success` (12s); CodeQL and `pages build and deployment` were still `in_progress` at check time (consistent with normal deploy latency, non-blocking).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred cycles 56-158, still needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no live NVD/EPSS/KEV/Dependabot/GHSA pipeline calls this cycle (code fix only, validated via mocks, no real API traffic generated); `gh api rate_limit` showed 4999/5000 remaining; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `7a7dd00` — "Fix silent NVD result truncation: paginate keywordSearch beyond 200 results" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 158 -> 159. `consecutive_no_improvement`: 4 -> 0 (reset, shipped a real fix). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.
