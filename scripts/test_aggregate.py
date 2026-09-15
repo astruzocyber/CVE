@@ -813,9 +813,14 @@ class TestBuildKevFeedRss(unittest.TestCase):
             match = re.search(r"<pubDate>([^<]+)</pubDate>", content)
             self.assertIsNotNone(match)
             pubdate = match.group(1)
-            # RFC 822 format has no ISO 8601 'T' date/time separator (distinct
-            # from the literal "GMT" zone suffix) or fractional seconds.
-            self.assertNotIn("T", pubdate.replace("GMT", ""))
+            # RFC 822 format ("Day, DD Mon YYYY HH:MM:SS GMT") has no ISO 8601
+            # 'T' date/time separator between the date and time components.
+            # A plain substring check for "T" is unsound: RFC 822 day-name
+            # abbreviations "Tue" and "Thu" legitimately contain a 'T', which
+            # made this assertion flaky (only failing on those two weekdays).
+            # Instead assert there is no ISO-8601-style "YYYY-MM-DDTHH:MM:SS"
+            # pattern anywhere in the value.
+            self.assertIsNone(re.search(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}", pubdate))
             self.assertNotIn(".", pubdate)
             self.assertTrue(pubdate.endswith("GMT"))
             # Must be parseable by the standard RFC 822 parser.

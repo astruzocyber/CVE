@@ -1393,7 +1393,7 @@ function exportMarkdownReport() {
     const cvss = fmtScore(a.cvss_score);
     const epss = typeof a.epss_score === "number" ? (a.epss_score * 100).toFixed(1) + "%" : "n/a";
     const kev = a.kev ? (a.kev_ransomware_use ? "Yes (ransomware)" : "Yes") : "No";
-    const affected = ((a.affected || []).join(", ") || "n/a").replace(/\|/g, "\\|");
+    const affected = ((a.affected || []).join(", ") || "n/a").replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
     lines.push(`| ${a.cve_id} | ${risk} | ${cvss} | ${epss} | ${kev} | ${affected} | ${a.source || "unknown"} |`);
   }
   const blob = new Blob([lines.join("\n")], { type: "text/markdown" });
