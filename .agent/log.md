@@ -4918,3 +4918,31 @@ Reviewed `.github/workflows/codeql.yml` (added cycle 145) for coverage depth: `g
 **Commit SHA:** `1d187b9` — "Cycle 147: upgrade CodeQL to security-extended query pack" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 146 -> 147. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 148 — 2026-09-15T11:52:00Z
+
+**Re-verified state before acting:** `git pull` clean (fast-forwarded to `1d187b9`, matching origin/main). `.agent/state.json` (total_cycles=147, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 10` — all workflows `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4996/5000 remaining, healthy. Checked `gh api repos/astruzocyber/CVE/code-scanning/alerts`: alert #1 confirmed `state:fixed` (cycle 146); alert #2 (`js/regex/missing-regexp-anchor`, high) confirmed `state:open`, surfaced by cycle 147's `security-extended` pack upgrade and explicitly deferred to this cycle.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Fix queued CodeQL alert #2 (js/regex/missing-regexp-anchor in `kevNotesLinksHtml()`)** (chosen) — 5/5/4. Concrete, tool-verified finding queued from the immediately prior cycle; directly closes the loop on cycle 145/147's investment in security scanning; small, well-scoped, testable change confined to one frontend helper function.
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-147, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/app.js` `kevNotesLinksHtml()`: replaced the unanchored substring regex checks (`/nvd\.nist\.gov/i`, `/bod-26-04|forensics-triage/i`) used to exclude CISA KEV boilerplate links with structured URL parsing (`new URL(url).hostname`/`.pathname`/`.search`). The old regexes could, in principle, match a URL merely *containing* the target text anywhere (e.g. a tracking/redirect URL with `nvd.nist.gov` in its path), incorrectly suppressing a genuine vendor advisory link — the exact class of bug CodeQL's `js/regex/missing-regexp-anchor` flags. Fails safe: any URL that fails to parse is kept as a candidate link (not silently dropped). Zero behavior change for realistic CISA KEV `notes` field content.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → pass.
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py scripts/validate_data.py scripts/notify_github_issues.py` → exit 0 (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 103/103 passed (unchanged).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (682 alerts, schema OK, 0 violations, id-reference OK, feeds OK).
+- Standalone Node test (`/tmp/test_kev.js`, a faithful extraction of the modified function) confirmed: a real vendor advisory link is kept; a real CISA BOD 26-04 link is dropped; a real `nvd.nist.gov/vuln/...` link is dropped; a synthetic lookalike URL with `nvd.nist.gov` embedded in an unrelated path (`https://tracker.example.com/nvd.nist.gov-lookalike/foo`) is now correctly **kept** — this is the exact case the old unanchored regex would have mishandled by wrongly suppressing it.
+- Pushed `22bd21a` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run, CodeQL run, and Pages build/deploy all `success` on commit `22bd21a`. Directly confirmed the fix via `gh api repos/astruzocyber/CVE/code-scanning/alerts`: alert #2 (`js/regex/missing-regexp-anchor`) now shows `state:fixed`, alongside alert #1 (`state:fixed`, cycle 146) — zero open CodeQL alerts remain under the `security-extended` pack.
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend bugfix + local/standalone validation only); `gh api rate_limit` showed 4996/5000 remaining; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `22bd21a` — "Cycle 148: fix CodeQL js/regex/missing-regexp-anchor in kevNotesLinksHtml()" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 147 -> 148. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL alerts remain.
