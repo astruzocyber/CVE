@@ -909,50 +909,88 @@ def fetch_ghsa_advisories(packages, token=None):
     print(f"Querying GHSA advisories for {len(packages)} package(s)...")
     for pkg in packages:
         url = GHSA_URL + "?" + urllib.parse.urlencode({"affects": pkg, "per_page": 100})
-        # Retry with backoff on transient failures (429/5xx/network) -- same resilience
-        # pattern already used by fetch_kev()/nvd_query()/fetch_epss()/
-        # fetch_dependabot_alerts(). Without this, a single transient blip would
-        # silently drop this package's GHSA advisories for the whole run with no retry.
-        data = None
-        last_err = None
-        hard_fail = False
-        for attempt in range(3):
-            try:
-                req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **headers})
-                with urllib.request.urlopen(req, timeout=30) as resp:
-                    data = json.loads(resp.read().decode())
-                break
-            except urllib.error.HTTPError as e:
-                last_err = e
-                if e.code == 429 or e.code >= 500:
-                    wait = 5 * (attempt + 1)
-                    print(f"  GHSA API HTTP {e.code} for package '{pkg}', retrying in "
-                          f"{wait}s (attempt {attempt + 1}/3)...", file=sys.stderr)
-                    time.sleep(wait)
-                    continue
-                body = ""
+        # Follow RFC 5988 Link-header rel="next" pagination, same as
+        # fetch_dependabot_alerts() -- the GHSA /advisories endpoint caps each
+        # response page at per_page (100 requested) and, like Dependabot
+        # alerts, uses Link-header pagination rather than a startIndex/page
+        # offset param. A package matching more than 100 advisories would
+        # previously have silently dropped everything past the first page
+        # with zero error or log line. Capped at 20 extra pages (2100
+        # advisories) as a runaway guard against a malformed/looping Link
+        # header. Currently dormant in production (ghsa_packages is
+        # empty in config/watchlist.yaml, pending vendor tech-stack input --
+        # see cycles 56-160), but this closes the same latent-truncation
+        # class of bug fixed for NVD in cycle 159 before it can ever bite.
+        pages_fetched = 0
+        while url and pages_fetched < 21:
+            pages_fetched += 1
+            # Retry with backoff on transient failures (429/5xx/network) -- same resilience
+            # pattern already used by fetch_kev()/nvd_query()/fetch_epss()/
+            # fetch_dependabot_alerts(). Without this, a single transient blip would
+            # silently drop this package's GHSA advisories for the whole run with no retry.
+            data = None
+            link_header = ""
+            last_err = None
+            hard_fail = False
+            for attempt in range(3):
                 try:
-                    body = e.read().decode()
-                except Exception:
-                    pass
-                print(f"  WARNING: GHSA API HTTP {e.code} for package '{pkg}': {body[:300]}",
-                      file=sys.stderr)
-                hard_fail = True
+                    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, **headers})
+                    with urllib.request.urlopen(req, timeout=30) as resp:
+                        data = json.loads(resp.read().decode())
+                        link_header = resp.headers.get("Link", "")
+                    break
+                except urllib.error.HTTPError as e:
+                    last_err = e
+                    if e.code == 429 or e.code >= 500:
+                        wait = 5 * (attempt + 1)
+                        print(f"  GHSA API HTTP {e.code} for package '{pkg}', retrying in "
+                              f"{wait}s (attempt {attempt + 1}/3)...", file=sys.stderr)
+                        time.sleep(wait)
+                        continue
+                    body = ""
+                    try:
+                        body = e.read().decode()
+                    except Exception:
+                        pass
+                    print(f"  WARNING: GHSA API HTTP {e.code} for package '{pkg}': {body[:300]}",
+                          file=sys.stderr)
+                    hard_fail = True
+                    break
+                except Exception as e:
+                    last_err = e
+                    wait = 5 * (attempt + 1)
+                    print(f"  GHSA API request failed for package '{pkg}' ({e}), retrying "
+                          f"in {wait}s (attempt {attempt + 1}/3)...", file=sys.stderr)
+                    time.sleep(wait)
+            if data is None:
+                if not hard_fail:
+                    print(f"  WARNING: GHSA API failed for package '{pkg}' after 3 attempts: "
+                          f"{last_err}", file=sys.stderr)
                 break
-            except Exception as e:
-                last_err = e
-                wait = 5 * (attempt + 1)
-                print(f"  GHSA API request failed for package '{pkg}' ({e}), retrying "
-                      f"in {wait}s (attempt {attempt + 1}/3)...", file=sys.stderr)
-                time.sleep(wait)
-        if data is None:
-            if not hard_fail:
-                print(f"  WARNING: GHSA API failed for package '{pkg}' after 3 attempts: "
-                      f"{last_err}", file=sys.stderr)
-            continue
-        if not validate_schema(f"GHSA advisories[{pkg}]", data, [], kind="list"):
-            continue
-        for adv in data:
+            if not validate_schema(f"GHSA advisories[{pkg}]", data, [], kind="list"):
+                break
+            _ghsa_page_results(data, pkg, results)
+            next_url = None
+            for part in link_header.split(","):
+                if 'rel="next"' in part:
+                    start = part.find("<") + 1
+                    end = part.find(">")
+                    if start > 0 and end > start:
+                        next_url = part[start:end]
+                    break
+            url = next_url
+            if url:
+                time.sleep(0.3)
+        if pages_fetched >= 21 and url:
+            print(f"  WARNING: GHSA advisories for package '{pkg}' hit the 21-page "
+                  f"pagination cap; some advisories may be missing.", file=sys.stderr)
+        time.sleep(0.3)
+    print(f"  GHSA candidates: {len(results)}")
+    return results
+
+
+def _ghsa_page_results(data, pkg, results):
+    for adv in data:
             if not isinstance(adv, dict):
                 continue
             cvss_info = adv.get("cvss") or {}
@@ -976,9 +1014,6 @@ def fetch_ghsa_advisories(packages, token=None):
                 "dependabot_url": adv.get("html_url"),
                 "severity": adv.get("severity"),
             })
-        time.sleep(0.3)
-    print(f"  GHSA candidates: {len(results)}")
-    return results
 
 
 # ---------------------------------------------------------------------------
