@@ -4825,3 +4825,33 @@ Continuing the fresh-eyes spec-compliance review from cycles 138/142/143 (which 
 **Commit SHA:** `334dc90` — "Cycle 144: fix feed.xml pubDate to RFC 822 (RSS 2.0 spec) + add lastBuildDate" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 143 -> 144. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 145 — 2026-09-15T10:14:56Z
+
+**Re-verified state before acting:** `git pull` clean (fast-forwarded to `6cd020e`, matching origin/main). `.agent/state.json` (total_cycles=144, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 20` — all workflows `success` (aggregation last ran 08:11 UTC, stale-alert/cancel-stale-queued housekeeping runs all green, no queued/stuck runs). `gh api rate_limit` — 4999/5000 remaining, healthy. Re-ran `python3 scripts/validate_data.py` fresh (VALIDATION PASSED, 682 alerts, schema OK, 0 violations, id-reference OK, feeds OK) and `python3 -m unittest discover -s scripts -p "test_*.py"` (103/103 pass) from clean checkout.
+
+Reviewed `.github/workflows/` (ci.yml, cve-alerts.yml, stale-data-alert.yml, cancel-stale-queued.yml) for a gap not yet covered: none of them run any static-analysis security scan of this project's *own* code (scripts/*.py, docs/*.js) -- CI only does syntax-check + schema validation + unit tests. Checked `gh api repos/astruzocyber/CVE/code-scanning/default-setup` -> `"state":"not-configured"`, and confirmed the repo is public (`"private":false`), meaning GitHub Advanced Security CodeQL analysis is available at zero cost with no default-setup/advanced-setup conflict. A tool whose entire purpose is surfacing vulnerabilities in *other* software had no automated check for injection/XSS/unsafe-deserialization-class issues in its own hand-rolled DOM-building JS and Python HTTP/parsing code.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Add CodeQL security scanning workflow (Python + JS)** (chosen) — 5/5/4. Genuinely free for public repos, zero conflict with existing code-scanning config (verified not-configured), fully independent of the data pipeline/CI/deploy (cannot regress any existing feature), directly serves accuracy/reliability priority by catching real code-quality bugs in the project's own pipeline and frontend.
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-144, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. Added `.github/workflows/codeql.yml`: matrix scan over `python` and `javascript` languages, triggered on push/PR touching `docs/**/*.js` or `scripts/**/*.py`, plus a weekly Monday 06:00 UTC full scan and `workflow_dispatch`. Uses `github/codeql-action/init@v3` + `github/codeql-action/analyze@v3` with `contents: read` + `security-events: write` permissions (minimum needed to upload SARIF results to the repo's Security tab). Zero changes to any pipeline/frontend/schema code.
+
+**Validation performed (all passed):**
+- `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/codeql.yml'))"` → pass, valid YAML.
+- `python3 -m py_compile scripts/aggregate.py scripts/notify_github_issues.py scripts/validate_data.py` → exit 0 (sanity, untouched).
+- `node --check docs/app.js` → pass (sanity, untouched).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (682 alerts, schema OK, 0 violations, id-reference OK, feeds OK) — unaffected, workflow-only change.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 103/103 passed (unchanged).
+- Pushed `75ef9db` to `origin/main` (clean, no conflicts). Live-verified post-push: CodeQL run `34956927157` completed `success` for both `python` and `javascript` matrix legs (~90s total).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (workflow-only addition, no pipeline run); `gh api rate_limit` showed 4999/5000 remaining; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `75ef9db` — "Cycle 145: add CodeQL security scanning (Python + JS) workflow" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 144 -> 145. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).

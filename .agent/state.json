@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 144,
+  "total_cycles": 145,
   "implemented": [
     {
       "cycle": 1,
@@ -1462,6 +1462,22 @@
         "xml_parse": "pass (docs/feed.xml re-parsed via xml.dom.minidom after regeneration)",
         "ci_run": "34909783403 completed success (10s)",
         "pages_build": "34909782036 in_progress at check time (consistent with normal deploy latency)"
+      },
+      "rate_limit_event": false
+    },
+    {
+      "cycle": 145,
+      "timestamp": "2026-09-15T10:14:56Z",
+      "title": "Add CodeQL security scanning workflow (Python + JS)",
+      "description": "Repo is public (verified via gh api, code-scanning default-setup was 'not-configured') so GitHub Advanced Security CodeQL analysis is free with zero conflict risk. Added .github/workflows/codeql.yml scanning both scripts/*.py and docs/*.js on push/PR to those paths plus a weekly Monday 06:00 UTC full scan, uploading SARIF to the repo's Security tab via the standard github/codeql-action/init+analyze v3 actions. Zero cost (public repo = free CodeQL minutes), read-only contents permission + minimum security-events:write CodeQL needs, fully independent of the aggregation pipeline / CI validation workflow / Pages deploy -- cannot affect data freshness or site rendering.",
+      "commit_sha": "75ef9db",
+      "validation": {
+        "yaml_syntax": "pass (python3 yaml.safe_load)",
+        "py_compile": "pass (sanity, untouched)",
+        "node_check": "pass (docs/app.js, sanity, untouched)",
+        "unit_tests": "pass (unchanged, no Python logic touched)",
+        "validate_data": "pass (682 alerts, schema OK, 0 violations, id-reference OK, feeds OK)",
+        "ci_run": "34956927157 completed success (CodeQL Security Scanning, both python and javascript matrix legs)"
       },
       "rate_limit_event": false
     }
