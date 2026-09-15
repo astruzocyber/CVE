@@ -54,6 +54,14 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
+          # security-extended adds lower-confidence/broader-coverage queries
+          # (e.g. additional taint-tracking sinks, weaker-crypto, more XSS/
+          # injection variants) beyond the "default" pack's high-precision
+          # subset. Still free for public repos (query selection doesn't
+          # change billing, only analysis time, which stays well within the
+          # 15-minute per-job timeout already set below). Reasonable given
+          # this project's stated priority is accuracy over feature breadth.
+          queries: security-extended
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
