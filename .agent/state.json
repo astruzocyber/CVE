@@ -1,7 +1,7 @@
 {
-  "consecutive_no_improvement": 2,
+  "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 153,
+  "total_cycles": 154,
   "implemented": [
     {
       "cycle": 1,
@@ -1551,6 +1551,13 @@
       "title": "Auto-close GitHub issues when CVE added to config/suppressions.yaml",
       "description": "config/suppressions.yaml was fully wired into the aggregation pipeline filter logic but had zero effect on already-open GitHub Issues -- an analyst who suppressed a CVE had to manually close its issue too or it stayed open forever. Added scripts/close_suppressed_issues.py (reuses aggregate.load_suppressions(), read-then-close only, idempotent, fail-soft) and wired it into cve-alerts.yml after the Notify via GitHub Issues step. 105/105 unit tests pass (2 new).",
       "commit_sha": "4e19303"
+    },
+    {
+      "cycle": 154,
+      "timestamp": "2026-09-15T15:18:00Z",
+      "title": "Add scripts/close_suppressed_issues.py to CI syntax-check step",
+      "description": "scripts/close_suppressed_issues.py (added cycle 151) was missing from ci.yml's py_compile syntax-check list, meaning a future syntax error in it would go undetected by the always-on CI regression guard until the actual pipeline run failed. Added it to the existing command alongside the other pipeline scripts.",
+      "commit_sha": "b6b56c6"
     }
   ],
   "rejected": [],

@@ -5077,3 +5077,33 @@ Re-read `.agent/log.md` full history (153 prior cycles) and `config/watchlist.ya
 **Commit SHA:** none — no changes made this cycle.
 
 **Updated state:** `total_cycles`: 152 -> 153. `consecutive_no_improvement`: 1 -> 2. `consecutive_failed_cycles`: 0 (unchanged, cycle did not fail — nothing to revert). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.
+
+## Cycle 154 — 2026-09-15T15:18:00Z
+
+**Re-verified state before acting:** `git pull` clean (up to date with `origin/main` at `4e19303`). `.agent/state.json` (total_cycles=153, consecutive_no_improvement=2, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 10` — all workflows `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4997/5000 remaining, healthy. `gh api .../code-scanning/alerts` — 2 alerts both `state:fixed`, zero open. `gh api .../dependabot/alerts` and `.../secret-scanning/alerts` — both empty (0), clean.
+
+Re-read `.agent/log.md` full history (153 prior cycles) to avoid repeats. Fresh review this cycle: `docs/data/stats.json` field inventory cross-checked against `docs/app.js` rendering (`by_cwe`/`by_vendor_product`/`by_age_bucket`/`risk_increasing_count`/`risk_decreasing_count`/`new_alerts_count` all confirmed already rendered). `docs/manifest.webmanifest` (present, correctly linked, valid). `docs/robots.txt`/CSP header reviewed, no gaps. Then reviewed `.github/workflows/ci.yml`'s "Syntax-check pipeline scripts" step against the actual `scripts/*.py` file list and found a real, verified gap: `scripts/close_suppressed_issues.py` (added cycle 151) was never added to the `py_compile` command, meaning CI's always-on regression guard (built specifically per its own header comment to catch broken commits before reaching production) would not catch a syntax error in this script — it would only surface when the `cve-alerts.yml` pipeline itself ran and failed, hours later and against production, defeating the purpose of the fast always-on guard.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Add `close_suppressed_issues.py` to CI's py_compile syntax-check step** (chosen) — 5/5/5. Concrete, verified gap in the CI safety net for a script the project shipped 3 cycles ago and already wired into the live pipeline (`cve-alerts.yml`). Zero cost (one-line workflow edit, no new dependencies/API calls). Zero regression risk — purely adds a check, cannot break anything that currently passes.
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-153, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. One-line edit to `.github/workflows/ci.yml`'s syntax-check step.
+
+**Validation performed (all passed):**
+- `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))"` → pass.
+- `python3 -m py_compile` on all 7 `scripts/*.py` files (including the newly-covered `close_suppressed_issues.py`) → exit 0.
+- `node --check docs/app.js` → pass (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 105/105 passed (unchanged).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (682 alerts, schema OK 0 violations, stats/trend/feeds all OK) — unaffected, no data files touched.
+- Pushed `b6b56c6` to `origin/main` (clean, no conflicts). Live-verified: `CI Data & Frontend Validation` run `34987560009` completed `success` (14s), `pages build and deployment` run `34987558992` completed successfully (unaffected — no `docs/` files touched, this is the routine deploy for the commit itself since `.github/workflows/**` changes still trigger Pages build via repo-wide push).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA pipeline calls this cycle (CI workflow fix only); `gh api rate_limit` showed 4996-4997/5000 remaining throughout; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `b6b56c6` — "Cycle 154: cover close_suppressed_issues.py in CI syntax-check step" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 153 -> 154. `consecutive_no_improvement`: 2 -> 0 (reset, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.
