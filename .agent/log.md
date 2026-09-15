@@ -4975,3 +4975,32 @@ Reviewed `.github/workflows/codeql.yml` (added cycle 145) for coverage depth: `g
 **Commit SHA:** `c6ff0b3` — "Cycle 149: add concurrency cancel-in-progress to ci.yml and codeql.yml" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 148 -> 149. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL alerts remain.
+
+## Cycle 150 — 2026-09-15T12:52:00Z
+
+**Re-verified state before acting:** `git pull` clean (fast-forwarded to `68ad7e6`, matching origin/main). `.agent/state.json` (total_cycles=149, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 10` — all workflows `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4997/5000 remaining, healthy. `gh api repos/astruzocyber/CVE/code-scanning/alerts` — both prior alerts confirmed `state:fixed`, zero open CodeQL alerts.
+
+Re-read `.agent/log.md`/`state.json` cycle-146-149 history to avoid repeats. Did a fresh, close read of `scripts/validate_data.py`'s `check_alerts_schema_json()` (added cycle 135, fixed a real schema-type bug cycle 138) and noticed its `jsonschema` import is wrapped in a `try/except ImportError` that only **warns** (non-fatal) if the package is missing. Cross-checked `requirements.txt` — it only declared `requests` and `PyYAML`. Ran the actual CI log for the most recent push (`gh run view <id> --log`) and confirmed the suspicion directly: CI's own output read `"jsonschema package not installed -- skipped alerts.schema.json validation"` on every single run since cycle 135. This is a real, live gap between believed and actual protection — the project's schema-validation safety net (explicitly built cycle 135 to catch exactly the kind of drift caught in cycle 138) has been a silent no-op in the one environment (CI, gatekeeping every push to the live dashboard) that matters most, for roughly 15 cycles. Local validation runs always reported "schema OK" and passed because `jsonschema` happened to already be installed in this dev environment — masking the gap from every prior cycle's own validation step.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Add `jsonschema>=4.23.0` to `requirements.txt`** (chosen) — 5/5/5. Directly closes a real, verified, currently-live accuracy gap in the project's own trust/validation layer (the user explicitly values accuracy safeguards over feature breadth). Zero cost (pure-Python, MIT-licensed package, no paid tier). Zero regression risk — CI already handles the "not installed" case gracefully via warn-skip, so installing it can only make an existing already-passing check start actually running for real; if it somehow found a real violation, that's the check doing its job, not a regression.
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-149, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. Added `jsonschema>=4.23.0` to `requirements.txt` (one line).
+
+**Validation performed (all passed):**
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py scripts/validate_data.py scripts/notify_github_issues.py` → exit 0.
+- `node --check docs/app.js` → pass (sanity, untouched).
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → pass (unchanged).
+- `python3 scripts/validate_data.py` (local) → VALIDATION PASSED, `alerts.schema.json: 682 alerts validated against published JSON Schema, 0 violations` (real schema check now confirmed to actually pass against real production data, not just theoretically expected to).
+- Pushed `e49b418` to `origin/main` (clean, no conflicts). Live-verified via `gh run view 34972925275 --log`: CI's `Install pipeline dependencies` step now shows `Collecting jsonschema>=4.23.0` and `Successfully installed ... jsonschema-4.26.0 jsonschema-specifications-2025.9.1 ...`; the `Validate committed data files against schema` step now prints `alerts.schema.json: 682 alerts validated against published JSON Schema, 0 violations` (previously printed the skip-warning) and `VALIDATION PASSED`. CI run completed `success` (24s). Pages build/deploy unaffected (no `docs/` files touched).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (dependency/CI fix only); `gh api rate_limit` showed 4996-4997/5000 remaining throughout; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `e49b418` — "Cycle 150: add jsonschema to requirements.txt so CI actually enforces alerts.schema.json" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 149 -> 150. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL alerts remain.

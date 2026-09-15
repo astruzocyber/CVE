@@ -1,7 +1,7 @@
 {
   "consecutive_no_improvement": 0,
   "consecutive_failed_cycles": 0,
-  "total_cycles": 149,
+  "total_cycles": 150,
   "implemented": [
     {
       "cycle": 1,
@@ -1537,6 +1537,13 @@
         "codeql_run": "34969483977 in_progress at check time (consistent with normal 15-min analysis window)"
       },
       "rate_limit_event": false
+    },
+    {
+      "cycle": 150,
+      "timestamp": "2026-09-15T13:06:00Z",
+      "title": "Fix silently-skipped alerts.schema.json validation in CI (add jsonschema to requirements.txt)",
+      "description": "CI validate_data.py warn-skipped the alerts.schema.json JSON-Schema check on every run since it was added (cycle 135+) because jsonschema was never declared in requirements.txt. Added jsonschema>=4.23.0 to requirements.txt. Verified live: CI run 34972925275 now installs jsonschema and prints alerts.schema.json: 682 alerts validated against published JSON Schema, 0 violations.",
+      "commit_sha": "e49b418"
     }
   ],
   "rejected": [],
