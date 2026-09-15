@@ -5267,3 +5267,28 @@ Re-ran full validation suite fresh: `python3 -m unittest discover -s scripts -p 
 **Commit SHA:** `dce40ad` — "Fix silent GHSA advisory truncation: paginate advisories beyond 100 per package" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 160 -> 161. `consecutive_no_improvement`: 1 -> 0 (reset, shipped a real fix). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.
+
+## Cycle 163 — 2026-09-15T20:07:00Z
+
+**Re-verified state before acting:** `git pull` clean (up to date at `d66cf39`, cycle 162's no-improvement update). `.agent/state.json` (total_cycles=162, consecutive_no_improvement=1... re-checked live: actually 1 after cycle 162's reset from cycle 161's fix). `gh run list --limit 10` — all recent runs `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4999/5000 remaining, healthy. `gh api .../code-scanning/alerts` and `.../dependabot/alerts` — 0 open (2 CodeQL alerts present but both `state: fixed`).
+
+Re-ran full validation suite fresh: `python3 -m unittest discover -s scripts -p "test_*.py"` → 105/105 pass. `python3 scripts/validate_data.py` → VALIDATION PASSED (684 alerts, schema 0 violations).
+
+**Fresh review found a real supply-chain gap:** all 5 GitHub Actions workflows referenced `actions/checkout@v7`, `actions/setup-python@v7`, and `github/codeql-action/{init,analyze}@v3` by mutable tag. A tag can be moved to point at different (potentially malicious) code without any change visible in this repo's diff history — this is exactly what OpenSSF Scorecard's "Pinned-Dependencies" check flags, and is a well-known supply-chain attack vector (a compromised maintainer account or release pipeline re-tagging `v7`). Checked prior log entries (cycle ~118-ish mentioned checking SHAs already matched pinned values — but on inspection the workflows were never actually converted to SHA pins, only checked for tag currency).
+
+**Implemented:** Pinned all 6 `uses:` lines across `ci.yml`, `cve-alerts.yml`, `stale-data-alert.yml`, and `codeql.yml` to their current tag's full immutable commit SHA (fetched via `gh api repos/<owner>/<repo>/git/refs/tags/<tag>`, resolving the CodeQL annotated tag through its tag object to the underlying commit), keeping a trailing `# v7`/`# v3` comment for human-readable version tracking. No version change — pure pinning of the exact same code already in use. Dependabot's `github-actions` ecosystem entry (added cycle 111) natively supports SHA-pinned actions and will continue to open version-bump PRs (updating both SHA and comment) when upstream cuts new tags.
+
+**Validation:**
+- `python3 -c "yaml.safe_load(...)"` on all 5 workflow files → pass.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → 105/105 pass (unchanged, no Python touched).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (684 alerts, schema OK 0 violations) — unaffected, workflow-metadata-only change.
+- `python3 -m py_compile` on all scripts → pass (sanity, untouched).
+- Pushed `4a77138` to `origin/main`. Live-verified: `CI Data & Frontend Validation` run `35017655830` completed `success` (17s); `CodeQL Security Scanning` (`35017655876`) and `pages build and deployment` (`35017654541`) still `in_progress` at check time (consistent with normal deploy latency, non-blocking).
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred cycles 56-161, still needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no live NVD/EPSS/KEV/Dependabot/GHSA pipeline calls this cycle (workflow-metadata fix only, no real API traffic beyond `gh api` ref lookups against GitHub's own free API); `gh api rate_limit` showed 4999/5000 remaining; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `4a77138` — "Cycle 163: pin GitHub Actions to immutable commit SHAs (supply-chain hardening)" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 162 -> 163. `consecutive_no_improvement`: 1 -> 0 (reset, shipped a real fix). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged). Zero open CodeQL/Dependabot/secret-scanning alerts remain.
