@@ -4855,3 +4855,34 @@ Reviewed `.github/workflows/` (ci.yml, cve-alerts.yml, stale-data-alert.yml, can
 **Commit SHA:** `75ef9db` — "Cycle 145: add CodeQL security scanning (Python + JS) workflow" — pushed to `origin/main`.
 
 **Updated state:** `total_cycles`: 144 -> 145. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
+
+## Cycle 146 — 2026-09-15T10:50:16Z
+
+**Re-verified state before acting:** `git pull` clean (fast-forwarded to `75ef9db`/`e82343a`, matching origin/main). `.agent/state.json` (total_cycles=145, consecutive_no_improvement=0, consecutive_failed_cycles=0, stopped=false). `gh run list --limit 15` — all workflows `success`, no queued/stuck runs, no 429/throttle signals. `gh api rate_limit` — 4996/5000 remaining, healthy. Re-ran `python3 scripts/validate_data.py` fresh (VALIDATION PASSED, 682 alerts, schema OK, 0 violations, id-reference OK, feeds OK) and `python3 -m unittest discover -s scripts -p "test_*.py"` (103/103 pass) from clean checkout.
+
+Cycle 145 shipped CodeQL security scanning (Python + JS). Its first real run (`34956927157`) surfaced exactly the class of finding it was added for: `gh api repos/astruzocyber/CVE/code-scanning/alerts` returned one **open, high-severity** alert, `js/incomplete-sanitization` (CWE-020/080/116), in `docs/app.js:1396` — `exportMarkdownReport()`'s `affected` column escaper replaced pipe characters (`|` -> `\|`) for Markdown table safety but never escaped literal backslash characters first, so an affected-package string containing a raw backslash immediately followed by a pipe (a realistic value shape, e.g. some vendor/package strings) could produce an incompletely-escaped, structurally broken table cell. This is a genuine dogfooding win for cycle 145's own investment: acting on a real finding is exactly the value case scored for that cycle.
+
+**Candidates considered (scored feasibility/risk/value out of 5 each):**
+1. **Fix the CodeQL js/incomplete-sanitization finding** (chosen) — 5/5/4. Concrete, tool-verified bug in shipped frontend code; one-line fix (escape backslashes before pipes, order matters to avoid double-escaping); zero schema/pipeline/API changes; directly closes the loop on cycle 145's new capability.
+2. GHSA/Dependabot package-level coverage expansion via `config/watchlist.yaml` — still deferred, needs human input on actual tech stack (deferred cycles 56-145, unchanged reasoning).
+3. Full risk_score history array / time-series per-CVE — still deferred, storage-growth risk, no new angle found.
+4. Any paid/threat-intel enrichment — rejected on principle, violates zero-cost constraint.
+
+**Implemented:** Candidate 1. `docs/app.js` `exportMarkdownReport()`: changed `.replace(/\|/g, "\\|")` to `.replace(/\\/g, "\\\\").replace(/\|/g, "\\|")` (backslashes escaped first, so the fix doesn't clobber its own output). Verified via standalone Node script that a value like `pkg\|evil` and a multi-pipe value both now escape correctly, and plain strings are unaffected.
+
+**Also fixed a flaky test found during this cycle's mandatory fresh validation run:** `TestBuildKevFeedRss.test_pubdate_is_rfc822_not_iso8601` (added cycle 144) asserted no literal `"T"` character appears in the RFC 822 `pubDate` string after stripping the `"GMT"` suffix — but RFC 822 day-name abbreviations `"Tue"` and `"Thu"` legitimately contain a `T`, so the test silently fails on real Tuesdays/Thursdays (reproduced live: today is a Tuesday, `full test suite exit=1` before the fix). Replaced the substring check with a regex asserting no ISO-8601-style `YYYY-MM-DDTHH:MM:SS` pattern is present, which is what the test actually intended to verify. This is the same "looks-right-fails-in-practice" bug class as the sitemap/feed spec-compliance fixes from cycles 138/142/144 — caught by this cycle's own mandated fresh-state re-validation step, not by chance.
+
+**Validation performed (all passed):**
+- `node --check docs/app.js` → pass.
+- `python3 -m py_compile scripts/aggregate.py scripts/test_aggregate.py` → exit 0.
+- `python3 -m unittest discover -s scripts -p "test_*.py"` → **103/103 passed**, `OK` (previously 1 failure pre-fix, confirmed reproducible and root-caused to the day-of-week issue above, not a real regression).
+- `python3 scripts/validate_data.py` → VALIDATION PASSED (682 alerts, schema OK, 0 violations, id-reference OK, feeds OK).
+- Pushed `781160a` to `origin/main` (clean, no conflicts). Live-verified post-push: CI run `34960077192` completed success (10s); CodeQL run `34960077173` completed success (1m18s); Pages build/deploy `34960076357` completed success (41s). Directly confirmed the fix via `gh api repos/astruzocyber/CVE/code-scanning/alerts`: alert #1 (`js/incomplete-sanitization`) now shows `"state":"fixed"`.
+
+**Rejected this cycle:** GHSA/Dependabot package-level coverage expansion (deferred, needs human input on tech stack); full risk_score history array (deferred, storage-growth risk); any paid/threat-intel enrichment (rejected on principle, violates zero-cost constraint).
+
+**RATE_LIMIT_EVENT: no** — no NVD/EPSS/KEV/Dependabot/GHSA calls this cycle (frontend bugfix + test fix + local validation only); `gh api rate_limit` showed 4996/5000 remaining; no 429/throttle signals in any recent run logs across all workflows.
+
+**Commit SHA:** `781160a` — "Cycle 146: fix CodeQL js/incomplete-sanitization in exportMarkdownReport() + fix flaky RFC822 pubDate test" — pushed to `origin/main`.
+
+**Updated state:** `total_cycles`: 145 -> 146. `consecutive_no_improvement`: 0 (unchanged, shipped an improvement). `consecutive_failed_cycles`: 0 (unchanged, cycle succeeded). `stopped`: false (unchanged).
