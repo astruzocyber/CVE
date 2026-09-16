@@ -5768,3 +5768,10 @@ Full validation: unittest discover (scripts/) -> pass (all). validate_data.py ->
 - unittest discover (scripts/): pass (all). validate_data.py: 721 alerts, 721 unique CVE ids, schema 0 violations, stats.json OK, trend.csv 76 rows OK, 63 DOM id-refs resolve, feeds OK.
 - No new candidate cleared feasibility/value bar (post-stop maintenance mode, past cycle 173 stop). No failures, no rate-limit events.
 - Per notification policy: routine cycle, no visible chat output.
+
+## Cycle (2026-09-16T16:24:00Z) - post-stop maintenance re-validation
+- Re-read repo state fresh: git pull clean. Workflows all green (Cancel Stale Queued x2, Stale Data Alert, pages-build-deployment, aggregation run, all success).
+- gh api rate_limit: 4998/5000, healthy.
+- unittest discover (scripts/): pass. validate_data.py: 723 alerts, 723 unique CVE ids, schema 0 violations, stats.json OK, trend.csv 77 rows OK, 63 DOM id-refs resolve, feeds OK.
+- No new candidate cleared feasibility/value bar (post-stop maintenance mode, past cycle 173 stop). No failures, no rate-limit events.
+- Per notification policy: routine cycle, no visible chat output.
