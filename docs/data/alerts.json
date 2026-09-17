@@ -1,5 +1,270 @@
 [
   {
+    "cve_id": "CVE-2026-63506",
+    "description": "Tina is a headless content management system. Prior to @tinacms/auth 1.1.4 and next-tinacms-azure 15.0.1, isAuthorized accepts a request-controlled clientID and asks isUserAuthorized to validate the bearer token against that selected TinaCloud app instead of the self-hosted site's configured app. An attacker with any TinaCloud account can submit the attacker's own app ID and valid token to a victim endpoint, causing TinaCloudBackendAuthProvider or an affected media authorized callback to accept the attacker's verified status across the tenant boundary. The vulnerable logic is present in packages/@tinacms/auth/src/index.ts and packages/next-tinacms-azure/src/auth.ts. Successful exploitation permits media listing, reading, upload, or deletion and, when TinaCloudBackendAuthProvider is used, GraphQL read, create, update, and delete operations on the victim's content without a victim account or victim interaction. This vulnerability is fixed in @tinacms/auth 1.1.4 and next-tinacms-azure 15.0.1.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-639"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-09-16T21:17:13.163",
+    "nvd_last_modified": "2026-09-16T21:17:13.163",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-17T00:13:41.296632+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-86831",
+    "description": "Improper validation of pod identifier uniqueness in aws-network-policy-agent in Amazon EKS Network Policy Agent before v1.4.0 might allow an authenticated remote user to bypass NetworkPolicy enforcement on co-located pods in other namespaces via crafted pod and namespace names that produce pod identifier collisions.\n\n\n\nTo remediate this issue, users should upgrade to Amazon EKS Network Policy Agent 1.4.0 or later and Amazon VPC CNI Managed Add-on v1.22.4 or later (which includes Network Policy Agent v1.4.0).",
+    "cvss_score": 8.7,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-1289"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 50.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.7,
+      "cvss_component": 50.7,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "amazon/aws"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-16T20:17:36.980",
+    "nvd_last_modified": "2026-09-16T20:36:12.510",
+    "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-17T00:13:41.296623+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-92593",
+    "description": "Craft CMS versions 5.10.0 through 5.10.12 contain an incomplete fix for CVE-2026-55794: the Controller::getPostedRedirectUrl() -> View::renderObjectTemplate() sink remained unsandboxed, and the same fix commit added a self-signing oracle in Cp::elementLabelHtml(). Because Craft/Yii HMAC tokens are not bound to a parameter name, an authenticated low-privilege control panel user with edit rights on a single element type can mint a token over attacker-controlled Twig for the returnUrl parameter and replay it as the redirect POST parameter, reaching the unsandboxed sink and achieving server-side template injection that executes arbitrary PHP code (full server compromise). The issue is fixed in 5.10.13.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-94"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-16T22:18:30.150",
+    "nvd_last_modified": "2026-09-16T22:18:30.150",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-17T00:13:41.296272+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-92592",
+    "description": "Craft CMS 4.8.0 through 4.18.5 and 5.0.0 through 5.10.12 sign an authenticated user's attacker-controlled license-shun cookie with the same key and format used to validate signed redirect parameters, because the HMAC signature is not bound to its purpose (Yii's cookieValidationKey is derived from the same Craft securityKey used for signed request parameters). An authenticated, non-administrator user (Control Panel access is not required) can set the cookie via the license-shun endpoint and transplant the signed envelope into the redirect parameter; on a successful login, Craft validates the signature and renders the authenticated bytes as an unsandboxed Twig template, where Twig's map filter accepts a string callback and allows PHP system() to execute arbitrary operating-system commands as the web-server user. Exploitation requires an account using password authentication without active 2FA, the default request configuration, and availability of PHP system(). The issue is fixed in 4.18.6 and 5.10.13.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-1336"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-16T22:18:30.013",
+    "nvd_last_modified": "2026-09-16T22:18:30.013",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-17T00:13:41.296265+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-92806",
+    "description": "phpList versions before 3.6.17 fail to validate cross-site request forgery tokens in the mass subscriber removal form handler. Attackers can induce logged-in administrators to visit crafted pages that silently delete and blacklist arbitrary subscriber addresses without authentication verification.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-352"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-16T21:17:30.410",
+    "nvd_last_modified": "2026-09-16T21:17:30.410",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-17T00:13:41.296256+00:00"
+  },
+  {
     "cve_id": "CVE-2026-59825",
     "description": "Mastodon is a free, open-source social network server based on ActivityPub. Prior to 4.4.19 and from 4.5.0 until 4.5.12, Mastodon's app/models/concerns/user/ldap_authenticable.rb mutates OpenSSL::SSL::SSLContext::DEFAULT_PARAMS when LDAP authentication uses LDAP_TLS_NO_VERIFY=true, disabling SSL and TLS certificate verification globally for requests made by puma web processes while sidekiq background jobs remain unaffected. This issue is fixed in versions 4.4.19 and 4.5.12.",
     "cvss_score": 7.4,
@@ -1855,8 +2120,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-15T21:16:48.957",
-    "nvd_last_modified": "2026-09-15T21:16:48.957",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-16T20:21:01.047",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -9836,8 +10101,8 @@
   {
     "cve_id": "CVE-2026-85596",
     "description": "Traefik versions >= v3.7.0 and <= v3.7.10 contain an authentication bypass in the Kubernetes Ingress NGINX provider. The TLS option generated for an Ingress carrying the nginx.ingress.kubernetes.io/auth-tls-secret annotation was named after the Ingress namespace and name. As a result, two Ingress objects sharing the same host, the same client CA secret, and the same client-authentication mode produced two distinct TLS option names for that host. Traefik treats this as a TLS options conflict and falls back to the entry point's default TLS configuration, which does not request a client certificate, so a route configured with nginx.ingress.kubernetes.io/auth-tls-verify-client: \"on\" becomes reachable without a client certificate. Only the v3.7 line is affected; the issue is fixed in v3.7.11.",
-    "cvss_score": 8.2,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
@@ -9855,10 +10120,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 28.8,
+    "risk_score": 34.4,
     "risk_score_breakdown": {
-      "cvss_raw": 8.2,
-      "cvss_component": 28.7,
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00224,
       "epss_component": 0.1,
@@ -9878,10 +10143,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-04T12:17:23.087",
-    "nvd_last_modified": "2026-09-10T16:17:59.527",
-    "vuln_status": "Awaiting Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-09-16T20:42:34.950",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "traefik",
+        "product": "traefik",
+        "fixed": "3.7.11",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/traefik/traefik/security/advisories/GHSA-j994-9gqj-9hwq",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.549548+00:00"
@@ -9945,8 +10225,8 @@
   {
     "cve_id": "CVE-2026-67309",
     "description": "Traefik versions >= v3.7.0 and <= v3.7.7 contain a path traversal vulnerability in the Kubernetes Ingress NGINX provider's RewriteTarget middleware (generated from the nginx.ingress.kubernetes.io/rewrite-target annotation). When an Ingress path uses a regex that captures attacker-controlled text without requiring a path separator (e.g., path /api(.*) with rewrite target /$1), a crafted request such as /api../admin matches the public router, is rewritten to a dot-segment traversal path (/../admin), and is forwarded without post-replacement normalization validation. A backend that normalizes dot segments resolves the path to a protected endpoint (e.g., /admin) reachable only through a separate router secured with BasicAuth, DigestAuth, or ForwardAuth, resulting in route-level authentication bypass. The issue is fixed in v3.7.8.",
-    "cvss_score": 7.8,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
@@ -9964,10 +10244,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 27.5,
+    "risk_score": 26.4,
     "risk_score_breakdown": {
-      "cvss_raw": 7.8,
-      "cvss_component": 27.3,
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00492,
       "epss_component": 0.2,
@@ -9987,10 +10267,37 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-08-01T13:17:00.703",
-    "nvd_last_modified": "2026-09-09T20:26:18.573",
-    "vuln_status": "Awaiting Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-09-16T20:45:02.070",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "traefik",
+        "product": "traefik",
+        "fixed": "3.7.8",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/traefik/traefik/commit/69259c3acc9d4bdc065cb2e3b83336f7de3e7038",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/traefik/traefik/commit/b93f02cd07b79490fb8c8f02e301a7a1ec553195",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/traefik/traefik/security/advisories/GHSA-8rxv-jg7p-wvg3",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T17:18:59.549528+00:00"
