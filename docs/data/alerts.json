@@ -1,5 +1,56 @@
 [
   {
+    "cve_id": "CVE-2025-12999",
+    "description": "UrlUtil.getBaseUrl builds the absolute URLs in a response \u2014 download links, icons, asset and API URLs \u2014 from the X-Forwarded-Host, X-Forwarded-Proto and X-Forwarded-Prefix request headers, with no check on whether the sender was a trusted proxy, falling back to the client-supplied Host header.                                                                                   \n\n                                                                                                                                                                                              \n\n\nThose responses are cached under keys that do not include the host (extension.json since 0.6.0, namespace.details.json since 0.9.0, sitemap since 0.14.5, latest.extension.version.vscode since 0.34.2). A single request carrying a forged header therefore places attacker-chosen URLs into an entry served to every other client for the lifetime of that entry \u2014 one hour by default, and cluster-wide where ovsx.redis.enabled is set.\n\n\n\nThe VSIX download URL, its signature URL and the public key URL are all derived from the same base URL, so extension signing does not limit the impact: an attacker who poisons an entry supplies the package, the signature over it, and the key used to verify it.                                                                                    \n\n\n\nExploitability depends on deployment topology. A server reachable directly by clients, or fronted by a proxy that relays the client's X-Forwarded-Host rather than overwriting it, is exploitable by an unauthenticated remote attacker. A proxy that overwrites the header is not.\n\n\n\nAn unauthenticated attacker can poison Open VSX's per-extension metadata cache with attacker-controlled download, signature, and public-key URLs by supplying a crafted X-Forwarded-Host header, causing downstream VS Code-compatible editors to fetch and install a malicious VSIX.\n\n\n\nWorkarounds (unpatched versions)\n\n  \n\n\n1. Configure the reverse proxy to set rather than relay X-Forwarded-Host, X-Forwarded-Proto and X-Forwarded-Prefix \u2014 note that nginx's $host is the client's Host header and is not a safe value.\n\n\n\n2. Ensure the server is not reachable except through that proxy.\n\n\n\n3. Flush the caches afterwards; poisoned entries survive the configuration change.",
+    "cvss_score": 9.1,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 53.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.1,
+      "cvss_component": 53.1,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-21T09:17:04.533",
+    "nvd_last_modified": "2026-09-21T09:17:04.533",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-21T12:13:07.790773+00:00"
+  },
+  {
     "cve_id": "CVE-2026-88856",
     "description": "Joomla Extension - OrdaSoft.com - Authenticated, Privileged Remote Code Execution in OrdaSoft Joomla Gallery extension for Joomla < 6.2.7 - The extensions updateOSGallery(), reached via task=update_osgallery, read a JSON request body and called the value of a method field as a live PHP function, passing the value of a package field as its single argument, with no allow-list or is_callable() check of any kind. Any function name compatible with a single argument was directly reachable, including system, exec, shell_exec, and passthru.",
     "cvss_score": 9.4,
