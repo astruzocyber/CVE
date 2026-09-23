@@ -1,5 +1,58 @@
 [
   {
+    "cve_id": "CVE-2026-32996",
+    "description": "This vulnerability in Veeam Agent for Microsoft Windows allows for Local Privilege Escalation.",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-532"
+    ],
+    "epss_score": 0.00157,
+    "epss_percentile": 0.05325,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 25.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00157,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/windows"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-05-28T05:16:35.637",
+    "nvd_last_modified": "2026-09-23T04:17:43.927",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-23T08:11:59.862610+00:00"
+  },
+  {
     "cve_id": "CVE-2026-88419",
     "description": "An unrestricted upload of files with a dangerous type in the thumbnail-upload endpoint (/index.php?m=member&f=article&v=thumbUpload) of WuzhiCMS 5.0.0 allows an authenticated low-privileged member to upload a crafted .php file and execute arbitrary PHP code on the server, because the stored file extension is taken verbatim from the client-supplied filename with no extension allowlist or content validation and the file is written to the web-accessible uploadfile/ directory, from which the web server executes PHP.",
     "cvss_score": 8.8,
