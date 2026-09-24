@@ -1,5 +1,170 @@
 [
   {
+    "cve_id": "CVE-2026-93352",
+    "description": "Laravel-Mediable 7.0.0 before 7.0.2 contains an incomplete patch for CVE-2026-49972 in which the .pht extension is absent from the forbidden_extensions blocklist in config/mediable.php. The blocklist introduced to address CVE-2026-49972 includes phpt but omits pht, which Apache executes as PHP via the default FilesMatch directive on Debian and Ubuntu systems. An attacker can upload a .pht file that passes all validation in MediaUploader::verifyExtension() and File::sanitizeFileName() because pht is not present in the blocklist, causing the file to be written to disk and executed as PHP when requested, enabling remote code execution with the privileges of the web server process.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-23T22:16:59.523",
+    "nvd_last_modified": "2026-09-23T22:16:59.523",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-24T00:13:58.395239+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-86583",
+    "description": "The Import and export users and customers plugin for WordPress is vulnerable to Privilege Escalation in all versions up to, and including, 2.4.17 via the plugin's own export and re-import workflow. The vulnerability exists because the exporter writes CSV cells using fputcsv() with a NUL byte (\\0) as the escape character, while the importer parses the same file using SplFileObject::fgetcsv() with only a single delimiter argument, causing PHP's default backslash escape character to be applied instead; because the export column layout places display_name immediately before the role column and nickname immediately after, an attacker can store crafted values in those two profile fields \u2014 saved by WordPress core via the standard profile page \u2014 such that the escape mismatch causes the parser to merge the display_name cell into the role field and rebalance the column count via nickname, yielding administrator as the parsed role for their own row when it reaches the import_user function's add_role function. This makes it possible for authenticated attackers with Subscriber-level access or above to escalate their privileges to Administrator. Exploitation requires a site administrator to trigger the plugin's documented export re-import migration with both \"Update existing users\" and \"Update roles for existing users\" set to \"yes\".",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-266"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-23T22:16:59.220",
+    "nvd_last_modified": "2026-09-23T22:16:59.220",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-24T00:13:58.394980+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-19125",
+    "description": "The EthPress \u2013 Web3 Login plugin for WordPress is vulnerable to Authentication Bypass in all versions up to, and including, 2.3.5. This is due to the verify_login() function in app/Login.php containing a missing return statement in the signature verification failure branch \u2014 when Signature::verify2() reports a mismatch, the function only assigns a WP_Error to a local variable and continues executing, causing unconditional fall-through to the login block where Address::log_in() calls wp_set_auth_cookie() regardless of whether the submitted signature is valid. This makes it possible for unauthenticated attackers to log in as any WordPress user who has a linked wallet address \u2014 including administrators \u2014 by submitting that user's public wallet address alongside an arbitrary well-formed signature, enabling full site takeover.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-287"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-23T22:16:56.683",
+    "nvd_last_modified": "2026-09-23T22:16:56.683",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-24T00:13:58.394968+00:00"
+  },
+  {
     "cve_id": "CVE-2008-4128",
     "description": "Multiple cross-site request forgery (CSRF) vulnerabilities in the HTTP Administration component in Cisco IOS 12.4 on the 871 Integrated Services Router allow remote attackers to execute arbitrary commands via (1) a certain \"show privilege\" command to the /level/15/exec/- URI, and (2) a certain \"alias exec\" command to the /level/15/exec/-/configure/http URI.  NOTE: some of these details are obtained from third party information.",
     "cvss_score": 8.1,
@@ -34,8 +199,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 66.9,
+    "epss_score_prev": 0.33917,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -87,7 +252,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -97,7 +262,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-23T19:19:53.500",
-    "nvd_last_modified": "2026-09-23T19:39:08.847",
+    "nvd_last_modified": "2026-09-23T20:17:25.370",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -140,7 +305,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -152,7 +317,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-23T19:19:50.933",
-    "nvd_last_modified": "2026-09-23T19:39:08.847",
+    "nvd_last_modified": "2026-09-23T20:17:24.483",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -195,7 +360,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -248,7 +413,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 53.1,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -301,7 +466,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -354,7 +519,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 53.1,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -407,7 +572,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -461,7 +626,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -514,7 +679,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -567,7 +732,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -620,7 +785,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -673,7 +838,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -726,7 +891,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -7627,7 +7792,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-17T22:17:02.983",
-    "nvd_last_modified": "2026-09-17T22:17:03.110",
+    "nvd_last_modified": "2026-09-23T20:17:11.267",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
