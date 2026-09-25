@@ -1,5 +1,387 @@
 [
   {
+    "cve_id": "CVE-2026-41447",
+    "description": "FirmaCheck for Windows before 1.3.16 contains a DLL hijacking vulnerability that allows local attackers to execute arbitrary code by placing a crafted openssl.cnf file in the unvalidated C:\\Program Files (x86)\\Common Files\\SSL\\ directory path. Attackers can write a malicious OpenSSL configuration file referencing an attacker-controlled DLL to achieve code execution at startup process privilege level when FirmaCheck.exe runs automatically at system startup.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-426"
+    ],
+    "epss_score": 0.00168,
+    "epss_percentile": 0.05345,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00168,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-03T21:16:38.947",
+    "nvd_last_modified": "2026-09-24T20:43:32.537",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-25T00:15:34.580116+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-57863",
+    "description": "Crater Invoice through 6.0.6 contains a path traversal vulnerability in the self-update API that allows authenticated company owners to write arbitrary files outside the intended extraction directory by supplying crafted ZIP archives with ../ sequences to the unzip endpoint. Attackers can exploit unsanitized ZIP entry names passed to PHP's ZipArchive::extractTo() to write arbitrary PHP files into the web-accessible public directory and achieve remote code execution on the server.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": 0.00899,
+    "epss_percentile": 0.57888,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00899,
+      "epss_component": 0.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-57863",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-25T13:19:24.200",
+    "nvd_last_modified": "2026-09-24T20:43:32.537",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-25T00:15:34.577674+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-67602",
+    "description": "phpIPAM before 1.8.2 contains an authentication bypass vulnerability in the REST API that allows unauthenticated attackers to gain full API access by exploiting an insecure object cache keying mechanism. The cache is keyed by lookup value alone without including the searched column, enabling an entry written during an app_id lookup to satisfy a subsequent app_code lookup, allowing attackers to use the numeric database row identifier as an API token to read, write, and delete all IP address management records.",
+    "cvss_score": 9.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-706"
+    ],
+    "epss_score": 0.0064,
+    "epss_percentile": 0.48375,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.1,
+      "cvss_component": 31.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0064,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-67602",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "6e11367e5f43eb9f50bde7f7b25bf65fc53d844d"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-24T14:16:57.347",
+    "nvd_last_modified": "2026-09-24T20:43:32.537",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-25T00:15:34.577664+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-69118",
+    "description": "Cachet through 2.4.1 contains a server-side template injection vulnerability in incident template rendering that allows authenticated users to execute arbitrary PHP code. Attackers can create malicious incident templates with Blade directives or Twig filters that execute system commands when incidents are created, achieving remote code execution as the web server process.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-863",
+      "CWE-1336"
+    ],
+    "epss_score": 0.00805,
+    "epss_percentile": 0.54874,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00805,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-69118",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "91e4d8aba7ce425c0b27ec74de2bc4792b3a107b"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-10T20:17:32.310",
+    "nvd_last_modified": "2026-09-24T20:43:32.537",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-25T00:15:34.577627+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-63725",
+    "description": "sysPass's FileBackupService::doBackupFiles() in lib/SP/Services/Backup/FileBackupService.php around line 388 builds a tar shell command by string-concatenating the backup directory path $this->path directly into the command line ('tar czf ' . $backupFileApp . ' ' . BASE_PATH . ' --exclude \\\"' . $this->path . '\\\" 2>&1') and passes the result to PHP's exec() with no application of escapeshellarg() and no validation of the path against a safe character set. The $this->path value is read from the sysPass configuration, which is persisted in the database and writable through the admin settings API and the admin UI. An administrator (or an attacker who has obtained an admin API token or admin session) can therefore store a backup path containing shell metacharacters and trigger a backup operation to execute arbitrary OS commands as the web server process user (typically www-data or apache). Because sysPass is a password manager whose sole purpose is to hold credentials for other systems, code execution as the web-server user permits reading sysPass's master password and encryption key from memory or configuration files, decrypting every stored credential in the database, exporting the entire password vault, pivoting to internal systems using the disclosed credentials, and installing persistent backdoors on the password-manager host.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-78"
+    ],
+    "epss_score": 0.00444,
+    "epss_percentile": 0.35902,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00444,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-63725",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-06T22:18:12.480",
+    "nvd_last_modified": "2026-09-24T20:43:32.537",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-25T00:15:34.577617+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-69703",
+    "description": "Atlas-Livre contains an improper access control vulnerability in the admin controllers under Espace_admin/controleur/ that allows unauthenticated attackers to bypass session-based authentication guards by sending raw HTTP requests that ignore redirects. Attackers can invoke destructive admin actions such as record deletion by requesting controller endpoints with GET parameters like supp, because the PHP header() redirect is never followed by an exit or die call, allowing all subsequent code including database operations to execute regardless of session state.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-306"
+    ],
+    "epss_score": 0.00826,
+    "epss_percentile": 0.55558,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00826,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-04T19:16:54.130",
+    "nvd_last_modified": "2026-09-24T20:43:32.537",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-25T00:15:34.577605+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-70125",
+    "description": "Microsoft Office Outlook Remote Code Execution Vulnerability",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00442,
+    "epss_percentile": 0.35653,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00442,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-23T23:18:12.510",
+    "nvd_last_modified": "2026-09-24T23:18:37.890",
+    "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-25T00:15:34.577019+00:00"
+  },
+  {
     "cve_id": "CVE-2026-79766",
     "description": "Termix is a web-based server management platform with SSH terminal, tunneling, and file editing capabilities. From 2.4.1 until 2.5.1, an authenticated Termix administrator can store attacker-controlled domain and email values through PATCH /users/acme-ssl-settings and trigger their interpolation into a certbot shell command through POST /users/acme-ssl-request. In src/backend/database/routes/acme-ssl-routes.ts, child_process.execSync invokes /bin/sh -c with those values only wrapped in double quotes, so shell metacharacters can execute arbitrary operating-system commands as the Termix backend process. Both HTTP webroot and DNS Cloudflare challenge modes are affected, and compromise exposes Termix databases, process secrets, stored credentials, and network reachability. This issue is fixed in version 2.5.1.",
     "cvss_score": 9.1,
@@ -34,7 +416,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 53.1,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -89,7 +471,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -146,7 +528,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -200,7 +582,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 54.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -253,7 +635,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -306,7 +688,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -359,7 +741,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 49.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -412,7 +794,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -465,16 +847,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2026-75105",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "6e11367e5f43eb9f50bde7f7b25bf65fc53d844d"
-      }
-    ],
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00482,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -524,16 +900,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2026-73482",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "f69dc97cd3a6705dffb2c7e6c8c5b534bac05e02"
-      }
-    ],
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.0034,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -583,8 +953,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.3,
+    "epss_score_prev": 0.01192,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1423,8 +1793,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-23T22:16:59.523",
-    "nvd_last_modified": "2026-09-24T16:17:25.857",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-24T21:08:55.030",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -3230,8 +3600,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-22T20:17:11.083",
-    "nvd_last_modified": "2026-09-22T20:17:11.083",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-24T21:25:27.050",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -4616,8 +4986,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-21T16:17:25.070",
-    "nvd_last_modified": "2026-09-21T18:17:11.697",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-24T21:25:27.050",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -4786,7 +5156,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-21T15:17:30.477",
-    "nvd_last_modified": "2026-09-23T18:25:00.707",
+    "nvd_last_modified": "2026-09-24T23:17:13.280",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -6792,7 +7162,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-18T18:17:17.127",
-    "nvd_last_modified": "2026-09-18T18:17:17.127",
+    "nvd_last_modified": "2026-09-24T21:18:55.637",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9117,7 +9487,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-17T21:17:12.600",
-    "nvd_last_modified": "2026-09-17T21:17:12.600",
+    "nvd_last_modified": "2026-09-24T21:17:12.550",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9279,8 +9649,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-17T21:17:14.980",
-    "nvd_last_modified": "2026-09-18T19:16:41.623",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-24T21:25:27.050",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -9802,8 +10172,8 @@
     ],
     "source": "nvd",
     "published": "2026-09-17T19:16:50.047",
-    "nvd_last_modified": "2026-09-18T19:16:42.137",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-24T21:23:54.397",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -32579,7 +32949,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:20:37.740",
-    "nvd_last_modified": "2026-09-09T04:19:57.453",
+    "nvd_last_modified": "2026-09-24T23:19:01.293",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -34265,8 +34635,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:18:55.790",
-    "nvd_last_modified": "2026-09-09T10:18:12.500",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-09-24T23:17:41.490",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -34786,7 +35156,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:20:02.413",
-    "nvd_last_modified": "2026-09-16T19:06:15.720",
+    "nvd_last_modified": "2026-09-24T23:18:36.523",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -34824,8 +35194,8 @@
       {
         "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-69911",
         "tags": [
-          "Vendor Advisory",
-          "Patch"
+          "Patch",
+          "Vendor Advisory"
         ]
       }
     ],
@@ -34878,7 +35248,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:19:31.983",
-    "nvd_last_modified": "2026-09-21T15:22:13.127",
+    "nvd_last_modified": "2026-09-24T23:18:12.410",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -34970,7 +35340,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:19:30.837",
-    "nvd_last_modified": "2026-09-21T17:14:10.200",
+    "nvd_last_modified": "2026-09-24T23:18:11.390",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -35062,7 +35432,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:19:30.663",
-    "nvd_last_modified": "2026-09-21T17:18:32.450",
+    "nvd_last_modified": "2026-09-24T23:18:11.210",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -35247,7 +35617,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:19:28.490",
-    "nvd_last_modified": "2026-09-18T15:17:24.240",
+    "nvd_last_modified": "2026-09-24T23:18:09.520",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -35339,7 +35709,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:19:18.450",
-    "nvd_last_modified": "2026-09-23T20:05:56.390",
+    "nvd_last_modified": "2026-09-24T23:18:01.197",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -35431,7 +35801,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:19:15.357",
-    "nvd_last_modified": "2026-09-18T20:18:00.930",
+    "nvd_last_modified": "2026-09-24T23:17:58.077",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -35630,7 +36000,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:19:03.540",
-    "nvd_last_modified": "2026-09-24T19:22:49.863",
+    "nvd_last_modified": "2026-09-24T23:17:47.470",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -35906,7 +36276,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:18:46.527",
-    "nvd_last_modified": "2026-09-24T17:55:14.493",
+    "nvd_last_modified": "2026-09-24T23:17:33.960",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -36236,7 +36606,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:17:53.350",
-    "nvd_last_modified": "2026-09-16T13:22:12.553",
+    "nvd_last_modified": "2026-09-24T23:17:14.453",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -39249,8 +39619,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-04T15:17:35.360",
-    "nvd_last_modified": "2026-09-10T16:17:49.593",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-24T20:43:32.537",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -48601,8 +48971,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-08-25T23:17:59.860",
-    "nvd_last_modified": "2026-09-03T05:15:09.570",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-09-24T20:43:32.537",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
