@@ -1,5 +1,3430 @@
 [
   {
+    "cve_id": "CVE-2025-68278",
+    "description": "Tina is a headless content management system. In tinacms prior to version 3.1.1, tinacms uses the gray-matter package in an insecure way allowing attackers that can control the content of the processed markdown files, e.g., blog posts, to execute arbitrary code. tinacms version 3.1.1, @tinacms/cli version 2.0.4, and @tinacms/graphql version 2.0.3 contain a fix for the issue.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-94"
+    ],
+    "epss_score": 0.00479,
+    "epss_percentile": 0.38756,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00479,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-68278",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "62086b0dd71be392fce34e95e3d1c8d05d60bf43"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2025-12-18T16:15:57.347",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "ssw",
+        "product": "tinacms",
+        "fixed": "3.1.1",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "ssw",
+        "product": "tinacms\\/cli",
+        "fixed": "2.0.4",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "ssw",
+        "product": "tinacms\\/graphql",
+        "fixed": "2.0.3",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/tinacms/tinacms/commit/fa7c27abef968e3f3a3e7d564f282bc566087569",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/tinacms/tinacms/security/advisories/GHSA-529f-9qwm-9628",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710233+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-65950",
+    "description": "WBCE CMS is a content management system. In versions 1.6.4 and below, the user management module allows a low-privileged authenticated user with permissions to modify users to execute arbitrary SQL queries. This can be escalated to a full database compromise, data exfiltration, effectively bypassing all security controls. The vulnerability exists in the admin/users/save.php script, which handles updates to user profiles. The script improperly processes the groups[] parameter sent from the user edit form. This issue is fixed in version 1.6.5.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": 0.00538,
+    "epss_percentile": 0.42916,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00538,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-65950",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "458d4385482770a7f6e77361e64265c1413b0c99"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2025-12-10T21:16:09.137",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "wbce",
+        "product": "wbce_cms",
+        "fixed": "1.6.5",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/WBCE/WBCE_CMS/commit/96046178f4c80cf16f7c224054dec7fdadddda7e",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/WBCE/WBCE_CMS/releases/tag/1.6.5",
+        "tags": [
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/WBCE/WBCE_CMS/security/advisories/GHSA-934v-xhx9-j2f3",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710224+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-58047",
+    "description": "Volto is a React based frontend for the Plone Content Management System. In versions from 19.0.0-alpha.1 to before 19.0.0-alpha.4, 18.0.0 to before 18.24.0, 17.0.0 to before 17.22.1, and prior to 16.34.0, an anonymous user could cause the NodeJS server part of Volto to quit with an error when visiting a specific URL. The problem has been patched in versions 16.34.0, 17.22.1, 18.24.0, and 19.0.0-alpha.4. To mitigate downtime, have setup automatically restart processes that quit with an error.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-755"
+    ],
+    "epss_score": 0.0061,
+    "epss_percentile": 0.46984,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0061,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-58047",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "bf1a7ceacf234f222052d5c5a5a210aa3630d187"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2025-08-28T18:15:33.277",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710213+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10225",
+    "description": "Improper Restriction of Operations within the Bounds of a Memory Buffer (CWE-119) in the OpenSSL-based session module in AxxonSoft Axxon One (C-Werk) 2.0.6 and earlier on Windows allows a remote attacker under high load conditions to cause application crashes or unpredictable behavior via triggering memory reallocation errors when handling expired session keys.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-119"
+    ],
+    "epss_score": 0.00399,
+    "epss_percentile": 0.31407,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00399,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-10T13:15:36.430",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "axxonsoft",
+        "product": "axxon_one",
+        "fixed": "2.0.6",
+        "fix_type": "up_to_and_including"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://www.axxonsoft.com/legal/axxonsoft-vulnerability-disclosure-policy/security-advisories",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710123+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13721",
+    "description": "Race in v8 in Google Chrome prior to 143.0.7499.41 allowed a remote attacker to potentially exploit heap corruption via a crafted HTML page. (Chromium security severity: Medium)",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-362"
+    ],
+    "epss_score": 0.00212,
+    "epss_percentile": 0.10301,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00212,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-13721",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-02T19:15:48.990",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "143.0.7499.40",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "143.0.7499.41",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/12/stable-channel-update-for-desktop.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710080+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13720",
+    "description": "Bad cast in Loader in Google Chrome prior to 143.0.7499.41 allowed a remote attacker who had compromised the renderer process to potentially exploit heap corruption via a crafted HTML page. (Chromium security severity: Medium)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-704"
+    ],
+    "epss_score": 0.0027,
+    "epss_percentile": 0.17109,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0027,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-13720",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-02T19:15:48.843",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "143.0.7499.40",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "143.0.7499.41",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/12/stable-channel-update-for-desktop.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710067+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13639",
+    "description": "Inappropriate implementation in WebRTC in Google Chrome prior to 143.0.7499.41 allowed a remote attacker to perform arbitrary read/write via a crafted HTML page. (Chromium security severity: Low)",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.00253,
+    "epss_percentile": 0.15019,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00253,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-13639",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-02T19:15:48.623",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "143.0.7499.40",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/12/stable-channel-update-for-desktop.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710058+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13638",
+    "description": "Use after free in Media Stream in Google Chrome prior to 143.0.7499.41 allowed a remote attacker to potentially exploit heap corruption via a crafted HTML page. (Chromium security severity: Low)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00259,
+    "epss_percentile": 0.15719,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00259,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-13638",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-02T19:15:48.480",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "143.0.7499.40",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/12/stable-channel-update-for-desktop.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710049+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13633",
+    "description": "Use after free in Digital Credentials in Google Chrome prior to 143.0.7499.41 allowed a remote attacker who had compromised the renderer process to potentially exploit heap corruption via a crafted HTML page. (Chromium security severity: High)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00409,
+    "epss_percentile": 0.32458,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00409,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-13633",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-02T19:15:47.890",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "143.0.7499.40",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/12/stable-channel-update-for-desktop.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710039+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13631",
+    "description": "Inappropriate implementation in Google Updater in Google Chrome on Mac prior to 143.0.7499.41 allowed a remote attacker to perform privilege escalation via a crafted file. (Chromium security severity: High)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00342,
+    "epss_percentile": 0.24992,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00342,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-13631",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-02T19:15:47.663",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "143.0.7499.40",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/12/stable-channel-update-for-desktop.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710030+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13042",
+    "description": "Inappropriate implementation in V8 in Google Chrome prior to 142.0.7444.166 allowed a remote attacker to potentially exploit heap corruption via a crafted HTML page. (Chromium security severity: High)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-787"
+    ],
+    "epss_score": 0.0026,
+    "epss_percentile": 0.1584,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0026,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-13042",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-11-12T17:15:36.967",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "142.0.7444.162",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/11/stable-channel-update-for-desktop_11.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710020+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10891",
+    "description": "Integer overflow in V8 in Google Chrome prior to 140.0.7339.207 allowed a remote attacker to potentially exploit heap corruption via a crafted HTML page. (Chromium security severity: High)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-472"
+    ],
+    "epss_score": 0.06872,
+    "epss_percentile": 0.93818,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 33.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.06872,
+      "epss_component": 2.7,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-10891",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-24T17:15:39.753",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "140.0.7339.207",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/09/stable-channel-update-for-desktop_23.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.710008+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10890",
+    "description": "Side-channel information leakage in V8 in Google Chrome prior to 140.0.7339.207 allowed a remote attacker to leak cross-origin data via a crafted HTML page. (Chromium security severity: High)",
+    "cvss_score": 9.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-1300",
+      "CWE-203"
+    ],
+    "epss_score": 0.00307,
+    "epss_percentile": 0.20965,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.1,
+      "cvss_component": 31.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00307,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-10890",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-24T17:15:39.620",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "140.0.7339.207",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/09/stable-channel-update-for-desktop_23.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709998+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10501",
+    "description": "Use after free in WebRTC in Google Chrome prior to 140.0.7339.185 allowed a remote attacker to potentially exploit heap corruption via a crafted HTML page. (Chromium security severity: High)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00281,
+    "epss_percentile": 0.18412,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00281,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-10501",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-24T17:15:39.100",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "140.0.7339.185",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/09/stable-channel-update-for-desktop_17.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709989+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10500",
+    "description": "Use after free in Dawn in Google Chrome prior to 140.0.7339.185 allowed a remote attacker to potentially exploit heap corruption via a crafted HTML page. (Chromium security severity: High)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00266,
+    "epss_percentile": 0.16521,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00266,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-10500",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-24T17:15:38.507",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "140.0.7339.185",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/09/stable-channel-update-for-desktop_17.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709979+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10201",
+    "description": "Inappropriate implementation in Mojo in Google Chrome on Android, Linux, ChromeOS prior to 140.0.7339.127 allowed a remote attacker to bypass site isolation via a crafted HTML page. (Chromium security severity: High)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-284",
+      "CWE-346"
+    ],
+    "epss_score": 0.00258,
+    "epss_percentile": 0.156,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00258,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-10201",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-10T19:15:40.363",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "140.0.7339.127",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/09/stable-channel-update-for-desktop_9.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709969+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10200",
+    "description": "Use after free in Serviceworker in Google Chrome on Desktop prior to 140.0.7339.127 allowed a remote attacker to potentially exploit heap corruption via a crafted HTML page. (Chromium security severity: Critical)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00574,
+    "epss_percentile": 0.45089,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00574,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-10200",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-10T19:15:40.157",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "140.0.7339.127",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/09/stable-channel-update-for-desktop_9.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709953+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-9866",
+    "description": "Inappropriate implementation in Extensions in Google Chrome prior to 140.0.7339.80 allowed a remote attacker to bypass content security policy via a crafted HTML page. (Chromium security severity: Medium)",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-693"
+    ],
+    "epss_score": 0.00364,
+    "epss_percentile": 0.27555,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00364,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-9866",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-03T17:15:34.987",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "140.0.7339.80",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2025/09/stable-channel-update-for-desktop.html",
+        "tags": [
+          "Release Notes"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709944+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-20352",
+    "description": "A vulnerability in the Simple Network Management Protocol (SNMP) subsystem of Cisco IOS Software and Cisco IOS XE Software could allow the following:\r\n\r \r An authenticated, remote attacker with low privileges could cause a denial of service (DoS) condition on an affected device that is running Cisco IOS Software or Cisco IOS XE Software. To cause the DoS, the attacker must have the SNMPv2c or earlier read-only community string or valid SNMPv3 user credentials. \r An authenticated, remote attacker with high privileges could execute code as the root user on an affected device that is running Cisco IOS XE Software. To execute code as the root user, the attacker must have the SNMPv1 or v2c read-only community string or valid SNMPv3 user credentials and administrative or privilege 15 credentials on the affected device. \r \r An attacker could exploit this vulnerability by sending a crafted SNMP packet to an affected device over IPv4 or IPv6 networks. \r\n\r This vulnerability is due to a stack overflow condition in the SNMP subsystem of the affected software. A successful exploit could allow a low-privileged attacker to cause the affected system to reload, resulting in a DoS condition, or allow a high-privileged attacker to execute arbitrary code as the root user and obtain full control of the affected system.\r\n\r Note: This vulnerability affects all versions of SNMP.",
+    "cvss_score": 7.7,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-121"
+    ],
+    "epss_score": 0.39447,
+    "epss_percentile": 0.98561,
+    "kev": true,
+    "kev_date_added": "2025-09-29",
+    "kev_due_date": "2025-10-20",
+    "kev_ransomware_use": false,
+    "kev_required_action": "Apply mitigations per vendor instructions, follow applicable BOD 22-01 guidance for cloud services, or discontinue use of the product if mitigations are unavailable.",
+    "kev_notes": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-snmp-x4LPhte ; https://nvd.nist.gov/vuln/detail/CVE-2025-20352",
+    "risk_score": 67.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.7,
+      "cvss_component": 26.9,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.39447,
+      "epss_component": 15.8,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 25.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "cisco/ios"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-24T18:15:36.930",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-snmp-x4LPhte",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709921+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-20315",
+    "description": "A vulnerability in the Network-Based Application Recognition (NBAR) feature of Cisco IOS XE Software could allow an unauthenticated, remote attacker to cause an affected device to reload, causing a denial of service (DoS) condition.\r\n\r This vulnerability is due to improper handling of malformed Control and Provisioning of Wireless Access Points (CAPWAP) packets. An attacker could exploit this vulnerability by sending malformed CAPWAP packets through an affected device. A successful exploit could allow the attacker to cause the device to reload unexpectedly, resulting in a DoS condition.",
+    "cvss_score": 8.6,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-805"
+    ],
+    "epss_score": 0.00443,
+    "epss_percentile": 0.3593,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.6,
+      "cvss_component": 30.1,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00443,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "cisco/ios"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-24T18:15:36.043",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709899+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-20334",
+    "description": "A vulnerability in the HTTP API subsystem of Cisco IOS XE Software could allow a remote attacker to inject commands that will execute with root privileges into the underlying operating system.\r\n\r This vulnerability is due to insufficient input validation. An attacker with administrative privileges could exploit this vulnerability by authenticating to an affected system and performing an API call with crafted input. Alternatively, an unauthenticated attacker could persuade a legitimate user with administrative privileges who is currently logged in to the system to click a crafted link. A successful exploit could allow the attacker to execute arbitrary commands as the root user.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-77"
+    ],
+    "epss_score": 0.00502,
+    "epss_percentile": 0.40386,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00502,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "cisco/ios"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-24T17:15:40.337",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709854+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-20340",
+    "description": "A vulnerability in the Address Resolution Protocol (ARP) implementation of Cisco IOS XR Software could allow an unauthenticated, adjacent attacker to trigger a broadcast storm, leading to a denial of service (DoS) condition on an affected device.&nbsp;\r\n\r\nThis vulnerability is due to how Cisco IOS XR Software processes a high, sustained rate of ARP traffic hitting the management interface. Under certain conditions, an attacker could exploit this vulnerability by sending an excessive amount of traffic to the management interface of an affected device, overwhelming its ARP processing capabilities. A successful exploit could result in degraded device performance, loss of management connectivity, and complete unresponsiveness of the system, leading to a DoS condition.",
+    "cvss_score": 7.4,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "ADJACENT_NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-400"
+    ],
+    "epss_score": 0.0061,
+    "epss_percentile": 0.46999,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.4,
+      "cvss_component": 25.9,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0061,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "cisco/ios"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-10T16:15:36.340",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709845+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-100389",
+    "description": "GestSup versions before 3.2.61 contain a remote code execution vulnerability in the basic IMAP connector's attachment handling that fails to skip blocked file extensions. Unauthenticated attackers can send emails with PHP attachments to monitored mailboxes, which are written to the web-accessible upload/ticket directory and executed when accessed.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-25T21:17:22.483",
+    "nvd_last_modified": "2026-09-25T21:17:22.483",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709798+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-100372",
+    "description": "ClipBucket v5 before 5.5.3-#197 contains a path traversal vulnerability in the admin template editor that allows authenticated administrators to overwrite PHP files by supplying directory traversal sequences in the folder parameter. Attackers with manage_template_access permission can traverse outside the layout directory to modify executable PHP files and achieve remote code execution as the web server user.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-25T20:17:06.143",
+    "nvd_last_modified": "2026-09-25T20:17:06.143",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709783+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-60043",
+    "description": "Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion') vulnerability in AncoraThemes Wanderic wanderic allows PHP Local File Inclusion.This issue affects Wanderic: from n/a through <= 1.0.10.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": 0.00499,
+    "epss_percentile": 0.40182,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00499,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-18T08:16:03.690",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709499+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-58949",
+    "description": "Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion') vulnerability in axiomthemes Spock spock allows PHP Local File Inclusion.This issue affects Spock: from n/a through <= 1.17.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": 0.00535,
+    "epss_percentile": 0.42748,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00535,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-18T08:16:02.757",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "axiomthemes",
+        "product": "spock",
+        "fixed": "1.17",
+        "fix_type": "up_to_and_including"
+      }
+    ],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709490+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-58885",
+    "description": "Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion') vulnerability in AncoraThemes Pathfinder pathfinder allows PHP Local File Inclusion.This issue affects Pathfinder: from n/a through <= 1.16.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": 0.00535,
+    "epss_percentile": 0.42751,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00535,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-18T08:15:57.777",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "ancorathemes",
+        "product": "pathfinder",
+        "fixed": "1.16",
+        "fix_type": "up_to_and_including"
+      }
+    ],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709478+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-53434",
+    "description": "Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion') vulnerability in AncoraThemes ChildHope childhope allows PHP Local File Inclusion.This issue affects ChildHope: from n/a through <= 1.1.8.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": 0.00499,
+    "epss_percentile": 0.40172,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00499,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-18T08:15:53.710",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709468+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-49359",
+    "description": "Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion') vulnerability in AncoraThemes ShieldGroup shieldgroup allows PHP Local File Inclusion.This issue affects ShieldGroup: from n/a through <= 2.13.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": 0.00623,
+    "epss_percentile": 0.4767,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00623,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-18T08:15:49.980",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709458+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-67510",
+    "description": "Neuron is a PHP framework for creating and orchestrating AI Agents. In versions 2.8.11 and below, the MySQLWriteTool executes arbitrary SQL provided by the caller using PDO::prepare() + execute() without semantic restrictions. This is consistent with the name (\u201cwrite tool\u201d), but in an LLM/agent context it becomes a high-risk capability: prompt injection or indirect prompt manipulation can cause execution of destructive queries such as DROP TABLE, TRUNCATE, DELETE, ALTER, or privilege-related statements (subject to DB permissions). Deployments that expose an agent with MySQLWriteTool enabled to untrusted input and/or run the tool with a DB user that has broad privileges are impacted. This issue is fixed in version 2.8.12.",
+    "cvss_score": 9.4,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-250",
+      "CWE-284"
+    ],
+    "epss_score": 0.00408,
+    "epss_percentile": 0.32374,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 33.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.4,
+      "cvss_component": 32.9,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00408,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-67510",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "44bab85d92bf162898ee48d0bcef6ba0d29b59c9"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-10T23:15:48.983",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "neuron-ai",
+        "product": "neuron",
+        "fixed": "2.8.12",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/neuron-core/neuron-ai/commit/44bab85d92bf162898ee48d0bcef6ba0d29b59c9",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/neuron-core/neuron-ai/releases/tag/2.8.12",
+        "tags": [
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/neuron-core/neuron-ai/security/advisories/GHSA-898v-775g-777c",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709448+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-67509",
+    "description": "Neuron is a PHP framework for creating and orchestrating AI Agents. Versions 2.8.11 and below use MySQLSelectTool, which is vulnerable to Read-Only Bypass.  MySQLSelectTool is intended to be a read-only SQL tool (e.g., for LLM agent querying, however, validation based on the first keyword (e.g., SELECT) and a forbidden-keyword list does not block file-writing constructs such as INTO OUTFILE / INTO DUMPFILE. As a result, an attacker who can influence the tool input (e.g., via prompt injection through a public agent endpoint) may write arbitrary files to the DB server if the MySQL/MariaDB account has the FILE privilege and server configuration permits writes to a useful location (e.g., a web-accessible directory). This issue is fixed in version 2.8.12.",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-94"
+    ],
+    "epss_score": 0.00289,
+    "epss_percentile": 0.19194,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00289,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-67509",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "44bab85d92bf162898ee48d0bcef6ba0d29b59c9"
+      }
+    ],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-10T23:15:48.823",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "neuron-ai",
+        "product": "neuron",
+        "fixed": "2.8.12",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/neuron-core/neuron-ai/commit/72735d0ea133266cf2f5d5d195d41e9dd865289a",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/neuron-core/neuron-ai/releases/tag/2.8.12",
+        "tags": [
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/neuron-core/neuron-ai/security/advisories/GHSA-j8g6-5gqc-mq36",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709436+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-14091",
+    "description": "A weakness has been identified in TrippWasTaken PHP-Guitar-Shop up to 6ce0868889617c1975982aae6df8e49555d0d555. This vulnerability affects unknown code of the file /product.php of the component Product Details Page. Executing manipulation of the argument ID can lead to sql injection. It is possible to launch the attack remotely. The exploit has been made available to the public and could be exploited. This product takes the approach of rolling releases to provide continious delivery. Therefore, version details for affected and updated releases are not available. The vendor was contacted early about this disclosure but did not respond in any way.",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-74",
+      "CWE-89"
+    ],
+    "epss_score": 0.00302,
+    "epss_percentile": 0.20441,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 25.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00302,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-05T16:15:49.337",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709426+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10624",
+    "description": "A security flaw has been discovered in PHPGurukul User Management System 1.0. This affects an unknown function of the file /login.php. Performing manipulation of the argument emailid results in sql injection. The attack can be initiated remotely. The exploit has been released to the public and may be exploited.",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-74",
+      "CWE-89"
+    ],
+    "epss_score": 0.00478,
+    "epss_percentile": 0.38683,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 25.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00478,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-17T23:15:36.113",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709416+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10604",
+    "description": "A vulnerability was identified in PHPGurukul Online Discussion Forum 1.0. This affects an unknown part of the file /admin/edit_member.php. The manipulation of the argument ID leads to sql injection. The attack may be initiated remotely. The exploit is publicly available and might be used.",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-74",
+      "CWE-89"
+    ],
+    "epss_score": 0.00417,
+    "epss_percentile": 0.33335,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 25.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00417,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-17T18:15:42.373",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709406+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13073",
+    "description": "The HandL UTM Grabber / Tracker WordPress plugin before 2.8.1 does not sanitize and escape a parameter before outputting it back in the page, leading to a Reflected Cross-Site Scripting which could be used against high privilege users such as admin",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00173,
+    "epss_percentile": 0.05914,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 24.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 24.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00173,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-10T06:15:45.907",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.709004+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13072",
+    "description": "The HandL UTM Grabber / Tracker WordPress plugin before 2.8.1 does not sanitize and escape a parameter before outputting it back in the page, leading to a Reflected Cross-Site Scripting which could be used against high privilege users such as admin.",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00173,
+    "epss_percentile": 0.05914,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 24.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 24.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00173,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-10T06:15:45.320",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708994+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13339",
+    "description": "The Hippoo Mobile App for WooCommerce plugin for WordPress is vulnerable to Path Traversal in all versions up to, and including, 1.7.1 via the template_redirect() function. This makes it possible for unauthenticated attackers to read the contents of arbitrary files on the server, which can contain sensitive information.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": 0.02213,
+    "epss_percentile": 0.81888,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.02213,
+      "epss_component": 0.9,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-10T05:16:02.200",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708983+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13614",
+    "description": "The Cool Tag Cloud plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the plugin's 'cool_tag_cloud' shortcode in all versions up to, and including, 2.29 due to insufficient input sanitization and output escaping on user supplied attributes. This makes it possible for authenticated attackers, with contributor level access and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.00343,
+    "epss_percentile": 0.25124,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00343,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-05T10:15:46.810",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708968+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-12879",
+    "description": "The User Generator and Importer plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to and including 1.2.2. This is due to missing nonce validation in the \"Import Using CSV File\" function. This makes it possible for unauthenticated attackers to elevate user privileges by creating arbitrary accounts with administrator privileges via a forged request, provided they can trick a site administrator into performing an action such as clicking on a link.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-352"
+    ],
+    "epss_score": 0.00184,
+    "epss_percentile": 0.07127,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00184,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-05T10:15:46.597",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708957+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-12851",
+    "description": "The My auctions allegro plugin for WordPress is vulnerable to Local File Inclusion in all versions up to, and including, 3.6.32 via the 'controller' parameter. This makes it possible for unauthenticated attackers to include and execute arbitrary files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where images and other \u201csafe\u201d file types can be uploaded and included.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": 0.00756,
+    "epss_percentile": 0.53244,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00756,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-05T10:15:45.530",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708947+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-12153",
+    "description": "The Featured Image via URL plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation function in all versions up to, and including, 0.1. This makes it possible for authenticated attackers, with Contributor-level access and above, to upload arbitrary files on the affected site's server which may make remote code execution possible.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00549,
+    "epss_percentile": 0.43593,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00549,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-05T06:16:05.707",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708937+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13313",
+    "description": "The CRM Memberships plugin for WordPress is vulnerable to privilege escalation via password reset in all versions up to, and including, 2.6. This is due to missing authorization and authentication checks on the `ntzcrm_changepassword` AJAX action. This makes it possible for unauthenticated attackers to reset arbitrary user passwords and gain unauthorized access to user accounts via the `ntzcrm_changepassword` endpoint, granted they can obtain or enumerate a target user's email address. The plugin also exposes the `ntzcrm_get_users` endpoint without authentication, allowing attackers to enumerate subscriber email addresses, facilitating the exploitation of the password reset vulnerability.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": 0.00547,
+    "epss_percentile": 0.43429,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00547,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-05T05:16:57.780",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708927+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13066",
+    "description": "The Demo Importer Plus plugin for WordPress is vulnerable to arbitrary file upload in all versions up to, and including, 2.0.6. This is due to insufficient file type validation detecting WXR files, allowing double extension files to bypass sanitization while being accepted as a valid WXR file. This makes it possible for authenticated attackers, with author-level access and above, to upload arbitrary files on the affected site's server which may make remote code execution possible.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00551,
+    "epss_percentile": 0.43735,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00551,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-05T04:15:59.757",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708917+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-9890",
+    "description": "The Theme Editor plugin for WordPress is vulnerable to Cross-Site Request Forgery in all versions up to, and including, 3.0. This is due to missing or incorrect nonce validation on the 'theme_editor_theme' page. This makes it possible for unauthenticated attackers to achieve remote code execution via a forged request granted they can trick a site administrator into performing an action such as clicking on a link.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-352"
+    ],
+    "epss_score": 0.00401,
+    "epss_percentile": 0.31639,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00401,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-10-18T09:15:34.687",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708908+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-9967",
+    "description": "The Orion SMS OTP Verification plugin for WordPress is vulnerable to privilege escalation via account takeover in all versions up to, and including, 1.1.7. This is due to the plugin not properly validating a user's identity prior to updating their password. This makes it possible for unauthenticated attackers to change arbitrary user's password to a one-time password if the attacker knows the user's phone number",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-288"
+    ],
+    "epss_score": 0.00428,
+    "epss_percentile": 0.34387,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00428,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-10-15T09:15:43.500",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708897+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-9216",
+    "description": "The StoreEngine \u2013 Powerful WordPress eCommerce Plugin for Payments, Memberships, Affiliates, Sales & More plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the import() function in all versions up to, and including, 1.5.0. This makes it possible for authenticated attackers, with Subscriber-level access and above, to upload arbitrary files on the affected site's server which may make remote code execution possible.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00878,
+    "epss_percentile": 0.57325,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00878,
+      "epss_component": 0.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-09-17T07:15:42.477",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708888+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10058",
+    "description": "The WP Import \u2013 Ultimate CSV XML Importer for WordPress plugin for WordPress is vulnerable to arbitrary file deletion due to insufficient file path validation in the upload_function() function in all versions up to, and including, 7.27. This makes it possible for authenticated attackers, with Subscriber-level access and above, to delete arbitrary files on the server, which can easily lead to remote code execution when the right file is deleted (such as wp-config.php).",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-73"
+    ],
+    "epss_score": 0.00619,
+    "epss_percentile": 0.47443,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00619,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2025-09-17T06:15:45.730",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708878+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10057",
+    "description": "The WP Import \u2013 Ultimate CSV XML Importer for WordPress plugin for WordPress is vulnerable to Remote Code Execution in all versions up to, and including, 7.28. This is due to the write_to_customfile() function writing unfiltered PHP code to a file. This makes it possible for authenticated attackers, with Subscriber-level access and above, to inject the customFunction.php file with PHP code that can be accessed to trigger remote code execution.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-94"
+    ],
+    "epss_score": 0.00729,
+    "epss_percentile": 0.52243,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00729,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2025-09-17T06:15:44.643",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708868+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-10143",
+    "description": "The Catch Dark Mode plugin for WordPress is vulnerable to Local File Inclusion in all versions up to, and including, 2.0 via the 'catch_dark_mode' shortcode. This makes it possible for authenticated attackers, with Contributor-level access and above, to include and execute arbitrary .php files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where .php file types can be uploaded and included.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": 0.00615,
+    "epss_percentile": 0.47218,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00615,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-09-17T02:15:32.947",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708858+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-9807",
+    "description": "The The Events Calendar plugin for WordPress is vulnerable to time-based SQL Injection via the \u2018s\u2019 parameter in all versions up to, and including, 6.15.1 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": 0.00347,
+    "epss_percentile": 0.25603,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00347,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-09-12T02:15:47.070",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708847+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-9874",
+    "description": "The Ultimate Classified Listings plugin for WordPress is vulnerable to Local File Inclusion in all versions up to, and including, 1.6 via the 'uclwp_dashboard' shortcode. This makes it possible for authenticated attackers, with Contributor-level access and above, to include and execute arbitrary .php files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where .php file types can be uploaded and included.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": 0.0058,
+    "epss_percentile": 0.45341,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0058,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-09-11T08:15:39.863",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708835+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-7718",
+    "description": "The Resideo Plugin for Resideo - Real Estate WordPress Theme plugin for WordPress is vulnerable to privilege escalation via account takeover in all versions up to, and including, 2.5.4. This is due to the plugin not properly validating a user's identity prior to updating their details like email. This makes it possible for authenticated attackers, with Subscriber-level access and above, to change arbitrary user's email addresses, including administrators, and leverage that to reset the user's password and gain access to their account.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-639"
+    ],
+    "epss_score": 0.00321,
+    "epss_percentile": 0.22541,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00321,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-09-10T13:15:37.040",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708821+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-9990",
+    "description": "The WordPress Helpdesk Integration plugin for WordPress is vulnerable to Local File Inclusion in all versions up to, and including, 5.8.10 via the portal_type parameter. This makes it possible for unauthenticated attackers to include and execute arbitrary .php files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where .php file types can be uploaded and included.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": 0.00711,
+    "epss_percentile": 0.51556,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00711,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-09-05T03:15:32.280",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708806+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-58048",
+    "description": "Paymenter is a free and open-source webshop solution for hostings. Prior to version 1.2.11, the ticket attachments functionality in Paymenter allows a malicious authenticated user to upload arbitrary files. This could result in sensitive data extraction from the database, credentials being read from configuration files, and arbitrary system commands being run under the web server user context. This vulnerability was patched by commit 87c3db4 and was released under the version 1.2.11 tag without any other code modifications compared to version 1.2.10. If upgrading is not immediately possible, administrators can mitigate this vulnerability with one or more of the following measures: updating nginx config to download attachments instead of executing them or disallowing access to /storage/ fully using a WAF such as Cloudflare.",
+    "cvss_score": 9.9,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00414,
+    "epss_percentile": 0.33052,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.9,
+      "cvss_component": 34.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00414,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-58048",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "87c3db42282ada1e3cda54b9a01f846926c0669b"
+      }
+    ],
+    "affected": [
+      "nginx/nginx",
+      "cloudflare/cloudflare"
+    ],
+    "matched_keywords": [
+      "cloudflare"
+    ],
+    "source": "nvd",
+    "published": "2025-08-28T18:15:33.473",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708762+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-100208",
+    "description": "Integer overflow or wraparound in Microsoft Office Outlook allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-190"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-09-25T20:17:04.760",
+    "nvd_last_modified": "2026-09-25T21:17:21.140",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708744+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-64298",
+    "description": "NMIS/BioDose V22.02 and previous version installations where the embedded Microsoft SQLServer Express is used are exposed in the Windows share accessed by clients in networked installs. By default, this directory has insecure directory paths that allow access to the SQL Server database and configuration files, which can contain sensitive data.",
+    "cvss_score": 8.4,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-732"
+    ],
+    "epss_score": 0.00234,
+    "epss_percentile": 0.1283,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 29.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.4,
+      "cvss_component": 29.4,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00234,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/windows"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-02T21:15:52.333",
+    "nvd_last_modified": "2026-09-25T23:10:00.463",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "mirion",
+        "product": "biodose\\/nmis",
+        "fixed": "23.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T00:13:34.708270+00:00"
+  },
+  {
     "cve_id": "CVE-2026-50547",
     "description": "InvoicePlane is a self-hosted open source application for managing invoices, clients, and payments. Prior to 1.7.2, InvoicePlane's Invoices::generate_xml() method appends a database-derived xml_id to the XMLconfigs helper directory and includes the resulting PHP path without validating the identifier. A low-privileged attacker who can influence the e-invoice configuration can use traversal sequences to include an existing PHP file. The standalone advisory establishes local file inclusion; code execution requires a separate file-upload or file-write primitive. This issue is fixed in version 1.7.2.",
     "cvss_score": 7.5,
@@ -35,7 +3460,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -88,7 +3513,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -143,7 +3568,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 53.1,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -10076,7 +13501,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2025-09-24T18:15:34.100",
-    "nvd_last_modified": "2026-09-18T13:18:38.953",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -11356,7 +14781,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2025-09-24T18:15:36.537",
-    "nvd_last_modified": "2026-09-17T19:24:42.800",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -11416,7 +14841,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2025-09-24T18:15:34.947",
-    "nvd_last_modified": "2026-09-17T19:42:09.900",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -11476,7 +14901,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2025-09-24T18:15:34.757",
-    "nvd_last_modified": "2026-09-18T10:39:07.903",
+    "nvd_last_modified": "2026-09-26T00:10:00.127",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -33900,11 +37325,11 @@
   },
   {
     "cve_id": "CVE-2026-78510",
-    "description": "A remote code execution vulnerability exists when Microsoft Office improperly validates input before loading dynamic link library (DLL) files. An attacker who successfully exploited this vulnerability could take control of an affected system. An attacker could then install programs; view, change, or delete data; or create new accounts with full user rights. Users whose accounts are configured to have fewer user rights on the system could be less impacted than users who operate with administrative user rights.\nTo exploit the vulnerability, an attacker must first convince a user to open a specially crafted Office document.\nThe updates address the vulnerability by correcting how Office validates input before loading DLL files.",
-    "cvss_score": 9.8,
+    "description": "Heap-based buffer overflow in Microsoft Office allows an unauthorized attacker to execute code locally.",
+    "cvss_score": 8.4,
     "cvss_version": "CVSS V31",
     "cvss_vector_components": {
-      "attack_vector": "NETWORK",
+      "attack_vector": "LOCAL",
       "attack_complexity": "LOW",
       "privileges_required": "NONE",
       "user_interaction": "NONE"
@@ -33920,10 +37345,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 34.7,
+    "risk_score": 29.8,
     "risk_score_breakdown": {
-      "cvss_raw": 9.8,
-      "cvss_component": 34.3,
+      "cvss_raw": 8.4,
+      "cvss_component": 29.4,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00974,
       "epss_component": 0.4,
@@ -33943,7 +37368,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T18:20:46.200",
-    "nvd_last_modified": "2026-09-24T18:18:49.903",
+    "nvd_last_modified": "2026-09-25T22:18:36.710",
     "vuln_status": "Modified",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
