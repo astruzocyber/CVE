@@ -1,5 +1,61 @@
 [
   {
+    "cve_id": "CVE-2026-18143",
+    "description": "The Request a Quote for WooCommerce plugin for WordPress is vulnerable to Arbitrary File Upload in all versions up to, and including, 2.9.2 via the `afrfq_submit_quote_via_popup()` function. This is due to missing file extension and MIME type validation in the popup upload handler, which uses the raw attacker-supplied filename directly as the destination for `move_uploaded_file()`. This makes it possible for unauthenticated attackers to upload executable files, such as PHP files, to a web-accessible temporary RFQ upload directory when a public quote rule with the multi-page popup flow is enabled.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-26T07:17:02.017",
+    "nvd_last_modified": "2026-09-26T07:17:02.017",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-26T08:11:48.253582+00:00"
+  },
+  {
     "cve_id": "CVE-2026-100599",
     "description": "OpenClaw versions 2026.5.1 through 2026.7.0 fail to apply the configured exec approval path to Google Meet node commands. The googlemeet.chrome command accepts caller-supplied audio command arrays and executes them on a paired node without going through the normal system.run approval flow. In deployments with the Google Meet plugin enabled, a paired Chrome node, and the googlemeet.chrome node command allowed, a tool-enabled agent able to invoke that command can execute attacker-selected processes on the paired node, impacting files, credentials, browser profiles, and availability on that node. The issue is fixed in 2026.7.1; as a workaround, remove googlemeet.chrome from allowed node commands or disable the Google Meet plugin.",
     "cvss_score": 8.8,
@@ -34,7 +90,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 51.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -87,7 +143,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 51.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -140,8 +196,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00328,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3479,7 +3535,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-25T20:17:04.760",
-    "nvd_last_modified": "2026-09-25T21:17:21.140",
+    "nvd_last_modified": "2026-09-26T04:17:33.933",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5932,7 +5988,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-08-11T17:18:54.080",
-    "nvd_last_modified": "2026-09-25T17:00:21.127",
+    "nvd_last_modified": "2026-09-26T04:17:45.630",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
