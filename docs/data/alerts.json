@@ -1,5 +1,915 @@
 [
   {
+    "cve_id": "CVE-2023-52945",
+    "description": "Uncontrolled search path element vulnerability in OpenSSL DLL component in Synology BeeDrive for desktop before 1.3.2-13814 allows local users to execute arbitrary code via unspecified vectors.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-427"
+    ],
+    "epss_score": 0.00139,
+    "epss_percentile": 0.02688,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00139,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-05-27T09:16:24.777",
+    "nvd_last_modified": "2026-09-26T23:10:00.127",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "synology",
+        "product": "beedrive",
+        "fixed": "1.3.2-13814",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://www.synology.com/en-global/security/advisory/Synology_SA_24_26",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.391048+00:00"
+  },
+  {
+    "cve_id": "CVE-2024-58284",
+    "description": "PopojiCMS 2.0.1 contains an authenticated remote command execution vulnerability that allows administrative users to inject malicious PHP code through the metadata settings endpoint. Attackers can log in and modify the meta content to create a web shell that executes arbitrary system commands through a GET parameter.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-94"
+    ],
+    "epss_score": 0.01102,
+    "epss_percentile": 0.6435,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.01102,
+      "epss_component": 0.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2024-58284",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-10T22:16:20.420",
+    "nvd_last_modified": "2026-09-26T21:10:00.130",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/PopojiCMS/PopojiCMS/archive/refs/tags/v2.0.1.zip",
+        "tags": [
+          "Release Notes"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390478+00:00"
+  },
+  {
+    "cve_id": "CVE-2024-58283",
+    "description": "WBCE CMS version 1.6.2 contains a remote code execution vulnerability that allows authenticated attackers to upload malicious PHP files through the Elfinder file manager. Attackers can exploit the file upload functionality in the elfinder connector to upload a web shell and execute arbitrary system commands through a user-controlled parameter.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00665,
+    "epss_percentile": 0.49754,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00665,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2024-58283",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-10T22:16:20.267",
+    "nvd_last_modified": "2026-09-26T21:10:00.130",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390467+00:00"
+  },
+  {
+    "cve_id": "CVE-2024-58282",
+    "description": "Serendipity 2.5.0 contains a remote code execution vulnerability that allows authenticated administrators to upload malicious PHP files through the media upload functionality. Attackers can exploit the file upload mechanism by creating a PHP shell with a command execution form that enables arbitrary system command execution on the web server.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.0102,
+    "epss_percentile": 0.61941,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0102,
+      "epss_component": 0.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2024-58282",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-10T22:16:20.100",
+    "nvd_last_modified": "2026-09-26T21:10:00.130",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390451+00:00"
+  },
+  {
+    "cve_id": "CVE-2024-58281",
+    "description": "Dotclear 2.29 contains a remote code execution vulnerability that allows authenticated attackers to upload malicious PHP files through the media upload functionality. Attackers can exploit the file upload process by crafting a PHP shell with a command execution form to gain system access through the uploaded file.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00943,
+    "epss_percentile": 0.59455,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00943,
+      "epss_component": 0.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2024-58281",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-10T22:16:19.907",
+    "nvd_last_modified": "2026-09-26T21:10:00.130",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390441+00:00"
+  },
+  {
+    "cve_id": "CVE-2024-58280",
+    "description": "CMSimple 5.15 contains a remote command execution vulnerability that allows authenticated attackers to modify file extensions and upload malicious PHP files. Attackers can append ',php' to Extensions_userfiles and upload a shell script to the media directory to execute arbitrary code on the server.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-403"
+    ],
+    "epss_score": 0.00941,
+    "epss_percentile": 0.59414,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00941,
+      "epss_component": 0.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-10T22:16:19.723",
+    "nvd_last_modified": "2026-09-26T21:10:00.130",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390401+00:00"
+  },
+  {
+    "cve_id": "CVE-2024-58279",
+    "description": "appRain CMF 4.0.5 contains an authenticated remote code execution vulnerability that allows administrative users to upload malicious PHP files through the filemanager upload endpoint. Attackers can leverage authenticated access to generate a web shell with command execution capabilities by uploading a crafted PHP file to the site's uploads directory.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00955,
+    "epss_percentile": 0.59849,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00955,
+      "epss_component": 0.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2024-58279",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-12-10T22:16:19.543",
+    "nvd_last_modified": "2026-09-26T21:10:00.130",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390391+00:00"
+  },
+  {
+    "cve_id": "CVE-2024-13986",
+    "description": "Nagios XI < 2024R1.3.2 contains a remote code execution vulnerability by chaining two flaws: an arbitrary file upload and a path traversal in the Core Config Snapshots interface. The issue arises from insufficient validation of file paths and extensions during MIB upload and snapshot rename operations. Exploitation results in the placement of attacker-controlled PHP files in a web-accessible directory, executed as the www-data user.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22",
+      "CWE-434"
+    ],
+    "epss_score": 0.01736,
+    "epss_percentile": 0.7674,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.01736,
+      "epss_component": 0.7,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-08-28T16:15:32.883",
+    "nvd_last_modified": "2026-09-26T21:10:00.130",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "nagios",
+        "product": "nagios_xi",
+        "fixed": "2024",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390345+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-96532",
+    "description": "The Testimonials Widget WordPress plugin through 4.0.4 does not perform a capability or ownership check when handling its front-end testimonial submission form, allowing unauthenticated users to modify or create arbitrary posts, including overwriting the title, content and author of any existing post.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": 0.00136,
+    "epss_percentile": 0.02517,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00136,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-26T07:17:03.527",
+    "nvd_last_modified": "2026-09-26T23:16:41.353",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390301+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-96524",
+    "description": "The MCP Server for WordPress  WordPress plugin before 1.8.2 does not correctly verify the WordPress REST API nonce for cookie-authenticated requests when a condition an attacker can influence is present, allowing unauthenticated attackers to perform administrator-only actions, including creating a new administrator account, by tricking a logged-in administrator into visiting a crafted page.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-352"
+    ],
+    "epss_score": 0.001,
+    "epss_percentile": 0.00793,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.001,
+      "epss_component": 0.0,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-26T07:17:03.130",
+    "nvd_last_modified": "2026-09-26T23:16:40.770",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390290+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-85081",
+    "description": "The File Manager WordPress plugin before 8.0.5, FileOrganizer  WordPress plugin before 1.2.1, File Manager Pro  WordPress plugin before 2.1.3 do not correctly validate the origin of window messages received by the file browser they load on their admin screens, accepting any origin that is a leading string prefix of the site's own address, which allows an unauthenticated attacker to run arbitrary JavaScript in the session of a logged-in administrator who visits a page under their control.\n\nThe defect is in the file-manager library all three bundle, and every version below 2.1.70 carries it. Updating the bundled library closes it.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.00173,
+    "epss_percentile": 0.05991,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00173,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-09-26T07:17:02.823",
+    "nvd_last_modified": "2026-09-26T23:16:38.233",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390278+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84096",
+    "description": "The wp-review-slider-pro WordPress plugin before 12.7.12 does not perform a capability check on the AJAX handler that saves its review submission forms, and the nonce protecting it is generated for every visitor, allowing any authenticated user, such as a subscriber, to overwrite a live form with field values that are output without escaping on public pages, leading to Stored Cross-Site Scripting.",
+    "cvss_score": 8.0,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.00158,
+    "epss_percentile": 0.04274,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.0,
+      "cvss_component": 28.0,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00158,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-26T07:17:02.623",
+    "nvd_last_modified": "2026-09-26T23:16:37.387",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390268+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84095",
+    "description": "The wp-review-slider-pro WordPress plugin before 12.7.12 does not perform a capability check on one of its AJAX handlers, and the nonce protecting it is generated for every visitor, allowing any authenticated user, such as a subscriber, to store arbitrary review content which is later output without escaping on public pages, leading to Stored Cross-Site Scripting.",
+    "cvss_score": 8.0,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.00158,
+    "epss_percentile": 0.04274,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.0,
+      "cvss_component": 28.0,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00158,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-26T07:17:02.520",
+    "nvd_last_modified": "2026-09-26T23:16:37.240",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390258+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-16591",
+    "description": "The WP Directory Kit WordPress plugin before 1.5.8 does not sanitize and escape some of its category and location fields before outputting them in page attributes, allowing users with a WP Directory Kit WordPress plugin before 1.5.8-specific listing-management role (and without the unfiltered_html capability) to perform Stored Cross-Site Scripting attacks that execute for any visitor of the affected page.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.00152,
+    "epss_percentile": 0.03679,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00152,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-09-26T07:17:01.847",
+    "nvd_last_modified": "2026-09-26T23:16:34.157",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.390236+00:00"
+  },
+  {
+    "cve_id": "CVE-2023-54359",
+    "description": "WordPress adivaha Travel Plugin 2.3 contains a time-based blind SQL injection vulnerability that allows unauthenticated attackers to manipulate database queries by injecting SQL code through the 'pid' GET parameter. Attackers can send requests to the /mobile-app/v3/ endpoint with crafted 'pid' values using XOR-based payloads to extract sensitive database information or cause denial of service.",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": 0.00269,
+    "epss_percentile": 0.17135,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00269,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-04-09T21:16:05.153",
+    "nvd_last_modified": "2026-09-26T23:10:00.127",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.389976+00:00"
+  },
+  {
+    "cve_id": "CVE-2024-13342",
+    "description": "The Booster for WooCommerce plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the 'add_files_to_order' function in all versions up to, and including, 7.2.4. This makes it possible for unauthenticated attackers to upload arbitrary files with double extensions on the affected site's server which may make remote code execution possible. This is only exploitable on select instances where the configuration will execute the first extension present.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00735,
+    "epss_percentile": 0.52584,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00735,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-08-29T11:15:30.710",
+    "nvd_last_modified": "2026-09-26T21:10:00.130",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "booster",
+        "product": "booster_for_woocommerce",
+        "fixed": "7.2.5",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://plugins.trac.wordpress.org/changeset/3262569/",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-27T00:15:37.389703+00:00"
+  },
+  {
     "cve_id": "CVE-2026-82901",
     "description": "The Ultra Addons for Contact Form 7 plugin for WordPress is vulnerable to Arbitrary File Upload due to insufficient file type validation in the 'uacf7_wpcf7_mail_components' function in all versions up to, and including, 3.5.50. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected site's server which may make remote code execution possible. Note: This is only exploitable when the plugin's PDF Generator module is enabled, which is disabled by default.",
     "cvss_score": 9.8,
@@ -34,7 +944,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -46,7 +956,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-26T19:16:28.427",
-    "nvd_last_modified": "2026-09-26T19:16:28.427",
+    "nvd_last_modified": "2026-09-26T23:16:37.000",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -89,7 +999,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -102,7 +1012,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-26T18:16:31.010",
-    "nvd_last_modified": "2026-09-26T18:16:31.010",
+    "nvd_last_modified": "2026-09-26T23:16:38.380",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -145,7 +1055,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 51.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -158,7 +1068,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-26T18:16:29.917",
-    "nvd_last_modified": "2026-09-26T18:16:29.917",
+    "nvd_last_modified": "2026-09-26T23:16:35.700",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -264,7 +1174,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-26T15:16:55.520",
-    "nvd_last_modified": "2026-09-26T15:16:55.520",
+    "nvd_last_modified": "2026-09-26T23:16:42.630",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -317,7 +1227,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-26T15:16:55.397",
-    "nvd_last_modified": "2026-09-26T15:16:55.397",
+    "nvd_last_modified": "2026-09-26T23:16:39.827",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -371,7 +1281,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-26T14:16:58.230",
-    "nvd_last_modified": "2026-09-26T14:16:58.340",
+    "nvd_last_modified": "2026-09-26T23:16:33.660",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -587,7 +1497,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-26T07:17:02.017",
-    "nvd_last_modified": "2026-09-26T07:17:02.017",
+    "nvd_last_modified": "2026-09-26T23:16:34.427",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -4350,7 +5260,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-25T03:16:59.533",
-    "nvd_last_modified": "2026-09-25T03:16:59.533",
+    "nvd_last_modified": "2026-09-26T23:16:43.313",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5236,7 +6146,7 @@
     ],
     "source": "nvd",
     "published": "2026-09-25T07:16:56.027",
-    "nvd_last_modified": "2026-09-25T13:08:26.930",
+    "nvd_last_modified": "2026-09-26T23:16:39.480",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
