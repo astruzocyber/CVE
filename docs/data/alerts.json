@@ -1,5 +1,60 @@
 [
   {
+    "cve_id": "CVE-2014-125130",
+    "description": "CodeArt Google MP3 Audio Player plugin (google-mp3-audio-player) for WordPress through 1.0.11 contains an unauthenticated arbitrary file read vulnerability that allows remote attackers to retrieve sensitive files by supplying a path-traversal payload in the file parameter of direct_download.php. Attackers can request paths ../../wp-config.php without authentication to download configuration files containing database credentials and secret keys, leading to full site compromise. Exploitation evidence was first observed by the Shadowserver Foundation on 2023-10-19.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-02T19:16:37.440",
+    "nvd_last_modified": "2026-10-02T19:16:37.440",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-02T20:10:26.643559+00:00"
+  },
+  {
     "cve_id": "CVE-2026-95326",
     "description": "Incomplete cleanup in Bluetooth in Google Chrome prior to 154.0.8037.57 allowed a remote attacker leveraging social engineering to bypass system access restrictions via a crafted HTML page. (Chromium security severity: Low)",
     "cvss_score": 8.4,
@@ -34,8 +89,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.5,
+    "epss_score_prev": 0.00251,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -44,10 +99,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-29T18:17:24.990",
-    "nvd_last_modified": "2026-10-02T13:18:04.477",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-02T20:00:10.113",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "154.0.8037.57",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/09/stable-channel-update-for-desktop_0856730748.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-02T16:11:06.318813+00:00"
@@ -87,8 +157,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.5,
+    "epss_score_prev": 0.00235,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -97,10 +167,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-29T18:17:20.143",
-    "nvd_last_modified": "2026-10-02T13:18:04.003",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-02T19:49:45.313",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "154.0.8037.57",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/09/stable-channel-update-for-desktop_0856730748.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-02T16:11:06.318635+00:00"
@@ -140,8 +225,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.5,
+    "epss_score_prev": 0.00222,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -150,10 +235,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-29T18:17:19.160",
-    "nvd_last_modified": "2026-10-02T13:18:03.310",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-02T19:45:21.407",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "154.0.8037.57",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/09/stable-channel-update-for-desktop_0856730748.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-02T16:11:06.318581+00:00"
@@ -194,7 +294,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -204,8 +304,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-02T15:17:08.830",
-    "nvd_last_modified": "2026-10-02T15:17:08.830",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-02T17:52:32.600",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -247,7 +347,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -300,7 +400,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.7,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -310,7 +410,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-02T13:17:53.453",
-    "nvd_last_modified": "2026-10-02T14:30:28.440",
+    "nvd_last_modified": "2026-10-02T17:17:07.357",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -354,7 +454,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.7,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -364,7 +464,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-02T13:17:53.323",
-    "nvd_last_modified": "2026-10-02T14:30:28.440",
+    "nvd_last_modified": "2026-10-02T17:17:07.240",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -407,7 +507,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -460,7 +560,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.7,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -470,7 +570,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-02T12:17:22.370",
-    "nvd_last_modified": "2026-10-02T14:30:28.440",
+    "nvd_last_modified": "2026-10-02T18:17:06.840",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -513,7 +613,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -526,8 +626,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-02T14:17:11.850",
-    "nvd_last_modified": "2026-10-02T14:17:11.850",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-02T17:52:32.600",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -569,7 +669,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -581,8 +681,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-02T14:17:10.483",
-    "nvd_last_modified": "2026-10-02T14:17:10.483",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-02T17:52:32.600",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -842,8 +942,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 57.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00492,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -855,7 +955,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-02T10:17:09.313",
-    "nvd_last_modified": "2026-10-02T13:18:55.613",
+    "nvd_last_modified": "2026-10-02T18:17:07.870",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -898,8 +998,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.4,
+    "epss_score_prev": 0.00419,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -953,8 +1053,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00241,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -966,7 +1066,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-02T08:17:06.000",
-    "nvd_last_modified": "2026-10-02T13:18:55.613",
+    "nvd_last_modified": "2026-10-02T18:17:10.347",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1009,8 +1109,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00241,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1064,8 +1164,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 57.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.6,
+    "epss_score_prev": 0.00636,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1119,8 +1219,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00241,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1175,8 +1275,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00285,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1187,7 +1287,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-02T08:17:04.983",
-    "nvd_last_modified": "2026-10-02T13:18:55.613",
+    "nvd_last_modified": "2026-10-02T18:17:09.577",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1230,8 +1330,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00241,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1285,8 +1385,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.0025,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1297,7 +1397,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-02T08:17:04.477",
-    "nvd_last_modified": "2026-10-02T13:18:55.613",
+    "nvd_last_modified": "2026-10-02T18:17:09.157",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1340,8 +1440,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00259,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1396,8 +1496,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00271,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1451,8 +1551,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00236,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1463,7 +1563,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-02T08:17:03.933",
-    "nvd_last_modified": "2026-10-02T13:18:55.613",
+    "nvd_last_modified": "2026-10-02T18:17:08.807",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1506,8 +1606,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00241,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1561,8 +1661,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00267,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1616,8 +1716,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00231,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1628,7 +1728,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-02T08:17:00.210",
-    "nvd_last_modified": "2026-10-02T13:18:55.613",
+    "nvd_last_modified": "2026-10-02T18:17:00.027",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1671,8 +1771,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00307,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1726,8 +1826,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00307,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1738,7 +1838,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-02T08:16:59.697",
-    "nvd_last_modified": "2026-10-02T13:18:55.613",
+    "nvd_last_modified": "2026-10-02T18:16:58.450",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1781,8 +1881,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00307,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1836,8 +1936,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00175,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1849,8 +1949,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-02T06:16:42.857",
-    "nvd_last_modified": "2026-10-02T11:17:37.553",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-02T18:00:34.733",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1892,8 +1992,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00307,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1948,8 +2048,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 47.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00518,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2003,8 +2103,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00565,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2059,8 +2159,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00292,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2114,8 +2214,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2170,8 +2270,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 53.1,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.2,
+    "epss_score_prev": 0.00883,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2225,8 +2325,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 57.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00397,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2280,8 +2380,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00318,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2336,8 +2436,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00194,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2391,8 +2491,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 57.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00479,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2446,8 +2546,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 50.7,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.6,
+    "epss_score_prev": 0.00398,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -2499,8 +2599,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00258,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -2552,8 +2652,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 56.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00216,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -2605,8 +2705,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00263,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -2795,8 +2895,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 41.4,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00337,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2852,8 +2952,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 53.1,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.0,
+    "epss_score_prev": 0.00529,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2908,8 +3008,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 53.1,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.9,
+    "epss_score_prev": 0.00343,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3179,7 +3279,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.4,
-    "epss_score_prev": 0.00222,
+    "epss_score_prev": 0.00296,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3188,10 +3288,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-29T18:17:23.580",
-    "nvd_last_modified": "2026-10-01T17:17:34.047",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-02T19:57:12.497",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "154.0.8037.57",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/09/stable-channel-update-for-desktop_0856730748.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-01T20:11:55.349328+00:00"
@@ -3231,8 +3346,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 33.7,
-    "epss_score_prev": 0.00289,
+    "risk_score_prev": 33.8,
+    "epss_score_prev": 0.00507,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3299,8 +3414,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.4,
+    "epss_score_prev": 0.0059,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3311,8 +3426,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-01T17:17:17.453",
-    "nvd_last_modified": "2026-10-01T19:17:16.733",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-02T18:00:34.733",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -3425,8 +3540,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00288,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3478,8 +3593,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.0037,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3638,8 +3753,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 54.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.7,
+    "epss_score_prev": 0.00236,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3916,8 +4031,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00251,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3969,8 +4084,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.4,
+    "epss_score_prev": 0.00547,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4025,8 +4140,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00236,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4080,8 +4195,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00304,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4135,8 +4250,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00259,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4190,8 +4305,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00475,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4246,8 +4361,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00284,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4301,8 +4416,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00284,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4357,8 +4472,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 47.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00538,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4412,8 +4527,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00284,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4467,8 +4582,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00357,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4522,8 +4637,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 57.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00576,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4577,8 +4692,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00383,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4632,8 +4747,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 57.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00294,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4688,8 +4803,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00256,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4743,8 +4858,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 41.4,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00164,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4798,8 +4913,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 50.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.2,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4853,8 +4968,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00185,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4908,8 +5023,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00216,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4963,8 +5078,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 50.7,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.5,
+    "epss_score_prev": 0.00231,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5018,8 +5133,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 58.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.1,
+    "epss_score_prev": 0.00308,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5073,8 +5188,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.0013,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5188,8 +5303,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00307,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5243,8 +5358,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 53.1,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.0,
+    "epss_score_prev": 0.00447,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5298,8 +5413,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00328,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5355,8 +5470,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00429,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5573,7 +5688,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.1,
-    "epss_score_prev": 0.00172,
+    "epss_score_prev": 0.00201,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5641,7 +5756,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00201,
+    "epss_score_prev": 0.00206,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5709,7 +5824,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.1,
-    "epss_score_prev": 0.00208,
+    "epss_score_prev": 0.00226,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5783,7 +5898,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.4,
-    "epss_score_prev": 0.00296,
+    "epss_score_prev": 0.00315,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6985,7 +7100,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.5,
-    "epss_score_prev": 0.0048,
+    "epss_score_prev": 0.00491,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7038,7 +7153,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00381,
+    "epss_score_prev": 0.0039,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7091,7 +7206,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00381,
+    "epss_score_prev": 0.0039,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7144,7 +7259,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.5,
-    "epss_score_prev": 0.00384,
+    "epss_score_prev": 0.00393,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7197,7 +7312,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.5,
-    "epss_score_prev": 0.00384,
+    "epss_score_prev": 0.00393,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7250,7 +7365,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.5,
-    "epss_score_prev": 0.00384,
+    "epss_score_prev": 0.00393,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -8093,8 +8208,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00323,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00402,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -9081,7 +9196,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.0,
-    "epss_score_prev": 0.0022,
+    "epss_score_prev": 0.00265,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -9136,7 +9251,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.5,
-    "epss_score_prev": 0.00416,
+    "epss_score_prev": 0.00425,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -9191,7 +9306,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.007,
+    "epss_score_prev": 0.00716,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -9247,7 +9362,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
-    "epss_score_prev": 0.0036,
+    "epss_score_prev": 0.00369,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -9302,7 +9417,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.7,
-    "epss_score_prev": 0.00195,
+    "epss_score_prev": 0.002,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -10134,7 +10249,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00304,
+    "epss_score_prev": 0.00311,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -10251,8 +10366,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00518,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00294,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -10304,8 +10419,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.003,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -10357,8 +10472,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 32.1,
-    "epss_score_prev": 0.00671,
+    "risk_score_prev": 32.0,
+    "epss_score_prev": 0.00397,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -10410,8 +10525,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00717,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00388,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -10463,8 +10578,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.003,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -10516,8 +10631,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00518,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00288,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -10569,8 +10684,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 34.5,
-    "epss_score_prev": 0.00564,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00331,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -10623,7 +10738,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 35.3,
-    "epss_score_prev": 0.00843,
+    "epss_score_prev": 0.00792,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12193,7 +12308,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.5,
-    "epss_score_prev": 0.00564,
+    "epss_score_prev": 0.00386,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12246,7 +12361,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "epss_score_prev": 0.00399,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12298,8 +12413,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.0037,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12351,8 +12466,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00518,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00355,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12404,8 +12519,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.0037,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12457,8 +12572,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.0037,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12511,7 +12626,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00518,
+    "epss_score_prev": 0.00482,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12563,8 +12678,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00518,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00355,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12617,7 +12732,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00518,
+    "epss_score_prev": 0.00383,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12670,7 +12785,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "epss_score_prev": 0.00399,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12722,8 +12837,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.0037,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12776,7 +12891,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00518,
+    "epss_score_prev": 0.00383,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12828,8 +12943,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00518,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00355,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12881,8 +12996,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.0037,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12934,8 +13049,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.0037,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12987,8 +13102,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00539,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.0037,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13040,8 +13155,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00394,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00287,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13096,7 +13211,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
-    "epss_score_prev": 0.00251,
+    "epss_score_prev": 0.0018,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13151,7 +13266,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
-    "epss_score_prev": 0.00251,
+    "epss_score_prev": 0.0018,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13980,7 +14095,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 32.8,
-    "epss_score_prev": 0.00558,
+    "epss_score_prev": 0.00406,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15299,7 +15414,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00308,
+    "epss_score_prev": 0.00348,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15367,7 +15482,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
-    "epss_score_prev": 0.00261,
+    "epss_score_prev": 0.0028,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15434,8 +15549,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.9,
-    "epss_score_prev": 0.0036,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00407,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -16938,8 +17053,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00366,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00414,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -17007,7 +17122,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00399,
+    "epss_score_prev": 0.00451,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -20825,8 +20940,8 @@
   {
     "cve_id": "CVE-2026-93302",
     "description": "MatchTrustedPeer ignores the public key used, leading to forged CA clones passing verification. Affected builds are any that enable the macro WOLFSSL_TRUST_PEER_CERT and load CA certificates with wolfSSL_CTX_trust_peer_cert() or wolfSSL_trust_peer_cert(). The peer must know the certificates being loaded to either of those APIs to take advantage of the issue. When OPENSSL_COMPATIBLE_DEFAULTS is also defined this widens the affected API to include all CA certificate loading. Both macros are defined when using autoconf builds such as (nginx, haproxy, stunnel, wpas, apache httpd, hitch, bind, rsyslog, ffmpeg, all, distro). When the certificate is listed as a trusted peer certificate the issue previously allowed for a malicious (D)TLS server to bypass authentication once knowing which CA\u2019s the client would accept. This also affects mutual authentication cases where the client knows which CA\u2019s the server has loaded. If building with any of these configurations and using (D)TLS where the loaded CA\u2019s could be known and authentication of the peer is desired, users should either: update to the latest wolfSSL version, apply the fix patch, or use the configure flag --disable-openssl-compatible-defaults and not load CA\u2019s with wolfSSL_CTX_trust_peer_cert() or wolfSSL_trust_peer_cert() to mitigate the issue.",
-    "cvss_score": 8.3,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
@@ -20844,10 +20959,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 29.2,
+    "risk_score": 28.8,
     "risk_score_breakdown": {
-      "cvss_raw": 8.3,
-      "cvss_component": 29.1,
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00288,
       "epss_component": 0.1,
@@ -20867,10 +20982,24 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-27T10:16:59.417",
-    "nvd_last_modified": "2026-09-29T17:17:15.347",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-02T18:57:08.567",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "wolfssl",
+        "product": "wolfssl",
+        "fixed": "5.9.2",
+        "fix_type": "up_to_and_including"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/wolfSSL/wolfssl/commit/22bcd51d553eaac1de37bee91fdac80cc47961e1",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-27T12:13:05.885114+00:00"
@@ -25636,7 +25765,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.0058,
+    "epss_score_prev": 0.00593,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -28504,8 +28633,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 33.7,
-    "epss_score_prev": 0.0033,
+    "risk_score_prev": 33.8,
+    "epss_score_prev": 0.00467,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -32613,7 +32742,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.5,
-    "epss_score_prev": 0.00596,
+    "epss_score_prev": 0.0046,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -43047,8 +43176,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 29.2,
-    "epss_score_prev": 0.02355,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.06537,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -47041,7 +47170,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00252,
+    "epss_score_prev": 0.00155,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -64258,7 +64387,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.5,
-    "epss_score_prev": 0.00477,
+    "epss_score_prev": 0.00466,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -64344,7 +64473,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.5,
-    "epss_score_prev": 0.00477,
+    "epss_score_prev": 0.00466,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -68373,8 +68502,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 26.9,
-    "epss_score_prev": 0.01823,
+    "risk_score_prev": 26.8,
+    "epss_score_prev": 0.01602,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -68707,7 +68836,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.6,
-    "epss_score_prev": 0.01009,
+    "epss_score_prev": 0.00916,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -68821,8 +68950,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 26.7,
-    "epss_score_prev": 0.01311,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00622,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -70187,22 +70316,23 @@
     "description": "FreeRDP before 3.29.0 (affected versions <= 3.28.0) contains multiple TLS certificate identity validation weaknesses in tls_verify_certificate(), tls_match_hostname(), and x509_utils_get_dns_names(). Because FreeRDP performs custom Common Name and DNS SAN string matching instead of using OpenSSL's length-aware identity validation APIs, it (1) truncates DNS SAN values at embedded NUL bytes (accepting e.g. 'victim.example\\0.attacker.example' as 'victim.example'), (2) accepts a matching Common Name even when non-matching DNS SAN entries are present, and (3) accepts IP-literal targets via DNS/CN matching without comparing iPAddress SANs. Under a trusted or misissued certificate chain, an attacker positioned to present such a certificate can bypass server identity verification, weakening TLS server authentication.",
     "cvss_score": 9.8,
     "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-295"
+    ],
     "epss_score": 0.00504,
     "epss_percentile": 0.40864,
     "kev": false,
     "kev_date_added": null,
     "kev_due_date": null,
-    "affected": [
-      "openssl/openssl"
-    ],
-    "matched_keywords": [],
-    "source": "nvd",
-    "published": "2026-08-01T13:16:57.487",
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485664+00:00",
     "kev_ransomware_use": false,
     "kev_required_action": null,
+    "kev_notes": null,
     "risk_score": 34.5,
     "risk_score_breakdown": {
       "cvss_raw": 9.8,
@@ -70216,14 +70346,49 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "kev_notes": null,
     "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00504,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.00504,
-    "vuln_status": null,
-    "nvd_fix_versions": [],
-    "nvd_reference_links": []
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-08-01T13:16:57.487",
+    "nvd_last_modified": "2026-10-02T19:08:13.673",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "freerdp",
+        "product": "freerdp",
+        "fixed": "3.29.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/FreeRDP/FreeRDP/commit/b9533f07f98c25ed01c5f543b4d0ce73e120f5fd",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/FreeRDP/FreeRDP/security/advisories/GHSA-43hh-p3vw-hfx3",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      },
+      {
+        "url": "https://www.vulncheck.com/advisories/freerdp-before-tls-certificate-identity-validation-bypass",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-09-05T15:02:54.485664+00:00"
   },
   {
     "cve_id": "CVE-2026-50010",
@@ -72291,7 +72456,7 @@
     "risk_score_prev": 33.8,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.00462,
+    "epss_score_prev": 0.00483,
     "vuln_status": null,
     "nvd_fix_versions": [],
     "nvd_reference_links": []
@@ -72334,7 +72499,7 @@
     "risk_score_prev": 33.8,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.00462,
+    "epss_score_prev": 0.00482,
     "vuln_status": null,
     "nvd_fix_versions": [],
     "nvd_reference_links": []
@@ -72632,10 +72797,10 @@
       "weight_redistributed": false
     },
     "kev_notes": null,
-    "risk_score_prev": 31.0,
+    "risk_score_prev": 30.9,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.00413,
+    "epss_score_prev": 0.00359,
     "vuln_status": null,
     "nvd_fix_versions": [],
     "nvd_reference_links": []
@@ -72804,10 +72969,10 @@
       "weight_redistributed": false
     },
     "kev_notes": null,
-    "risk_score_prev": 31.0,
+    "risk_score_prev": 30.9,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "epss_score_prev": 0.00413,
+    "epss_score_prev": 0.00292,
     "vuln_status": null,
     "nvd_fix_versions": [],
     "nvd_reference_links": []
