@@ -1,5 +1,330 @@
 [
   {
+    "cve_id": "CVE-2026-105679",
+    "description": "Ghost is a Node.js content management system. From 6.22.1 until 6.64.0, Ghost restricted the content type used to serve uploaded files to prevent browsers from executing them. On sites using the default local storage adapter, this restriction was not applied, so files uploaded by any staff user were served with a content type derived from their file extension. This could be used to host scripts on the site's domain, possibly resulting in compromise of other staff users' admin sessions. This issue is fixed in version 6.64.0.",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-79",
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 42.6,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-10-05T20:17:15.107",
+    "nvd_last_modified": "2026-10-05T20:17:15.107",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-06T05:00:00.787731+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-105677",
+    "description": "Ghost is a Node.js content management system. From 6.10.3 until 6.64.0, a vulnerability in how Ghost loads theme translation files allowed an authenticated Administrator to execute arbitrary code on the server via a crafted theme. This issue is fixed in version 6.64.0.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22",
+      "CWE-94",
+      "CWE-829"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-10-05T20:17:14.733",
+    "nvd_last_modified": "2026-10-05T20:17:14.733",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-06T05:00:00.787721+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-105675",
+    "description": "Ghost is a Node.js content management system. From 4.39.0 until 6.64.0, staff users with permission to view staff invites were able to discover the secret token of pending invites, including invites for roles with higher privileges than their own. This could allow a staff user to escalate their privileges by accepting a pending invite. This issue is fixed in version 6.64.0.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-203",
+      "CWE-943"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-10-05T20:17:14.367",
+    "nvd_last_modified": "2026-10-05T20:17:14.367",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-06T05:00:00.787711+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-105651",
+    "description": "Ghost is a Node.js content management system. From 5.94.0 until 6.64.0, when creating a bookmark card, Ghost could store non-image files fetched from an external website as bookmark icons or thumbnails. This allowed any staff user, including Contributors, to host arbitrary HTML on the site's domain, possibly resulting in compromise of other staff users' admin sessions. This issue is fixed in version 6.64.0.",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-79",
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 42.6,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-10-05T20:17:14.010",
+    "nvd_last_modified": "2026-10-05T20:17:14.010",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-06T05:00:00.787702+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-105650",
+    "description": "Ghost is a Node.js content management system. From 2.1.0 until 6.64.0, embedding a URL from an attacker-controlled website could result in untrusted scripts being stored in post content. These scripts could run in the Ghost editor, on the published site, and in newsletter emails, possibly resulting in compromise of a staff user's admin session. This issue is fixed in version 6.64.0.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-79",
+      "CWE-184"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-10-05T20:17:13.817",
+    "nvd_last_modified": "2026-10-05T20:17:13.817",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-06T05:00:00.787692+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-105649",
+    "description": "Ghost is a Node.js content management system. From 4.22.0 until 6.65.0, SVG media thumbnails and SVG images uploaded with a non-SVG file extension were stored without sanitization. This allowed any staff user, including Contributors, to host scripts on the site's domain, possibly resulting in compromise of other staff users' admin sessions. This issue is fixed in version 6.65.0.",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-79",
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 42.6,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-10-05T20:17:13.613",
+    "nvd_last_modified": "2026-10-05T20:17:13.613",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-06T05:00:00.787681+00:00"
+  },
+  {
     "cve_id": "CVE-2026-105643",
     "description": "Ghost is a Node.js content management system. From version 6.34.0 until 6.67.0, embed cards in the Ghost editor could bypass protections against stored cross-site scripting. Any staff user, including Contributors, could store scripts in post content that ran when another staff user opened the post in the editor, potentially compromising that user\u2019s admin session. Self-hosted sites should leave the new \u00a0security.embedPreviewUrl\u00a0 configuration option at its default value. This issue is fixed in version 6.67.0.",
     "cvss_score": 7.3,
@@ -35,7 +360,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -88,7 +413,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 51.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -98,7 +423,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-05T19:17:18.733",
-    "nvd_last_modified": "2026-10-05T19:17:18.733",
+    "nvd_last_modified": "2026-10-05T20:17:12.860",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -141,7 +466,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -195,7 +520,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -249,7 +574,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.6,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -302,7 +627,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -357,8 +682,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00445,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -410,16 +735,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2025-69200",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "fe206674c07c5ad9e5013c3068ade4ce0cb66f89"
-      }
-    ],
+    "risk_score_prev": 27.1,
+    "epss_score_prev": 0.02141,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -489,8 +808,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.7,
+    "epss_score_prev": 0.0022,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5776,7 +6095,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-01T20:17:29.110",
-    "nvd_last_modified": "2026-10-01T20:23:46.493",
+    "nvd_last_modified": "2026-10-05T21:16:37.040",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5829,7 +6148,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-01T20:17:26.950",
-    "nvd_last_modified": "2026-10-01T20:23:46.493",
+    "nvd_last_modified": "2026-10-06T03:17:06.460",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -6187,7 +6506,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-01T20:17:25.283",
-    "nvd_last_modified": "2026-10-01T20:25:35.640",
+    "nvd_last_modified": "2026-10-05T21:16:36.547",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
