@@ -1,5 +1,915 @@
 [
   {
+    "cve_id": "CVE-2026-109573",
+    "description": "phpMyFAQ before 4.1.9 contains an SQL injection vulnerability in PdoMysql::escape(), which escapes single quotes with backslashes that are treated literally when MySQL or MariaDB runs in NO_BACKSLASH_ESCAPES mode. Unauthenticated attackers can send a Unicode right single quotation mark in the search parameter of api/autocomplete, which is normalized to an ASCII quote, to read credentials and configuration secrets, modify records, or drop tables.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T23:17:22.557",
+    "nvd_last_modified": "2026-10-12T23:17:22.680",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.335285+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-65954",
+    "description": "PHPCSUtils is a suite of utility functions for use with PHP_CodeSniffer. From 1.0.0-alpha1 until 1.2.3, PHPCSUtils\\AbstractSniffs\\AbstractArrayDeclarationSniff::getActualArrayKey() evaluates attacker-controlled array-key expressions with eval(), allowing callback-form keys in untrusted PHP code scanned by an extending sniff to execute arbitrary commands on the scanning host. Known reachable paths include Universal.Arrays.DuplicateArrayKey and Universal.Arrays.MixedArrayKeyTypes. This issue is fixed in version 1.2.3.",
+    "cvss_score": 8.6,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-95"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 50.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.6,
+      "cvss_component": 50.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T19:16:39.567",
+    "nvd_last_modified": "2026-10-12T19:16:39.567",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.335274+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-109347",
+    "description": "Adminer before 6.1.1 contains a remote code execution vulnerability that allows authenticated SQLite users to bypass ATTACH and VACUUM INTO restrictions by prefixing statements with a UTF-8 byte-order mark. Attackers can attach a database file at a PHP-served path and create a table named with PHP code to execute it as the web server user.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-94"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T17:17:31.517",
+    "nvd_last_modified": "2026-10-12T17:17:31.517",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.335265+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-109318",
+    "description": "Grav Git Sync 1.0.2 through 3.4.12 contains a command injection vulnerability that allows authenticated content editors to execute OS commands by injecting shell substitutions into profile fields. When the gravuser or gravfull author mode is enabled, attackers can set a malicious username, full name, or email that reaches PHP exec() via git commit --author, running commands as the web-server account.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-78"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T17:17:26.807",
+    "nvd_last_modified": "2026-10-12T17:17:26.807",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.335256+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-109305",
+    "description": "Craft CMS from 5.10.2 before 5.10.14 contains a Twig sandbox bypass that allows non-admin users to invoke PHP callables through the \"has some\" and \"has every\" operators. Users with the System Messages permission can supply two-argument callables such as passthru or system in sandboxed templates to execute code as the web user.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-1336"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T17:17:24.773",
+    "nvd_last_modified": "2026-10-12T17:17:24.773",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.335247+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108481",
+    "description": "Cross-Site Request Forgery (CSRF) vulnerability in Patreon Patreon WordPress patreon-connect allows Cross Site Request Forgery.This issue affects Patreon WordPress: from n/a through 1.10.0.",
+    "cvss_score": 7.4,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-352"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.4,
+      "cvss_component": 43.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-12T18:17:21.327",
+    "nvd_last_modified": "2026-10-12T23:17:21.340",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.334517+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108479",
+    "description": "Cross-Site Request Forgery (CSRF) vulnerability in Patreon Patreon WordPress patreon-connect allows Cross Site Request Forgery.This issue affects Patreon WordPress: from n/a through 1.9.17.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-352"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-12T18:17:21.187",
+    "nvd_last_modified": "2026-10-12T23:17:21.227",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.334506+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84312",
+    "description": "Nginx UI is a web user interface for the Nginx web server. Prior to 2.4.1, GetCasdoorUri uses the configured Casdoor application name as a constant OAuth state value and CasdoorCallback does not compare the submitted state with a value bound to the initiating browser session. An unauthenticated attacker can cause a victim's browser to complete an attacker-controlled Casdoor authorization flow, and the callback can mint a Nginx UI session for the identity returned by that authorization code. This issue is fixed in version 2.4.1.",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-287",
+      "CWE-352"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 41.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 41.4,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T22:17:05.263",
+    "nvd_last_modified": "2026-10-12T22:17:05.263",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.332848+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84360",
+    "description": "Nginx UI is a web user interface for the Nginx web server. Prior to 2.4.1, the HTTP configuration mutation routes require RequireSecureSession, but /mcp and /mcp_message require only ordinary authentication before exposing nginx_config_add and nginx_config_modify. An OTP-enabled user with a normal JWT but no valid X-Secure-Session-ID can therefore create or modify Nginx configuration and trigger reload behavior through MCP, bypassing the intended step-up control. This issue is fixed in version 2.4.1.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-288"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T21:17:22.960",
+    "nvd_last_modified": "2026-10-12T21:17:22.960",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.332838+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84319",
+    "description": "Nginx UI is a web user interface for the Nginx web server. Prior to 2.4.1, the regular HTTP configuration API rejects restricted Nginx directives such as load_module, js_import, and js_content. However, the MCP configuration interface allows a secondary authenticated user to write and apply equivalent restricted configuration content. This allows the user to load ngx_http_js_module.so, import attacker-controlled JavaScript, reload Nginx, and execute NJS in the Nginx worker context. This issue is fixed in version 2.4.1.",
+    "cvss_score": 8.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-693"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 48.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.3,
+      "cvss_component": 48.4,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T21:17:22.517",
+    "nvd_last_modified": "2026-10-12T21:17:22.517",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.332828+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84318",
+    "description": "Nginx UI is a web user interface for the Nginx web server. From 2.0.0-rc.6 until 2.4.1, the MCP tool nginx_config_add writes nginx configuration files to disk and triggers an nginx reload without calling config.ValidateConfigFile. The identical flow in the REST API (POST /api/configs) does call that function and correctly rejects dangerous directives. An authenticated attacker can exploit this gap to write config files containing any blocked directive (perl, js_import, load_module, user root, etc.), bypassing nginx-ui's entire security layer. On a server with the nginx Perl, njs, or Lua module loaded, this is post-authentication Remote Code Execution. This issue is fixed in version 2.4.1.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-693"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T21:17:22.360",
+    "nvd_last_modified": "2026-10-12T21:17:22.360",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.332818+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84317",
+    "description": "Nginx UI is a web user interface for the Nginx web server. Prior to 2.4.1, internal/config/validation.go (ValidateConfigFile) is a security control that blocks dangerous nginx directives \u2014 js_*, perl_*, load_module of the njs/perl modules, and user root. It is enforced on three of the four config-write paths: api/config/add.go, api/config/modify.go, and mcp/config/config_modify.go. The fourth path \u2014 the MCP tool nginx_config_add (mcp/config/config_add.go) \u2014 does NOT call it: it writes the caller-supplied content straight to disk and reloads nginx. An authenticated MCP caller (or an MCP agent induced via prompt injection) can therefore inject exactly the directives the control is meant to block, leading to nginx code execution on deployments where the njs/perl module is available (e.g. the official Docker image). This issue is fixed in version 2.4.1.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-20",
+      "CWE-693"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T21:17:22.213",
+    "nvd_last_modified": "2026-10-12T21:17:22.213",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.332808+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84316",
+    "description": "Nginx UI is a web user interface for the Nginx web server. Prior to 2.4.1, config.ValidateConfigDirectives splits configuration by newline and checks only the first directive token on each line even though Nginx permits multiple semicolon-separated directives on one line. An authenticated caller can place a benign directive first and a restricted load_module, js_import, perl, or user root directive later on the same line, or can use an unrestricted include directive to load restricted content. These mechanisms bypass validation on REST, nginx_config_modify, site, and stream write paths; when an executable module is available, the injected configuration can execute code in the Nginx worker context. This issue is fixed in version 2.4.1.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-20",
+      "CWE-184"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T21:17:22.067",
+    "nvd_last_modified": "2026-10-12T21:17:22.067",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.332797+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84315",
+    "description": "Nginx UI is a web user interface for the Nginx web server. Prior to 2.4.1, Nginx UI does not apply RequireSecureSession to multiple authenticated mutation routes even though OTP-enabled users are expected to present a fresh X-Secure-Session-ID for sensitive actions. A stolen authenticated session can therefore create or alter automatic backups, DNS credentials and records, certificates and ACME users, Nginx control settings, and site or stream automation without completing the OTP or passkey step-up. This issue is fixed in version 2.4.1.",
+    "cvss_score": 8.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 48.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.3,
+      "cvss_component": 48.4,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T21:17:21.900",
+    "nvd_last_modified": "2026-10-12T21:17:21.900",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.332786+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84314",
+    "description": "Nginx UI is a web user interface for the Nginx web server. Prior to 2.4.1, the POST /api/users/:id user-management endpoint permits an authenticated user to change another user's password without passing RequireSecureSession, even though the self-service password-change path requires that step-up. An attacker with an authenticated account can change the initial administrator's password, invalidate existing administrator tokens, and then authenticate as the administrator. This issue is fixed in version 2.4.1.",
+    "cvss_score": 8.7,
+    "cvss_version": "CVSS V40",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-285",
+      "CWE-862"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 50.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.7,
+      "cvss_component": 50.7,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T21:17:21.753",
+    "nvd_last_modified": "2026-10-12T21:17:21.753",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.332774+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-84313",
+    "description": "Nginx UI is a web user interface for the Nginx web server. Prior to 2.4.1, POST /api/otp_enroll and POST /api/finish_passkey_register are registered outside RequireSecureSession and accept a normal authenticated session without verifying the current password. An attacker with a stolen JWT can bind an attacker-controlled TOTP secret when the victim has not already enabled TOTP, or can register an attacker-controlled passkey because that path has no equivalent existing-enrollment guard. These changes create persistent account access that can survive a password change and interfere with the legitimate user's authentication. This issue is fixed in version 2.4.1.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-287",
+      "CWE-306"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T21:17:21.597",
+    "nvd_last_modified": "2026-10-12T21:17:21.597",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.332755+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-109326",
+    "description": "Grav before 2.1.7 contains an information disclosure vulnerability because bundled nginx, lighttpd, IIS, and Caddy 2 configurations block .git only at document root. Unauthenticated attackers can request nested repositories such as user/.git to retrieve Git config, refs, and objects, reconstructing unpublished history or committed secrets.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-527"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "nginx/nginx"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T17:17:28.017",
+    "nvd_last_modified": "2026-10-12T17:17:28.137",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-13T01:50:04.332739+00:00"
+  },
+  {
     "cve_id": "CVE-2026-109398",
     "description": "Gumlet php-image-resize before 3.0.1 contains a denial of service vulnerability because the ImageResize constructor in lib/ImageResize.php passes images to GD imagecreatefrom* functions without pixel limits. Remote attackers can upload small, highly compressed images that decode to large bitmaps, exhausting PHP memory and terminating the worker process.",
     "cvss_score": 7.5,
@@ -34,7 +944,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -87,7 +997,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -140,7 +1050,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -193,7 +1103,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -246,8 +1156,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00564,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -299,8 +1209,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00564,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -352,16 +1262,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2026-78416",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "c7ea105e1d2cf043e76e7847d84e5732071a26b4"
-      }
-    ],
+    "risk_score_prev": 30.8,
+    "epss_score_prev": 0.0102,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -411,8 +1315,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00564,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -464,8 +1368,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.3,
+    "epss_score_prev": 0.00696,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -517,8 +1421,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00239,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -572,8 +1476,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00564,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -628,8 +1532,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00456,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -683,8 +1587,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00483,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -738,8 +1642,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00428,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -793,8 +1697,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00591,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -849,8 +1753,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00749,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -905,8 +1809,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.7,
+    "epss_score_prev": 0.00904,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -961,8 +1865,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00525,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1016,8 +1920,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.6,
+    "epss_score_prev": 0.00791,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1071,8 +1975,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00498,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1126,8 +2030,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00625,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1181,8 +2085,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00498,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1237,8 +2141,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00468,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1292,8 +2196,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00505,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1347,8 +2251,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.5,
+    "epss_score_prev": 0.00665,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1402,8 +2306,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00373,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1457,16 +2361,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2026-19883",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "e297f41b49c6ec76635b006dff8a964a99a1ed24"
-      }
-    ],
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00689,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -1521,16 +2419,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2025-59951",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "5cd9de9ac519ca0448e65790ac7d97b838d0cd39"
-      }
-    ],
+    "risk_score_prev": 33.5,
+    "epss_score_prev": 0.04322,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "nginx/nginx"
     ],
@@ -1919,8 +2811,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.7,
-    "epss_score_prev": 0.00328,
+    "risk_score_prev": 25.8,
+    "epss_score_prev": 0.00396,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1973,7 +2865,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00415,
+    "epss_score_prev": 0.00424,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2026,7 +2918,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00511,
+    "epss_score_prev": 0.00523,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2412,7 +3304,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.0017,
+    "epss_score_prev": 0.00276,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2467,7 +3359,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
-    "epss_score_prev": 0.00172,
+    "epss_score_prev": 0.00164,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2522,7 +3414,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00177,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2577,7 +3469,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00177,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2633,7 +3525,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00177,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2688,7 +3580,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.0033,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2743,7 +3635,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00177,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2798,7 +3690,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00136,
+    "epss_score_prev": 0.00215,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2854,7 +3746,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00172,
+    "epss_score_prev": 0.00267,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2910,7 +3802,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00172,
+    "epss_score_prev": 0.00267,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2965,7 +3857,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00177,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3021,7 +3913,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00177,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3076,7 +3968,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00177,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3131,7 +4023,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00177,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3186,7 +4078,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00172,
+    "epss_score_prev": 0.00276,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3241,7 +4133,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00172,
+    "epss_score_prev": 0.00276,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3296,7 +4188,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00171,
+    "epss_score_prev": 0.00282,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3350,8 +4242,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.8,
-    "epss_score_prev": 0.00118,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00152,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3406,7 +4298,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00172,
+    "epss_score_prev": 0.00276,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3461,7 +4353,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00196,
+    "epss_score_prev": 0.00361,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3516,7 +4408,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.1,
-    "epss_score_prev": 0.0017,
+    "epss_score_prev": 0.00279,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3571,7 +4463,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00185,
+    "epss_score_prev": 0.0034,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3626,7 +4518,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00185,
+    "epss_score_prev": 0.0034,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3681,7 +4573,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.9,
-    "epss_score_prev": 0.00146,
+    "epss_score_prev": 0.00309,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3736,7 +4628,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.9,
-    "epss_score_prev": 0.00146,
+    "epss_score_prev": 0.00309,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3791,7 +4683,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
-    "epss_score_prev": 0.00142,
+    "epss_score_prev": 0.00316,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3846,7 +4738,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.9,
-    "epss_score_prev": 0.00146,
+    "epss_score_prev": 0.00309,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3901,7 +4793,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
-    "epss_score_prev": 0.00146,
+    "epss_score_prev": 0.00341,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3956,7 +4848,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
-    "epss_score_prev": 0.00146,
+    "epss_score_prev": 0.00341,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4012,7 +4904,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.4,
-    "epss_score_prev": 0.00146,
+    "epss_score_prev": 0.00341,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4067,7 +4959,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00167,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4122,7 +5014,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00167,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4177,7 +5069,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00167,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4233,7 +5125,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00167,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4287,8 +5179,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 34.3,
-    "epss_score_prev": 0.00106,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00185,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4342,8 +5234,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 34.3,
-    "epss_score_prev": 0.00106,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00185,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4397,8 +5289,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 34.3,
-    "epss_score_prev": 0.00106,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00185,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4453,8 +5345,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 34.3,
-    "epss_score_prev": 0.00106,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00185,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4509,7 +5401,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.9,
-    "epss_score_prev": 0.00144,
+    "epss_score_prev": 0.00291,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4564,7 +5456,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.0019,
+    "epss_score_prev": 0.00324,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4620,7 +5512,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00156,
+    "epss_score_prev": 0.00338,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4675,7 +5567,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00146,
+    "epss_score_prev": 0.00253,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4730,7 +5622,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
-    "epss_score_prev": 0.00142,
+    "epss_score_prev": 0.00316,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4784,8 +5676,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 34.4,
-    "epss_score_prev": 0.00211,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00553,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4841,7 +5733,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.0019,
+    "epss_score_prev": 0.00324,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4896,7 +5788,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00142,
+    "epss_score_prev": 0.00286,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4951,7 +5843,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00125,
+    "epss_score_prev": 0.00167,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11181,7 +12073,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 28.0,
+    "risk_score_prev": 31.9,
     "epss_score_prev": 0.04437,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -36922,7 +37814,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-05-08T15:16:35.043",
-    "nvd_last_modified": "2026-10-05T16:10:00.443",
+    "nvd_last_modified": "2026-10-12T22:10:00.247",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -62866,7 +63758,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.4,
-    "epss_score_prev": 0.00253,
+    "epss_score_prev": 0.00255,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -62934,7 +63826,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00259,
+    "epss_score_prev": 0.00261,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -63136,7 +64028,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.0026,
+    "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -63613,8 +64505,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00364,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00377,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -89337,7 +90229,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-08-24T21:17:48.457",
-    "nvd_last_modified": "2026-09-09T21:06:39.057",
+    "nvd_last_modified": "2026-10-12T21:10:00.227",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -89390,7 +90282,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-08-24T21:17:48.307",
-    "nvd_last_modified": "2026-09-09T21:06:39.057",
+    "nvd_last_modified": "2026-10-12T21:10:00.227",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
