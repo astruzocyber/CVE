@@ -1,0 +1,53 @@
+// Curated CWE id -> short name map (static: the CWE taxonomy changes rarely, and a
+// live lookup would add an external dependency for no benefit). Unknown ids
+// simply render without a name.
+export const CWE_NAMES = {
+  "20": "Improper Input Validation", "22": "Path Traversal", "36": "Absolute Path Traversal",
+  "59": "Link Following", "73": "External Control of File Name/Path", "74": "Injection",
+  "76": "Equivalent Special Element Injection", "78": "OS Command Injection", "79": "Cross-Site Scripting (XSS)",
+  "89": "SQL Injection", "93": "CRLF Injection", "94": "Code Injection", "95": "Eval Injection",
+  "98": "PHP File Inclusion", "119": "Improper Restriction of Memory Buffer Bounds",
+  "120": "Buffer Copy without Checking Size (Classic Buffer Overflow)", "121": "Stack-based Buffer Overflow",
+  "122": "Heap-based Buffer Overflow", "125": "Out-of-bounds Read", "129": "Improper Validation of Array Index",
+  "131": "Incorrect Calculation of Buffer Size", "180": "Incorrect Behavior Order: Validate Before Canonicalize",
+  "184": "Incomplete List of Disallowed Inputs", "190": "Integer Overflow or Wraparound",
+  "193": "Off-by-one Error", "197": "Numeric Truncation Error", "200": "Exposure of Sensitive Information",
+  "208": "Observable Timing Discrepancy", "209": "Generation of Error Message Containing Sensitive Info",
+  "250": "Execution with Unnecessary Privileges", "269": "Improper Privilege Management",
+  "276": "Incorrect Default Permissions", "284": "Improper Access Control", "285": "Improper Authorization",
+  "287": "Improper Authentication", "290": "Authentication Bypass by Spoofing",
+  "294": "Authentication Bypass by Capture-replay", "297": "Improper Validation of Certificate with Host Mismatch",
+  "306": "Missing Authentication for Critical Function", "308": "Use of Single-factor Authentication",
+  "311": "Missing Encryption of Sensitive Data", "312": "Cleartext Storage of Sensitive Information",
+  "319": "Cleartext Transmission of Sensitive Information", "330": "Use of Insufficiently Random Values",
+  "345": "Insufficient Verification of Data Authenticity", "347": "Improper Verification of Cryptographic Signature",
+  "352": "Cross-Site Request Forgery (CSRF)", "362": "Race Condition", "367": "Time-of-check Time-of-use (TOCTOU) Race Condition",
+  "400": "Uncontrolled Resource Consumption", "407": "Inefficient Regular Expression Complexity (ReDoS)",
+  "415": "Double Free", "416": "Use After Free", "427": "Uncontrolled Search Path Element",
+  "434": "Unrestricted Upload of File with Dangerous Type", "436": "Interpretation Conflict",
+  "441": "Server-Side Request Forgery (SSRF)-adjacent Proxy/Confused Deputy", "459": "Incomplete Cleanup",
+  "470": "Unsafe Reflection", "476": "NULL Pointer Dereference", "480": "Use of Incorrect Operator",
+  "502": "Deserialization of Untrusted Data", "506": "Embedded Malicious Code",
+  "613": "Insufficient Session Expiration", "620": "Unverified Password Change",
+  "636": "Not Failing Securely ('Failing Open')", "639": "Insecure Direct Object Reference (IDOR)",
+  "664": "Improper Control of a Resource Through its Lifetime", "665": "Improper Initialization",
+  "668": "Exposure of Resource to Wrong Sphere", "672": "Operation on a Resource after Expiration or Release",
+  "682": "Incorrect Calculation", "691": "Insufficient Control Flow Management",
+  "693": "Protection Mechanism Failure", "697": "Incorrect Comparison", "703": "Improper Check/Handling of Exceptional Conditions",
+  "704": "Incorrect Type Conversion or Cast", "706": "Use of Incorrectly-resolved Name or Reference",
+  "707": "Improper Neutralization", "770": "Allocation of Resources Without Limits or Throttling",
+  "787": "Out-of-bounds Write", "789": "Uncontrolled Memory Allocation",
+  "807": "Reliance on Untrusted Inputs in a Security Decision", "825": "Expired Pointer Dereference",
+  "843": "Type Confusion", "862": "Missing Authorization", "863": "Incorrect Authorization",
+  "908": "Use of Uninitialized Resource", "916": "Use of Password Hash With Insufficient Computational Effort",
+  "918": "Server-Side Request Forgery (SSRF)", "941": "Incorrectly Specified Destination in a Communication Channel",
+  "943": "Improper Neutralization of Special Elements in Data Query Logic",
+  "1050": "Excessive Platform Resource Consumption within a Loop",
+  "1284": "Improper Validation of Specified Quantity in Input", "1289": "Improper Validation of Unsafe Equivalence in Input",
+  "1321": "Improperly Controlled Modification of Object Prototype Attributes (Prototype Pollution)",
+  "1336": "Improper Neutralization of Special Elements Used in a Template Engine",
+};
+
+export function cweName(cweId) {
+  return CWE_NAMES[String(cweId ?? "").replace(/^CWE-/i, "")] ?? null;
+}
