@@ -224,6 +224,15 @@ class TestCheckJsHtmlConsistency(ValidateDataTestBase):
         validate_data.check_js_html_consistency()
         self.assertTrue(any("does-not-exist" in e for e in validate_data.errors))
 
+    def test_js_module_byid_references_checked(self):
+        docs = _make_docs_tree(self.tmpdir, index_html='<input id="search">')
+        (docs / "app.js").unlink()
+        (docs / "js").mkdir()
+        (docs / "js" / "main.js").write_text('byId("search"); byId("missing-id");')
+        validate_data.check_js_html_consistency()
+        self.assertTrue(any("missing-id" in e for e in validate_data.errors))
+        self.assertFalse(any('"search"' in e for e in validate_data.errors))
+
 
 class TestCheckFeeds(ValidateDataTestBase):
     def test_valid_feeds_pass(self):

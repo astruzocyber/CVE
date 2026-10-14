@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="theme-init.js"></script>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b0f14">
+<script src="theme-init.js"></script>
 <title>CVE / KEV / Dependabot Alert Dashboard</title>
 <meta name="description" content="Free, zero-cost vulnerability alert dashboard aggregating CISA KEV, NVD, FIRST.org EPSS, GitHub Security Advisories, and Dependabot alerts with a composite risk score, historical trend charts, and dependency-file matching.">
 <meta property="og:title" content="Vulnerability Alert Dashboard">
@@ -24,8 +26,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="style.css">
+<link rel="modulepreload" href="js/main.js">
 <link rel="canonical" href="https://astruzocyber.github.io/CVE/">
 <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml">
 <link rel="alternate" type="application/rss+xml" title="CVE/KEV Alert Feed (RSS)" href="feed.xml">
@@ -33,8 +35,6 @@
 <link rel="search" type="application/opensearchdescription+xml" title="CVE Alerts" href="opensearch.xml">
 <link rel="alternate" type="text/plain" title="llms.txt (AI agent guide)" href="llms.txt">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0b0f14">
-<meta name="color-scheme" content="dark light">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -48,27 +48,11 @@
   "url": "https://astruzocyber.github.io/CVE/",
   "sameAs": "https://github.com/astruzocyber/CVE",
   "isAccessibleForFree": true,
-  "creator": {
-    "@type": "Organization",
-    "name": "astruzocyber",
-    "url": "https://github.com/astruzocyber"
-  },
+  "creator": { "@type": "Organization", "name": "astruzocyber", "url": "https://github.com/astruzocyber" },
   "distribution": [
-    {
-      "@type": "DataDownload",
-      "encodingFormat": "application/json",
-      "contentUrl": "https://astruzocyber.github.io/CVE/data/alerts.json"
-    },
-    {
-      "@type": "DataDownload",
-      "encodingFormat": "application/rss+xml",
-      "contentUrl": "https://astruzocyber.github.io/CVE/feed.xml"
-    },
-    {
-      "@type": "DataDownload",
-      "encodingFormat": "application/feed+json",
-      "contentUrl": "https://astruzocyber.github.io/CVE/feed.json"
-    }
+    { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://astruzocyber.github.io/CVE/data/alerts.json" },
+    { "@type": "DataDownload", "encodingFormat": "application/rss+xml", "contentUrl": "https://astruzocyber.github.io/CVE/feed.xml" },
+    { "@type": "DataDownload", "encodingFormat": "application/feed+json", "contentUrl": "https://astruzocyber.github.io/CVE/feed.json" }
   ],
   "keywords": ["CVE", "CISA KEV", "NVD", "EPSS", "vulnerability", "Dependabot", "GitHub Security Advisories", "risk score"]
 }
@@ -76,210 +60,348 @@
 </head>
 <body>
   <a href="#search" class="skip-link">Skip to search and filters</a>
-  <header>
-    <h1>Vulnerability Alert Dashboard</h1>
-    <p class="subtitle">CISA KEV &middot; NVD &middot; FIRST.org EPSS &middot; GitHub Security Advisories (GHSA) &middot; GitHub Dependabot</p>
-    <p class="meta" id="last-updated">Loading...</p>
-    <p class="stale-banner" id="stale-banner" role="alert" hidden></p>
 
-    <div class="stats-bar" id="stats-bar" hidden>
-      <div class="stat"><span class="stat-value" id="stat-total">-</span><span class="stat-label">Total alerts</span></div>
-      <div class="stat stat-critical"><span class="stat-value" id="stat-critical">-</span><span class="stat-label">Critical (CVSS&ge;9)</span></div>
-      <div class="stat stat-kev"><span class="stat-value" id="stat-kev">-</span><span class="stat-label">In CISA KEV</span></div>
-      <div class="stat stat-overdue"><span class="stat-value" id="stat-overdue">-</span><span class="stat-label">KEV overdue (BOD 22-01)</span></div>
-      <div class="stat stat-due-soon"><span class="stat-value" id="stat-due-soon">-</span><span class="stat-label">KEV due soon (&le;7d)</span></div>
-      <div class="stat stat-ransomware"><span class="stat-value" id="stat-ransomware">-</span><span class="stat-label">Ransomware-linked</span></div>
-      <div class="stat"><span class="stat-value" id="stat-epss">-</span><span class="stat-label">Avg EPSS</span></div>
-      <div class="stat"><span class="stat-value" id="stat-avg-risk">-</span><span class="stat-label">Avg risk score</span></div>
-      <div class="stat"><span class="stat-value" id="stat-avg-cvss">-</span><span class="stat-label">Avg CVSS</span></div>
-      <div class="stat" id="stat-risk-trend-tile"><span class="stat-value" id="stat-risk-trend">-</span><span class="stat-label">Risk trending up/down</span></div>
-      <div class="stat stat-rejected" id="stat-rejected-tile" hidden><span class="stat-value" id="stat-rejected">-</span><span class="stat-label">Rejected by NVD</span></div>
-    </div>
-    <div class="source-breakdown" id="source-breakdown" hidden aria-label="Alert count by source"></div>
-    <div class="severity-breakdown" id="severity-breakdown" hidden aria-label="Alert count by severity band"></div>
-    <div class="cwe-breakdown" id="cwe-breakdown" hidden aria-label="Top weakness (CWE) classifications"></div>
-    <div class="vendor-breakdown" id="vendor-breakdown" hidden aria-label="Top affected vendor/product pairs"></div>
-    <div class="keyword-breakdown" id="keyword-breakdown" hidden aria-label="Top watchlist keyword matches"></div>
-    <div class="age-breakdown" id="age-breakdown" hidden aria-label="Alert count by first-seen age"></div>
-  </header>
-
-  <main>
-    <section id="trend-section" class="trend-section" hidden>
-      <h2>Historical trend</h2>
-      <canvas id="trend-chart" height="80" role="img" aria-label="Historical trend chart. Loading summary..."></canvas>
-    </section>
-
-    <section class="dep-filter">
-      <h2>Filter by your dependencies (optional)</h2>
-      <p class="dep-hint">Paste or choose a <code>package.json</code>, <code>requirements.txt</code>, <code>go.mod</code>, <code>pyproject.toml</code>, or <code>Pipfile</code>.
-        Parsed entirely in your browser -- nothing is uploaded anywhere.</p>
-      <div class="dep-controls">
-        <input type="file" id="dep-file-input" accept=".json,.txt,.mod,.toml,Pipfile">
-        <textarea id="dep-text-input" rows="3" placeholder='Or paste file contents here...'></textarea>
-        <div class="dep-buttons">
-          <button id="dep-apply-btn" type="button">Apply filter</button>
-          <button id="dep-clear-btn" type="button">Clear</button>
+  <header class="app-header">
+    <div class="container app-header__inner">
+      <div class="brand">
+        <svg class="brand__logo" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <rect width="100" height="100" rx="18" class="brand__logo-bg"/>
+          <path d="M50 15 L82 30 V52 C82 70 68 82 50 90 C32 82 18 70 18 52 V30 Z" class="brand__logo-shield"/>
+          <path d="M40 50 L47 58 L62 40" class="brand__logo-check"/>
+        </svg>
+        <div>
+          <h1 class="brand__title">Vulnerability Alert Dashboard</h1>
+          <p class="brand__sources">CISA KEV · NVD · FIRST.org EPSS · GitHub Security Advisories · Dependabot</p>
         </div>
       </div>
-      <p class="dep-status" id="dep-status"></p>
+      <div class="app-header__actions">
+        <button id="theme-toggle" type="button" class="btn btn--ghost" title="Toggle light/dark theme (shortcut: t)" aria-pressed="false">Theme</button>
+        <button id="kbd-hint-btn" type="button" class="btn btn--ghost" title="Show keyboard shortcuts (shortcut: ?)" aria-haspopup="dialog">Shortcuts</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="status-strip">
+    <div class="container status-strip__inner">
+      <p class="status-strip__meta" id="last-updated" aria-live="polite">Loading data…</p>
+      <p class="stale-banner" id="stale-banner" role="alert" hidden></p>
+    </div>
+  </div>
+
+  <main id="main" class="container">
+
+    <!-- 1. Overview: the numbers that decide what to look at first. -->
+    <section class="section" aria-labelledby="overview-title">
+      <div class="section__head">
+        <h2 class="section__title" id="overview-title">Overview</h2>
+        <p class="section__hint">Click a tile to filter the alert list.</p>
+      </div>
+      <div class="kpi-grid" id="stats-bar" hidden>
+        <button type="button" class="kpi" data-kpi="total"><span class="kpi__value" id="stat-total">–</span><span class="kpi__label">Total alerts</span></button>
+        <button type="button" class="kpi kpi--critical" data-kpi="critical"><span class="kpi__value" id="stat-critical">–</span><span class="kpi__label">Critical (CVSS ≥ 9)</span></button>
+        <button type="button" class="kpi kpi--warn" data-kpi="kev"><span class="kpi__value" id="stat-kev">–</span><span class="kpi__label">In CISA KEV</span></button>
+        <button type="button" class="kpi kpi--high" data-kpi="overdue"><span class="kpi__value" id="stat-overdue">–</span><span class="kpi__label">KEV overdue</span></button>
+        <button type="button" class="kpi kpi--warn" data-kpi="due-soon"><span class="kpi__value" id="stat-due-soon">–</span><span class="kpi__label">KEV due ≤ 7 days</span></button>
+        <button type="button" class="kpi kpi--critical" data-kpi="ransomware"><span class="kpi__value" id="stat-ransomware">–</span><span class="kpi__label">Ransomware-linked</span></button>
+        <button type="button" class="kpi kpi--accent" data-kpi="new"><span class="kpi__value" id="stat-new">–</span><span class="kpi__label">New in last 24 h</span></button>
+        <button type="button" class="kpi kpi--muted" data-kpi="rejected" id="stat-rejected-tile" title="Click to hide CVEs that NVD has rejected" hidden><span class="kpi__value" id="stat-rejected">–</span><span class="kpi__label">Rejected by NVD (hide)</span></button>
+      </div>
+      <dl class="metric-row" id="metric-row" hidden>
+        <div class="metric"><dt>Avg risk score</dt><dd id="stat-avg-risk">–</dd></div>
+        <div class="metric"><dt>Avg CVSS</dt><dd id="stat-avg-cvss">–</dd></div>
+        <div class="metric"><dt>Avg EPSS</dt><dd id="stat-epss">–</dd></div>
+        <div class="metric"><dt>Risk trend (up / down)</dt><dd id="stat-risk-trend">–</dd></div>
+      </dl>
     </section>
 
-    <div class="controls">
-      <label for="search" class="visually-hidden">Search alerts</label>
-      <input type="text" id="search" placeholder="Search CVE ID, description, product..." aria-label="Search CVE ID, description, product">
-      <label for="kev-filter" class="visually-hidden">Filter by KEV status</label>
-      <select id="kev-filter" aria-label="Filter by KEV status">
-        <option value="all">All (KEV + non-KEV)</option>
-        <option value="kev">KEV only</option>
-        <option value="overdue">KEV overdue only</option>
-        <option value="due-soon">KEV due soon (&le;7d) only</option>
-        <option value="ransomware">Ransomware-linked only</option>
-        <option value="non-kev">Non-KEV only</option>
-      </select>
-      <label for="severity-filter" class="visually-hidden">Filter by severity</label>
-      <select id="severity-filter" aria-label="Filter by severity">
-        <option value="all">All severities</option>
-        <option value="critical">Critical (CVSS &ge;9)</option>
-        <option value="high">High (CVSS 7-8.9)</option>
-        <option value="medium">Medium (CVSS 4-6.9)</option>
-        <option value="low">Low (CVSS &lt;4)</option>
-      </select>
-      <label for="source-filter" class="visually-hidden">Filter by source</label>
-      <select id="source-filter" aria-label="Filter by source">
-        <option value="all">All sources</option>
-        <option value="nvd">NVD</option>
-        <option value="ghsa">GHSA</option>
-        <option value="dependabot">Dependabot</option>
-      </select>
-      <label for="min-risk" class="visually-hidden">Minimum risk score</label>
-      <input type="number" id="min-risk" min="0" max="100" step="1" placeholder="Min risk score" aria-label="Minimum risk score (0-100)" title="Show only alerts with composite risk score &ge; this value">
-      <label for="min-epss" class="visually-hidden">Minimum EPSS probability</label>
-      <input type="number" id="min-epss" min="0" max="100" step="1" placeholder="Min EPSS %" aria-label="Minimum EPSS exploitation probability (0-100)" title="Show only alerts with EPSS exploitation probability &ge; this percentage">
-      <label class="hide-reviewed-label" title="Hide alerts you've marked as reviewed on this device (local-only, not shared/synced)">
-        <input type="checkbox" id="hide-reviewed"> Hide reviewed
-      </label>
-      <label class="hide-reviewed-label" title="Show only alerts first seen on the dashboard within the last 24 hours">
-        <input type="checkbox" id="new-only"> New (24h) only
-      </label>
-      <label class="hide-reviewed-label" title="Hide CVEs that NVD has withdrawn (Rejected status) -- their CVSS/EPSS/risk scores may be stale or meaningless">
-        <input type="checkbox" id="hide-rejected"> Hide rejected CVEs
-      </label>
-      <label class="hide-reviewed-label" title="Show only alerts with a known fix version (OSV.dev fixed-package data or NVD CPE fix-version data) -- useful for prioritizing remediation that can actually be shipped right now">
-        <input type="checkbox" id="has-fix-only"> Fix available only
-      </label>
-      <label for="sort-by" class="visually-hidden">Sort order</label>
-      <select id="sort-by" aria-label="Sort order">
-        <option value="risk_score">Sort: Risk score (high to low)</option>
-        <option value="first_seen">Sort: Newest first</option>
-        <option value="cvss_score">Sort: CVSS (high to low)</option>
-        <option value="epss_score">Sort: EPSS (high to low)</option>
-        <option value="cve_id">Sort: CVE ID</option>
-        <option value="kev_due_date">Sort: KEV due date (soonest first)</option>
-        <option value="first_seen_oldest">Sort: Oldest first (triage backlog)</option>
-        <option value="published">Sort: Published date (newest first)</option>
-        <option value="risk_delta">Sort: Risk increase (biggest jump first)</option>
-      </select>
-      <button id="export-csv" type="button">Export CSV</button>
-      <button id="export-json" type="button" title="Export the currently-filtered alerts as raw JSON for scripting/automation">Export JSON</button>
-      <button id="export-md-report" type="button" title="Download the currently-filtered alerts as a Markdown summary table for a status update, GitHub issue, or Slack/Teams post">Export Markdown report</button>
-      <button id="print-view" type="button" title="Open the browser print dialog (use &quot;Save as PDF&quot; for a report)">Print / PDF</button>
-      <button id="mark-filtered-reviewed" type="button" title="Mark every alert currently matching your filters as reviewed on this device (local-only, not shared/synced)">Mark filtered as reviewed</button>
-      <button id="export-reviewed" type="button" title="Download your local mark-as-reviewed triage state as a JSON file (to back up or share with a teammate)">Export reviewed state</button>
-      <label class="import-reviewed-label" title="Load a reviewed-state JSON file (from Export reviewed state) and merge its CVE IDs into your local triage progress">
-        Import reviewed state
-        <input type="file" id="import-reviewed-input" accept=".json" aria-label="Import reviewed state JSON file">
-      </label>
-      <button id="reset-filters" type="button" title="Clear search, KEV/severity/source filters, risk/EPSS thresholds, hide-reviewed, new-only, hide-rejected, fix-available-only, sort, and dependency-file filter (shortcut: r)">Reset filters</button>
-      <label for="saved-views-select" class="visually-hidden">Load a saved filter view</label>
-      <select id="saved-views-select" aria-label="Load a saved filter view" title="Load a previously-saved combination of filters (saved locally on this device)">
-        <option value="">Saved views...</option>
-      </select>
-      <button id="save-view-btn" type="button" title="Save the current search/filter/sort combination under a name, stored locally on this device (not shared/synced)">Save view</button>
-      <button id="delete-view-btn" type="button" title="Delete the currently-selected saved view" disabled>Delete view</button>
-      <button id="theme-toggle" type="button" title="Toggle light/dark theme (shortcut: t)" aria-pressed="false">🌙 Dark</button>
-      <button id="view-toggle" type="button" title="Toggle between card view and a dense sortable table view (shortcut: v)" aria-pressed="false">☰ Table view</button>
-      <button type="button" id="kbd-hint-btn" class="kbd-hint" title="Show keyboard shortcuts (shortcut: ?)" aria-haspopup="dialog">⌨ shortcuts</button>
-      <span class="count" id="result-count" aria-live="polite"></span>
-      <span class="reviewed-progress" id="reviewed-progress" aria-live="polite" title="How many of all tracked alerts you've marked reviewed on this device (local-only, not shared/synced)"></span>
-      <span class="import-reviewed-status" id="import-reviewed-status" aria-live="polite"></span>
-    </div>
+    <!-- 2. Breakdowns: where the volume comes from. -->
+    <section class="section" aria-labelledby="insights-title">
+      <div class="section__head">
+        <h2 class="section__title" id="insights-title">Breakdown</h2>
+        <p class="section__hint">Each chip filters or searches the list.</p>
+      </div>
+      <div class="insight-grid">
+        <article class="panel insight" id="severity-panel" hidden>
+          <h3 class="panel__title">Severity</h3>
+          <div class="chip-list" id="severity-breakdown"></div>
+        </article>
+        <article class="panel insight" id="source-panel" hidden>
+          <h3 class="panel__title">Source</h3>
+          <div class="chip-list" id="source-breakdown"></div>
+        </article>
+        <article class="panel insight" id="age-panel" hidden>
+          <h3 class="panel__title">Time on board</h3>
+          <div class="chip-list" id="age-breakdown"></div>
+        </article>
+        <article class="panel insight" id="keyword-panel" hidden>
+          <h3 class="panel__title">Watchlist matches</h3>
+          <div class="chip-list" id="keyword-breakdown"></div>
+        </article>
+        <article class="panel insight insight--wide" id="cwe-panel" hidden>
+          <h3 class="panel__title">Top weaknesses (CWE)</h3>
+          <div class="chip-list" id="cwe-breakdown"></div>
+        </article>
+        <article class="panel insight insight--wide" id="vendor-panel" hidden>
+          <h3 class="panel__title">Top vendor / product</h3>
+          <div class="chip-list" id="vendor-breakdown"></div>
+        </article>
+      </div>
+    </section>
 
-    <div id="empty-state" class="empty-state" role="status" hidden>
-      No alerts match your filters (or no data has been collected yet -- the
-      scheduled GitHub Action runs every 4 hours; you can also trigger it manually
-      from the Actions tab).
-    </div>
+    <!-- 3. Trend: collapsed by default so the alert list stays above the fold. -->
+    <details class="section panel disclosure" id="trend-section" hidden>
+      <summary class="disclosure__summary"><h2 class="section__title">Historical trend</h2><span class="disclosure__hint" id="trend-hint"></span></summary>
+      <div class="chart-box">
+        <canvas id="trend-chart" role="img" aria-label="Historical trend chart. Loading summary…"></canvas>
+      </div>
+      <p class="section__hint">Toggle series by clicking the legend.</p>
+    </details>
 
-    <div class="card-grid" id="card-grid"></div>
+    <!-- 4. Alerts: toolbar + results. -->
+    <section class="section" aria-labelledby="alerts-title">
+      <div class="section__head">
+        <h2 class="section__title" id="alerts-title">Alerts</h2>
+        <p class="section__hint">Shortcuts: <kbd>/</kbd> search · <kbd>r</kbd> reset · <kbd>v</kbd> view · <kbd>?</kbd> help</p>
+      </div>
 
-    <div class="table-view-wrapper" id="table-view-wrapper" hidden>
-      <table class="alerts-table" id="alerts-table">
-        <thead>
-          <tr>
-            <th data-sort="cve_id" tabindex="0" role="button" aria-sort="none">CVE ID</th>
-            <th data-sort="cvss_score" tabindex="0" role="button" aria-sort="none">CVSS</th>
-            <th data-sort="epss_score" tabindex="0" role="button" aria-sort="none">EPSS</th>
-            <th data-sort="risk_score" tabindex="0" role="button" aria-sort="descending">Risk</th>
-            <th>KEV</th>
-            <th>Source</th>
-            <th data-sort="first_seen" tabindex="0" role="button" aria-sort="none">First seen</th>
-            <th>Product(s)</th>
-            <th>Fix</th>
-            <th>Watchlist</th>
-            <th>CWE</th>
-            <th>Attack Vector</th>
-            <th>Reviewed</th>
-          </tr>
-        </thead>
-        <tbody id="alerts-table-body"></tbody>
-      </table>
-    </div>
+      <div class="toolbar" role="search">
+        <div class="toolbar__row">
+          <div class="field field--search">
+            <label for="search" class="visually-hidden">Search alerts</label>
+            <input type="search" id="search" class="input" placeholder="Search CVE ID, description, product, CWE…" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="field">
+            <label for="kev-filter" class="visually-hidden">Filter by KEV status</label>
+            <select id="kev-filter" class="input">
+              <option value="all">KEV: all</option>
+              <option value="kev">KEV only</option>
+              <option value="overdue">KEV overdue</option>
+              <option value="due-soon">KEV due ≤ 7 days</option>
+              <option value="ransomware">Ransomware-linked</option>
+              <option value="non-kev">Non-KEV only</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="severity-filter" class="visually-hidden">Filter by severity</label>
+            <select id="severity-filter" class="input">
+              <option value="all">Severity: all</option>
+              <option value="critical">Critical (≥ 9.0)</option>
+              <option value="high">High (7.0–8.9)</option>
+              <option value="medium">Medium (4.0–6.9)</option>
+              <option value="low">Low (&lt; 4.0)</option>
+              <option value="unknown">No CVSS yet</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="source-filter" class="visually-hidden">Filter by source</label>
+            <select id="source-filter" class="input">
+              <option value="all">Source: all</option>
+              <option value="nvd">NVD</option>
+              <option value="ghsa">GHSA</option>
+              <option value="dependabot">Dependabot</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sort-by" class="visually-hidden">Sort order</label>
+            <select id="sort-by" class="input">
+              <option value="risk_score">Sort: risk score</option>
+              <option value="first_seen">Sort: newest on board</option>
+              <option value="first_seen_oldest">Sort: oldest on board</option>
+              <option value="published">Sort: published date</option>
+              <option value="cvss_score">Sort: CVSS</option>
+              <option value="epss_score">Sort: EPSS</option>
+              <option value="kev_due_date">Sort: KEV due date</option>
+              <option value="risk_delta">Sort: biggest risk increase</option>
+              <option value="cve_id">Sort: CVE ID</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="toolbar__row toolbar__row--secondary">
+          <button type="button" id="filters-toggle" class="btn" aria-expanded="false" aria-controls="filters-panel">More filters<span class="btn__badge" id="filters-badge" hidden></span></button>
+
+          <details class="menu" id="export-menu">
+            <summary class="btn">Export</summary>
+            <div class="menu__list" role="menu">
+              <button id="export-csv" type="button" class="menu__item" role="menuitem">CSV (spreadsheet)</button>
+              <button id="export-json" type="button" class="menu__item" role="menuitem">JSON (raw objects)</button>
+              <button id="export-md-report" type="button" class="menu__item" role="menuitem">Markdown report</button>
+              <button id="print-view" type="button" class="menu__item" role="menuitem">Print / save as PDF</button>
+            </div>
+          </details>
+
+          <details class="menu" id="triage-menu">
+            <summary class="btn">Triage</summary>
+            <div class="menu__list" role="menu">
+              <button id="mark-filtered-reviewed" type="button" class="menu__item" role="menuitem">Mark all filtered as reviewed</button>
+              <button id="export-reviewed" type="button" class="menu__item" role="menuitem">Export reviewed state</button>
+              <label class="menu__item" role="menuitem">Import reviewed state…
+                <input type="file" id="import-reviewed-input" class="visually-hidden" accept=".json,application/json">
+              </label>
+            </div>
+          </details>
+
+          <div class="toolbar__spacer"></div>
+
+          <div class="segmented" role="group" aria-label="Layout">
+            <button type="button" id="view-toggle" class="btn" aria-pressed="false" title="Toggle card / table view (shortcut: v)">Table view</button>
+          </div>
+          <button id="reset-filters" type="button" class="btn btn--ghost" title="Clear all filters, sort and dependency filter (shortcut: r)">Reset</button>
+        </div>
+
+        <div class="filters-panel" id="filters-panel" hidden>
+          <fieldset class="filters-panel__group">
+            <legend>Thresholds</legend>
+            <div class="field field--inline">
+              <label for="min-risk">Min risk score</label>
+              <input type="number" id="min-risk" class="input input--num" min="0" max="100" step="1" inputmode="numeric" placeholder="0–100">
+            </div>
+            <div class="field field--inline">
+              <label for="min-epss">Min EPSS %</label>
+              <input type="number" id="min-epss" class="input input--num" min="0" max="100" step="1" inputmode="numeric" placeholder="0–100">
+            </div>
+          </fieldset>
+
+          <fieldset class="filters-panel__group">
+            <legend>Show</legend>
+            <label class="check"><input type="checkbox" id="new-only"> New in last 24 h only</label>
+            <label class="check"><input type="checkbox" id="has-fix-only"> Fix available only</label>
+            <label class="check"><input type="checkbox" id="hide-reviewed"> Hide reviewed</label>
+            <label class="check"><input type="checkbox" id="hide-rejected"> Hide CVEs rejected by NVD</label>
+          </fieldset>
+
+          <fieldset class="filters-panel__group">
+            <legend>Saved views <span class="legend-note">(this browser only)</span></legend>
+            <div class="field-row">
+              <label for="saved-views-select" class="visually-hidden">Load a saved filter view</label>
+              <select id="saved-views-select" class="input"><option value="">Saved views…</option></select>
+              <button id="save-view-btn" type="button" class="btn">Save current</button>
+              <button id="delete-view-btn" type="button" class="btn btn--ghost" disabled>Delete</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="filters-panel__group filters-panel__group--wide">
+            <legend>Match your dependencies <span class="legend-note">(parsed locally, never uploaded)</span></legend>
+            <p class="field-help">Accepts <code>package.json</code>, <code>requirements.txt</code>, <code>go.mod</code>, <code>pyproject.toml</code> or <code>Pipfile</code>.</p>
+            <div class="dep-controls">
+              <label for="dep-file-input" class="visually-hidden">Choose a dependency file</label>
+              <input type="file" id="dep-file-input" class="input input--file" accept=".json,.txt,.mod,.toml,Pipfile">
+              <label for="dep-text-input" class="visually-hidden">Or paste dependency file contents</label>
+              <textarea id="dep-text-input" class="input input--mono" rows="3" placeholder="…or paste the file contents here"></textarea>
+              <div class="field-row">
+                <button id="dep-apply-btn" type="button" class="btn btn--primary">Apply</button>
+                <button id="dep-clear-btn" type="button" class="btn btn--ghost">Clear</button>
+              </div>
+            </div>
+            <p class="field-help" id="dep-status" aria-live="polite"></p>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="results-bar">
+        <p class="results-bar__count" id="result-count" aria-live="polite"></p>
+        <ul class="active-filters" id="active-filters" aria-label="Active filters"></ul>
+        <p class="results-bar__progress" id="reviewed-progress" title="Reviewed-state is stored only in this browser"></p>
+      </div>
+      <p class="notice" id="import-reviewed-status" aria-live="polite" hidden></p>
+
+      <div id="empty-state" class="empty-state" role="status" hidden>
+        <p class="empty-state__title">No alerts match these filters.</p>
+        <p>Try removing a filter, or <button type="button" class="link-btn" id="empty-reset">reset everything</button>. If the board is empty after a reset, the scheduled pipeline hasn't produced data yet.</p>
+      </div>
+
+      <div class="card-grid" id="card-grid"></div>
+
+      <div class="table-wrap" id="table-view-wrapper" hidden>
+        <table class="alerts-table" id="alerts-table">
+          <caption class="visually-hidden">Vulnerability alerts. Sortable columns are buttons.</caption>
+          <thead>
+            <tr>
+              <th scope="col" aria-sort="none"><button type="button" class="th-sort" data-sort="cve_id">CVE ID</button></th>
+              <th scope="col" aria-sort="descending" class="num"><button type="button" class="th-sort" data-sort="risk_score">Risk</button></th>
+              <th scope="col" aria-sort="none" class="num"><button type="button" class="th-sort" data-sort="cvss_score">CVSS</button></th>
+              <th scope="col" aria-sort="none" class="num"><button type="button" class="th-sort" data-sort="epss_score">EPSS</button></th>
+              <th scope="col">KEV</th>
+              <th scope="col">Product(s)</th>
+              <th scope="col">Vector</th>
+              <th scope="col">Fix</th>
+              <th scope="col">CWE</th>
+              <th scope="col">Watchlist</th>
+              <th scope="col">Source</th>
+              <th scope="col" aria-sort="none"><button type="button" class="th-sort" data-sort="first_seen">First seen</button></th>
+              <th scope="col">Reviewed</th>
+            </tr>
+          </thead>
+          <tbody id="alerts-table-body"></tbody>
+        </table>
+      </div>
+
+      <div class="pager" id="pager" hidden>
+        <p class="pager__status" id="pager-status"></p>
+        <div class="field-row">
+          <button type="button" class="btn" id="show-more">Show more</button>
+          <button type="button" class="btn btn--ghost" id="show-all">Show all</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Methodology. -->
+    <section class="section panel about" aria-labelledby="about-title">
+      <h2 class="section__title" id="about-title">How to read this dashboard</h2>
+      <div class="about__grid">
+        <div>
+          <h3>Risk score (0–100)</h3>
+          <p>35% CVSS (scaled) + 40% EPSS (probability of exploitation in the next 30 days) + a 25-point bonus when the CVE is in CISA's Known Exploited Vulnerabilities catalog, capped at 100. Real-world exploitation is weighted above theoretical severity.</p>
+          <p>If CVSS or EPSS is not published yet, its weight is redistributed across the known components instead of scoring zero, so missing data never reads as "safe". Open <em>Score breakdown</em> on any card to see the exact math.</p>
+        </div>
+        <div>
+          <h3>Data integrity</h3>
+          <p>Every external API response is schema-validated before use. On an unexpected shape the pipeline logs a warning and skips that data rather than guessing. The score is a local triage heuristic, not an industry standard. Use it to decide order, not as a sole go/no-go gate.</p>
+          <p>Data refreshes about every 4 hours via GitHub Actions. A red banner appears above if the last update is more than 20 hours old.</p>
+        </div>
+        <div>
+          <h3>Feeds &amp; integration</h3>
+          <ul class="link-list">
+            <li><a href="feed.xml">RSS feed</a> and <a href="feed.json">JSON feed</a>: new CISA KEV entries</li>
+            <li><a href="data/alerts.json">data/alerts.json</a>: the full dataset</li>
+            <li><a href="data/alerts.schema.json">JSON Schema</a> (Draft-07) for validating integrations</li>
+          </ul>
+          <p>Reviewed marks and saved views live only in this browser. Use <em>Triage → Export</em> to move them.</p>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer>
-    <p>Data sourced from <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA KEV</a>,
-      <a href="https://nvd.nist.gov/" target="_blank" rel="noopener">NVD</a>,
-      <a href="https://www.first.org/epss/" target="_blank" rel="noopener">FIRST.org EPSS</a>,
-      <a href="https://github.com/advisories" target="_blank" rel="noopener">GitHub Security Advisories</a>,
-      and GitHub Dependabot Alerts. Fully static, zero-cost, updated on a schedule via GitHub Actions.</p>
-    <p class="methodology">Risk score (0-100) = 35% CVSS (scaled) + 40% EPSS (probability
-      of exploitation in the next 30 days) + 25% flat bonus if listed in CISA's Known
-      Exploited Vulnerabilities catalog, capped at 100. This weights real-world
-      exploitation signal above theoretical severity and is a local heuristic, not an
-      industry-standard score -- use it to triage order, not as a sole go/no-go gate.
-      If CVSS or EPSS is not yet published for a CVE, that component's weight is
-      redistributed proportionally across the remaining known components rather than
-      scored as zero, so missing data never masquerades as "not severe" / "won't be
-      exploited" -- look for the redistribution note in a card's breakdown panel.
-      Every external API response is schema-validated before use; on an unexpected
-      shape the pipeline logs a warning and skips that data rather than guessing.
-      Click "breakdown" on any card to see the exact CVSS/EPSS/KEV components behind
-      its score. Subscribe to <a href="feed.xml">feed.xml</a> or
-      <a href="feed.json">feed.json</a> for newly-added CISA KEV entries.</p>
-    <p class="methodology">Building an integration? <a href="data/alerts.json">data/alerts.json</a>
-      is the full dataset and is documented by a published
-      <a href="data/alerts.schema.json">JSON Schema</a> (Draft-07) so you can
-      validate against it and detect breaking field changes.</p>
+  <footer class="app-footer">
+    <div class="container">
+      <p>Data: <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA KEV</a> ·
+        <a href="https://nvd.nist.gov/" target="_blank" rel="noopener">NVD</a> ·
+        <a href="https://www.first.org/epss/" target="_blank" rel="noopener">FIRST.org EPSS</a> ·
+        <a href="https://github.com/advisories" target="_blank" rel="noopener">GitHub Security Advisories</a> ·
+        GitHub Dependabot. Fully static, zero-cost, open source at <a href="https://github.com/astruzocyber/CVE" target="_blank" rel="noopener">astruzocyber/CVE</a>.</p>
+    </div>
   </footer>
 
-  <div id="shortcuts-modal" class="shortcuts-modal" hidden role="dialog" aria-modal="true" aria-labelledby="shortcuts-modal-title">
-    <div class="shortcuts-modal-content">
-      <div class="shortcuts-modal-header">
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <div id="shortcuts-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="shortcuts-modal-title">
+    <div class="modal__content">
+      <div class="modal__header">
         <h2 id="shortcuts-modal-title">Keyboard shortcuts</h2>
-        <button type="button" id="shortcuts-modal-close" aria-label="Close keyboard shortcuts">&times;</button>
+        <button type="button" id="shortcuts-modal-close" class="icon-btn" aria-label="Close keyboard shortcuts">×</button>
       </div>
       <dl class="shortcuts-list">
         <dt><kbd>/</kbd></dt><dd>Focus search</dd>
-        <dt><kbd>Esc</kbd></dt><dd>Unfocus current field / close this dialog</dd>
+        <dt><kbd>Esc</kbd></dt><dd>Leave the current field / close dialogs and menus</dd>
         <dt><kbd>r</kbd></dt><dd>Reset filters</dd>
-        <dt><kbd>t</kbd></dt><dd>Toggle light/dark theme</dd>
-        <dt><kbd>v</kbd></dt><dd>Toggle card/table view</dd>
-        <dt><kbd>?</kbd></dt><dd>Show/hide this shortcuts help</dd>
+        <dt><kbd>t</kbd></dt><dd>Toggle light / dark theme</dd>
+        <dt><kbd>v</kbd></dt><dd>Toggle card / table view</dd>
+        <dt><kbd>?</kbd></dt><dd>Show / hide this help</dd>
       </dl>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" integrity="sha384-NrKB+u6Ts6AtkIhwPixiKTzgSKNblyhlk0Sohlgar9UHUBzai/sgnNNWWd291xqt" crossorigin="anonymous"></script>
-  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" integrity="sha384-NrKB+u6Ts6AtkIhwPixiKTzgSKNblyhlk0Sohlgar9UHUBzai/sgnNNWWd291xqt" crossorigin="anonymous" defer></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

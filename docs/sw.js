@@ -17,7 +17,7 @@
 //     stale-data banner (cycle 9) which reads a live fetch of stats.json --
 //     caching them here would defeat that mechanism and could show a visitor
 //     confidently-wrong vulnerability data while offline with no warning.
-//   - Static shell (index.html, app.js, style.css, theme-init.js,
+//   - Static shell (index.html, js/*.js modules, style.css, theme-init.js,
 //     manifest.webmanifest, icons): NETWORK-FIRST with a versioned cache
 //     fallback. A visitor with a live connection always gets the current
 //     file (never stuck on a stale cached JS bug fix); only when the network
@@ -27,14 +27,29 @@
 //     which the existing frontend already handles as an empty/error state).
 //   - Cache versioned by CACHE_NAME; activate() purges any old-version
 //     caches so a deploy never accumulates stale shell files indefinitely.
-const CACHE_NAME = "cve-dashboard-shell-v1";
+const CACHE_NAME = "cve-dashboard-shell-v2";
 const SHELL_ASSETS = [
   "./",
   "./index.html",
-  "./app.js",
+  "./js/cwe-names.js",
+  "./js/deps.js",
+  "./js/dom.js",
+  "./js/export.js",
+  "./js/filters.js",
+  "./js/format.js",
+  "./js/main.js",
+  "./js/overview.js",
+  "./js/render-card.js",
+  "./js/render-table.js",
+  "./js/reviewed.js",
+  "./js/saved-views.js",
+  "./js/state.js",
+  "./js/theme.js",
+  "./js/trend.js",
   "./style.css",
   "./theme-init.js",
   "./manifest.webmanifest",
+  "./404.html",
 ];
 
 self.addEventListener("install", (event) => {

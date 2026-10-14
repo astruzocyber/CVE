@@ -62,7 +62,7 @@ jobs:
 
       - name: Syntax-check frontend JS
         run: |
-          node --check docs/app.js
+          for f in docs/js/*.js docs/sw.js docs/theme-init.js; do node --check "$f"; done
 
       - name: Validate committed data files against schema
         run: python scripts/validate_data.py

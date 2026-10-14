@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CI regression guard: validates docs/data/*.json + docs/app.js/index.html
+"""CI regression guard: validates docs/data/*.json + frontend JS (docs/js/*.js)/index.html
 against the schema this project's frontend actually depends on.
 
 Why this exists: for 53 cycles, the only thing standing between a bad commit
@@ -176,24 +176,33 @@ def check_trend_csv():
     print(f"trend.csv: {len(lines) - 1} data rows checked (older rows may have fewer columns than current header -- expected schema growth)")
 
 
+def _frontend_js_sources():
+    """Frontend JS: the ES modules under docs/js/ plus a legacy docs/app.js if present."""
+    sources = sorted((DOCS / "js").glob("*.js")) if (DOCS / "js").is_dir() else []
+    legacy = DOCS / "app.js"
+    if legacy.exists():
+        sources.append(legacy)
+    return sources
+
+
 def check_js_html_consistency():
-    app_js = DOCS / "app.js"
+    sources = _frontend_js_sources()
     index_html = DOCS / "index.html"
-    if not app_js.exists() or not index_html.exists():
-        fail("docs/app.js or docs/index.html missing")
+    if not sources or not index_html.exists():
+        fail("frontend JS (docs/js/*.js or docs/app.js) or docs/index.html missing")
         return
-    js = app_js.read_text()
+    js = "\n".join(p.read_text() for p in sources)
     html = index_html.read_text()
-    # Every getElementById target referenced in app.js must exist as an id= in index.html,
-    # unless it's created dynamically (heuristic: only check the toolbar/control ids that
-    # are known to be static markup, not per-card dynamically-generated elements).
-    static_ids = re.findall(r'getElementById\("([\w-]+)"\)', js)
+    # Every literal id looked up by the frontend (byId("x") helper or
+    # document.getElementById("x")) must exist as an id= in index.html.
+    # Per-card ids are built from template strings, so they never match.
+    static_ids = re.findall(r'(?:getElementById|\bbyId)\("([\w-]+)"\)', js)
     html_ids = set(re.findall(r'id="([\w-]+)"', html))
     missing_ids = [i for i in set(static_ids) if i not in html_ids]
     if missing_ids:
-        fail(f"app.js references getElementById ids not present in index.html: {sorted(missing_ids)}")
+        fail(f"frontend JS references element ids not present in index.html: {sorted(missing_ids)}")
     else:
-        print(f"app.js/index.html: {len(set(static_ids))} getElementById id references all resolve")
+        print(f"frontend JS/index.html: {len(set(static_ids))} element id references across {len(sources)} file(s) all resolve")
 
 
 def check_feeds():
