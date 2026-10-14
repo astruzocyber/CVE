@@ -1,5 +1,1708 @@
 [
   {
+    "cve_id": "CVE-2019-5443",
+    "description": "A non-privileged user or program can put code and a config file in a known non-privileged path (under C:/usr/local/) that will make curl <= 7.65.1 automatically run the code (as an openssl \"engine\") on invocation. If that curl is invoked by a privileged user it can do anything it wants.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-94",
+      "CWE-427"
+    ],
+    "epss_score": 0.0069,
+    "epss_percentile": 0.51534,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0069,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2019-5443",
+    "osv_fixed_versions": [],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2019-07-02T19:15:10.790",
+    "nvd_last_modified": "2026-10-14T07:16:54.880",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "haxx",
+        "product": "curl",
+        "fixed": "7.65.1",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "oracle",
+        "product": "mysql_server",
+        "fixed": "5.7.27",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "oracle",
+        "product": "mysql_server",
+        "fixed": "8.0.17",
+        "fix_type": "up_to_and_including"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "http://www.openwall.com/lists/oss-security/2019/06/24/1",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://curl.haxx.se/docs/CVE-2019-5443.html",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      },
+      {
+        "url": "https://www.oracle.com/security-alerts/cpuapr2020.html",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://www.oracle.com/security-alerts/cpuoct2020.html",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://www.oracle.com/technetwork/security-advisory/cpuoct2019-5072832.html",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.030079+00:00"
+  },
+  {
+    "cve_id": "CVE-2016-5131",
+    "description": "Use-after-free vulnerability in libxml2 through 2.9.4, as used in Google Chrome before 52.0.2743.82, allows remote attackers to cause a denial of service or possibly have unspecified other impact via vectors related to the XPointer range-to function.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.02251,
+    "epss_percentile": 0.82466,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.02251,
+      "epss_component": 0.9,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2016-5131",
+    "osv_fixed_versions": [],
+    "affected": [
+      "google/chrome"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2016-07-23T19:59:13.767",
+    "nvd_last_modified": "2026-10-14T07:16:38.367",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "52.0.2743.82",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "xmlsoft",
+        "product": "libxml2",
+        "fixed": "2.9.4",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "apple",
+        "product": "iphone_os",
+        "fixed": "10.0",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "apple",
+        "product": "mac_os_x",
+        "fixed": "10.12",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "apple",
+        "product": "tvos",
+        "fixed": "10.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.030064+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-61511",
+    "description": "vBulletin 5.x through 5.7.5 and 6.x through 6.2.1 contains an eval injection vulnerability in the vB5_Template_Runtime::runMaths() method within the template runtime that allows unauthenticated remote attackers to execute arbitrary PHP code by supplying crafted input through the pagenav[pagenumber] parameter. Attackers can exploit the insufficiently restrictive regex filter by using phpfuck-style encoding with permitted characters to inject and execute arbitrary PHP code via the unauthenticated ajax/render template route without any authentication.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-95"
+    ],
+    "epss_score": 0.05607,
+    "epss_percentile": 0.92751,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 36.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.05607,
+      "epss_component": 2.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-07-27T14:16:59.177",
+    "nvd_last_modified": "2026-10-14T04:18:24.660",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029486+00:00"
+  },
+  {
+    "cve_id": "CVE-2017-9050",
+    "description": "libxml2 20904-GITv2.9.4-16-g0741801 is vulnerable to a heap-based buffer over-read in the xmlDictAddString function in dict.c. This vulnerability causes programs that use libxml2, such as PHP, to crash. This vulnerability exists because of an incomplete fix for CVE-2016-1839.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-125",
+      "CWE-122"
+    ],
+    "epss_score": 0.04626,
+    "epss_percentile": 0.91507,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.04626,
+      "epss_component": 1.9,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2017-9050",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2017-05-18T06:29:00.497",
+    "nvd_last_modified": "2026-10-14T07:16:41.420",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [
+      {
+        "url": "http://www.openwall.com/lists/oss-security/2017/05/15/1",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029416+00:00"
+  },
+  {
+    "cve_id": "CVE-2017-9049",
+    "description": "libxml2 20904-GITv2.9.4-16-g0741801 is vulnerable to a heap-based buffer over-read in the xmlDictComputeFastKey function in dict.c. This vulnerability causes programs that use libxml2, such as PHP, to crash. This vulnerability exists because of an incomplete fix for libxml2 Bug 759398.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-125"
+    ],
+    "epss_score": 0.04626,
+    "epss_percentile": 0.91507,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.04626,
+      "epss_component": 1.9,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2017-9049",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2017-05-18T06:29:00.467",
+    "nvd_last_modified": "2026-10-14T07:16:41.193",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [
+      {
+        "url": "http://www.openwall.com/lists/oss-security/2017/05/15/1",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029408+00:00"
+  },
+  {
+    "cve_id": "CVE-2017-9048",
+    "description": "libxml2 20904-GITv2.9.4-16-g0741801 is vulnerable to a stack-based buffer overflow. The function xmlSnprintfElementContent in valid.c is supposed to recursively dump the element content definition into a char buffer 'buf' of size 'size'. At the end of the routine, the function may strcat two more characters without checking whether the current strlen(buf) + 2 < size. This vulnerability causes programs that use libxml2, such as PHP, to crash.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-119"
+    ],
+    "epss_score": 0.04848,
+    "epss_percentile": 0.91837,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.04848,
+      "epss_component": 1.9,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2017-9048",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2017-05-18T06:29:00.433",
+    "nvd_last_modified": "2026-10-14T07:16:40.950",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [
+      {
+        "url": "http://www.openwall.com/lists/oss-security/2017/05/15/1",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029401+00:00"
+  },
+  {
+    "cve_id": "CVE-2017-9047",
+    "description": "A buffer overflow was discovered in libxml2 20904-GITv2.9.4-16-g0741801. The function xmlSnprintfElementContent in valid.c is supposed to recursively dump the element content definition into a char buffer 'buf' of size 'size'. The variable len is assigned strlen(buf). If the content->type is XML_ELEMENT_CONTENT_ELEMENT, then (i) the content->prefix is appended to buf (if it actually fits) whereupon (ii) content->name is written to the buffer. However, the check for whether the content->name actually fits also uses 'len' rather than the updated buffer length strlen(buf). This allows us to write about \"size\" many bytes beyond the allocated memory. This vulnerability causes programs that use libxml2, such as PHP, to crash.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V30",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-119"
+    ],
+    "epss_score": 0.03185,
+    "epss_percentile": 0.87766,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.03185,
+      "epss_component": 1.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2017-9047",
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2017-05-18T06:29:00.403",
+    "nvd_last_modified": "2026-10-14T07:16:40.757",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [
+      {
+        "url": "http://www.openwall.com/lists/oss-security/2017/05/15/1",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029393+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-110284",
+    "description": "The LifterLMS \u2013 WP LMS for eLearning, Online Courses, & Quizzes plugin for WordPress is vulnerable to Local File Inclusion in versions up to, and including, 10.3.1 via attacker-controlled attributes of the [lifterlms_checkout] shortcode. This is due to the llms_get_template() helper performing extract() on the shortcode attribute array before resolving the template path, which allows the attacker-supplied 'template_name' and 'default_path' shortcode attributes to overwrite the function's local parameters and ultimately control the path passed to a PHP include. This makes it possible for authenticated attackers, with Instructor-level access and above, to include and execute arbitrary files on the server, that can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where files with safe extensions containing attacker-controlled content can be uploaded and included.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T08:17:05.747",
+    "nvd_last_modified": "2026-10-14T08:17:05.747",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029385+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-107751",
+    "description": "The Mang Board plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'user_name' parameter in all versions up to, and including, 2.4.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The save-time sanitizer mbw_htmlspecialchars2() is ineffective against this vector because the exploit payload relies solely on unquoted HTML attribute syntax using only spaces, alphanumerics, and characters such as =, parentheses, and dots \u2014 none of which are escaped.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T08:17:04.570",
+    "nvd_last_modified": "2026-10-14T08:17:04.570",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029379+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-107631",
+    "description": "The Record of Consent Extension for Complianz plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'uid' parameter in all versions up to, and including, 2.5 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This is possible because the enforcing nonce is emitted via wp_localize_script on wp_enqueue_scripts and is therefore readable by any unauthenticated frontend visitor, and no capability or role check gates the write path.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T08:17:04.260",
+    "nvd_last_modified": "2026-10-14T08:17:04.260",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029374+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-104909",
+    "description": "The Mang Board plugin for WordPress is vulnerable to Local File Inclusion in all versions up to, and including, 2.4.3 via the '<mode>_type (e.g. foo_type)' parameter parameter. This makes it possible for unauthenticated attackers to include and execute arbitrary .php files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where .php file types can be uploaded and included. Exploitation is trivial via an unauthenticated POST to any page rendering a public [mb_board] shortcode, as no nonce or capability check is enforced on the shortcode render path; on servers with a standard PHP installation, pearcmd.php can be leveraged to write and then include an attacker-controlled payload file in a single request.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T08:17:03.443",
+    "nvd_last_modified": "2026-10-14T08:17:03.443",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029369+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-104764",
+    "description": "The Post Export Import with Media plugin for WordPress is vulnerable to PHP Object Injection in all versions up to, and including, 1.17.1 via deserialization of untrusted input . This makes it possible for authenticated attackers, with administrator-level access and above, to inject a PHP Object. No known POP chain is present in the vulnerable software, which means this vulnerability has no impact unless another plugin or theme containing a POP chain is installed on the site. If a POP chain is present via an additional plugin or theme installed on the target system, it may allow the attacker to perform actions like delete arbitrary files, retrieve sensitive data, or execute code depending on the POP chain present.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-502"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T08:17:03.297",
+    "nvd_last_modified": "2026-10-14T08:17:03.297",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029363+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-104748",
+    "description": "The SimpleForm \u2013 Form Maker to Chat Apps with Quiz, Poll and Multi Lead Notifications plugin for WordPress is vulnerable to Privilege Escalation in all versions up to, and including, 3.10.0 This is due to the `wp_ajax_nopriv_simpleform_wp_register` AJAX action lacking any capability check for role assignment and the `save_custom_fields_to_user_meta()` function using an exclusion list that omits `wp_capabilities`, combined with `get_form_settings()` returning a hard-coded defaults array that unconditionally enables meta writing regardless of the supplied `form_id`. This makes it possible for unauthenticated attackers to create a new Administrator-level WordPress account by supplying `wp_capabilities[administrator]=1` alongside standard registration fields. The nonce required by the endpoint is publicly emitted into the `front_end_data` JavaScript object on every front-end page via `wp_enqueue_scripts`, making it trivially obtainable by any unauthenticated visitor before submitting the malicious request.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-269"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T08:17:02.997",
+    "nvd_last_modified": "2026-10-14T08:17:02.997",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029356+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-103367",
+    "description": "The ShopMagic \u2013 email automation for WordPress plugin for WordPress is vulnerable to Local File Inclusion in all versions up to, and including, 4.9.0 via the 'billing_address.first_name' parameter parameter. This makes it possible for unauthenticated attackers to include and execute arbitrary .php files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where .php file types can be uploaded and included. Exploitation requires a published recipe that processes the {{ customer.first_name }} placeholder \u2014 the plugin's built-in \"New Order email with social media profile links\" recipe satisfies this requirement out of the box, making the default configuration exploitable with no account, cookie, or nonce by simply submitting a guest checkout with the payload as the billing first name.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-98"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T08:17:02.553",
+    "nvd_last_modified": "2026-10-14T08:17:02.553",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029351+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-103366",
+    "description": "The Appointment Booking Plugin \u2013 LatePoint | Calendar & Scheduling for WordPress plugin for WordPress is vulnerable to Insecure Direct Object Reference in versions up to, and including, 5.7.3 via the `booking[id]` and `cart[id]` parameters on the `steps__reload_booking_form_summary_panel` and `steps__start` public routes (reachable through wp_ajax_nopriv_latepoint_route_call). This is due to `OsStepsHelper::set_required_objects()` feeding raw request parameters into `set_booking_object()` and `set_cart_object()`, which call `OsModel::set_data()` and load an arbitrary booking or cart row by primary key with no ownership check \u2014 the ownership guard the vendor added for the earlier disclosure lives only inside `OsStepsHelper::load_step()` and does not cover the sibling routes or `cart[id]` at all. This makes it possible for unauthenticated attackers to enumerate sequential booking / cart identifiers and read other customers' appointment details (service name, agent, date/time, duration, price breakdown, status) and other shoppers' pending checkout contents directly from the JSON responses.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-639"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T08:17:02.417",
+    "nvd_last_modified": "2026-10-14T08:17:02.417",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029343+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-100163",
+    "description": "The Appointment Booking Plugin \u2013 LatePoint | Calendar & Scheduling for WordPress plugin for WordPress is vulnerable to Authentication Bypass in versions up to, and including, 5.7.2 via the OsCustomerHelper::create_wp_user_for_customer() helper reached from the public process_step_customer() booking step. When the 'Use WordPress users as customers' option is enabled, the helper falls back from email_exists() to username_exists( $customer->email ), which matches any WordPress user whose user_login equals the victim customer's email even when that user's user_email is completely different, and links that WordPress user's ID into the victim's LatePoint customer row (only privileged roles are excluded; Subscriber is allowed). This makes it possible for authenticated attackers, with Subscriber-level access and above, to take over another customer's LatePoint account \u2014 accessing their bookings, service, agent, and calendar data, and having the victim customer's email overwritten with the attacker's on next login \u2014 by holding a Subscriber account whose user_login equals the victim's email and submitting an unauthenticated public booking step registration request.",
+    "cvss_score": 7.4,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-287"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.4,
+      "cvss_component": 43.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T08:17:02.257",
+    "nvd_last_modified": "2026-10-14T08:17:02.257",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029337+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-101924",
+    "description": "The NewStatPress plugin for WordPress is vulnerable to Stored Cross-Site Scripting in versions up to, and including, 1.4.5 via the 'Last referrers' meta box on the plugin's Overview admin page. This is due to insufficient output escaping of the visitor-supplied query string that the plugin records in its statistics table: the newstatpress_generate_overview_lastreferrers() function concatenates the stored urlrequested value into a single-quoted href attribute after only FILTER_SANITIZE_URL, which does not encode the apostrophe. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a high-privileged user, such as an administrator, accesses the Overview page and hovers the injected link.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T05:16:41.567",
+    "nvd_last_modified": "2026-10-14T05:16:41.567",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029331+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-97398",
+    "description": "The FV Flowplayer Video Player plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'synopsis' Shortcode Attribute in all versions up to, and including, 7.5.54.7212 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This requires the 'Parse Vimeo and YouTube links' (parse_comments) option to be enabled and the liststyle attribute set to \"season\" for the vulnerable code path to be reached.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:19:05.300",
+    "nvd_last_modified": "2026-10-14T04:19:05.300",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029324+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-96661",
+    "description": "The Gmedia Photo Gallery plugin for WordPress is vulnerable to time-based SQL Injection via the 'gmedia__in' parameter in all versions up to, and including, 1.25.1 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. The unauthenticated mobile app endpoint dispatches the library action without validating the Mobile App feature flag, a nonce, or any WordPress authentication, meaning no account or session of any kind is required to exploit this vulnerability.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:19:01.350",
+    "nvd_last_modified": "2026-10-14T04:19:01.350",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029317+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-95816",
+    "description": "The Smart Forms \u2013 when you need more than just a contact form plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'formString' parameter in all versions up to, and including, 2.6.104 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The nonce check protecting the rednao_smart_forms_save_form_values AJAX handler is only enforced when the smart_forms_block_anonymous_submissions option is enabled, meaning default installations require no authentication or nonce verification whatsoever to submit and store malicious payloads.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:18:56.647",
+    "nvd_last_modified": "2026-10-14T04:18:56.647",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029312+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-95808",
+    "description": "The Form Maker by 10Web \u2013 Mobile-Friendly Drag & Drop Contact Form Builder plugin for WordPress is vulnerable to blind SQL Injection via the 'inputs' parameter in all versions up to, and including, 1.15.48 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. The nonce required to reach the vulnerable handler is emitted to every public page that renders a form, making it trivially obtainable by an unauthenticated attacker from page source.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:18:56.467",
+    "nvd_last_modified": "2026-10-14T04:18:56.467",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029306+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-94377",
+    "description": "The Verified Reviews (Avis V\u00e9rifi\u00e9s) plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'moderation' parameter in all versions up to, and including, 2.4.6 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The authentication bypass is possible because ntav_check_data() uses loose != comparisons for signature verification, allowing a JSON body with boolean true values for idWebsite and sign to pass all checks on any configured installation.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:18:55.297",
+    "nvd_last_modified": "2026-10-14T04:18:55.297",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029300+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-93885",
+    "description": "The Cryptocurrency Donation Box \u2013 Bitcoin & Crypto Donations plugin for WordPress is vulnerable to Stored Cross-Site Scripting via data_object Parameter in all versions up to, and including, 2.2.13 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This is exploitable by unauthenticated attackers because the cdbbc_payment_verify AJAX action is registered under wp_ajax_nopriv_ and its only authentication gate \u2014 a nonce check \u2014 is bypassable, as the cdbbc_donation_box nonce is publicly exposed to anonymous visitors via the wallets_data JavaScript object emitted by the [crypto-donation-box] shortcode.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:18:54.973",
+    "nvd_last_modified": "2026-10-14T04:18:54.973",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029293+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-87855",
+    "description": "The JTL-Connector for WooCommerce plugin for WordPress is vulnerable to Arbitrary File Upload in all versions up to, and including, 2.4.3 via the saveImage() function. This is due to the startSession() function accepting an empty jtlauth parameter as a valid credential, combined with insufficient file type validation in handleImagePush(). This makes it possible for unauthenticated attackers to upload files that may be executable, which makes remote code execution possible.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:18:52.840",
+    "nvd_last_modified": "2026-10-14T04:18:52.840",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029287+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-83592",
+    "description": "The Contact Form DB for Enfold plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Contact Form Field Values in all versions up to, and including, 2.0.2 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The payload is echoed unescaped both inside a title HTML attribute and in the table cell body in admin/ecf_index.php; base64 encoding and serialization of the stored values do not neutralize the malicious content.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:18:38.893",
+    "nvd_last_modified": "2026-10-14T04:18:38.893",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029280+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-78193",
+    "description": "The JTL-Connector for WooCommerce plugin for WordPress is vulnerable to time-based SQL Injection via 'product.push' Identity Endpoint in all versions up to, and including, 2.4.3 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. The injection fires during identity linking, before ProductController::push() executes, meaning exploitation succeeds even if downstream product handling would otherwise reject the request.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:18:36.860",
+    "nvd_last_modified": "2026-10-14T04:18:36.860",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029274+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-77114",
+    "description": "The Document Gallery plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'dg_thumber_webhook' Action Request Body in all versions up to, and including, 5.1.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Exploitation requires that logging be enabled in the plugin's Advanced settings, which is only the default state when WP_DEBUG is true; otherwise an administrator must manually enable it.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:18:36.537",
+    "nvd_last_modified": "2026-10-14T04:18:36.537",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029266+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-104800",
+    "description": "The AGE-GATE plugin for WordPress is vulnerable to Remote Code Execution in all versions up to, and including, 1.0 via the 'width (and height)' parameter parameter. This is due to missing authentication, capability checks, and nonce verification on the standalone admin.php endpoint, combined with unsanitized injection of POST parameters directly into generated PHP source written to an included file. This makes it possible for unauthenticated attackers to execute code on the server. This is possible because admin.php does not load WordPress and carries no ABSPATH guard, making it a fully unauthenticated entry point regardless of the decorative capability arguments registered via the plugin's simulated menu API.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:18:12.563",
+    "nvd_last_modified": "2026-10-14T04:18:12.563",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029260+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-100153",
+    "description": "The NewStatPress plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'QUERY_STRING / REQUEST_URI' parameter in all versions up to, and including, 1.4.5 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Exploitation requires that an administrator has placed the [NewStatPress type=\"Top Pages\"] shortcode on a publicly viewable page, and that the attacker's crafted URL accumulates enough hits to appear in the top-N ranking.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-14T04:18:03.177",
+    "nvd_last_modified": "2026-10-14T04:18:03.177",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-14T09:19:24.029251+00:00"
+  },
+  {
     "cve_id": "CVE-2026-93388",
     "description": "The Printcart Store (PCDesigner / NB Designer) plugin for WooCommerce is vulnerable to unauthenticated arbitrary file upload leading to remote code execution in all versions up to, and including, 2.9.1 The nbdesigner_copy_image_from_url AJAX action is registered for logged-out callers (wp_ajax_nopriv_), and its Google Drive branch rebuilds the destination filename from the raw, attacker-supplied gapi[name] parameter \u2014 bypassing the jpg/jpeg/png/gif allow-list applied on the other branch \u2014 and writes the fetched bytes to a web-accessible directory (wp-content/uploads/nbdesigner/temp/). This makes it possible for unauthenticated attackers to write a .php file to a web-served, PHP-executing location and, by supplying their own Google Drive file and OAuth token as the content source, execute arbitrary code on the server. The required save-design nonce is handed to anonymous callers by the nbd_check_use_logged_in endpoint, so it presents no barrier.",
     "cvss_score": 9.8,
@@ -34,7 +1737,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -87,7 +1790,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -143,7 +1846,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -198,7 +1901,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -254,7 +1957,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -310,7 +2013,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -365,7 +2068,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 53.1,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -421,7 +2124,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -477,7 +2180,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -533,7 +2236,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -588,7 +2291,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -644,7 +2347,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -2462,7 +4165,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:12.340",
-    "nvd_last_modified": "2026-10-13T20:19:36.677",
+    "nvd_last_modified": "2026-10-14T04:19:05.670",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2994,7 +4697,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:10.530",
-    "nvd_last_modified": "2026-10-13T23:19:29.697",
+    "nvd_last_modified": "2026-10-14T04:19:04.617",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -4323,7 +6026,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:38.557",
-    "nvd_last_modified": "2026-10-13T20:19:06.187",
+    "nvd_last_modified": "2026-10-14T04:18:54.100",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -4484,7 +6187,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:35.710",
-    "nvd_last_modified": "2026-10-13T21:19:51.363",
+    "nvd_last_modified": "2026-10-14T04:18:53.953",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5122,7 +6825,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:50.007",
-    "nvd_last_modified": "2026-10-13T21:18:18.320",
+    "nvd_last_modified": "2026-10-14T04:18:35.820",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5175,7 +6878,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:48.817",
-    "nvd_last_modified": "2026-10-13T21:18:17.230",
+    "nvd_last_modified": "2026-10-14T04:18:35.673",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5919,7 +7622,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:40.990",
-    "nvd_last_modified": "2026-10-13T21:18:11.363",
+    "nvd_last_modified": "2026-10-14T04:18:34.217",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -8150,7 +9853,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:05.980",
-    "nvd_last_modified": "2026-10-13T21:19:22.663",
+    "nvd_last_modified": "2026-10-14T04:18:47.863",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -8734,7 +10437,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:57.447",
-    "nvd_last_modified": "2026-10-13T21:18:24.577",
+    "nvd_last_modified": "2026-10-14T04:18:37.680",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9266,7 +10969,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:02.160",
-    "nvd_last_modified": "2026-10-13T22:17:47.440",
+    "nvd_last_modified": "2026-10-14T04:18:26.617",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9478,7 +11181,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:57.433",
-    "nvd_last_modified": "2026-10-13T22:17:27.453",
+    "nvd_last_modified": "2026-10-14T04:18:12.957",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
