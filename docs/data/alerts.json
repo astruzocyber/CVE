@@ -1,5 +1,528 @@
 [
   {
+    "cve_id": "CVE-2026-105866",
+    "description": "Payload is a free and open source headless content management system. In versions before 3.90.0 and canary versions before 4.0.0-canary.34, an unauthenticated attacker who knows an account email address or username can abuse the account lockout mechanism of a local-authentication collection to prevent that account from signing in. This issue is fixed in versions 3.90.0 and 4.0.0-canary.34.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-307",
+      "CWE-645"
+    ],
+    "epss_score": 0.00351,
+    "epss_percentile": 0.27091,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00351,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-105866",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "e10b60228b92b680663110ea2af431643bfc6126"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-10-06T17:17:22.990",
+    "nvd_last_modified": "2026-10-15T00:08:37.490",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/1c46204a73a0a9f988a80c52690eee5a4ada3cf1",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-v5gf-vpjc-pc7w",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T03:19:30.986477+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-105852",
+    "description": "Payload is a free and open source headless content management system. In versions before 3.90.0 and canary versions before 4.0.0-canary.34, querying a readable collection with a relationship to another collection can expose information about related documents protected by access.read where constraints. This issue is fixed in versions 3.90.0 and 4.0.0-canary.34.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": 0.00276,
+    "epss_percentile": 0.18697,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00276,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-105852",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "e10b60228b92b680663110ea2af431643bfc6126"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-10-06T17:17:20.990",
+    "nvd_last_modified": "2026-10-15T00:12:33.800",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/94059cf4bc6170ce88453015c0c6551329ae3982",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-7c34-32v3-j575",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T03:19:30.986334+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-105848",
+    "description": "Payload is a free and open source headless content management system. In @payloadcms/plugin-stripe versions before 3.90.0 and canary versions before 4.0.0-canary.34, an authenticated user who can reach the enabled optional Stripe REST proxy can perform unintended Stripe operations. This issue is fixed in versions 3.90.0 and 4.0.0-canary.34.",
+    "cvss_score": 9.6,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-749",
+      "CWE-862"
+    ],
+    "epss_score": 0.00252,
+    "epss_percentile": 0.155,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 33.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.6,
+      "cvss_component": 33.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00252,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-105848",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "e10b60228b92b680663110ea2af431643bfc6126"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "content management system"
+    ],
+    "source": "nvd",
+    "published": "2026-10-06T17:17:20.280",
+    "nvd_last_modified": "2026-10-15T00:13:23.133",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/2f94a4205e5ba3ec0e91c92ed54f24f429826dd0",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-r9v2-gg2j-22q5",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T03:19:30.986272+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-9230",
+    "description": "Issue summary: An application trying to decrypt CMS messages encrypted using\npassword based encryption can trigger an out-of-bounds read and write.\n\nImpact summary: This out-of-bounds read may trigger a crash which leads to\nDenial of Service for an application. The out-of-bounds write can cause\na memory corruption which can have various consequences including\na Denial of Service or Execution of attacker-supplied code.\n\nAlthough the consequences of a successful exploit of this vulnerability\ncould be severe, the probability that the attacker would be able to\nperform it is low. Besides, password based (PWRI) encryption support in CMS\nmessages is very rarely used. For that reason the issue was assessed as\nModerate severity according to our Security Policy.\n\nThe FIPS modules in 3.5, 3.4, 3.3, 3.2, 3.1 and 3.0 are not affected by this\nissue, as the CMS implementation is outside the OpenSSL FIPS module\nboundary.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-125",
+      "CWE-787"
+    ],
+    "epss_score": 0.01554,
+    "epss_percentile": 0.74655,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.01554,
+      "epss_component": 0.6,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2025-9230",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "5965ea5dd6960f36d8b7f74f8eac67a8eb8f2b45"
+      }
+    ],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-09-30T14:15:41.050",
+    "nvd_last_modified": "2026-10-15T02:18:27.243",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T03:19:30.986195+00:00"
+  },
+  {
+    "cve_id": "CVE-2024-5535",
+    "description": "Issue summary: Calling the OpenSSL API function SSL_select_next_proto with an\nempty supported client protocols buffer may cause a crash or memory contents to\nbe sent to the peer.\n\nImpact summary: A buffer overread can have a range of potential consequences\nsuch as unexpected application beahviour or a crash. In particular this issue\ncould result in up to 255 bytes of arbitrary private data from memory being sent\nto the peer leading to a loss of confidentiality. However, only applications\nthat directly call the SSL_select_next_proto function with a 0 length list of\nsupported client protocols are affected by this issue. This would normally never\nbe a valid scenario and is typically not under attacker control but may occur by\naccident in the case of a configuration or programming error in the calling\napplication.\n\nThe OpenSSL API function SSL_select_next_proto is typically used by TLS\napplications that support ALPN (Application Layer Protocol Negotiation) or NPN\n(Next Protocol Negotiation). NPN is older, was never standardised and\nis deprecated in favour of ALPN. We believe that ALPN is significantly more\nwidely deployed than NPN. The SSL_select_next_proto function accepts a list of\nprotocols from the server and a list of protocols from the client and returns\nthe first protocol that appears in the server list that also appears in the\nclient list. In the case of no overlap between the two lists it returns the\nfirst item in the client list. In either case it will signal whether an overlap\nbetween the two lists was found. In the case where SSL_select_next_proto is\ncalled with a zero length client list it fails to notice this condition and\nreturns the memory immediately following the client list pointer (and reports\nthat there was no overlap in the lists).\n\nThis function is typically called from a server side application callback for\nALPN or a client side application callback for NPN. In the case of ALPN the list\nof protocols supplied by the client is guaranteed by libssl to never be zero in\nlength. The list of server protocols comes from the application and should never\nnormally be expected to be of zero length. In this case if the\nSSL_select_next_proto function has been called as expected (with the list\nsupplied by the client passed in the client/client_len parameters), then the\napplication will not be vulnerable to this issue. If the application has\naccidentally been configured with a zero length server list, and has\naccidentally passed that zero length server list in the client/client_len\nparameters, and has additionally failed to correctly handle a \"no overlap\"\nresponse (which would normally result in a handshake failure in ALPN) then it\nwill be vulnerable to this problem.\n\nIn the case of NPN, the protocol permits the client to opportunistically select\na protocol when there is no overlap. OpenSSL returns the first client protocol\nin the no overlap case in support of this. The list of client protocols comes\nfrom the application and should never normally be expected to be of zero length.\nHowever if the SSL_select_next_proto function is accidentally called with a\nclient_len of 0 then an invalid memory pointer will be returned instead. If the\napplication uses this output as the opportunistic protocol then the loss of\nconfidentiality will occur.\n\nThis issue has been assessed as Low severity because applications are most\nlikely to be vulnerable if they are using NPN instead of ALPN - but NPN is not\nwidely used. It also requires an application configuration or programming error.\nFinally, this issue would not typically be under attacker control making active\nexploitation unlikely.\n\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n\nDue to the low severity of this issue we are not issuing new releases of\nOpenSSL at this time. The fix will be included in the next releases when they\nbecome available.",
+    "cvss_score": 9.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-125"
+    ],
+    "epss_score": 0.05582,
+    "epss_percentile": 0.92763,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.1,
+      "cvss_component": 31.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.05582,
+      "epss_component": 2.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2024-5535",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "fb7fab9fa6f4869eaa8fbb97e0d593159f03ffe4"
+      }
+    ],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2024-06-27T11:15:24.447",
+    "nvd_last_modified": "2026-10-15T01:19:17.867",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T03:19:30.986185+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-71316",
+    "description": "SQLite 'sqldiff.exe' does not securely handle the way the Microsoft Windows C runtime converts Unicode characters to ANSI codepages.  An attacker could use the '-L' option to load an arbitrary DLL with a crafted command line argument string that results in command line file arguments being misinterpreted as command line options. Fixed on or around 2025-12-26.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-176"
+    ],
+    "epss_score": 0.00384,
+    "epss_percentile": 0.3078,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00384,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/windows"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-06-04T19:16:27.170",
+    "nvd_last_modified": "2026-10-15T02:18:25.980",
+    "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T03:19:30.980185+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-27909",
+    "description": "Use after free in Microsoft Windows Search Component allows an authorized attacker to elevate privileges locally.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00333,
+    "epss_percentile": 0.24966,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00333,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/windows"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-04-14T18:16:57.613",
+    "nvd_last_modified": "2026-10-14T23:17:37.523",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_1607",
+        "fixed": "10.0.14393.9060",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_1809",
+        "fixed": "10.0.17763.8644",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_21h2",
+        "fixed": "10.0.19044.7184",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_22h2",
+        "fixed": "10.0.19045.7184",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_11_23h2",
+        "fixed": "10.0.22631.6936",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-27909",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T03:19:30.980169+00:00"
+  },
+  {
     "cve_id": "CVE-2026-55572",
     "description": "e107 is a content management system (CMS). Prior to 2.3.7, the bundled alt_auth plugin's otherdb and e107db authentication backends interpolate the submitted login username directly into SQL in e107_plugins/alt_auth/otherdb_auth.php and e107_plugins/alt_auth/e107db_auth.php. The login() methods execute those strings with PDO::query() before effective sanitization, so an unauthenticated user can inject SQL when alt_auth is installed and either backend is configured with a live external database connection. The injection can expose or modify data available to the configured database account, and query failures can additionally disclose the generated query through the debug-message path. This issue is fixed in version 2.3.7.",
     "cvss_score": 10.0,
@@ -34,7 +557,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 58.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -87,7 +610,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 41.4,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -140,16 +663,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2023-4807",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "e04bd3433fd84e1861bf258ea37928d9845e6a86"
-      }
-    ],
+    "risk_score_prev": 27.6,
+    "epss_score_prev": 0.00843,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -243,16 +760,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2023-0464",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "e818b74be2170fbe957a07b0da4401c2b694b3b8"
-      }
-    ],
+    "risk_score_prev": 27.7,
+    "epss_score_prev": 0.03658,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -352,16 +863,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2023-0286",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "e818b74be2170fbe957a07b0da4401c2b694b3b8"
-      }
-    ],
+    "risk_score_prev": 50.7,
+    "epss_score_prev": 0.61979,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -470,16 +975,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2023-0215",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "e818b74be2170fbe957a07b0da4401c2b694b3b8"
-      }
-    ],
+    "risk_score_prev": 28.0,
+    "epss_score_prev": 0.04494,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "openssl/openssl"
     ],
@@ -583,7 +1082,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -636,7 +1135,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 51.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -689,7 +1188,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -744,8 +1243,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.3,
+    "epss_score_prev": 0.00519,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -797,16 +1296,10 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2025-66844",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "35f5dd74fe2d67062bd60f69ab0d4819780d05b5"
-      }
-    ],
+    "risk_score_prev": 31.9,
+    "epss_score_prev": 0.00288,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [
       "php/php"
     ],
@@ -864,9 +1357,9 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2025-65474",
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00541,
+    "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
       "php/php"
@@ -924,9 +1417,9 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2025-65471",
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00535,
+    "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
       "php/php"
@@ -984,7 +1477,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 51.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -1039,8 +1532,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.4,
+    "epss_score_prev": 0.00405,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1094,8 +1587,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.8,
+    "epss_score_prev": 0.00509,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1149,8 +1642,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00302,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1204,8 +1697,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00449,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1259,8 +1752,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00477,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1314,8 +1807,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.7,
+    "epss_score_prev": 0.09667,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1384,8 +1877,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.5,
+    "epss_score_prev": 0.10573,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1451,8 +1944,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.4,
+    "epss_score_prev": 0.20183,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1532,7 +2025,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 51.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -1585,8 +2078,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00466,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1645,8 +2138,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00466,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1705,8 +2198,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00571,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1773,8 +2266,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.2,
+    "epss_score_prev": 0.01021,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1840,8 +2333,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00521,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1907,8 +2400,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00614,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1974,8 +2467,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00521,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2042,8 +2535,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00521,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2109,8 +2602,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.6,
+    "epss_score_prev": 0.00425,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2169,8 +2662,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00558,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2236,8 +2729,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.6,
+    "epss_score_prev": 0.00658,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2291,8 +2784,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 41.9,
+    "epss_score_prev": 0.23203,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2339,8 +2832,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 38.0,
+    "epss_score_prev": 0.13601,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2387,8 +2880,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 43.3,
+    "epss_score_prev": 0.26857,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2435,8 +2928,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 43.3,
+    "epss_score_prev": 0.26857,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2483,8 +2976,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 50.0,
+    "epss_score_prev": 0.43407,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2531,8 +3024,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 38.0,
+    "epss_score_prev": 0.13508,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2584,8 +3077,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00819,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2676,8 +3169,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00298,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2761,8 +3254,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 40.1,
+    "epss_score_prev": 0.18745,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5011,7 +5504,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 33.6,
+    "risk_score_prev": 30.1,
     "epss_score_prev": 0.00118,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -19647,7 +20140,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-12T17:17:31.517",
-    "nvd_last_modified": "2026-10-12T17:17:31.517",
+    "nvd_last_modified": "2026-10-15T03:17:09.860",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -51518,10 +52011,42 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:23.957",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:07:39.960",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.87.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/2a69863deb0e3c87e36c1b3b17ab2d5b02fcb941",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/commit/8f77dffa9552885ec2710768cfee15b57e389935",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.87.0",
+        "tags": [
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-4ww4-68q3-h7g5",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903771+00:00"
@@ -51529,13 +52054,13 @@
   {
     "cve_id": "CVE-2026-105868",
     "description": "Payload is a free and open source headless content management system. In versions before 3.90.0 and canary versions before 4.0.0-canary.34, local upload configurations that accept XML files can store an XML file and stylesheet that execute JavaScript in the Payload origin when a logged-in user opens the file. This issue is fixed in versions 3.90.0 and 4.0.0-canary.34.",
-    "cvss_score": 8.6,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
-      "privileges_required": "LOW",
-      "user_interaction": "PASSIVE"
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
     },
     "cwe_ids": [
       "CWE-434"
@@ -51548,10 +52073,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 30.2,
+    "risk_score": 24.9,
     "risk_score_breakdown": {
-      "cvss_raw": 8.6,
-      "cvss_component": 30.1,
+      "cvss_raw": 7.1,
+      "cvss_component": 24.8,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00259,
       "epss_component": 0.1,
@@ -51571,10 +52096,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:23.283",
-    "nvd_last_modified": "2026-10-09T02:16:56.583",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:13:30.413",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/a8c3a8e8e2680c96ec4f66f5b3854c5df6c35adf",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-9qpg-3cf8-w33x",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903760+00:00"
@@ -51678,10 +52230,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:22.843",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:08:48.063",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/6b74418f628fa633c2f297e5919a9f91b383dc11",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-p223-2wr2-j562",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903747+00:00"
@@ -51689,8 +52268,8 @@
   {
     "cve_id": "CVE-2026-105863",
     "description": "Payload is a free and open source headless content management system. In versions after 3.0.0 and before 3.90.0, a custom field option that maps a field to a reserved authentication claim name can place unintended values in the authentication token issued at login. This issue is fixed in version 3.90.0.",
-    "cvss_score": 9.2,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 9.4,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
@@ -51709,10 +52288,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 32.4,
+    "risk_score": 33.1,
     "risk_score_breakdown": {
-      "cvss_raw": 9.2,
-      "cvss_component": 32.2,
+      "cvss_raw": 9.4,
+      "cvss_component": 32.9,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00387,
       "epss_component": 0.2,
@@ -51732,10 +52311,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:22.570",
-    "nvd_last_modified": "2026-10-09T02:16:56.387",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:09:08.310",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/56cd5cd050a57daebf33159e41e5ff9d4a45239c",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-66wr-7vmr-p5jq",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903738+00:00"
@@ -51786,10 +52392,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:22.423",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:09:17.103",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/a8c3a8e8e2680c96ec4f66f5b3854c5df6c35adf",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-2pwp-2369-8fg3",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903731+00:00"
@@ -51797,13 +52430,13 @@
   {
     "cve_id": "CVE-2026-105861",
     "description": "Payload is a free and open source headless content management system. In versions after 3.0.0 and before 3.90.0, authenticated external URL-based upload retrieval can forward authentication data to a redirected destination that was not verified as trusted, potentially exposing a valid session to an unintended recipient. This issue is fixed in version 3.90.0.",
-    "cvss_score": 7.2,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
-      "privileges_required": "LOW",
-      "user_interaction": "ACTIVE"
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
     },
     "cwe_ids": [
       "CWE-200",
@@ -51817,10 +52450,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 25.3,
+    "risk_score": 28.8,
     "risk_score_breakdown": {
-      "cvss_raw": 7.2,
-      "cvss_component": 25.2,
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00185,
       "epss_component": 0.1,
@@ -51840,10 +52473,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:22.277",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:09:43.197",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/ba5cf6ae20d27a2c15106cb37466419031f86e6d",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-pj5h-5q6c-3pfx",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903725+00:00"
@@ -51852,7 +52512,7 @@
     "cve_id": "CVE-2026-105860",
     "description": "Payload is a free and open source headless content management system. In @payloadcms/plugin-multi-tenant versions before 3.90.0 and canary versions before 4.0.0-canary.34, the default tenant array field access allows an authenticated user to assign the user's own account to other tenants. Deployments that replace the default behavior with secured tenants arrayFieldAccess.create and tenants arrayFieldAccess.update functions are not affected by this behavior. This issue is fixed in versions 3.90.0 and 4.0.0-canary.34.",
     "cvss_score": 7.1,
-    "cvss_version": "CVSS V40",
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
@@ -51893,10 +52553,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:22.133",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:10:21.827",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/19b58692d20d3947f31124bf7a88ac14a5ebf02e",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-p96c-xwx8-3cqj",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903718+00:00"
@@ -51947,10 +52634,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:21.987",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:10:48.717",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/36fa9af73dd04fa59f4b4a06d11454538c4c1409",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-f7hx-52q9-hcrf",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903711+00:00"
@@ -52001,10 +52715,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:21.847",
-    "nvd_last_modified": "2026-10-09T02:16:56.207",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:11:17.267",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/e947fc4ba4a434f276d043386e501b1d14eda679",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-97rh-rhh2-7vjv",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903703+00:00"
@@ -52055,10 +52796,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:21.710",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:11:25.630",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/333b82b9f3e685fed6826c2e3270da79df8336c6",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-r488-j9vj-wx3q",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903696+00:00"
@@ -52066,8 +52834,8 @@
   {
     "cve_id": "CVE-2026-105856",
     "description": "Payload is a free and open source headless content management system. Prior to 3.90.0 and 4.0.0-canary.34, an attacker with read and create or update access to a collection containing a json field or a blocks field with blocksAsJSON enabled can inject SQL through a crafted field path and operators. Collections without those fields are not affected, and richText fields are not affected. The SQLite packages are fixed in versions 3.90.0 and 4.0.0-canary.34, and the Postgres packages are fixed in version 3.73.0.",
-    "cvss_score": 8.6,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 8.3,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
@@ -52085,10 +52853,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 30.2,
+    "risk_score": 29.2,
     "risk_score_breakdown": {
-      "cvss_raw": 8.6,
-      "cvss_component": 30.1,
+      "cvss_raw": 8.3,
+      "cvss_component": 29.1,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00269,
       "epss_component": 0.1,
@@ -52108,10 +52876,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:21.570",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:11:47.513",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/03b78c7e0901d19c67f07bdf6396a276010adbcc",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-pj7x-6wpf-pgvp",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903687+00:00"
@@ -52119,8 +52914,8 @@
   {
     "cve_id": "CVE-2026-105855",
     "description": "Payload is a free and open source headless content management system. In versions before 3.90.0 and canary versions before 4.0.0-canary.34, the server fails to enforce a field-level access.update restriction on the password field of an authentication collection. This issue is fixed in versions 3.90.0 and 4.0.0-canary.34.",
-    "cvss_score": 7.6,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
@@ -52138,10 +52933,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 26.7,
+    "risk_score": 24.9,
     "risk_score_breakdown": {
-      "cvss_raw": 7.6,
-      "cvss_component": 26.6,
+      "cvss_raw": 7.1,
+      "cvss_component": 24.8,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00326,
       "epss_component": 0.1,
@@ -52161,10 +52956,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:21.430",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:11:56.080",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/9de9e7911e29d60870a1d5480412524c63d6411e",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-fx49-4h83-wjv9",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903681+00:00"
@@ -52172,8 +52994,8 @@
   {
     "cve_id": "CVE-2026-105854",
     "description": "Payload is a free and open source headless content management system. In versions from 3.0.0 before 3.90.0 and canary versions before 4.0.0-canary.34, a malformed multipart request body can cause multipart Content-Type processing to take an extremely long time, resulting in uncontrolled resource consumption. This issue is fixed in versions 3.90.0 and 4.0.0-canary.34.",
-    "cvss_score": 8.7,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
@@ -52192,10 +53014,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 30.5,
+    "risk_score": 26.3,
     "risk_score_breakdown": {
-      "cvss_raw": 8.7,
-      "cvss_component": 30.4,
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00308,
       "epss_component": 0.1,
@@ -52215,10 +53037,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:21.290",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:12:03.407",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/0084bd51fb7742b26a88431bb84cb1696857e6dc",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-2g7p-5934-q4w7",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903674+00:00"
@@ -52279,12 +53128,12 @@
   {
     "cve_id": "CVE-2026-105851",
     "description": "Payload is a free and open source headless content management system. In versions from 3.0.0 before 3.90.0 and canary versions before 4.0.0-canary.34, the duplicate operation copies values from a source document even when a field is hidden or its access.read or access.create rule rejects that value for the caller. The disableDuplicate setting does not prevent this access-control bypass. This issue is fixed in versions 3.90.0 and 4.0.0-canary.34.",
-    "cvss_score": 9.3,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
-      "privileges_required": "NONE",
+      "privileges_required": "LOW",
       "user_interaction": "NONE"
     },
     "cwe_ids": [
@@ -52299,10 +53148,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 32.7,
+    "risk_score": 28.4,
     "risk_score_breakdown": {
-      "cvss_raw": 9.3,
-      "cvss_component": 32.6,
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.0031,
       "epss_component": 0.1,
@@ -52322,10 +53171,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:20.843",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:12:41.997",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/099ef12e2682f076aa8e8d0ccb790536b4e1027f",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-vc4h-q48j-5hcx",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903658+00:00"
@@ -52333,8 +53209,8 @@
   {
     "cve_id": "CVE-2026-105850",
     "description": "Payload is a free and open source headless content management system. In @payloadcms/plugin-ecommerce versions before 3.90.0 and canary versions before 4.0.0-canary.34, use of the Stripe payment adapter can allow a Stripe order confirmation to be processed more than once under certain conditions. This issue is fixed in versions 3.90.0 and 4.0.0-canary.34.",
-    "cvss_score": 8.8,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
@@ -52352,10 +53228,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 30.9,
+    "risk_score": 28.8,
     "risk_score_breakdown": {
-      "cvss_raw": 8.8,
-      "cvss_component": 30.8,
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00308,
       "epss_component": 0.1,
@@ -52375,10 +53251,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:20.693",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:12:52.177",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/6c0c4dc9b4ce1ac87b03fbb5dd7356b8559cbc4e",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-8r29-2mp2-pmrw",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903652+00:00"
@@ -52386,8 +53289,8 @@
   {
     "cve_id": "CVE-2026-105849",
     "description": "Payload is a free and open source headless content management system. In versions from 3.0.0 before 3.90.0 and canary versions before 4.0.0-canary.34, users with ordinary read access to other authentication documents in a collection with useAPIKey enabled can obtain active API keys and exercise the target accounts' permissions until those keys are rotated or disabled. This issue is fixed in versions 3.90.0 and 4.0.0-canary.34.",
-    "cvss_score": 7.7,
-    "cvss_version": "CVSS V40",
+    "cvss_score": 8.3,
+    "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
@@ -52406,10 +53309,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 27.0,
+    "risk_score": 29.2,
     "risk_score_breakdown": {
-      "cvss_raw": 7.7,
-      "cvss_component": 26.9,
+      "cvss_raw": 8.3,
+      "cvss_component": 29.1,
       "cvss_weight": "35.0% of (CVSS/10)",
       "epss_raw": 0.00309,
       "epss_component": 0.1,
@@ -52429,10 +53332,37 @@
     ],
     "source": "nvd",
     "published": "2026-10-06T17:17:20.470",
-    "nvd_last_modified": "2026-10-06T20:03:40.690",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-15T00:13:10.917",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "payloadcms",
+        "product": "payload",
+        "fixed": "3.90.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/payloadcms/payload/commit/880d2e900be22cd66a9e939f2b3e702fa413180f",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/releases/tag/v3.90.0",
+        "tags": [
+          "Patch",
+          "Release Notes"
+        ]
+      },
+      {
+        "url": "https://github.com/payloadcms/payload/security/advisories/GHSA-238x-w2j9-gwwr",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-06T20:48:19.903644+00:00"
@@ -118346,7 +119276,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-08T17:18:37.883",
-    "nvd_last_modified": "2026-09-10T04:18:18.120",
+    "nvd_last_modified": "2026-10-15T02:20:16.757",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -125300,7 +126230,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-01-27T16:16:14.257",
-    "nvd_last_modified": "2026-09-07T13:17:27.740",
+    "nvd_last_modified": "2026-10-15T02:17:23.440",
     "vuln_status": "Modified",
     "nvd_fix_versions": [
       {
