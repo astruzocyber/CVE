@@ -1,5 +1,2180 @@
 [
   {
+    "cve_id": "CVE-2026-100409",
+    "description": "OpenNext Cloudflare is an open Next.js adapter for Cloudflare. From 0.3.0 until 1.20.2, applications that enable enableCacheInterception, rely on middleware for access control, and have a matching cached protected route process encoded pathnames inconsistently between middleware matching and cache lookup. An unauthenticated attacker can use a percent-encoded pathname that does not match authorization middleware but decodes to the cache key of a protected route, causing cached content to be returned without authorization. Malformed encodings can also be partially decoded, allowing cache lookup to continue with a pathname that middleware did not evaluate consistently. This issue is fixed in version 1.20.2.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-177",
+      "CWE-180"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "cloudflare/cloudflare"
+    ],
+    "matched_keywords": [
+      "cloudflare"
+    ],
+    "source": "nvd",
+    "published": "2026-10-15T17:17:07.923",
+    "nvd_last_modified": "2026-10-15T18:17:21.500",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.646928+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-104827",
+    "description": "react/http is an event-driven, streaming HTTP client and server implementation for ReactPHP. From 1.0.0 until 1.11.1, React\\Http\\Browser uses ClientRequestStream::handleData() to append response-header bytes to an internal buffer without enforcing a size limit. A remote server can send a valid status line and partial header, withhold the \\r\\n\\r\\n or \\n\\n header terminator, and continue streaming data so the buffer grows for the life of the connection. Applications that fetch attacker-controlled or attacker-influenced URLs, including URLs reached through redirects, can exhaust PHP memory_limit and crash the event-loop or worker process. Confidentiality and integrity are unaffected. This issue is fixed in version 1.11.1.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-770"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T19:17:14.933",
+    "nvd_last_modified": "2026-10-15T19:17:14.933",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.646384+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-107248",
+    "description": "Thelia 3.0.0's back-office Email/Messages feature contains a server\u2011side template injection (SSTI) flaw that allows any authenticated user with the \u201cMessages\u201d permission to supply unsandboxed Twig templates, which are then compiled and executed as raw code. By modifying Message content, an attacker can execute arbitrary PHP functions, read sensitive files, and potentially write to the filesystem, leading to full compromise of the application and underlying host. This vulnerability has been patched in thelia/twig-engine-module 1.0.9.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-94",
+      "CWE-1336"
+    ],
+    "epss_score": 0.00195,
+    "epss_percentile": 0.08527,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00195,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T16:17:03.203",
+    "nvd_last_modified": "2026-10-15T18:17:24.270",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.646241+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-103535",
+    "description": "Thelia v2.6.1 contains path traversal and PHP code injection vulnerabilities in its translation editor that can be chained to achieve remote code execution. The `item_name` parameter, used to build the translation file's write path, does not sanitize directory traversal sequences such as `../`. This enables an authenticated user with `UPDATE`-level permissions on `admin.configuration.language` to write files outside the expected `templates/` directory, including to web\u2011accessible paths. Separately, the translation\u2011writing logic does not escape `\\` in user\u2011supplied values, allowing inputs to break out of the PHP string literal and inject executable code into the translation file. Chained together, these flaws allow a malicious PHP file to be written to a web-accessible path and executed with the web\u2011server\u2019s privileges.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-94",
+      "CWE-434"
+    ],
+    "epss_score": 0.00474,
+    "epss_percentile": 0.39472,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00474,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-12T15:17:06.560",
+    "nvd_last_modified": "2026-10-15T18:17:22.020",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.646233+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-69691",
+    "description": "Netgate pfSense CE 2.8.0 allows code execution in the XMLRPC API via pfsense.exec_php. NOTE: the Supplier disputes this because the API call is only available to admins and they are intentionally allowed to execute PHP code.",
+    "cvss_score": 9.9,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-284",
+      "CWE-915"
+    ],
+    "epss_score": 0.00677,
+    "epss_percentile": 0.51265,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.9,
+      "cvss_component": 34.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00677,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-05-08T07:16:28.880",
+    "nvd_last_modified": "2026-10-15T19:10:00.173",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.646168+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-69690",
+    "description": "Netgate pfSense CE 2.7.2 allows code execution by using the module installer with a backup file with a serialized PHP object containing the post_reboot_commands property. NOTE: the Supplier disputes this because this installer is only available to admins and they are intentionally allowed to execute PHP code.",
+    "cvss_score": 9.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-502",
+      "CWE-915"
+    ],
+    "epss_score": 0.0081,
+    "epss_percentile": 0.56067,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.1,
+      "cvss_component": 31.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0081,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-05-08T07:16:28.750",
+    "nvd_last_modified": "2026-10-15T19:10:00.173",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.646161+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13604",
+    "description": "The Login Security, FireWall, Malware removal by CleanTalk plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the page URL in all versions up to, and including, 2.168 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.00308,
+    "epss_percentile": 0.21986,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00308,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-09T16:17:35.473",
+    "nvd_last_modified": "2026-10-15T21:10:00.327",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645486+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13065",
+    "description": "The Starter Templates plugin for WordPress is vulnerable to arbitrary file upload in all versions up to, and including, 4.4.41. This is due to insufficient file type validation detecting WXR files, allowing double extension files to bypass sanitization while being accepted as a valid WXR file. This makes it possible for authenticated attackers, with author-level access and above, to upload arbitrary files on the affected site's server which may make remote code execution possible.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.13514,
+    "epss_percentile": 0.96405,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 36.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.13514,
+      "epss_component": 5.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-06T10:16:05.090",
+    "nvd_last_modified": "2026-10-15T20:10:00.197",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645478+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-12966",
+    "description": "The All-in-One Video Gallery plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the resolve_import_directory() function in versions 4.5.4 to 4.5.7. This makes it possible for authenticated attackers, with Author-level access and above, to upload arbitrary files on the affected site's server which may make remote code execution possible.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00519,
+    "epss_percentile": 0.42798,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00519,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-06T10:16:03.797",
+    "nvd_last_modified": "2026-10-15T20:10:00.197",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645471+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-12499",
+    "description": "The Rich Shortcodes for Google Reviews plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the contents of a Google Review in all versions up to, and including, 6.8 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. NOTE: This vulnerability was partially patched in version 6.6.2.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.00383,
+    "epss_percentile": 0.30741,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00383,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-06T08:15:47.787",
+    "nvd_last_modified": "2026-10-15T20:10:00.197",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645464+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-13377",
+    "description": "The 10Web Booster \u2013 Website speed optimization, Cache & Page Speed optimizer plugin for WordPress is vulnerable to arbitrary folder deletion due to insufficient file path validation in the get_cache_dir_for_page_from_url() function in all versions up to, and including, 2.32.7. This makes it possible for authenticated attackers, with Subscriber-level access and above, to delete arbitrary folders on the server, which can easily lead to a loss of data or a denial of service condition.",
+    "cvss_score": 9.6,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": 0.00505,
+    "epss_percentile": 0.41728,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 33.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.6,
+      "cvss_component": 33.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00505,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-06T07:15:46.830",
+    "nvd_last_modified": "2026-10-15T20:10:00.197",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "10web",
+        "product": "10web_booster",
+        "fixed": "2.32.11",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://plugins.trac.wordpress.org/changeset/3402434/tenweb-speed-optimizer",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645457+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-12673",
+    "description": "The Flex QR Code Generator plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the update_qr_code() function in all versions up to, and including, 1.2.7. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected site's server which may make remote code execution possible.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00734,
+    "epss_percentile": 0.53434,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00734,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-06T06:15:50.233",
+    "nvd_last_modified": "2026-10-15T20:10:00.197",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645448+00:00"
+  },
+  {
+    "cve_id": "CVE-2025-12510",
+    "description": "The Widgets for Google Reviews plugin for WordPress is vulnerable to Stored Cross-Site Scripting in all versions up to, and including, 13.2.4 due to insufficient input sanitization and output escaping on Google Reviews data imported by the plugin. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that will execute in the admin panel (and potentially on the frontend) whenever a user accesses imported reviews, granted they can add a malicious review to a Google Place that is connected to the vulnerable site.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": 0.00396,
+    "epss_percentile": 0.32213,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 25.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00396,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2025-12-06T04:15:47.183",
+    "nvd_last_modified": "2026-10-15T21:10:00.327",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645441+00:00"
+  },
+  {
+    "cve_id": "CVE-2018-8014",
+    "description": "The defaults settings for the CORS filter provided in Apache Tomcat 9.0.0.M1 to 9.0.8, 8.5.0 to 8.5.31, 8.0.0.RC1 to 8.0.52, 7.0.41 to 7.0.88 are insecure and enable 'supportsCredentials' for all origins. It is expected that users of the CORS filter will have configured it appropriately for their environment rather than using it in the default configuration. Therefore, it is expected that most users will not be impacted by this issue.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V30",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-1188"
+    ],
+    "epss_score": 0.21313,
+    "epss_percentile": 0.9757,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.21313,
+      "epss_component": 8.5,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2018-8014",
+    "osv_fixed_versions": [],
+    "affected": [
+      "apache/tomcat"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2018-05-16T16:29:00.207",
+    "nvd_last_modified": "2026-10-15T18:17:20.623",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "apache",
+        "product": "tomcat",
+        "fixed": "7.0.88",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "apache",
+        "product": "tomcat",
+        "fixed": "8.0.52",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "apache",
+        "product": "tomcat",
+        "fixed": "8.5.31",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "apache",
+        "product": "tomcat",
+        "fixed": "9.0.8",
+        "fix_type": "up_to_and_including"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "http://tomcat.apache.org/security-7.html",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      },
+      {
+        "url": "http://tomcat.apache.org/security-8.html",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      },
+      {
+        "url": "http://tomcat.apache.org/security-9.html",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      },
+      {
+        "url": "http://www.oracle.com/technetwork/security-advisory/cpuoct2018-4428296.html",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://security.netapp.com/advisory/ntap-20181018-0002/",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645336+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108452",
+    "description": "Improper limitation of a pathname to a restricted directory ('path traversal') in Microsoft Office SharePoint allows an authorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:10.907",
+    "nvd_last_modified": "2026-10-15T21:17:10.907",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645238+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108451",
+    "description": "Numeric truncation error in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122",
+      "CWE-197"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:10.790",
+    "nvd_last_modified": "2026-10-15T21:17:10.790",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645232+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108450",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122",
+      "CWE-197"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:10.673",
+    "nvd_last_modified": "2026-10-15T21:17:10.673",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645226+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108449",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:10.553",
+    "nvd_last_modified": "2026-10-15T21:17:10.553",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645220+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108448",
+    "description": "Heap-based buffer overflow in Microsoft Office Outlook allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:10.440",
+    "nvd_last_modified": "2026-10-15T21:17:10.440",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645215+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108447",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:10.317",
+    "nvd_last_modified": "2026-10-15T21:17:10.317",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645205+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108446",
+    "description": "Use after free in Microsoft Office Excel allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:10.200",
+    "nvd_last_modified": "2026-10-15T21:17:10.200",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645199+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108445",
+    "description": "Stack-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-121"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:10.077",
+    "nvd_last_modified": "2026-10-15T21:17:10.077",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645192+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108444",
+    "description": "Microsoft Office Remote Code Execution Vulnerability",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:09.957",
+    "nvd_last_modified": "2026-10-15T21:17:09.957",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645187+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108443",
+    "description": "Off-by-one error in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-193"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:09.840",
+    "nvd_last_modified": "2026-10-15T21:17:09.840",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645181+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108442",
+    "description": "Use after free in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:09.727",
+    "nvd_last_modified": "2026-10-15T21:17:09.727",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645174+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108441",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:09.607",
+    "nvd_last_modified": "2026-10-15T21:17:09.607",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645167+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108440",
+    "description": "Stack-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-121"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:09.493",
+    "nvd_last_modified": "2026-10-15T21:17:09.493",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645160+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108439",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:09.377",
+    "nvd_last_modified": "2026-10-15T21:17:09.377",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645154+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108437",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:09.140",
+    "nvd_last_modified": "2026-10-15T21:17:09.140",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645147+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108433",
+    "description": "Reliance on untrusted inputs in a security decision in Microsoft Office Word allows an unauthorized attacker to bypass a security feature locally.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-807"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 45.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 45.5,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:08.657",
+    "nvd_last_modified": "2026-10-15T21:17:08.657",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645140+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108432",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:08.540",
+    "nvd_last_modified": "2026-10-15T21:17:08.540",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645133+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108431",
+    "description": "Stack-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-121"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:08.420",
+    "nvd_last_modified": "2026-10-15T21:17:08.420",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645124+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108430",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:08.303",
+    "nvd_last_modified": "2026-10-15T21:17:08.303",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645118+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108429",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:08.190",
+    "nvd_last_modified": "2026-10-15T21:17:08.190",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645110+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108428",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:08.067",
+    "nvd_last_modified": "2026-10-15T21:17:08.067",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645103+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108427",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-20",
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:07.947",
+    "nvd_last_modified": "2026-10-15T21:17:07.947",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645096+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-108426",
+    "description": "Heap-based buffer overflow in Microsoft Office Word allows an unauthorized attacker to execute code over a network.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-15T21:17:07.820",
+    "nvd_last_modified": "2026-10-15T21:17:07.820",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.645088+00:00"
+  },
+  {
+    "cve_id": "CVE-2018-0851",
+    "description": "Microsoft Office 2007 SP2, Microsoft Office Word Viewer, Microsoft Office 2010 SP2, Microsoft Office 2013 SP1 and RT SP1, Microsoft Office 2016, and Microsoft Office 2016 Click-to-Run (C2R) allow a remote code execution vulnerability, due to how Office handles objects in memory, aka \"Microsoft Office Memory Corruption Vulnerability\". This CVE is unique from CVE-2018-0852.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V30",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-787"
+    ],
+    "epss_score": 0.19111,
+    "epss_percentile": 0.97289,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 38.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.19111,
+      "epss_component": 7.6,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2018-02-15T02:29:03.093",
+    "nvd_last_modified": "2026-10-15T18:17:07.267",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2018-0851",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.643876+00:00"
+  },
+  {
+    "cve_id": "CVE-2017-8512",
+    "description": "A remote code execution vulnerability exists in Microsoft Office when the software fails to properly handle objects in memory, aka \"Office Remote Code Execution Vulnerability\". This CVE ID is unique from CVE-2017-8509, CVE-2017-8510, CVE-2017-8511, CVE-2017-0260, and CVE-2017-8506.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V30",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.22127,
+    "epss_percentile": 0.97641,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 39.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.22127,
+      "epss_component": 8.9,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2017-06-15T01:29:03.913",
+    "nvd_last_modified": "2026-10-15T17:17:02.047",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2017-8512",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-15T22:54:36.643868+00:00"
+  },
+  {
     "cve_id": "CVE-2026-109449",
     "description": "In\u00a0Symfony Expression Language versions prior to 5.4.54, 6.4.48, 7.4.21, and 8.1.9,\u00a0the parser of the ExpressionLanguage component built its node tree with no bound on its depth. An expression made of tens of thousands of nested unary operators, array literals, binary operators or property accesses crashed the PHP process, while the tree was being freed.\n\n\n#[Assert\\ExpressionSyntax] passes the validated value to ExpressionLanguage::lint(), so an application validating expressions written by its users could be crashed by a single request, and so could any code parsing untrusted expressions.\n\nThis issue affects symfony/expression-language\u00a0through v5.4.53, v6.0.0-BETA1\u00a0through\u00a0v6.4.47, v7.0.0-BETA1\u00a0through\u00a0v7.4.20, and v8.0.0-BETA1\u00a0through\u00a0v8.1.8.",
     "cvss_score": 8.7,
@@ -34,7 +2209,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.7,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -44,7 +2219,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-15T16:17:43.963",
-    "nvd_last_modified": "2026-10-15T16:17:43.963",
+    "nvd_last_modified": "2026-10-15T19:17:21.243",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -87,7 +2262,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 53.1,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -140,7 +2315,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.7,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -150,7 +2325,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-15T15:17:24.993",
-    "nvd_last_modified": "2026-10-15T16:17:43.703",
+    "nvd_last_modified": "2026-10-15T19:17:20.987",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -193,7 +2368,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.7,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -203,7 +2378,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-15T15:17:22.583",
-    "nvd_last_modified": "2026-10-15T16:17:35.520",
+    "nvd_last_modified": "2026-10-15T19:17:19.470",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -246,8 +2421,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -301,8 +2476,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00158,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -356,8 +2531,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -411,8 +2586,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.2,
+    "epss_score_prev": 0.00215,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -466,9 +2641,9 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2017-12616",
+    "risk_score_prev": 54.2,
+    "epss_score_prev": 0.70118,
+    "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
       "apache/tomcat"
@@ -519,9 +2694,9 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2017-5664",
+    "risk_score_prev": 32.8,
+    "epss_score_prev": 0.16567,
+    "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
       "apache/tomcat"
@@ -572,9 +2747,9 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2017-5648",
+    "risk_score_prev": 37.1,
+    "epss_score_prev": 0.13225,
+    "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
       "apache/tomcat"
@@ -625,9 +2800,9 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2016-5388",
+    "risk_score_prev": 48.7,
+    "epss_score_prev": 0.50896,
+    "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
       "apache/tomcat"
@@ -729,9 +2904,9 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2016-0714",
+    "risk_score_prev": 36.0,
+    "epss_score_prev": 0.13075,
+    "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
       "apache/tomcat"
@@ -805,8 +2980,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 38.1,
+    "epss_score_prev": 0.18238,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -864,8 +3039,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.6,
+    "epss_score_prev": 0.15757,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -925,8 +3100,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.8,
+    "epss_score_prev": 0.25082,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -978,8 +3153,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 49.2,
+    "epss_score_prev": 0.54809,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1031,8 +3206,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 47.2,
+    "epss_score_prev": 0.49831,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1084,8 +3259,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.5,
+    "epss_score_prev": 0.14825,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1137,8 +3312,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.3,
+    "epss_score_prev": 0.16722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1190,8 +3365,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.15901,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1243,8 +3418,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 36.2,
+    "epss_score_prev": 0.22162,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1296,8 +3471,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.7,
+    "epss_score_prev": 0.21102,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1349,8 +3524,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00473,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1362,7 +3537,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-15T07:18:03.093",
-    "nvd_last_modified": "2026-10-15T14:45:38.353",
+    "nvd_last_modified": "2026-10-15T17:17:28.920",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1405,8 +3580,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00236,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1418,7 +3593,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-15T06:17:05.490",
-    "nvd_last_modified": "2026-10-15T14:45:38.353",
+    "nvd_last_modified": "2026-10-15T17:17:29.673",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1461,8 +3636,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00231,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1473,7 +3648,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-15T06:17:03.347",
-    "nvd_last_modified": "2026-10-15T14:45:38.353",
+    "nvd_last_modified": "2026-10-15T17:17:21.433",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1516,8 +3691,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00287,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1528,7 +3703,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-15T06:17:03.043",
-    "nvd_last_modified": "2026-10-15T14:45:38.353",
+    "nvd_last_modified": "2026-10-15T17:17:21.230",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1571,8 +3746,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 47.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.003,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1583,7 +3758,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-15T06:17:02.693",
-    "nvd_last_modified": "2026-10-15T14:45:38.353",
+    "nvd_last_modified": "2026-10-15T17:17:21.130",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1626,8 +3801,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00364,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1638,7 +3813,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-15T06:17:02.160",
-    "nvd_last_modified": "2026-10-15T14:45:38.353",
+    "nvd_last_modified": "2026-10-15T17:17:17.233",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1681,8 +3856,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.6,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.7,
+    "epss_score_prev": 0.00243,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1693,7 +3868,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-15T05:17:04.067",
-    "nvd_last_modified": "2026-10-15T14:45:38.353",
+    "nvd_last_modified": "2026-10-15T17:17:23.553",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1736,8 +3911,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 57.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.7,
+    "epss_score_prev": 0.00916,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1750,7 +3925,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-15T05:17:02.637",
-    "nvd_last_modified": "2026-10-15T14:45:38.353",
+    "nvd_last_modified": "2026-10-15T17:17:14.450",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1795,7 +3970,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00351,
+    "epss_score_prev": 0.00374,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1875,7 +4050,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00276,
+    "epss_score_prev": 0.00268,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1956,7 +4131,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.7,
-    "epss_score_prev": 0.00252,
+    "epss_score_prev": 0.00244,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -2143,7 +4318,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.5,
-    "epss_score_prev": 0.00384,
+    "epss_score_prev": 0.00408,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2286,8 +4461,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 58.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.2,
+    "epss_score_prev": 0.00515,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -2339,8 +4514,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 41.4,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00191,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -2349,7 +4524,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T18:17:29.680",
-    "nvd_last_modified": "2026-10-15T14:45:38.353",
+    "nvd_last_modified": "2026-10-15T17:17:14.347",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2392,8 +4567,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 27.6,
-    "epss_score_prev": 0.00843,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.0158,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2489,8 +4664,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 27.7,
-    "epss_score_prev": 0.03658,
+    "risk_score_prev": 27.8,
+    "epss_score_prev": 0.03985,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2592,8 +4767,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 50.7,
-    "epss_score_prev": 0.61979,
+    "risk_score_prev": 54.4,
+    "epss_score_prev": 0.71239,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2704,8 +4879,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 28.0,
-    "epss_score_prev": 0.04494,
+    "risk_score_prev": 28.2,
+    "epss_score_prev": 0.05024,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2811,8 +4986,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 47.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00343,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2864,8 +5039,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.0057,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2917,8 +5092,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 57.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00595,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3206,8 +5381,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.0074,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3262,7 +5437,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00405,
+    "epss_score_prev": 0.00419,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3754,8 +5929,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00741,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3764,8 +5939,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-14T18:19:30.300",
-    "nvd_last_modified": "2026-10-15T11:17:52.763",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-15T20:39:54.150",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -5090,8 +7265,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 34.3,
-    "epss_score_prev": 0.20287,
+    "risk_score_prev": 37.6,
+    "epss_score_prev": 0.2859,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5189,8 +7364,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 52.6,
-    "epss_score_prev": 0.45675,
+    "risk_score_prev": 53.6,
+    "epss_score_prev": 0.48234,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5249,8 +7424,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 63.8,
-    "epss_score_prev": 0.95404,
+    "risk_score_prev": 64.2,
+    "epss_score_prev": 0.96391,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5352,8 +7527,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 27.2,
-    "epss_score_prev": 0.02524,
+    "risk_score_prev": 28.0,
+    "epss_score_prev": 0.04583,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5602,7 +7777,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00209,
+    "epss_score_prev": 0.00275,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5670,7 +7845,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00209,
+    "epss_score_prev": 0.00275,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5738,7 +7913,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00209,
+    "epss_score_prev": 0.00275,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5806,7 +7981,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00209,
+    "epss_score_prev": 0.00275,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5874,7 +8049,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00209,
+    "epss_score_prev": 0.00275,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -5942,7 +8117,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00231,
+    "epss_score_prev": 0.00308,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6010,7 +8185,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.7,
-    "epss_score_prev": 0.00209,
+    "epss_score_prev": 0.00307,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6078,7 +8253,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00209,
+    "epss_score_prev": 0.00275,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6146,7 +8321,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00224,
+    "epss_score_prev": 0.0033,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6214,7 +8389,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00224,
+    "epss_score_prev": 0.0033,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6282,7 +8457,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.7,
-    "epss_score_prev": 0.00207,
+    "epss_score_prev": 0.0034,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6349,8 +8524,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 33.6,
-    "epss_score_prev": 0.00123,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00253,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6418,7 +8593,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
-    "epss_score_prev": 0.00224,
+    "epss_score_prev": 0.00323,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6486,7 +8661,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00224,
+    "epss_score_prev": 0.0033,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6554,7 +8729,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
-    "epss_score_prev": 0.00207,
+    "epss_score_prev": 0.00298,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6622,7 +8797,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00237,
+    "epss_score_prev": 0.00339,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6690,7 +8865,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6758,7 +8933,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6825,8 +9000,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 33.7,
-    "epss_score_prev": 0.00254,
+    "risk_score_prev": 33.8,
+    "epss_score_prev": 0.00406,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6894,7 +9069,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -6962,7 +9137,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.7,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00338,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7030,7 +9205,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7098,7 +9273,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7166,7 +9341,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00296,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7233,8 +9408,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.1,
-    "epss_score_prev": 0.00118,
+    "risk_score_prev": 30.2,
+    "epss_score_prev": 0.00207,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7302,7 +9477,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.7,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00338,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7370,7 +9545,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00234,
+    "epss_score_prev": 0.0033,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7438,7 +9613,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7506,7 +9681,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00296,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7573,8 +9748,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00215,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00383,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7642,7 +9817,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.7,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00338,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7709,8 +9884,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 47.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.1,
+    "epss_score_prev": 0.02119,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7763,7 +9938,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.0021,
+    "epss_score_prev": 0.00375,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7817,8 +9992,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.3,
-    "epss_score_prev": 0.00185,
+    "risk_score_prev": 25.4,
+    "epss_score_prev": 0.00408,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7873,8 +10048,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 35.1,
-    "epss_score_prev": 0.0019,
+    "risk_score_prev": 35.2,
+    "epss_score_prev": 0.0046,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7928,8 +10103,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00204,
+    "risk_score_prev": 30.3,
+    "epss_score_prev": 0.00503,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -7983,8 +10158,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00225,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00462,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -8040,7 +10215,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.2,
-    "epss_score_prev": 0.00215,
+    "epss_score_prev": 0.00345,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -8094,8 +10269,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 47.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00441,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -8147,8 +10322,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00393,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -8157,7 +10332,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-14T15:17:26.963",
-    "nvd_last_modified": "2026-10-14T16:04:11.750",
+    "nvd_last_modified": "2026-10-15T17:17:32.343",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -8200,8 +10375,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 47.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00554,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -8253,8 +10428,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00482,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -8306,8 +10481,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 47.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00516,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -8359,8 +10534,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00359,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -8369,7 +10544,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-14T15:17:05.260",
-    "nvd_last_modified": "2026-10-14T16:04:11.750",
+    "nvd_last_modified": "2026-10-15T17:17:12.027",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -8909,7 +11084,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T08:17:05.747",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:15.183",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -8964,7 +11139,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T08:17:04.570",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:13.353",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9020,7 +11195,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T08:17:04.260",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:13.067",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9132,7 +11307,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T08:17:03.297",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:11.680",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9187,7 +11362,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T08:17:02.997",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:11.513",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9299,7 +11474,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T08:17:02.417",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:10.770",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9574,7 +11749,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T04:18:56.647",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:32.740",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9740,7 +11915,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T04:18:54.973",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:32.200",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9850,7 +12025,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T04:18:38.893",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:29.020",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9961,7 +12136,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T04:18:36.537",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:27.450",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10017,7 +12192,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T04:18:12.563",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:11.907",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10181,7 +12356,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T03:17:37.797",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:34.090",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10292,7 +12467,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T03:17:20.220",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:14.920",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10403,7 +12578,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T03:17:12.513",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:08.690",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10459,7 +12634,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T02:17:01.397",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:29.893",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10626,7 +12801,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T02:16:56.360",
-    "nvd_last_modified": "2026-10-14T14:26:59.367",
+    "nvd_last_modified": "2026-10-15T17:17:11.797",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10896,8 +13071,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T20:17:07.010",
-    "nvd_last_modified": "2026-10-13T22:17:22.133",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-15T20:39:54.150",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -10939,8 +13114,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 28.6,
-    "epss_score_prev": 0.00695,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00419,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11009,10 +13184,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:16.197",
-    "nvd_last_modified": "2026-10-13T20:19:39.987",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T17:40:12.173",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-97781",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.741223+00:00"
@@ -11053,7 +13235,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11062,7 +13244,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:16.080",
-    "nvd_last_modified": "2026-10-14T14:04:27.867",
+    "nvd_last_modified": "2026-10-15T21:19:32.450",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11121,7 +13303,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00601,
+    "epss_score_prev": 0.00589,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11130,7 +13312,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:15.830",
-    "nvd_last_modified": "2026-10-14T20:06:28.530",
+    "nvd_last_modified": "2026-10-15T21:19:32.187",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11189,7 +13371,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11198,7 +13380,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:15.710",
-    "nvd_last_modified": "2026-10-14T20:06:41.823",
+    "nvd_last_modified": "2026-10-15T21:19:32.050",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11257,7 +13439,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11266,7 +13448,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:15.590",
-    "nvd_last_modified": "2026-10-14T20:06:39.250",
+    "nvd_last_modified": "2026-10-15T21:19:31.927",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11326,7 +13508,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11335,7 +13517,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:15.463",
-    "nvd_last_modified": "2026-10-14T20:06:36.713",
+    "nvd_last_modified": "2026-10-15T21:19:31.807",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11403,10 +13585,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:15.350",
-    "nvd_last_modified": "2026-10-13T20:19:39.230",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T17:39:14.387",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-97774",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.741170+00:00"
@@ -11447,7 +13636,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11456,7 +13645,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:15.227",
-    "nvd_last_modified": "2026-10-14T20:06:31.220",
+    "nvd_last_modified": "2026-10-15T21:19:31.620",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11515,7 +13704,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11524,7 +13713,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:15.107",
-    "nvd_last_modified": "2026-10-14T20:17:19.730",
+    "nvd_last_modified": "2026-10-15T21:19:31.490",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11583,7 +13772,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11592,7 +13781,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:14.983",
-    "nvd_last_modified": "2026-10-14T20:16:56.897",
+    "nvd_last_modified": "2026-10-15T21:19:31.363",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11651,7 +13840,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11660,7 +13849,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:14.863",
-    "nvd_last_modified": "2026-10-14T20:16:27.820",
+    "nvd_last_modified": "2026-10-15T21:19:31.233",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11720,7 +13909,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00774,
+    "epss_score_prev": 0.00757,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11729,7 +13918,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:14.740",
-    "nvd_last_modified": "2026-10-14T20:16:00.167",
+    "nvd_last_modified": "2026-10-15T21:19:31.103",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11788,7 +13977,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11797,7 +13986,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:14.617",
-    "nvd_last_modified": "2026-10-14T20:15:26.943",
+    "nvd_last_modified": "2026-10-15T21:19:30.980",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11857,7 +14046,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00601,
+    "epss_score_prev": 0.00589,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11866,7 +14055,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:14.487",
-    "nvd_last_modified": "2026-10-14T20:15:00.093",
+    "nvd_last_modified": "2026-10-15T21:19:30.860",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11925,7 +14114,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11934,7 +14123,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:14.363",
-    "nvd_last_modified": "2026-10-14T20:14:29.270",
+    "nvd_last_modified": "2026-10-15T21:19:30.730",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -11993,7 +14182,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12002,7 +14191,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:14.240",
-    "nvd_last_modified": "2026-10-14T20:18:55.517",
+    "nvd_last_modified": "2026-10-15T21:19:30.600",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12061,7 +14250,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12070,7 +14259,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:14.117",
-    "nvd_last_modified": "2026-10-14T20:19:20.703",
+    "nvd_last_modified": "2026-10-15T21:19:30.467",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12129,7 +14318,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12138,7 +14327,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:13.990",
-    "nvd_last_modified": "2026-10-14T20:19:50.007",
+    "nvd_last_modified": "2026-10-15T21:19:30.350",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12197,7 +14386,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12206,7 +14395,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:13.853",
-    "nvd_last_modified": "2026-10-14T20:20:22.793",
+    "nvd_last_modified": "2026-10-15T21:19:30.237",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -12257,7 +14446,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12266,7 +14455,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:13.610",
-    "nvd_last_modified": "2026-10-14T20:21:18.613",
+    "nvd_last_modified": "2026-10-15T21:19:30.007",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -12317,7 +14506,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00601,
+    "epss_score_prev": 0.00589,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12326,7 +14515,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:13.490",
-    "nvd_last_modified": "2026-10-14T20:21:49.633",
+    "nvd_last_modified": "2026-10-15T21:19:29.887",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12385,7 +14574,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12394,7 +14583,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:13.367",
-    "nvd_last_modified": "2026-10-14T20:22:13.577",
+    "nvd_last_modified": "2026-10-15T21:19:29.770",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12453,7 +14642,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12462,7 +14651,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:13.237",
-    "nvd_last_modified": "2026-10-14T20:00:47.680",
+    "nvd_last_modified": "2026-10-15T21:19:29.643",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12521,7 +14710,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12530,7 +14719,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:13.107",
-    "nvd_last_modified": "2026-10-14T20:01:17.560",
+    "nvd_last_modified": "2026-10-15T21:19:29.517",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12595,7 +14784,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12604,7 +14793,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:12.973",
-    "nvd_last_modified": "2026-10-14T20:01:51.233",
+    "nvd_last_modified": "2026-10-15T21:19:29.397",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12664,7 +14853,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12673,7 +14862,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:12.850",
-    "nvd_last_modified": "2026-10-14T20:02:52.680",
+    "nvd_last_modified": "2026-10-15T21:19:29.277",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12732,7 +14921,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12741,7 +14930,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:12.707",
-    "nvd_last_modified": "2026-10-14T20:03:27.943",
+    "nvd_last_modified": "2026-10-15T21:19:29.160",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12800,7 +14989,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00535,
+    "epss_score_prev": 0.00524,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12809,7 +14998,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:12.587",
-    "nvd_last_modified": "2026-10-14T20:03:58.110",
+    "nvd_last_modified": "2026-10-15T21:19:29.040",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12868,7 +15057,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12877,7 +15066,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:12.463",
-    "nvd_last_modified": "2026-10-14T20:04:24.523",
+    "nvd_last_modified": "2026-10-15T21:19:28.913",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -12996,7 +15185,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13005,7 +15194,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:12.213",
-    "nvd_last_modified": "2026-10-14T20:04:56.567",
+    "nvd_last_modified": "2026-10-15T21:19:28.737",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -13064,7 +15253,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13073,7 +15262,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:12.093",
-    "nvd_last_modified": "2026-10-14T20:05:26.170",
+    "nvd_last_modified": "2026-10-15T21:19:28.610",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -13132,7 +15321,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13141,7 +15330,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:11.953",
-    "nvd_last_modified": "2026-10-14T20:05:52.800",
+    "nvd_last_modified": "2026-10-15T21:19:28.490",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -13200,7 +15389,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13209,7 +15398,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:11.823",
-    "nvd_last_modified": "2026-10-14T20:06:33.097",
+    "nvd_last_modified": "2026-10-15T21:19:28.367",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -13260,7 +15449,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13269,7 +15458,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:11.440",
-    "nvd_last_modified": "2026-10-14T20:09:19.183",
+    "nvd_last_modified": "2026-10-15T21:19:27.987",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -13329,7 +15518,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13338,7 +15527,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:11.317",
-    "nvd_last_modified": "2026-10-14T20:09:48.680",
+    "nvd_last_modified": "2026-10-15T21:19:27.873",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -13390,7 +15579,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00798,
+    "epss_score_prev": 0.00781,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13399,7 +15588,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:11.050",
-    "nvd_last_modified": "2026-10-14T20:11:20.223",
+    "nvd_last_modified": "2026-10-15T21:19:27.627",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -13458,7 +15647,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13467,7 +15656,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:10.800",
-    "nvd_last_modified": "2026-10-14T20:11:55.430",
+    "nvd_last_modified": "2026-10-15T21:19:27.503",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -13526,7 +15715,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13535,7 +15724,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:10.647",
-    "nvd_last_modified": "2026-10-14T20:12:33.257",
+    "nvd_last_modified": "2026-10-15T21:19:27.383",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -13715,7 +15904,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13724,7 +15913,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:10.170",
-    "nvd_last_modified": "2026-10-14T16:46:39.340",
+    "nvd_last_modified": "2026-10-15T21:19:27.087",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -13775,7 +15964,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13784,7 +15973,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:10.050",
-    "nvd_last_modified": "2026-10-14T16:47:30.903",
+    "nvd_last_modified": "2026-10-15T21:19:26.960",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -13798,8 +15987,8 @@
       {
         "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-97010",
         "tags": [
-          "Vendor Advisory",
-          "Patch"
+          "Patch",
+          "Vendor Advisory"
         ]
       }
     ],
@@ -13843,7 +16032,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.4,
-    "epss_score_prev": 0.0033,
+    "epss_score_prev": 0.00323,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13903,7 +16092,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13912,7 +16101,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:09.810",
-    "nvd_last_modified": "2026-10-14T16:49:08.483",
+    "nvd_last_modified": "2026-10-15T21:19:26.770",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -13971,7 +16160,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -13980,7 +16169,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:09.687",
-    "nvd_last_modified": "2026-10-14T16:50:01.860",
+    "nvd_last_modified": "2026-10-15T21:19:26.647",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -14040,7 +16229,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -14049,7 +16238,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:09.430",
-    "nvd_last_modified": "2026-10-14T16:50:48.623",
+    "nvd_last_modified": "2026-10-15T21:19:26.400",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -14108,7 +16297,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -14117,7 +16306,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:09.307",
-    "nvd_last_modified": "2026-10-14T16:51:33.730",
+    "nvd_last_modified": "2026-10-15T21:19:26.277",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -14131,8 +16320,8 @@
       {
         "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-97003",
         "tags": [
-          "Vendor Advisory",
-          "Patch"
+          "Patch",
+          "Vendor Advisory"
         ]
       }
     ],
@@ -14185,10 +16374,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:09.180",
-    "nvd_last_modified": "2026-10-13T20:19:34.190",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:19:26.140",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-97001",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740716+00:00"
@@ -14238,10 +16434,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:09.060",
-    "nvd_last_modified": "2026-10-13T20:19:34.083",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:19:25.980",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96997",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740708+00:00"
@@ -14291,10 +16494,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:08.940",
-    "nvd_last_modified": "2026-10-13T20:19:33.980",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T17:35:52.977",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96996",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740699+00:00"
@@ -14345,10 +16555,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:22:08.813",
-    "nvd_last_modified": "2026-10-13T20:19:33.870",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:19:25.793",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96995",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740690+00:00"
@@ -14389,7 +16606,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00713,
+    "epss_score_prev": 0.00698,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -14457,7 +16674,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.5,
-    "epss_score_prev": 0.00427,
+    "epss_score_prev": 0.00418,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -14466,7 +16683,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:42.653",
-    "nvd_last_modified": "2026-10-14T20:15:34.670",
+    "nvd_last_modified": "2026-10-15T21:19:09.897",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -14526,10 +16743,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:42.290",
-    "nvd_last_modified": "2026-10-13T20:19:09.337",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:19:09.663",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-88207",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740660+00:00"
@@ -14570,7 +16794,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00517,
+    "epss_score_prev": 0.00506,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -14638,7 +16862,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.8,
-    "epss_score_prev": 0.00624,
+    "epss_score_prev": 0.00625,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -14706,7 +16930,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -14715,7 +16939,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:41.797",
-    "nvd_last_modified": "2026-10-14T20:15:31.133",
+    "nvd_last_modified": "2026-10-15T21:19:09.360",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -14766,7 +16990,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00713,
+    "epss_score_prev": 0.00698,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -14834,7 +17058,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00713,
+    "epss_score_prev": 0.00698,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -14911,10 +17135,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:41.283",
-    "nvd_last_modified": "2026-10-13T20:19:08.577",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:19:09.060",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-88197",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740606+00:00"
@@ -14964,10 +17195,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:41.150",
-    "nvd_last_modified": "2026-10-13T20:19:08.473",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:19:08.943",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-88196",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740597+00:00"
@@ -15009,7 +17247,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15018,7 +17256,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:39.650",
-    "nvd_last_modified": "2026-10-14T20:15:27.123",
+    "nvd_last_modified": "2026-10-15T21:19:08.053",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -15069,7 +17307,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.6,
-    "epss_score_prev": 0.00688,
+    "epss_score_prev": 0.00674,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15078,7 +17316,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:39.527",
-    "nvd_last_modified": "2026-10-14T20:15:24.480",
+    "nvd_last_modified": "2026-10-15T21:19:07.930",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -15138,10 +17376,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:38.557",
-    "nvd_last_modified": "2026-10-14T04:18:54.100",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:19:07.190",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-88178",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740569+00:00"
@@ -15329,7 +17574,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:35.710",
-    "nvd_last_modified": "2026-10-15T16:16:40.840",
+    "nvd_last_modified": "2026-10-15T21:19:05.207",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -15448,7 +17693,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15457,7 +17702,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:34.910",
-    "nvd_last_modified": "2026-10-14T20:14:55.653",
+    "nvd_last_modified": "2026-10-15T21:19:04.683",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -15509,7 +17754,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00738,
+    "epss_score_prev": 0.00722,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15518,7 +17763,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:34.267",
-    "nvd_last_modified": "2026-10-14T12:49:02.820",
+    "nvd_last_modified": "2026-10-15T21:19:04.247",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -15578,10 +17823,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:34.147",
-    "nvd_last_modified": "2026-10-13T21:19:49.867",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:19:04.110",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-88144",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740507+00:00"
@@ -15631,10 +17883,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:28.940",
-    "nvd_last_modified": "2026-10-13T21:19:45.383",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T17:32:11.980",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-88109",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740498+00:00"
@@ -15675,7 +17934,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.4,
-    "epss_score_prev": 0.01518,
+    "epss_score_prev": 0.01519,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15752,10 +18011,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:20:56.927",
-    "nvd_last_modified": "2026-10-13T21:19:14.420",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T17:31:29.947",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-85340",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740478+00:00"
@@ -15797,7 +18063,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00774,
+    "epss_score_prev": 0.00757,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15806,7 +18072,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:20:40.100",
-    "nvd_last_modified": "2026-10-14T20:14:52.710",
+    "nvd_last_modified": "2026-10-15T21:18:32.537",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -15857,7 +18123,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00805,
+    "epss_score_prev": 0.00788,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15866,7 +18132,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:53.927",
-    "nvd_last_modified": "2026-10-14T12:49:44.770",
+    "nvd_last_modified": "2026-10-15T21:17:48.610",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -15917,7 +18183,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00805,
+    "epss_score_prev": 0.00788,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15926,7 +18192,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:50.243",
-    "nvd_last_modified": "2026-10-14T20:14:50.170",
+    "nvd_last_modified": "2026-10-15T21:17:47.350",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -15977,7 +18243,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00805,
+    "epss_score_prev": 0.00788,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -15986,7 +18252,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:50.123",
-    "nvd_last_modified": "2026-10-14T20:14:47.193",
+    "nvd_last_modified": "2026-10-15T21:17:47.237",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -16037,7 +18303,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.7,
-    "epss_score_prev": 0.00997,
+    "epss_score_prev": 0.00976,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -16106,7 +18372,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:48.817",
-    "nvd_last_modified": "2026-10-15T16:17:10.130",
+    "nvd_last_modified": "2026-10-15T21:17:46.443",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -16157,7 +18423,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00805,
+    "epss_score_prev": 0.00788,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -16166,7 +18432,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:48.510",
-    "nvd_last_modified": "2026-10-14T20:14:39.923",
+    "nvd_last_modified": "2026-10-15T21:17:46.217",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -16286,7 +18552,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:47.630",
-    "nvd_last_modified": "2026-10-15T16:18:06.277",
+    "nvd_last_modified": "2026-10-15T21:17:45.720",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -16346,10 +18612,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:46.873",
-    "nvd_last_modified": "2026-10-13T21:18:15.680",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T17:30:55.110",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-70276",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740378+00:00"
@@ -16391,7 +18664,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.6,
-    "epss_score_prev": 0.00711,
+    "epss_score_prev": 0.00696,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -16400,7 +18673,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:45.663",
-    "nvd_last_modified": "2026-10-14T20:14:36.703",
+    "nvd_last_modified": "2026-10-15T21:17:44.640",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -16451,7 +18724,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00805,
+    "epss_score_prev": 0.00788,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -16460,7 +18733,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:45.540",
-    "nvd_last_modified": "2026-10-14T20:14:31.360",
+    "nvd_last_modified": "2026-10-15T21:17:44.527",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -16511,7 +18784,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.6,
-    "epss_score_prev": 0.00916,
+    "epss_score_prev": 0.00897,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -16579,7 +18852,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.2,
-    "epss_score_prev": 0.00949,
+    "epss_score_prev": 0.0095,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -16768,7 +19041,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00805,
+    "epss_score_prev": 0.00788,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -16777,7 +19050,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:43.687",
-    "nvd_last_modified": "2026-10-14T12:50:22.727",
+    "nvd_last_modified": "2026-10-15T21:17:43.400",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -16828,7 +19101,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00555,
+    "epss_score_prev": 0.00543,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -16896,7 +19169,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00765,
+    "epss_score_prev": 0.00748,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -17024,7 +19297,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.5,
-    "epss_score_prev": 0.00427,
+    "epss_score_prev": 0.00418,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -17033,7 +19306,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:36.897",
-    "nvd_last_modified": "2026-10-14T20:06:58.910",
+    "nvd_last_modified": "2026-10-15T21:17:40.663",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -17093,10 +19366,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:19:36.237",
-    "nvd_last_modified": "2026-10-13T21:18:08.220",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:17:40.270",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-70215",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740265+00:00"
@@ -17137,7 +19417,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00517,
+    "epss_score_prev": 0.00506,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -17274,7 +19554,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00838,
+    "epss_score_prev": 0.0082,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -17283,7 +19563,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:59.750",
-    "nvd_last_modified": "2026-10-14T20:15:37.870",
+    "nvd_last_modified": "2026-10-15T21:17:05.700",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -17297,8 +19577,8 @@
       {
         "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-105718",
         "tags": [
-          "Vendor Advisory",
-          "Patch"
+          "Patch",
+          "Vendor Advisory"
         ]
       }
     ],
@@ -17464,7 +19744,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00548,
+    "epss_score_prev": 0.00536,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -17473,7 +19753,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:59.360",
-    "nvd_last_modified": "2026-10-14T20:06:52.633",
+    "nvd_last_modified": "2026-10-15T21:17:05.460",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -17593,10 +19873,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:58.960",
-    "nvd_last_modified": "2026-10-13T22:17:28.577",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:17:05.220",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-105599",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740193+00:00"
@@ -18057,7 +20344,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.2,
-    "epss_score_prev": 0.00839,
+    "epss_score_prev": 0.0084,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18125,7 +20412,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.5,
-    "epss_score_prev": 0.00551,
+    "epss_score_prev": 0.0054,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18261,7 +20548,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00713,
+    "epss_score_prev": 0.00698,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18329,7 +20616,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00713,
+    "epss_score_prev": 0.00698,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18397,7 +20684,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00713,
+    "epss_score_prev": 0.00698,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18474,10 +20761,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:50.217",
-    "nvd_last_modified": "2026-10-13T22:17:22.603",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T21:17:00.603",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-102858",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740064+00:00"
@@ -18528,10 +20822,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:50.097",
-    "nvd_last_modified": "2026-10-13T22:17:22.493",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T17:28:58.637",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-102857",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740055+00:00"
@@ -18582,10 +20883,17 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:49.973",
-    "nvd_last_modified": "2026-10-13T22:17:22.370",
-    "vuln_status": "Undergoing Analysis",
+    "nvd_last_modified": "2026-10-15T17:27:50.580",
+    "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-102856",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740045+00:00"
@@ -18746,7 +21054,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00805,
+    "epss_score_prev": 0.00788,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18755,7 +21063,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:41.213",
-    "nvd_last_modified": "2026-10-14T18:52:04.687",
+    "nvd_last_modified": "2026-10-15T21:16:48.230",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -18814,7 +21122,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00839,
+    "epss_score_prev": 0.00821,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18823,7 +21131,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:41.073",
-    "nvd_last_modified": "2026-10-14T19:13:14.263",
+    "nvd_last_modified": "2026-10-15T21:16:48.113",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -18874,7 +21182,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00839,
+    "epss_score_prev": 0.00821,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18883,7 +21191,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:40.933",
-    "nvd_last_modified": "2026-10-14T19:13:56.510",
+    "nvd_last_modified": "2026-10-15T21:16:47.980",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -18942,7 +21250,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00839,
+    "epss_score_prev": 0.00821,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18951,7 +21259,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:17:40.810",
-    "nvd_last_modified": "2026-10-14T19:14:40.963",
+    "nvd_last_modified": "2026-10-15T21:16:47.373",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [],
     "nvd_reference_links": [
@@ -19489,7 +21797,7 @@
     "source": "nvd",
     "published": "2026-10-13T19:21:05.980",
     "nvd_last_modified": "2026-10-14T04:18:47.863",
-    "vuln_status": "Awaiting Analysis",
+    "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -21736,7 +24044,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-13T08:16:59.263",
-    "nvd_last_modified": "2026-10-13T13:29:12.567",
+    "nvd_last_modified": "2026-10-15T17:17:10.010",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -31793,8 +34101,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 31.9,
-    "epss_score_prev": 0.00369,
+    "risk_score_prev": 32.0,
+    "epss_score_prev": 0.0043,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -34235,8 +36543,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 52.3,
-    "epss_score_prev": 0.60122,
+    "risk_score_prev": 53.7,
+    "epss_score_prev": 0.63531,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -37141,7 +39449,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
-    "epss_score_prev": 0.0029,
+    "epss_score_prev": 0.00295,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -44986,7 +47294,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00486,
+    "epss_score_prev": 0.00521,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -45042,7 +47350,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
-    "epss_score_prev": 0.00285,
+    "epss_score_prev": 0.00305,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -46279,7 +48587,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.4,
-    "epss_score_prev": 0.00079,
+    "epss_score_prev": 0.00089,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -51404,7 +53712,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00311,
+    "epss_score_prev": 0.00343,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -51478,7 +53786,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00249,
+    "epss_score_prev": 0.00281,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -51546,7 +53854,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00244,
+    "epss_score_prev": 0.0028,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -53970,7 +56278,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
-    "epss_score_prev": 0.00259,
+    "epss_score_prev": 0.00168,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -54050,7 +56358,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
-    "epss_score_prev": 0.00253,
+    "epss_score_prev": 0.0022,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -54103,8 +56411,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 28.4,
-    "epss_score_prev": 0.0037,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00379,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -54185,7 +56493,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.1,
-    "epss_score_prev": 0.00387,
+    "epss_score_prev": 0.00376,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -54266,7 +56574,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.5,
-    "epss_score_prev": 0.00248,
+    "epss_score_prev": 0.00271,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -54347,7 +56655,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.8,
-    "epss_score_prev": 0.00185,
+    "epss_score_prev": 0.00135,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -54427,7 +56735,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
-    "epss_score_prev": 0.00238,
+    "epss_score_prev": 0.00193,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -54750,7 +57058,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
-    "epss_score_prev": 0.00269,
+    "epss_score_prev": 0.00293,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -54830,7 +57138,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
-    "epss_score_prev": 0.00326,
+    "epss_score_prev": 0.00248,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -54911,7 +57219,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00308,
+    "epss_score_prev": 0.00354,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -54991,7 +57299,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
-    "epss_score_prev": 0.0026,
+    "epss_score_prev": 0.00257,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -55045,7 +57353,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.4,
-    "epss_score_prev": 0.0031,
+    "epss_score_prev": 0.00249,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -55206,7 +57514,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.2,
-    "epss_score_prev": 0.00309,
+    "epss_score_prev": 0.003,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -55287,7 +57595,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.9,
-    "epss_score_prev": 0.00252,
+    "epss_score_prev": 0.00244,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -56164,7 +58472,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.8,
-    "epss_score_prev": 0.00438,
+    "epss_score_prev": 0.00495,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -56232,7 +58540,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00463,
+    "epss_score_prev": 0.00523,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -56300,7 +58608,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00292,
+    "epss_score_prev": 0.0033,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -56368,7 +58676,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00313,
+    "epss_score_prev": 0.00354,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -56436,7 +58744,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00292,
+    "epss_score_prev": 0.00331,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -56504,7 +58812,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00319,
+    "epss_score_prev": 0.00335,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -65699,7 +68007,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00222,
+    "epss_score_prev": 0.00231,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -65767,7 +68075,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00199,
+    "epss_score_prev": 0.00207,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -121150,7 +123458,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.4,
-    "epss_score_prev": 0.00247,
+    "epss_score_prev": 0.00278,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -134642,7 +136950,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00289,
+    "epss_score_prev": 0.0021,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
