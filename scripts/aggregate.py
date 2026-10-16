@@ -149,6 +149,7 @@ def load_watchlist():
     wl.setdefault("cvss_minimum", 7.0)
     wl.setdefault("vendors_products", [])
     wl.setdefault("keywords", [])
+    wl.setdefault("priority_keywords", [])
     wl.setdefault("dependabot_repos", [])
     wl.setdefault("ghsa_packages", [])
     wl.setdefault("require_kev_or_high_epss", False)
@@ -628,6 +629,149 @@ def extract_cwe_ghsa(advisory_or_alert_dict):
     return ids
 
 
+def nvd_entry_from_cve(cve, source="nvd"):
+    """Normalise one NVD 2.0 `cve` object into the candidate-entry shape used
+    by passes_filters()/build_final_entry(). Shared by the watchlist search and
+    the KEV-driven ingest so both produce byte-identical field sets."""
+    score, cvss_version = extract_cvss(cve)
+    return {
+        "cve_id": cve.get("id"),
+        "description": extract_description(cve),
+        "cvss_score": score,
+        "cvss_version": cvss_version,
+        "cvss_vector_components": extract_cvss_vector_components(cve),
+        "cwe_ids": extract_cwe_nvd(cve),
+        "published": cve.get("published"),
+        # lastModified answers whether NVD revised the record since publication
+        # (rescored CVSS, corrected CWE, edited description).
+        "nvd_last_modified": cve.get("lastModified"),
+        "vuln_status": extract_vuln_status(cve),
+        "nvd_fix_versions": extract_nvd_fix_versions(cve),
+        "nvd_reference_links": extract_nvd_reference_links(cve),
+        "matched_vendor_product": [],
+        "matched_keywords": [],
+        "priority_match": False,
+        "source": source,
+    }
+
+
+def kev_recent_ids(kev_map, days, now=None):
+    """CVE ids CISA added to KEV within the last `days` days (by dateAdded).
+
+    Why this exists: the watchlist search is NVD `keywordSearch`, which ANDs
+    every word of a term against the CVE *description*. Microsoft's CNA
+    descriptions name the component ("... in Windows Shell allows ...") and
+    almost never the word "Microsoft", so the "microsoft windows" pair silently
+    missed actively exploited Patch Tuesday zero-days such as CVE-2026-96951 --
+    even though CISA had already listed it in KEV. A KEV listing is the
+    strongest exploitation signal available, so every recent KEV addition is
+    ingested regardless of watchlist wording or CVSS floor.
+    """
+    now = now or datetime.now(timezone.utc)
+    cutoff = (now - timedelta(days=days)).date()
+    out = []
+    for cve_id, v in kev_map.items():
+        try:
+            added = datetime.strptime(str(v.get("dateAdded", "")), "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        if added >= cutoff:
+            out.append(cve_id)
+    return sorted(out)
+
+
+def kev_fallback_entry(cve_id, kev_entry):
+    """Candidate built from the KEV record alone when NVD has no record yet.
+    cvss_score stays None (never invented); passes_filters lets KEV through."""
+    vp = f"{kev_entry.get('vendorProject', '')}/{kev_entry.get('product', '')}".strip("/").lower()
+    desc = kev_entry.get("shortDescription") or kev_entry.get("vulnerabilityName") or ""
+    return {
+        "cve_id": cve_id, "description": desc, "cvss_score": None, "cvss_version": None,
+        "cvss_vector_components": None, "cwe_ids": list(kev_entry.get("cwes") or []),
+        "published": None, "nvd_last_modified": None, "vuln_status": None,
+        "nvd_fix_versions": [], "nvd_reference_links": [],
+        "matched_vendor_product": [vp] if vp else [], "matched_keywords": ["CISA KEV"],
+        "priority_match": True, "source": "kev",
+    }
+
+
+INTEL_PATH = os.path.join(DATA_DIR, "intel.json")
+_CVE_ID_RE = re.compile(r"^CVE-\d{4}-\d{4,7}$")
+
+
+def intel_exploited_cve_ids(intel, days, now=None):
+    """CVE ids literally named in threat-intel news items (scripts/fetch_intel.py)
+    tagged "exploited" and published in the last `days` days. Lets the board
+    pick up a zero-day the press reports as exploited before CISA lists it.
+    Only ids present verbatim in the article text -- nothing inferred."""
+    now = now or datetime.now(timezone.utc)
+    cutoff = now - timedelta(days=days)
+    items = intel.get("items", []) if isinstance(intel, dict) else []
+    out = []
+    for it in items:
+        if "exploited" not in (it.get("categories") or []):
+            continue
+        try:
+            pub = datetime.fromisoformat(str(it.get("published") or it.get("first_seen") or ""))
+        except ValueError:
+            continue
+        if pub.tzinfo is None:
+            pub = pub.replace(tzinfo=timezone.utc)
+        if pub < cutoff:
+            continue
+        for cid in it.get("cve_ids") or []:
+            cid = str(cid).upper()
+            if _CVE_ID_RE.match(cid) and cid not in out:
+                out.append(cid)
+    return sorted(out)
+
+
+def fetch_kev_candidates(kev_map, already_known, api_key, days=None, news_ids=None):
+    """NVD-enriched candidates for (a) KEV additions in the last `days` days and
+    (b) CVEs that recent news reports as exploited (`news_ids`), excluding any
+    that another source produced this run or that are already on the board
+    (already-tracked CVEs get their KEV fields refreshed by main() instead).
+
+    News-only ids are added ONLY if NVD has a record -- a CVE id seen in an
+    article is never turned into an alert from the article text alone."""
+    days = days if days is not None else int(os.environ.get("KEV_LOOKBACK_DAYS", "14"))
+    kev_ids = [c for c in kev_recent_ids(kev_map, days) if c not in already_known]
+    news_only = [c for c in (news_ids or []) if c not in already_known and c not in kev_ids]
+    print(f"KEV-driven ingest: {len(kev_ids)} KEV addition(s) in the last {days}d not yet tracked; "
+          f"{len(news_only)} news-reported exploited CVE(s) not yet tracked")
+    delay = 0.7 if api_key else 6.5
+    out = []
+    for cve_id in news_only:
+        result = nvd_query({"cveId": cve_id}, api_key)
+        time.sleep(delay)
+        vulns = (result or {}).get("vulnerabilities") or []
+        if not (vulns and vulns[0].get("cve", {}).get("id") == cve_id):
+            print(f"  news-reported {cve_id}: no NVD record yet -- skipped (retried next run)")
+            continue
+        entry = nvd_entry_from_cve(vulns[0]["cve"], source="nvd")
+        entry["matched_keywords"].append("news: reported exploited")
+        entry["priority_match"] = True
+        out.append(entry)
+    for cve_id in kev_ids:
+        kev_entry = kev_map.get(cve_id, {})
+        result = nvd_query({"cveId": cve_id}, api_key)
+        time.sleep(delay)
+        vulns = (result or {}).get("vulnerabilities") or []
+        if vulns and vulns[0].get("cve", {}).get("id") == cve_id:
+            entry = nvd_entry_from_cve(vulns[0]["cve"], source="kev")
+            vp = f"{kev_entry.get('vendorProject', '')}/{kev_entry.get('product', '')}".strip("/").lower()
+            if vp:
+                entry["matched_vendor_product"].append(vp)
+            entry["matched_keywords"].append("CISA KEV")
+            entry["priority_match"] = True
+            if not entry["description"]:
+                entry["description"] = kev_entry.get("shortDescription", "")
+        else:
+            entry = kev_fallback_entry(cve_id, kev_entry)
+        out.append(entry)
+    return out
+
+
 def fetch_nvd_candidates(watchlist, api_key):
     lookback_days = int(os.environ.get("LOOKBACK_DAYS", "8"))
     end = datetime.now(timezone.utc)
@@ -643,6 +787,11 @@ def fetch_nvd_candidates(watchlist, api_key):
             search_terms.append(("vendor_product", term, vendor, product))
     for kw in watchlist["keywords"]:
         search_terms.append(("keyword", kw, None, None))
+    # priority_keywords: exact-phrase description matches that bypass the CVSS
+    # floor (e.g. identity infrastructure like AD FS, where a 5.9 spoofing bug
+    # still matters). Exact phrase keeps them precise despite the lower floor.
+    for kw in watchlist.get("priority_keywords", []):
+        search_terms.append(("priority", kw, None, None))
 
     candidates = {}
     delay = 0.7 if api_key else 6.5  # stay under 50/30s (key) or 5/30s (no key)
@@ -670,6 +819,8 @@ def fetch_nvd_candidates(watchlist, api_key):
             "lastModEndDate": end.strftime(date_fmt),
             "resultsPerPage": 200,
         }
+        if kind == "priority":
+            params["keywordExactMatch"] = ""
         result = nvd_query(params, api_key)
         time.sleep(delay)
         if not result:
@@ -703,29 +854,7 @@ def fetch_nvd_candidates(watchlist, api_key):
             cve_id = cve.get("id")
             if not cve_id:
                 continue
-            score, cvss_version = extract_cvss(cve)
-            entry = candidates.setdefault(cve_id, {
-                "cve_id": cve_id,
-                "description": extract_description(cve),
-                "cvss_score": score,
-                "cvss_version": cvss_version,
-                "cvss_vector_components": extract_cvss_vector_components(cve),
-                "cwe_ids": extract_cwe_nvd(cve),
-                "published": cve.get("published"),
-                # NVD's lastModified is already present in every response we fetch
-                # (it's how the lookback-window query itself is filtered) but was
-                # never propagated into our schema -- it answers a distinct question
-                # from "published": whether NVD has revised the record since initial
-                # publication (rescored CVSS, corrected CWE, edited description),
-                # which "published" alone can never reveal for an old CVE.
-                "nvd_last_modified": cve.get("lastModified"),
-                "vuln_status": extract_vuln_status(cve),
-                "nvd_fix_versions": extract_nvd_fix_versions(cve),
-                "nvd_reference_links": extract_nvd_reference_links(cve),
-                "matched_vendor_product": [],
-                "matched_keywords": [],
-                "source": "nvd",
-            })
+            entry = candidates.setdefault(cve_id, nvd_entry_from_cve(cve))
             if kind == "vendor_product":
                 pair = f"{vendor}/{product}"
                 if pair not in entry["matched_vendor_product"]:
@@ -733,6 +862,8 @@ def fetch_nvd_candidates(watchlist, api_key):
             else:
                 if term not in entry["matched_keywords"]:
                     entry["matched_keywords"].append(term)
+                if kind == "priority":
+                    entry["priority_match"] = True
     print(f"  NVD candidates (pre-filter): {len(candidates)}")
     return candidates
 
@@ -1027,6 +1158,12 @@ def passes_filters(entry, watchlist, kev_map, epss_map, suppressions):
     in_kev = cve_id in kev_map
     epss_info = epss_map.get(cve_id, {})
     epss_score = epss_info.get("epss")
+
+    # Known-exploited (CISA KEV) and priority-keyword matches bypass the CVSS
+    # floor: exploitation evidence / identity-infrastructure exposure outranks
+    # a base score (CVSS may also not be published yet for a fresh zero-day).
+    if in_kev or entry.get("priority_match"):
+        return True
 
     # A CVE with no parseable CVSS score cannot be verified against the floor -- exclude it
     # rather than let it through by default (this was silently passing everything before).
@@ -1596,10 +1733,22 @@ def main():
     dependabot_candidates = fetch_dependabot_alerts(watchlist["dependabot_repos"], gh_token)
     ghsa_candidates = fetch_ghsa_advisories(watchlist["ghsa_packages"], gh_token)
 
-    all_candidates = list(nvd_candidates.values()) + dependabot_candidates + ghsa_candidates
+    existing_alerts = load_json_file(ALERTS_PATH, [])
+    # KEV-driven ingest: tag KEV listings already surfaced by the watchlist,
+    # and pull in any recent KEV addition nobody else produced (see
+    # kev_recent_ids docstring for the miss this closes).
+    for c in nvd_candidates.values():
+        if c["cve_id"] in kev_map and "CISA KEV" not in c["matched_keywords"]:
+            c["matched_keywords"].append("CISA KEV")
+    already_known = set(nvd_candidates) | {c.get("cve_id") for c in dependabot_candidates + ghsa_candidates} \
+        | {a.get("cve_id") for a in existing_alerts}
+    news_ids = intel_exploited_cve_ids(load_json_file(INTEL_PATH, {}),
+                                       int(os.environ.get("KEV_LOOKBACK_DAYS", "14")))
+    kev_candidates = fetch_kev_candidates(kev_map, already_known, nvd_api_key, news_ids=news_ids)
+
+    all_candidates = list(nvd_candidates.values()) + kev_candidates + dependabot_candidates + ghsa_candidates
     all_cve_ids = {c["cve_id"] for c in all_candidates if c.get("cve_id") and c["cve_id"].startswith("CVE-")}
 
-    existing_alerts = load_json_file(ALERTS_PATH, [])
     existing_by_key = {unique_key(a): a for a in existing_alerts}
     seen_ids = set(load_json_file(SEEN_PATH, []))
 

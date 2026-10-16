@@ -85,7 +85,7 @@ function fillPanel(panelId, listId, entries) {
   panel.hidden = false;
 }
 
-const SOURCE_FILTERS = new Set(["nvd", "ghsa", "dependabot"]);
+const SOURCE_FILTERS = new Set(["nvd", "kev", "ghsa", "dependabot"]);
 const AGE_ORDER = ["0-1d", "1-7d", "7-30d", "30d+"];
 
 export function renderBreakdowns(alerts, stats) {

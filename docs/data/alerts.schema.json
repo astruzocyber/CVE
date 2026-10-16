@@ -46,7 +46,7 @@
       "osv_fixed_versions": { "type": "array", "items": { "type": "object", "properties": { "package": { "type": ["string", "null"] }, "ecosystem": { "type": ["string", "null"] }, "fixed": { "type": "string" } }, "required": ["fixed"] }, "description": "Up to 5 {package, ecosystem, fixed} entries parsed from OSV.dev fixed-version events (see parse_osv_fixed_versions() in scripts/aggregate.py). package/ecosystem are nullable when OSV omits package metadata for the affected range." },
       "affected": { "type": "array", "items": { "type": "string" }, "description": "vendor/product strings (NVD CPE-derived or Dependabot ecosystem/package) matched by the watchlist/dependency filters." },
       "matched_keywords": { "type": "array", "items": { "type": "string" } },
-      "source": { "type": "string", "enum": ["nvd", "ghsa", "dependabot"] },
+      "source": { "type": "string", "enum": ["nvd", "kev", "ghsa", "dependabot"] },
       "published": { "type": ["string", "null"], "format": "date-time" },
       "nvd_last_modified": { "type": ["string", "null"], "format": "date-time" },
       "vuln_status": { "type": ["string", "null"], "description": "e.g. 'Rejected' when NVD has withdrawn the CVE -- rendered as a REJECTED badge, not removed from the feed." },

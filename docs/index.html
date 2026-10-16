@@ -148,6 +148,41 @@
       </div>
     </section>
 
+    <!-- 2b. Threat intel: news/advisories with no CVE (social engineering,
+         vendor update issues) and exploited-in-the-wild reports. -->
+    <section class="section" id="intel-section" aria-labelledby="intel-title" hidden>
+      <div class="section__head">
+        <h2 class="section__title" id="intel-title">Threat intel &amp; news</h2>
+        <p class="section__hint" id="intel-hint"></p>
+      </div>
+      <div class="toolbar" role="search">
+        <div class="toolbar__row">
+          <div class="field field--search">
+            <label for="intel-q" class="visually-hidden">Search threat intel</label>
+            <input type="search" id="intel-q" class="input" placeholder="Search headlines, CVE, product…" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="field">
+            <label for="intel-cat" class="visually-hidden">Filter by category</label>
+            <select id="intel-cat" class="input"><option value="">All categories</option></select>
+          </div>
+          <div class="field">
+            <label for="intel-prio" class="visually-hidden">Filter by priority</label>
+            <select id="intel-prio" class="input">
+              <option value="">Priority: all</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          <label class="field intel-watch"><input type="checkbox" id="intel-watch"> Watchlist matches only</label>
+        </div>
+      </div>
+      <p class="section__hint" id="intel-count" aria-live="polite"></p>
+      <div class="card-grid" id="intel-grid"></div>
+      <p class="section__hint" id="intel-empty" hidden>No threat-intel items match these filters.</p>
+      <button type="button" class="btn btn--sm" id="intel-more" hidden>Show more</button>
+    </section>
+
     <!-- 3. Trend: collapsed by default so the alert list stays above the fold. -->
     <details class="section panel disclosure" id="trend-section" hidden>
       <summary class="disclosure__summary"><h2 class="section__title">Historical trend</h2><span class="disclosure__hint" id="trend-hint"></span></summary>
@@ -197,6 +232,7 @@
             <select id="source-filter" class="input">
               <option value="all">Source: all</option>
               <option value="nvd">NVD</option>
+              <option value="kev">CISA KEV</option>
               <option value="ghsa">GHSA</option>
               <option value="dependabot">Dependabot</option>
             </select>

@@ -1,0 +1,38 @@
+# Threat-intel news / advisory feeds ingested by scripts/fetch_intel.py.
+#
+# Why: the CVE pipeline only sees what NVD/KEV/GHSA/Dependabot publish, so it
+# structurally cannot surface social-engineering campaigns (e.g. Microsoft
+# Teams "IT support" vishing), vendor operational issues (e.g. a Windows
+# update causing black screens), or news that a CVE is being exploited before
+# CISA lists it. These feeds fill that gap. All are free, public RSS/Atom.
+#
+# A feed that errors is skipped for that run (logged, never fatal); items
+# already collected stay on the board until they age out (retention_days).
+retention_days: 30
+max_items: 600
+
+feeds:
+  - name: BleepingComputer
+    url: https://www.bleepingcomputer.com/feed/
+  - name: The Hacker News
+    url: https://feeds.feedburner.com/TheHackersNews
+  - name: SANS ISC
+    url: https://isc.sans.edu/rssfeed_full.xml
+  - name: Dark Reading
+    url: https://www.darkreading.com/rss.xml
+  - name: SecurityWeek
+    url: https://www.securityweek.com/feed/
+  - name: Help Net Security
+    url: https://www.helpnetsecurity.com/feed/
+  - name: The Register
+    url: https://www.theregister.com/security/headlines.atom
+  - name: Microsoft Security Blog
+    url: https://www.microsoft.com/en-us/security/blog/feed/
+  - name: CISA Advisories
+    url: https://www.cisa.gov/cybersecurity-advisories/all.xml
+  - name: Cyber Security News
+    url: https://cybersecuritynews.com/feed/
+  - name: GBHackers
+    url: https://gbhackers.com/feed/
+  - name: Krebs on Security
+    url: https://krebsonsecurity.com/feed/
