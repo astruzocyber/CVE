@@ -59,6 +59,44 @@ keywords:
   - "wp-content"
   - "content management system"
   - "cloudflare"
+  # Microsoft component names. NVD keywordSearch ANDs every word against the
+  # CVE description, and Microsoft's descriptions name the component
+  # ("... in Windows Shell allows ...") but rarely the word "Microsoft" -- so
+  # the "microsoft windows" vendor/product pair above misses most Patch
+  # Tuesday CVEs. These terms match how Microsoft actually words them.
+  - "Windows Shell"
+  - "Windows SmartScreen"
+  - "Windows Kernel"
+  - "Windows Kerberos"
+  - "Windows NTLM"
+  - "Windows Remote Desktop"
+  - "Windows Common Log File System"
+  - "Windows Hyper-V"
+  - "Windows Win32k"
+  - "Microsoft Exchange Server"
+  - "Microsoft SharePoint"
+  - "Microsoft Outlook"
+  - "Microsoft Office"
+  - "Microsoft Teams"
+  - "Microsoft Edge"
+  - "Microsoft Defender"
+  - "Azure Virtual Desktop"
+  # Perimeter / email stack seen in the SOC (Palo Alto, Fortinet, Check Point/Avanan).
+  - "PAN-OS"
+  - "GlobalProtect"
+  - "FortiGate"
+  - "FortiClient"
+  - "Check Point"
+
+# Exact-phrase description matches that bypass cvss_minimum: identity, trust and
+# user-delivered-file bypass components where even a "Medium" CVE matters
+# (e.g. CVE-2026-69982, AD FS security-feature bypass, CVSS 5.9).
+priority_keywords:
+  - "Active Directory Federation Services"
+  - "Mark of the Web"
+  - "Windows SmartScreen"
+  - "Microsoft Entra"
+  - "Active Directory Certificate Services"
 
 # GitHub repos to check via the Dependabot Alerts API (needs GH_DEPENDABOT_TOKEN secret
 # with security_events read scope on each repo listed).

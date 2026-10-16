@@ -17,6 +17,7 @@ import { exportCsv, exportJson, exportMarkdown, alertToMarkdown, suppressionSnip
 import { initTheme } from "./theme.js";
 import { initTrend, refreshTrendTheme } from "./trend.js";
 import { saveView, deleteView, findView, renderViewsSelect } from "./saved-views.js";
+import { initIntel } from "./intel.js";
 
 const VIEW_KEY = "viewMode";
 
@@ -457,6 +458,7 @@ async function main() {
   render();
   revealHash();
   initTrend();
+  initIntel();
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(() => {});

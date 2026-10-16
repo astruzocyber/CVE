@@ -265,6 +265,54 @@ def check_alerts_schema_json():
         print(f"alerts.schema.json: {len(alerts)} alerts validated against published JSON Schema, 0 violations")
 
 
+def check_intel_json():
+    """docs/data/intel.json (threat-intel board, scripts/fetch_intel.py).
+    Optional file: absent is a warning, malformed is a failure."""
+    path = DOCS / "data" / "intel.json"
+    if not path.exists():
+        warn("intel.json missing (threat-intel board will stay hidden)")
+        return
+    try:
+        data = json.loads(path.read_text())
+    except json.JSONDecodeError as e:
+        fail(f"intel.json is not valid JSON: {e}")
+        return
+    if not isinstance(data, dict) or not isinstance(data.get("items"), list):
+        fail("intel.json must be an object with an 'items' list")
+        return
+    labels = data.get("category_labels") or {}
+    required = {"id", "title", "link", "source", "categories", "watch_matches", "cve_ids", "score", "priority"}
+    seen = set()
+    for n, it in enumerate(data["items"]):
+        where = f"intel.json items[{n}]"
+        if not isinstance(it, dict):
+            fail(f"{where} is not an object")
+            continue
+        missing = required - set(it)
+        if missing:
+            fail(f"{where} missing keys {sorted(missing)}")
+            continue
+        if it["id"] in seen:
+            fail(f"{where} duplicate id {it['id']}")
+        seen.add(it["id"])
+        if not str(it["link"]).startswith(("https://", "http://")):
+            fail(f"{where} link is not http(s)")
+        if it["priority"] not in ("high", "medium", "low"):
+            fail(f"{where} bad priority {it['priority']!r}")
+        for c in it["categories"]:
+            if c not in labels:
+                fail(f"{where} category {c!r} has no label")
+        for cid in it["cve_ids"]:
+            if not re.fullmatch(r"CVE-\d{4}-\d{4,7}", cid):
+                fail(f"{where} malformed CVE id {cid!r}")
+        # Anti-hallucination guard: every CVE id must appear verbatim in the item text.
+        text = f"{it['title']} {it.get('summary', '')}".upper()
+        for cid in it["cve_ids"]:
+            if cid.upper() not in text:
+                fail(f"{where} CVE {cid} not present in its own title/summary")
+    print(f"intel.json: {len(data['items'])} items checked")
+
+
 def main():
     check_alerts_json()
     check_alerts_schema_json()
@@ -272,6 +320,7 @@ def main():
     check_trend_csv()
     check_js_html_consistency()
     check_feeds()
+    check_intel_json()
 
     print()
     if warnings:
