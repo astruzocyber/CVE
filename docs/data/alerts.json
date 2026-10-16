@@ -1,5 +1,2232 @@
 [
   {
+    "cve_id": "CVE-2026-68498",
+    "description": "StreamReadConstraints.maxNameLength (default 50,000 characters) is intended to bound how much memory a single JSON Object property name can consume while being parsed, independently of the much larger maxStringLength (default 100,000,000 characters) that bounds ordinary string values. For parsers built over character input \u2014 Reader, String or char[] sources, all served by ReaderBasedJsonParser \u2014 that bound is not applied while the name is being accumulated. The code path instead re-uses the string-value length check, which is roughly 2000x larger by default.\n\n\n\nIn the character-input slow path, ReaderBasedJsonParser._parseName2() accumulates the name into the TextBuffer and, when a segment fills, calls TextBuffer.finishCurrentSegment(), which validates only maxStringLength. The correct check, StreamReadConstraints.validateNameLength(int), is reached afterwards in CharsToNameCanonicalizer.findSymbol(), once the entire name has been scanned to its closing quote. By that point the full name \u2014 up to maxStringLength characters \u2014 has already been buffered in memory.\n\n\n\nA remote attacker who can have a single sufficiently long JSON Object property name parsed through this path can force allocation on the order of 100,000,000 characters (approximately 200 MB, with segment bookkeeping pushing real peak usage higher) before any StreamConstraintsException is thrown, instead of the approximately 50,000-character (about 100 KB) bound the API promises. Repeating this across concurrent requests can exhaust the heap and crash the process. No authentication or user interaction is required. Because StreamReadConstraints.maxDocumentLength is disabled by default (-1), nothing else bounds the token first, so the issue is exploitable under default configuration.\n\n\n\nByte-input parsers are not affected: UTF8StreamJsonParser, UTF8DataInputJsonParser and the non-blocking (async) parsers re-validate maxNameLength on every growth of the name-decode buffer via ParserBase._growNameDecodeBuffer(), rejecting an oversized name after allocating only tens of kilobytes. Applications are exposed when untrusted JSON is parsed from a String, Reader or char[] \u2014 for example an HTTP request body already read into a String \u2014 rather than from raw UTF-8 bytes.\n\n\n\nThis issue affects com.fasterxml.jackson.core:jackson-core from 2.16.0 and tools.jackson.core:jackson-core from 3.0.0. Releases before 2.16.0 are not affected, because StreamReadConstraints.maxNameLength was first introduced in jackson-core 2.16.0.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-400"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-10-16T22:17:25.183",
+    "nvd_last_modified": "2026-10-16T22:17:25.183",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704961+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89711",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nNFSD: remove flawed WARN_ON_ONCE from nfsd_mode_check\n\nThe header for commit e75b23f9e323 (\"nfsd: check d_can_lookup in\nfh_verify of directories\") details the assumption that justified\nadding the WARN_ON_ONCE to nfsd_mode_check(), that assumption is\ninvalid (in the case of NFS reexport).\n\nWhen NFSD exports an NFS filesystem it is very possible for\nnfsd_mode_check() to encounter a @dentry that doesn't have\ni_op->lookup (see nfs_fhget()'s NFS_ATTR_FATTR_MOUNTPOINT and\nNFS_ATTR_FATTR_V4_REFERRAL handling, and d_flags_for_inode()).\n\nSo remove nfsd_mode_check()'s WARN_ON_ONCE(). The nfserr_notdir\nreturn on that branch must stay. It guards the subsequent\nlookup_one_unlocked() -> __lookup_slow() path, which calls\ninode->i_op->lookup() with no NULL check, so returning nfserr_notdir\nis what keeps a client LOOKUP into such a @dentry from dereferencing\na NULL method pointer.",
+    "cvss_score": 8.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00443,
+    "epss_percentile": 0.37054,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.2,
+      "cvss_component": 28.7,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00443,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-89711",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "ae251937c6f0237e5b555a5e4ba4595b8206e865"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.270"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.221"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.188"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.157"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:19:58.500",
+    "nvd_last_modified": "2026-10-16T20:18:27.687",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704777+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89708",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nnfsd: RCU-protect cl_cb_session to fix use-after-free on session teardown\n\nAfter a DESTROY_SESSION the per-session teardown path can free a\nsession while rpciod still holds an inflight callback rpc_task that\ndereferences clp->cl_cb_session.  nfsd4_probe_callback_sync() flushes\ncl_callback_wq, but once nfsd4_run_cb_work() has called\nrpc_call_async() the rpc_task lives on rpciod; flushing the workqueue\ndoes not wait for it.  rpc_shutdown_client() does drain rpciod tasks,\nbut uses a 1-second wait_event_timeout \u2014 tasks stuck in rpc_delay()\n(e.g. 2-second NFS4ERR_DELAY retries) can outlive the drain.\n\n    destroy path                       rpciod\n    ------------                       ------\n    unhash_session(ses)\n    nfsd4_probe_callback_sync(clp)\n      flush_workqueue(cl_callback_wq)\n      /* returns; rpc_task still live */\n    nfsd4_put_session_locked(ses)\n    free_session(ses) -> kfree(ses)\n                                       nfsd4_cb_sequence_done()\n                                         reads cb_clp->cl_cb_session\n                                         /* freed slab */\n\nA second window exists in nfsd4_process_cb_update().  When\n__nfsd4_find_backchannel() returns NULL because unhash_session() has\nalready removed the destroyed session from cl_sessions,\nsetup_callback_client() takes the v4.1 early return so\nclp->cl_cb_session = ses never fires and the field retains a pointer\nto the about-to-be-freed session.\n\nFix both by converting cl_cb_session to an RCU-protected pointer:\n\n  - Move the cl_cb_session = ses assignment in setup_callback_client()\n    to after rpc_create() succeeds, so it is only published when a\n    working backchannel exists.  Clear cl_cb_session on the error\n    return in nfsd4_process_cb_update().  Both stores use\n    rcu_assign_pointer().\n\n  - Annotate cl_cb_session with __rcu.  All rpciod-side readers use\n    rcu_read_lock()/rcu_dereference() and check for NULL, bailing to\n    the appropriate error or requeue path:\n    encode_cb_sequence4args(), decode_cb_sequence4resok(),\n    nfsd41_cb_get_slot(), nfsd41_cb_release_slot(),\n    nfsd4_cb_prepare(), and nfsd4_cb_sequence_done().\n\n  - Switch __free_session() from kfree() to kfree_rcu() so the\n    session slab is not reclaimed until after an RCU grace period,\n    guaranteeing that rpciod readers inside rcu_read_lock() never\n    dereference freed memory.\n\n  - Pass the session pointer to the nfsd_cb_seq_status and\n    nfsd_cb_free_slot tracepoints instead of having them re-read\n    cl_cb_session.\n\n  - nfsd4_cb_prepare() calls rpc_exit() when the session is NULL,\n    routing through the done/release path to requeue the callback.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00444,
+    "epss_percentile": 0.37182,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00444,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-89708",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "2775ec1d617e665eab71ce0f13ab1f7959713a2b"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.12.111"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.18.50"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "7.2.4"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:19:58.140",
+    "nvd_last_modified": "2026-10-16T20:18:27.403",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704765+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89671",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nnfsd: gate nfs3 setacl by argp->mask\n\nnfsd3_proc_setacl() calls set_posix_acl() unconditionally for both\nACL_TYPE_ACCESS and ACL_TYPE_DEFAULT, passing argp->acl_access and\nargp->acl_default verbatim. The NFSv3 ACL decoder only populates\nthose pointers when the corresponding mask bit is set:\n\n    nfs3svc_decode_setaclargs()\n      if (args->mask & NFS_ACL)    decode into acl_access\n      if (args->mask & NFS_DFACL)  decode into acl_default\n      /* otherwise the pointer stays NULL (pc_argzero) */\n\n    nfsd3_proc_setacl()\n      set_posix_acl(.., ACL_TYPE_ACCESS,  argp->acl_access)\n      set_posix_acl(.., ACL_TYPE_DEFAULT, argp->acl_default)\n\nset_posix_acl(idmap, dentry, type, NULL) is the VFS \"remove this\nACL type\" operation. A NULL pointer that means \"the client did not\nsend this arm\" is therefore indistinguishable from \"the client\nasked to remove this ACL\". A SETACL with mask=NFS_ACL silently\ndrops the directory's default ACL; mask=0 drops both.\n\nThe sibling nfsd3_proc_getacl() already consults argp->mask before\ntouching each arm; mirror that in setacl.\n\nFix by wrapping each set_posix_acl() call in the matching mask bit\ncheck and initializing error to 0 before inode_lock so that a\nrequest with neither bit set leaves the on-disk ACLs untouched and\nreturns nfs_ok. The out_drop_lock path and the unconditional\nposix_acl_release() at out: are preserved; both NULL-tolerate the\nskipped arms.",
+    "cvss_score": 9.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00501,
+    "epss_percentile": 0.4152,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.1,
+      "cvss_component": 31.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00501,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-89671",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "3be1d8611dae4829e4608007db29f4a8748c37b2"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.157"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.12.109"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.18.50"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "7.2.4"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:19:53.647",
+    "nvd_last_modified": "2026-10-16T20:18:25.947",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704756+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89649",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nceph: bound xattr value length in __build_xattrs()\n\n__build_xattrs() decodes the MDS-supplied xattr blob one attribute at a\ntime. For each attribute it reads a 32-bit name length, advances past the\nname bytes, reads a 32-bit value length, records the value pointer, and\nadvances past the value bytes. The two length fields are read with\nceph_decode_32_safe(), but the value bytes themselves are advanced over\nwith a bare \"p += len\" and no ceph_decode_need() check that \"len\" bytes\nremain in the blob.\n\nFor every attribute except the last, the next iteration's\nceph_decode_32_safe() on the following name length implicitly verifies\nthat the previous value did not run past the blob end. The final\nattribute has no successor, so its decoded value length is never checked\nagainst the blob bounds. A malicious or compromised metadata server can\nset the last attribute's value length larger than the bytes actually\npresent in the blob.\n\nThe blob is a dedicated kvmalloc() allocation sized to the wire length\n(ceph_buffer_new() in ceph_fill_inode()). __set_xattr() records the\noversized length in xattr->val_len verbatim, and a later getxattr(2) runs\nmemcpy(value, xattr->val, xattr->val_len) into a user-supplied buffer,\ncopying bytes past the end of the allocation back to user space.\n\nImpact: a malicious metadata server discloses adjacent kernel heap bytes\nto a local user via getxattr(2) on a CephFS file. Add the missing\nceph_decode_need() so an out-of-bounds value length on the final\nattribute fails the decode and returns -EIO instead of being stored.",
+    "cvss_score": 9.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00678,
+    "epss_percentile": 0.51357,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.1,
+      "cvss_component": 31.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00678,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-89649",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "848b80ca6b410f350d08b8ac19a00ef88223f2ea"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.270"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.221"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.188"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.157"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:19:50.897",
+    "nvd_last_modified": "2026-10-16T20:18:20.907",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704744+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89574",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\ndm array: validate array block headers on read\n\narray_block_check() validates blocknr and csum and nothing else, while\nnode_check(), next to it, has bounded the structural fields since both\nwere written. dm_array_cursor_next() takes its loop bound from the\non-disk nr_entries and element_at() is unguarded pointer arithmetic, so\na count larger than the block holds keeps the cursor in one block while\nthe index grows past it and the read walks off the dm-bufio buffer --\ndm_cache_load_mappings() drives it once per cache block at activation.\n\nCheck the header against itself: reject a zero value_size, require\nmax_entries to equal calc_max_entries() for that value_size and block\nsize, and require nr_entries to fit. Equality rather than an upper bound,\nsince a count below the real capacity trips BUG_ON() in fill_ablock() and\ntrim_ablock(). Metadata dm-array writes satisfies all three.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00168,
+    "epss_percentile": 0.05691,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00168,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-89574",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "67adda7ed5da3e3b64f5b9021a02c21fb374fd9c"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.12.109"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.18.50"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "7.2.4"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:19:41.517",
+    "nvd_last_modified": "2026-10-16T20:18:19.160",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704724+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89550",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nSUNRPC: svcauth_gss: enforce krb5 token minimum length\n\nsvcauth_gss_unwrap_priv() validates only an upper bound on the\nwire-supplied opaque length before handing the buffer to\ngss_unwrap():\n\n    if (len > xdr_stream_remaining(xdr))\n            goto unwrap_failed;\n    offset = xdr_stream_pos(xdr);\n    ...\n    maj_stat = gss_unwrap(ctx, offset, offset + len, buf);\n\nThe wire value `len` flows unchanged as the upper bound into the\nkrb5 unwrap path, so a len in [0, 16] passes this check and is\nhanded to gss_unwrap(). For a krb5 v2 context that lands in\ngss_krb5_unwrap_v2(), which reads the 16-byte RFC 4121 token\nheader fields at ptr+4 and ptr+6 and then calls rotate_left()\nbefore any integrity check. With a sub-header length the header\nreads run past the token, and _rotate_left()'s `shift %= buf->len`\npath can divide by zero when buf->len has been driven to zero by\nthe truncated token. A header-only token (len == 16) is equally\ninvalid: with a non-zero RRC field and the opaque blob ending at\nthe XDR buffer boundary, rotate_left() builds a zero-length\nsubbuffer, reaching the same division.\n\nReject the token at the server entry point before it reaches the\nkrb5 unwrap core. A valid sealed RFC 4121 token must contain\nthe 16-byte header plus at least some encrypted payload.\n\nFix by adding a minimum-length check immediately after the\nexisting upper-bound check:\n\n    if (len <= GSS_KRB5_TOK_HDR_LEN)\n            goto unwrap_failed;",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00457,
+    "epss_percentile": 0.38208,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00457,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-89550",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "0ea5b0c7f212c2772d32c2b88287b89a9cdf6edd"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.157"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.12.109"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.18.50"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "7.2.4"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:19:38.500",
+    "nvd_last_modified": "2026-10-16T20:18:17.400",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704713+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89544",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nSUNRPC: fix gssx_dec_option_array error path bugs\n\nFour coupled defects in the gssx XDR option-array decoder make the\nerror paths unsafe: a NULL deref in the caller, a refcount leak on\nthe decoded group_info, and a latent use-after-free that the leak\nfix would otherwise expose.\n\ngssx_dec_option_array() sets oa->count = 1 before allocating\noa->data.  If that allocation fails, -ENOMEM is returned with\noa->count == 1 and oa->data == NULL.  All other error paths jump\nto free_oa: which frees oa->data and NULLs it but also leaves\noa->count == 1.  The caller trusts the count:\n\n    gssp_accept_sec_context_upcall()\n      gssx_dec_accept_sec_context()\n        gssx_dec_option_array()        /* fails, count=1 data=NULL */\n      data = res.options.data[0].value /* NULL deref */\n\nIndependently, free_creds: releases the partially decoded svc_cred\nwith a bare kfree(creds).  gssx_dec_linux_creds() installs a\ngroups_alloc() result into creds->cr_group_info; that object is\nkvmalloc-backed and refcounted, and only put_group_info() reaches\nkvfree().  A plain kfree(creds) drops the wrapper and leaks the\ngroup_info allocation.\n\nThe natural fix for the leak is to call free_svc_cred(creds) before\nkfree(creds), but free_svc_cred() invokes put_group_info() on\ncreds->cr_group_info unconditionally when non-NULL.  The existing\nout_free_groups: path in gssx_dec_linux_creds() already called\ngroups_free() on that pointer without clearing it, so once\nfree_svc_cred() is wired in, the subsequent put_group_info() would\ntouch freed memory.\n\nFix all four together:\n\n  - Move the oa->count = 1 assignment below the oa->data allocation\n    so it is never set when oa->data is NULL.\n  - Reset oa->count to 0 at free_oa: so count and data stay\n    coherent and the caller sees an empty option array.\n  - Call free_svc_cred(creds) before kfree(creds) at free_creds:\n    so the refcounted cr_group_info is released.  free_svc_cred()\n    either NULL-guards each field explicitly (cr_group_info has\n    an if() check) or delegates to a helper that is NULL-safe\n    itself (kfree for the string fields, gss_mech_put() which\n    guards with if(gm) at gss_mech_switch.c:342), so it is safe\n    to call on a partially decoded svc_cred where only\n    cr_uid/cr_gid/cr_group_info have been written and everything\n    else is zero from kzalloc.\n  - In gssx_dec_linux_creds()'s out_free_groups: path, release\n    cr_group_info with put_group_info() rather than groups_free()\n    so the teardown matches free_svc_cred()'s refcount-aware path,\n    and clear the pointer so a later free_svc_cred() on the same\n    creds does not release it a second time.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00594,
+    "epss_percentile": 0.47295,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00594,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-89544",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "fb30241f7ccace372ee83017891549f23a715581"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "4.20"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "5.5"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "5.11"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "5.16"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:19:37.670",
+    "nvd_last_modified": "2026-10-16T20:18:16.773",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704703+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89488",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nopenvswitch: Fix CT limit teardown use-after-free\n\nPacket processing uses CT limit state under RCU, while netns teardown\nfrees that state under ovs_mutex. The CT limit pointer was neither removed\nfrom readers nor protected by a grace period, allowing packet processing to\ndereference the freed state.\n\nAn unprivileged user can trigger this bug from a user and network\nnamespace, causing a slab-use-after-free in ovs_ct_execute() when the\nnetns is torn down.\n\nPublish the CT limit pointer through RCU, remove it before teardown, and\nwait for readers before freeing its contents. Keep ovs_mutex around\nindividual CT limit updates, and use the RCU read-side lock while GET\ntraverses the RCU-protected limit lists.\n\nNetns teardown detaches the RCU-protected CT limit state in the pernet\n.pre_exit callback while holding ovs_mutex.  The pernet core guarantees an\nRCU grace period between the .pre_exit and .exit callbacks, so the .exit\ncallback completes the teardown without adding any extra synchronization.\n\nThe netlink command handlers do not need NULL checks because the userspace\nnetlink socket holds an active reference to its network namespace while a\nrequest is processed. The per-netns exit path therefore cannot run\nconcurrently with SET, DEL, or GET for that socket's namespace.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00126,
+    "epss_percentile": 0.02027,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00126,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-89488",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "239f26589a6926db28c436e14f28517581ef1385"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.270"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.221"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.188"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.157"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:19:30.557",
+    "nvd_last_modified": "2026-10-16T20:18:14.700",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704694+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89481",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nnvme-tcp: fix host memory disclosure on R2T for a read command\n\nnvme_tcp_handle_r2t() does not check the direction of the request the\nR2T refers to. A malicious controller can send an R2T for a READ and\nthe host will answer it: nvme_tcp_setup_h2c_data_pdu() builds the\nH2CData header and nvme_tcp_try_send_data() sends the request's data\nbuffer. That buffer is the READ destination, so its contents go to the\ncontroller.\n\nThe command then completes normally and nothing is logged.\n\nAgainst a test controller that answers every READ with an R2T, a 4096\nbyte buffered read returned all 4096 bytes, split over two R2Ts. The\npages contained stale kernel data, including an array of struct page\npointers.\n\nReject an R2T for a request that is not a write.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00413,
+    "epss_percentile": 0.34064,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00413,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-89481",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "49a4dcf57608ebf6432dbcb203ed25e7ed581445"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.188"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.157"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.12.109"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.18.50"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:19:29.600",
+    "nvd_last_modified": "2026-10-16T20:18:13.937",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704685+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-89478",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nsctp: drop a chunk if its transport was removed\n\nsctp_rcv() resolves the transport once per packet and leaves it in\nchunk->transport. The lookup reference, or the one sctp_add_backlog() takes\nif the socket is owned by userspace, keeps it around until the chunk has\nbeen processed.\n\nAn authenticated ASCONF DEL-IP can remove it in the meantime.\nsctp_assoc_rm_peer() takes the transport out of the association and calls\nsctp_transport_free(), which tags it dead and drops the reference the\nassociation held. There is a window on both paths: the packet can sit on\nthe socket backlog, and on the direct path the lookup completes before\nbh_lock_sock().\n\nThe DATA chunk in that packet puts the removed transport back into\nasoc->peer.last_data_from. Once the packet is done that reference goes\naway and the transport is freed by RCU, so the next delayed SACK carries\nthe pointer into the SACK chunk and sctp_outq_select_transport() reads the\nfreed transport's state.\n\nDrop the chunk in sctp_inq_push(), next to the existing rcvr->dead check.\nBoth paths reach it with the association's socket lock held. The peer\nretransmits it.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00514,
+    "epss_percentile": 0.42492,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00514,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-89478",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "3fc072e7cb4a0ff251d13cfc2d24f62489cd9386"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.270"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.221"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.188"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.157"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-11T20:19:29.207",
+    "nvd_last_modified": "2026-10-16T20:18:13.390",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704675+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80691",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nscsi: target: iblock: Fix wrong PR ops NULL check for PREEMPT/RELEASE\n\nIn the iblock_execute_pr_out() function, PRO_PREEMPT,\nPRO_PREEMPT_AND_ABORT, and PRO_RELEASE all perform callback capability\nchecks through ops->pr_clear. The error check allows unimplemented hooks\nto pass through the gate, resulting dereferencing a NULL function\npointer.\n\nCheck whether the hooks that need to be called are supported.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00441,
+    "epss_percentile": 0.36811,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00441,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-80691",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "3c60a8b4037dc35e365658fcbcb349a5d742ff49"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.151"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.12.103"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.18.44"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "7.1.8"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-28T08:16:54.587",
+    "nvd_last_modified": "2026-10-16T20:18:06.600",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704656+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80668",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nnetfilter: nf_conntrack_expect: use conntrack GC to reap expectations\n\nThis patch replaces the timer API by GC worker approach for\nexpectations, as it already happened in many other subsystems.\n\nUse the existing conntrack GC worker to iterate over the local list of\nexpectations in the master conntrack to reap expired expectations.\nCheck IPS_HELPER_BIT to run GC for expectations, set it on for nft_ct\nexpectation which nevers sets it. Hold the expectation spinlock while\niterating over the master conntrack expectation list to synchronize with\nnf_ct_remove_expectations(). This also performs runtime packet path\ngarbage collection through the expectation insertion and lookup\nfunctions while walking over one of the chains of the global expectation\nhashtables. Unconfirmed conntrack entries are skipped since ct->ext can\nbe reallocated and dying are skipped since those will be gone soon.\nSet on IPS_HELPER_BIT if the helper ct extension is added, then the new\nGC worker does not need to bump the ct refcount to check if the ct->ext\nhelper is available.\n\nThis removes the extra bump on the refcount for expectation timers, this\nallows to remove several nf_ct_expect_put() calls after the unlink,\nafter this update only refcount remains at 1 while on the expectation\nhashes.\n\nThis patch implicitly addresses a race with the existing timer API\nallowing an expectation to access a stale exp->master pointer which has\nbeen already released when expectation removal loses races with an\nexpiring timer, ie. timer_del() reporting false.\n\nAdd a new NF_CT_EXPECT_DEAD flag to reap this expectation via GC. This\nis needed by nf_conntrack_unexpect_related() which is called in error\npaths to invalidate newly created expectations that has been added into\nthe hashes. These expectactions cannot be inmediately released as GC or\nnf_ct_remove_expectations() could race to make it. On expectation\ninsert, the runtime GC reaps stale expectations before checking the\nexpectation limit set by policy.\n\nSet current timestamp in nf_ct_expect_alloc(), then add the expectation\npolicy timeout (or custom timeout specified added on top of this) to\nspecify the expectation lifetime.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00553,
+    "epss_percentile": 0.45,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00553,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-80668",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "7ec786f4230c2a9b2eaf97a2d45368933b49d2b2"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "6.2"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "6.7"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "6.13"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "6.19"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-28T08:16:52.080",
+    "nvd_last_modified": "2026-10-16T20:18:05.630",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704646+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80664",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nnetfilter: xt_nat: reject unsupported target families\n\nxt_nat SNAT and DNAT target handlers assume IP-family conntrack state\nis present and can dereference a NULL pointer when instantiated from an\nunsupported family through nft_compat. A bridge-family compat rule can\ntherefore trigger a NULL-dereference in nf_nat_setup_info().\n\nReject non-IP families in xt_nat_checkentry() so unsupported targets\ncannot be installed. Keep NFPROTO_INET allowed for valid inet NAT\ncompat users and leave the runtime fast path unchanged.\n\n[ The crash was fixed via\n  9dbba7e694ec (\"netfilter: nft_compat: ebtables emulation must reject non-bridge targets\"),\n  so this patch is no longer critical.\n  Nevertheless, NAT is only relevant for ipv4/ipv6, so this extra\n  family check is a good idea in any case. ]",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00174,
+    "epss_percentile": 0.0638,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 25.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 25.6,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00174,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-80664",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "49abe564391411057a26a9a943c8e17867c3b9b4"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.261"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.212"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.178"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.145"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-28T08:16:51.620",
+    "nvd_last_modified": "2026-10-16T20:18:05.470",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704637+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80604",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nHID: core: Fix OOB read in hid_get_report for numbered reports\n\nWhen a caller passes a size of 0 to hid_report_raw_event() for a\nnumbered report, the function originally called hid_get_report() before\nperforming any size validation.\n\nInside hid_get_report(), if the report is numbered (report_enum->numbered\nis true), it unconditionally dereferences data[0] to extract the report ID.\nWith a size of 0, this results in an out-of-bounds read or kernel panic.\n\nFix this by moving the numbered report size validation check before the\ncall to hid_get_report(), ensuring that size is at least 1 before\ndereferencing the data pointer.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "ADJACENT_NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00412,
+    "epss_percentile": 0.33948,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00412,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-80604",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "f8896b684e246f3f00f45ba2b6803ae59b9cc768"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "30ff978af92cb51c9ba99f96fc4f4ac80d7001ba"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "c39f5765ad840b71ff8db812d0210f216cca96e4"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "c973d53bcd420b58c4a34c68198746286d77e9fa"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "c1fc0d3aff26ec9ff885b3e4c92eba98cf349678"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-28T08:16:44.317",
+    "nvd_last_modified": "2026-10-16T20:18:03.453",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704627+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80603",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nnetfilter: nf_conntrack_irc: fix parse_dcc() off-by-one OOB read\n\nparse_dcc() treats data_end as an inclusive end pointer, but its only\ncaller passes data_limit = ib_ptr + datalen, which points one past the\nlast valid byte.\n\nThe newline search loop iterates while tmp <= data_end, so when no\nnewline is present, *tmp is read at tmp == data_end, one byte beyond\nthe region filled by skb_header_pointer().\n\nirc_buffer is kmalloc'd as MAX_SEARCH_SIZE + 1 bytes and datalen is\ncapped at MAX_SEARCH_SIZE, so the stray read does not fault.  The byte\nis uninitialized or stale; if it contains an ASCII digit, simple_strtoul\nwill consume it and produce a wrong DCC IP or port in the conntrack\nexpectation.  The extra allocation byte is also a fragile guard: if the\ncap or allocation size changes, this becomes a real out-of-bounds read.\n\nChange the loop and its post-loop check to use strict less-than,\nconsistent with the caller's exclusive-end convention.  Update the\nfunction comment accordingly.",
+    "cvss_score": 9.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00595,
+    "epss_percentile": 0.47334,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.1,
+      "cvss_component": 31.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00595,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-80603",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "abb8c32b88ea3f46beb68c34fe9a3ac8ed664e7e"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.261"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.212"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.178"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.145"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-28T08:16:44.187",
+    "nvd_last_modified": "2026-10-16T20:18:03.287",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704616+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80590",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\ninet: frags: strip GSO state from fragments before reassembly\n\nA virtio_net_hdr (tun/tap, or AF_PACKET with PACKET_VNET_HDR) can mark\nan IPv4 or IPv6 fragment as GSO; nothing relates gso_type to frag_off.\ninet_frag_reasm_prepare()/inet_frag_reasm_finish() keep the first\nfragment's skb as the head of the reassembled datagram, including its\nshinfo->gso_size/gso_type/gso_segs, and chain the remaining fragments\non frag_list with whatever linear/paged layout they arrived with.\n\nAfter ip_defrag() (ip_local_deliver(), nf_defrag_ipv4, ...) the\nreassembled skb therefore still claims to be GSO (SKB_GSO_DODGY), and\nthe next software segmentation point - udp_rcv_segment() on local\ndelivery, validate_xmit_skb(), or the ip_finish_output_gso() slow\npath - hands it to skb_segment(). skb_segment()'s frag_list walk\nassumes GRO-shaped input and hits one of its BUG_ON()s. Two writes to\na tap by an unprivileged user in its own userns are enough:\n\n  kernel BUG at net/core/skbuff.c:4899!\n  Oops: invalid opcode: 0000 [#1] SMP KASAN NOPTI\n  CPU: 0 UID: 1000 PID: 82 Comm: poc Not tainted 7.2.0-pentest+ #2\n  RIP: 0010:skb_segment+0x20ca/0x48b0\n  Call Trace:\n   <TASK>\n   __udp_gso_segment+0x29a/0x27d0\n   udp4_ufo_fragment+0x458/0x6c0\n   inet_gso_segment+0x429/0x1340\n   skb_mac_gso_segment+0x233/0x4f0\n   __skb_gso_segment+0x308/0x660\n   udp_queue_rcv_skb+0x440/0xad0\n   udp_unicast_rcv_skb+0xc7/0x2c0\n   udp_rcv+0x16ce/0x2260\n   ip_protocol_deliver_rcu+0x197/0x2d0\n   ip_local_deliver+0x430/0x690\n   ip_rcv+0x16f/0x1f0\n   __netif_receive_skb_one_core+0x15e/0x1c0\n   __netif_receive_skb+0x1e/0x110\n   netif_receive_skb+0xf6/0x5c0\n   tun_rx_batched.isra.0+0x3ab/0x790\n   tun_get_user+0x17c3/0x3550\n   tun_chr_write_iter+0xba/0x1b0\n   vfs_write+0x646/0x1130\n   </TASK>\n  Kernel panic - not syncing: Fatal exception in interrupt\n\nThis runs with BH disabled, so it is a panic rather than an oops. The\nsame is reachable with CAP_NET_RAW in a netns where a defrag point\nprecedes a GSO point, and from a guest whose VMM forwards\nvirtio_net_hdr to a tap. The SKB_GSO_DODGY frag_list checks added by\ncommit 3dcbdb134f32 (\"net: gso: Fix skb_segment splat when splitting\ngso_size mangled skb having linear-headed frag_list\") and by\ncommit 9e4b7a99a03a (\"net: gso: fix panic on frag_list with mixed head\nalloc types\") do not cover it: page-backed heads skip them, and kmalloc\nheads skip them when gso_size == skb_headlen(head), which the sender\ncontrols.\n\nAn skb entering a frag queue is an IP fragment by definition and\ncannot legitimately carry GSO state: GRO does not merge fragments and\nthe stack segments before it fragments, so only untrusted sources are\naffected. This has been reachable since\ncommit f43798c27684 (\"tun: Allow GSO using virtio_net_hdr\"), the first\npath that let userspace attach GSO metadata to an IP fragment. Reset\nthe GSO fields of every fragment as it is queued, in\ninet_frag_queue_insert(), which IPv4, IPv6, nf_conntrack_reasm and\n6lowpan reassembly share; then neither the head nor the frag_list\nmembers of the reassembled skb carry them (the members matter too:\nthe ip_do_fragment()/ip6_fragment() fast paths send them out as they\nare). The head may remain CHECKSUM_PARTIAL; that is already accepted\non receive and resolved by skb_checksum_help() in\nip_do_fragment()/ip6_fragment() on forward.\n\nTested on top of net.git (dc4b95b8fee9), x86_64: the tap reproducer\nabove, two further IPv4 frag_list geometries that reach\nBUG_ON(i >= nfrags) and BUG_ON(!list_skb->head_frag), and an IPv6\nfragment-header variant (udp6_ufo_fragment()) each panic the unpatched\nkernel; with this patch all four datagrams are delivered intact and\nnothing is logged.",
+    "cvss_score": 8.6,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00578,
+    "epss_percentile": 0.46416,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.6,
+      "cvss_component": 30.1,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00578,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-80590",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "cfdbc8c2e6f9ef5d8b8e54859da03dfe682b0bee"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.268"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.219"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.186"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.155"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-28T08:16:42.517",
+    "nvd_last_modified": "2026-10-16T20:18:02.410",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704606+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80587",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nmptcp: avoid combining some incoming suboptions\n\nSome MPTCP suboptions are mutually exclusive according to the RFC8684,\nbut also because in different places, the code doesn't expect some\ncombinations to be present. That's specially true for suboptions that\nwould be present twice, but with different attributes.\n\nThe new restrictions are the same as the ones applied on the output\nside, with mptcp_write_options. The same rules can be reused with a\nsmall fix: an MP_FASTCLOSE can be used with a DSS when the sender picks\nthis option [1], which is not the case on Linux. Here are the rules:\n\n  Which options can be used together?\n\n  X: mutually exclusive\n  O: often used together\n  C: can be used together in some cases\n  P: could be used together but we prefer not to (optimisations)\n\n  | Opt: | MPC  | MPJ  | DSS  | ADD  |  RM  | PRIO | FAIL |  FC  |\n  |------|------|------|------|------|------|------|------|------|\n  | MPC  |------|------|------|------|------|------|------|------|\n  | MPJ  |  X   |------|------|------|------|------|------|------|\n  | DSS  |  X   |  X   |------|------|------|------|------|------|\n  | ADD  |  X   |  X   |  P   |------|------|------|------|------|\n  | RM   |  C   |  C   |  C   |  P   |------|------|------|------|\n  | PRIO |  X   |  C   |  C   |  C   |  C   |------|------|------|\n  | FAIL |  X   |  X   |  C   |  X   |  X   |  X   |------|------|\n  | FC   |  X   |  X   |  P   |  X   |  X   |  X   |  X   |------|\n  | RST  |  X   |  X   |  X   |  X   |  X   |  X   |  O   |  O   |\n  |------|------|------|------|------|------|------|------|------|\n\nThe only difference is with the 'P': another stack could send and\nADD_ADDR with other suboptions (DSS, RM_ADDR), and this should be\nallowed.\n\nA few points of attention:\n\n - In theory, an MP_CAPABLE could be used with a RM_ADDR, but there is\n   no reason to add it with a SYN. Note that even with a 4th ACK, it\n   doesn't seem to be useful, except when IDs are known in advance via\n   another channel. Better not to break that.\n\n - Now, combining both an MP_CAPABLE and an MP_JOIN will no longer\n   result to a reject of the two options, but only the second suboption\n   is ignored. That seems OK to do that for this unexpected error. At\n   least now all inconsistent combinations are handled the same way.\n   This could change later in next. This also means the explicit checks\n   for having both MPC + MPJ in subflow.c will now be unreachable.\n   That's fine, they will be removed in a follow-up patch.\n\n - In case of conflicting combinations, the extra suboption(s) is/are\n   ignored: having such combinations either means the remote peer is\n   buggy, or is evil. The simplest action is then taken in this case:\n   stop processing the current suboption.\n\n - In mp_opt->suboptions, there is also a bit reserved to the checksum,\n   which can be used in an MP_CAPABLE and a DSS. Each time a DSS option\n   can be used in parallel with another option, the checksum can be set,\n   so the verification is combined into a new OPTIONS_MPTCP_DSS macro.\n\n - An MP_CAPABLE ACK can carry a Data-Level Length, and an optional\n   Checksum: they are the same as the ones found in a DSS, because a DSS\n   cannot be used in parallel to an MP_CAPABLE. Similarly, even if there\n   is room, a DSS cannot be used with an MP_JOIN.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00403,
+    "epss_percentile": 0.32965,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00403,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-80587",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "0e2210af439755a2af352eea4178261dcf61742e"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.218"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.153"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.12.105"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.18.46"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-26T15:17:15.017",
+    "nvd_last_modified": "2026-10-16T20:18:01.900",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704594+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80579",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nfbdev: clear fb_info->mode before deleting a videomode\n\nfb_set_var() can delete a mode from info->modelist when userspace\npasses FB_ACTIVATE_INV_MODE through FBIOPUT_VSCREENINFO. The code\nchecks that the mode being deleted is not the current info->var and\nthat fbcon is not using it, but it does not check fb_info->mode.\n\nfb_info->mode may still point into the modelist entry being deleted.\nIf the entry is freed, later mode sysfs reads through show_mode() can\ndereference a stale pointer.\n\nClear fb_info->mode before calling fb_delete_videomode() when it\nmatches the mode being removed.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00165,
+    "epss_percentile": 0.05348,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00165,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-80579",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "ce7fef961c63229b22dec415fb988899f479d61f"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "7.1.10"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-26T15:17:14.007",
+    "nvd_last_modified": "2026-10-16T20:18:01.160",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704584+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80561",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nlibceph: fix multiple unsafe decodes in decode_locker()\n\ndecode_locker() in cls_lock_client.c contains three unsafe decode\noperations that allow a malicious or compromised OSD to trigger\nslab-out-of-bounds reads:\n\n1. ceph_decode_copy() at the locker_id_t name field has no preceding\n   bounds check. With p == end after ceph_start_decoding() accepts\n   struct_len=0, this reads sizeof(ceph_entity_name) = 9 bytes past\n   the validated buffer boundary.\n\n2. *p += sizeof(struct ceph_timespec) after the locker_info_t header\n   is an unchecked pointer advance. A malicious OSD can position p\n   past end, causing all subsequent _safe checks to pass against a\n   bogus boundary.\n\n3. len = ceph_decode_32(p) has no preceding bounds check, and the\n   immediately following *p += len is uncapped. A malicious OSD can\n   send len=0xffffffff, advancing p gigabytes past end and escaping\n   the decode window entirely.\n\nFix all three by replacing bare operations with their safe variants:\n  ceph_decode_copy   -> ceph_decode_copy_safe\n  *p += sizeof(...)  -> ceph_decode_skip_n\n  ceph_decode_32(p)  -> ceph_decode_32_safe\n  *p += len          -> ceph_decode_skip_n\n\nA new label is added to return -EINVAL on any bounds violation.\n-EINVAL is appropriate here: the data received from the OSD\nis structurally malformed, which is an invalid argument to the decode\ncontract regardless of whether the caller or the wire is at fault.\n\nAttacker model: a malicious or compromised OSD in a multi-tenant Ceph\ndeployment can trigger this against any kernel client that issues the\nlock.get_info class method (e.g. during RBD exclusive lock acquisition)\nwithout any further privileges beyond OSD session establishment.\n\n[ idryomov: use ceph_decode_skip_string() to skip description, trim\n  changelog ]",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00514,
+    "epss_percentile": 0.42494,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00514,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-80561",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "1ed45c8d96498725eb54f740172f9068d8673906"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.266"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.217"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.184"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.153"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-26T15:17:11.007",
+    "nvd_last_modified": "2026-10-16T20:18:00.360",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704575+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-74753",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nperf: Reject exited events as group leaders\n\nperf_event_remove_on_exec() sets remove-on-exec events to the EXIT state\nand detaches their group relationships.  The event's file descriptor can\nremain open, however, and perf_event_open() currently accepts that event\nas a group leader because its early validation rejects only REVOKED and\nDEAD events.\n\nA new sibling can consequently be linked to the detached leader.  When\nthe leader is closed, perf_group_detach() observes that its\nPERF_ATTACH_GROUP bit is already clear and skips the new sibling.  The\nsibling then retains a group_leader pointer to the freed event.\n\nReject group leaders in the EXIT state.  Perform the check while holding\nthe shared context mutex so that an exec in the target task cannot detach\nthe leader between validation and group attachment.\n\n[peterz: make the earlier test fully consistent]",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00129,
+    "epss_percentile": 0.02219,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00129,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-74753",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "ce12e1170c0c78dffb9b28af6d287492ae7dd99d"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "e593031ff19a9484e8a00bc47edd447187721846"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "7a03413f31c196ab3894f988cdce0bb47b4fec42"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "7ce010275c531475f9d6e7efb11b9e522c74ed2e"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "fa091f46c3833fb22384f10eade2b4e1e1d0b278"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-26T15:16:54.387",
+    "nvd_last_modified": "2026-10-16T20:17:56.900",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704566+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-74518",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nmm/hugetlb: fix list corruption in allocate_file_region_entries()\n\nallocate_file_region_entries() tops up resv->region_cache with freshly\nallocated file_region descriptors.  The allocation uses GFP_KERNEL, so\nresv->lock is dropped around it: the new entries are gathered on a\nstack-local list head, allocated_regions, and spliced into\nresv->region_cache once the lock is re-acquired.\n\nThe splice used list_splice(), which moves the entries but does not\nre-initialize the source head, so allocated_regions is left pointing at an\nentry that now lives on resv->region_cache.  The top-up runs in a while\nloop that re-checks the cache deficit after re-acquiring the lock.  For a\nshared mapping the resv_map is shared by every mapper of the hugetlbfs\ninode, so a concurrent region_chg()/region_add()/region_del() on the same\nresv_map can consume cache entries during the unlocked window and force a\nsecond iteration.  That iteration calls list_add() on the stale head and\ncorrupts the list; with CONFIG_DEBUG_LIST the __list_add_valid() check\ntrips:\n\n  list_add corruption. next->prev should be prev (ffffc900011ff7f8),\n  but was ffff88814c281460. (next=ffff88814c545640).\n  kernel BUG at lib/list_debug.c:31!\n   allocate_file_region_entries+0x191/0x420\n   region_chg+0x267/0x300\n   hugetlb_reserve_pages+0x387/0xc80\n   hugetlbfs_file_mmap+0x2ce/0x3f0\n   mmap_region+0x1348/0x1a80\n   do_mmap+0x85e/0xb90\n   vm_mmap_pgoff+0x18c/0x330\n   ksys_mmap_pgoff+0x2a1/0x3e0\n   do_syscall_64+0xd7/0x420\n\nWithout CONFIG_DEBUG_LIST the bad list_add() silently links a kernel-stack\naddress into resv->region_cache, leading to later use-after-free.\n\nThis was observed as a real host panic on a dense KVM host where a QEMU\nguest-RAM hugetlbfs file was mapped MAP_SHARED by both QEMU and a separate\nSPDK/DPDK vhost-user target, generating concurrent region_* traffic on one\nshared resv_map.\n\nUse list_splice_init() so the source head is re-initialized empty after\neach splice, making the retry loop safe.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00126,
+    "epss_percentile": 0.02029,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00126,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-74518",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "01b8569233e47693d6ff7efa96d9854c55f936fc"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.265"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.216"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.183"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.151"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-15T13:17:56.967",
+    "nvd_last_modified": "2026-10-16T20:17:34.450",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704501+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-74474",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nvxlan: use pskb_network_may_pull() for transmit path header pulls\n\nIn vxlan_xmit(), arp_reduce(), and vxlan_mdb_entry_skb_get(), pskb_may_pull() was\nbeing called to verify the availability of network layer headers (ARP, IPv6/ND,\nIP/IPv6 MDB keys).\n\nHowever, during transmit skb->data points to the MAC header, so skb_network_offset(skb)\nis ETH_HLEN (14 bytes). Using pskb_may_pull(skb, len) only checks len bytes from skb->data\nrather than skb_network_offset(skb) + len, which can leave part of the network header\nin non-linear frags.\n\nReplace these remaining pskb_may_pull() calls with pskb_network_may_pull() to properly\naccount for the MAC header offset.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00491,
+    "epss_percentile": 0.40815,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00491,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-74474",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "371425d4be7795e9158388af9eee0201e6047410"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.188"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.153"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.12.105"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.18.44"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-15T13:17:52.177",
+    "nvd_last_modified": "2026-10-16T20:17:30.300",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704489+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-74473",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nvxlan: use pskb_network_may_pull() in route_shortcircuit()\n\nroute_shortcircuit() currently calls pskb_may_pull(skb, sizeof(struct iphdr))\n(or ipv6hdr), which checks if bytes are available starting from skb->data.\n\nHowever, in vxlan_xmit(), skb->data points to the MAC header, so\nskb_network_offset(skb) is ETH_HLEN (14 bytes). Using pskb_may_pull(skb, 20)\nonly checks 20 bytes from skb->data (which is 14 bytes MAC header + 6 bytes of\nIP header), leaving the rest of the IP header potentially un-pulled in non-linear\nfrags. Subsequent dereferences of ip_hdr(skb)->daddr can read beyond the pulled\nlinear buffer length.\n\nFix this by using pskb_network_may_pull(), which adds skb_network_offset(skb) to\nthe length check to ensure the full network header is present in the linear buffer.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00525,
+    "epss_percentile": 0.43245,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00525,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-74473",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "c419af4924c1593500a40519730ed98575d04a3e"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.265"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.216"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.183"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.151"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-15T13:17:52.060",
+    "nvd_last_modified": "2026-10-16T20:17:30.130",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704480+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-74471",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\ntracing: Check return value of __register_event() in trace_module_add_events()\n\ntrace_module_add_events() ignores the return value of __register_event()\nand unconditionally calls __add_event_to_tracers() for each event.\n\nIf __register_event() fails (for example, if event_init() fails), the\ntrace_event_call is not added to ftrace_events list, but\n__add_event_to_tracers() still creates a trace_event_file pointing to it.\nIf module loading subsequently fails and module memory is freed, tracing\nstate retains a stale trace_event_call pointer in trace_event_file,\nleading to a use-after-free when tracefs or tracing subsystem operations\nare later executed.\n\nFix this by checking the return value of __register_event() and only\ncalling __add_event_to_tracers() if event registration succeeded.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00126,
+    "epss_percentile": 0.02032,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00126,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-74471",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "3bf965a2827c44f03294107703e7ba53fbd0a69a"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.265"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.216"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.183"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.151"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-15T13:17:51.847",
+    "nvd_last_modified": "2026-10-16T20:17:29.970",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704470+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-74443",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\ndrm/vmwgfx: bound DMA command body size against suffix pointer\n\nvmw_cmd_dma() locates the DMA suffix at\n\n\t(unsigned long) &cmd->body + header->size - sizeof(*suffix)\n\nwithout checking that header->size is large enough to contain both\ncmd->body and the suffix.  An undersized header makes the suffix\npointer underflow back into the previous command in the bounce\nbuffer.  The verifier later writes suffix->maximumOffset, clobbering\nverified fields of an already-relocated earlier command -- a TOCTOU\non the device-visible command stream that lets one command rewrite\nanother's GMR id, surface id, or other authenticated fields.\n\nReject the command if the body is too small for the suffix to fit.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00129,
+    "epss_percentile": 0.02273,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00129,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-74443",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "eb20f418933bea53375843b27b4022c1810be63b"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.265"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.216"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.183"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.151"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-15T13:17:48.863",
+    "nvd_last_modified": "2026-10-16T20:17:27.933",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704460+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-74436",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nrxrpc: serialize kernel accept preallocation with socket teardown\n\nrxrpc_kernel_charge_accept() reads rx->backlog without any\nsocket/backlog synchronization and passes that raw pointer into\nrxrpc_service_prealloc_one(). A concurrent rxrpc_discard_prealloc()\nsets rx->backlog = NULL and frees the backlog rings, so a kernel\npreallocation worker can keep using a freed struct rxrpc_backlog\nwhile updating *_backlog_head/tail and array slots.\n\nSerialize the state check and backlog lookup with the socket lock,\nand reject kernel preallocation once teardown has disabled\nlistening or discarded the service backlog.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00399,
+    "epss_percentile": 0.32548,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00399,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-74436",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "d6207326b4ca0ae1041281b6af9df53f8080669a"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.266"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.217"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.184"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.148"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-15T06:22:45.710",
+    "nvd_last_modified": "2026-10-16T20:17:27.483",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704451+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-74407",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nwifi: ath11k: cancel SSR work items during PCI shutdown\n\nA reboot can crash the kernel if it overlaps with WLAN firmware crash\nrecovery (SSR). The crash is a NULL pointer dereference in the MHI teardown\npath while freeing DMA-backed MHI contexts.\n\nSimplified trace:\n  dma_free_attrs\n  mhi_deinit_dev_ctxt [mhi]\n  ath11k_pci_power_down [ath11k_pci]\n  ath11k_pci_shutdown [ath11k_pci]\n  device_shutdown\n  kernel_restart\n\nOn the host side, SSR is driven by the MHI RDDM callback, which queues\nreset_work to perform device recovery. reset_work power-cycles the device\nby calling ath11k_hif_power_down() followed by ath11k_hif_power_up(). The\npower-down phase deinitializes MHI and frees DMA resources.\n\nShutdown/reboot runs fully asynchronously with this RDDM-driven SSR\nrecovery flow. As a result, the shutdown path\n(ath11k_pci_shutdown() -> ath11k_pci_power_down()) can race with the SSR\nrecovery sequence.\n\nFix this by canceling SSR-related work items during PCI shutdown, marking\nthe device as unregistering, and serializing the RDDM callback path that\nchecks and queues reset_work. This ensures that no new SSR recovery work\ncan be queued once teardown has started, and that any in-flight recovery\nwork is fully synchronized before device power-down, preventing MHI\nteardown and DMA resource freeing from running more than once.\n\nNote: This issue only affects PCI/MHI-based devices. AHB-based ath11k\ndevices do not queue reset_work in normal SSR flows.\n\nTested-on: WCN6855 hw2.1 PCI WLAN.HSP.1.1-04866.5-QCAHSPSWPL_V1_V2_SILICONZ_IOE-1",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "ADJACENT_NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00375,
+    "epss_percentile": 0.29897,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00375,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-74407",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "6dd3701facc0cee62d6682e49eed64499f9d0e43"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.18.53"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "7.1.5"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-08-15T06:22:42.737",
+    "nvd_last_modified": "2026-10-16T20:17:26.117",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.704441+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-80548",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\ns390/vfio_ccw: Selectively expand io_mutex\n\nThe io_mutex was defined to serialize the io_regions, but then has\nalso sort of been associated with the I/O themselves because of\nthe close relationship they share.\n\nWith the handful of races that are possible, the choices are either to:\n A) expand the scope of io_mutex to close these remaining windows, or\n B) reduce the scope of io_mutex to just io_region, and introduce a new\n    lock mechanism for the remaining I/O resources\n\nThis patch implements A, since B brings with it a lot more interactions\nthat would need to be tracked and kept in a correct hierarchy. It also\ntakes advantage of the workqueue element for cp_free() that now gets\ncalled out of fsm_notoper(), which could be invoked out of an interrupt\ncontext and thus cannot acquire a mutex itself.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00176,
+    "epss_percentile": 0.06641,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00176,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-80548",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "dab6a6627b0b0cce23653e99c7b0bf8c6cfd82e0"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.218"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.1.185"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.6.153"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "6.12.105"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Windows Kernel"
+    ],
+    "source": "nvd",
+    "published": "2026-08-26T15:17:09.200",
+    "nvd_last_modified": "2026-10-16T20:17:58.900",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.701373+00:00"
+  },
+  {
+    "cve_id": "CVE-2026-30971",
+    "description": "ZoneMinder is a free, open source closed-circuit television software application. Prior to 1.39.2, 1.38.2, and 1.36.40, ZoneMinder interpolates an unvalidated monitor Device field into shell commands in PHP and Perl control paths when an authenticated user with monitor-create or monitor-edit permission saves a Local monitor whose Device Path contains shell metacharacters and the monitor control or startup path runs. In this attack mechanism, the stored Device value reaches Perl qx() and backtick execution before zmdc.pl argument detainting, while separate PHP command paths use bypassable escapeshellcmd defenses. The attacker can execute arbitrary commands as the web server user. This vulnerability is fixed in 1.39.2, 1.38.2, and 1.36.40.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-78"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-16T20:17:23.190",
+    "nvd_last_modified": "2026-10-16T20:17:23.320",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-16T22:35:03.700200+00:00"
+  },
+  {
     "cve_id": "CVE-2026-83666",
     "description": "Concurrent execution using shared resource with improper synchronization ('race condition') in Active Directory Certificate Services (AD CS) allows an authorized attacker to elevate privileges locally.",
     "cvss_score": 7.0,
@@ -34,8 +2261,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00199,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -87,8 +2314,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 23.2,
+    "epss_score_prev": 0.00995,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -179,8 +2406,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -271,8 +2498,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00391,
     "osv_id": "CVE-2026-110112",
     "osv_fixed_versions": [
       {
@@ -330,8 +2557,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 18.6,
+    "epss_score_prev": 0.00105,
     "osv_id": "CVE-2026-104047",
     "osv_fixed_versions": [],
     "affected": [],
@@ -396,8 +2623,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.0,
+    "epss_score_prev": 0.0048,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -449,8 +2676,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.1,
+    "epss_score_prev": 0.00583,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -502,8 +2729,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.6,
+    "epss_score_prev": 0.01056,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -555,8 +2782,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.6,
+    "epss_score_prev": 0.01103,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -608,8 +2835,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.6,
+    "epss_score_prev": 0.00643,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -661,8 +2888,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.6,
+    "epss_score_prev": 0.01103,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -714,8 +2941,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.1,
+    "epss_score_prev": 0.00588,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -767,8 +2994,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 20.9,
+    "epss_score_prev": 0.00567,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -820,8 +3047,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 23.1,
+    "epss_score_prev": 0.00772,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -873,8 +3100,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.5,
+    "epss_score_prev": 0.00335,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -883,8 +3110,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T11:16:57.423",
-    "nvd_last_modified": "2026-10-14T14:17:30.043",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T19:56:15.773",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -926,8 +3153,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.0012,
     "osv_id": "CVE-2026-19575",
     "osv_fixed_versions": [
       {
@@ -985,8 +3212,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.8,
+    "epss_score_prev": 0.0012,
     "osv_id": "CVE-2026-19569",
     "osv_fixed_versions": [
       {
@@ -1044,8 +3271,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00354,
     "osv_id": "CVE-2026-107911",
     "osv_fixed_versions": [
       {
@@ -1101,8 +3328,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00257,
     "osv_id": "CVE-2026-98290",
     "osv_fixed_versions": [
       {
@@ -1178,8 +3405,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00133,
     "osv_id": "CVE-2026-98256",
     "osv_fixed_versions": [
       {
@@ -1245,8 +3472,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.8,
+    "epss_score_prev": 0.00122,
     "osv_id": "CVE-2026-98243",
     "osv_fixed_versions": [
       {
@@ -1312,8 +3539,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00473,
     "osv_id": "CVE-2026-98239",
     "osv_fixed_versions": [
       {
@@ -1389,8 +3616,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00131,
     "osv_id": "CVE-2026-98216",
     "osv_fixed_versions": [
       {
@@ -1466,8 +3693,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00506,
     "osv_id": "CVE-2026-98171",
     "osv_fixed_versions": [
       {
@@ -1545,8 +3772,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.7,
+    "epss_score_prev": 0.0035,
     "osv_id": "CVE-2026-105636",
     "osv_fixed_versions": [
       {
@@ -1604,8 +3831,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00114,
     "osv_id": "CVE-2026-19185",
     "osv_fixed_versions": [
       {
@@ -1663,8 +3890,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.4,
+    "epss_score_prev": 0.00103,
     "osv_id": "CVE-2026-19184",
     "osv_fixed_versions": [
       {
@@ -1722,8 +3949,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00174,
     "osv_id": "CVE-2026-71891",
     "osv_fixed_versions": [
       {
@@ -1782,8 +4009,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00207,
     "osv_id": "CVE-2026-104912",
     "osv_fixed_versions": [
       {
@@ -1841,8 +4068,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.2,
+    "epss_score_prev": 0.00312,
     "osv_id": "CVE-2026-101322",
     "osv_fixed_versions": [
       {
@@ -1900,8 +4127,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00153,
     "osv_id": "CVE-2026-102715",
     "osv_fixed_versions": [],
     "affected": [],
@@ -1953,8 +4180,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.6,
+    "epss_score_prev": 0.00628,
     "osv_id": "CVE-2026-91012",
     "osv_fixed_versions": [
       {
@@ -2026,8 +4253,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00118,
     "osv_id": "CVE-2026-18414",
     "osv_fixed_versions": [
       {
@@ -2085,8 +4312,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00118,
     "osv_id": "CVE-2026-18413",
     "osv_fixed_versions": [
       {
@@ -2144,8 +4371,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00112,
     "osv_id": "CVE-2026-16513",
     "osv_fixed_versions": [
       {
@@ -2203,8 +4430,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00239,
     "osv_id": "CVE-2026-100849",
     "osv_fixed_versions": [
       {
@@ -2262,8 +4489,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00322,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -2313,8 +4540,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00475,
     "osv_id": "CVE-2026-98070",
     "osv_fixed_versions": [
       {
@@ -2390,8 +4617,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00569,
     "osv_id": "CVE-2026-98069",
     "osv_fixed_versions": [
       {
@@ -2467,8 +4694,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00164,
     "osv_id": "CVE-2026-97612",
     "osv_fixed_versions": [
       {
@@ -2544,8 +4771,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00344,
     "osv_id": "CVE-2026-93787",
     "osv_fixed_versions": [
       {
@@ -2623,8 +4850,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.7,
+    "epss_score_prev": 0.00306,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -2677,8 +4904,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.1,
+    "epss_score_prev": 0.00408,
     "osv_id": "CVE-2026-77259",
     "osv_fixed_versions": [
       {
@@ -2769,8 +4996,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.003,
     "osv_id": "CVE-2026-77242",
     "osv_fixed_versions": [
       {
@@ -2860,8 +5087,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.00823,
     "osv_id": "CVE-2026-63126",
     "osv_fixed_versions": [
       {
@@ -2917,8 +5144,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.0,
+    "epss_score_prev": 0.00398,
     "osv_id": "CVE-2026-90016",
     "osv_fixed_versions": [
       {
@@ -2989,8 +5216,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00379,
     "osv_id": "CVE-2026-80937",
     "osv_fixed_versions": [
       {
@@ -3063,8 +5290,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.3,
+    "epss_score_prev": 0.00409,
     "osv_id": "CVE-2026-88887",
     "osv_fixed_versions": [
       {
@@ -3122,8 +5349,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.3,
+    "epss_score_prev": 0.00409,
     "osv_id": "CVE-2026-88881",
     "osv_fixed_versions": [
       {
@@ -3181,8 +5408,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.00847,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -3234,8 +5461,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.2,
+    "epss_score_prev": 0.01038,
     "osv_id": "CVE-2026-55976",
     "osv_fixed_versions": [
       {
@@ -3312,8 +5539,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00223,
     "osv_id": "CVE-2026-13212",
     "osv_fixed_versions": [
       {
@@ -3371,8 +5598,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00398,
     "osv_id": "CVE-2026-75931",
     "osv_fixed_versions": [
       {
@@ -3460,43 +5687,17 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2026-74700",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "34e77d8e3570f9df3952496ddb402833695662fd"
-      },
-      {
-        "package": "Kernel",
-        "ecosystem": "Linux",
-        "fixed": "6.6.152"
-      },
-      {
-        "package": "Kernel",
-        "ecosystem": "Linux",
-        "fixed": "6.12.104"
-      },
-      {
-        "package": "Kernel",
-        "ecosystem": "Linux",
-        "fixed": "6.18.45"
-      },
-      {
-        "package": "Kernel",
-        "ecosystem": "Linux",
-        "fixed": "7.1.9"
-      }
-    ],
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00125,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [],
     "matched_keywords": [
       "Check Point"
     ],
     "source": "nvd",
     "published": "2026-08-22T16:16:44.610",
-    "nvd_last_modified": "2026-10-14T13:10:00.187",
+    "nvd_last_modified": "2026-10-16T20:17:52.793",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -3537,43 +5738,17 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2026-74689",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "b3bcd5d65ac03c15787b2a5b36c718e26a689336"
-      },
-      {
-        "package": "Kernel",
-        "ecosystem": "Linux",
-        "fixed": "6.1.183"
-      },
-      {
-        "package": "Kernel",
-        "ecosystem": "Linux",
-        "fixed": "6.6.152"
-      },
-      {
-        "package": "Kernel",
-        "ecosystem": "Linux",
-        "fixed": "6.12.104"
-      },
-      {
-        "package": "Kernel",
-        "ecosystem": "Linux",
-        "fixed": "6.18.45"
-      }
-    ],
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00139,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [],
     "matched_keywords": [
       "Check Point"
     ],
     "source": "nvd",
     "published": "2026-08-22T16:16:43.303",
-    "nvd_last_modified": "2026-10-14T13:10:00.187",
+    "nvd_last_modified": "2026-10-16T20:17:51.950",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -3614,43 +5789,17 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
-    "osv_id": "CVE-2026-74614",
-    "osv_fixed_versions": [
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "941329ce14c5f481223a10d1d4c8b57ea7f3048a"
-      },
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "29dd10583bf9d2744cd84b862e4257c0a5699570"
-      },
-      {
-        "package": null,
-        "ecosystem": null,
-        "fixed": "5.15.216"
-      },
-      {
-        "package": "Kernel",
-        "ecosystem": "Linux",
-        "fixed": "5.15.216"
-      },
-      {
-        "package": "Kernel",
-        "ecosystem": "Linux",
-        "fixed": "6.1.183"
-      }
-    ],
+    "risk_score_prev": 29.5,
+    "epss_score_prev": 0.00142,
+    "osv_id": null,
+    "osv_fixed_versions": [],
     "affected": [],
     "matched_keywords": [
       "Check Point"
     ],
     "source": "nvd",
     "published": "2026-08-22T16:16:34.023",
-    "nvd_last_modified": "2026-10-14T13:10:00.187",
+    "nvd_last_modified": "2026-10-16T20:17:46.687",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -3691,8 +5840,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00129,
     "osv_id": "CVE-2026-74610",
     "osv_fixed_versions": [
       {
@@ -3770,8 +5919,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00173,
     "osv_id": "CVE-2026-64008",
     "osv_fixed_versions": [
       {
@@ -3871,8 +6020,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.1,
+    "epss_score_prev": 0.00643,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -3924,8 +6073,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.1,
+    "epss_score_prev": 0.00862,
     "osv_id": "CVE-2026-1933",
     "osv_fixed_versions": [
       {
@@ -3997,8 +6146,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00459,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4050,8 +6199,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.0027,
     "osv_id": "CVE-2025-15444",
     "osv_fixed_versions": [
       {
@@ -4127,8 +6276,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00178,
     "osv_id": "CVE-2025-68735",
     "osv_fixed_versions": [
       {
@@ -4194,8 +6343,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00153,
     "osv_id": "CVE-2025-68286",
     "osv_fixed_versions": [
       {
@@ -4271,8 +6420,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.8,
+    "epss_score_prev": 0.00307,
     "osv_id": "CVE-2025-68250",
     "osv_fixed_versions": [
       {
@@ -4333,8 +6482,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00152,
     "osv_id": "CVE-2025-68167",
     "osv_fixed_versions": [
       {
@@ -4402,8 +6551,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.7,
+    "epss_score_prev": 0.00185,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4453,8 +6602,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00213,
     "osv_id": "CVE-2024-47702",
     "osv_fixed_versions": [
       {
@@ -4559,8 +6708,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.6,
+    "epss_score_prev": 0.00847,
     "osv_id": "CVE-2021-47107",
     "osv_fixed_versions": [],
     "affected": [],
@@ -4638,8 +6787,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.3,
+    "epss_score_prev": 0.02445,
     "osv_id": "CVE-2022-36227",
     "osv_fixed_versions": [
       {
@@ -4729,8 +6878,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.03146,
     "osv_id": "CVE-2020-6078",
     "osv_fixed_versions": [],
     "affected": [],
@@ -4782,8 +6931,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.2,
+    "epss_score_prev": 0.02504,
     "osv_id": "CVE-2020-6071",
     "osv_fixed_versions": [],
     "affected": [],
@@ -4835,8 +6984,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00128,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4908,8 +7057,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.2,
+    "epss_score_prev": 0.00082,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4981,8 +7130,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 71.8,
+    "epss_score_prev": 0.46239,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5062,8 +7211,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.0034,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5115,8 +7264,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00206,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5182,8 +7331,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00819,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5249,8 +7398,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00819,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5316,8 +7465,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00202,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5383,8 +7532,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.0,
+    "epss_score_prev": 0.00549,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5457,8 +7606,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 62.0,
+    "epss_score_prev": 0.15522,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5519,8 +7668,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00378,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5572,8 +7721,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00236,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5625,8 +7774,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01587,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5678,8 +7827,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00765,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5731,8 +7880,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.7,
+    "epss_score_prev": 0.00927,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5784,8 +7933,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.9,
+    "epss_score_prev": 0.00857,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5837,8 +7986,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.6,
+    "epss_score_prev": 0.00689,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5905,8 +8054,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.7,
+    "epss_score_prev": 0.01174,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5973,8 +8122,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.9,
+    "epss_score_prev": 0.00756,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6041,8 +8190,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.2,
+    "epss_score_prev": 0.00913,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6109,8 +8258,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.6,
+    "epss_score_prev": 0.00707,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6177,8 +8326,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 92.3,
+    "epss_score_prev": 0.99876,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6244,8 +8393,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 89.8,
+    "epss_score_prev": 0.93651,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6313,8 +8462,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00318,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6366,8 +8515,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00318,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6419,8 +8568,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.0027,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6472,8 +8621,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6564,8 +8713,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.6,
+    "epss_score_prev": 0.00657,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6655,8 +8804,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.0027,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6708,8 +8857,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00507,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6800,8 +8949,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.1,
+    "epss_score_prev": 0.00457,
     "osv_id": "CVE-2026-62960",
     "osv_fixed_versions": [
       {
@@ -6859,8 +9008,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.00821,
     "osv_id": "CVE-2025-59775",
     "osv_fixed_versions": [
       {
@@ -6932,8 +9081,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00252,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -6983,8 +9132,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.2,
+    "epss_score_prev": 0.02206,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7034,8 +9183,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.0053,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7087,8 +9236,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00252,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7140,8 +9289,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00252,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7193,8 +9342,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00204,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7246,8 +9395,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00252,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7299,8 +9448,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00252,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7352,8 +9501,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00344,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7405,8 +9554,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00318,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7458,8 +9607,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00381,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7511,8 +9660,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.0027,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7564,8 +9713,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00304,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7617,8 +9766,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00276,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7670,8 +9819,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.0027,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7723,8 +9872,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00296,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7776,8 +9925,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00341,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7829,8 +9978,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00296,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7882,8 +10031,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.0027,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7935,8 +10084,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.8,
+    "epss_score_prev": 0.00111,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -7988,8 +10137,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00121,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8041,8 +10190,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00127,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8094,8 +10243,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00117,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8147,8 +10296,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00125,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8200,8 +10349,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00127,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8253,8 +10402,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00127,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8306,8 +10455,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00127,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8359,8 +10508,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.5,
+    "epss_score_prev": 0.0012,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8412,8 +10561,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.6,
+    "epss_score_prev": 0.00113,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8465,8 +10614,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00125,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8518,8 +10667,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8571,8 +10720,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8624,8 +10773,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.0,
+    "epss_score_prev": 0.00144,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8677,8 +10826,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00123,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8730,8 +10879,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00122,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8783,8 +10932,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8836,8 +10985,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8889,8 +11038,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00132,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8942,8 +11091,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00129,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -8995,8 +11144,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9048,8 +11197,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9101,8 +11250,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9154,8 +11303,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9207,8 +11356,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9260,8 +11409,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9313,8 +11462,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9366,8 +11515,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00146,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9419,8 +11568,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00146,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9472,8 +11621,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00146,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9525,8 +11674,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00146,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9578,8 +11727,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00146,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9631,8 +11780,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00142,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9684,8 +11833,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00146,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9737,8 +11886,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00142,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9790,8 +11939,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00127,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9843,8 +11992,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00127,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9896,8 +12045,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00113,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -9950,8 +12099,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.0018,
     "osv_id": "CVE-2026-46655",
     "osv_fixed_versions": [
       {
@@ -10009,8 +12158,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.8,
+    "epss_score_prev": 0.00348,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10077,8 +12226,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00477,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10130,8 +12279,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 71.2,
+    "epss_score_prev": 0.54158,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10199,8 +12348,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 55.9,
+    "epss_score_prev": 0.09011,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10261,8 +12410,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00329,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10314,8 +12463,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 16.5,
+    "epss_score_prev": 0.00244,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10367,8 +12516,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.8,
+    "epss_score_prev": 0.01146,
     "osv_id": "CVE-2026-110233",
     "osv_fixed_versions": [
       {
@@ -10426,8 +12575,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.6,
+    "epss_score_prev": 0.00759,
     "osv_id": "CVE-2026-106057",
     "osv_fixed_versions": [
       {
@@ -10485,8 +12634,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.9,
+    "epss_score_prev": 0.01471,
     "osv_id": "CVE-2026-103473",
     "osv_fixed_versions": [
       {
@@ -10544,8 +12693,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.7,
+    "epss_score_prev": 0.00767,
     "osv_id": "CVE-2026-100844",
     "osv_fixed_versions": [
       {
@@ -10617,8 +12766,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.6,
+    "epss_score_prev": 0.00581,
     "osv_id": "CVE-2026-100368",
     "osv_fixed_versions": [
       {
@@ -10676,8 +12825,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.9,
+    "epss_score_prev": 0.00212,
     "osv_id": "CVE-2026-71538",
     "osv_fixed_versions": [
       {
@@ -10735,8 +12884,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00129,
     "osv_id": "CVE-2025-14821",
     "osv_fixed_versions": [
       {
@@ -10808,8 +12957,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.0025,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10899,8 +13048,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00312,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10990,8 +13139,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 19.0,
+    "epss_score_prev": 0.00165,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11059,8 +13208,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 55.2,
+    "epss_score_prev": 0.38088,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11141,8 +13290,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 47.8,
+    "epss_score_prev": 0.05323,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -11230,8 +13379,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 62.1,
+    "epss_score_prev": 0.44647,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -12439,10 +14588,48 @@
     ],
     "source": "nvd",
     "published": "2026-10-13T19:22:16.697",
-    "nvd_last_modified": "2026-10-16T17:18:03.463",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-16T19:32:12.930",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_1607",
+        "fixed": "10.0.14393.9612",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_1809",
+        "fixed": "10.0.17763.9376",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_21h2",
+        "fixed": "10.0.19044.7807",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_22h2",
+        "fixed": "10.0.19045.7807",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_11_23h2",
+        "fixed": "10.0.22631.7652",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-97788",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T19:22:14.707625+00:00"
@@ -12797,7 +14984,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T18:17:24.960",
-    "nvd_last_modified": "2026-10-15T14:41:34.110",
+    "nvd_last_modified": "2026-10-16T21:17:18.010",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -13624,7 +15811,7 @@
     ],
     "source": "nvd",
     "published": "2026-08-22T16:16:46.063",
-    "nvd_last_modified": "2026-10-15T11:17:48.410",
+    "nvd_last_modified": "2026-10-16T20:17:53.887",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -31285,10 +33472,30 @@
     ],
     "source": "nvd",
     "published": "2026-10-13T19:22:04.720",
-    "nvd_last_modified": "2026-10-16T16:23:01.123",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-16T19:35:12.897",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "windows_server_2022",
+        "fixed": "10.0.20348.5761",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_server_2025",
+        "fixed": "10.0.26100.33650",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96929",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T19:22:14.705681+00:00"
@@ -31338,10 +33545,48 @@
     ],
     "source": "nvd",
     "published": "2026-10-13T19:22:02.523",
-    "nvd_last_modified": "2026-10-16T16:22:58.513",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-16T20:52:06.863",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_1607",
+        "fixed": "10.0.14393.9612",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_1809",
+        "fixed": "10.0.17763.9376",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_21h2",
+        "fixed": "10.0.19044.7807",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_22h2",
+        "fixed": "10.0.19045.7807",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_11_23h2",
+        "fixed": "10.0.22631.7652",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-96915",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T19:22:14.705672+00:00"
@@ -35727,8 +37972,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-15T13:17:10.617",
-    "nvd_last_modified": "2026-10-15T14:17:13.717",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T19:56:15.773",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -40393,8 +42638,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-15T17:17:07.923",
-    "nvd_last_modified": "2026-10-15T18:17:21.500",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T20:04:29.760",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -40446,8 +42691,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-15T19:17:14.933",
-    "nvd_last_modified": "2026-10-16T18:17:20.463",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T20:04:29.760",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -44892,8 +47137,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T18:17:37.863",
-    "nvd_last_modified": "2026-10-14T18:17:37.863",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T20:04:29.760",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -45527,8 +47772,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-14T18:17:38.013",
-    "nvd_last_modified": "2026-10-15T16:18:14.273",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T20:04:29.760",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -62788,10 +65033,49 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T19:21:05.980",
-    "nvd_last_modified": "2026-10-16T16:22:04.987",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-10-16T19:34:38.030",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_1607",
+        "fixed": "10.0.14393.9612",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_1809",
+        "fixed": "10.0.17763.9376",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_21h2",
+        "fixed": "10.0.19044.7807",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_10_22h2",
+        "fixed": "10.0.19045.7807",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "microsoft",
+        "product": "windows_11_23h2",
+        "fixed": "10.0.22631.7652",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-85814",
+        "tags": [
+          "Vendor Advisory",
+          "Patch"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739897+00:00"
@@ -64262,8 +66546,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T17:17:47.183",
-    "nvd_last_modified": "2026-10-13T21:18:22.463",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T20:04:29.760",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -64370,8 +66654,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-13T16:17:22.057",
-    "nvd_last_modified": "2026-10-13T17:17:42.283",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T20:04:29.760",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -65311,8 +67595,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-12T19:16:39.567",
-    "nvd_last_modified": "2026-10-13T17:17:44.657",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T20:04:29.760",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -75592,8 +77876,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-09T21:17:04.347",
-    "nvd_last_modified": "2026-10-13T12:17:12.410",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T20:04:29.760",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -75646,8 +77930,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-09T21:17:04.180",
-    "nvd_last_modified": "2026-10-13T16:17:12.223",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T20:04:29.760",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -75699,8 +77983,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-09T21:17:04.017",
-    "nvd_last_modified": "2026-10-14T03:17:15.773",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-10-16T20:04:29.760",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
