@@ -860,5 +860,17 @@ class TestBuildKevFeedRss(unittest.TestCase):
             self.assertIn("<pubDate>not-a-real-timestamp</pubDate>", content)
 
 
+class TestAdvisoryTwins(unittest.TestCase):
+    def test_kev_only_twin_collapses_into_nvd_alert(self):
+        by_key = {"CVE-2026-1::kev": {"cve_id": "CVE-2026-1", "source": "kev", "first_seen": "2026-10-16T00:00:00"},
+                  "CVE-2026-1::nvd": {"cve_id": "CVE-2026-1", "source": "nvd", "first_seen": "2026-10-17T00:00:00"},
+                  "CVE-2026-2::kev": {"cve_id": "CVE-2026-2", "source": "kev", "first_seen": "2026-10-17T00:00:00"},
+                  "CVE-2026-1::dependabot": {"cve_id": "CVE-2026-1", "source": "dependabot"}}
+        import aggregate
+        self.assertEqual(aggregate.collapse_advisory_twins(by_key), 1)
+        self.assertEqual(sorted(by_key), ["CVE-2026-1::dependabot", "CVE-2026-1::nvd", "CVE-2026-2::kev"])
+        self.assertEqual(by_key["CVE-2026-1::nvd"]["first_seen"], "2026-10-16T00:00:00")
+
+
 if __name__ == "__main__":
     unittest.main()

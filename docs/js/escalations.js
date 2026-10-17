@@ -51,7 +51,15 @@ function renderItem(it) {
     ? extLink(it.link, it.title) || escapeHtml(it.title)
     : `<a href="#${encodeURIComponent(it.ref)}" title="Open this CVE on the dashboard">${escapeHtml(it.title)}</a>`;
   const reasons = (it.reasons || []).map((r) => `<li>${escapeHtml(r)}</li>`).join("");
-  const kind = it.kind === "cve" ? "CVE" : it.kind === "bundle" ? `Bundle · ${(it.cve_ids || []).length} CVEs` : `News · ${it.source || ""}`;
+  const cov = it.coverage || [];
+  const kind = it.kind === "cve" ? "CVE" : it.kind === "bundle" ? `Bundle · ${(it.cve_ids || []).length} CVEs`
+    : cov.length ? `News · ${cov.length} reports` : `News · ${it.source || ""}`;
+  const coverage = cov.length
+    ? `<details class="esc-coverage"><summary>All ${cov.length} reports of this incident</summary><ul>${cov
+        .filter((c) => !c.dup)
+        .map((c) => `<li>${extLink(c.link, c.title) || escapeHtml(c.title)} <span class="muted">· ${escapeHtml(c.source || "")} · ${escapeHtml(day(c.date))}</span></li>`)
+        .join("")}</ul></details>`
+    : "";
   const meta = [kind, day(it.date)].join(" · ");
   return `<article class="card esc-card esc-card--${escapeHtml(it.tier)}${it.closed ? " esc-card--closed" : ""}">
     <div class="card__head">
@@ -65,6 +73,7 @@ function renderItem(it) {
     </div>
     ${triageLine(it)}
     <ul class="esc-reasons">${reasons}</ul>
+    ${coverage}
     <div class="esc-actions">
       <button type="button" class="btn btn--sm" data-esc-triage="${escapeHtml(it.key)}"
         title="Copy a triage entry, then paste it under entries: in config/triage.yaml">Copy triage entry</button>

@@ -162,6 +162,35 @@ class EstateAndTriageTests(unittest.TestCase):
         out = E.build([], {"items": [it]}, env(), NOW)
         self.assertEqual(out["items"][0]["tier"], "escalate")
 
+    def _pan(self, i, title, day, cves=None):
+        x = intel(f"pan{i}", title, ["exploited"], priority="high")
+        x["published"] = f"2026-10-{day}T12:00:00+00:00"
+        x["cve_ids"] = cves or []
+        return x
+
+    def test_duplicate_coverage_folds_into_one_story(self):
+        items = [self._pan(1, "Palo Alto Networks PAN-OS zero-day exploited", 14, ["CVE-2026-0322"]),
+                 self._pan(2, "PAN-OS flaw exploited, Palo Alto Networks warns - Outlet", 15),
+                 self._pan(3, "CISA: Palo Alto Networks bug exploited", 15, ["CVE-2026-0322"])]
+        out = E.build([], {"items": items}, env(), NOW)
+        self.assertEqual(len(out["items"]), 1)
+        s = out["items"][0]
+        self.assertEqual(s["key"], "intel:pan1")
+        self.assertEqual(s["tier"], "escalate")
+        self.assertEqual(len(s["coverage"]), 3)
+        self.assertEqual(sorted(s["member_keys"]), ["intel:pan1", "intel:pan2", "intel:pan3"])
+
+    def test_different_cves_or_far_apart_stay_separate(self):
+        items = [self._pan(1, "Palo Alto Networks bug A exploited", 14, ["CVE-2026-1"]),
+                 self._pan(2, "Palo Alto Networks bug B exploited", 14, ["CVE-2026-2"]),
+                 self._pan(3, "Palo Alto Networks bug C exploited", 10)]
+        self.assertEqual(len(E.build([], {"items": items}, env(), NOW)["items"]), 3)
+
+    def test_story_already_announced_via_member_not_reposted(self):
+        story = {"key": "intel:a", "tier": "escalate", "member_keys": ["intel:a", "intel:b"]}
+        self.assertEqual(D.select_new([story], {"intel:b": "x"}), [])
+        self.assertEqual(len(D.select_new([story], {})), 1)
+
     def test_triaged_item_never_posted_to_discord(self):
         esc_doc = {"items": [{"key": "cve:A", "tier": "escalate", "title": "A", "triage": {"status": "acknowledged"}}]}
         self.assertEqual(D.select_new(esc_doc["items"], {}), [])

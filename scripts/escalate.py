@@ -311,6 +311,91 @@ def bundle_work(items, triage, min_size=BUNDLE_MIN):
     return keep
 
 
+STORY_DAYS = 3  # same-asset coverage published within this many days = one incident
+
+_TITLE_NOISE = re.compile(r"\s+[-|\u2013\u2014]\s+[^-|\u2013\u2014]{2,60}$")
+
+
+def _norm_title(t):
+    return re.sub(r"[^a-z0-9]+", " ", _TITLE_NOISE.sub("", t or "").lower()).strip()
+
+
+def group_stories(items, triage, days=STORY_DAYS):
+    """Fold duplicate press coverage of ONE incident (the same zero-day reported by
+    20 outlets / Google News) into a single news card. Two stories are the same
+    incident when they hit a shared asset AND (name a common CVE, OR were
+    published within `days` of each other without naming DIFFERENT CVEs).
+    The card keeps every outlet's headline + link under `coverage`; its key is
+    the earliest member's intel key, so triage entries and Discord dedupe that
+    already reference it keep working. Individually-triaged stories stay apart."""
+    news = [it for it in items if it["kind"] == "intel" and it["key"] not in triage]
+    rest = [it for it in items if not (it["kind"] == "intel" and it["key"] not in triage)]
+    news.sort(key=lambda it: (it.get("date") or "", it["key"]))
+    # Greedy, NON-transitive: an item joins a cluster only if it matches that
+    # cluster's FIRST report directly, so roundup articles naming several vendors
+    # ("CISA adds PAN-OS, BeyondTrust ... to KEV") cannot chain incidents together.
+    clusters = []  # [seed, cve_set, members]
+    for it in news:
+        ci, di = set(it.get("cve_ids") or []), _dt(it.get("date"))
+        home = None
+        for cl in clusters:
+            seed, cset = cl[0], cl[1]
+            if ci & cset:
+                home = cl
+                break
+            ds = _dt(seed.get("date"))
+            if (set(it["assets"]) == set(seed["assets"]) and not (ci and cset and not ci & cset)
+                    and di and ds and abs((di - ds).total_seconds()) <= days * 86400):
+                home = cl
+                break
+        if home is None:
+            clusters.append([it, set(ci), [it]])
+        else:
+            home[1] |= ci
+            home[2].append(it)
+    groups = {n: cl[2] for n, cl in enumerate(clusters)}
+    out = list(rest)
+    for members in groups.values():
+        if len(members) == 1:
+            out.append(members[0])
+            continue
+        lead = min(members, key=lambda m: (TIER_RANK[m["tier"]], CRIT_RANK[m["criticality"]],
+                                           -(m["score"] or 0), m.get("date") or ""))
+        first = members[0]  # earliest -> stable key
+        cves = sorted({c for m in members for c in m.get("cve_ids") or []})
+        cats = []
+        for m in members:
+            cats += [c for c in m.get("categories") or [] if c not in cats]
+        seen_titles, coverage = set(), []
+        for m in sorted(members, key=lambda m: m.get("date") or ""):
+            nt = _norm_title(m["title"])
+            coverage.append({"title": m["title"], "link": m["link"], "source": m.get("source"),
+                             "date": m.get("date"), "dup": nt in seen_titles})
+            seen_titles.add(nt)
+        story = dict(lead)
+        story.update({
+            "key": first["key"],
+            "ref": first["ref"],
+            "tier": lead["tier"],
+            "date": max((m.get("date") or "") for m in members),
+            "first_reported": first.get("date"),
+            "assets": sorted({a for m in members for a in m["assets"]}),
+            "criticality": min((m["criticality"] for m in members), key=lambda c: CRIT_RANK[c]),
+            "categories": cats,
+            "cve_ids": cves,
+            "member_keys": [m["key"] for m in members],
+            "coverage": coverage,
+            "reasons": list(lead["reasons"]) + [
+                f"Same incident reported by {len(members)} sources "
+                f"({len({m.get('source') for m in members})} outlets/feeds) -- first seen "
+                f"{(first.get('date') or '')[:10]}"],
+        })
+        if cves and not any(r.startswith("Names ") for r in story["reasons"]):
+            story["reasons"].insert(-1, "Names " + ", ".join(cves[:5]))
+        out.append(story)
+    return out
+
+
 def build(alerts, intel, env, now=None, triage=None):
     now = now or datetime.now(timezone.utc)
     triage = triage or {}
@@ -337,6 +422,7 @@ def build(alerts, intel, env, now=None, triage=None):
         if r:
             out.append(r)
     out = bundle_work(out, triage)
+    out = group_stories(out, triage)
     for r in out:
         t = triage.get(r["key"])
         if t:
