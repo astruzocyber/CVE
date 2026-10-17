@@ -92,10 +92,28 @@ def load_priority_terms(path=WATCHLIST_PATH):
     return [str(t).strip() for t in wl.get("priority_keywords") or [] if str(t).strip()]
 
 
+# Generic security-news vocabulary: sharing these says nothing about being the same incident.
+_GENERIC = set("""
+about after again against alert alerts allow allows amid analysis attack attackers attacks being bypass
+bypasses campaign check checks critical customers cyber data details disclosed discovered exploit
+exploitation exploited exploits files firms fixes flaw flaws hacker hackers hits impact including
+issue issues just latest malicious malware million more news over patch patched patches patching
+people report reports research researchers security servers service steal than that their them these
+threat threats through under update updates urged used users using vulnerabilities vulnerability warn
+warning warns week what when where which while with without zero-day zero-days zeroday active actively
+remote code execution severity high medium critical october november september release new year
+""".split())
+
+
+def _words(text):
+    return {w.strip("-") for w in re.split(r"[^a-z0-9-]+", (text or "").lower())
+            if len(w.strip("-")) >= 4 and not w.strip("-").isdigit()}
+
+
 def load_env(path=ENV_PATH, priority_terms=None):
     with open(path, encoding="utf-8") as fh:
         cfg = yaml.safe_load(fh) or {}
-    assets = []
+    assets, vendor_words = [], set()
     for a in cfg.get("assets") or []:
         terms = [str(t).strip() for t in (a.get("terms") or []) if str(t).strip()]
         if not a.get("name") or not terms:
@@ -113,11 +131,14 @@ def load_env(path=ENV_PATH, priority_terms=None):
         excl = [str(t).strip() for t in (a.get("exclude") or []) if str(t).strip()]
         xpat = re.compile("|".join(re.escape(t) for t in excl), re.IGNORECASE) if excl else None
         assets.append({"name": a["name"], "criticality": crit, "re": pat, "exclude": xpat})
+        for t in terms:
+            vendor_words.update(_words(t))
     win = cfg.get("window_days") or {}
     th = cfg.get("thresholds") or {}
     pt = load_priority_terms() if priority_terms is None else priority_terms
     return {
         "assets": assets,
+        "vendor_words": vendor_words,
         "priority_re": (re.compile(r"(?<![\w-])(?:" + "|".join(re.escape(t) for t in pt) + r")(?![\w-])",
                                    re.IGNORECASE) if pt else None),
         "cve_days": int(win.get("cve", 14)),
@@ -320,7 +341,7 @@ def _norm_title(t):
     return re.sub(r"[^a-z0-9]+", " ", _TITLE_NOISE.sub("", t or "").lower()).strip()
 
 
-def group_stories(items, triage, days=STORY_DAYS):
+def group_stories(items, triage, days=STORY_DAYS, vendor_words=None):
     """Fold duplicate press coverage of ONE incident (the same zero-day reported by
     20 outlets / Google News) into a single news card. Two stories are the same
     incident when they hit a shared asset AND (name a common CVE, OR were
@@ -331,6 +352,34 @@ def group_stories(items, triage, days=STORY_DAYS):
     news = [it for it in items if it["kind"] == "intel" and it["key"] not in triage]
     rest = [it for it in items if not (it["kind"] == "intel" and it["key"] not in triage)]
     news.sort(key=lambda it: (it.get("date") or "", it["key"]))
+    vendor_words = vendor_words or set()
+    # document frequency of each title word inside this window -> "rare" words are
+    # campaign / malware names (PEERSTITCH, ClickFix) that pin a story to one incident
+    df = {}
+    for it in news:
+        for w in _words(_TITLE_NOISE.sub("", it["title"])):
+            df[w] = df.get(w, 0) + 1
+    rare_cut = max(2, len(news) // 50)
+
+    def sig(it):
+        ws = _words(_TITLE_NOISE.sub("", it["title"])) - _GENERIC
+        return ws - vendor_words, ws & vendor_words
+
+    def names(it):
+        # campaign / malware / actor names are written as ALLCAPS or CamelCase
+        # (PEERSTITCH, ROMULUS, ClickFix) -- ordinary words never are
+        raw = _TITLE_NOISE.sub("", it["title"])
+        return {w.lower() for w in re.findall(r"\b(?:[A-Z]{5,}|[A-Z][a-z]+[A-Z][A-Za-z]+)\b", raw)} \
+            - _GENERIC - vendor_words
+
+    def same_topic(a, b):
+        """2 = shares a distinctive campaign/malware name, 1 = shares 2+ topic words, 0 = no."""
+        (na, va), (nb, vb) = sig(a), sig(b)
+        shared = na & nb
+        if any(df.get(w, 0) <= max(rare_cut, 12) for w in names(a) & names(b)):
+            return 2
+        return 1 if len(shared) + (1 if va & vb else 0) >= 2 else 0
+
     # Greedy, NON-transitive: an item joins a cluster only if it matches that
     # cluster's FIRST report directly, so roundup articles naming several vendors
     # ("CISA adds PAN-OS, BeyondTrust ... to KEV") cannot chain incidents together.
@@ -338,21 +387,53 @@ def group_stories(items, triage, days=STORY_DAYS):
     for it in news:
         ci, di = set(it.get("cve_ids") or []), _dt(it.get("date"))
         home = None
-        for cl in clusters:
-            seed, cset = cl[0], cl[1]
-            if ci & cset:
-                home = cl
-                break
-            ds = _dt(seed.get("date"))
-            if (set(it["assets"]) == set(seed["assets"]) and not (ci and cset and not ci & cset)
-                    and di and ds and abs((di - ds).total_seconds()) <= days * 86400):
+        for cl in clusters:      # 1) a shared CVE id is decisive
+            if ci & cl[1]:
                 home = cl
                 break
         if home is None:
+            for cl in clusters:  # 2) same incident told without (conflicting) CVE ids
+                seed, cset = cl[0], cl[1]
+                ds = _dt(seed.get("date"))
+                topic = same_topic(it, seed)
+                if (ci and cset and not ci & cset and topic < 2) or not (di and ds) \
+                        or abs((di - ds).total_seconds()) > days * 86400 \
+                        or not set(it["assets"]) & set(seed["assets"]):
+                    continue
+                if set(it["assets"]) == set(seed["assets"]) or topic:
+                    home = cl
+                    break
+        if home is None:
             clusters.append([it, set(ci), [it]])
         else:
-            home[1] |= ci
+            if len(ci) <= 3:     # roundups naming many CVEs don't widen the cluster
+                home[1] |= ci
             home[2].append(it)
+    def _campaign_link(ma, mb):
+        # same named campaign/malware (e.g. PEERSTITCH) on an overlapping asset, within `days`
+        for x in ma:
+            for y in mb:
+                dx, dy = _dt(x.get("date")), _dt(y.get("date"))
+                if dx and dy and abs((dx - dy).total_seconds()) <= days * 86400 \
+                        and set(x["assets"]) & set(y["assets"]) and same_topic(x, y) == 2:
+                    return True
+        return False
+
+    # 3) a CVE id introduced by a later report can join two clusters that started apart
+    merged = True
+    while merged:
+        merged = False
+        for a in range(len(clusters)):
+            for b in range(a + 1, len(clusters)):
+                if clusters[a][1] & clusters[b][1] or _campaign_link(clusters[a][2], clusters[b][2]):
+                    clusters[a][1] |= clusters[b][1]
+                    clusters[a][2] += clusters[b][2]
+                    clusters[a][2].sort(key=lambda it: (it.get("date") or "", it["key"]))
+                    del clusters[b]
+                    merged = True
+                    break
+            if merged:
+                break
     groups = {n: cl[2] for n, cl in enumerate(clusters)}
     out = list(rest)
     for members in groups.values():
@@ -396,6 +477,60 @@ def group_stories(items, triage, days=STORY_DAYS):
     return out
 
 
+ADVISORY_MIN = 3  # >= this many WORK advisories from one feed on one asset within STORY_DAYS
+
+
+def batch_advisories(items, triage, min_size=ADVISORY_MIN, days=STORY_DAYS):
+    """A vendor PSIRT publishing 6 separate WORK advisories in one release cycle is one
+    patch task, not 6. Groups single-feed, same-asset WORK news items that each name
+    CVE ids (and are not multi-source stories) into one card; all CVEs + links kept."""
+    cand = [it for it in items if it["kind"] == "intel" and it["tier"] == "work"
+            and it.get("cve_ids") and not it.get("coverage") and it["key"] not in triage]
+    keys = {id(it) for it in cand}
+    rest = [it for it in items if id(it) not in keys]
+    cand.sort(key=lambda it: (it.get("date") or "", it["key"]))
+    groups = []
+    for it in cand:
+        di = _dt(it.get("date"))
+        for g in groups:
+            s0 = g[0]
+            ds = _dt(s0.get("date"))
+            if (s0.get("source") == it.get("source") and s0["assets"] == it["assets"]
+                    and di and ds and abs((di - ds).total_seconds()) <= days * 86400):
+                g.append(it)
+                break
+        else:
+            groups.append([it])
+    out = rest
+    for g in groups:
+        if len(g) < min_size:
+            out.extend(g)
+            continue
+        first = g[0]
+        cves = sorted({c for m in g for c in m["cve_ids"]})
+        label = " + ".join(first["assets"])
+        lo, hi = (first.get("date") or "")[:10], max((m.get("date") or "") for m in g)[:10]
+        card = dict(max(g, key=lambda m: (m["score"] or 0)))
+        card.update({
+            "key": first["key"], "ref": first["ref"], "link": first["link"],
+            "title": f"{len(g)} {first.get('source') or 'vendor'} advisories for {label} "
+                     f"({lo}{'' if lo == hi else ' to ' + hi}) -- one patch cycle",
+            "date": max((m.get("date") or "") for m in g),
+            "first_reported": first.get("date"),
+            "cve_ids": cves,
+            "member_keys": [m["key"] for m in g],
+            "advisory_batch": True,
+            "coverage": [{"title": m["title"], "link": m["link"], "source": m.get("source"),
+                          "date": m.get("date"), "dup": False} for m in g],
+            "reasons": [first["reasons"][0],
+                        f"{len(g)} advisories from {first.get('source')} within {days} days "
+                        "(one vendor release -- patch together)",
+                        "Names " + ", ".join(cves[:8]) + (" …" if len(cves) > 8 else "")],
+        })
+        out.append(card)
+    return out
+
+
 def build(alerts, intel, env, now=None, triage=None):
     now = now or datetime.now(timezone.utc)
     triage = triage or {}
@@ -422,7 +557,8 @@ def build(alerts, intel, env, now=None, triage=None):
         if r:
             out.append(r)
     out = bundle_work(out, triage)
-    out = group_stories(out, triage)
+    out = group_stories(out, triage, vendor_words=env.get("vendor_words"))
+    out = batch_advisories(out, triage)
     for r in out:
         t = triage.get(r["key"])
         if t:

@@ -186,6 +186,36 @@ class EstateAndTriageTests(unittest.TestCase):
                  self._pan(3, "Palo Alto Networks bug C exploited", 10)]
         self.assertEqual(len(E.build([], {"items": items}, env(), NOW)["items"]), 3)
 
+    def test_campaign_name_links_reports_with_different_old_cves(self):
+        items = [self._pan(1, "PEERSTITCH malware deployed via FortiOS flaw", 15, ["CVE-2025-1"]),
+                 self._pan(2, "Unit 42 uncovers PEERSTITCH, a stealthy FortiGate implant", 16),
+                 self._pan(3, "Fortinet FortiWeb flaw exploited in attacks", 10)]
+        out = E.build([], {"items": items}, env(), NOW)
+        sizes = sorted(len(i.get("coverage") or [i]) for i in out["items"])
+        self.assertEqual(sizes, [1, 2])
+
+    def test_later_cve_joins_clusters(self):
+        items = [self._pan(1, "Palo Alto Networks bug one", 10, ["CVE-2026-1"]),
+                 self._pan(2, "Palo Alto Networks bug two", 11, ["CVE-2026-2"]),
+                 self._pan(3, "Palo Alto Networks chained bugs", 12, ["CVE-2026-1", "CVE-2026-2"])]
+        out = E.build([], {"items": items}, env(), NOW)
+        self.assertEqual(len(out["items"]), 1)
+
+    def test_psirt_work_advisories_batched(self):
+        items = []
+        for i, d in enumerate([14, 14, 15, 16]):
+            x = intel(f"ps{i}", f"CVE-2026-03{i} PAN-OS: Denial of Service (Severity: MEDIUM)", ["vulnerability"])
+            x["published"] = f"2026-10-{d}T12:00:00+00:00"
+            x["cve_ids"] = [f"CVE-2026-03{i}"]
+            x["source"] = "Palo Alto PSIRT"
+            items.append(x)
+        out = E.build([], {"items": items}, env(), NOW)
+        work = [i for i in out["items"] if i["tier"] == "work"]
+        if work:  # only meaningful when these advisories reach WORK at all
+            self.assertEqual(len(work), 1)
+            self.assertEqual(len(work[0]["cve_ids"]), 4)
+            self.assertEqual(work[0]["key"], "intel:ps0")
+
     def test_story_already_announced_via_member_not_reposted(self):
         story = {"key": "intel:a", "tier": "escalate", "member_keys": ["intel:a", "intel:b"]}
         self.assertEqual(D.select_new([story], {"intel:b": "x"}), [])

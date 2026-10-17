@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-17T16:47:07.649352+00:00",
+ "generated_at": "2026-10-17T17:28:17.637801+00:00",
  "window_days": {
   "cve": 14,
   "intel": 7
@@ -135,12 +135,12 @@
   }
  ],
  "counts": {
-  "escalate": 31,
-  "work": 52
+  "escalate": 27,
+  "work": 44
  },
  "open": {
-  "escalate": 31,
-  "work": 52
+  "escalate": 27,
+  "work": 44
  },
  "triaged": 0,
  "items": [
@@ -627,54 +627,27 @@
    ]
   },
   {
-   "key": "intel:5fc8c6dd8c540e0e",
+   "key": "intel:0bc2e5c144e4a0cf",
    "kind": "intel",
-   "ref": "5fc8c6dd8c540e0e",
+   "ref": "0bc2e5c144e4a0cf",
    "title": "PEERSTITCH Malware Deployed via FortiOS Flaw Bypasses Checks on Tagged VPN Sessions",
    "link": "https://thehackernews.com/2026/10/attackers-exploit-fortios-flaw-to.html",
    "source": "The Hacker News",
-   "date": "2026-10-16T04:59:36+00:00",
+   "date": "2026-10-16T10:10:00+00:00",
    "tier": "escalate",
    "assets": [
-    "Fortinet perimeter"
+    "Fortinet perimeter",
+    "Palo Alto (firewalls / GlobalProtect / Cortex)"
    ],
    "criticality": "critical",
    "reasons": [
     "In your estate: Fortinet perimeter (\"FortiOS\")",
     "Category: Actively exploited, Vulnerability",
     "High news priority (rule score 75)",
-    "Names CVE-2025-61624"
+    "Names CVE-2025-61624",
+    "Same incident reported by 16 sources (6 outlets/feeds) -- first seen 2026-10-13"
    ],
    "score": 75,
-   "categories": [
-    "exploited",
-    "vulnerability"
-   ],
-   "cve_ids": [
-    "CVE-2025-61624"
-   ]
-  },
-  {
-   "key": "intel:0bc2e5c144e4a0cf",
-   "kind": "intel",
-   "ref": "0bc2e5c144e4a0cf",
-   "title": "Unit 42 Uncovers PEERSTITCH, a Stealthy FortiGate Implant",
-   "link": "https://unit42.paloaltonetworks.com/fortimanager-cve-2024-47575-peerstitch-malware/",
-   "source": "Unit 42",
-   "date": "2026-10-16T04:59:00+00:00",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"FortiGate\")",
-    "Category: Actively exploited",
-    "High news priority (rule score 70)",
-    "Names CVE-2024-47575",
-    "Same incident reported by 11 sources (3 outlets/feeds) -- first seen 2026-10-13"
-   ],
-   "score": 70,
    "categories": [
     "vulnerability",
     "social_engineering",
@@ -683,7 +656,10 @@
     "exploited"
    ],
    "cve_ids": [
-    "CVE-2024-47575"
+    "CVE-2024-47575",
+    "CVE-2025-61624",
+    "CVE-2026-106170",
+    "CVE-2026-107656"
    ],
    "first_reported": "2026-10-13T07:00:00+00:00",
    "member_keys": [
@@ -694,10 +670,15 @@
     "intel:82d5ab4580add1fb",
     "intel:082a1cb598a38c59",
     "intel:ed4de16917e5b3e3",
+    "intel:a6ebbd2f69e7e088",
+    "intel:bce0b58170c802ef",
     "intel:0721cb7f0e89e9cd",
     "intel:a539da34da9cbfc5",
     "intel:b60bebb0b242b205",
-    "intel:9a7385989270aeff"
+    "intel:9a7385989270aeff",
+    "intel:5fc8c6dd8c540e0e",
+    "intel:70e2376b9d711186",
+    "intel:89926bf6a4d787d2"
    ],
    "coverage": [
     {
@@ -750,6 +731,20 @@
      "dup": false
     },
     {
+     "title": "ZDI-26-772: Fortinet FortiSandbox Admin Profile Improper Handling of Exceptional Conditions Denial-of-Service Vulnerability",
+     "link": "http://www.zerodayinitiative.com/advisories/ZDI-26-772/",
+     "source": "Zero Day Initiative",
+     "date": "2026-10-15T05:00:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "ZDI-26-771: Fortinet FortiSandbox login_user_profile Hard-Coded Credentials Authentication Bypass Vulnerability",
+     "link": "http://www.zerodayinitiative.com/advisories/ZDI-26-771/",
+     "source": "Zero Day Initiative",
+     "date": "2026-10-15T05:00:00+00:00",
+     "dup": false
+    },
+    {
      "title": "PoC Exploit Released for Critical Fortinet FortiClient EMS Authentication Bypass Vulnerability - Cyber Press",
      "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE5Kc3RFWXhHZzRyTlFlNGFoSXdUYVBRNEdPY3JScDJVLU03Z2RYQ3lYeUNIU3dLYUdONElES3dHYzY0OVU4M3FrV3NWVTVkaFFiUURfaTg0MFVyTm1ERTd6dGp1WEtIQzNIMEdQTXF3YWRJTTNsb2w3UlFxT0tVZ9IBfkFVX3lxTE5Kc3RFWXhHZzRyTlFlNGFoSXdUYVBRNEdPY3JScDJVLU03Z2RYQ3lYeUNIU3dLYUdONElES3dHYzY0OVU4M3FrV3NWVTVkaFFiUURfaTg0MFVyTm1ERTd6dGp1WEtIQzNIMEdQTXF3YWRJTTNsb2w3UlFxT0tVZw?oc=5",
      "source": "GNews: estate perimeter exploited",
@@ -776,6 +771,27 @@
      "source": "GNews: estate perimeter exploited",
      "date": "2026-10-16T04:59:00+00:00",
      "dup": false
+    },
+    {
+     "title": "PEERSTITCH Malware Deployed via FortiOS Flaw Bypasses Checks on Tagged VPN Sessions",
+     "link": "https://thehackernews.com/2026/10/attackers-exploit-fortios-flaw-to.html",
+     "source": "The Hacker News",
+     "date": "2026-10-16T04:59:36+00:00",
+     "dup": true
+    },
+    {
+     "title": "PEERSTITCH malware: How Attackers Compromised 500 Firewalls Through FortiManager",
+     "link": "https://securityaffairs.com/201077/malware/peerstitch-malware-how-attackers-compromised-500-firewalls-through-fortimanager.html",
+     "source": "Security Affairs",
+     "date": "2026-10-16T09:08:57+00:00",
+     "dup": false
+    },
+    {
+     "title": "FortiOS vulnerability exploited to distribute PEERSTITCH Malware - SecNews.gr",
+     "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5ENFJOUWV2QTV2SURKRGlzTmFDMF9Idzh5eDBGTXl3ZzlvYXZkOGlzZzNQaEd1aVVWTXhibUNsUi1qSEdqTm9HdEJvR1hUMGdPUmRKUlFzM3c4SFNjaW5Jc2lXNHNXdkVMRFRyZVAtNDI0RFJPWFZDanN1Z3dYb28?oc=5",
+     "source": "GNews: estate perimeter exploited",
+     "date": "2026-10-16T10:10:00+00:00",
+     "dup": false
     }
    ]
   },
@@ -786,9 +802,10 @@
    "title": "BeyondTrust Remote Support Zero-Day Continues Trend of Exploited Edge Bugs",
    "link": "https://www.darkreading.com/endpoint-security/beyondtrust-remote-support-exploited-edge-bugs",
    "source": "Dark Reading",
-   "date": "2026-10-16T20:34:37+00:00",
+   "date": "2026-10-17T10:47:42+00:00",
    "tier": "escalate",
    "assets": [
+    "Fortinet perimeter",
     "Palo Alto (firewalls / GlobalProtect / Cortex)",
     "Remote access / support tools"
    ],
@@ -796,14 +813,44 @@
    "reasons": [
     "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"Palo Alto Networks\"); Remote access / support tools (\"BeyondTrust\")",
     "Category: Actively exploited, Vulnerability",
-    "High news priority (rule score 70)"
+    "High news priority (rule score 70)",
+    "Same incident reported by 3 sources (3 outlets/feeds) -- first seen 2026-10-16"
    ],
    "score": 70,
    "categories": [
     "exploited",
     "vulnerability"
    ],
-   "cve_ids": []
+   "cve_ids": [],
+   "first_reported": "2026-10-16T20:34:37+00:00",
+   "member_keys": [
+    "intel:15367a3259ffd977",
+    "intel:ef60421a25c99805",
+    "intel:cd127af9f3cee5c6"
+   ],
+   "coverage": [
+    {
+     "title": "BeyondTrust Remote Support Zero-Day Continues Trend of Exploited Edge Bugs",
+     "link": "https://www.darkreading.com/endpoint-security/beyondtrust-remote-support-exploited-edge-bugs",
+     "source": "Dark Reading",
+     "date": "2026-10-16T20:34:37+00:00",
+     "dup": false
+    },
+    {
+     "title": "U.S. CISA adds Fortinet Multiple Products and BeyondTrust Remote Support flaws to its Known Exploited Vulnerabilities catalog",
+     "link": "https://securityaffairs.com/201178/security/u-s-cisa-adds-fortinet-multiple-products-and-beyondtrust-remote-support-flaws-to-its-known-exploited-vulnerabilities-catalog.html",
+     "source": "Security Affairs",
+     "date": "2026-10-17T10:35:48+00:00",
+     "dup": false
+    },
+    {
+     "title": "U.S. CISA adds Fortinet Multiple Products and BeyondTrust Remote Support flaws to its Known Exploited Vulne... - Security Affairs",
+     "link": "https://news.google.com/rss/articles/CBMiiAJBVV95cUxQaUp0UlF2Qk1iMXpOOHc3bUNTb05vOVlLTVpvdXZXM2lQV05xanRPWGI0NzlhNy1xblEyVnBSQy1vcDV4VHNnWVZjZDdlaEYwUGlMX1dlS1pMeHctYXR0aFFGSUlKSFdKNGpjcnlsVmJjTzdDTDlYdHNmRWxlYVNCaDJwWWhCSS00Z2J4RjBUNHBUOTVUSDhtVXczbGxwRElPcGdONm9xRTBnWkZIUkplbUFLS1FJOTJYWjhuY0FpY1l0LXo4UTZPREJSX1BjMVBVRUo1dEhOYTY3UnRCV2RKM29BOGlGWGNrTUZQay1USi01cG9DZW0wLXh1RXBjNmlvNi1kaHB1MlLSAYgCQVVfeXFMUGlKdFJRdkJNYjF6Tjh3N21DU29ObzlZS01ab3V2VzNpUFdOcWp0T1hiNDc5YTctcW5RMlZwUkMtb3A1eFRzZ1lWY2Q3ZWhGMFBpTF9XZUtaTHh3LWF0dGhRRklJSkhXSjRqY3J5bFZiY083Q0w5WHRzZkVsZWFTQmgycFloQkktNGdieEYwVDRwVDk1VEg4bVV3M2xscERJT3BnTjZvcUUwZ1pGSFJKZW1BS0tRSTkyWFo4bmNBaWNZdC16OFE2T0RCUl9QYzFQVUVKNXRITmE2N1J0QldkSjNvQThpRlhja01GUGstVEotNXBvQ2VtMC14dUVwYzZpbzYtZGhwdTJS?oc=5",
+     "source": "GNews: remote access & password managers",
+     "date": "2026-10-17T10:47:42+00:00",
+     "dup": false
+    }
+   ]
   },
   {
    "key": "intel:9dd7389cf87f9f22",
@@ -827,129 +874,6 @@
    "categories": [
     "exploited",
     "vulnerability"
-   ],
-   "cve_ids": []
-  },
-  {
-   "key": "intel:a6ebbd2f69e7e088",
-   "kind": "intel",
-   "ref": "a6ebbd2f69e7e088",
-   "title": "FortiOS vulnerability exploited to distribute PEERSTITCH Malware - SecNews.gr",
-   "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5ENFJOUWV2QTV2SURKRGlzTmFDMF9Idzh5eDBGTXl3ZzlvYXZkOGlzZzNQaEd1aVVWTXhibUNsUi1qSEdqTm9HdEJvR1hUMGdPUmRKUlFzM3c4SFNjaW5Jc2lXNHNXdkVMRFRyZVAtNDI0RFJPWFZDanN1Z3dYb28?oc=5",
-   "source": "GNews: estate perimeter exploited",
-   "date": "2026-10-16T10:10:00+00:00",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"FortiOS\")",
-    "Category: Actively exploited, Vulnerability",
-    "High news priority (rule score 70)",
-    "Names CVE-2026-106170",
-    "Same incident reported by 2 sources (2 outlets/feeds) -- first seen 2026-10-15"
-   ],
-   "score": 70,
-   "categories": [
-    "vulnerability",
-    "exploited"
-   ],
-   "cve_ids": [
-    "CVE-2026-106170"
-   ],
-   "first_reported": "2026-10-15T05:00:00+00:00",
-   "member_keys": [
-    "intel:a6ebbd2f69e7e088",
-    "intel:89926bf6a4d787d2"
-   ],
-   "coverage": [
-    {
-     "title": "ZDI-26-772: Fortinet FortiSandbox Admin Profile Improper Handling of Exceptional Conditions Denial-of-Service Vulnerability",
-     "link": "http://www.zerodayinitiative.com/advisories/ZDI-26-772/",
-     "source": "Zero Day Initiative",
-     "date": "2026-10-15T05:00:00+00:00",
-     "dup": false
-    },
-    {
-     "title": "FortiOS vulnerability exploited to distribute PEERSTITCH Malware - SecNews.gr",
-     "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5ENFJOUWV2QTV2SURKRGlzTmFDMF9Idzh5eDBGTXl3ZzlvYXZkOGlzZzNQaEd1aVVWTXhibUNsUi1qSEdqTm9HdEJvR1hUMGdPUmRKUlFzM3c4SFNjaW5Jc2lXNHNXdkVMRFRyZVAtNDI0RFJPWFZDanN1Z3dYb28?oc=5",
-     "source": "GNews: estate perimeter exploited",
-     "date": "2026-10-16T10:10:00+00:00",
-     "dup": false
-    }
-   ]
-  },
-  {
-   "key": "intel:ef60421a25c99805",
-   "kind": "intel",
-   "ref": "ef60421a25c99805",
-   "title": "U.S. CISA adds Fortinet Multiple Products and BeyondTrust Remote Support flaws to its Known Exploited Vulnerabilities catalog",
-   "link": "https://securityaffairs.com/201178/security/u-s-cisa-adds-fortinet-multiple-products-and-beyondtrust-remote-support-flaws-to-its-known-exploited-vulnerabilities-catalog.html",
-   "source": "Security Affairs",
-   "date": "2026-10-17T10:47:42+00:00",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter",
-    "Remote access / support tools"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\"); Remote access / support tools (\"BeyondTrust\")",
-    "Category: Actively exploited, Vulnerability",
-    "High news priority (rule score 70)",
-    "Same incident reported by 2 sources (2 outlets/feeds) -- first seen 2026-10-17"
-   ],
-   "score": 70,
-   "categories": [
-    "exploited",
-    "vulnerability"
-   ],
-   "cve_ids": [],
-   "first_reported": "2026-10-17T10:35:48+00:00",
-   "member_keys": [
-    "intel:ef60421a25c99805",
-    "intel:cd127af9f3cee5c6"
-   ],
-   "coverage": [
-    {
-     "title": "U.S. CISA adds Fortinet Multiple Products and BeyondTrust Remote Support flaws to its Known Exploited Vulnerabilities catalog",
-     "link": "https://securityaffairs.com/201178/security/u-s-cisa-adds-fortinet-multiple-products-and-beyondtrust-remote-support-flaws-to-its-known-exploited-vulnerabilities-catalog.html",
-     "source": "Security Affairs",
-     "date": "2026-10-17T10:35:48+00:00",
-     "dup": false
-    },
-    {
-     "title": "U.S. CISA adds Fortinet Multiple Products and BeyondTrust Remote Support flaws to its Known Exploited Vulne... - Security Affairs",
-     "link": "https://news.google.com/rss/articles/CBMiiAJBVV95cUxQaUp0UlF2Qk1iMXpOOHc3bUNTb05vOVlLTVpvdXZXM2lQV05xanRPWGI0NzlhNy1xblEyVnBSQy1vcDV4VHNnWVZjZDdlaEYwUGlMX1dlS1pMeHctYXR0aFFGSUlKSFdKNGpjcnlsVmJjTzdDTDlYdHNmRWxlYVNCaDJwWWhCSS00Z2J4RjBUNHBUOTVUSDhtVXczbGxwRElPcGdONm9xRTBnWkZIUkplbUFLS1FJOTJYWjhuY0FpY1l0LXo4UTZPREJSX1BjMVBVRUo1dEhOYTY3UnRCV2RKM29BOGlGWGNrTUZQay1USi01cG9DZW0wLXh1RXBjNmlvNi1kaHB1MlLSAYgCQVVfeXFMUGlKdFJRdkJNYjF6Tjh3N21DU29ObzlZS01ab3V2VzNpUFdOcWp0T1hiNDc5YTctcW5RMlZwUkMtb3A1eFRzZ1lWY2Q3ZWhGMFBpTF9XZUtaTHh3LWF0dGhRRklJSkhXSjRqY3J5bFZiY083Q0w5WHRzZkVsZWFTQmgycFloQkktNGdieEYwVDRwVDk1VEg4bVV3M2xscERJT3BnTjZvcUUwZ1pGSFJKZW1BS0tRSTkyWFo4bmNBaWNZdC16OFE2T0RCUl9QYzFQVUVKNXRITmE2N1J0QldkSjNvQThpRlhja01GUGstVEotNXBvQ2VtMC14dUVwYzZpbzYtZGhwdTJS?oc=5",
-     "source": "GNews: remote access & password managers",
-     "date": "2026-10-17T10:47:42+00:00",
-     "dup": false
-    }
-   ]
-  },
-  {
-   "key": "intel:70e2376b9d711186",
-   "kind": "intel",
-   "ref": "70e2376b9d711186",
-   "title": "PEERSTITCH malware: How Attackers Compromised 500 Firewalls Through FortiManager",
-   "link": "https://securityaffairs.com/201077/malware/peerstitch-malware-how-attackers-compromised-500-firewalls-through-fortimanager.html",
-   "source": "Security Affairs",
-   "date": "2026-10-16T09:08:57+00:00",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter",
-    "Palo Alto (firewalls / GlobalProtect / Cortex)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"Palo Alto Networks\"); Fortinet perimeter (\"FortiManager\")",
-    "Category: Actively exploited",
-    "High news priority (rule score 65)"
-   ],
-   "score": 65,
-   "categories": [
-    "exploited"
    ],
    "cve_ids": []
   },
@@ -1439,7 +1363,7 @@
     "Category: Actively exploited, Vulnerability",
     "High news priority (rule score 70)",
     "Names CVE-2026-110447",
-    "Same incident reported by 3 sources (3 outlets/feeds) -- first seen 2026-10-14"
+    "Same incident reported by 4 sources (4 outlets/feeds) -- first seen 2026-10-14"
    ],
    "score": 70,
    "categories": [
@@ -1453,6 +1377,7 @@
    "first_reported": "2026-10-14T17:38:31+00:00",
    "member_keys": [
     "intel:639d0d6e00a7eca3",
+    "intel:cce41b85261d22db",
     "intel:f705f438edc13f67",
     "intel:478b6f526bee25ba"
    ],
@@ -1462,6 +1387,13 @@
      "link": "https://thehackernews.com/2026/10/hackers-backdoor-nextcloud-servers.html",
      "source": "The Hacker News",
      "date": "2026-10-14T17:38:31+00:00",
+     "dup": false
+    },
+    {
+     "title": "Hackers exploit Collabora RCE flaw to backdoor Nextcloud servers",
+     "link": "https://www.bleepingcomputer.com/news/security/hackers-exploit-collabora-rce-flaw-to-backdoor-nextcloud-servers/",
+     "source": "BleepingComputer",
+     "date": "2026-10-15T20:25:04+00:00",
      "dup": false
     },
     {
@@ -1905,10 +1837,10 @@
    "key": "intel:2c072459f6ad6b7c",
    "kind": "intel",
    "ref": "2c072459f6ad6b7c",
-   "title": "CVE-2026-0319 PAN-OS: Improper Input Handling Vulnerability (Severity: MEDIUM)",
+   "title": "7 Palo Alto PSIRT advisories for Palo Alto (firewalls / GlobalProtect / Cortex) (2026-10-14 to 2026-10-17) -- one patch cycle",
    "link": "https://security.paloaltonetworks.com/CVE-2026-0319",
    "source": "Palo Alto PSIRT",
-   "date": "2026-10-14T16:00:00+00:00",
+   "date": "2026-10-17T00:55:00+00:00",
    "tier": "work",
    "assets": [
     "Palo Alto (firewalls / GlobalProtect / Cortex)"
@@ -1916,93 +1848,83 @@
    "criticality": "critical",
    "reasons": [
     "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"PAN-OS\")",
-    "Category: Vulnerability",
-    "Names CVE-2026-0319"
+    "7 advisories from Palo Alto PSIRT within 3 days (one vendor release -- patch together)",
+    "Names CVE-2026-0307, CVE-2026-0313, CVE-2026-0316, CVE-2026-0317, CVE-2026-0319, CVE-2026-0320, CVE-2026-0321"
    ],
    "score": 35,
    "categories": [
     "vulnerability"
    ],
    "cve_ids": [
-    "CVE-2026-0319"
-   ]
-  },
-  {
-   "key": "intel:9b2f9d4a91815ca8",
-   "kind": "intel",
-   "ref": "9b2f9d4a91815ca8",
-   "title": "CVE-2026-0316 PAN-OS: Stored Cross-Site Scripting (XSS) Vulnerability (Severity: LOW)",
-   "link": "https://security.paloaltonetworks.com/CVE-2026-0316",
-   "source": "Palo Alto PSIRT",
-   "date": "2026-10-14T16:00:00+00:00",
-   "tier": "work",
-   "assets": [
-    "Palo Alto (firewalls / GlobalProtect / Cortex)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"PAN-OS\")",
-    "Category: Vulnerability",
-    "Names CVE-2026-0316"
-   ],
-   "score": 35,
-   "categories": [
-    "vulnerability"
-   ],
-   "cve_ids": [
-    "CVE-2026-0316"
-   ]
-  },
-  {
-   "key": "intel:aa12f5ac17949155",
-   "kind": "intel",
-   "ref": "aa12f5ac17949155",
-   "title": "CVE-2026-0321 PAN-OS: Denial of Service (DoS) Vulnerabilities in Network Services (Severity: MEDIUM)",
-   "link": "https://security.paloaltonetworks.com/CVE-2026-0321",
-   "source": "Palo Alto PSIRT",
-   "date": "2026-10-15T18:30:00+00:00",
-   "tier": "work",
-   "assets": [
-    "Palo Alto (firewalls / GlobalProtect / Cortex)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"PAN-OS\")",
-    "Category: Vulnerability",
-    "Names CVE-2026-0321"
-   ],
-   "score": 35,
-   "categories": [
-    "vulnerability"
-   ],
-   "cve_ids": [
+    "CVE-2026-0307",
+    "CVE-2026-0313",
+    "CVE-2026-0316",
+    "CVE-2026-0317",
+    "CVE-2026-0319",
+    "CVE-2026-0320",
     "CVE-2026-0321"
-   ]
-  },
-  {
-   "key": "intel:bce0b58170c802ef",
-   "kind": "intel",
-   "ref": "bce0b58170c802ef",
-   "title": "ZDI-26-771: Fortinet FortiSandbox login_user_profile Hard-Coded Credentials Authentication Bypass Vulnerability",
-   "link": "http://www.zerodayinitiative.com/advisories/ZDI-26-771/",
-   "source": "Zero Day Initiative",
-   "date": "2026-10-15T05:00:00+00:00",
-   "tier": "work",
-   "assets": [
-    "Fortinet perimeter"
    ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "Category: Vulnerability",
-    "Names CVE-2026-107656"
+   "first_reported": "2026-10-14T16:00:00+00:00",
+   "member_keys": [
+    "intel:2c072459f6ad6b7c",
+    "intel:9b2f9d4a91815ca8",
+    "intel:d6b0a216cc088f7f",
+    "intel:aa12f5ac17949155",
+    "intel:eb8f95dc470d97d0",
+    "intel:f1a29fa28f2c6299",
+    "intel:ef2332a565645053"
    ],
-   "score": 35,
-   "categories": [
-    "vulnerability"
-   ],
-   "cve_ids": [
-    "CVE-2026-107656"
+   "advisory_batch": true,
+   "coverage": [
+    {
+     "title": "CVE-2026-0319 PAN-OS: Improper Input Handling Vulnerability (Severity: MEDIUM)",
+     "link": "https://security.paloaltonetworks.com/CVE-2026-0319",
+     "source": "Palo Alto PSIRT",
+     "date": "2026-10-14T16:00:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "CVE-2026-0316 PAN-OS: Stored Cross-Site Scripting (XSS) Vulnerability (Severity: LOW)",
+     "link": "https://security.paloaltonetworks.com/CVE-2026-0316",
+     "source": "Palo Alto PSIRT",
+     "date": "2026-10-14T16:00:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "CVE-2026-0313 Cortex XSOAR: OS Command Injection Vulnerability (Severity: MEDIUM)",
+     "link": "https://security.paloaltonetworks.com/CVE-2026-0313",
+     "source": "Palo Alto PSIRT",
+     "date": "2026-10-14T16:00:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "CVE-2026-0321 PAN-OS: Denial of Service (DoS) Vulnerabilities in Network Services (Severity: MEDIUM)",
+     "link": "https://security.paloaltonetworks.com/CVE-2026-0321",
+     "source": "Palo Alto PSIRT",
+     "date": "2026-10-15T18:30:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "CVE-2026-0320 PAN-OS: Authenticated Admin Command Injection Vulnerability (Severity: MEDIUM)",
+     "link": "https://security.paloaltonetworks.com/CVE-2026-0320",
+     "source": "Palo Alto PSIRT",
+     "date": "2026-10-15T18:30:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "CVE-2026-0317 PAN-OS: Denial of Service Vulnerability (Severity: LOW)",
+     "link": "https://security.paloaltonetworks.com/CVE-2026-0317",
+     "source": "Palo Alto PSIRT",
+     "date": "2026-10-15T18:30:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "CVE-2026-0307 GlobalProtect App: Local Privilege Escalation Vulnerabilities (Severity: MEDIUM)",
+     "link": "https://security.paloaltonetworks.com/CVE-2026-0307",
+     "source": "Palo Alto PSIRT",
+     "date": "2026-10-17T00:55:00+00:00",
+     "dup": false
+    }
    ]
   },
   {
@@ -2027,84 +1949,6 @@
     "patch"
    ],
    "cve_ids": []
-  },
-  {
-   "key": "intel:eb8f95dc470d97d0",
-   "kind": "intel",
-   "ref": "eb8f95dc470d97d0",
-   "title": "CVE-2026-0320 PAN-OS: Authenticated Admin Command Injection Vulnerability (Severity: MEDIUM)",
-   "link": "https://security.paloaltonetworks.com/CVE-2026-0320",
-   "source": "Palo Alto PSIRT",
-   "date": "2026-10-15T18:30:00+00:00",
-   "tier": "work",
-   "assets": [
-    "Palo Alto (firewalls / GlobalProtect / Cortex)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"PAN-OS\")",
-    "Category: Vulnerability",
-    "Names CVE-2026-0320"
-   ],
-   "score": 35,
-   "categories": [
-    "vulnerability"
-   ],
-   "cve_ids": [
-    "CVE-2026-0320"
-   ]
-  },
-  {
-   "key": "intel:ef2332a565645053",
-   "kind": "intel",
-   "ref": "ef2332a565645053",
-   "title": "CVE-2026-0307 GlobalProtect App: Local Privilege Escalation Vulnerabilities (Severity: MEDIUM)",
-   "link": "https://security.paloaltonetworks.com/CVE-2026-0307",
-   "source": "Palo Alto PSIRT",
-   "date": "2026-10-17T00:55:00+00:00",
-   "tier": "work",
-   "assets": [
-    "Palo Alto (firewalls / GlobalProtect / Cortex)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"GlobalProtect\")",
-    "Category: Vulnerability",
-    "Names CVE-2026-0307"
-   ],
-   "score": 35,
-   "categories": [
-    "vulnerability"
-   ],
-   "cve_ids": [
-    "CVE-2026-0307"
-   ]
-  },
-  {
-   "key": "intel:f1a29fa28f2c6299",
-   "kind": "intel",
-   "ref": "f1a29fa28f2c6299",
-   "title": "CVE-2026-0317 PAN-OS: Denial of Service Vulnerability (Severity: LOW)",
-   "link": "https://security.paloaltonetworks.com/CVE-2026-0317",
-   "source": "Palo Alto PSIRT",
-   "date": "2026-10-15T18:30:00+00:00",
-   "tier": "work",
-   "assets": [
-    "Palo Alto (firewalls / GlobalProtect / Cortex)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"PAN-OS\")",
-    "Category: Vulnerability",
-    "Names CVE-2026-0317"
-   ],
-   "score": 35,
-   "categories": [
-    "vulnerability"
-   ],
-   "cve_ids": [
-    "CVE-2026-0317"
-   ]
   },
   {
    "key": "bundle:fortinet-perimeter:2026-10-13",
@@ -2320,32 +2164,6 @@
    "kev": false
   },
   {
-   "key": "intel:d6b0a216cc088f7f",
-   "kind": "intel",
-   "ref": "d6b0a216cc088f7f",
-   "title": "CVE-2026-0313 Cortex XSOAR: OS Command Injection Vulnerability (Severity: MEDIUM)",
-   "link": "https://security.paloaltonetworks.com/CVE-2026-0313",
-   "source": "Palo Alto PSIRT",
-   "date": "2026-10-14T16:00:00+00:00",
-   "tier": "work",
-   "assets": [
-    "Palo Alto (firewalls / GlobalProtect / Cortex)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"Cortex XSOAR\")",
-    "Category: Vulnerability",
-    "Names CVE-2026-0313"
-   ],
-   "score": 10,
-   "categories": [
-    "vulnerability"
-   ],
-   "cve_ids": [
-    "CVE-2026-0313"
-   ]
-  },
-  {
    "key": "intel:89da19b51c108909",
    "kind": "intel",
    "ref": "89da19b51c108909",
@@ -2491,32 +2309,6 @@
     "vulnerability"
    ],
    "cve_ids": []
-  },
-  {
-   "key": "intel:cce41b85261d22db",
-   "kind": "intel",
-   "ref": "cce41b85261d22db",
-   "title": "Hackers exploit Collabora RCE flaw to backdoor Nextcloud servers",
-   "link": "https://www.bleepingcomputer.com/news/security/hackers-exploit-collabora-rce-flaw-to-backdoor-nextcloud-servers/",
-   "source": "BleepingComputer",
-   "date": "2026-10-15T20:25:04+00:00",
-   "tier": "work",
-   "assets": [
-    "Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace) (\"Nextcloud\")",
-    "Category: Vulnerability",
-    "Names CVE-2026-110447"
-   ],
-   "score": 35,
-   "categories": [
-    "vulnerability"
-   ],
-   "cve_ids": [
-    "CVE-2026-110447"
-   ]
   },
   {
    "key": "cve:CVE-2026-109412",

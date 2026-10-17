@@ -55,7 +55,7 @@ function renderItem(it) {
   const kind = it.kind === "cve" ? "CVE" : it.kind === "bundle" ? `Bundle · ${(it.cve_ids || []).length} CVEs`
     : cov.length ? `News · ${cov.length} reports` : `News · ${it.source || ""}`;
   const coverage = cov.length
-    ? `<details class="esc-coverage"><summary>All ${cov.length} reports of this incident</summary><ul>${cov
+    ? `<details class="esc-coverage"><summary>${it.advisory_batch ? `All ${cov.length} advisories in this release` : `All ${cov.length} reports of this incident`}</summary><ul>${cov
         .filter((c) => !c.dup)
         .map((c) => `<li>${extLink(c.link, c.title) || escapeHtml(c.title)} <span class="muted">· ${escapeHtml(c.source || "")} · ${escapeHtml(day(c.date))}</span></li>`)
         .join("")}</ul></details>`
