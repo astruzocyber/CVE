@@ -1286,6 +1286,22 @@ def unique_key(entry):
     return f"{entry['cve_id']}::{entry['source']}"
 
 
+def collapse_advisory_twins(by_key):
+    """Self-heal: if a CVE has both an NVD alert and a KEV-only alert, keep the
+    NVD one (richer record) with the earliest first_seen. Returns #removed."""
+    removed = 0
+    for key in [k for k in by_key if k.endswith("::kev")]:
+        nvd_key = key[:-len("::kev")] + "::nvd"
+        if nvd_key in by_key:
+            kev_alert = by_key.pop(key)
+            nvd_alert = by_key[nvd_key]
+            fs = [x for x in (kev_alert.get("first_seen"), nvd_alert.get("first_seen")) if x]
+            if fs:
+                nvd_alert["first_seen"] = min(fs)
+            removed += 1
+    return removed
+
+
 def compute_stats(alerts):
     total = len(alerts)
     kev_count = sum(1 for a in alerts if a.get("kev"))
@@ -1772,6 +1788,20 @@ def main():
         key = unique_key(c)
         touched_keys.add(key)
         final = build_final_entry(c, kev_map, epss_map)
+        # NVD and the KEV-only ingest describe the SAME advisory. When the NVD
+        # record of a CVE we first surfaced from KEV arrives (NVD often lags the
+        # KEV listing), upgrade that alert in place instead of adding a second.
+        twin = f"{c['cve_id']}::{'kev' if c.get('source') == 'nvd' else 'nvd'}"
+        if c.get("source") in ("nvd", "kev") and twin in existing_by_key:
+            if c.get("source") == "kev":
+                touched_keys.add(twin)
+                continue  # the richer NVD alert already exists
+            prior_twin = existing_by_key.pop(twin)
+            seen_ids.add(key)
+            existing_by_key[key] = {**final, "first_seen": prior_twin.get("first_seen", final["first_seen"]),
+                                    "risk_score_prev": prior_twin.get("risk_score"),
+                                    "epss_score_prev": prior_twin.get("epss_score")}
+            continue
         if key not in seen_ids:
             new_alerts.append(final)
             seen_ids.add(key)
@@ -1866,6 +1896,7 @@ def main():
                 existing_by_key[key]["osv_id"] = final["osv_id"]
                 existing_by_key[key]["osv_fixed_versions"] = final["osv_fixed_versions"]
 
+    collapse_advisory_twins(existing_by_key)
     cumulative = sorted(existing_by_key.values(), key=lambda a: a.get("first_seen", ""), reverse=True)
     stats = compute_stats(cumulative)
     # Alert-velocity signal: how many brand-new CVEs this single run surfaced

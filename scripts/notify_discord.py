@@ -56,7 +56,8 @@ def select_new(items, sent, min_tier="escalate"):
     limit = TIER_RANK.get(min_tier, 0)
     # items the team already triaged in config/triage.yaml are never announced
     return [it for it in items if TIER_RANK.get(it.get("tier"), 9) <= limit
-            and it.get("key") not in sent and not it.get("triage")]
+            and not any(k in sent for k in (it.get("member_keys") or [it.get("key")]))
+            and not it.get("triage")]
 
 
 def build_embed(it, dashboard):
