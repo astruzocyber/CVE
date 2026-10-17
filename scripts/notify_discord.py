@@ -54,7 +54,9 @@ def _clip(text, n):
 
 def select_new(items, sent, min_tier="escalate"):
     limit = TIER_RANK.get(min_tier, 0)
-    return [it for it in items if TIER_RANK.get(it.get("tier"), 9) <= limit and it.get("key") not in sent]
+    # items the team already triaged in config/triage.yaml are never announced
+    return [it for it in items if TIER_RANK.get(it.get("tier"), 9) <= limit
+            and it.get("key") not in sent and not it.get("triage")]
 
 
 def build_embed(it, dashboard):
@@ -118,14 +120,18 @@ def run(webhook, esc, state, now, seed_only=False, min_tier="escalate", dashboar
         for it in new:
             sent[it["key"]] = stamp
         if not seed_only:
-            n_esc = sum(1 for it in items if it.get("tier") == "escalate")
-            n_work = sum(1 for it in items if it.get("tier") == "work")
+            n_esc = sum(1 for it in items if it.get("tier") == "escalate" and not it.get("closed"))
+            n_work = sum(1 for it in items if it.get("tier") == "work" and not it.get("closed"))
             ok = poster(webhook, {"content": (
                 f"✅ CVE dashboard connected. {n_esc} Escalate / {n_work} Work items are already on the board "
                 f"({dashboard}). From now on, only NEW Escalate items will be posted here.")})
             if not ok:
                 return state, 0
-        return {"seeded": True, "sent": prune(sent, now)}, 0
+        # no digest on the connect run -- the connect message already summarises the board
+        new_state = {**state, "seeded": True, "sent": prune(sent, now)}
+        if not seed_only:
+            new_state["digest_date"] = now.date().isoformat()
+        return new_state, 0
 
     posted = 0
     batch = new[:MAX_ITEMS_PER_RUN]
@@ -141,7 +147,37 @@ def run(webhook, esc, state, now, seed_only=False, min_tier="escalate", dashboar
         posted += len(chunk)
         time.sleep(1)
     # anything beyond MAX_ITEMS_PER_RUN is left unsent and goes out next run
-    return {"seeded": True, "sent": prune(sent, now)}, posted
+    return {**state, "seeded": True, "sent": prune(sent, now)}, posted
+
+
+def build_digest(esc, dashboard, limit=10):
+    """Daily summary of what is still OPEN (not closed in triage.yaml)."""
+    items = [it for it in esc.get("items") or [] if not it.get("closed")]
+    esc_items = [it for it in items if it.get("tier") == "escalate"]
+    n_work = sum(1 for it in items if it.get("tier") == "work")
+    lines = [f"🗓️ Daily briefing — {len(esc_items)} open Escalate · {n_work} open Work · "
+             f"{esc.get('triaged', 0)} triaged by the team. {dashboard}"]
+    for it in esc_items[:limit]:
+        t = it.get("triage") or {}
+        tag = f" [{t['status']}{(' · ' + t['owner']) if t.get('owner') else ''}]" if t else " [untriaged]"
+        lines.append(f"• {_clip(it.get('title'), 150)}{tag}")
+    if len(esc_items) > limit:
+        lines.append(f"…and {len(esc_items) - limit} more on the board.")
+    if not esc_items:
+        lines.append("Nothing open at Escalate level.")
+    text = "\n".join(lines)   # keep line breaks (_clip would collapse them)
+    return text if len(text) <= 1900 else text[:1899] + "…"
+
+
+def run_digest(webhook, esc, state, now, hour_utc=12, dashboard="", poster=post):
+    """Posts the daily digest once per UTC day, on the first run at/after hour_utc.
+    Returns (new_state, posted_bool). The day is recorded only after Discord accepts."""
+    today = now.date().isoformat()
+    if not state.get("seeded") or state.get("digest_date") == today or now.hour < hour_utc:
+        return state, False
+    if not poster(webhook, {"content": build_digest(esc, dashboard)}):
+        return state, False
+    return {**state, "digest_date": today}, True
 
 
 def main():
@@ -157,12 +193,22 @@ def main():
         print("escalations.json missing -- nothing to notify.")
         return 0
     state = _load(STATE_PATH, {}) or {}
+    now = datetime.now(timezone.utc)
+    dashboard = os.environ.get("DASHBOARD_URL") or "https://astruzocyber.github.io/CVE/"
+    seed_only = os.environ.get("DISCORD_SEED_ONLY") == "1"
     new_state, n = run(
-        webhook, esc, state, datetime.now(timezone.utc),
-        seed_only=os.environ.get("DISCORD_SEED_ONLY") == "1",
+        webhook, esc, state, now, seed_only=seed_only,
         min_tier=(os.environ.get("DISCORD_MIN_TIER") or "escalate").strip().lower(),
-        dashboard=os.environ.get("DASHBOARD_URL") or "https://astruzocyber.github.io/CVE/",
+        dashboard=dashboard,
     )
+    if not seed_only and (os.environ.get("DISCORD_DIGEST") or "1") != "0":
+        try:
+            hour = int(os.environ.get("DISCORD_DIGEST_HOUR_UTC") or 12)
+        except ValueError:
+            hour = 12
+        new_state, sent_digest = run_digest(webhook, esc, new_state, now, hour, dashboard)
+        if sent_digest:
+            print("Discord: daily digest posted.")
     with open(STATE_PATH, "w", encoding="utf-8") as fh:
         json.dump(new_state, fh, indent=1, sort_keys=True)
         fh.write("\n")

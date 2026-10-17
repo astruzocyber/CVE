@@ -8,8 +8,8 @@
 #
 # A feed that errors is skipped for that run (logged, never fatal); items
 # already collected stay on the board until they age out (retention_days).
-retention_days: 30
-max_items: 600
+retention_days: 45   # was 30; longer memory for slow-burn campaigns
+max_items: 1500      # was 600; room for the vendor/research feeds below
 
 feeds:
   - name: BleepingComputer
@@ -36,3 +36,55 @@ feeds:
     url: https://gbhackers.com/feed/
   - name: Krebs on Security
     url: https://krebsonsecurity.com/feed/
+
+  # ---- Vendor PSIRTs for our perimeter / estate (probed 2026-10-17) ----
+  - name: Fortinet PSIRT
+    url: https://filestore.fortinet.com/fortiguard/rss/ir.xml
+  - name: Palo Alto PSIRT
+    url: https://security.paloaltonetworks.com/rss.xml
+  - name: Cisco PSIRT
+    url: https://sec.cloudapps.cisco.com/security/center/psirtrss20/CiscoSecurityAdvisory.xml
+  - name: CERT/CC
+    url: https://www.kb.cert.org/vuls/atomfeed/
+  - name: Zero Day Initiative
+    url: https://www.zerodayinitiative.com/rss/published/
+
+  # ---- Threat research (campaigns, initial access, exploitation write-ups) ----
+  - name: Unit 42
+    url: https://unit42.paloaltonetworks.com/feed/
+  - name: Cisco Talos
+    url: https://blog.talosintelligence.com/rss/
+  - name: Check Point Research
+    url: https://research.checkpoint.com/feed/
+  - name: Huntress
+    url: https://www.huntress.com/blog/rss.xml
+  - name: Rapid7
+    url: https://www.rapid7.com/blog/rss/
+  - name: watchTowr Labs
+    url: https://labs.watchtowr.com/rss/
+  - name: Security Affairs
+    url: https://securityaffairs.com/feed
+  - name: The Record
+    url: https://therecord.media/feed
+  - name: Cloudflare Security
+    url: https://blog.cloudflare.com/tag/security/rss/
+
+  # ---- Google News searches: reach outlets whose own feeds are bot-blocked,
+  # and catch estate-specific campaigns (Teams vishing etc.) as soon as any
+  # outlet reports them. Each item links to the original article.
+  - name: "GNews: Teams / help-desk vishing"
+    url: "https://news.google.com/rss/search?q=%28%22Microsoft+Teams%22+OR+%22Teams%22%29+%28vishing+OR+%22help+desk%22+OR+%22IT+support%22%29+%28phishing+OR+attack+OR+scam%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+  - name: "GNews: estate perimeter exploited"
+    url: "https://news.google.com/rss/search?q=%28Fortinet+OR+FortiGate+OR+%22Palo+Alto%22+OR+GlobalProtect+OR+%22Check+Point%22+OR+SonicWall+OR+Meraki+OR+Peplink+OR+Citrix%29+%28exploited+OR+%22zero-day%22+OR+%22actively+exploited%22%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+  - name: "GNews: remote access & password managers"
+    url: "https://news.google.com/rss/search?q=%28AnyDesk+OR+BeyondTrust+OR+Bomgar+OR+%22Zoho+Assist%22+OR+ScaleFT+OR+Bitwarden+OR+Vaultwarden+OR+Keeper+OR+%22Remote+Desktop+Manager%22%29+%28vulnerability+OR+exploited+OR+breach+OR+malicious%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+  - name: "GNews: identity & M365 attacks"
+    url: "https://news.google.com/rss/search?q=%28%22Entra+ID%22+OR+%22AD+FS%22+OR+%22Active+Directory%22+OR+%22Microsoft+365%22+OR+%22Office+365%22+OR+Intune%29+%28attack+OR+phishing+OR+exploited+OR+%22zero-day%22%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+  - name: "GNews: business SaaS breaches"
+    url: "https://news.google.com/rss/search?q=%28Workday+OR+ADP+OR+DocuSign+OR+HubSpot+OR+Slack+OR+Acumatica+OR+OnBase+OR+Yardi+OR+%22Bill.com%22+OR+Five9+OR+3CX+OR+Avaya+OR+Grandstream%29+%28breach+OR+vulnerability+OR+phishing+OR+exploited%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+  - name: "GNews: virtualization & cloud"
+    url: "https://news.google.com/rss/search?q=%28VMware+OR+ESXi+OR+Nutanix+OR+AWS+OR+Azure+OR+%22Google+Cloud%22+OR+DigitalOcean+OR+Cloudflare%29+%28exploited+OR+%22zero-day%22+OR+ransomware+OR+breach%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+  - name: "GNews: dev & AI tools"
+    url: "https://news.google.com/rss/search?q=%28GitHub+OR+Bitbucket+OR+Atlassian+OR+Confluence+OR+Jira+OR+Cursor+OR+%22Claude+Code%22+OR+ChatGPT+OR+Copilot+OR+Gemini+OR+Kiro%29+%28vulnerability+OR+malicious+OR+%22supply+chain%22+OR+exploited+OR+phishing%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+  - name: "GNews: media & publishing sector"
+    url: "https://news.google.com/rss/search?q=%28newspaper+OR+%22media+company%22+OR+publisher+OR+%22news+outlet%22%29+%28cyberattack+OR+ransomware+OR+breach%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"

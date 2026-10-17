@@ -251,5 +251,31 @@ class TestCheckFeeds(ValidateDataTestBase):
         self.assertTrue(any("does not look like valid XML" in e for e in validate_data.errors))
 
 
+class TestCheckTriageYaml(ValidateDataTestBase):
+    def _write(self, text):
+        p = Path(self.tmpdir) / "triage.yaml"
+        p.write_text(text)
+        return p
+
+    def test_valid_entries_pass(self):
+        validate_data.check_triage_yaml(self._write(
+            'entries:\n  "cve:CVE-2026-12345":\n    status: in_progress\n    owner: "GMS"\n'
+            '  "intel:0123456789abcdef":\n    status: false_positive\n'
+            '  "bundle:browsers-edge:2026-10-13":\n    status: resolved\n'))
+        self.assertEqual(validate_data.errors, [])
+
+    def test_empty_entries_pass(self):
+        validate_data.check_triage_yaml(self._write("entries:\n"))
+        self.assertEqual(validate_data.errors, [])
+
+    def test_bad_status_and_key_fail(self):
+        validate_data.check_triage_yaml(self._write('entries:\n  "CVE-2026-1":\n    status: done\n'))
+        self.assertEqual(len(validate_data.errors), 2)
+
+    def test_invalid_yaml_fails(self):
+        validate_data.check_triage_yaml(self._write("entries:\n  - [unclosed\n"))
+        self.assertEqual(len(validate_data.errors), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

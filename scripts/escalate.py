@@ -39,10 +39,47 @@ WATCHLIST_PATH = os.path.join(ROOT, "config", "watchlist.yaml")
 ALERTS_PATH = os.path.join(ROOT, "docs", "data", "alerts.json")
 INTEL_PATH = os.path.join(ROOT, "docs", "data", "intel.json")
 OUT_PATH = os.path.join(ROOT, "docs", "data", "escalations.json")
+TRIAGE_PATH = os.path.join(ROOT, "config", "triage.yaml")
 
 TIER_RANK = {"escalate": 0, "work": 1}
 CRIT_RANK = {"critical": 0, "high": 1, "medium": 2}
 HOT_INTEL = {"exploited", "ransomware", "social_engineering"}
+# Shared team triage (config/triage.yaml, edited in the GitHub web UI).
+TRIAGE_STATUSES = {"acknowledged", "in_progress", "escalated", "resolved", "false_positive",
+                   "accepted_risk"}
+CLOSED_STATUSES = {"resolved", "false_positive", "accepted_risk"}
+
+
+def load_triage(path=TRIAGE_PATH):
+    """{key: {status, owner, note, date}} from config/triage.yaml. Unknown
+    statuses are dropped (printed) rather than guessed."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            cfg = yaml.safe_load(fh) or {}
+    except OSError:
+        return {}
+    except yaml.YAMLError as e:
+        # keep the board running; validate_data.py fails CI on the same typo
+        print(f"WARNING: config/triage.yaml is not valid YAML, triage ignored: {e}")
+        return {}
+    if not isinstance(cfg, dict) or not isinstance(cfg.get("entries") or {}, dict):
+        print("WARNING: config/triage.yaml 'entries' must be a mapping, triage ignored")
+        return {}
+    out = {}
+    for key, v in (cfg.get("entries") or {}).items():
+        if not isinstance(v, dict):
+            continue
+        status = str(v.get("status") or "").strip().lower()
+        if status not in TRIAGE_STATUSES:
+            print(f"triage.yaml: ignoring {key!r} -- unknown status {status!r}")
+            continue
+        out[str(key).strip()] = {
+            "status": status,
+            "owner": str(v.get("owner") or "").strip(),
+            "note": str(v.get("note") or "").strip(),
+            "date": str(v.get("date") or "").strip(),
+        }
+    return out
 
 
 def load_priority_terms(path=WATCHLIST_PATH):
@@ -68,8 +105,11 @@ def load_env(path=ENV_PATH, priority_terms=None):
             crit = "medium"
         # longest first so the reported hit is the most specific phrase
         terms.sort(key=len, reverse=True)
-        pat = re.compile(r"(?<![\w-])(?:" + "|".join(re.escape(t) for t in terms) + r")(?![\w-])",
-                         re.IGNORECASE)
+        flags = 0 if a.get("match_case") else re.IGNORECASE
+        # boundaries also reject URL/hostname context ("https://github.com/x" is a
+        # reference link, not a GitHub product CVE)
+        pat = re.compile(r"(?<![\w./-])(?:" + "|".join(re.escape(t) for t in terms) + r")(?![\w-]|\.\w)",
+                         flags)
         excl = [str(t).strip() for t in (a.get("exclude") or []) if str(t).strip()]
         xpat = re.compile("|".join(re.escape(t) for t in excl), re.IGNORECASE) if excl else None
         assets.append({"name": a["name"], "criticality": crit, "re": pat, "exclude": xpat})
@@ -159,6 +199,7 @@ def classify_alert(alert, env):
         "title": f"{cid}: {(alert.get('description') or '').strip()[:220]}",
         "link": f"#{cid}",
         "date": alert.get("kev_date_added") or alert.get("first_seen"),
+        "published": (alert.get("published") or "")[:10] or None,
         "tier": tier,
         "assets": sorted({a["name"] for a, _ in hits}),
         "criticality": min((a["criticality"] for a, _ in hits), key=lambda c: CRIT_RANK[c]),
@@ -169,11 +210,23 @@ def classify_alert(alert, env):
     }
 
 
+def current_categories(item):
+    text = f"{item.get('title') or ''} {item.get('summary') or ''}"
+    try:
+        from fetch_intel import CATEGORY_RES
+    except Exception:  # pragma: no cover - fall back to the stored labels
+        return list(item.get("categories") or [])
+    return [k for k, _, rx in CATEGORY_RES if rx.search(text)]
+
+
 def classify_intel(item, env, labels):
     hits = match_assets(f"{item.get('title') or ''} {item.get('summary') or ''}", env["assets"])
     if not hits:
         return None
-    cats = list(item.get("categories") or [])
+    # Re-classify with the CURRENT rules instead of trusting the label stored
+    # when the story was fetched: rule fixes (new exploitation phrasings,
+    # removed false positives) then apply to the whole 45-day window at once.
+    cats = current_categories(item)
     if not cats and item.get("priority") != "high":
         return None
     best = min(CRIT_RANK[a["criticality"]] for a, _ in hits)
@@ -207,8 +260,60 @@ def classify_intel(item, env, labels):
     }
 
 
-def build(alerts, intel, env, now=None):
+BUNDLE_MIN = 4  # >= this many same-day WORK CVEs on the same assets -> one bundle item
+
+
+def _slug(text):
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:40]
+
+
+def bundle_work(items, triage, min_size=BUNDLE_MIN):
+    """Collapse same-asset, same-publish-day WORK CVEs (a Chrome release, a Patch
+    Tuesday) into one bundle item: one patch cycle = one work item. ESCALATE items
+    and anything the team triaged individually are never bundled, and every
+    member CVE id is kept on the bundle so nothing disappears."""
+    groups, keep = {}, []
+    for it in items:
+        if (it["kind"] == "cve" and it["tier"] == "work" and it.get("published")
+                and it["key"] not in triage):
+            groups.setdefault((tuple(it["assets"]), it["published"]), []).append(it)
+        else:
+            keep.append(it)
+    for (assets, day), members in groups.items():
+        if len(members) < min_size:
+            keep.extend(members)
+            continue
+        members.sort(key=lambda m: (-(m["cvss"] or 0), m["ref"]))
+        ids = [m["ref"] for m in members]
+        top = max((m["cvss"] for m in members if m["cvss"] is not None), default=None)
+        label = " + ".join(assets)
+        keep.append({
+            "key": f"bundle:{_slug(label)}:{day}",
+            "kind": "bundle",
+            "ref": ids[0],
+            "title": f"{len(ids)} {label} CVEs published {day} -- one patch cycle"
+                     + (f" (highest CVSS {top})" if top is not None else ""),
+            "link": f"#{ids[0]}",
+            "date": max((m["date"] or "") for m in members) or day,
+            "published": day,
+            "tier": "work",
+            "assets": list(assets),
+            "criticality": min((m["criticality"] for m in members), key=lambda c: CRIT_RANK[c]),
+            "reasons": [members[0]["reasons"][0],
+                        f"{len(ids)} CVEs at/above the WORK threshold, all published {day} "
+                        "(typically one vendor release -- patch together)",
+                        "CVEs: " + ", ".join(ids)],
+            "score": max((m["score"] or 0) for m in members),
+            "cvss": top,
+            "kev": False,
+            "cve_ids": ids,
+        })
+    return keep
+
+
+def build(alerts, intel, env, now=None, triage=None):
     now = now or datetime.now(timezone.utc)
+    triage = triage or {}
     cve_cut = now - timedelta(days=env["cve_days"])
     intel_cut = now - timedelta(days=env["intel_days"])
     out = []
@@ -231,13 +336,21 @@ def build(alerts, intel, env, now=None):
         r = classify_intel(it, env, labels)
         if r:
             out.append(r)
-    out.sort(key=lambda r: (TIER_RANK[r["tier"]], CRIT_RANK[r["criticality"]], -(r["score"] or 0),
-                            r["key"]))
+    out = bundle_work(out, triage)
+    for r in out:
+        t = triage.get(r["key"])
+        if t:
+            r["triage"] = t
+            r["closed"] = t["status"] in CLOSED_STATUSES
+    out.sort(key=lambda r: (bool(r.get("closed")), TIER_RANK[r["tier"]], CRIT_RANK[r["criticality"]],
+                            -(r["score"] or 0), r["key"]))
     return {
         "generated_at": now.isoformat(),
         "window_days": {"cve": env["cve_days"], "intel": env["intel_days"]},
         "assets": [{"name": a["name"], "criticality": a["criticality"]} for a in env["assets"]],
         "counts": {t: sum(1 for r in out if r["tier"] == t) for t in TIER_RANK},
+        "open": {t: sum(1 for r in out if r["tier"] == t and not r.get("closed")) for t in TIER_RANK},
+        "triaged": sum(1 for r in out if r.get("triage")),
         "items": out,
     }
 
@@ -255,12 +368,13 @@ def main():
         print("config/environment.yaml missing -- escalation board disabled.")
         return 0
     env = load_env()
-    result = build(_load(ALERTS_PATH, []), _load(INTEL_PATH, {}), env)
+    result = build(_load(ALERTS_PATH, []), _load(INTEL_PATH, {}), env, triage=load_triage())
     with open(OUT_PATH, "w", encoding="utf-8") as fh:
         json.dump(result, fh, indent=1, ensure_ascii=False)
         fh.write("\n")
     c = result["counts"]
-    print(f"Escalations: {c['escalate']} escalate, {c['work']} work "
+    print(f"Escalations: {c['escalate']} escalate, {c['work']} work, "
+          f"{result['triaged']} triaged "
           f"(CVE window {env['cve_days']}d, intel window {env['intel_days']}d)")
     return 0
 

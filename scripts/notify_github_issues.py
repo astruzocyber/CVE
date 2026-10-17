@@ -22,6 +22,12 @@ import urllib.error
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 NEW_ALERTS_PATH = os.path.join(REPO_ROOT, "docs", "data", "new_alerts.json")
 GITHUB_API = "https://api.github.com"
+ESCALATIONS_PATH = os.path.join(REPO_ROOT, "docs", "data", "escalations.json")
+# GitHub's secondary rate limit on content creation is roughly 80 requests/min
+# and 500/hour; a burst of 341 issues tripped it. Cap per run, pace each call,
+# and roll the overflow into ONE digest issue so nothing is silently dropped.
+MAX_ISSUES_PER_RUN = int(os.environ.get("MAX_ISSUES_PER_RUN") or 40)
+ISSUE_PACING_S = float(os.environ.get("ISSUE_PACING_S") or 2.0)
 
 
 def load_new_alerts():
@@ -109,6 +115,60 @@ def build_issue_body(alert):
     return "\n".join(lines)
 
 
+def retry_wait(headers, attempt, cap=120):
+    """Seconds to wait before retrying: Retry-After, else x-ratelimit-reset when
+    the primary quota is exhausted, else exponential backoff. Capped so a run
+    never hangs."""
+    headers = headers or {}
+    ra = headers.get("Retry-After")
+    if ra and str(ra).strip().isdigit():
+        return min(int(ra), cap)
+    if str(headers.get("x-ratelimit-remaining", "")).strip() == "0":
+        reset = str(headers.get("x-ratelimit-reset", "")).strip()
+        if reset.isdigit():
+            return max(1, min(int(reset) - int(time.time()), cap))
+    return min(15 * (2 ** attempt), cap)
+
+
+def split_for_cap(alerts, cap=MAX_ISSUES_PER_RUN):
+    """(individual, overflow). Alerts on the environment board (Escalate/Work)
+    always go first, then by risk score, so the cap only ever drops the least
+    relevant ones into the digest."""
+    board = _board_tiers()
+    def key(a):
+        tier = board.get(f"cve:{a.get('cve_id')}")
+        return ({"escalate": 0, "work": 1}.get(tier, 2), -(a.get("risk_score") or 0))
+    ordered = sorted(alerts, key=key)
+    return ordered[:cap], ordered[cap:]
+
+
+def _board_tiers():
+    try:
+        with open(ESCALATIONS_PATH, encoding="utf-8") as fh:
+            items = json.load(fh).get("items") or []
+        out = {}
+        for it in items:
+            out[it.get("key")] = it.get("tier")
+            for cid in it.get("cve_ids") or []:   # bundled CVEs keep their tier
+                out.setdefault(f"cve:{cid}", it.get("tier"))
+        return out
+    except (OSError, ValueError, AttributeError):
+        return {}
+
+
+def build_digest_body(overflow):
+    lines = [f"{len(overflow)} additional new alert(s) this run were above the per-run issue cap "
+             f"({MAX_ISSUES_PER_RUN}). They are all on the dashboard; listed here so none is lost.", "",
+             "| CVE | CVSS | Risk | KEV | Affected |", "|---|---|---|---|---|"]
+    for a in overflow[:300]:
+        aff = ", ".join(a.get("affected") or [])[:80].replace("|", "/") or (a.get("source") or "")
+        lines.append(f"| {a.get('cve_id')} | {a.get('cvss_score')} | {a.get('risk_score')} | "
+                     f"{'yes' if a.get('kev') else ''} | {aff} |")
+    if len(overflow) > 300:
+        lines.append(f"\n…and {len(overflow) - 300} more (see the dashboard).")
+    return "\n".join(lines)
+
+
 def create_issue(repo, token, title, body, labels):
     """Create a GitHub Issue with retry/backoff on 429/5xx, mirroring the same
     3-attempt exponential-backoff pattern used throughout scripts/aggregate.py
@@ -119,7 +179,7 @@ def create_issue(repo, token, title, body, labels):
     url = f"{GITHUB_API}/repos/{repo}/issues"
     payload = json.dumps({"title": title, "body": body, "labels": labels}).encode()
     last_err = None
-    for attempt in range(3):
+    for attempt in range(4):
         req = urllib.request.Request(
             url,
             data=payload,
@@ -143,15 +203,18 @@ def create_issue(repo, token, title, body, labels):
                 body_text = e.read().decode()
             except Exception:
                 pass
-            if e.code == 429 or e.code >= 500:
-                wait = 5 * (attempt + 1)
+            secondary = e.code == 403 and ("secondary rate limit" in body_text.lower()
+                                           or "abuse" in body_text.lower()
+                                           or (e.headers or {}).get("Retry-After"))
+            if e.code == 429 or e.code >= 500 or secondary:
+                wait = retry_wait(e.headers, attempt)
                 print(f"  Issue creation HTTP {e.code} for {title}, retrying in {wait}s "
-                      f"(attempt {attempt + 1}/3)...", file=sys.stderr)
+                      f"(attempt {attempt + 1}/4)...", file=sys.stderr)
                 time.sleep(wait)
                 continue
             print(f"  ERROR creating issue for {title}: HTTP {e.code} {body_text[:300]}", file=sys.stderr)
             return False
-    print(f"  ERROR creating issue for {title} after 3 attempts: {last_err}", file=sys.stderr)
+    print(f"  ERROR creating issue for {title} after 4 attempts: {last_err}", file=sys.stderr)
     return False
 
 
@@ -169,10 +232,17 @@ def main():
 
     # Highest composite risk first, so if the run is interrupted partway, the most
     # urgent issues were the ones already created.
-    alerts.sort(key=lambda a: a.get("risk_score") or 0, reverse=True)
+    # Environment-board items first, then highest risk, so if the run is
+    # interrupted (or capped) the most urgent issues are the ones created.
+    alerts, overflow = split_for_cap(alerts)
 
-    print(f"Opening {len(alerts)} GitHub issue(s) for new alerts...")
-    for alert in alerts:
+    print(f"Opening {len(alerts)} GitHub issue(s) for new alerts"
+          f"{f' (+1 digest for {len(overflow)} more)' if overflow else ''}...")
+    board = _board_tiers()
+    failures = 0
+    for i, alert in enumerate(alerts):
+        if i:
+            time.sleep(ISSUE_PACING_S)
         cve_id = alert.get("cve_id", "UNKNOWN")
         kev_tag = " [KEV]" if alert.get("kev") else ""
         ransomware_tag = " [RANSOMWARE]" if alert.get("kev_ransomware_use") else ""
@@ -187,7 +257,21 @@ def main():
             labels.append("kev")
         if alert.get("kev_ransomware_use"):
             labels.append("ransomware")
-        create_issue(repo, token, title, body, labels)
+        tier = board.get(f"cve:{cve_id}")
+        if tier:
+            labels.append(f"env-{tier}")   # env-escalate / env-work: in our estate
+        if not create_issue(repo, token, title, body, labels):
+            failures += 1
+            if failures >= 5:
+                print("  Too many consecutive issue failures -- stopping; alerts remain on the dashboard.",
+                      file=sys.stderr)
+                return
+        else:
+            failures = 0
+    if overflow:
+        time.sleep(ISSUE_PACING_S)
+        create_issue(repo, token, f"[VULN DIGEST] {len(overflow)} more new alert(s) this run",
+                     build_digest_body(overflow), ["vulnerability-alert", "digest"])
 
 
 if __name__ == "__main__":

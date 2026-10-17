@@ -1,22 +1,27 @@
 # Your environment ("estate") -- drives the "Escalate now" board and Discord alerts.
 #
-# scripts/escalate.py matches each asset's `terms` (case-insensitive, whole
-# word/phrase) against:
-#   - CVE alerts:  NVD description + matched watchlist keywords + affected packages
+# scripts/escalate.py matches each asset's `terms` (whole word/phrase) against:
+#   - CVE alerts:  NVD description + affected packages
 #   - Threat intel: article title + summary
 # Only items that hit at least one asset here can be tiered. Nothing is
 # inferred: every tier comes with the literal reasons that produced it.
 #
 # criticality: critical | high | medium
-#   critical/high assets escalate on exploitation / social-engineering signals;
-#   medium assets top out at "work" unless the item is actively exploited.
-# exclude: optional phrases that disqualify a match for that asset.
+#   critical : internet-facing / identity / remote-access / credential stores.
+#              Escalates on exploitation, social-engineering, or a network CVSS >= 9.
+#   high     : core business platforms and fleet-wide software. Escalates on
+#              exploitation / social-engineering; otherwise WORK at CVSS >= 8.8.
+#   medium   : niche or per-user software. WORK only at CVSS >= 9.8; escalates
+#              only when actively exploited.
+# exclude:    phrases that disqualify a match for that asset.
+# match_case: true -> terms are case-sensitive (for names that are also
+#             ordinary words, e.g. "Workday", "Domo", "Deel").
 #
-# Edit freely: remove what you don't run, add what you do. Prefer specific
-# product names over generic words ("Microsoft Teams", not "Teams").
+# Edit freely. Prefer specific product names over generic words.
+# Source of the app list: GFR Media / LinkActiv inventory supplied 2026-10-17.
 
 window_days:
-  cve: 14     # CVE alerts first seen / KEV-added within this many days
+  cve: 14     # CVE alerts published / KEV-added within this many days
   intel: 7    # news items published within this many days
 
 thresholds:
@@ -28,52 +33,169 @@ thresholds:
   escalate_epss: 0.5      # in-estate CVE with EPSS at/above this -> ESCALATE
 
 assets:
+  # ---------------------------------------------------------------- critical
   - name: "Identity (AD / AD FS / Entra ID)"
     criticality: critical
+    # inventory: Active Directory, Azure AD Atabex, Global Secure Access client
     terms: ["Active Directory", "Active Directory Federation Services", "AD FS", "ADFS",
             "Entra ID", "Microsoft Entra", "Azure AD", "Azure Active Directory",
             "Kerberos", "NTLM", "Active Directory Certificate Services", "AD CS",
-            "domain controller", "MFA fatigue", "OAuth consent"]
-  - name: "Palo Alto firewalls / GlobalProtect"
+            "domain controller", "MFA fatigue", "OAuth consent", "Global Secure Access"]
+  - name: "ManageEngine (ADSelfService / Vulnerability Manager)"
     criticality: critical
-    terms: ["Palo Alto Networks", "PAN-OS", "GlobalProtect", "Prisma Access"]
+    # inventory: AdSelf - Service, ManageEngine Vulnerability Manager
+    terms: ["ManageEngine", "ADSelfService", "ADSelfService Plus", "Vulnerability Manager Plus"]
+  - name: "Palo Alto (firewalls / GlobalProtect / Cortex)"
+    criticality: critical
+    terms: ["Palo Alto Networks", "PAN-OS", "GlobalProtect", "Prisma Access",
+            "Cortex XDR", "Cortex XSOAR", "Cortex XSIAM"]
   - name: "Fortinet perimeter"
     criticality: critical
+    # inventory: Fortinet, Forti FW LA
     terms: ["Fortinet", "FortiGate", "FortiOS", "FortiProxy", "FortiClient", "FortiManager",
             "FortiAnalyzer", "FortiWeb", "FortiSIEM", "FortiEMS"]
-  - name: "Check Point"
+  - name: "Check Point / Avanan"
     criticality: critical
-    terms: ["Check Point"]   # exact phrase here (NVD's own keyword search AND-matches "check"+"point")
+    terms: ["Check Point", "Avanan", "Harmony Email"]   # exact phrase (NVD AND-matches "check"+"point")
+  - name: "Network edge (Cisco / Meraki / Peplink / SonicWall CSE)"
+    criticality: critical
+    terms: ["Cisco Meraki", "Meraki", "Cisco IOS", "IOS XE", "Cisco ISR", "Peplink",
+            "Cloud Secure Edge", "SonicWall CSE", "Banyan Security"]
+  - name: "Remote access / support tools"
+    criticality: critical
+    # inventory: AnyDesk, Bomgar, Zoho Assist, Remote Desktop Manager, ScaleFT, Citrix Workspace
+    terms: ["AnyDesk", "BeyondTrust", "Bomgar", "Privileged Remote Access",
+            "Zoho Assist", "Remote Desktop Manager", "Devolutions", "ScaleFT",
+            "Okta Advanced Server Access", "Citrix Workspace", "Citrix Receiver"]
+  - name: "Password managers"
+    criticality: critical
+    terms: ["Bitwarden", "Vaultwarden", "Keeper Security", "Keeper Password Manager", "Keeper Commander"]
+  - name: "Virtualization (VMware / Nutanix)"
+    criticality: critical
+    terms: ["VMware", "ESXi", "vCenter", "Nutanix", "Parallels Desktop", "Parallels RAS"]
+
+  # -------------------------------------------------------------------- high
   - name: "Microsoft 365 / email"
     criticality: high
     terms: ["Microsoft 365", "M365", "Office 365", "Exchange Online", "Exchange Server",
             "Microsoft Exchange", "Microsoft Outlook", "SharePoint", "OneDrive",
-            "Avanan", "Harmony Email", "business email compromise", "BEC"]
+            "business email compromise", "BEC"]
   - name: "Microsoft Teams"
     criticality: high
     terms: ["Microsoft Teams", "Teams call", "Teams calls", "Teams chat", "Teams message",
             "Teams messages", "via Teams", "over Teams", "on Teams"]
+  - name: "Microsoft Intune / Power Platform / Dynamics"
+    criticality: high
+    terms: ["Intune", "Microsoft Intune", "Power Automate", "Power BI", "Power Platform",
+            "Power Apps", "Dynamics AX", "Microsoft Dynamics", "Dynamics 365"]
   - name: "Windows endpoints"
     criticality: high
     terms: ["Windows 10", "Windows 11", "Windows Shell", "Windows SmartScreen", "SmartScreen",
             "Mark of the Web", "MotW", "Windows Kernel", "Win32k", "Common Log File System",
             "Windows Defender", "Microsoft Defender", "Windows Update", "Patch Tuesday",
-            "Microsoft Office", "Microsoft Edge"]
+            "Microsoft Office", "Dell Command Update", "Dell Command"]
   - name: "Windows (generic mention)"
-    # bare "Windows" is too broad to escalate on its own (most malware news says
-    # it); kept at medium so it can still surface as WORK.
+    # bare "Windows" is too broad to escalate on its own (most malware news says it)
     criticality: medium
     terms: ["Windows"]
   - name: "Windows Server / RDP / virtual desktop"
     criticality: high
     terms: ["Windows Server", "Remote Desktop", "RDP", "Hyper-V", "Azure Virtual Desktop",
             "AVD", "FSLogix", "Windows 365"]
-  - name: "SIEM (Sumo Logic)"
+  - name: "Browsers (Edge / Chromium / WebView2 / others)"
+    criticality: high
+    # Edge, WebView2 and Vivaldi ship Chromium, so Google Chrome CVEs apply to them
+    terms: ["Microsoft Edge", "WebView2", "Chromium", "Google Chrome", "Vivaldi",
+            "Pale Moon", "Zen Browser"]
+  - name: "Adobe (Acrobat / Reader / InDesign / Creative Cloud)"
+    criticality: high
+    terms: ["Adobe Acrobat", "Acrobat Reader", "Adobe Reader", "Acrobat DC", "Acrobat AI Assistant",
+            "InDesign", "Adobe Creative Cloud", "Adobe Admin Console"]
+  - name: "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
+    criticality: high
+    terms: ["Amazon Web Services", "AWS", "AWS CLI", "Microsoft Azure", "Azure",
+            "Google Cloud", "GCP", "DigitalOcean", "Digital Ocean", "Cloudflare"]
+    # attackers hosting phishing on free Cloudflare/cloud services is not a flaw
+    # in OUR cloud accounts -- those stories still show on the intel board
+    exclude: ["Cloudflare Pages", "pages.dev", "workers.dev", "Cloudflare Workers domains",
+              "Cloudflare-hosted", "hosted on Cloudflare", "abuse Cloudflare", "abusing Cloudflare"]
+  - name: "Voice / meetings (3CX / Zoom / Avaya / Grandstream / Five9 / WeMeet)"
+    criticality: high
+    terms: ["3CX", "Zoom Workplace", "Zoom Client", "Zoom Meetings", "Zoom Rooms",
+            "Zoom Video Communications", "Zoom desktop", "Zoom app", "Avaya", "Grandstream",
+            "Five9", "Tencent Meeting", "VooV Meeting", "WeMeet"]
+  - name: "Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems)"
+    criticality: high
+    terms: ["GitHub", "GitHub Actions", "GitHub Copilot", "Bitbucket", "Atlassian",
+            "Jira", "Confluence", "OutSystems"]
+  - name: "Monitoring & telemetry (PRTG / Site24x7 / Sumo Logic / observIQ)"
+    criticality: high
+    terms: ["PRTG", "Paessler", "Site24x7", "Sumo Logic", "observIQ", "BindPlane",
+            "OpenTelemetry Collector"]
+  - name: "Finance / ERP / HR (Acumatica, Sage, OnBase, UKG, Bill.com, Yardi)"
+    criticality: high
+    terms: ["Acumatica", "Sage 100", "MAS 90", "MAS90", "OnBase", "Hyland", "UKG",
+            "Kronos Workforce", "Bill.com", "Yardi", "Yardi Voyager", "Juniper Square"]
+  - name: "Finance / HR SaaS (Workday / ADP / Deel / Domo)"
+    criticality: high
+    match_case: true   # these names are also ordinary words
+    terms: ["Workday", "ADP", "Deel", "Domo"]
+  - name: "Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace)"
+    criticality: high
+    terms: ["Slack", "HubSpot", "DocuSign", "Nextcloud", "Google Workspace", "Gmail",
+            "Google Drive", "Google Ad Manager"]
+    exclude: ["slack space"]
+  - name: "Sophos (encryption / Phish Threat)"
+    criticality: high
+    terms: ["Sophos Central", "Sophos SafeGuard", "SafeGuard Enterprise", "Sophos Phish Threat",
+            "Sophos Central Device Encryption"]
+  - name: "Publishing stack (Arc XP / Naviga / GN4 / Arkitex / Marfeel / Airship / Piano)"
+    criticality: high
+    terms: ["Arc XP", "Naviga", "GN4", "Arkitex", "Marfeel", "Urban Airship", "Airship SDK",
+            "Piano.io", "Piano Software", "Global Relay", "MirrorWeb"]
+  - name: "AI assistants & coding agents"
+    criticality: high
+    # inventory: Claude, ChatGPT, Copilot, Gemini, Cursor, Kiro CLI, Devin, Perplexity, DeepL, Keymate
+    terms: ["Claude Code", "Claude Desktop", "Anthropic", "ChatGPT", "OpenAI", "Microsoft Copilot",
+            "Copilot Studio", "Microsoft 365 Copilot", "Google Gemini", "Gemini CLI", "Cursor IDE",
+            "Cursor AI", "Cursor editor", "Anysphere", "Kiro", "Devin AI", "Perplexity", "DeepL",
+            "Keymate"]
+
+  # ------------------------------------------------------------------ medium
+  - name: "Messaging apps (Telegram Desktop / WeChat / KakaoTalk)"
     criticality: medium
-    terms: ["Sumo Logic"]
-  - name: "Web publishing (WordPress / Cloudflare)"
+    terms: ["Telegram Desktop", "WeChat", "KakaoTalk"]
+  - name: "Desktop utilities"
     criticality: medium
-    terms: ["WordPress", "Cloudflare"]
-    # third-party plugin/theme CVEs: only relevant if you run that plugin --
-    # add the plugin's name as its own term instead
+    terms: ["4K Video Downloader", "BurnAware", "Folge", "Free Download Manager", "Grammarly",
+            "K-Lite Codec Pack", "K-Lite", "MPC-HC", "LAV Filters", "Netpas", "pgAdmin", "stunnel",
+            "WebWork Tracker", "Zight", "Zotero", "MEmu", "Vim", "think-cell", "Cerberus FTP",
+            "FOG Project", "Zoho Desk", "RevoSpin"]
+  - name: "Apple / creative (macOS, Final Cut Pro, Photo Mechanic, Affinity)"
+    criticality: medium
+    terms: ["macOS", "Final Cut Pro", "Photo Mechanic", "Affinity Photo", "Affinity Designer"]
+  - name: "Business SaaS & data services"
+    criticality: medium
+    terms: ["Tableau", "Bloomberg Terminal", "Bloomberg Professional", "Statista", "CoStar",
+            "Real Capital Analytics", "MSCI", "Canva", "Buildout", "Rethink CRM", "Squarespace",
+            "PayScan"]
+  - name: "Web publishing (WordPress)"
+    # not on the 2026-10-17 inventory; kept in case esquelaspr / Edictos run on it -- delete if not
+    criticality: medium
+    terms: ["WordPress"]
     exclude: ["plugin for WordPress", "WordPress plugin", "theme for WordPress", "WordPress theme"]
+
+# Inventory items deliberately NOT matched (internal apps with no public CVE/news
+# feed, or names too generic to match without flooding false positives). Listed
+# so the coverage gap stays visible. To track one, add a specific term above.
+unmatched_inventory:
+  internal: ["API Atabex Core", "Atabex", "Acumatica: Interface Atabex", "API / Mocha DFP",
+             "Subs Sales App", "Portal del cliente", "Home Delivery App", "Newsbuddy v1",
+             "Newsbuddy v2", "Customer Portal v1", "Customer Portal v2", "Paynet", "Cobraste",
+             "MCS", "MAP Ticket Scan", "Scheduler", "MDM Manager", "MSO Rewards", "MMM Rewards",
+             "Piano Webhook", "ePaper Web Service", "Inventario de eMotions (App)", "eMotions",
+             "Integración de Punches LinkActiv", "ALs", "Dads (interno)", "Dats (web)",
+             "Comisiones", "El Track", "esquelaspr", "Edictos", "Talent Acquisition", "SAM",
+             "MST", "PCI Portal", "Denex", "Consola Licencias Parallels"]
+  too_generic: ["Juno", "Orchestrator", "Empower", "Accepta", "Apple Store Helpdesk",
+                "Apple Store Developers", "NYSE Market CTA Network", "Google"]

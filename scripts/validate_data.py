@@ -345,13 +345,54 @@ def check_escalations_json():
         seen.add(it["key"])
         if it["tier"] not in ("escalate", "work"):
             fail(f"{where} bad tier {it['tier']!r}")
-        if it["kind"] not in ("cve", "intel"):
+        if it["kind"] not in ("cve", "intel", "bundle"):
             fail(f"{where} bad kind {it['kind']!r}")
+        if it["kind"] == "bundle" and not (isinstance(it.get("cve_ids"), list) and it["cve_ids"]):
+            fail(f"{where} bundle without cve_ids (members would be lost)")
+        if it["kind"] == "bundle" and it["tier"] != "work":
+            fail(f"{where} bundle must be WORK tier (escalations are never bundled)")
+        if "triage" in it and (not isinstance(it["triage"], dict) or not it["triage"].get("status")):
+            fail(f"{where} malformed triage block")
         if not it["assets"] or not set(it["assets"]) <= asset_names:
             fail(f"{where} assets not in the environment profile")
         if not it["reasons"] or not str(it["reasons"][0]).startswith("In your estate:"):
             fail(f"{where} has no estate-match reason")
     print(f"escalations.json: {len(data['items'])} items checked")
+
+
+TRIAGE_OK = {"acknowledged", "in_progress", "escalated", "resolved", "false_positive", "accepted_risk"}
+
+
+def check_triage_yaml(path=None):
+    """config/triage.yaml is hand-edited in the GitHub web UI, so a typo must
+    fail CI loudly instead of silently dropping the team's triage."""
+    path = path or (ROOT / "config" / "triage.yaml")
+    if not Path(path).exists():
+        warn("config/triage.yaml missing (shared triage disabled)")
+        return
+    try:
+        import yaml
+    except ImportError:
+        warn("PyYAML not installed -- triage.yaml not checked")
+        return
+    try:
+        cfg = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError as e:
+        fail(f"triage.yaml is not valid YAML: {e}")
+        return
+    entries = cfg.get("entries") if isinstance(cfg, dict) else None
+    if entries is None:
+        entries = {}
+    if not isinstance(entries, dict):
+        fail("triage.yaml 'entries' must be a mapping of key -> {status, ...}")
+        return
+    key_re = re.compile(r"^(cve:CVE-\d{4}-\d{4,}|intel:[0-9a-f]{16}|bundle:[a-z0-9-]+:\d{4}-\d{2}-\d{2})$")
+    for key, v in entries.items():
+        if not key_re.match(str(key)):
+            fail(f"triage.yaml key {key!r} is not cve:CVE-…, intel:<16 hex> or bundle:<asset>:<date>")
+        if not isinstance(v, dict) or str(v.get("status", "")).strip().lower() not in TRIAGE_OK:
+            fail(f"triage.yaml {key!r}: status must be one of {sorted(TRIAGE_OK)}")
+    print(f"triage.yaml: {len(entries)} entries checked")
 
 
 def main():
@@ -363,6 +404,7 @@ def main():
     check_feeds()
     check_intel_json()
     check_escalations_json()
+    check_triage_yaml()
 
     print()
     if warnings:
