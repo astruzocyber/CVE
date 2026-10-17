@@ -1,0 +1,26 @@
+# Shared team triage for the "Escalate now" board.
+#
+# This file is the team's shared state (the site itself has no backend). Edit it
+# in the GitHub web UI (pencil icon) and commit; the next pipeline run shows the
+# status on every board card and stops Discord from re-announcing that item.
+#
+# Each card on the board has a "Copy triage entry" button that produces the
+# exact block to paste under `entries:`. The key is the card's id:
+#   CVEs    : "cve:CVE-2026-12345"
+#   News    : "intel:<16-char id>"
+#   Bundles : "bundle:<asset>:<publish date>"  (e.g. one Patch Tuesday / Chrome release)
+#
+# status (required):
+#   acknowledged | in_progress | escalated        -> stays open on the board
+#   resolved | false_positive | accepted_risk     -> closed (hidden unless "Include closed")
+# owner / note / date: free text, shown on the card and in the briefing.
+#
+# Example:
+#   "cve:CVE-2026-96252":
+#     status: escalated
+#     owner: "Gian"
+#     note: "Sent to Christian Jusino; AD FS patch scheduled"
+#     date: "2026-10-17"
+
+# Paste entries below this line, indented two spaces.
+entries:

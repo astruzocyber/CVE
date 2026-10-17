@@ -89,7 +89,7 @@ class EscalateTests(unittest.TestCase):
         self.assertEqual(tiers(out), {"b1": "work"})
 
     def test_generic_windows_malware_news_not_escalated(self):
-        out = E.build([], {"items": [intel("g1", "New stealer targets Windows users",
+        out = E.build([], {"items": [intel("g1", "New stealer lures Windows users with fake updates",
                                            ["social_engineering"], priority="medium")]}, env(), NOW)
         self.assertEqual(tiers(out), {"g1": "work"})
 
@@ -99,6 +99,72 @@ class EscalateTests(unittest.TestCase):
                       {"items": [intel("t1", "Vishing via Microsoft Teams", ["social_engineering"])]}, env(), NOW)
         self.assertEqual(out["items"][0]["tier"], "escalate")
         self.assertEqual(out["counts"], {"escalate": 1, "work": 1})
+
+
+class EstateAndTriageTests(unittest.TestCase):
+    def test_url_hostname_is_not_a_product_match(self):
+        out = E.build([alert("CVE-2026-2", "Path traversal in Acme Notes, see https://github.com/acme/notes "
+                             "for the fix.", 9.8)], {}, env(), NOW)
+        self.assertEqual(out["items"], [])
+
+    def test_inventory_app_matches(self):
+        out = E.build([alert("CVE-2026-3", "Remote code execution in AnyDesk for Windows.", 9.8,
+                             kev=True, kev_date_added="2026-10-14")], {}, env(), NOW)
+        self.assertEqual(tiers(out), {"CVE-2026-3": "escalate"})
+
+    def test_match_case_common_word_names(self):
+        self.assertEqual(E.build([alert("CVE-2026-4", "A flaw lets users workday schedules leak.", 9.8)],
+                                 {}, env(), NOW)["items"], [])
+
+    def test_triage_is_attached_and_closed_is_flagged(self):
+        a = alert("CVE-2026-5", "Remote code execution in AnyDesk for Windows.", 9.8,
+                  kev=True, kev_date_added="2026-10-14")
+        tri = {"cve:CVE-2026-5": {"status": "resolved", "owner": "GMS", "note": "patched", "date": "2026-10-16"}}
+        out = E.build([a], {}, env(), NOW, triage=tri)
+        it = out["items"][0]
+        self.assertEqual(it["triage"]["status"], "resolved")
+        self.assertTrue(it["closed"])
+        self.assertEqual(out["open"]["escalate"], 0)
+
+    def test_load_triage_drops_unknown_status_and_survives_bad_yaml(self):
+        import tempfile
+        d = tempfile.mkdtemp()
+        good, bad = os.path.join(d, "g.yaml"), os.path.join(d, "b.yaml")
+        open(good, "w").write('entries:\n  "cve:CVE-2026-5":\n    status: resolved\n'
+                              '  "cve:CVE-2026-6":\n    status: maybe\n')
+        open(bad, "w").write("entries:\n  - [unclosed\n")
+        self.assertEqual(list(E.load_triage(good)), ["cve:CVE-2026-5"])
+        self.assertEqual(E.load_triage(bad), {})
+        self.assertEqual(E.load_triage(os.path.join(d, "missing.yaml")), {})
+
+    def _work(self, n, day="2026-10-13"):
+        return [alert(f"CVE-2026-10{i:02d}", "Use after free in Google Chrome allows heap corruption.", 8.8,
+                      published=f"{day}T19:00:00") for i in range(n)]
+
+    def test_same_day_release_is_bundled_with_every_id_kept(self):
+        out = E.build(self._work(6), {}, env(), NOW)
+        bundles = [i for i in out["items"] if i["kind"] == "bundle"]
+        self.assertEqual(len(bundles), 1)
+        self.assertEqual(len(bundles[0]["cve_ids"]), 6)
+        self.assertEqual(bundles[0]["tier"], "work")
+        self.assertFalse(any(i["kind"] == "cve" for i in out["items"]))
+
+    def test_small_groups_and_triaged_items_not_bundled(self):
+        self.assertTrue(all(i["kind"] == "cve" for i in E.build(self._work(3), {}, env(), NOW)["items"]))
+        tri = {"cve:CVE-2026-1000": {"status": "in_progress"}}
+        out = E.build(self._work(5), {}, env(), NOW, triage=tri)
+        kinds = sorted(i["kind"] for i in out["items"])
+        self.assertEqual(kinds, ["bundle", "cve"])
+
+    def test_stale_stored_category_is_reclassified(self):
+        it = intel("pan1", "Palo Alto Networks Patches PAN-OS RCE Flaw Amid Active Exploitation",
+                   ["patch", "vulnerability"], priority="medium")
+        out = E.build([], {"items": [it]}, env(), NOW)
+        self.assertEqual(out["items"][0]["tier"], "escalate")
+
+    def test_triaged_item_never_posted_to_discord(self):
+        esc_doc = {"items": [{"key": "cve:A", "tier": "escalate", "title": "A", "triage": {"status": "acknowledged"}}]}
+        self.assertEqual(D.select_new(esc_doc["items"], {}), [])
 
 
 class IntelRuleRegressionTests(unittest.TestCase):
@@ -191,6 +257,20 @@ class DiscordTests(unittest.TestCase):
         finally:
             D.urllib.request.urlopen = orig
         self.assertIn(b'"allowed_mentions": {"parse": []}', sent[0])
+
+    def test_digest_once_per_day_after_hour(self):
+        doc = esc(("A", "escalate"), ("B", "work"))
+        st = {"seeded": True, "sent": {}}
+        early = NOW.replace(hour=6)
+        self.assertEqual(D.run_digest("u", doc, st, early, 12, poster=self.poster())[1], False)
+        st2, ok = D.run_digest("u", doc, st, NOW, 12, poster=self.poster())
+        self.assertTrue(ok)
+        self.assertIn("1 open Escalate", self.calls[0]["content"])
+        self.assertEqual(D.run_digest("u", doc, st2, NOW, 12, poster=self.poster())[1], False)
+
+    def test_connect_run_skips_same_day_digest(self):
+        st, _ = D.run("u", esc(("A", "escalate")), {}, NOW, poster=self.poster())
+        self.assertEqual(D.run_digest("u", esc(("A", "escalate")), st, NOW, 12, poster=self.poster())[1], False)
 
     def test_webhook_url_validation(self):
         self.assertTrue(D.WEBHOOK_RE.match("https://discord.com/api/webhooks/123/abc-DEF_1"))
