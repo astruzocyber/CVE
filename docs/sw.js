@@ -27,7 +27,7 @@
 //     which the existing frontend already handles as an empty/error state).
 //   - Cache versioned by CACHE_NAME; activate() purges any old-version
 //     caches so a deploy never accumulates stale shell files indefinitely.
-const CACHE_NAME = "cve-dashboard-shell-v3";
+const CACHE_NAME = "cve-dashboard-shell-v4";
 const SHELL_ASSETS = [
   "./",
   "./index.html",
@@ -38,6 +38,7 @@ const SHELL_ASSETS = [
   "./js/filters.js",
   "./js/format.js",
   "./js/intel.js",
+  "./js/escalations.js",
   "./js/main.js",
   "./js/overview.js",
   "./js/render-card.js",

@@ -148,6 +148,37 @@
       </div>
     </section>
 
+    <!-- 2a. Escalate now: CVEs + news that hit this environment's assets
+         (config/environment.yaml), tiered by scripts/escalate.py. -->
+    <section class="section esc-section" id="esc-section" aria-labelledby="esc-title" hidden>
+      <div class="section__head">
+        <h2 class="section__title" id="esc-title">Escalate now &mdash; your environment</h2>
+        <p class="section__hint" id="esc-hint"></p>
+      </div>
+      <div class="toolbar">
+        <div class="toolbar__row">
+          <div class="field">
+            <label for="esc-tier" class="visually-hidden">Tier</label>
+            <select id="esc-tier" class="input">
+              <option value="escalate" selected>Escalate only</option>
+              <option value="work">Work only</option>
+              <option value="">Escalate + work</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="esc-asset" class="visually-hidden">Asset</label>
+            <select id="esc-asset" class="input"><option value="">All assets</option></select>
+          </div>
+          <button type="button" class="btn btn--sm" id="esc-copy" title="Copy a plain-text briefing of the items shown">Copy briefing</button>
+          <button type="button" class="btn btn--sm" id="esc-download" title="Download the briefing as a text file">Download briefing</button>
+          <button type="button" class="btn btn--sm" id="esc-present" title="Print / save as PDF only this board">Present / PDF</button>
+        </div>
+      </div>
+      <p class="section__hint" id="esc-count" aria-live="polite"></p>
+      <div class="card-grid" id="esc-grid"></div>
+      <p class="section__hint" id="esc-empty" hidden>Nothing in this tier right now.</p>
+    </section>
+
     <!-- 2b. Threat intel: news/advisories with no CVE (social engineering,
          vendor update issues) and exploited-in-the-wild reports. -->
     <section class="section" id="intel-section" aria-labelledby="intel-title" hidden>

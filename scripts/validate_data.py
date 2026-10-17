@@ -313,6 +313,47 @@ def check_intel_json():
     print(f"intel.json: {len(data['items'])} items checked")
 
 
+def check_escalations_json():
+    """docs/data/escalations.json (Escalate-now board, scripts/escalate.py).
+    Optional: absent is a warning, malformed is a failure. Every item must carry
+    an 'In your estate' reason quoting the literal term that matched."""
+    path = DOCS / "data" / "escalations.json"
+    if not path.exists():
+        warn("escalations.json missing (Escalate-now board will stay hidden)")
+        return
+    try:
+        data = json.loads(path.read_text())
+    except json.JSONDecodeError as e:
+        fail(f"escalations.json is not valid JSON: {e}")
+        return
+    if not isinstance(data, dict) or not isinstance(data.get("items"), list):
+        fail("escalations.json must be an object with an 'items' list")
+        return
+    asset_names = {a.get("name") for a in data.get("assets") or []}
+    seen = set()
+    for n, it in enumerate(data["items"]):
+        where = f"escalations.json items[{n}]"
+        if not isinstance(it, dict):
+            fail(f"{where} is not an object")
+            continue
+        missing = {"key", "kind", "ref", "title", "tier", "assets", "criticality", "reasons"} - set(it)
+        if missing:
+            fail(f"{where} missing keys {sorted(missing)}")
+            continue
+        if it["key"] in seen:
+            fail(f"{where} duplicate key {it['key']}")
+        seen.add(it["key"])
+        if it["tier"] not in ("escalate", "work"):
+            fail(f"{where} bad tier {it['tier']!r}")
+        if it["kind"] not in ("cve", "intel"):
+            fail(f"{where} bad kind {it['kind']!r}")
+        if not it["assets"] or not set(it["assets"]) <= asset_names:
+            fail(f"{where} assets not in the environment profile")
+        if not it["reasons"] or not str(it["reasons"][0]).startswith("In your estate:"):
+            fail(f"{where} has no estate-match reason")
+    print(f"escalations.json: {len(data['items'])} items checked")
+
+
 def main():
     check_alerts_json()
     check_alerts_schema_json()
@@ -321,6 +362,7 @@ def main():
     check_js_html_consistency()
     check_feeds()
     check_intel_json()
+    check_escalations_json()
 
     print()
     if warnings:

@@ -1,0 +1,79 @@
+# Your environment ("estate") -- drives the "Escalate now" board and Discord alerts.
+#
+# scripts/escalate.py matches each asset's `terms` (case-insensitive, whole
+# word/phrase) against:
+#   - CVE alerts:  NVD description + matched watchlist keywords + affected packages
+#   - Threat intel: article title + summary
+# Only items that hit at least one asset here can be tiered. Nothing is
+# inferred: every tier comes with the literal reasons that produced it.
+#
+# criticality: critical | high | medium
+#   critical/high assets escalate on exploitation / social-engineering signals;
+#   medium assets top out at "work" unless the item is actively exploited.
+# exclude: optional phrases that disqualify a match for that asset.
+#
+# Edit freely: remove what you don't run, add what you do. Prefer specific
+# product names over generic words ("Microsoft Teams", not "Teams").
+
+window_days:
+  cve: 14     # CVE alerts first seen / KEV-added within this many days
+  intel: 7    # news items published within this many days
+
+thresholds:
+  work_cvss:              # in-estate CVE at/above this -> WORK, by the asset's criticality
+    critical: 7.0
+    high: 8.8
+    medium: 9.8
+  escalate_cvss: 9.0      # in-estate CVE at/above this on a CRITICAL asset, network-reachable -> ESCALATE
+  escalate_epss: 0.5      # in-estate CVE with EPSS at/above this -> ESCALATE
+
+assets:
+  - name: "Identity (AD / AD FS / Entra ID)"
+    criticality: critical
+    terms: ["Active Directory", "Active Directory Federation Services", "AD FS", "ADFS",
+            "Entra ID", "Microsoft Entra", "Azure AD", "Azure Active Directory",
+            "Kerberos", "NTLM", "Active Directory Certificate Services", "AD CS",
+            "domain controller", "MFA fatigue", "OAuth consent"]
+  - name: "Palo Alto firewalls / GlobalProtect"
+    criticality: critical
+    terms: ["Palo Alto Networks", "PAN-OS", "GlobalProtect", "Prisma Access"]
+  - name: "Fortinet perimeter"
+    criticality: critical
+    terms: ["Fortinet", "FortiGate", "FortiOS", "FortiProxy", "FortiClient", "FortiManager",
+            "FortiAnalyzer", "FortiWeb", "FortiSIEM", "FortiEMS"]
+  - name: "Check Point"
+    criticality: critical
+    terms: ["Check Point"]   # exact phrase here (NVD's own keyword search AND-matches "check"+"point")
+  - name: "Microsoft 365 / email"
+    criticality: high
+    terms: ["Microsoft 365", "M365", "Office 365", "Exchange Online", "Exchange Server",
+            "Microsoft Exchange", "Microsoft Outlook", "SharePoint", "OneDrive",
+            "Avanan", "Harmony Email", "business email compromise", "BEC"]
+  - name: "Microsoft Teams"
+    criticality: high
+    terms: ["Microsoft Teams", "Teams call", "Teams calls", "Teams chat", "Teams message",
+            "Teams messages", "via Teams", "over Teams", "on Teams"]
+  - name: "Windows endpoints"
+    criticality: high
+    terms: ["Windows 10", "Windows 11", "Windows Shell", "Windows SmartScreen", "SmartScreen",
+            "Mark of the Web", "MotW", "Windows Kernel", "Win32k", "Common Log File System",
+            "Windows Defender", "Microsoft Defender", "Windows Update", "Patch Tuesday",
+            "Microsoft Office", "Microsoft Edge"]
+  - name: "Windows (generic mention)"
+    # bare "Windows" is too broad to escalate on its own (most malware news says
+    # it); kept at medium so it can still surface as WORK.
+    criticality: medium
+    terms: ["Windows"]
+  - name: "Windows Server / RDP / virtual desktop"
+    criticality: high
+    terms: ["Windows Server", "Remote Desktop", "RDP", "Hyper-V", "Azure Virtual Desktop",
+            "AVD", "FSLogix", "Windows 365"]
+  - name: "SIEM (Sumo Logic)"
+    criticality: medium
+    terms: ["Sumo Logic"]
+  - name: "Web publishing (WordPress / Cloudflare)"
+    criticality: medium
+    terms: ["WordPress", "Cloudflare"]
+    # third-party plugin/theme CVEs: only relevant if you run that plugin --
+    # add the plugin's name as its own term instead
+    exclude: ["plugin for WordPress", "WordPress plugin", "theme for WordPress", "WordPress theme"]
