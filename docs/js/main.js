@@ -18,6 +18,7 @@ import { initTheme } from "./theme.js";
 import { initTrend, refreshTrendTheme } from "./trend.js";
 import { saveView, deleteView, findView, renderViewsSelect } from "./saved-views.js";
 import { initIntel } from "./intel.js";
+import { initEscalations } from "./escalations.js";
 
 const VIEW_KEY = "viewMode";
 
@@ -459,6 +460,7 @@ async function main() {
   revealHash();
   initTrend();
   initIntel();
+  initEscalations(alerts, render);
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(() => {});

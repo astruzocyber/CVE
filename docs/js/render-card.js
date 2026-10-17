@@ -28,6 +28,8 @@ export function deltaHtml(delta, kind, prev, curr) {
 
 function statusBadges(a) {
   const out = [];
+  if (a.esc_tier === "escalate") out.push(badge("overdue", "Escalate", `Hits your environment: ${(a.esc_assets || []).join(", ")}`));
+  else if (a.esc_tier === "work") out.push(badge("due-soon", "Work", `Hits your environment: ${(a.esc_assets || []).join(", ")}`));
   if (isNewWithin24h(a)) out.push(badge("new", "New"));
   if (isRejected(a)) out.push(badge("rejected", "Rejected by NVD", "NVD has withdrawn this CVE ID (duplicate, disputed, or withdrawn by the CNA). Scores may be stale."));
   if (a.kev) out.push(badge("kev", "KEV", "Listed in CISA's Known Exploited Vulnerabilities catalog"));

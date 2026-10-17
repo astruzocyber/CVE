@@ -472,6 +472,8 @@ th[aria-sort="descending"] .th-sort::after { content: " ▼"; }
   .app-header__actions, .toolbar, .filters-panel, .pager, .card__actions, .card__foot, .skip-link, .toast, #trend-section, .about { display: none !important; }
   .card { break-inside: avoid; opacity: 1 !important; }
   .card-grid { grid-template-columns: 1fr 1fr; }
+  body.presenting-esc main > :not(#esc-section), body.presenting-esc .app-header, body.presenting-esc .status-strip, body.presenting-esc footer { display: none !important; }
+  body.presenting-esc #esc-section { border: 0; padding: 0; }
   a { color: #000; }
 }
 
@@ -481,3 +483,9 @@ th[aria-sort="descending"] .th-sort::after { content: " ▼"; }
 .intel-card__title a:hover, .intel-card__title a:focus-visible { color: var(--c-accent); text-decoration: underline; }
 .intel-watch { display: inline-flex; align-items: center; gap: var(--s-2); font-size: var(--fs-sm); color: var(--c-text-muted); }
 #intel-more { justify-self: center; }
+
+/* Escalate-now board */
+.esc-section { border: 1px solid var(--c-border); border-left: 4px solid var(--c-critical); border-radius: 8px; padding: var(--s-4); background: var(--c-surface); }
+.esc-card--escalate { border-left: 4px solid var(--c-critical); }
+.esc-card--work { border-left: 4px solid var(--c-warn); }
+.esc-reasons { margin: 0; padding-left: 1.2em; font-size: var(--fs-sm); color: var(--c-text-muted); display: grid; gap: 2px; }

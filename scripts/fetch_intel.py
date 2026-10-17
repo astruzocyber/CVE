@@ -48,13 +48,15 @@ CVE_RE = re.compile(r"\bCVE-(\d{4})-(\d{4,7})\b", re.I)
 CATEGORY_RULES = [
     ("exploited", "Actively exploited",
      r"(?<!could be )(?<!can be )(?<!may be )(?<!to be )(?<!if )\bexploited\b|actively exploited|exploited in (?:the wild|attacks)|in[- ]the[- ]wild|zero[- ]days?\b|\b0[- ]?day\b|"
-     r"under (?:active )?attack|exploitation (?:attempts|activity)|known exploited|mass[- ]exploit"),
+     r"under (?:active )?attack|exploitation (?:attempts|activity)|known exploited|mass[- ]exploit|"
+     r"active(?:ly)? exploitation|amid (?:active )?exploitation|"
+     r"(?:malware|backdoor|ransomware|implant) (?:deployed|delivered|dropped) via"),
     ("social_engineering", "Social engineering",
-     r"phish|vishing|smishing|social[- ]engineer|impersonat|fake (?:it|help ?desk|tech|support|captcha)|"
+     r"(?<!anti-)(?<!anti)phish|vishing|smishing|social[- ]engineer|impersonat|fake (?:it|help ?desk|tech|support|captcha)|"
      r"\bit support\b|help ?desk|tech support scam|quick assist|clickfix|callback scam|"
      r"(?:microsoft )?teams (?:call|message|chat|phish|scam)|via microsoft teams|over microsoft teams|"
      r"mfa fatigue|mfa bombing|consent phish|business email compromise|\bBEC\b|malvertis|"
-     r"seo poison|lure|scam"),
+     r"seo poison|\blures?\b|\bscams?\b"),
     ("vendor_issue", "Vendor / update issue",
      r"black screen|blue screen|\bBSOD\b|crash(?:es|ing)?\b|outage|known issue|bug (?:causing|that|breaks)|"
      r"(?:update|patch) (?:may |could |will )?break|breaks? (?:windows|sign-?in|log-?in|boot|vpn|printing|apps?|outlook|teams)|boot ?loop|fails? to (?:boot|install|start|load)|roll(?:s|ed)? back|"
