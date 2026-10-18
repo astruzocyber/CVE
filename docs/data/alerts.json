@@ -1,5 +1,72 @@
 [
   {
+    "cve_id": "CVE-2020-36863",
+    "description": "Nagios XI versions prior to\u00a05.7.2\u00a0allow PHP files to be uploaded to the Audio Import directory and executed from that location. The upload handler did not properly restrict file types or enforce storage outside of the webroot, and the web server permitted execution within the upload directory. An authenticated attacker with access to the audio import feature could upload a crafted PHP file and then request it to achieve remote code execution with the privileges of the application service.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.01378,
+    "epss_percentile": 0.71617,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.01378,
+      "epss_component": 0.6,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2025-10-30T22:15:39.150",
+    "nvd_last_modified": "2026-10-18T00:10:00.123",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "nagios",
+        "product": "nagios_xi",
+        "fixed": "5.7.2",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://www.nagios.com/changelog/nagios-xi/",
+        "tags": [
+          "Release Notes"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-18T04:29:15.542262+00:00"
+  },
+  {
     "cve_id": "CVE-2026-111911",
     "description": "phpMyFAQ 4.0.0 before 4.1.9 contains an authentication bypass vulnerability where WebAuthn registration endpoints attach credentials to any account without authentication or challenge validation. Attackers can stage a victim username, submit a forged fmt=none attestation to register a passkey, then log in bypassing passwords and TOTP for account takeover.",
     "cvss_score": 9.8,
