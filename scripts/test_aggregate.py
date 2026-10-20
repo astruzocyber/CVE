@@ -872,10 +872,6 @@ class TestAdvisoryTwins(unittest.TestCase):
         self.assertEqual(by_key["CVE-2026-1::nvd"]["first_seen"], "2026-10-16T00:00:00")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class TestSingleWordHit(unittest.TestCase):
     """NVD prefix-matches single keywords; only whole-word / CPE hits count."""
 
@@ -895,3 +891,46 @@ class TestSingleWordHit(unittest.TestCase):
         self.assertTrue(single_word_hit("Canva", self._cve("Affinity by Canva before 3.0 ...")))
         self.assertTrue(single_word_hit("Naviga", self._cve("XSS in an editor",
                                                           ["cpe:2.3:a:naviga:writer:*:*:*:*:*:*:*:*"])))
+
+
+class TestPruneSingleWord(unittest.TestCase):
+    """Retroactive prune of single-word prefix noise ingested before single_word_hit()."""
+    WL = {"keywords": ["Zoom", "Slack", "Vim", "wordpress", "Fortinet"], "priority_keywords": []}
+
+    def test_prefix_noise_pruned_real_hits_kept(self):
+        from aggregate import prune_loose_phrase_matches
+        alerts = [
+            {"cve_id": "CVE-A", "source": "nvd", "matched_keywords": ["Zoom"],
+             "description": "Reflected XSS in ZoomSounds through 6.91", "affected": []},
+            {"cve_id": "CVE-B", "source": "nvd", "matched_keywords": ["Slack"],
+             "description": "A flaw in slackero phpwcms", "affected": []},
+            {"cve_id": "CVE-C", "source": "nvd", "matched_keywords": ["wordpress", "Vim"],
+             "description": "The FV Flowplayer plugin for WordPress is vulnerable", "affected": []},
+            {"cve_id": "CVE-D", "source": "nvd", "matched_keywords": ["Zoom"],
+             "description": "Zoom Workplace for Windows allows DLL hijacking", "affected": []},
+            {"cve_id": "CVE-E", "source": "nvd", "matched_keywords": ["Zoom"],
+             "description": "Buffer overflow in the meeting client", "affected": ["zoom/meetings"]},
+            {"cve_id": "CVE-F", "source": "kev", "matched_keywords": ["Fortinet"],
+             "description": "FortiOS heap overflow"},  # CISA-text match, not an NVD prefix hit
+        ]
+        kept, removed = prune_loose_phrase_matches(alerts, self.WL)
+        self.assertEqual(removed, ["CVE-A", "CVE-B"])
+        by = {a["cve_id"]: a for a in kept}
+        self.assertEqual(by["CVE-C"]["matched_keywords"], ["wordpress"])
+        self.assertEqual(by["CVE-D"]["matched_keywords"], ["Zoom"])
+        self.assertEqual(by["CVE-E"]["matched_keywords"], ["Zoom"])
+        self.assertEqual(by["CVE-F"]["matched_keywords"], ["Fortinet"])
+
+    def test_affected_pair_justifies_alert(self):
+        """Stored alerts keep vendor/product pairs in `affected`; a pair-matched alert
+        must survive even when its only keyword turns out loose."""
+        from aggregate import prune_loose_phrase_matches
+        alerts = [{"cve_id": "CVE-G", "source": "nvd", "matched_keywords": ["Check Point"],
+                   "description": "kernel check at point", "affected": ["mozilla/firefox"]}]
+        kept, removed = prune_loose_phrase_matches(alerts, {"keywords": ["Check Point"]})
+        self.assertEqual(removed, [])
+        self.assertEqual(kept[0]["matched_keywords"], [])
+
+
+if __name__ == "__main__":
+    unittest.main()

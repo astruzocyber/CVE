@@ -951,13 +951,24 @@ def prune_loose_phrase_matches(alerts, watchlist):
     keywordExactMatch: drop a watchlist phrase from matched_keywords when the
     phrase is not literally in the description, then drop the alert itself if
     nothing else (another keyword, a vendor/product pair, KEV, a priority term,
-    a non-NVD source) still justifies it. Returns (kept, removed_ids)."""
-    phrases = {k for k in (watchlist.get("keywords") or []) + (watchlist.get("priority_keywords") or [])
-               if is_phrase(k)}
+    a non-NVD source) still justifies it. Returns (kept, removed_ids).
+
+    Single-word keywords get the same treatment for NVD-sourced alerts
+    ingested before single_word_hit() existed (NVD prefix-matched "Zoom" to
+    "ZoomSounds"/"zoomCrop", "Slack" to "slackero"): the word must stand alone
+    in the description or name a vendor/product of an `affected` pair (the
+    stored stand-in for the CPE check, which needs the raw NVD record)."""
+    all_kws = (watchlist.get("keywords") or []) + (watchlist.get("priority_keywords") or [])
+    phrases = {k for k in all_kws if is_phrase(k)}
+    words = {k for k in all_kws if not is_phrase(k)}
     kept, removed = [], []
     for a in alerts:
         kws = a.get("matched_keywords") or []
-        loose = [k for k in kws if k in phrases and not phrase_in(k, a.get("description"))]
+        desc = a.get("description")
+        aff_parts = {p.lower() for vp in (a.get("affected") or []) for p in str(vp).split("/")}
+        loose = [k for k in kws if (k in phrases and not phrase_in(k, desc))
+                 or (k in words and a.get("source") == "nvd" and not phrase_in(k, desc)
+                     and re.sub(r"\W+", "_", k.lower()) not in aff_parts)]
         if not loose:
             kept.append(a)
             continue
@@ -967,7 +978,9 @@ def prune_loose_phrase_matches(alerts, watchlist):
         for k in watchlist.get("keywords") or []:
             if k not in a["matched_keywords"] and k not in loose and phrase_in(k, a.get("description")):
                 a["matched_keywords"].append(k)
-        justified = (a["matched_keywords"] or a.get("matched_vendor_product") or a.get("kev")
+        # stored alerts carry vendor/product pairs as `affected` (build_final_entry);
+        # `matched_vendor_product` only exists on in-flight candidates
+        justified = (a["matched_keywords"] or a.get("affected") or a.get("matched_vendor_product") or a.get("kev")
                      or a.get("source") not in (None, "nvd"))
         if justified:
             if a.get("priority_match") and not any(k in (watchlist.get("priority_keywords") or [])
@@ -1863,8 +1876,8 @@ def main():
     existing_alerts = load_json_file(ALERTS_PATH, [])
     existing_alerts, loose_removed = prune_loose_phrase_matches(existing_alerts, watchlist)
     if loose_removed:
-        print(f"  Removed {len(loose_removed)} alert(s) matched only by a multi-word keyword "
-              f"that is not in the description (pre-exact-match noise), e.g. {loose_removed[:5]}")
+        print(f"  Removed {len(loose_removed)} alert(s) matched only by a keyword "
+              f"that is not literally in the description (pre-exact/whole-word-match noise), e.g. {loose_removed[:5]}")
     # KEV-driven ingest: tag KEV listings already surfaced by the watchlist,
     # and pull in any recent KEV addition nobody else produced (see
     # kev_recent_ids docstring for the miss this closes).
