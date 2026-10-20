@@ -771,9 +771,10 @@ def fetch_kev_candidates(kev_map, already_known, api_key, days=None, news_ids=No
         sweep_ids = sorted(sweep_ids, key=lambda c: str(kev_map[c].get("dateAdded", "")),
                            reverse=True)[:sweep_max]
     print(f"KEV watchlist sweep: {len(sweep_ids)} older KEV listing(s) naming a watchlist term not yet tracked")
+    recent_count = len(kev_ids)
     kev_ids = kev_ids + sweep_ids
     news_only = [c for c in (news_ids or []) if c not in already_known and c not in kev_ids]
-    print(f"KEV-driven ingest: {len(kev_ids)} KEV addition(s) in the last {days}d not yet tracked; "
+    print(f"KEV-driven ingest: {recent_count} KEV addition(s) in the last {days}d + {len(sweep_ids)} from the watchlist sweep not yet tracked; "
           f"{len(news_only)} news-reported exploited CVE(s) not yet tracked")
     delay = 0.7 if api_key else 6.5
     out = []
