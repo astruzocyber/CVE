@@ -902,7 +902,13 @@ def fetch_nvd_candidates(watchlist, api_key):
             cve_id = cve.get("id")
             if not cve_id:
                 continue
-            if kind == "keyword" and not is_phrase(term) and not single_word_hit(term, cve):
+            # keywordExactMatch is a substring match ("Check Point" returned the
+            # Linux "bpf: Check pointer type" fix), so phrases need a whole-phrase
+            # check too -- otherwise prune_loose_phrase_matches() drops the alert
+            # and the next fetch re-adds it, every run.
+            if kind != "vendor_product" and not (
+                    phrase_in(term, extract_description(cve)) if is_phrase(term)
+                    else single_word_hit(term, cve)):
                 continue
             entry = candidates.setdefault(cve_id, nvd_entry_from_cve(cve))
             if kind == "vendor_product":
@@ -936,6 +942,24 @@ def single_word_hit(term, cve):
     return False
 
 
+# fetch_nvd_candidates() has rejected single-word prefix hits (single_word_hit,
+# which also accepts a CPE vendor/product match) since commit 397f6f8. Alerts first
+# seen later already passed that check; re-checking them without the CPE data
+# would prune CPE-only hits ("ZoomRooms", cpe zoom:rooms) once they leave the
+# NVD lookback window.
+SINGLE_WORD_FILTER_SINCE = datetime(2026, 10, 20, 21, 30, tzinfo=timezone.utc)
+
+
+def _before_single_word_filter(alert):
+    try:
+        fs = datetime.fromisoformat(str(alert.get("first_seen") or "").replace("Z", "+00:00"))
+    except ValueError:
+        return True  # unknown age: treat as legacy, i.e. re-check it
+    if fs.tzinfo is None:
+        fs = fs.replace(tzinfo=timezone.utc)
+    return fs < SINGLE_WORD_FILTER_SINCE
+
+
 def is_phrase(term):
     return len(str(term or "").split()) > 1
 
@@ -967,7 +991,8 @@ def prune_loose_phrase_matches(alerts, watchlist):
         desc = a.get("description")
         aff_parts = {p.lower() for vp in (a.get("affected") or []) for p in str(vp).split("/")}
         loose = [k for k in kws if (k in phrases and not phrase_in(k, desc))
-                 or (k in words and a.get("source") == "nvd" and not phrase_in(k, desc)
+                 or (k in words and a.get("source") == "nvd" and _before_single_word_filter(a)
+                     and not phrase_in(k, desc)
                      and re.sub(r"\W+", "_", k.lower()) not in aff_parts)]
         if not loose:
             kept.append(a)

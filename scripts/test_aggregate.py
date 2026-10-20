@@ -931,6 +931,41 @@ class TestPruneSingleWord(unittest.TestCase):
         self.assertEqual(removed, [])
         self.assertEqual(kept[0]["matched_keywords"], [])
 
+    def test_alerts_seen_after_fetch_filter_not_rechecked(self):
+        """Post-filter alerts already passed single_word_hit (maybe via CPE, which the
+        stored alert can't show); re-checking them would drop CPE-only hits."""
+        from aggregate import prune_loose_phrase_matches
+        alerts = [{"cve_id": "CVE-H", "source": "nvd", "matched_keywords": ["Zoom"],
+                   "description": "ZoomRooms installer DLL hijack", "affected": [],
+                   "first_seen": "2026-10-21T08:00:00+00:00"}]
+        kept, removed = prune_loose_phrase_matches(alerts, self.WL)
+        self.assertEqual(removed, [])
+        self.assertEqual(kept[0]["matched_keywords"], ["Zoom"])
+
+
+class TestFetchPhraseBoundary(unittest.TestCase):
+    """keywordExactMatch is substring-based; the fetch must reject "Check pointer"
+    for "Check Point" or prune and fetch fight over the alert every run."""
+
+    def test_substring_phrase_hit_rejected(self):
+        from unittest import mock
+        import aggregate as A
+
+        def cve(i, desc):
+            return {"cve": {"id": i, "descriptions": [{"lang": "en", "value": desc}]}}
+
+        def fake(params, api_key):
+            if params.get("keywordSearch") == "Check Point":
+                v = [cve("CVE-1", "bpf: Check pointer type for all atomic RMW paths"),
+                     cve("CVE-2", "Check Point Harmony Email allows XSS")]
+                return {"vulnerabilities": v, "totalResults": 2}
+            return {"vulnerabilities": [], "totalResults": 0}
+
+        with mock.patch.object(A, "nvd_query", side_effect=fake), mock.patch.object(A.time, "sleep"):
+            got = A.fetch_nvd_candidates({"keywords": ["Check Point"], "vendors_products": [],
+                                          "priority_keywords": []}, None)
+        self.assertEqual(sorted(got), ["CVE-2"])
+
 
 if __name__ == "__main__":
     unittest.main()

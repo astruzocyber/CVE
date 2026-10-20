@@ -169,10 +169,6 @@ class TestPhraseMatching(unittest.TestCase):
         self.assertNotIn("keywordExactMatch", by_kw["Veeam"])
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class KevWatchlistSweepTest(unittest.TestCase):
     KEV = {
         "CVE-2023-27532": {"vendorProject": "Veeam", "product": "Backup & Replication",
@@ -203,3 +199,7 @@ class KevWatchlistSweepTest(unittest.TestCase):
         self.assertNotIn("CVE-2020-0001", ids)
         self.assertIn("Veeam", ids["CVE-2023-27532"]["matched_keywords"])
         self.assertIn("CISA KEV", ids["CVE-2023-27532"]["matched_keywords"])
+
+
+if __name__ == "__main__":
+    unittest.main()
