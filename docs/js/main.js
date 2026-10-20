@@ -118,7 +118,16 @@ function revealHash() {
   }
   const card = document.getElementById(id);
   if (!card) return;
-  card.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "center" });
+  card.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+  // Trend chart / intel / escalation panels above the board finish loading
+  // after this and push the card down; re-aim once layout has settled.
+  for (const ms of [800, 2000, 4000]) {
+    setTimeout(() => {
+      if (location.hash.slice(1) !== id && decodeURIComponent(location.hash.slice(1)) !== id) return;
+      const r = card.getBoundingClientRect();
+      if (Math.abs(r.top) > 80) card.scrollIntoView({ behavior: "auto", block: "start" });
+    }, ms);
+  }
   card.classList.add("is-highlighted");
   setTimeout(() => card.classList.remove("is-highlighted"), 2500);
 }
@@ -460,7 +469,11 @@ async function main() {
   revealHash();
   initTrend();
   initIntel();
-  initEscalations(alerts, render);
+  // initEscalations re-renders once its data arrives, and render() resets
+  // paging to page 1 -- which un-rendered a deep-linked card past page 1
+  // (#alert-CVE-… from a shared link or a news-card CVE chip). Re-apply the
+  // hash after that re-render.
+  initEscalations(alerts, () => { render(); revealHash(); });
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(() => {});
