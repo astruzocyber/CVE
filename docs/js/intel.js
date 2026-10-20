@@ -4,9 +4,36 @@
 // Every tag shown is a deterministic keyword-rule hit on the article's own
 // title/summary -- nothing is generated.
 import { byId, escapeHtml, extLink, debounce } from "./dom.js";
+import { findAlert } from "./state.js";
 
 const PAGE = 24;
-const state = { items: [], labels: {}, cat: "", prio: "", watchOnly: false, q: "", shown: PAGE };
+const state = { items: [], labels: {}, cat: "", prio: "", src: "", watchOnly: false, q: "", shown: PAGE };
+const SEV_BADGE = { critical: "badge--critical", high: "badge--high", medium: "badge--medium", low: "badge--low" };
+
+// A CVE chip jumps to the alert card when the dashboard tracks that CVE
+// (deep-link format is #alert-<id>, see main.js revealHash); otherwise it
+// opens the NVD record so the chip is never a dead link.
+function cveLink(c) {
+  const id = escapeHtml(c);
+  if (findAlert(c)) return `<a class="tag" href="#alert-${encodeURIComponent(c)}" title="Jump to this CVE on the dashboard">${id}</a>`;
+  return `<a class="tag tag--ext" href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(c)}" target="_blank" rel="noopener noreferrer" title="Not on the dashboard yet (no NVD match or filtered) - open NVD record">${id} ↗</a>`;
+}
+
+// Vendor advisory: per-CVE table copied from the vendor bulletin (severity
+// and CVSS as the vendor rated them; blank where the bulletin didn't say).
+function renderAdvisory(adv) {
+  if (!adv || !adv.length) return "";
+  const rows = adv.map((a) => `<tr>
+      <td>${cveLink(a.cve)}</td>
+      <td>${a.severity ? `<span class="badge ${SEV_BADGE[a.severity] || ""}">${escapeHtml(a.severity)}</span>` : "-"}</td>
+      <td class="num">${a.cvss != null ? escapeHtml(String(a.cvss)) + (a.cvss_version ? `<span class="adv__ver"> v${escapeHtml(a.cvss_version)}</span>` : "") : "-"}</td>
+      <td>${escapeHtml(a.description || "")}${a.fixed_in ? `<div class="adv__fix">Fixed in: ${escapeHtml(a.fixed_in)}</div>` : ""}</td>
+    </tr>`).join("");
+  return `<details class="adv"><summary>${adv.length} CVE${adv.length === 1 ? "" : "s"} in this bulletin (vendor ratings)</summary>
+    <div class="table-wrap"><table class="adv__table">
+      <thead><tr><th scope="col">CVE</th><th scope="col">Vendor severity</th><th scope="col" class="num">CVSS</th><th scope="col">Issue / fix</th></tr></thead>
+      <tbody>${rows}</tbody></table></div></details>`;
+}
 
 const CAT_BADGE = {
   exploited: "badge--overdue",
@@ -31,9 +58,11 @@ function fmtDate(iso) {
 function matches(it) {
   if (state.cat && !(it.categories || []).includes(state.cat)) return false;
   if (state.prio && it.priority !== state.prio) return false;
+  if (state.src && it.source !== state.src) return false;
   if (state.watchOnly && !(it.watch_matches || []).length) return false;
   if (state.q) {
-    const hay = `${it.title} ${it.summary} ${it.source} ${(it.cve_ids || []).join(" ")} ${(it.watch_matches || []).join(" ")}`.toLowerCase();
+    const adv = (it.advisory || []).map((a) => `${a.description || ""} ${a.fixed_in || ""}`).join(" ");
+    const hay = `${it.title} ${it.summary} ${it.source} ${(it.cve_ids || []).join(" ")} ${(it.watch_matches || []).join(" ")} ${adv}`.toLowerCase();
     if (!state.q.split(/\s+/).every((w) => hay.includes(w))) return false;
   }
   return true;
@@ -43,9 +72,13 @@ function renderItem(it) {
   const cats = (it.categories || [])
     .map((c) => `<span class="badge ${CAT_BADGE[c] || ""}">${escapeHtml(state.labels[c] || c)}</span>`)
     .join("");
-  const cves = (it.cve_ids || [])
-    .map((c) => `<a class="tag" href="#${encodeURIComponent(c)}" title="Open on this dashboard if tracked">${escapeHtml(c)}</a>`)
-    .join("");
+  const isAdv = it.kind === "advisory";
+  const advBadge = isAdv
+    ? `<span class="badge badge--advisory" title="Official vendor security bulletin">Vendor advisory</span>` +
+      (it.advisory_severity ? `<span class="badge ${SEV_BADGE[it.advisory_severity] || ""}" title="Highest vendor-rated severity in this bulletin">max ${escapeHtml(it.advisory_severity)}</span>` : "")
+    : "";
+  // advisory CVEs are listed in the table instead of as loose chips
+  const cves = (isAdv && (it.advisory || []).length ? [] : it.cve_ids || []).map(cveLink).join("");
   const watch = (it.watch_matches || []).length
     ? `<p class="card__affected">Matches your watchlist: ${escapeHtml(it.watch_matches.slice(0, 6).join(", "))}</p>`
     : "";
@@ -58,8 +91,9 @@ function renderItem(it) {
       <span class="badge ${PRIO_BADGE[it.priority] || ""}" title="Rule score ${Number(it.score) || 0}/100">${escapeHtml(it.priority)}</span>
     </div>
     <p class="card__affected">${escapeHtml(it.source)}${also} · ${escapeHtml(fmtDate(it.published || it.first_seen))}</p>
-    <div class="card__badges">${cats}</div>
+    <div class="card__badges">${advBadge}${cats}</div>
     ${it.summary ? `<p class="card__desc">${escapeHtml(it.summary)}</p>` : ""}
+    ${isAdv ? renderAdvisory(it.advisory) : ""}
     ${watch}
     ${cves ? `<div class="card__tags">${cves}</div>` : ""}
   </article>`;
@@ -86,6 +120,16 @@ function renderCatChips() {
     .join("");
 }
 
+function renderSourceSelect() {
+  const counts = {};
+  for (const it of state.items) counts[it.source] = (counts[it.source] || 0) + 1;
+  const adv = new Set(state.items.filter((i) => i.kind === "advisory").map((i) => i.source));
+  // vendor advisory sources first, then news by volume
+  const names = Object.keys(counts).sort((a, b) => (adv.has(b) - adv.has(a)) || counts[b] - counts[a] || a.localeCompare(b));
+  byId("intel-src").innerHTML = `<option value="">All sources</option>` +
+    names.map((n) => `<option value="${escapeHtml(n)}">${escapeHtml(n)} (${counts[n]})</option>`).join("");
+}
+
 function renderFeedHealth(feeds, generatedAt) {
   const ok = (feeds || []).filter((f) => f.ok).length;
   const bad = (feeds || []).filter((f) => !f.ok).map((f) => f.name);
@@ -109,11 +153,13 @@ export async function initIntel() {
   state.labels = data.category_labels || {};
   section.hidden = false;
   renderCatChips();
+  renderSourceSelect();
   renderFeedHealth(data.feeds, data.generated_at);
 
   const reset = () => { state.shown = PAGE; render(); };
   byId("intel-cat").addEventListener("change", (e) => { state.cat = e.target.value; reset(); });
   byId("intel-prio").addEventListener("change", (e) => { state.prio = e.target.value; reset(); });
+  byId("intel-src").addEventListener("change", (e) => { state.src = e.target.value; reset(); });
   byId("intel-watch").addEventListener("change", (e) => { state.watchOnly = e.target.checked; reset(); });
   byId("intel-q").addEventListener("input", debounce((e) => { state.q = e.target.value.trim().toLowerCase(); reset(); }, 150));
   byId("intel-more").addEventListener("click", () => { state.shown += PAGE; render(); });

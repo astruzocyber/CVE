@@ -259,7 +259,14 @@ def classify_intel(item, env, labels):
         reasons.append(f"High news priority (rule score {item.get('score')})")
     if item.get("cve_ids"):
         reasons.append("Names " + ", ".join(item["cve_ids"][:5]))
-    if hot and (best <= CRIT_RANK["high"] or "exploited" in hot):
+    # Official vendor bulletin rating a CVE Critical on a critical asset: act
+    # on the vendor's rating instead of waiting days for NVD to score it.
+    vendor_critical = (item.get("kind") == "advisory" and item.get("advisory_severity") == "critical"
+                       and best == CRIT_RANK["critical"])
+    if vendor_critical:
+        crit = [a["cve"] for a in item.get("advisory") or [] if a.get("severity") == "critical"]
+        reasons.append("Vendor rates Critical: " + ", ".join(crit[:5]))
+    if vendor_critical or (hot and (best <= CRIT_RANK["high"] or "exploited" in hot)):
         tier = "escalate"
     else:
         tier = "work"

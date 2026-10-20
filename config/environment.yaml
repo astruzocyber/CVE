@@ -54,6 +54,17 @@ assets:
     # inventory: Fortinet, Forti FW LA
     terms: ["Fortinet", "FortiGate", "FortiOS", "FortiProxy", "FortiClient", "FortiManager",
             "FortiAnalyzer", "FortiWeb", "FortiSIEM", "FortiEMS"]
+  - name: "Veeam backup & recovery"
+    criticality: critical
+    # added 2026-10-20 (Veeam ecosystem integration). Backup servers hold
+    # credentials for every protected host and are the first thing ransomware
+    # crews hit before encrypting (KEV: CVE-2023-27532, CVE-2024-40711 --
+    # both known ransomware use). Vendor bulletins come from the
+    # "Veeam Security KB" intel feed, CVEs from NVD keyword "Veeam".
+    terms: ["Veeam", "Veeam Backup & Replication", "Veeam Backup and Replication",
+            "Veeam ONE", "Veeam Service Provider Console", "Veeam Agent",
+            "Veeam Backup Enterprise Manager", "Veeam Software Appliance",
+            "Veeam Backup for Microsoft 365", "Veeam Cloud Connect", "Kasten"]
   - name: "Check Point / Avanan"
     criticality: critical
     terms: ["Check Point", "Avanan", "Harmony Email"]   # exact phrase (NVD AND-matches "check"+"point")

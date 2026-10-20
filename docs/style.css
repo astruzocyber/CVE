@@ -483,6 +483,23 @@ th[aria-sort="descending"] .th-sort::after { content: " ▼"; }
 .intel-card__title a:hover, .intel-card__title a:focus-visible { color: var(--c-accent); text-decoration: underline; }
 .intel-watch { display: inline-flex; align-items: center; gap: var(--s-2); font-size: var(--fs-sm); color: var(--c-text-muted); }
 #intel-more { justify-self: center; }
+.badge--advisory { --badge-c: var(--c-accent); }
+.tag--ext { opacity: 0.8; }
+.adv { margin-top: var(--s-2); font-size: var(--fs-sm); }
+.adv > summary { cursor: pointer; color: var(--c-accent); font-weight: 600; }
+.adv .table-wrap { margin-top: var(--s-2); }
+/* Cards are narrow (3-up grid), so each advisory row is stacked: CVE,
+   severity and CVSS on one line, the issue/fix text full-width below. */
+.adv__table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.adv__table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.adv__table tr { display: grid; grid-template-columns: auto auto 1fr; gap: var(--s-1) var(--s-2); align-items: center;
+  padding: var(--s-2) 0; border-bottom: 1px solid var(--c-border); }
+.adv__table td { padding: 0; text-align: left; min-width: 0; overflow-wrap: anywhere; }
+.adv__table td:first-child .tag { white-space: nowrap; }
+.adv__table td:last-child { grid-column: 1 / -1; }
+.adv__table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.adv__ver, .adv__fix { color: var(--c-text-muted); font-size: var(--fs-xs); }
+.adv__fix { margin-top: 2px; }
 
 /* Escalate-now board */
 .esc-section { border: 1px solid var(--c-border); border-left: 4px solid var(--c-critical); border-radius: 8px; padding: var(--s-4); background: var(--c-surface); }
@@ -498,3 +515,9 @@ th[aria-sort="descending"] .th-sort::after { content: " ▼"; }
 .esc-coverage { margin: .4rem 0; font-size: .85rem; }
 .esc-coverage summary { cursor: pointer; }
 .esc-coverage ul { margin: .3rem 0 0 1rem; padding: 0; }
+
+/* Long asset names ("Dev & code platforms (GitHub / Bitbucket / ...)") were
+   nowrap and pushed the page ~140px wider than a phone screen (audit
+   2026-10-20). Let badges wrap inside their card instead. */
+.card { min-width: 0; }
+.card__badges .badge { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }

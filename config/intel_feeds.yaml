@@ -49,6 +49,17 @@ feeds:
   - name: Zero Day Initiative
     url: https://www.zerodayinitiative.com/rss/published/
 
+  # ---- Veeam (backup & recovery: the #1 ransomware pre-encryption target) ----
+  # Official KB security feed (probed 2026-10-20): one Atom entry per
+  # "Vulnerabilities Resolved in <product> <build>" bulletin. advisory: true
+  # makes fetch_intel.py read the CVE table in <content> (vendor severity +
+  # CVSS per CVE); the feed's <summary> is only the title. Bulletins stay on
+  # the board for a year because the exposure lasts until the server is patched.
+  - name: Veeam Security KB
+    url: https://www.veeam.com/services/open/kb/security-feed
+    advisory: true
+    retention_days: 365
+
   # ---- Threat research (campaigns, initial access, exploitation write-ups) ----
   - name: Unit 42
     url: https://unit42.paloaltonetworks.com/feed/
@@ -82,6 +93,8 @@ feeds:
     url: "https://news.google.com/rss/search?q=%28%22Entra+ID%22+OR+%22AD+FS%22+OR+%22Active+Directory%22+OR+%22Microsoft+365%22+OR+%22Office+365%22+OR+Intune%29+%28attack+OR+phishing+OR+exploited+OR+%22zero-day%22%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
   - name: "GNews: business SaaS breaches"
     url: "https://news.google.com/rss/search?q=%28Workday+OR+ADP+OR+DocuSign+OR+HubSpot+OR+Slack+OR+Acumatica+OR+OnBase+OR+Yardi+OR+%22Bill.com%22+OR+Five9+OR+3CX+OR+Avaya+OR+Grandstream%29+%28breach+OR+vulnerability+OR+phishing+OR+exploited%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
+  - name: "GNews: Veeam & backup attacks"
+    url: "https://news.google.com/rss/search?q=%28Veeam+OR+%22Backup+%26+Replication%22+OR+%22Veeam+ONE%22+OR+%22Service+Provider+Console%22%29+%28vulnerability+OR+exploited+OR+ransomware+OR+%22zero-day%22+OR+breach%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
   - name: "GNews: virtualization & cloud"
     url: "https://news.google.com/rss/search?q=%28VMware+OR+ESXi+OR+Nutanix+OR+AWS+OR+Azure+OR+%22Google+Cloud%22+OR+DigitalOcean+OR+Cloudflare%29+%28exploited+OR+%22zero-day%22+OR+ransomware+OR+breach%29+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"
   - name: "GNews: dev & AI tools"

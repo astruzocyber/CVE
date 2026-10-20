@@ -819,7 +819,11 @@ def fetch_nvd_candidates(watchlist, api_key):
             "lastModEndDate": end.strftime(date_fmt),
             "resultsPerPage": 200,
         }
-        if kind == "priority":
+        # Multi-word keywords must match as a phrase. Without keywordExactMatch
+        # NVD ANDs the words anywhere in the record, so "Check Point" matched
+        # 335 Linux-kernel CVEs ("check" ... "point") and "Windows Kernel"
+        # matched 82 more -- 13.5% of the board was this noise (audit 2026-10-20).
+        if kind == "priority" or (kind == "keyword" and is_phrase(term)):
             params["keywordExactMatch"] = ""
         result = nvd_query(params, api_key)
         time.sleep(delay)
@@ -866,6 +870,49 @@ def fetch_nvd_candidates(watchlist, api_key):
                     entry["priority_match"] = True
     print(f"  NVD candidates (pre-filter): {len(candidates)}")
     return candidates
+
+
+def is_phrase(term):
+    return len(str(term or "").split()) > 1
+
+
+def phrase_in(term, text):
+    """Whole-phrase, case-insensitive; whitespace/hyphen runs are equivalent."""
+    words = [re.escape(w) for w in str(term).split()]
+    return bool(words) and re.search(r"(?<!\w)" + r"[\s-]+".join(words) + r"(?!\w)", text or "", re.I) is not None
+
+
+def prune_loose_phrase_matches(alerts, watchlist):
+    """Retroactive cleanup for alerts ingested before multi-word keywords used
+    keywordExactMatch: drop a watchlist phrase from matched_keywords when the
+    phrase is not literally in the description, then drop the alert itself if
+    nothing else (another keyword, a vendor/product pair, KEV, a priority term,
+    a non-NVD source) still justifies it. Returns (kept, removed_ids)."""
+    phrases = {k for k in (watchlist.get("keywords") or []) + (watchlist.get("priority_keywords") or [])
+               if is_phrase(k)}
+    kept, removed = [], []
+    for a in alerts:
+        kws = a.get("matched_keywords") or []
+        loose = [k for k in kws if k in phrases and not phrase_in(k, a.get("description"))]
+        if not loose:
+            kept.append(a)
+            continue
+        a["matched_keywords"] = [k for k in kws if k not in loose]
+        # a different current keyword may literally match (e.g. "Exchange Online"
+        # on a CVE first caught by a loose "Microsoft Exchange Server" hit)
+        for k in watchlist.get("keywords") or []:
+            if k not in a["matched_keywords"] and k not in loose and phrase_in(k, a.get("description")):
+                a["matched_keywords"].append(k)
+        justified = (a["matched_keywords"] or a.get("matched_vendor_product") or a.get("kev")
+                     or a.get("source") not in (None, "nvd"))
+        if justified:
+            if a.get("priority_match") and not any(k in (watchlist.get("priority_keywords") or [])
+                                                   for k in a["matched_keywords"]):
+                a["priority_match"] = False
+            kept.append(a)
+        else:
+            removed.append(a.get("cve_id"))
+    return kept, removed
 
 
 # ---------------------------------------------------------------------------
@@ -1750,6 +1797,10 @@ def main():
     ghsa_candidates = fetch_ghsa_advisories(watchlist["ghsa_packages"], gh_token)
 
     existing_alerts = load_json_file(ALERTS_PATH, [])
+    existing_alerts, loose_removed = prune_loose_phrase_matches(existing_alerts, watchlist)
+    if loose_removed:
+        print(f"  Removed {len(loose_removed)} alert(s) matched only by a multi-word keyword "
+              f"that is not in the description (pre-exact-match noise), e.g. {loose_removed[:5]}")
     # KEV-driven ingest: tag KEV listings already surfaced by the watchlist,
     # and pull in any recent KEV addition nobody else produced (see
     # kev_recent_ids docstring for the miss this closes).

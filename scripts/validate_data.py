@@ -305,8 +305,26 @@ def check_intel_json():
         for cid in it["cve_ids"]:
             if not re.fullmatch(r"CVE-\d{4}-\d{4,7}", cid):
                 fail(f"{where} malformed CVE id {cid!r}")
-        # Anti-hallucination guard: every CVE id must appear verbatim in the item text.
-        text = f"{it['title']} {it.get('summary', '')}".upper()
+        # Vendor advisories: each row is regex-copied from the vendor bulletin
+        # (fetch_intel.parse_advisory); values must be in range or absent.
+        adv = it.get("advisory")
+        if adv is not None:
+            if it.get("kind") != "advisory" or not isinstance(adv, list):
+                fail(f"{where} 'advisory' must be a list on kind=advisory items")
+                adv = []
+            for a in adv:
+                if not isinstance(a, dict) or not re.fullmatch(r"CVE-\d{4}-\d{4,7}", str(a.get("cve"))):
+                    fail(f"{where} advisory row without a valid CVE id: {a!r}")
+                    continue
+                if a.get("severity") not in (None, "critical", "high", "medium", "low"):
+                    fail(f"{where} advisory {a['cve']} bad severity {a.get('severity')!r}")
+                if a.get("cvss") is not None and not (isinstance(a["cvss"], (int, float)) and 0 <= a["cvss"] <= 10):
+                    fail(f"{where} advisory {a['cve']} CVSS out of range {a.get('cvss')!r}")
+                if a["cve"] not in it["cve_ids"]:
+                    fail(f"{where} advisory {a['cve']} missing from cve_ids")
+        # Anti-hallucination guard: every CVE id must appear verbatim in the item
+        # text, or (vendor advisories) in a row parsed from the bulletin body.
+        text = f"{it['title']} {it.get('summary', '')} {' '.join(str(a.get('cve')) for a in adv or [] if isinstance(a, dict))}".upper()
         for cid in it["cve_ids"]:
             if cid.upper() not in text:
                 fail(f"{where} CVE {cid} not present in its own title/summary")

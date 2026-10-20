@@ -74,6 +74,7 @@ keywords:
   - "Windows Hyper-V"
   - "Windows Win32k"
   - "Microsoft Exchange Server"
+  - "Exchange Online"
   - "Microsoft SharePoint"
   - "Microsoft Outlook"
   - "Microsoft Office"
@@ -158,6 +159,12 @@ keywords:
   - "think-cell"
   - "Parallels"
   - "OutSystems"
+  # Veeam: backup servers are the first thing ransomware crews go after (CISA
+  # KEV: CVE-2023-27532, CVE-2024-40711, both known ransomware use). One word
+  # covers every product (Backup & Replication, ONE, Service Provider Console,
+  # Agents, Enterprise Manager, Software Appliance, Kasten by Veeam).
+  - "Veeam"
+  - "Kasten"
 
 # Exact-phrase description matches that bypass cvss_minimum: identity, trust and
 # user-delivered-file bypass components where even a "Medium" CVE matters
@@ -170,6 +177,10 @@ priority_keywords:
   - "Active Directory Certificate Services"
   - "ADSelfService Plus"
   - "Global Secure Access"
+  # Every Veeam CVE regardless of CVSS: low volume (~10-20/yr) and Medium ones
+  # still matter on a backup server, e.g. CVE-2026-93026 (6.1) lets a Backup
+  # Viewer delete the Enterprise Manager master key (= unrecoverable backups).
+  - "Veeam"
 
 # GitHub repos to check via the Dependabot Alerts API (needs GH_DEPENDABOT_TOKEN secret
 # with security_events read scope on each repo listed).

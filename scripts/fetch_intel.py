@@ -196,7 +196,8 @@ def _regex_items(text):
             link = m.group(1) if m else ""
         out.append({"title": grab("title"), "link": link,
                     "date": grab("pubDate") or grab("published") or grab("updated") or grab("dc:date"),
-                    "summary": grab("description") or grab("summary") or grab("content:encoded") or grab("content")})
+                    "summary": grab("description") or grab("summary") or grab("content:encoded") or grab("content"),
+                    "content": grab("content:encoded") or grab("content")})
     return out
 
 
@@ -219,6 +220,9 @@ def parse_feed(data):
             "link": _child_text(el, "link") or _child_text(el, "guid", "id"),
             "date": _child_text(el, "pubdate", "published", "updated", "date"),
             "summary": _child_text(el, "description", "summary", "encoded", "content"),
+            # full body, used only by advisory feeds (vendor KBs put the CVE
+            # table in <content>; their <summary> is just the title)
+            "content": _child_text(el, "encoded", "content"),
         })
     return out
 
@@ -237,8 +241,10 @@ def classify(text, watch_res):
     return cats, watch, cves
 
 
-def score_item(cats, watch, cves):
+def score_item(cats, watch, cves, advisory=None):
     score = sum(WEIGHTS.get(c, 0) for c in cats)
+    # vendor-rated severity of the worst CVE in a vendor advisory
+    score += ADVISORY_BONUS.get(advisory_max_severity(advisory), 0)
     if watch:
         score += WATCH_BONUS
         # A vendor/update problem or SE campaign on a product we run is
@@ -254,6 +260,77 @@ def priority_label(score):
     return "high" if score >= 60 else "medium" if score >= 30 else "low"
 
 
+# ---- Vendor security advisories (feeds marked `advisory: true`) ----------
+# A vendor KB/PSIRT entry lists its CVEs with the vendor's own severity and
+# CVSS, usually days before NVD scores them. The parser only copies values
+# that sit literally next to a CVE id in that entry ("CVE-x ... Severity:
+# Critical CVSS v4.0 Score: 9.4"); anything it cannot read is left None.
+ADVISORY_SEV_RE = re.compile(r"\bSeverity:\s*(Critical|High|Medium|Low)\b", re.I)
+ADVISORY_CVSS_RE = re.compile(r"\bCVSS\s*v?(\d\.\d)\s*(?:Base\s*)?Score:\s*(\d{1,2}(?:\.\d)?)\b", re.I)
+ADVISORY_DESC_RE = re.compile(r"^\s*[:\-\u2013\u2014]?\s*(A vulnerability .+?|An? .+?)\s*(?=Severity:)", re.I | re.S)
+ADVISORY_FIX_RE = re.compile(r"fixed starting in the following builds?:\s*(.+?)\s*(?=\bNote:|\bCVE-\d{4}-|\bMitigation\b|\bMore Information\b|\bIf this KB article\b|$)",
+                             re.I | re.S)
+ADVISORY_APPLIES_RE = re.compile(r"Article Applicability\s*(.+?)(?:\s*(?:Veeam Software Security Commitment|Issue Details)\b|$)",
+                                 re.I | re.S)
+SEV_RANK = {"critical": 0, "high": 1, "medium": 2, "low": 3}
+ADVISORY_BONUS = {"critical": 30, "high": 15}
+
+
+def parse_advisory(body):
+    """[{cve, severity, cvss, cvss_version}] in document order, one per CVE id.
+    Each CVE's fields are read only from the text between it and the next
+    *different* CVE id, so one entry's score never leaks onto another."""
+    hits = [(m.start(), f"CVE-{m.group(1)}-{m.group(2)}") for m in CVE_RE.finditer(body or "")]
+    out, seen = [], {}
+    for n, (pos, cid) in enumerate(hits):
+        end = next((p for p, c in hits[n + 1:] if c != cid), len(body))
+        seg = body[pos:end]
+        sev = ADVISORY_SEV_RE.search(seg)
+        score = ADVISORY_CVSS_RE.search(seg)
+        desc = ADVISORY_DESC_RE.search(seg[len(cid):]) if sev else None
+        fix = ADVISORY_FIX_RE.search(seg) if sev else None
+        rec = {"cve": cid,
+               "severity": sev.group(1).lower() if sev else None,
+               "cvss": float(score.group(2)) if score and float(score.group(2)) <= 10 else None,
+               "cvss_version": score.group(1) if score else None,
+               "description": _clip(desc.group(1), 280) if desc else None,
+               "fixed_in": _clip(fix.group(1), 200) if fix else None}
+        if cid not in seen:
+            seen[cid] = rec
+            out.append(rec)
+        elif seen[cid]["severity"] is None and rec["severity"]:
+            seen[cid].update(rec)  # first mention was a cross-reference, not the entry
+    return out
+
+
+def _clip(s, n):
+    s = _WS_RE.sub(" ", s or "").strip()
+    return s if len(s) <= n else s[:n - 1].rsplit(" ", 1)[0] + "\u2026"
+
+
+def advisory_digest(advisory):
+    """Factual one-liner built only from parsed fields: "3 CVEs: 1 Critical,
+    2 Medium; highest CVSS 9.4 (v4.0)". None when nothing was rated."""
+    rated = [a for a in advisory or [] if a.get("severity")]
+    if not rated:
+        return None
+    counts = {}
+    for a in rated:
+        counts[a["severity"]] = counts.get(a["severity"], 0) + 1
+    parts = [f"{counts[s]} {s.capitalize()}" for s in sorted(counts, key=SEV_RANK.get)]
+    top = max((a for a in rated if a.get("cvss") is not None), key=lambda a: a["cvss"], default=None)
+    n = len(rated)
+    s = f"{n} CVE{'s' if n != 1 else ''}: " + ", ".join(parts)
+    if top:
+        s += f"; highest CVSS {top['cvss']:g}" + (f" (v{top['cvss_version']})" if top.get("cvss_version") else "")
+    return s + "."
+
+
+def advisory_max_severity(advisory):
+    sevs = [a["severity"] for a in advisory or [] if a.get("severity") in SEV_RANK]
+    return min(sevs, key=SEV_RANK.get) if sevs else None
+
+
 def item_id(link, title):
     key = (link or "").split("#")[0].rstrip("/").lower() or re.sub(r"\W+", " ", (title or "").lower()).strip()
     return hashlib.sha1(key.encode()).hexdigest()[:16]
@@ -263,22 +340,35 @@ def norm_title(t):
     return re.sub(r"[^a-z0-9]+", " ", (t or "").lower()).strip()
 
 
-def build_item(raw, feed_name, watch_res, now):
+def build_item(raw, feed_name, watch_res, now, advisory=False):
     title = clean_text(raw.get("title"))
     link = (raw.get("link") or "").strip()
     if not title or not link.startswith(("https://", "http://")):
         return None
     summary = clean_text(raw.get("summary"))
+    adv = []
+    if advisory:
+        body = clean_text(raw.get("content")) or summary
+        adv = parse_advisory(body)
+        if not any(a["severity"] for a in adv):
+            # cumulative "List of Security Fixes" index pages name every CVE
+            # the product ever had -- a changelog, not a new advisory
+            adv = []
+        if not summary or norm_title(summary) == norm_title(title) or summary.startswith(title):
+            m = ADVISORY_APPLIES_RE.search(body)
+            lead = clean_text(m.group(1)) if m else ""
+            summary = " ".join(x for x in (advisory_digest(adv), lead) if x) or summary
     if len(summary) > SUMMARY_CHARS:
         summary = summary[:SUMMARY_CHARS].rsplit(" ", 1)[0] + "…"
     published = parse_date(raw.get("date"))
     if published and published > now + timedelta(hours=6):
         published = None  # never trust future-dated items
     cats, watch, cves = classify(f"{title}\n{summary}", watch_res)
+    cves += [a["cve"] for a in adv if a["cve"] not in cves]
     if not cats and not watch and not cves:
         return None
-    score = score_item(cats, watch, cves)
-    return {
+    score = score_item(cats, watch, cves, adv)
+    item = {
         "id": item_id(link, title),
         "title": title,
         "link": link,
@@ -291,9 +381,14 @@ def build_item(raw, feed_name, watch_res, now):
         "score": score,
         "priority": priority_label(score),
     }
+    if advisory:
+        item["kind"] = "advisory"
+        item["advisory"] = adv
+        item["advisory_severity"] = advisory_max_severity(adv)
+    return item
 
 
-def merge(existing, fresh, now, retention_days, max_items):
+def merge(existing, fresh, now, retention_days, max_items, source_retention=None):
     """Existing items are kept (and re-classified by the caller); fresh items
     win on id collision. Same story syndicated by several outlets is grouped
     by normalised title so it appears once with `also_reported_by`."""
@@ -302,13 +397,16 @@ def merge(existing, fresh, now, retention_days, max_items):
         prev = by_id.get(i["id"])
         i["first_seen"] = (prev or {}).get("first_seen") or now.isoformat()
         by_id[i["id"]] = i
-    cutoff = now - timedelta(days=retention_days)
+    source_retention = source_retention or {}
 
     def when(i):
         d = parse_date(i.get("published") or "") or parse_date(i.get("first_seen") or "")
         return d or now
 
-    kept = [i for i in by_id.values() if when(i) >= cutoff]
+    # Vendor advisories stay useful far longer than news (an unpatched Veeam
+    # server is exposed until it is patched), so feeds may set their own window.
+    kept = [i for i in by_id.values()
+            if when(i) >= now - timedelta(days=source_retention.get(i.get("source"), retention_days))]
     by_title = {}
     for i in sorted(kept, key=when):
         key = norm_title(i["title"])
@@ -340,12 +438,16 @@ def main():
     # Re-classify retained items so rule/watchlist changes apply retroactively.
     for i in existing:
         cats, watch, cves = classify(f"{i.get('title', '')}\n{i.get('summary', '')}", watch_res)
+        adv = i.get("advisory") or []
+        cves += [a["cve"] for a in adv if a.get("cve") and a["cve"] not in cves]
         i.update(categories=cats, watch_matches=watch, cve_ids=cves)
-        i["score"] = score_item(cats, watch, cves)
+        i["score"] = score_item(cats, watch, cves, adv)
         i["priority"] = priority_label(i["score"])
         i.pop("also_reported_by", None)
     existing = [i for i in existing if i.get("categories") or i.get("watch_matches") or i.get("cve_ids")]
 
+    source_retention = {f["name"]: int(f["retention_days"]) for f in feeds
+                        if isinstance(f, dict) and f.get("name") and f.get("retention_days")}
     fresh, feed_status = [], []
     for feed in feeds:
         name, url = feed.get("name"), feed.get("url")
@@ -353,7 +455,8 @@ def main():
             continue
         try:
             raws = parse_feed(fetch(url))
-            items = [b for b in (build_item(r, name, watch_res, now) for r in raws) if b]
+            adv = bool(feed.get("advisory"))
+            items = [b for b in (build_item(r, name, watch_res, now, advisory=adv) for r in raws) if b]
             fresh.extend(items)
             feed_status.append({"name": name, "ok": True, "items": len(raws), "kept": len(items)})
             log(f"  {name}: {len(raws)} items, {len(items)} kept")
@@ -365,7 +468,7 @@ def main():
         log("  WARN every intel feed failed this run -- keeping previous intel.json untouched")
         return 0
 
-    items = merge(existing, fresh, now, retention, max_items)
+    items = merge(existing, fresh, now, retention, max_items, source_retention)
     out = {
         "generated_at": now.isoformat(),
         "category_labels": CATEGORY_LABELS,
