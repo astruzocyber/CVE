@@ -874,3 +874,24 @@ class TestAdvisoryTwins(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestSingleWordHit(unittest.TestCase):
+    """NVD prefix-matches single keywords; only whole-word / CPE hits count."""
+
+    def _cve(self, desc, cpes=()):
+        return {"id": "CVE-2099-0001", "descriptions": [{"lang": "en", "value": desc}],
+                "configurations": [{"nodes": [{"cpeMatch": [{"criteria": c} for c in cpes]}]}]}
+
+    def test_prefix_noise_rejected(self):
+        from aggregate import single_word_hit
+        self.assertFalse(single_word_hit("DeepL", self._cve("libexpat stack overflow via deeply nested XML")))
+        self.assertFalse(single_word_hit("Canva", self._cve("Use-after-free in the canvas component")))
+        self.assertFalse(single_word_hit("Naviga", self._cve("Open redirect in navigation handler")))
+
+    def test_whole_word_and_cpe_kept(self):
+        from aggregate import single_word_hit
+        self.assertTrue(single_word_hit("DeepL", self._cve("DeepL for Windows allows DLL hijacking")))
+        self.assertTrue(single_word_hit("Canva", self._cve("Affinity by Canva before 3.0 ...")))
+        self.assertTrue(single_word_hit("Naviga", self._cve("XSS in an editor",
+                                                          ["cpe:2.3:a:naviga:writer:*:*:*:*:*:*:*:*"])))

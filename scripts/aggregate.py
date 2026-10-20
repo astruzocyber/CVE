@@ -902,6 +902,8 @@ def fetch_nvd_candidates(watchlist, api_key):
             cve_id = cve.get("id")
             if not cve_id:
                 continue
+            if kind == "keyword" and not is_phrase(term) and not single_word_hit(term, cve):
+                continue
             entry = candidates.setdefault(cve_id, nvd_entry_from_cve(cve))
             if kind == "vendor_product":
                 pair = f"{vendor}/{product}"
@@ -914,6 +916,24 @@ def fetch_nvd_candidates(watchlist, api_key):
                     entry["priority_match"] = True
     print(f"  NVD candidates (pre-filter): {len(candidates)}")
     return candidates
+
+
+def single_word_hit(term, cve):
+    """NVD keywordSearch prefix-matches single words: "DeepL" returned libexpat
+    "deeply nested" bugs, "Naviga" returned "navigation", "Canva" "canvas"
+    (audit 2026-10-20: 45/33/25 bogus high-CVSS hits in 30 days). Keep a
+    single-word keyword hit only if the word stands alone in the description
+    or in an affected-product CPE (vendor/product field)."""
+    if phrase_in(term, extract_description(cve)):
+        return True
+    t = re.sub(r"\W+", "_", str(term).lower())
+    for conf in cve.get("configurations") or []:
+        for node in conf.get("nodes") or []:
+            for m in node.get("cpeMatch") or []:
+                parts = str(m.get("criteria", "")).lower().split(":")
+                if len(parts) > 4 and t in (parts[3], parts[4]):
+                    return True
+    return False
 
 
 def is_phrase(term):
