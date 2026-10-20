@@ -1,5 +1,56 @@
 [
   {
+    "cve_id": "CVE-2026-90177",
+    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nbpf: Check pointer type for all atomic RMW paths\n\nAtomic RMW verification records an instruction pointer type only when the\ncurrent destination is PTR_TO_ARENA. A second path can therefore reach the\nsame instruction with an ordinary pointer without comparing it against the\nsaved arena type.\n\nThe post-verification fixup uses the saved type to rewrite the instruction\nto BPF_PROBE_ATOMIC for every path. Record the actual destination type for\nall atomic RMW paths so the existing mismatch check rejects incompatible\nuses of one instruction.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00173,
+    "epss_percentile": 0.06399,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00173,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00173,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "Check Point"
+    ],
+    "source": "nvd",
+    "published": "2026-09-17T17:17:11.623",
+    "nvd_last_modified": "2026-10-19T09:19:07.697",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-20T17:02:44.918856+00:00"
+  },
+  {
     "cve_id": "CVE-2026-69821",
     "description": "Improper encoding or escaping of output in Active Directory Certificate Services (AD CS) allows an authorized attacker to elevate privileges locally.",
     "cvss_score": 7.8,
@@ -34,8 +85,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -126,8 +177,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 23.1,
+    "epss_score_prev": 0.00738,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -217,8 +268,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 21.1,
+    "epss_score_prev": 0.00983,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -309,8 +360,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 21.4,
+    "epss_score_prev": 0.00299,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -362,8 +413,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.2,
+    "epss_score_prev": 0.0037,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -415,8 +466,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.0,
+    "epss_score_prev": 0.0036,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -468,8 +519,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 16.9,
+    "epss_score_prev": 0.00338,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -521,8 +572,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.9,
+    "epss_score_prev": 0.00847,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -589,8 +640,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.0,
+    "epss_score_prev": 0.00375,
     "osv_id": "CVE-2026-13745",
     "osv_fixed_versions": [
       {
@@ -650,8 +701,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.0,
+    "epss_score_prev": 0.00251,
     "osv_id": "CVE-2026-103435",
     "osv_fixed_versions": [
       {
@@ -709,8 +760,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.1,
+    "epss_score_prev": 0.00193,
     "osv_id": "CVE-2026-100585",
     "osv_fixed_versions": [
       {
@@ -768,8 +819,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 41.7,
+    "epss_score_prev": 0.27213,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -835,8 +886,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00462,
     "osv_id": "CVE-2026-70335",
     "osv_fixed_versions": [
       {
@@ -909,8 +960,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.7,
+    "epss_score_prev": 0.01176,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -963,8 +1014,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00135,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1016,8 +1067,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.8,
+    "epss_score_prev": 0.00558,
     "osv_id": "CVE-2026-73032",
     "osv_fixed_versions": [
       {
@@ -1075,8 +1126,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.1,
+    "epss_score_prev": 0.0046,
     "osv_id": "CVE-2026-47701",
     "osv_fixed_versions": [
       {
@@ -1134,8 +1185,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.5,
+    "epss_score_prev": 0.00135,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1187,8 +1238,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00156,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1240,8 +1291,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.7,
+    "epss_score_prev": 0.00219,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1307,8 +1358,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.7,
+    "epss_score_prev": 0.00331,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1360,8 +1411,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00538,
     "osv_id": "CVE-2026-52741",
     "osv_fixed_versions": [
       {
@@ -1419,8 +1470,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.3,
+    "epss_score_prev": 0.00397,
     "osv_id": "CVE-2025-65036",
     "osv_fixed_versions": [
       {
@@ -1492,8 +1543,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.3,
+    "epss_score_prev": 0.00489,
     "osv_id": "CVE-2026-77262",
     "osv_fixed_versions": [
       {
@@ -1586,8 +1637,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.3,
+    "epss_score_prev": 0.00408,
     "osv_id": "CVE-2026-77255",
     "osv_fixed_versions": [
       {
@@ -1678,8 +1729,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.0,
+    "epss_score_prev": 0.0062,
     "osv_id": "CVE-2026-77254",
     "osv_fixed_versions": [
       {
@@ -1771,8 +1822,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00373,
     "osv_id": "CVE-2026-77253",
     "osv_fixed_versions": [
       {
@@ -1865,8 +1916,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.3,
+    "epss_score_prev": 0.00413,
     "osv_id": "CVE-2026-77248",
     "osv_fixed_versions": [
       {
@@ -1960,8 +2011,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.1,
+    "epss_score_prev": 0.00428,
     "osv_id": "CVE-2026-77246",
     "osv_fixed_versions": [
       {
@@ -2053,8 +2104,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.8,
+    "epss_score_prev": 0.00324,
     "osv_id": "CVE-2026-77274",
     "osv_fixed_versions": [
       {
@@ -2147,8 +2198,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.0053,
     "osv_id": "CVE-2026-77271",
     "osv_fixed_versions": [
       {
@@ -2240,8 +2291,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00321,
     "osv_id": "CVE-2026-77261",
     "osv_fixed_versions": [
       {
@@ -2333,8 +2384,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00349,
     "osv_id": "CVE-2026-77260",
     "osv_fixed_versions": [
       {
@@ -2426,8 +2477,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.0,
+    "epss_score_prev": 0.0034,
     "osv_id": "CVE-2026-77258",
     "osv_fixed_versions": [
       {
@@ -2521,8 +2572,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.1,
+    "epss_score_prev": 0.00286,
     "osv_id": "CVE-2026-77244",
     "osv_fixed_versions": [
       {
@@ -2614,8 +2665,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00323,
     "osv_id": "CVE-2026-77243",
     "osv_fixed_versions": [
       {
@@ -2707,8 +2758,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.1,
+    "epss_score_prev": 0.00481,
     "osv_id": "CVE-2026-73496",
     "osv_fixed_versions": [
       {
@@ -2768,8 +2819,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00507,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -2867,8 +2918,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.9,
+    "epss_score_prev": 0.00325,
     "osv_id": "CVE-2026-106486",
     "osv_fixed_versions": [
       {
@@ -2927,8 +2978,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.8,
+    "epss_score_prev": 0.00487,
     "osv_id": "CVE-2026-86059",
     "osv_fixed_versions": [
       {
@@ -2986,8 +3037,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00588,
     "osv_id": "CVE-2025-59531",
     "osv_fixed_versions": [
       {
@@ -3083,8 +3134,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00477,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -3178,8 +3229,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.7,
+    "epss_score_prev": 0.00878,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -3298,8 +3349,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.0,
+    "epss_score_prev": 0.00291,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -3382,8 +3433,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.5,
+    "epss_score_prev": 0.00707,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -3502,8 +3553,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00261,
     "osv_id": "CVE-2026-100575",
     "osv_fixed_versions": [
       {
@@ -3562,8 +3613,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00449,
     "osv_id": "CVE-2026-48976",
     "osv_fixed_versions": [
       {
@@ -3624,8 +3675,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00171,
     "osv_id": "CVE-2026-61687",
     "osv_fixed_versions": [
       {
@@ -3683,8 +3734,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00206,
     "osv_id": "CVE-2026-33143",
     "osv_fixed_versions": [
       {
@@ -3756,8 +3807,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00283,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -3823,8 +3874,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00207,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -3876,8 +3927,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.7,
+    "epss_score_prev": 0.00258,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -3929,8 +3980,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00319,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -3982,8 +4033,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.2,
+    "epss_score_prev": 0.00097,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4035,8 +4086,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.8,
+    "epss_score_prev": 0.00107,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4088,8 +4139,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.8,
+    "epss_score_prev": 0.00098,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4141,8 +4192,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.0,
+    "epss_score_prev": 0.00271,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4208,8 +4259,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.00686,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4261,8 +4312,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.6,
+    "epss_score_prev": 0.00798,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4314,8 +4365,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.7,
+    "epss_score_prev": 0.00278,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4367,8 +4418,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.5,
+    "epss_score_prev": 0.01751,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4435,8 +4486,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 91.1,
+    "epss_score_prev": 0.99677,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4522,8 +4573,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00268,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4575,8 +4626,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.4,
+    "epss_score_prev": 0.00659,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4628,8 +4679,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00209,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4681,8 +4732,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.6,
+    "epss_score_prev": 0.00896,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4734,8 +4785,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00345,
     "osv_id": "CVE-2026-107181",
     "osv_fixed_versions": [
       {
@@ -4793,8 +4844,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.8,
+    "epss_score_prev": 0.00136,
     "osv_id": "CVE-2026-94488",
     "osv_fixed_versions": [
       {
@@ -4852,8 +4903,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00125,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4943,8 +4994,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00381,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -4996,8 +5047,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00219,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5049,8 +5100,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00349,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5102,8 +5153,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00178,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5155,8 +5206,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00161,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5222,8 +5273,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00322,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -5296,8 +5347,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00314,
     "osv_id": "CVE-2026-73078",
     "osv_fixed_versions": [
       {
@@ -5376,8 +5427,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00144,
     "osv_id": "CVE-2026-73077",
     "osv_fixed_versions": [
       {
@@ -5457,8 +5508,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00134,
     "osv_id": "CVE-2026-73076",
     "osv_fixed_versions": [
       {
@@ -5538,8 +5589,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.6,
+    "epss_score_prev": 0.00115,
     "osv_id": "CVE-2026-73072",
     "osv_fixed_versions": [
       {
@@ -5618,8 +5669,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00516,
     "osv_id": "CVE-2023-0433",
     "osv_fixed_versions": [
       {
@@ -5720,8 +5771,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00481,
     "osv_id": "CVE-2023-0288",
     "osv_fixed_versions": [
       {
@@ -5811,8 +5862,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00582,
     "osv_id": "CVE-2023-0049",
     "osv_fixed_versions": [
       {
@@ -5895,8 +5946,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00388,
     "osv_id": "CVE-2022-3591",
     "osv_fixed_versions": [
       {
@@ -5980,8 +6031,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00446,
     "osv_id": "CVE-2022-4141",
     "osv_fixed_versions": [
       {
@@ -6071,8 +6122,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00532,
     "osv_id": "CVE-2022-3324",
     "osv_fixed_versions": [
       {
@@ -6155,8 +6206,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.0052,
     "osv_id": "CVE-2022-3297",
     "osv_fixed_versions": [
       {
@@ -6246,8 +6297,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00561,
     "osv_id": "CVE-2022-3296",
     "osv_fixed_versions": [
       {
@@ -6336,8 +6387,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00489,
     "osv_id": "CVE-2022-3256",
     "osv_fixed_versions": [
       {
@@ -6420,8 +6471,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00561,
     "osv_id": "CVE-2022-3134",
     "osv_fixed_versions": [
       {
@@ -6504,8 +6555,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00529,
     "osv_id": "CVE-2022-3037",
     "osv_fixed_versions": [
       {
@@ -6594,8 +6645,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00538,
     "osv_id": "CVE-2022-2946",
     "osv_fixed_versions": [
       {
@@ -6673,8 +6724,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00482,
     "osv_id": "CVE-2022-2849",
     "osv_fixed_versions": [
       {
@@ -6752,8 +6803,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00534,
     "osv_id": "CVE-2022-2845",
     "osv_fixed_versions": [
       {
@@ -6831,8 +6882,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00581,
     "osv_id": "CVE-2022-2522",
     "osv_fixed_versions": [
       {
@@ -6916,8 +6967,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.8,
+    "epss_score_prev": 0.01276,
     "osv_id": "CVE-2022-2345",
     "osv_fixed_versions": [
       {
@@ -6996,8 +7047,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.8,
+    "epss_score_prev": 0.01295,
     "osv_id": "CVE-2022-2344",
     "osv_fixed_versions": [
       {
@@ -7075,8 +7126,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01377,
     "osv_id": "CVE-2022-2343",
     "osv_fixed_versions": [
       {
@@ -7155,8 +7206,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01489,
     "osv_id": "CVE-2022-2304",
     "osv_fixed_versions": [
       {
@@ -7228,8 +7279,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.4,
+    "epss_score_prev": 0.01395,
     "osv_id": "CVE-2022-2287",
     "osv_fixed_versions": [
       {
@@ -7307,8 +7358,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01375,
     "osv_id": "CVE-2022-2286",
     "osv_fixed_versions": [
       {
@@ -7386,8 +7437,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01414,
     "osv_id": "CVE-2022-2285",
     "osv_fixed_versions": [
       {
@@ -7465,8 +7516,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01436,
     "osv_id": "CVE-2022-2284",
     "osv_fixed_versions": [
       {
@@ -7544,8 +7595,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01402,
     "osv_id": "CVE-2022-2257",
     "osv_fixed_versions": [
       {
@@ -7617,8 +7668,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01395,
     "osv_id": "CVE-2022-2210",
     "osv_fixed_versions": [
       {
@@ -7696,8 +7747,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01404,
     "osv_id": "CVE-2022-2207",
     "osv_fixed_versions": [
       {
@@ -7775,8 +7826,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.8,
+    "epss_score_prev": 0.01363,
     "osv_id": "CVE-2022-2206",
     "osv_fixed_versions": [
       {
@@ -7854,8 +7905,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01517,
     "osv_id": "CVE-2022-2183",
     "osv_fixed_versions": [
       {
@@ -7933,8 +7984,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01541,
     "osv_id": "CVE-2022-2182",
     "osv_fixed_versions": [
       {
@@ -8013,8 +8064,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.8,
+    "epss_score_prev": 0.01314,
     "osv_id": "CVE-2022-2175",
     "osv_fixed_versions": [
       {
@@ -8092,8 +8143,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01414,
     "osv_id": "CVE-2022-2129",
     "osv_fixed_versions": [
       {
@@ -8171,8 +8222,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01561,
     "osv_id": "CVE-2022-2126",
     "osv_fixed_versions": [
       {
@@ -8263,8 +8314,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.0,
+    "epss_score_prev": 0.01637,
     "osv_id": "CVE-2022-2125",
     "osv_fixed_versions": [
       {
@@ -8355,8 +8406,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01561,
     "osv_id": "CVE-2022-2124",
     "osv_fixed_versions": [
       {
@@ -8446,8 +8497,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.9,
+    "epss_score_prev": 0.01476,
     "osv_id": "CVE-2022-2042",
     "osv_fixed_versions": [
       {
@@ -8537,8 +8588,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.8,
+    "epss_score_prev": 0.01593,
     "osv_id": "CVE-2022-1620",
     "osv_fixed_versions": [
       {
@@ -8617,8 +8668,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.3,
+    "epss_score_prev": 0.02544,
     "osv_id": "CVE-2022-1619",
     "osv_fixed_versions": [
       {
@@ -8702,8 +8753,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.02712,
     "osv_id": "CVE-2022-1616",
     "osv_fixed_versions": [
       {
@@ -8800,8 +8851,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00609,
     "osv_id": "CVE-2022-0351",
     "osv_fixed_versions": [
       {
@@ -8891,8 +8942,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.5,
+    "epss_score_prev": 0.01697,
     "osv_id": "CVE-2021-4166",
     "osv_fixed_versions": [
       {
@@ -8989,8 +9040,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.1,
+    "epss_score_prev": 0.01969,
     "osv_id": "CVE-2021-4136",
     "osv_fixed_versions": [
       {
@@ -9093,8 +9144,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.0,
+    "epss_score_prev": 0.01786,
     "osv_id": "CVE-2021-3973",
     "osv_fixed_versions": [
       {
@@ -9173,8 +9224,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.9,
+    "epss_score_prev": 0.02231,
     "osv_id": "CVE-2021-3968",
     "osv_fixed_versions": [
       {
@@ -9252,8 +9303,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.8,
+    "epss_score_prev": 0.01363,
     "osv_id": "CVE-2021-3974",
     "osv_fixed_versions": [
       {
@@ -9332,8 +9383,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.6,
+    "epss_score_prev": 0.00635,
     "osv_id": "CVE-2021-3928",
     "osv_fixed_versions": [
       {
@@ -9412,8 +9463,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.0,
+    "epss_score_prev": 0.01708,
     "osv_id": "CVE-2021-3927",
     "osv_fixed_versions": [
       {
@@ -9492,8 +9543,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00579,
     "osv_id": "CVE-2026-86864",
     "osv_fixed_versions": [
       {
@@ -9567,8 +9618,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00583,
     "osv_id": "CVE-2026-86863",
     "osv_fixed_versions": [
       {
@@ -9641,8 +9692,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.2,
+    "epss_score_prev": 0.00943,
     "osv_id": "CVE-2025-13780",
     "osv_fixed_versions": [],
     "affected": [],
@@ -9701,8 +9752,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.0023,
     "osv_id": "CVE-2025-12765",
     "osv_fixed_versions": [
       {
@@ -9774,8 +9825,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00476,
     "osv_id": "CVE-2025-12764",
     "osv_fixed_versions": [
       {
@@ -9847,8 +9898,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00426,
     "osv_id": "CVE-2026-95814",
     "osv_fixed_versions": [],
     "affected": [],
@@ -9900,8 +9951,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00258,
     "osv_id": "CVE-2026-101878",
     "osv_fixed_versions": [
       {
@@ -9959,8 +10010,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00259,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10012,8 +10063,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.2,
+    "epss_score_prev": 0.00068,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10065,8 +10116,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00595,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10138,8 +10189,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.5,
+    "epss_score_prev": 0.00327,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10205,8 +10256,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00242,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10278,8 +10329,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.2,
+    "epss_score_prev": 0.0088,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10331,8 +10382,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.6,
+    "epss_score_prev": 0.01951,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10385,8 +10436,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.6,
+    "epss_score_prev": 0.06991,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10438,8 +10489,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.7,
+    "epss_score_prev": 0.04726,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10491,8 +10542,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.6,
+    "epss_score_prev": 0.03602,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10544,8 +10595,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.5,
+    "epss_score_prev": 0.01244,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10597,8 +10648,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.6,
+    "epss_score_prev": 0.00682,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10650,8 +10701,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.8,
+    "epss_score_prev": 0.00463,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10703,8 +10754,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.1,
+    "epss_score_prev": 0.00775,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10756,8 +10807,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00683,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10809,8 +10860,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.6,
+    "epss_score_prev": 0.02021,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10862,8 +10913,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.1,
+    "epss_score_prev": 0.00394,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10915,8 +10966,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.01126,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -10968,8 +11019,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.3,
+    "epss_score_prev": 0.03725,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11021,8 +11072,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.2,
+    "epss_score_prev": 0.01089,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11074,8 +11125,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.7,
+    "epss_score_prev": 0.02856,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11127,8 +11178,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.0,
+    "epss_score_prev": 0.00595,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11180,8 +11231,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.0,
+    "epss_score_prev": 0.00595,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11233,8 +11284,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.6,
+    "epss_score_prev": 0.00846,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11286,8 +11337,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.6,
+    "epss_score_prev": 0.01094,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11339,8 +11390,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.2,
+    "epss_score_prev": 0.00971,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11392,8 +11443,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.2,
+    "epss_score_prev": 0.01515,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11445,8 +11496,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.8,
+    "epss_score_prev": 0.01827,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11499,8 +11550,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 36.1,
+    "epss_score_prev": 0.04606,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11553,8 +11604,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.5,
+    "epss_score_prev": 0.04136,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11606,8 +11657,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.6,
+    "epss_score_prev": 0.04542,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11673,8 +11724,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 40.1,
+    "epss_score_prev": 0.27381,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11740,8 +11791,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00197,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11793,8 +11844,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.0019,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11846,8 +11897,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 66.7,
+    "epss_score_prev": 0.18379,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -11932,8 +11983,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 62.9,
+    "epss_score_prev": 0.51689,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12024,8 +12075,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 56.9,
+    "epss_score_prev": 0.16639,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12116,8 +12167,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.8,
+    "epss_score_prev": 0.00377,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12169,8 +12220,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00529,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12242,8 +12293,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00359,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12321,8 +12372,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.6,
+    "epss_score_prev": 0.08352,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12412,8 +12463,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00322,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12497,8 +12548,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00455,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12570,8 +12621,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.1,
+    "epss_score_prev": 0.17188,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12655,8 +12706,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.1,
+    "epss_score_prev": 0.12203,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12734,8 +12785,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00214,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12801,8 +12852,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.7,
+    "epss_score_prev": 0.01324,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12840,57 +12891,6 @@
     "first_seen": "2026-10-20T16:55:32.920440+00:00"
   },
   {
-    "cve_id": "CVE-2026-90177",
-    "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nbpf: Check pointer type for all atomic RMW paths\n\nAtomic RMW verification records an instruction pointer type only when the\ncurrent destination is PTR_TO_ARENA. A second path can therefore reach the\nsame instruction with an ordinary pointer without comparing it against the\nsaved arena type.\n\nThe post-verification fixup uses the saved type to rewrite the instruction\nto BPF_PROBE_ATOMIC for every path. Record the actual destination type for\nall atomic RMW paths so the existing mismatch check rejects incompatible\nuses of one instruction.",
-    "cvss_score": 7.8,
-    "cvss_version": "CVSS V31",
-    "cvss_vector_components": {
-      "attack_vector": "LOCAL",
-      "attack_complexity": "LOW",
-      "privileges_required": "LOW",
-      "user_interaction": "NONE"
-    },
-    "cwe_ids": [],
-    "epss_score": 0.00173,
-    "epss_percentile": 0.06399,
-    "kev": false,
-    "kev_date_added": null,
-    "kev_due_date": null,
-    "kev_ransomware_use": false,
-    "kev_required_action": null,
-    "kev_notes": null,
-    "risk_score": 27.4,
-    "risk_score_breakdown": {
-      "cvss_raw": 7.8,
-      "cvss_component": 27.3,
-      "cvss_weight": "35.0% of (CVSS/10)",
-      "epss_raw": 0.00173,
-      "epss_component": 0.1,
-      "epss_weight": "40.0% of EPSS probability",
-      "kev_bonus": 0.0,
-      "kev_weight": "flat +25.0 if in CISA KEV",
-      "capped": false,
-      "weight_redistributed": false
-    },
-    "risk_score_prev": 27.4,
-    "epss_score_prev": 0.00173,
-    "osv_id": null,
-    "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "Check Point"
-    ],
-    "source": "nvd",
-    "published": "2026-09-17T17:17:11.623",
-    "nvd_last_modified": "2026-10-19T09:19:07.697",
-    "vuln_status": "Received",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.920395+00:00"
-  },
-  {
     "cve_id": "CVE-2026-88097",
     "description": "Use after free in Microsoft Edge (Chromium-based) allows an unauthorized attacker to elevate privileges locally.",
     "cvss_score": 8.1,
@@ -12925,8 +12925,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00256,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -12992,8 +12992,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.1,
+    "epss_score_prev": 0.00862,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13060,8 +13060,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00236,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13152,8 +13152,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13244,8 +13244,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00202,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13336,8 +13336,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.3,
+    "epss_score_prev": 0.00768,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13428,8 +13428,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.0,
+    "epss_score_prev": 0.0057,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13521,8 +13521,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.3,
+    "epss_score_prev": 0.00768,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13613,8 +13613,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13705,8 +13705,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13797,8 +13797,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13889,8 +13889,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00246,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -13975,8 +13975,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14067,8 +14067,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.3,
+    "epss_score_prev": 0.00768,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14159,8 +14159,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.0,
+    "epss_score_prev": 0.0057,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14252,8 +14252,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.3,
+    "epss_score_prev": 0.00768,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14344,8 +14344,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.8,
+    "epss_score_prev": 0.00348,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14436,8 +14436,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14528,8 +14528,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.0,
+    "epss_score_prev": 0.00486,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14620,8 +14620,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 52.9,
+    "epss_score_prev": 0.0139,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14713,8 +14713,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.2,
+    "epss_score_prev": 0.00913,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14805,8 +14805,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.6,
+    "epss_score_prev": 0.01027,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14897,8 +14897,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.00663,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -14989,8 +14989,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.7,
+    "epss_score_prev": 0.00974,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -15081,8 +15081,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00819,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -15173,8 +15173,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.00663,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -15265,8 +15265,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -15357,8 +15357,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -15449,8 +15449,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.0,
+    "epss_score_prev": 0.0057,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -15541,8 +15541,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.7,
+    "epss_score_prev": 0.01174,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -15633,8 +15633,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.7,
+    "epss_score_prev": 0.01174,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -15713,8 +15713,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -15805,8 +15805,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00778,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -15863,59 +15863,6 @@
     "first_seen": "2026-10-20T16:55:32.919430+00:00"
   },
   {
-    "cve_id": "CVE-2026-68836",
-    "description": "Heap-based buffer overflow in Windows kernel32.dll allows an authorized attacker to elevate privileges locally.",
-    "cvss_score": 7.8,
-    "cvss_version": "CVSS V31",
-    "cvss_vector_components": {
-      "attack_vector": "LOCAL",
-      "attack_complexity": "LOW",
-      "privileges_required": "LOW",
-      "user_interaction": "NONE"
-    },
-    "cwe_ids": [
-      "CWE-122"
-    ],
-    "epss_score": 0.00341,
-    "epss_percentile": 0.26171,
-    "kev": false,
-    "kev_date_added": null,
-    "kev_due_date": null,
-    "kev_ransomware_use": false,
-    "kev_required_action": null,
-    "kev_notes": null,
-    "risk_score": 27.4,
-    "risk_score_breakdown": {
-      "cvss_raw": 7.8,
-      "cvss_component": 27.3,
-      "cvss_weight": "35.0% of (CVSS/10)",
-      "epss_raw": 0.00341,
-      "epss_component": 0.1,
-      "epss_weight": "40.0% of EPSS probability",
-      "kev_bonus": 0.0,
-      "kev_weight": "flat +25.0 if in CISA KEV",
-      "capped": false,
-      "weight_redistributed": false
-    },
-    "risk_score_prev": 27.4,
-    "epss_score_prev": 0.00341,
-    "osv_id": null,
-    "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "Windows Kernel"
-    ],
-    "source": "nvd",
-    "published": "2026-10-13T19:18:53.820",
-    "nvd_last_modified": "2026-10-16T16:20:00.463",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
-    "severity": null,
-    "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919036+00:00"
-  },
-  {
     "cve_id": "CVE-2026-85360",
     "description": "Use after free in Windows Kernel allows an authorized attacker to elevate privileges locally.",
     "cvss_score": 7.0,
@@ -15950,8 +15897,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16042,8 +15989,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00819,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16135,8 +16082,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16227,8 +16174,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16319,8 +16266,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00202,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16412,8 +16359,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16504,8 +16451,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.0,
+    "epss_score_prev": 0.0057,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16596,8 +16543,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.0,
+    "epss_score_prev": 0.0057,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16688,8 +16635,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.6,
+    "epss_score_prev": 0.00849,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16780,8 +16727,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.7,
+    "epss_score_prev": 0.00974,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16872,8 +16819,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -16964,8 +16911,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00298,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -17056,8 +17003,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00264,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -17148,8 +17095,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.6,
+    "epss_score_prev": 0.00362,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -17461,7 +17408,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 53.1,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -17514,8 +17461,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 23.8,
+    "epss_score_prev": 0.00101,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -17569,8 +17516,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 14.3,
+    "epss_score_prev": 0.00116,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -17857,8 +17804,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00414,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -17912,8 +17859,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 51.3,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00454,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -17963,8 +17910,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 50.7,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.5,
+    "epss_score_prev": 0.00335,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18018,8 +17965,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00338,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -18140,8 +18087,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00304,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -18246,8 +18193,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.0,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.4,
+    "epss_score_prev": 0.00488,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -19023,8 +18970,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 43.8,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00263,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -19076,8 +19023,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 42.6,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.7,
+    "epss_score_prev": 0.00144,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -19411,14 +19358,17 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 57.2,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.6,
+    "epss_score_prev": 0.00715,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-10-19T17:17:04.507",
     "nvd_last_modified": "2026-10-20T15:17:13.573",
@@ -19573,7 +19523,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.5,
-    "epss_score_prev": 0.00571,
+    "epss_score_prev": 0.00612,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -20633,7 +20583,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 34.5,
-    "epss_score_prev": 0.00508,
+    "epss_score_prev": 0.00545,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -23057,7 +23007,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00379,
+    "epss_score_prev": 0.00406,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -24061,7 +24011,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.4,
-    "epss_score_prev": 0.00203,
+    "epss_score_prev": 0.00218,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -27398,8 +27348,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 25.3,
-    "epss_score_prev": 0.00363,
+    "risk_score_prev": 25.4,
+    "epss_score_prev": 0.00389,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -27467,8 +27417,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 28.1,
-    "epss_score_prev": 0.00363,
+    "risk_score_prev": 28.2,
+    "epss_score_prev": 0.00389,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -27524,7 +27474,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
-    "epss_score_prev": 0.00347,
+    "epss_score_prev": 0.00372,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -27579,7 +27529,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.4,
-    "epss_score_prev": 0.00514,
+    "epss_score_prev": 0.00551,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -37350,8 +37300,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 27.4,
-    "epss_score_prev": 0.00135,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00104,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -39837,9 +39787,12 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-10-17T04:16:47.780",
     "nvd_last_modified": "2026-10-19T15:16:45.150",
@@ -40110,9 +40063,12 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-10-17T03:16:27.927",
     "nvd_last_modified": "2026-10-19T15:16:45.150",
@@ -40568,7 +40524,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 32.0,
-    "epss_score_prev": 0.0048,
+    "epss_score_prev": 0.00469,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -40659,7 +40615,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.1,
-    "epss_score_prev": 0.00583,
+    "epss_score_prev": 0.0057,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -44898,8 +44854,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 85.5,
-    "epss_score_prev": null,
+    "risk_score_prev": 56.3,
+    "epss_score_prev": 0.12711,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -48779,7 +48735,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00569,
+    "epss_score_prev": 0.00557,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -52632,7 +52588,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.7,
-    "epss_score_prev": 0.00299,
+    "epss_score_prev": 0.00338,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -53350,7 +53306,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00248,
+    "epss_score_prev": 0.0028,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -53418,7 +53374,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00223,
+    "epss_score_prev": 0.00252,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -53486,7 +53442,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00223,
+    "epss_score_prev": 0.00252,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -53554,7 +53510,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00223,
+    "epss_score_prev": 0.00252,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -53622,7 +53578,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00268,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -53690,7 +53646,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00268,
+    "epss_score_prev": 0.00303,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -53758,7 +53714,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00288,
+    "epss_score_prev": 0.00325,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -55637,9 +55593,12 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
+      "wordpress/wordpress",
       "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-10-16T05:17:28.580",
     "nvd_last_modified": "2026-10-16T18:17:20.360",
@@ -57065,7 +57024,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.1,
-    "epss_score_prev": 0.00634,
+    "epss_score_prev": 0.00635,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -57135,7 +57094,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00442,
+    "epss_score_prev": 0.00432,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -57198,7 +57157,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00442,
+    "epss_score_prev": 0.00432,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -57260,7 +57219,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00442,
+    "epss_score_prev": 0.00432,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -57322,7 +57281,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00348,
+    "epss_score_prev": 0.0034,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -57384,7 +57343,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00442,
+    "epss_score_prev": 0.00432,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -57446,7 +57405,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00442,
+    "epss_score_prev": 0.00432,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -57515,7 +57474,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00442,
+    "epss_score_prev": 0.00432,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -57577,7 +57536,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00442,
+    "epss_score_prev": 0.00432,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -57639,7 +57598,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00442,
+    "epss_score_prev": 0.00432,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -78454,7 +78413,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 24.6,
-    "epss_score_prev": 0.00156,
+    "epss_score_prev": 0.00153,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -104086,7 +104045,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00324,
+    "epss_score_prev": 0.00347,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -147795,8 +147754,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00593,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.00742,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -167341,7 +167300,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.8,
-    "epss_score_prev": 0.00506,
+    "epss_score_prev": 0.00398,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -167476,8 +167435,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 29.3,
-    "epss_score_prev": 0.00404,
+    "risk_score_prev": 29.2,
+    "epss_score_prev": 0.00312,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -170207,8 +170166,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 33.8,
-    "epss_score_prev": 0.00462,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00358,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -174818,8 +174777,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 29.3,
-    "epss_score_prev": 0.00404,
+    "risk_score_prev": 29.2,
+    "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -176593,7 +176552,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.8,
-    "epss_score_prev": 0.00462,
+    "epss_score_prev": 0.00572,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -176932,8 +176891,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 33.8,
-    "epss_score_prev": 0.00462,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00373,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
