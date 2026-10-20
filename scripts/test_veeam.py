@@ -171,3 +171,35 @@ class TestPhraseMatching(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class KevWatchlistSweepTest(unittest.TestCase):
+    KEV = {
+        "CVE-2023-27532": {"vendorProject": "Veeam", "product": "Backup & Replication",
+                           "vulnerabilityName": "Veeam Backup & Replication Missing Authentication",
+                           "dateAdded": "2023-08-22"},
+        "CVE-2020-0001": {"vendorProject": "Microsoft", "product": "Windows",
+                          "vulnerabilityName": "Microsoft Windows Privilege Escalation", "dateAdded": "2022-03-03"},
+        "CVE-2019-9999": {"vendorProject": "Acme", "product": "Widget",
+                          "vulnerabilityName": "Acme Widget checks a point", "dateAdded": "2022-01-01"},
+    }
+    WL = {"keywords": ["Veeam", "Check Point"], "priority_keywords": [],
+          "vendors_products": [{"vendor": "microsoft", "product": "windows"}]}
+
+    def test_matches_keyword_and_pair_not_loose_phrase(self):
+        got = A.kev_watchlist_ids(self.KEV, self.WL)
+        self.assertEqual(got["CVE-2023-27532"], "Veeam")
+        self.assertEqual(got["CVE-2020-0001"], "microsoft windows")
+        self.assertNotIn("CVE-2019-9999", got)  # "checks a point" != "Check Point"
+
+    def test_sweep_ingests_old_kev_and_skips_known(self):
+        calls = []
+        def fake_q(params, key):
+            calls.append(params["cveId"]); return None  # no NVD record -> KEV fallback
+        with mock.patch.object(A, "nvd_query", fake_q), mock.patch.object(A.time, "sleep"):
+            out = A.fetch_kev_candidates(self.KEV, {"CVE-2020-0001"}, None, days=14, watchlist=self.WL)
+        ids = {e["cve_id"]: e for e in out}
+        self.assertIn("CVE-2023-27532", ids)
+        self.assertNotIn("CVE-2020-0001", ids)
+        self.assertIn("Veeam", ids["CVE-2023-27532"]["matched_keywords"])
+        self.assertIn("CISA KEV", ids["CVE-2023-27532"]["matched_keywords"])

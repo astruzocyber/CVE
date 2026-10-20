@@ -726,7 +726,33 @@ def intel_exploited_cve_ids(intel, days, now=None):
     return sorted(out)
 
 
-def fetch_kev_candidates(kev_map, already_known, api_key, days=None, news_ids=None):
+def kev_watchlist_ids(kev_map, watchlist):
+    """{cve_id: watchlist term} for EVERY KEV entry (any dateAdded) whose CISA
+    vendor/product/name/description literally names a watchlist keyword or
+    vendor+product pair. kev_recent_ids only looks back KEV_LOOKBACK_DAYS, so
+    exploited bugs in watched products listed before the board existed --
+    e.g. the ransomware-used Veeam CVE-2023-27532 / CVE-2024-40711 -- were
+    never on the board (audit 2026-10-20: 529 such CVEs). Matching uses
+    phrase_in (whole phrase) on CISA's own text only; nothing inferred."""
+    terms = list(watchlist.get("priority_keywords") or []) + list(watchlist.get("keywords") or [])
+    pairs = watchlist.get("vendors_products") or []
+    out = {}
+    for cve_id, v in kev_map.items():
+        text = " ".join(str(v.get(k) or "") for k in
+                        ("vendorProject", "product", "vulnerabilityName", "shortDescription"))
+        hit = next((t for t in terms if phrase_in(t, text)), None)
+        if hit is None:
+            for vp in pairs:
+                if phrase_in(vp.get("vendor", ""), str(v.get("vendorProject") or "")) and \
+                        phrase_in(vp.get("product", ""), str(v.get("product") or "")):
+                    hit = f"{vp['vendor']} {vp['product']}"
+                    break
+        if hit is not None:
+            out[cve_id] = hit
+    return out
+
+
+def fetch_kev_candidates(kev_map, already_known, api_key, days=None, news_ids=None, watchlist=None):
     """NVD-enriched candidates for (a) KEV additions in the last `days` days and
     (b) CVEs that recent news reports as exploited (`news_ids`), excluding any
     that another source produced this run or that are already on the board
@@ -736,6 +762,16 @@ def fetch_kev_candidates(kev_map, already_known, api_key, days=None, news_ids=No
     article is never turned into an alert from the article text alone."""
     days = days if days is not None else int(os.environ.get("KEV_LOOKBACK_DAYS", "14"))
     kev_ids = [c for c in kev_recent_ids(kev_map, days) if c not in already_known]
+    sweep = kev_watchlist_ids(kev_map, watchlist) if watchlist else {}
+    sweep_max = int(os.environ.get("KEV_SWEEP_MAX", "600"))
+    sweep_ids = sorted(c for c in sweep if c not in already_known and c not in kev_ids)
+    if len(sweep_ids) > sweep_max:
+        print(f"  KEV watchlist sweep: {len(sweep_ids)} pending, taking newest {sweep_max} "
+              f"this run (rest follow on later runs)")
+        sweep_ids = sorted(sweep_ids, key=lambda c: str(kev_map[c].get("dateAdded", "")),
+                           reverse=True)[:sweep_max]
+    print(f"KEV watchlist sweep: {len(sweep_ids)} older KEV listing(s) naming a watchlist term not yet tracked")
+    kev_ids = kev_ids + sweep_ids
     news_only = [c for c in (news_ids or []) if c not in already_known and c not in kev_ids]
     print(f"KEV-driven ingest: {len(kev_ids)} KEV addition(s) in the last {days}d not yet tracked; "
           f"{len(news_only)} news-reported exploited CVE(s) not yet tracked")
@@ -763,11 +799,15 @@ def fetch_kev_candidates(kev_map, already_known, api_key, days=None, news_ids=No
             if vp:
                 entry["matched_vendor_product"].append(vp)
             entry["matched_keywords"].append("CISA KEV")
+            if cve_id in sweep and sweep[cve_id] not in entry["matched_keywords"]:
+                entry["matched_keywords"].append(sweep[cve_id])
             entry["priority_match"] = True
             if not entry["description"]:
                 entry["description"] = kev_entry.get("shortDescription", "")
         else:
             entry = kev_fallback_entry(cve_id, kev_entry)
+            if cve_id in sweep:
+                entry["matched_keywords"].append(sweep[cve_id])
         out.append(entry)
     return out
 
@@ -797,8 +837,10 @@ def fetch_nvd_candidates(watchlist, api_key):
     delay = 0.7 if api_key else 6.5  # stay under 50/30s (key) or 5/30s (no key)
 
     print(f"Querying NVD for {len(search_terms)} search terms (lookback {lookback_days}d)...")
-    # NVD caps each response page at resultsPerPage (we request the API max of
-    # 200). A single keywordSearch term returning more than 200 matches in the
+    # NVD caps each response page at resultsPerPage. The API max is 2000
+    # (verified 2026-10-20); this used to request 200, which with the 10-page
+    # guard capped a term at 2200 results and dropped ~450 WordPress CVEs in a
+    # 30-day backfill, and made long backfills hit the job timeout. A single keywordSearch term returning more than 200 matches in the
     # lookback window (e.g. a broad vendor/product pair like "microsoft
     # windows" during a busy Patch Tuesday period) previously had its excess
     # results silently dropped -- totalResults was fetched into the schema
@@ -812,12 +854,13 @@ def fetch_nvd_candidates(watchlist, api_key):
     # matches in an 8-day (or 2-day CI) window would itself be a data anomaly
     # worth surfacing, not silently paginating through unbounded.
     MAX_EXTRA_PAGES = 10
+    NVD_PAGE = 2000
     for kind, term, vendor, product in search_terms:
         params = {
             "keywordSearch": term,
             "lastModStartDate": start.strftime(date_fmt),
             "lastModEndDate": end.strftime(date_fmt),
-            "resultsPerPage": 200,
+            "resultsPerPage": NVD_PAGE,
         }
         # Multi-word keywords must match as a phrase. Without keywordExactMatch
         # NVD ANDs the words anywhere in the record, so "Check Point" matched
@@ -834,12 +877,12 @@ def fetch_nvd_candidates(watchlist, api_key):
         page = 0
         while len(vulns) < total_results and page < MAX_EXTRA_PAGES:
             page += 1
-            page_params = dict(params, startIndex=page * 200)
+            page_params = dict(params, startIndex=page * NVD_PAGE)
             page_result = nvd_query(page_params, api_key)
             time.sleep(delay)
             if not page_result:
                 print(f"  WARNING: NVD pagination fetch failed for term "
-                      f"'{term}' page {page} (startIndex={page * 200}); "
+                      f"'{term}' page {page} (startIndex={page * NVD_PAGE}); "
                       f"proceeding with {len(vulns)}/{total_results} results "
                       f"for this term.", file=sys.stderr)
                 break
@@ -1811,7 +1854,8 @@ def main():
         | {a.get("cve_id") for a in existing_alerts}
     news_ids = intel_exploited_cve_ids(load_json_file(INTEL_PATH, {}),
                                        int(os.environ.get("KEV_LOOKBACK_DAYS", "14")))
-    kev_candidates = fetch_kev_candidates(kev_map, already_known, nvd_api_key, news_ids=news_ids)
+    kev_candidates = fetch_kev_candidates(kev_map, already_known, nvd_api_key, news_ids=news_ids,
+                                          watchlist=watchlist)
 
     all_candidates = list(nvd_candidates.values()) + kev_candidates + dependabot_candidates + ghsa_candidates
     all_cve_ids = {c["cve_id"] for c in all_candidates if c.get("cve_id") and c["cve_id"].startswith("CVE-")}
