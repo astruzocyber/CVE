@@ -996,5 +996,42 @@ class TestReadmittedKeepsFirstSeen(unittest.TestCase):
         self.assertIn("known_first_seen(key, existing_by_key, pruned_first_seen", src)
 
 
+class TestKevOutageDoesNotCorruptData(unittest.TestCase):
+    """A failed CISA KEV fetch returns {}. That must not wipe the KEV baseline
+    (the next good run would re-announce the whole catalog as new) and must
+    not let main() write alerts/stats with every KEV flag cleared."""
+
+    def test_empty_catalog_keeps_snapshot_and_feed(self):
+        import aggregate
+        with tempfile.TemporaryDirectory() as d:
+            snap = os.path.join(d, "kev_snapshot.json")
+            feed_json = os.path.join(d, "feed.json")
+            feed_xml = os.path.join(d, "feed.xml")
+            real = {f"CVE-2020-{i:04d}": {"cveID": f"CVE-2020-{i:04d}"} for i in range(50)}
+            with mock.patch.object(aggregate, "KEV_SNAPSHOT_PATH", snap), \
+                 mock.patch.object(aggregate, "FEED_JSON_PATH", feed_json), \
+                 mock.patch.object(aggregate, "FEED_XML_PATH", feed_xml):
+                aggregate.build_kev_feed(real)   # seed baseline
+                aggregate.build_kev_feed({})     # outage run
+                with open(snap) as f:
+                    self.assertEqual(len(json.load(f)), 50)
+                aggregate.build_kev_feed(real)   # recovery run
+                with open(feed_json) as f:
+                    self.assertEqual(json.load(f)["items"], [])
+
+    def test_main_aborts_before_writing_when_kev_unavailable(self):
+        import aggregate
+        with mock.patch.object(aggregate, "fetch_kev", return_value={}), \
+             mock.patch.object(aggregate, "fetch_nvd_candidates") as nvd, \
+             mock.patch.object(aggregate, "save_json_file") as save, \
+             mock.patch.object(aggregate, "append_history") as hist:
+            with self.assertRaises(SystemExit) as cm:
+                aggregate.main()
+            self.assertNotEqual(cm.exception.code, 0)
+            nvd.assert_not_called()
+            save.assert_not_called()
+            hist.assert_not_called()
+
+
 if __name__ == "__main__":
     unittest.main()

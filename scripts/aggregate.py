@@ -1761,6 +1761,13 @@ def build_kev_feed(kev_map):
     snapshot_existed = os.path.exists(KEV_SNAPSHOT_PATH)
     prior_ids = set(load_json_file(KEV_SNAPSHOT_PATH, []))
     current_ids = set(kev_map.keys())
+    if not current_ids and prior_ids:
+        # Empty catalog = failed fetch, not CISA delisting everything. Keep the
+        # baseline; overwriting it with [] would make the next good run report
+        # the entire catalog as newly added.
+        print("KEV feed: empty KEV catalog this run; keeping prior snapshot and feed unchanged.",
+              file=sys.stderr)
+        return
 
     if not snapshot_existed:
         # First run ever: there is no real "prior" baseline, so every KEV
@@ -1903,6 +1910,15 @@ def main():
         print(f"Loaded {len(suppressions)} active suppression(s) from config/suppressions.yaml")
 
     kev_map = fetch_kev()
+    if not kev_map:
+        # fetch_kev() returns {} only when the catalog could not be fetched or
+        # failed schema validation (the real catalog has 1000+ entries). Going
+        # on would mark every tracked alert as not-KEV, drop the KEV bonus from
+        # every risk score, write a bogus trend row, and empty kev_snapshot.json
+        # so the next good run re-announces the whole catalog as "new" in the
+        # feed. Stop before writing anything; the last good data stays live.
+        sys.exit("ERROR: CISA KEV catalog unavailable this run; aborting without "
+                 "writing data so the last good snapshot stays published.")
     nvd_candidates = fetch_nvd_candidates(watchlist, nvd_api_key)
     dependabot_candidates = fetch_dependabot_alerts(watchlist["dependabot_repos"], gh_token)
     ghsa_candidates = fetch_ghsa_advisories(watchlist["ghsa_packages"], gh_token)
