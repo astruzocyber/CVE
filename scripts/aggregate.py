@@ -382,12 +382,21 @@ def extract_cvss(nvd_cve):
     metrics = nvd_cve.get("metrics", {})
     for key in ("cvssMetricV31", "cvssMetricV30", "cvssMetricV2", "cvssMetricV40"):
         if key in metrics and metrics[key]:
-            m = metrics[key][0]
-            cvss_data = m.get("cvssData", {})
-            score = cvss_data.get("baseScore")
-            if score is not None:
-                return float(score), key.replace("cvssMetric", "CVSS ")
+            for m in _primary_first(metrics[key]):
+                score = (m.get("cvssData") or {}).get("baseScore")
+                if score is not None:
+                    return float(score), key.replace("cvssMetric", "CVSS ")
     return None, None
+
+
+def _primary_first(entries):
+    """NVD lists one metric per scorer (NVD's own "Primary" and the CNA's
+    "Secondary") in no guaranteed order: CVE-2024-13342 carries Wordfence 8.1
+    first and NVD 9.8 second, so taking [0] made the score depend on array
+    order. Use NVD's Primary assessment when present (the headline score NVD
+    publishes), otherwise keep the original order."""
+    entries = [e for e in entries if isinstance(e, dict)]
+    return sorted(entries, key=lambda e: e.get("type") != "Primary")
 
 
 # NVD's cvssData already carries the individual CVSS vector components (attack
@@ -413,8 +422,9 @@ def extract_cvss(nvd_cve):
 def extract_cvss_vector_components(nvd_cve):
     metrics = nvd_cve.get("metrics", {})
     for key in ("cvssMetricV31", "cvssMetricV30", "cvssMetricV40"):
-        if key in metrics and metrics[key]:
-            cvss_data = metrics[key][0].get("cvssData", {})
+        if key in metrics and metrics[key] and _primary_first(metrics[key]):
+            # Same scorer as extract_cvss() so components match the score.
+            cvss_data = _primary_first(metrics[key])[0].get("cvssData") or {}
             av = cvss_data.get("attackVector")
             ac = cvss_data.get("attackComplexity")
             pr = cvss_data.get("privilegesRequired")

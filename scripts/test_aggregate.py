@@ -119,6 +119,23 @@ class TestExtractCvss(unittest.TestCase):
         self.assertEqual(extract_cvss({"metrics": {}}), (None, None))
         self.assertEqual(extract_cvss({}), (None, None))
 
+    def test_prefers_nvd_primary_over_cna_secondary_listed_first(self):
+        # Real NVD shape for CVE-2024-13342: CNA (Wordfence) 8.1 listed
+        # before NVD's own Primary 9.8.
+        nvd_cve = {"metrics": {"cvssMetricV31": [
+            {"source": "security@wordfence.com", "type": "Secondary",
+             "cvssData": {"baseScore": 8.1, "attackVector": "NETWORK", "attackComplexity": "HIGH"}},
+            {"source": "nvd@nist.gov", "type": "Primary",
+             "cvssData": {"baseScore": 9.8, "attackVector": "NETWORK", "attackComplexity": "LOW"}},
+        ]}}
+        self.assertEqual(extract_cvss(nvd_cve), (9.8, "CVSS V31"))
+        self.assertEqual((extract_cvss_vector_components(nvd_cve) or {}).get("attack_complexity"), "LOW")
+
+    def test_secondary_only_still_used(self):
+        nvd_cve = {"metrics": {"cvssMetricV31": [
+            {"source": "psirt@cisco.com", "type": "Secondary", "cvssData": {"baseScore": 8.6}}]}}
+        self.assertEqual(extract_cvss(nvd_cve), (8.6, "CVSS V31"))
+
 
 class TestExtractCvssVectorComponents(unittest.TestCase):
     def test_v31_extracted(self):
