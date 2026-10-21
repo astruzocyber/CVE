@@ -136,9 +136,36 @@ export function activeFilterChips(values = readFilters()) {
   return chips;
 }
 
+// Dependency names match whole names only: a plain substring test matched "ms"
+// inside "forms", "ws" inside "allows" and "os" inside "cisco ios" (thousands of
+// unrelated alerts). Package names can contain . _ - @ /, so those count as part
+// of the name ("openssl" does not match "openssl_encrypt" or "pyopenssl"); a
+// trailing sentence period still ends the name.
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const depMatchers = new WeakMap();
+
+function packageMatchers(names) {
+  let m = depMatchers.get(names);
+  if (!m) {
+    m = [...names].filter(Boolean).map((pkg) => ({
+      pkg,
+      re: new RegExp(`(?<![a-z0-9._@/-])${escapeRe(pkg)}(?![a-z0-9_@-]|\\.[a-z0-9])`),
+    }));
+    depMatchers.set(names, m);
+  }
+  return m;
+}
+
 function matchesPackages(alert, names) {
-  const haystack = `${(alert.affected || []).join(" ")} ${alert.description || ""}`.toLowerCase();
-  for (const pkg of names) if (pkg && haystack.includes(pkg)) return true;
+  // "vendor/product" tags: the whole tag, or its vendor or product part, exactly.
+  const tags = new Set();
+  for (const vp of alert.affected || []) {
+    const s = String(vp).toLowerCase();
+    tags.add(s);
+    for (const part of s.split("/")) tags.add(part.trim());
+  }
+  const text = String(alert.description || "").toLowerCase();
+  for (const { pkg, re } of packageMatchers(names)) if (tags.has(pkg) || re.test(text)) return true;
   return false;
 }
 

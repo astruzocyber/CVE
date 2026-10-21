@@ -88,3 +88,28 @@ test("published breakdown chip counts equal facet filter results", () => {
   assert.ok(checked > 0, "stats.json has no breakdowns to check");
   assert.deepEqual(bad, []);
 });
+
+test("dependency filter matches whole package names, not substrings of other words", () => {
+  const alerts = [
+    A("CVE-1", { description: "Prototype pollution in qs before 6.10.3." }),
+    A("CVE-2", { description: "A flaw in the FAQs endpoint and in form handling for systems." }),
+    A("CVE-3", { affected: ["openssl/openssl"] }),
+    A("CVE-4", { description: "openssl_encrypt() misuse in pyOpenSSL wrappers." }),
+    A("CVE-5", { description: "The ws package for Node.js allows DoS." }),
+    A("CVE-6", { description: "Escalation via crafted HTTP headers in workflows." }),
+    A("CVE-7", { description: "golang.org/x/net/html: infinite loop." }),
+  ];
+  const ids = (names) => {
+    state.alerts = alerts;
+    state.searchIndex = buildSearchIndex(alerts);
+    state.depPackages = new Set(names);
+    const out = alerts.filter(makePredicate(defaults())).map((a) => a.cve_id);
+    state.depPackages = null;
+    return out;
+  };
+  assert.deepEqual(ids(["qs"]), ["CVE-1"]);
+  assert.deepEqual(ids(["ms"]), []);
+  assert.deepEqual(ids(["openssl"]), ["CVE-3"]);
+  assert.deepEqual(ids(["ws"]), ["CVE-5"]);
+  assert.deepEqual(ids(["golang.org/x/net", "net"]), ["CVE-7"]);
+});
