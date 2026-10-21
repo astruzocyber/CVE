@@ -119,6 +119,19 @@ class TestFetchIntel(unittest.TestCase):
                      "AWS Security Agent exploited 33 of 37 CVEs; separately, attackers exploited a Fortinet zero-day"):
             self.assertIn("exploited", F.classify(text, WATCH)[0], text)
 
+    def test_plural_or_can_update_breakage_is_vendor_issue(self):
+        # Real BleepingComputer / GBHackers titles (2026-10): plural "updates"
+        # and "can break" missed the vendor_issue rule, so an update breaking
+        # Exchange on a watched product scored medium instead of high.
+        for text in ("Microsoft: October Windows Server updates break Exchange sign-in, mail flow",
+                     "Microsoft Confirms October Windows Updates Can Break Exchange Server Email Services",
+                     "Microsoft: October Windows update may break Smart App Control"):
+            self.assertIn("vendor_issue", F.classify(text, WATCH)[0], text)
+        for text in ("AI-Found Linux Kernel Flaw Gives Local Users Root, and Can Break a Guest Out to the Host",
+                     "Frontier AI Broke the Vulnerability Math",
+                     "Microsoft Disrupts 3 Phishing Kits Linked to Over 1 Billion Scam Messages"):
+            self.assertNotIn("vendor_issue", F.classify(text, WATCH)[0], text)
+
     def test_bare_teams_not_watch_match(self):
         _, watch, _ = F.classify("How security teams handle alerts", WATCH)
         self.assertNotIn("teams", watch)

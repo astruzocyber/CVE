@@ -66,7 +66,7 @@ CATEGORY_RULES = [
      r"seo poison|\blures?\b|\bscams?\b"),
     ("vendor_issue", "Vendor / update issue",
      r"black screen|blue screen|\bBSOD\b|crash(?:es|ing)?\b|outage|known issue|bug (?:causing|that|breaks)|"
-     r"(?:update|patch) (?:may |could |will )?break|breaks? (?:windows|sign-?in|log-?in|boot|vpn|printing|apps?|outlook|teams)|boot ?loop|fails? to (?:boot|install|start|load)|roll(?:s|ed)? back|"
+     r"(?:update|patch)(?:e?s)? (?:may |could |can |will )?break|breaks? (?:windows|sign-?in|log-?in|boot|vpn|printing|apps?|outlook|teams)|boot ?loop|fails? to (?:boot|install|start|load)|roll(?:s|ed)? back|"
      r"pull(?:s|ed)? (?:the )?(?:update|patch)|update (?:issue|problem)s?|emergency (?:update|fix)|"
      r"out[- ]of[- ]band|service disruption|degraded"),
     ("patch", "Patch / advisory",
