@@ -101,6 +101,36 @@ class TestCloseSuppressedIssues(unittest.TestCase):
         self.assertEqual(len(patched), 1)
         self.assertTrue(patched[0].endswith("issues/51"))
 
+    def test_issue_beyond_2000_open_is_still_closed(self):
+        # 2399 open vulnerability-alert issues (Oct 2026): the oldest ones sit
+        # past page 20 of the newest-first listing and must still be checked.
+        import re as _re
+        suppressions = {"CVE-2099-77777": {"reason": "n/a", "expires": None}}
+        patched = []
+
+        def fake_urlopen(req, timeout=30):
+            url = req.full_url
+            if "issues?state=open" in url:
+                page = int(_re.search(r"[?&]page=(\d+)", url).group(1))
+                if page <= 24:
+                    return FakeResponse([{"number": page * 1000 + i,
+                                          "title": f"[VULN ALERT] CVE-2098-{page:02d}{i:03d}"}
+                                         for i in range(100)])
+                return FakeResponse([{"number": 7, "title": "[VULN ALERT] CVE-2099-77777 (risk 9)"}])
+            if req.get_method() == "PATCH":
+                patched.append(url)
+                return FakeResponse({"state": "closed"})
+            return FakeResponse({"id": 1})
+
+        with mock.patch.object(csi, "load_suppressions", return_value=suppressions), \
+             mock.patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            os.environ["GITHUB_TOKEN"] = "x"
+            os.environ["GITHUB_REPOSITORY"] = "astruzocyber/CVE"
+            csi.main()
+
+        self.assertEqual(len(patched), 1)
+        self.assertTrue(patched[0].endswith("issues/7"))
+
     def test_id_in_title_token_boundaries(self):
         self.assertTrue(csi.id_in_title("CVE-2025-5949", "[VULN ALERT] CVE-2025-5949 - x"))
         self.assertTrue(csi.id_in_title("CVE-2025-5949", "[VULN ALERT] CVE-2025-5949"))

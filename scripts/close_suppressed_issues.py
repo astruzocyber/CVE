@@ -92,12 +92,16 @@ def _api_request(url, token, method="GET", payload=None):
     return None
 
 
-def fetch_open_vuln_issues(repo, token):
-    """Paginate repos/{repo}/issues?state=open&labels=vulnerability-alert.
-    Bounded to a sane number of pages (20 x 100 = 2000 issues) as a defensive
-    ceiling -- this project has never come close to that volume."""
+MAX_PAGES = 200  # 200 x 100 = 20,000 open issues; defensive loop bound only
+
+
+def fetch_open_vuln_issues(repo, token, max_pages=MAX_PAGES):
+    """Paginate repos/{repo}/issues?state=open&labels=vulnerability-alert until
+    a short page. The old 20-page (2000 issue) ceiling was passed in October
+    2026 (2399 open), so the oldest issues (the API lists newest first) were
+    never checked against suppressions. Warns if the loop bound is reached."""
     issues = []
-    for page in range(1, 21):
+    for page in range(1, max_pages + 1):
         url = (f"{GITHUB_API}/repos/{repo}/issues"
                f"?state=open&labels=vulnerability-alert&per_page=100&page={page}")
         data = _api_request(url, token)
@@ -106,6 +110,9 @@ def fetch_open_vuln_issues(repo, token):
         issues.extend(data)
         if len(data) < 100:
             break
+    else:
+        print(f"  WARNING: stopped after {max_pages} pages ({len(issues)} open issues); "
+              f"older issues were not checked against suppressions.", file=sys.stderr)
     return issues
 
 
