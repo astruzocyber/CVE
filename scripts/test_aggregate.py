@@ -1033,5 +1033,34 @@ class TestKevOutageDoesNotCorruptData(unittest.TestCase):
             hist.assert_not_called()
 
 
+class TestEpssOutageKeepsPriorScores(unittest.TestCase):
+    """A failed EPSS batch used to overwrite every tracked alert in it with
+    epss_score=None, dropping the EPSS share of its risk score for that run."""
+
+    def test_failed_batch_ids_reported(self):
+        import aggregate
+        with mock.patch.object(aggregate, "http_get_json", side_effect=OSError("down")), \
+             mock.patch.object(aggregate.time, "sleep"):
+            failed = set()
+            out = aggregate.fetch_epss(["CVE-2024-0001", "CVE-2024-0002"], failed=failed)
+        self.assertEqual(out, {})
+        self.assertEqual(failed, {"CVE-2024-0001", "CVE-2024-0002"})
+
+    def test_prior_score_kept_only_for_failed_ids(self):
+        import aggregate
+        existing = [
+            {"cve_id": "CVE-2024-0001", "epss_score": 0.42, "epss_percentile": 0.97},
+            {"cve_id": "CVE-2024-0002", "epss_score": 0.10, "epss_percentile": 0.80},
+            {"cve_id": "CVE-2024-0003", "epss_score": None},
+        ]
+        fresh = {"CVE-2024-0002": {"epss": 0.20, "percentile": 0.90}}
+        out = aggregate.keep_prior_epss_on_failure(
+            fresh, {"CVE-2024-0001", "CVE-2024-0003"}, existing)
+        self.assertEqual(out["CVE-2024-0001"], {"epss": 0.42, "percentile": 0.97})
+        self.assertEqual(out["CVE-2024-0002"], {"epss": 0.20, "percentile": 0.90})  # fresh wins
+        self.assertNotIn("CVE-2024-0003", out)  # never invent a score
+        self.assertIs(aggregate.keep_prior_epss_on_failure(fresh, set(), existing), fresh)
+
+
 if __name__ == "__main__":
     unittest.main()

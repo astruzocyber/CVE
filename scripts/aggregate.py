@@ -1020,7 +1020,10 @@ def prune_loose_phrase_matches(alerts, watchlist):
 # ---------------------------------------------------------------------------
 # 3. EPSS
 # ---------------------------------------------------------------------------
-def fetch_epss(cve_ids):
+def fetch_epss(cve_ids, failed=None):
+    """Returns {cve: {epss, percentile}}. If `failed` (a set) is given, the IDs
+    of every batch that could not be fetched are added to it, so the caller can
+    tell "FIRST has no score" apart from "we couldn't ask this run"."""
     epss_scores = {}
     batch_size = 100
     ids = list(cve_ids)
@@ -1035,6 +1038,8 @@ def fetch_epss(cve_ids):
             try:
                 data, _ = http_get_json(url, timeout=30)
                 if not validate_schema("EPSS response", data, ["data"]):
+                    if failed is not None:
+                        failed.update(batch)
                     break
                 for item in data.get("data", []):
                     cve = item.get("cve")
@@ -1052,8 +1057,29 @@ def fetch_epss(cve_ids):
                     time.sleep(wait)
                 else:
                     print(f"  WARNING: EPSS batch failed after 3 attempts: {e}", file=sys.stderr)
+                    if failed is not None:
+                        failed.update(batch)
         time.sleep(0.5)
     return epss_scores
+
+
+def keep_prior_epss_on_failure(epss_map, failed_ids, existing_alerts):
+    """For CVEs whose EPSS batch failed this run, reuse the score already on
+    the tracked alert instead of overwriting it with None (which also dropped
+    the EPSS share from risk_score and set a bogus epss_score_prev delta).
+    CVEs FIRST answered for are never touched."""
+    if not failed_ids:
+        return epss_map
+    out = dict(epss_map)
+    kept = 0
+    for a in existing_alerts:
+        cve = a.get("cve_id")
+        if cve in failed_ids and cve not in out and a.get("epss_score") is not None:
+            out[cve] = {"epss": a["epss_score"], "percentile": a.get("epss_percentile")}
+            kept += 1
+    print(f"  EPSS: {len(failed_ids)} CVE(s) in failed batches; kept last known score for {kept}.",
+          file=sys.stderr)
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -1957,7 +1983,9 @@ def main():
     # to when NVD last modified the CVE record.
     all_cve_ids |= {a["cve_id"] for a in existing_alerts
                     if a.get("cve_id", "").startswith("CVE-")}
-    epss_map = fetch_epss(all_cve_ids) if all_cve_ids else {}
+    epss_failed = set()
+    epss_map = fetch_epss(all_cve_ids, failed=epss_failed) if all_cve_ids else {}
+    epss_map = keep_prior_epss_on_failure(epss_map, epss_failed, existing_alerts)
 
     filtered = [c for c in all_candidates
                 if c.get("cve_id") and passes_filters(c, watchlist, kev_map, epss_map, suppressions)]
