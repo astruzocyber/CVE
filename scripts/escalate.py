@@ -130,7 +130,12 @@ def load_env(path=ENV_PATH, priority_terms=None):
                          flags)
         excl = [str(t).strip() for t in (a.get("exclude") or []) if str(t).strip()]
         xpat = re.compile("|".join(re.escape(t) for t in excl), re.IGNORECASE) if excl else None
-        assets.append({"name": a["name"], "criticality": crit, "re": pat, "exclude": xpat})
+        # ignore: phrases blanked out before matching (the vendor named only as a
+        # research source, "Check Point Research"); unlike exclude, any other
+        # mention of the asset in the same text still matches
+        ign = sorted((str(t).strip() for t in (a.get("ignore") or []) if str(t).strip()), key=len, reverse=True)
+        ipat = re.compile("|".join(re.escape(t) for t in ign), re.IGNORECASE) if ign else None
+        assets.append({"name": a["name"], "criticality": crit, "re": pat, "exclude": xpat, "ignore": ipat})
         for t in terms:
             vendor_words.update(_words(t))
     win = cfg.get("window_days") or {}
@@ -156,7 +161,10 @@ def match_assets(text, assets):
     """[(asset, matched_term)] for every asset whose term appears in text."""
     hits = []
     for a in assets:
-        m = a["re"].search(text or "")
+        t = text or ""
+        if a.get("ignore"):
+            t = a["ignore"].sub(" ", t)
+        m = a["re"].search(t)
         if m and not (a["exclude"] and a["exclude"].search(text or "")):
             hits.append((a, m.group(0)))
     return hits

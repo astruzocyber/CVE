@@ -14,6 +14,7 @@
 #   medium   : niche or per-user software. WORK only at CVSS >= 9.8; escalates
 #              only when actively exploited.
 # exclude:    phrases that disqualify a match for that asset.
+# ignore:     phrases skipped when matching (other mentions in the same text still count).
 # match_case: true -> terms are case-sensitive (for names that are also
 #             ordinary words, e.g. "Workday", "Domo", "Deel").
 #
@@ -84,6 +85,9 @@ assets:
   - name: "Check Point / Avanan"
     criticality: critical
     terms: ["Check Point", "Avanan", "Harmony Email"]   # exact phrase (NVD AND-matches "check"+"point")
+    # Check Point as the research source of a news story is not a Check Point product issue
+    ignore: ["Check Point Research", "Source: Check Point", "Check Point says", "Check Point said",
+             "Check Point reported", "Check Point researchers"]
   - name: "Network edge (Cisco / Meraki / Peplink / SonicWall CSE)"
     criticality: critical
     terms: ["Cisco Meraki", "Meraki", "Cisco IOS", "IOS XE", "Cisco ISR", "Peplink",

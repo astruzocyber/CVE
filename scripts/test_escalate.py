@@ -124,6 +124,19 @@ class EscalateTests(unittest.TestCase):
                      "Palo Alto-based vendor patches its scanner"):
             self.assertNotIn(pa, [a["name"] for a, _ in E.match_assets(text, env()["assets"])], text)
 
+    def test_check_point_as_research_source_is_not_check_point_asset(self):
+        # Real intel (Help Net Security 2026-10-19): brand-phishing stats "tracked by
+        # Check Point Research ... (Source: Check Point)" escalated as Check Point / Avanan.
+        cp = "Check Point / Avanan"
+        for text in ("Microsoft accounted for 33% of brand impersonation attempts tracked by Check Point "
+                     "Research in Q3. Top 10 most impersonated brands (Source: Check Point)",
+                     "Microsoft behind a third of brand phishing, Check Point says - News Ghana",
+                     "19th October - Threat Intelligence Report - Check Point Research"):
+            self.assertNotIn(cp, [a["name"] for a, _ in E.match_assets(text, env()["assets"])], text)
+        for text in ("Authentication bypass in the Check Point SmartConsole login process.",
+                     "Check Point Research found that Check Point Quantum Security Gateway VPN is exploited"):
+            self.assertIn(cp, [a["name"] for a, _ in E.match_assets(text, env()["assets"])], text)
+
     def test_teams_vishing_news_escalates(self):
         out = E.build([], {"items": [intel("t1", "Hackers pose as IT support in Microsoft Teams calls",
                                            ["social_engineering"])]}, env(), NOW)
