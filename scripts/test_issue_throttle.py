@@ -55,6 +55,25 @@ class MentionTests(unittest.TestCase):
         self.assertNotRegex(N.issue_title(a), self.MENTION)
         self.assertNotRegex(N.build_digest_body([a]), self.MENTION)
 
+    def test_issue_body_never_references_issues(self):
+        # Real cases: CVE-2026-46052 "Not tainted 6.18.17-i1-amd #950", CVE-2025-40273
+        # "[#1] SMP", CVE-2025-62429 "Prior to version 5.5.2 #147" -> cross-referenced
+        # this repo's unrelated issues #1/#950/#147.
+        a = {"cve_id": "CVE-2025-62429", "description": "Not tainted 6.8.6 #1 Hardware. "
+             "Oops [#1] SMP. Prior to 5.5.2 #147, see GH-12 and other/repo#34. "
+             "Ref https://x.example/page#1 and https://github.com/a/b#5 &#35;9 C# code.",
+             "affected": ["php/php"]}
+        body = N.build_issue_body(a)
+        self.assertIn("6.8.6 #\u200b1 Hardware", body)
+        self.assertIn("other/repo#\u200b34", body)
+        self.assertIn("5.5.2 #\u200b147", body)
+        self.assertIn("[#\u200b1]", body)
+        self.assertIn("GH-\u200b12", body)
+        self.assertIn("https://x.example/page#1", body)       # URL fragments untouched
+        self.assertIn("https://github.com/a/b#5", body)
+        self.assertIn("&#35;9", body)
+        self.assertIn("### Triage checklist", body)          # headings untouched
+
 
 if __name__ == "__main__":
     unittest.main()

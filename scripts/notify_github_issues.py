@@ -72,10 +72,21 @@ def priority_label(risk_score):
 # stops the mention while the text still reads the same. Emails (a@b.com) are
 # left alone: GitHub never mentions there and the lookbehind skips them.
 _MENTION_RE = re.compile(r"(?<![A-Za-z0-9_`])@(?=[A-Za-z0-9])")
+# Same problem for issue references: kernel oops traces ("Not tainted 6.8.6 #1",
+# "[#1] SMP") and version strings ("5.5.2 #147") made GitHub link to OUR repo's
+# unrelated issues #1/#147 and post "mentioned this issue" on them (issue #1
+# collected 14 such cross-references). Covers "#123", "GH-123" and
+# "owner/repo#123"; URL fragments ("/page#1", "&#35;") are left alone.
+_ISSUE_REF_RE = re.compile(r"(?<![\w&/#])(#|GH-)(?=\d)")
+_REPO_REF_RE = re.compile(r"(?<![\w./:@-])([\w.-]+/[\w.-]+#)(?=\d)")
 
 
 def no_mention(text):
-    return _MENTION_RE.sub("@\u200b", text) if isinstance(text, str) else text
+    if not isinstance(text, str):
+        return text
+    text = _MENTION_RE.sub("@\u200b", text)
+    text = _REPO_REF_RE.sub("\\1\u200b", text)
+    return _ISSUE_REF_RE.sub("\\1\u200b", text)
 
 
 def issue_title(alert):
