@@ -920,6 +920,8 @@ def fetch_nvd_candidates(watchlist, api_key):
                     phrase_in(term, extract_description(cve)) if is_phrase(term)
                     else single_word_hit(term, cve)):
                 continue
+            if kind == "vendor_product" and cpe_names_other_vendor(vendor, product, cve):
+                continue
             entry = candidates.setdefault(cve_id, nvd_entry_from_cve(cve))
             if kind == "vendor_product":
                 pair = f"{vendor}/{product}"
@@ -968,6 +970,29 @@ def _before_single_word_filter(alert):
     if fs.tzinfo is None:
         fs = fs.replace(tzinfo=timezone.utc)
     return fs < SINGLE_WORD_FILTER_SINCE
+
+
+def cpe_names_other_vendor(vendor, product, cve):
+    """A vendor/product watchlist pair is searched as NVD keywordSearch
+    "vendor product", which matches the words anywhere in the text: "php php"
+    returned libxml2 bugs and WordPress-plugin "PHP Object Injection" CVEs,
+    "openssl openssl" returned curl/libssh bugs, "nginx nginx" Rack bugs (live
+    NVD, audit 2026-10-21), and each was stored as affected 'php/php' etc.
+    When NVD has assigned CPEs and none of them names the pair's vendor or
+    product (as CPE vendor or product), the record is about something else.
+    Records with no CPEs yet are left as before (cannot tell)."""
+    names = {str(vendor or "").lower(), str(product or "").lower()} - {""}
+    seen_any = False
+    for conf in cve.get("configurations") or []:
+        for node in conf.get("nodes") or []:
+            for m in node.get("cpeMatch") or []:
+                parts = str(m.get("criteria", "")).lower().split(":")
+                if len(parts) < 5:
+                    continue
+                seen_any = True
+                if parts[3] in names or parts[4] in names:
+                    return False
+    return seen_any
 
 
 def is_phrase(term):

@@ -1043,6 +1043,37 @@ class TestFetchPhraseBoundary(unittest.TestCase):
         self.assertEqual(sorted(got), ["CVE-2"])
 
 
+class TestFetchVendorProductCpe(unittest.TestCase):
+    """'php php' keywordSearch returns libxml2 / WordPress-plugin CVEs; a record
+    whose CPEs name neither 'php' vendor nor product must not be tagged php/php."""
+
+    def test_other_vendor_cpe_rejected(self):
+        from unittest import mock
+        import aggregate as A
+
+        def cve(i, desc, cpes):
+            confs = [{"nodes": [{"cpeMatch": [{"criteria": c, "vulnerable": True} for c in cpes]}]}] if cpes else []
+            return {"cve": {"id": i, "descriptions": [{"lang": "en", "value": desc}], "configurations": confs}}
+
+        def fake(params, api_key):
+            if params.get("keywordSearch") == "php php":
+                v = [cve("CVE-1", "libxml2 overflow, see php bug tracker", ["cpe:2.3:a:xmlsoft:libxml2:2.9.4:*:*:*:*:*:*:*"]),
+                     cve("CVE-2", "PHP 8.3 heap overflow", ["cpe:2.3:a:php:php:*:*:*:*:*:*:*:*"]),
+                     cve("CVE-3", "PHP Object Injection in a plugin", [])]
+                return {"vulnerabilities": v, "totalResults": 3}
+            if params.get("keywordSearch") == "nginx nginx":
+                return {"vulnerabilities": [cve("CVE-4", "nginx resolver bug", ["cpe:2.3:a:f5:nginx:*:*:*:*:*:*:*:*"])],
+                        "totalResults": 1}
+            return {"vulnerabilities": [], "totalResults": 0}
+
+        with mock.patch.object(A, "nvd_query", side_effect=fake), mock.patch.object(A.time, "sleep"):
+            got = A.fetch_nvd_candidates({"keywords": [], "priority_keywords": [],
+                                          "vendors_products": [{"vendor": "php", "product": "php"},
+                                                               {"vendor": "nginx", "product": "nginx"}]}, None)
+        # CVE-3 has no CPEs yet (cannot tell, kept); CVE-4 nginx now under vendor f5
+        self.assertEqual(sorted(got), ["CVE-2", "CVE-3", "CVE-4"])
+
+
 class TestReadmittedKeepsFirstSeen(unittest.TestCase):
     """An alert pruned as loose-phrase noise and re-admitted in the same run by a
     CPE pair must keep its original first_seen (it was reset to 'now' and showed
