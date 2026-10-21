@@ -91,6 +91,21 @@ class TestFetchIntel(unittest.TestCase):
             {"title": "Cisco Meraki Security Hardening Release",
              "summary": "found during internal testing and are not known to be actively exploited."}))
 
+    def test_actor_exploiting_flaw_tagged_exploited(self):
+        # Real intel titles/summaries that carried no exploited tag before.
+        for text in ("Hackers Exploit Palo Alto Networks PAN-OS Flaw to Bypass MFA and Deploy Ransomware",
+                     "Ransomware operators are exploiting a vulnerability in Palo Alto Networks PAN-OS",
+                     "Cyber threat actors are actively exploiting the vulnerability to gain initial access",
+                     "Cisco Warns of Active Attacks Exploiting New Critical Secure Email Gateway Vulnerability",
+                     "Threat actors have begun to exploit a chain of vulnerabilities in Plex Media Server"):
+            self.assertIn("exploited", F.classify(text, WATCH)[0], text)
+        for text in ("By exploiting this flaw, an attacker with an existing session can mint tokens",
+                     "Threat actors are exploiting GTA6 hype with fake leaked downloads",
+                     "attackers exploit vulnerable university and government websites to manipulate search results",
+                     "Attackers could exploit the flaw to run code",
+                     "Hackers are not exploiting the bug yet"):
+            self.assertNotIn("exploited", F.classify(text, WATCH)[0], text)
+
     def test_bare_teams_not_watch_match(self):
         _, watch, _ = F.classify("How security teams handle alerts", WATCH)
         self.assertNotIn("teams", watch)

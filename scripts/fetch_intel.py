@@ -50,7 +50,14 @@ CATEGORY_RULES = [
      r"(?<!could be )(?<!can be )(?<!may be )(?<!to be )(?<!if )\bexploited\b|actively exploited|exploited in (?:the wild|attacks)|in[- ]the[- ]wild|zero[- ]days?\b|\b0[- ]?day\b|"
      r"under (?:active )?attack|exploitation (?:attempts|activity)|known exploited|mass[- ]exploit|"
      r"active(?:ly)? exploitation|amid (?:active )?exploitation|"
-     r"(?:malware|backdoor|ransomware|implant) (?:deployed|delivered|dropped) via"),
+     r"(?:malware|backdoor|ransomware|implant) (?:deployed|delivered|dropped) via|"
+     # "Hackers are exploiting a ... flaw", "Threat Actors Exploit Critical X Flaws",
+     # "Active Attacks Exploiting New ... Vulnerability". Needs a plural/actor
+     # subject and a vuln noun within 6 words, so "By exploiting this flaw, an
+     # attacker could" and "exploiting GTA6 hype" stay untagged.
+     r"\b(?:hackers|attackers|threat actors?|cyber ?criminals|operators|gangs|crooks|attacks)\s+"
+     r"(?:(?:are|were|have|has|been|actively|now|still|currently|continue to|began(?: to)?|begun(?: to)?|started(?: to)?)\s+)*"
+     r"exploit(?:s|ing)?\b(?:\W+\w+){0,6}?\W+(?:vulnerabilit(?:y|ies)|flaws?|bugs?|zero[- ]days?|CVE-\d{4}-\d+)\b"),
     ("social_engineering", "Social engineering",
      r"(?<!anti-)(?<!anti)phish|vishing|smishing|social[- ]engineer|impersonat|fake (?:it|help ?desk|tech|support|captcha)|"
      r"\bit support\b|help ?desk|tech support scam|quick assist|clickfix|callback scam|"
