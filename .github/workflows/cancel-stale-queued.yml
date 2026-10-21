@@ -45,7 +45,7 @@ jobs:
           FOUND_ANY=0
           # status=queued restricts results to the GH-side state this watchdog exists
           # to catch; per_page=50 is far above the number of scheduled runs that could
-          # ever legitimately stack up (schedule is every 4h, this checks every 15m).
+          # ever legitimately stack up (schedule is every 2h, this checks every 15m).
           # Note: deliberately NOT piping into `while read` -- that runs the loop
           # in a subshell, silently discarding FOUND_ANY back in the parent shell
           # (verified locally: without process substitution FOUND_ANY stays 0

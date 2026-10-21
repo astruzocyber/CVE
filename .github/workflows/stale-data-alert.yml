@@ -80,7 +80,7 @@ jobs:
               echo "Data is stale (${AGE_HOURS}h >= ${THRESHOLD}h) -- filing a new issue."
               BODY_FILE=$(mktemp)
               {
-                echo "The aggregation pipeline last successful data refresh (docs/data/stats.json generated_at) was **${GENERATED_AT}**, which is now ${AGE_HOURS} hours ago -- past the ${THRESHOLD}h staleness threshold (5x the normal 4h schedule)."
+                echo "The aggregation pipeline last successful data refresh (docs/data/stats.json generated_at) was **${GENERATED_AT}**, which is now ${AGE_HOURS} hours ago -- past the ${THRESHOLD}h staleness threshold (the aggregation is scheduled every 2h, so this means many missed or failed runs)."
                 echo ""
                 echo "This usually means the CVE/KEV/Dependabot Alert Aggregation workflow has stopped running, is failing, or a run is stuck queued (see cancel-stale-queued.yml). Check: https://github.com/${REPO}/actions/workflows/cve-alerts.yml"
                 echo ""
