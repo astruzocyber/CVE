@@ -189,6 +189,20 @@ const strMissingLast = (get, dir) => (a, b) => {
   return dir * x.localeCompare(y);
 };
 
+// CVE ids compare by year, then by sequence number as a number: plain string
+// order put CVE-2026-100107 before CVE-2026-9999. Non-CVE ids (GHSA) follow.
+const CVE_ID_RE = /^CVE-(\d{4})-(\d+)$/i;
+const cveIdAsc = (a, b) => {
+  const x = a.cve_id || "";
+  const y = b.cve_id || "";
+  if (!x || !y) return (!x) - (!y);
+  const mx = CVE_ID_RE.exec(x);
+  const my = CVE_ID_RE.exec(y);
+  if (mx && my) return (Number(mx[1]) - Number(my[1])) || (Number(mx[2]) - Number(my[2])) || x.localeCompare(y);
+  if (mx || my) return mx ? -1 : 1;
+  return x.localeCompare(y);
+};
+
 export const SORTS = {
   risk_score: desc("risk_score"),
   cvss_score: desc("cvss_score"),
@@ -197,7 +211,7 @@ export const SORTS = {
   first_seen_oldest: strMissingLast((a) => a.first_seen, 1),
   published: strMissingLast((a) => a.published, -1),
   kev_due_date: strMissingLast((a) => a.kev_due_date, 1),
-  cve_id: strMissingLast((a) => a.cve_id, 1),
+  cve_id: cveIdAsc,
   risk_delta: (a, b) => {
     const da = riskDelta(a);
     const db = riskDelta(b);

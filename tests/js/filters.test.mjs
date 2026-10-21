@@ -57,6 +57,15 @@ test("sorts put missing values last", () => {
   assert.equal([...xs].sort(SORTS.kev_due_date)[0].cve_id, "a");
 });
 
+test("CVE ID sort is numeric, not alphabetical", () => {
+  // Alphabetically "CVE-2026-100107" < "CVE-2026-9999", which put 6-digit ids
+  // in the middle of the year and 5-digit ids at the very end.
+  const ids = ["CVE-2026-97818", "CVE-2026-100107", "CVE-2025-123456", "CVE-2026-0551", "CVE-2026-9999", "GHSA-abcd-1234-wxyz"];
+  const sorted = ids.map((id) => A(id)).sort(SORTS.cve_id).map((a) => a.cve_id);
+  assert.deepEqual(sorted, ["CVE-2025-123456", "CVE-2026-0551", "CVE-2026-9999", "CVE-2026-97818", "CVE-2026-100107", "GHSA-abcd-1234-wxyz"]);
+  assert.equal([A(""), A("CVE-2026-1")].sort(SORTS.cve_id)[1].cve_id, "", "missing id still sorts last");
+});
+
 // Invariant on the published data: every breakdown chip's number (from stats.json)
 // must equal the number of results its exact-tag filter returns.
 test("published breakdown chip counts equal facet filter results", () => {
