@@ -14,6 +14,7 @@ a notification on rare failure (visible in the Action run logs either way).
 """
 import json
 import os
+import re
 import sys
 import time
 import urllib.request
@@ -65,7 +66,33 @@ def priority_label(risk_score):
     return "priority-p3-low"
 
 
+# Upstream text (NVD/GHSA descriptions often credit researchers as "@handle")
+# is pasted into issues on a PUBLIC repo, where GitHub renders "@handle" as a
+# user mention and notifies that stranger. A zero-width space after the "@"
+# stops the mention while the text still reads the same. Emails (a@b.com) are
+# left alone: GitHub never mentions there and the lookbehind skips them.
+_MENTION_RE = re.compile(r"(?<![A-Za-z0-9_`])@(?=[A-Za-z0-9])")
+
+
+def no_mention(text):
+    return _MENTION_RE.sub("@\u200b", text) if isinstance(text, str) else text
+
+
+def issue_title(alert):
+    cve_id = alert.get("cve_id", "UNKNOWN")
+    kev_tag = " [KEV]" if alert.get("kev") else ""
+    ransomware_tag = " [RANSOMWARE]" if alert.get("kev_ransomware_use") else ""
+    risk = alert.get("risk_score")
+    risk_tag = f" (risk {risk})" if risk is not None else ""
+    return no_mention(f"[VULN ALERT] {cve_id}{kev_tag}{ransomware_tag}{risk_tag} - "
+                      f"{', '.join(alert.get('affected', [])) or alert.get('source')}")
+
+
 def build_issue_body(alert):
+    return no_mention(_issue_body(alert))
+
+
+def _issue_body(alert):
     kev_line = "Yes (CISA Known Exploited Vulnerabilities catalog)" if alert.get("kev") else "No"
     epss = alert.get("epss_score")
     epss_line = f"{epss:.2%}" if isinstance(epss, (int, float)) else "unknown"
@@ -166,7 +193,7 @@ def build_digest_body(overflow):
                      f"{'yes' if a.get('kev') else ''} | {aff} |")
     if len(overflow) > 300:
         lines.append(f"\n…and {len(overflow) - 300} more (see the dashboard).")
-    return "\n".join(lines)
+    return no_mention("\n".join(lines))
 
 
 def create_issue(repo, token, title, body, labels):
@@ -244,12 +271,7 @@ def main():
         if i:
             time.sleep(ISSUE_PACING_S)
         cve_id = alert.get("cve_id", "UNKNOWN")
-        kev_tag = " [KEV]" if alert.get("kev") else ""
-        ransomware_tag = " [RANSOMWARE]" if alert.get("kev_ransomware_use") else ""
-        risk = alert.get("risk_score")
-        risk_tag = f" (risk {risk})" if risk is not None else ""
-        title = (f"[VULN ALERT] {cve_id}{kev_tag}{ransomware_tag}{risk_tag} - "
-                 f"{', '.join(alert.get('affected', [])) or alert.get('source')}")
+        title = issue_title(alert)
         body = build_issue_body(alert)
         labels = ["vulnerability-alert", severity_label(alert.get("cvss_score")),
                    priority_label(alert.get("risk_score"))]

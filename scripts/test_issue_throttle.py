@@ -37,5 +37,24 @@ class ThrottleTests(unittest.TestCase):
         self.assertEqual(N.retry_wait({}, 5), 120)
 
 
+class MentionTests(unittest.TestCase):
+    """Upstream text (NVD/GHSA descriptions, credits) is pasted into issues on a
+    public repo. GitHub turns '@handle' into a user mention and notifies that
+    stranger (real case: CVE-2026-11325 'Thanks to @agentka99 and @beg1nn3r')."""
+    MENTION = r"(?<![A-Za-z0-9_`])@[A-Za-z0-9]"
+
+    def test_issue_body_never_mentions_users(self):
+        a = {"cve_id": "CVE-2026-11325", "description": "Thanks to @agentka99 and @beg1nn3r. "
+             "In @payloadcms/plugin-form-builder. Mail sec@example.com.",
+             "affected": ["@scope/pkg"], "matched_keywords": ["@x"], "kev": True,
+             "kev_required_action": "ask @someone"}
+        body = N.build_issue_body(a)
+        self.assertNotRegex(body, self.MENTION)
+        self.assertIn("sec@example.com", body)          # emails untouched
+        self.assertIn("payloadcms/plugin-form-builder", body)   # text otherwise intact
+        self.assertNotRegex(N.issue_title(a), self.MENTION)
+        self.assertNotRegex(N.build_digest_body([a]), self.MENTION)
+
+
 if __name__ == "__main__":
     unittest.main()
