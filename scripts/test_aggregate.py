@@ -967,5 +967,34 @@ class TestFetchPhraseBoundary(unittest.TestCase):
         self.assertEqual(sorted(got), ["CVE-2"])
 
 
+class TestReadmittedKeepsFirstSeen(unittest.TestCase):
+    """An alert pruned as loose-phrase noise and re-admitted in the same run by a
+    CPE pair must keep its original first_seen (it was reset to 'now' and showed
+    as 'New in last 24 h', e.g. CVE-2023-0286 on 2026-10-20)."""
+
+    def test_pruned_then_readmitted(self):
+        import aggregate as A
+        old = "2026-10-14T22:59:41+00:00"
+        alerts = [{"cve_id": "CVE-2023-0286", "source": "nvd", "matched_keywords": ["Zoom"],
+                   "description": "X.400 address type confusion in OpenSSL", "affected": [],
+                   "first_seen": old}]
+        pruned_first_seen = {A.unique_key(a): a["first_seen"] for a in alerts}
+        kept, removed = A.prune_loose_phrase_matches(alerts, {"keywords": ["Zoom"]})
+        self.assertEqual(removed, ["CVE-2023-0286"])
+        by_key = {A.unique_key(a): a for a in kept}
+        now = "2026-10-20T16:55:32+00:00"
+        self.assertEqual(A.known_first_seen("CVE-2023-0286::nvd", by_key, pruned_first_seen, now), old)
+        # Genuinely unknown key still falls back to now; a live prior wins.
+        self.assertEqual(A.known_first_seen("CVE-9::nvd", by_key, pruned_first_seen, now), now)
+        self.assertEqual(A.known_first_seen("K", {"K": {"first_seen": "a"}}, {"K": "b"}, now), "a")
+
+    def test_main_snapshots_before_prune(self):
+        import inspect
+        import aggregate as A
+        src = inspect.getsource(A.main)
+        self.assertLess(src.index("pruned_first_seen = "), src.index("prune_loose_phrase_matches("))
+        self.assertIn("known_first_seen(key, existing_by_key, pruned_first_seen", src)
+
+
 if __name__ == "__main__":
     unittest.main()

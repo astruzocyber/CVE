@@ -1435,6 +1435,15 @@ def unique_key(entry):
     return f"{entry['cve_id']}::{entry['source']}"
 
 
+def known_first_seen(key, existing_by_key, pruned_first_seen, default):
+    """first_seen for an already-seen alert. An alert pruned earlier in this
+    same run (loose-phrase prune) and re-admitted by another match (e.g. a CPE
+    vendor/product pair) keeps the date it was really first seen, instead of
+    being reset to now and miscounted as 'new in last 24 h'."""
+    prior = existing_by_key.get(key) or {}
+    return prior.get("first_seen") or pruned_first_seen.get(key) or default
+
+
 def collapse_advisory_twins(by_key):
     """Self-heal: if a CVE has both an NVD alert and a KEV-only alert, keep the
     NVD one (richer record) with the earliest first_seen. Returns #removed."""
@@ -1899,6 +1908,8 @@ def main():
     ghsa_candidates = fetch_ghsa_advisories(watchlist["ghsa_packages"], gh_token)
 
     existing_alerts = load_json_file(ALERTS_PATH, [])
+    pruned_first_seen = {unique_key(a): a.get("first_seen") for a in existing_alerts
+                         if a.get("cve_id") and a.get("source")}
     existing_alerts, loose_removed = prune_loose_phrase_matches(existing_alerts, watchlist)
     if loose_removed:
         print(f"  Removed {len(loose_removed)} alert(s) matched only by a keyword "
@@ -1969,7 +1980,8 @@ def main():
             # whether a CVE just got materially more or less urgent since an analyst
             # last looked at it.
             prior = existing_by_key.get(key, final)
-            merged = {**final, "first_seen": prior.get("first_seen", final["first_seen"]),
+            merged = {**final, "first_seen": known_first_seen(key, existing_by_key, pruned_first_seen,
+                                                              final["first_seen"]),
                       "risk_score_prev": prior.get("risk_score"),
                       # Mirrors risk_score_prev immediately above, but for the raw EPSS
                       # probability rather than the composite score: EPSS publishes new
