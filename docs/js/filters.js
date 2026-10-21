@@ -16,6 +16,10 @@ import {
  */
 export const FILTERS = [
   { key: "q", param: "q", kind: "text", def: "", el: () => byId("search"), label: (v) => `Search: “${v}”` },
+  // Exact breakdown-chip filter ("kw:<keyword>", "cwe:<id>", "vp:<vendor/product>"),
+  // so a chip's result count equals the number printed on the chip (a free-text
+  // search for "cisco/ios" also matched cisco/ios_xe: 75 results under a "33" chip).
+  { key: "facet", param: "facet", kind: "text", def: "", el: () => byId("facet-filter"), label: facetLabel },
   { key: "kev", param: "kev", kind: "select", def: "all", el: () => byId("kev-filter") },
   { key: "sev", param: "sev", kind: "select", def: "all", el: () => byId("severity-filter") },
   { key: "source", param: "source", kind: "select", def: "all", el: () => byId("source-filter") },
@@ -27,6 +31,24 @@ export const FILTERS = [
   { key: "hideRejected", param: "hiderejected", kind: "check", def: false, el: () => byId("hide-rejected"), label: () => "Hiding rejected", advanced: true },
   { key: "hasFixOnly", param: "hasfixonly", kind: "check", def: false, el: () => byId("has-fix-only"), label: () => "Fix available", advanced: true },
 ];
+
+const FACET_FIELDS = { kw: "matched_keywords", cwe: "cwe_ids", vp: "affected" };
+const FACET_NAMES = { kw: "Watchlist", cwe: "CWE", vp: "Product" };
+
+/** "kw:wordpress" -> ["matched_keywords", "wordpress"]; null if malformed. */
+export function parseFacet(value) {
+  const s = String(value || "");
+  const i = s.indexOf(":");
+  if (i < 1) return null;
+  const field = FACET_FIELDS[s.slice(0, i)];
+  const term = s.slice(i + 1);
+  return field && term ? [field, term] : null;
+}
+
+function facetLabel(v) {
+  const kind = String(v).split(":")[0];
+  return parseFacet(v) ? `${FACET_NAMES[kind]}: ${String(v).slice(kind.length + 1)}` : `Facet: ${v}`;
+}
 
 const byKey = Object.fromEntries(FILTERS.map((f) => [f.key, f]));
 
@@ -135,7 +157,9 @@ export function makePredicate(v) {
   const q = v.q.toLowerCase();
   const kevOk = KEV_PREDICATES[v.kev] ?? KEV_PREDICATES.all;
   const deps = state.depPackages;
+  const facet = v.facet ? parseFacet(v.facet) : null;
   return (a) => {
+    if (v.facet && !(facet && (a[facet[0]] || []).includes(facet[1]))) return false;
     if (v.hideReviewed && isReviewed(a.cve_id)) return false;
     if (v.newOnly && !isNewWithin24h(a)) return false;
     if (v.hideRejected && isRejected(a)) return false;

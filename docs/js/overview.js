@@ -9,7 +9,7 @@ import {
 } from "./format.js";
 import { cweName } from "./cwe-names.js";
 
-export const STALE_THRESHOLD_MS = 20 * 60 * 60 * 1000; // pipeline runs ~every 4 h
+export const STALE_THRESHOLD_MS = 20 * 60 * 60 * 1000; // pipeline is scheduled every 2 h (GitHub often delays to 3-5 h)
 
 export function computeKpis(alerts) {
   const k = { total: alerts.length, critical: 0, kev: 0, overdue: 0, dueSoon: 0, ransomware: 0, fresh: 0, rejected: 0, up: 0, down: 0 };
@@ -107,16 +107,19 @@ export function renderBreakdowns(alerts, stats) {
   const ageMax = Math.max(0, ...ageEntries.map((b) => age[b]));
   fillPanel("age-panel", "age-breakdown", ageEntries.map((b) => chip(b, age[b], ageMax, null, `First seen ${b} ago`)));
 
-  const searchChips = (obj, label) => {
+  // Exact-match chips (same fields stats.json counts), so clicking a chip
+  // shows exactly the number of alerts printed on it.
+  const facetChips = (obj, kind, label) => {
     const entries = topN(obj, 10);
     const max = entries[0]?.[1] ?? 0;
-    return entries.map(([key, c]) => chip(label(key), c, max, ["q", key], `Search for ${key}`));
+    return entries.map(([key, c]) => chip(label(key), c, max, ["facet", `${kind}:${key}`], `Show the ${c} alerts tagged ${key}`));
   };
   fillPanel("keyword-panel", "keyword-breakdown",
-    searchChips(stats?.by_matched_keyword ?? countBy(alerts, (a) => a.matched_keywords || []), (k) => k));
+    facetChips(stats?.by_matched_keyword ?? countBy(alerts, (a) => a.matched_keywords || []), "kw", (k) => k));
   fillPanel("cwe-panel", "cwe-breakdown",
-    searchChips(stats?.by_cwe ?? countBy(alerts, (a) => a.cwe_ids || []), (c) => (cweName(c) ? `${c} · ${cweName(c)}` : c)));
-  fillPanel("vendor-panel", "vendor-breakdown", searchChips(stats?.by_vendor_product ?? {}, (v) => v));
+    facetChips(stats?.by_cwe ?? countBy(alerts, (a) => a.cwe_ids || []), "cwe", (c) => (cweName(c) ? `${c} · ${cweName(c)}` : c)));
+  fillPanel("vendor-panel", "vendor-breakdown",
+    facetChips(stats?.by_vendor_product ?? countBy(alerts, (a) => a.affected || []), "vp", (v) => v));
 }
 
 export function renderFreshness(generatedAt, count, now = Date.now()) {
@@ -133,7 +136,7 @@ export function renderFreshness(generatedAt, count, now = Date.now()) {
   const ago = hours < 1 ? "less than 1 h ago" : `${hours} h ago`;
   meta.textContent = `${count} alerts · updated ${fmtDateTime(generatedAt)} (${ago})`;
   if (ageMs > STALE_THRESHOLD_MS) {
-    banner.textContent = `⚠ Data may be stale: the last successful update was ${hours} h ago (expected every ~4 h). The pipeline may be failing; check GitHub Actions.`;
+    banner.textContent = `⚠ Data may be stale: the last successful update was ${hours} h ago (scheduled every 2 h). The pipeline may be failing; check GitHub Actions.`;
     banner.hidden = false;
   } else {
     banner.hidden = true;
