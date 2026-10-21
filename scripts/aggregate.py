@@ -2041,6 +2041,79 @@ def backfill_legacy_nvd_fields(alerts_by_key, skip_keys, api_key, max_n=None, sl
     return filled
 
 
+# Marker on alerts whose watchlist vendor/product pairs were re-checked against
+# NVD's CPEs: "ok" (CPEs present; final) or "no_cpes:YYYY-MM-DD" (retry later).
+AFFECTED_CHECK_FIELD = "affected_cpe_check"
+AFFECTED_RECHECK_DAYS = 14
+
+
+def _needs_affected_check(alert, watch_pairs, today):
+    if alert.get("source") != "nvd" or alert.get("kev") or not str(alert.get("cve_id", "")).startswith("CVE-"):
+        return False
+    if not any(p in watch_pairs for p in alert.get("affected") or []):
+        return False
+    mark = str(alert.get(AFFECTED_CHECK_FIELD) or "")
+    if mark == "ok":
+        return False
+    if mark.startswith("no_cpes:"):
+        try:
+            last = datetime.strptime(mark[8:], "%Y-%m-%d").date()
+        except ValueError:
+            return True
+        return (today - last).days >= AFFECTED_RECHECK_DAYS
+    return True
+
+
+def revalidate_affected_pairs(alerts_by_key, skip_keys, watchlist, api_key, max_n=None,
+                              sleep=time.sleep, today=None):
+    """Stored alerts ingested before cpe_names_other_vendor() (60ea6b7) carry
+    watchlist pairs that only came from NVD's loose 'vendor product' word search:
+    557 live alerts were justified by 'php/php' alone, all third-party PHP apps
+    and WordPress plugins (audit 2026-10-21). Re-read up to `max_n` of them by
+    cveId; when NVD now lists CPEs and none names a pair's vendor/product, drop
+    that pair, and drop the alert if nothing else (keyword, other pair, KEV)
+    still justifies it. Records without CPEs are retried after 14 days; failed
+    lookups leave the alert unchanged. Returns the removed CVE ids."""
+    max_n = max_n if max_n is not None else int(os.environ.get("AFFECTED_RECHECK_MAX", "100"))
+    today = today or datetime.now(timezone.utc).date()
+    watch_pairs = {f"{vp.get('vendor', '')}/{vp.get('product', '')}": (vp.get("vendor", ""), vp.get("product", ""))
+                   for vp in watchlist.get("vendors_products") or []}
+    todo = [k for k, a in alerts_by_key.items() if k not in skip_keys and _needs_affected_check(a, watch_pairs, today)]
+    # alerts justified by a pair alone first: they are the ones that may be noise
+    todo.sort(key=lambda k: bool(alerts_by_key[k].get("matched_keywords")))
+    if not todo or max_n <= 0:
+        return []
+    print(f"Affected-pair recheck: {len(todo)} alert(s) not yet checked against NVD CPEs, re-reading up to {max_n}")
+    delay = 0.7 if api_key else 6.5
+    removed, dropped_pairs = [], 0
+    for key in todo[:max_n]:
+        alert = alerts_by_key[key]
+        cve_id = alert["cve_id"]
+        result = nvd_query({"cveId": cve_id}, api_key)
+        sleep(delay)
+        vulns = (result or {}).get("vulnerabilities") or []
+        if not (vulns and isinstance(vulns[0], dict) and vulns[0].get("cve", {}).get("id") == cve_id):
+            continue
+        cve = vulns[0]["cve"]
+        has_cpes = any(len(str(m.get("criteria", "")).split(":")) >= 5
+                       for c in cve.get("configurations") or [] for nd in c.get("nodes") or []
+                       for m in nd.get("cpeMatch") or [])
+        if not has_cpes:
+            alert[AFFECTED_CHECK_FIELD] = f"no_cpes:{today.isoformat()}"
+            continue
+        keep = [p for p in alert.get("affected") or []
+                if p not in watch_pairs or not cpe_names_other_vendor(*watch_pairs[p], cve)]
+        dropped_pairs += len(alert.get("affected") or []) - len(keep)
+        alert["affected"] = keep
+        alert[AFFECTED_CHECK_FIELD] = "ok"
+        if not (keep or alert.get("matched_keywords") or alert.get("kev")):
+            removed.append(cve_id)
+            del alerts_by_key[key]
+    print(f"Affected-pair recheck: dropped {dropped_pairs} pair(s) whose CPEs name another vendor; "
+          f"removed {len(removed)} alert(s) left with no match, e.g. {removed[:5]}")
+    return removed
+
+
 def main():
     nvd_api_key = os.environ.get("NVD_API_KEY", "").strip() or None
     gh_token = os.environ.get("GH_DEPENDABOT_TOKEN", "").strip() or None
@@ -2201,6 +2274,7 @@ def main():
         prior.setdefault("nvd_reference_links", [])
 
     backfill_legacy_nvd_fields(existing_by_key, touched_keys, nvd_api_key)
+    revalidate_affected_pairs(existing_by_key, touched_keys, watchlist, nvd_api_key)
 
     # Suppressed entries that were previously alerted should also disappear from the
     # cumulative view going forward (an analyst explicitly accepted the risk) -- but

@@ -1233,5 +1233,64 @@ class TestLegacyNvdBackfill(unittest.TestCase):
         self.assertEqual(q.call_count, 2)
 
 
+class TestRevalidateAffectedPairs(unittest.TestCase):
+    """557 live alerts were justified only by 'php/php', stored before the fetch
+    checked CPEs (60ea6b7); e.g. CVE-2026-62052 'PHP Object Injection in Tipsy'."""
+
+    WL = {"vendors_products": [{"vendor": "php", "product": "php"},
+                               {"vendor": "wordpress", "product": "wordpress"}]}
+
+    @staticmethod
+    def resp(cve_id, cpes):
+        nodes = [{"cpeMatch": [{"criteria": c} for c in cpes]}] if cpes else []
+        return {"vulnerabilities": [{"cve": {"id": cve_id, "configurations": [{"nodes": nodes}] if nodes else []}}]}
+
+    def alerts(self):
+        return {
+            "CVE-1::nvd": {"cve_id": "CVE-1", "source": "nvd", "affected": ["php/php"], "matched_keywords": []},
+            "CVE-2::nvd": {"cve_id": "CVE-2", "source": "nvd", "affected": ["php/php"], "matched_keywords": []},
+            "CVE-3::nvd": {"cve_id": "CVE-3", "source": "nvd", "affected": ["php/php", "wordpress/wordpress"],
+                           "matched_keywords": ["WordPress"]},
+            "CVE-4::nvd": {"cve_id": "CVE-4", "source": "nvd", "affected": ["php/php"], "matched_keywords": []},
+            "CVE-5::kev": {"cve_id": "CVE-5", "source": "kev", "kev": True, "affected": ["php/php"]},
+        }
+
+    def run_it(self, alerts, responses, **kw):
+        import aggregate
+        with mock.patch.object(aggregate, "nvd_query", side_effect=lambda p, k: responses.get(p["cveId"])) as q:
+            removed = aggregate.revalidate_affected_pairs(alerts, set(), self.WL, None, sleep=lambda s: None,
+                                                          today=__import__("datetime").date(2026, 10, 21), **kw)
+        return removed, q
+
+    def test_drops_pair_and_unjustified_alert(self):
+        alerts = self.alerts()
+        responses = {
+            "CVE-1": self.resp("CVE-1", ["cpe:2.3:a:tipsy:tipsy:*:*:*:*:*:wordpress:*:*"]),  # other vendor
+            "CVE-2": self.resp("CVE-2", ["cpe:2.3:a:php:php:8.3.0:*:*:*:*:*:*:*"]),  # real PHP bug
+            "CVE-3": self.resp("CVE-3", ["cpe:2.3:a:foo:bar:*:*:*:*:*:wordpress:*:*"]),
+            "CVE-4": self.resp("CVE-4", []),  # NVD has not analysed it yet
+        }
+        removed, q = self.run_it(alerts, responses, max_n=10)
+        self.assertEqual(removed, ["CVE-1"])
+        self.assertNotIn("CVE-1::nvd", alerts)
+        self.assertEqual(alerts["CVE-2::nvd"]["affected"], ["php/php"])
+        # plugin CPE: the pair goes (as in the live fetch) but the WordPress keyword keeps the alert
+        self.assertEqual(alerts["CVE-3::nvd"]["affected"], [])
+        self.assertEqual(alerts["CVE-3::nvd"]["matched_keywords"], ["WordPress"])
+        self.assertEqual(alerts["CVE-4::nvd"]["affected"], ["php/php"])
+        self.assertEqual(alerts["CVE-4::nvd"]["affected_cpe_check"], "no_cpes:2026-10-21")
+        self.assertEqual(q.call_count, 4)  # KEV alert never re-read
+        # converges: checked alerts are not re-read; no-CPE ones wait 14 days
+        _, q2 = self.run_it(alerts, responses, max_n=10)
+        self.assertEqual(q2.call_count, 0)
+
+    def test_failed_lookup_and_cap(self):
+        alerts = self.alerts()
+        before = {k: dict(v) for k, v in alerts.items()}
+        removed, q = self.run_it(alerts, {}, max_n=2)
+        self.assertEqual((removed, q.call_count), ([], 2))
+        self.assertEqual(alerts, before)
+
+
 if __name__ == "__main__":
     unittest.main()
