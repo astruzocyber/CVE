@@ -69,7 +69,30 @@ jobs:
           AGE_HOURS=$(( (NOW_EPOCH - GENERATED_EPOCH) / 3600 ))
           THRESHOLD="${STALE_THRESHOLD_HOURS}"
 
-          echo "Data generated_at=${GENERATED_AT}, age=${AGE_HOURS}h, threshold=${THRESHOLD}h"
+          echo "stats.json generated_at=${GENERATED_AT}, age=${AGE_HOURS}h, threshold=${THRESHOLD}h"
+
+          # The escalation board (escalate.py) and threat-intel feed (fetch_intel.py)
+          # run as continue-on-error steps, so a crash (or every news feed failing)
+          # leaves their file frozen while the job stays green and stats.json stays
+          # fresh. Track the oldest of the three so that silent failure is noticed.
+          WORST_FILE="stats.json"
+          WORST_AT="${GENERATED_AT}"
+          for f in escalations.json intel.json; do
+            [ -f "docs/data/${f}" ] || continue
+            AT=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1])).get('generated_at',''))" "docs/data/${f}" 2>/dev/null || true)
+            if [ -z "${AT}" ]; then
+              echo "::warning::docs/data/${f} has no readable generated_at -- not checked."
+              continue
+            fi
+            AT_EPOCH=$(date -u -d "${AT}" +%s)
+            AGE=$(( (NOW_EPOCH - AT_EPOCH) / 3600 ))
+            echo "${f} generated_at=${AT}, age=${AGE}h"
+            if [ "${AGE}" -gt "${AGE_HOURS}" ]; then
+              AGE_HOURS="${AGE}"
+              WORST_FILE="${f}"
+              WORST_AT="${AT}"
+            fi
+          done
 
           EXISTING_ISSUE=$(gh api "repos/${REPO}/issues?state=open&labels=data-staleness&per_page=5" --jq '.[0].number // empty')
 
@@ -80,8 +103,12 @@ jobs:
               echo "Data is stale (${AGE_HOURS}h >= ${THRESHOLD}h) -- filing a new issue."
               BODY_FILE=$(mktemp)
               {
-                echo "The aggregation pipeline last successful data refresh (docs/data/stats.json generated_at) was **${GENERATED_AT}**, which is now ${AGE_HOURS} hours ago -- past the ${THRESHOLD}h staleness threshold (the aggregation is scheduled every 2h, so this means many missed or failed runs)."
+                echo "The oldest dashboard data file, docs/data/${WORST_FILE}, was last refreshed (generated_at) at **${WORST_AT}**, which is now ${AGE_HOURS} hours ago -- past the ${THRESHOLD}h staleness threshold (the aggregation is scheduled every 2h, so this means many missed or failed runs)."
                 echo ""
+                if [ "${WORST_FILE}" != "stats.json" ]; then
+                  echo "stats.json itself is fresh (generated_at ${GENERATED_AT}), so the aggregation is running but the never-fatal step that writes ${WORST_FILE} is crashing or keeping its previous output (escalations.json: 'Tier items for this environment'; intel.json: 'Fetch threat-intel news feeds'). Check that step's log in the latest run: https://github.com/${REPO}/actions/workflows/cve-alerts.yml"
+                  echo ""
+                fi
                 echo "This usually means the CVE/KEV/Dependabot Alert Aggregation workflow has stopped running, is failing, or a run is stuck queued (see cancel-stale-queued.yml). Check: https://github.com/${REPO}/actions/workflows/cve-alerts.yml"
                 echo ""
                 echo "This issue was filed automatically and will auto-close once fresh data is detected."
@@ -97,6 +124,6 @@ jobs:
               echo "Closing previously-open staleness issue #${EXISTING_ISSUE} (data has recovered)."
               gh api "repos/${REPO}/issues/${EXISTING_ISSUE}" -X PATCH -f state=closed >/dev/null
               gh api "repos/${REPO}/issues/${EXISTING_ISSUE}/comments" -X POST \
-                -f body="Data is fresh again as of this check (generated_at=${GENERATED_AT}, age=${AGE_HOURS}h). Auto-closing." >/dev/null
+                -f body="Data is fresh again as of this check (oldest file ${WORST_FILE}, generated_at=${WORST_AT}, age=${AGE_HOURS}h). Auto-closing." >/dev/null
             fi
           fi
