@@ -1415,6 +1415,19 @@ def composite_risk_score(cvss, epss_score, in_kev):
     return total, breakdown
 
 
+def affected_or_kev(affected, kev_entry):
+    """`affected` for an alert: the watchlist CPE vendor/product pairs, or --
+    when NVD gave none (keyword match, CPEs not assigned yet) and the CVE is in
+    KEV -- CISA's own vendorProject/product, the same pair a KEV-sourced alert
+    carries. Without this, the NVD record of a CVE first surfaced from KEV
+    replaced it in place and dropped e.g. 'beyondtrust/remote support'."""
+    if affected:
+        return list(affected)
+    kev_entry = kev_entry or {}
+    vp = f"{kev_entry.get('vendorProject', '')}/{kev_entry.get('product', '')}".strip("/").lower()
+    return [vp] if vp else []
+
+
 def build_final_entry(entry, kev_map, epss_map):
     cve_id = entry["cve_id"]
     in_kev = cve_id in kev_map
@@ -1444,7 +1457,7 @@ def build_final_entry(entry, kev_map, epss_map):
         "epss_score_prev": None,
         "osv_id": None,
         "osv_fixed_versions": [],
-        "affected": entry.get("matched_vendor_product", []),
+        "affected": affected_or_kev(entry.get("matched_vendor_product", []), kev_entry if in_kev else None),
         "matched_keywords": entry.get("matched_keywords", []),
         "source": entry.get("source"),
         "published": entry.get("published"),
@@ -2093,6 +2106,8 @@ def main():
         prior["kev_ransomware_use"] = (kev_entry.get("knownRansomwareCampaignUse") == "Known") if in_kev else False
         prior["kev_required_action"] = kev_entry.get("requiredAction") if in_kev else None
         prior["kev_notes"] = kev_entry.get("notes") if in_kev else None
+        if in_kev:
+            prior["affected"] = affected_or_kev(prior.get("affected"), kev_entry)
         prior["risk_score"] = risk_score
         prior["risk_score_breakdown"] = risk_breakdown
         prior.setdefault("osv_id", None)

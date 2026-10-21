@@ -483,6 +483,30 @@ class TestBuildFinalEntry(unittest.TestCase):
         final = build_final_entry(entry, kev_map={}, epss_map={})
         self.assertIsNone(final["vuln_status"])
 
+    def test_kev_listed_nvd_alert_without_cpe_gets_kev_vendor_product(self):
+        # Real case CVE-2026-102764: surfaced from KEV as
+        # 'beyondtrust/remote support', then its NVD record (keyword match, no
+        # CPE pair yet) replaced it in place and the product was dropped.
+        kev = {"CVE-2026-102764": {"vendorProject": "BeyondTrust", "product": "Remote Support",
+                                   "dateAdded": "2026-10-16"}}
+        entry = {"cve_id": "CVE-2026-102764", "source": "nvd", "cvss_score": 9.8,
+                 "description": "test", "matched_vendor_product": [],
+                 "matched_keywords": ["BeyondTrust"]}
+        final = build_final_entry(entry, kev_map=kev, epss_map={})
+        self.assertEqual(final["affected"], ["beyondtrust/remote support"])
+
+    def test_cpe_match_kept_over_kev_vendor_product(self):
+        kev = {"CVE-2026-00007": {"vendorProject": "Fortinet", "product": "FortiOS"}}
+        entry = {"cve_id": "CVE-2026-00007", "source": "nvd", "cvss_score": 9.8,
+                 "description": "test", "matched_vendor_product": ["fortinet/fortios"]}
+        self.assertEqual(build_final_entry(entry, kev_map=kev, epss_map={})["affected"],
+                         ["fortinet/fortios"])
+
+    def test_non_kev_alert_without_cpe_stays_empty(self):
+        entry = {"cve_id": "CVE-2026-00008", "source": "nvd", "cvss_score": 5.0,
+                 "description": "test", "matched_vendor_product": []}
+        self.assertEqual(build_final_entry(entry, kev_map={}, epss_map={})["affected"], [])
+
 
 class TestParseOsvFixedVersions(unittest.TestCase):
     def test_extracts_fixed_versions_from_affected_ranges(self):
