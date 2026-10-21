@@ -1453,6 +1453,20 @@ def affected_or_kev(affected, kev_entry):
     return [vp] if vp else []
 
 
+def with_kev_label(keywords, in_kev):
+    """matched_keywords plus the "CISA KEV" label when the CVE is KEV-listed.
+
+    The label was only added to fresh NVD watchlist candidates and KEV-ingest
+    entries, so a stored alert that CISA listed later (or a news-ingested one)
+    kept kev=true without it, and the "CISA KEV" keyword chip undercounted the
+    KEV tile. Never removes anything; returns a new list.
+    """
+    out = list(keywords or [])
+    if in_kev and "CISA KEV" not in out:
+        out.append("CISA KEV")
+    return out
+
+
 def build_final_entry(entry, kev_map, epss_map):
     cve_id = entry["cve_id"]
     in_kev = cve_id in kev_map
@@ -1483,7 +1497,7 @@ def build_final_entry(entry, kev_map, epss_map):
         "osv_id": None,
         "osv_fixed_versions": [],
         "affected": affected_or_kev(entry.get("matched_vendor_product", []), kev_entry if in_kev else None),
-        "matched_keywords": entry.get("matched_keywords", []),
+        "matched_keywords": with_kev_label(entry.get("matched_keywords", []), in_kev),
         "source": entry.get("source"),
         "published": entry.get("published"),
         "nvd_last_modified": entry.get("nvd_last_modified"),
@@ -2252,6 +2266,7 @@ def main():
         prior["kev_notes"] = kev_entry.get("notes") if in_kev else None
         if in_kev:
             prior["affected"] = affected_or_kev(prior.get("affected"), kev_entry)
+            prior["matched_keywords"] = with_kev_label(prior.get("matched_keywords"), in_kev)
         prior["risk_score"] = risk_score
         prior["risk_score_breakdown"] = risk_breakdown
         prior.setdefault("osv_id", None)

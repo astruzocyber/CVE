@@ -507,6 +507,33 @@ class TestBuildFinalEntry(unittest.TestCase):
                  "description": "test", "matched_vendor_product": []}
         self.assertEqual(build_final_entry(entry, kev_map={}, epss_map={})["affected"], [])
 
+    def test_kev_listed_alert_carries_cisa_kev_label(self):
+        # Real case CVE-2024-47575: ingested via the news path with
+        # ['news: reported exploited'], kev=true, but no 'CISA KEV' label, so
+        # the keyword chip showed 600 while the KEV tile showed 606.
+        kev = {"CVE-2024-47575": {"vendorProject": "Fortinet", "product": "FortiManager"}}
+        kws = ["news: reported exploited"]
+        entry = {"cve_id": "CVE-2024-47575", "source": "nvd", "cvss_score": 9.8,
+                 "description": "test", "matched_vendor_product": [], "matched_keywords": kws}
+        final = build_final_entry(entry, kev_map=kev, epss_map={})
+        self.assertEqual(final["matched_keywords"], ["news: reported exploited", "CISA KEV"])
+        self.assertEqual(kws, ["news: reported exploited"])  # input not mutated
+        again = build_final_entry({**entry, "matched_keywords": ["CISA KEV"]}, kev_map=kev, epss_map={})
+        self.assertEqual(again["matched_keywords"], ["CISA KEV"])  # no duplicate
+        self.assertEqual(build_final_entry(entry, kev_map={}, epss_map={})["matched_keywords"],
+                         ["news: reported exploited"])
+
+    def test_stored_alert_refresh_adds_cisa_kev_label(self):
+        # Stored alerts not resurfaced this run are refreshed in main(); one
+        # that CISA listed later (CVE-2016-7255, matched by microsoft/windows
+        # only) kept kev=true with matched_keywords [].
+        import inspect
+        import aggregate as A
+        src = inspect.getsource(A.main)
+        self.assertIn('prior["matched_keywords"] = with_kev_label(prior.get("matched_keywords"), in_kev)', src)
+        self.assertEqual(A.with_kev_label([], True), ["CISA KEV"])
+        self.assertEqual(A.with_kev_label(None, False), [])
+
 
 class TestParseOsvFixedVersions(unittest.TestCase):
     def test_extracts_fixed_versions_from_affected_ranges(self):
