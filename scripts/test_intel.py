@@ -106,6 +106,19 @@ class TestFetchIntel(unittest.TestCase):
                      "Hackers are not exploiting the bug yet"):
             self.assertNotIn("exploited", F.classify(text, WATCH)[0], text)
 
+    def test_benchmark_score_not_tagged_exploited(self):
+        # Real intel title (2026-10-15): a vendor's AI pentest agent scoring a
+        # benchmark, not attackers exploiting AWS. It sat in ESCALATE as
+        # "Actively exploited" on the AWS asset.
+        for text in ("AWS Security Agent (now part of AWS Continuum) exploited 33 of 37 new real-world CVEs",
+                     "GPT-4 agents exploited 87% of one-day vulnerabilities in the benchmark",
+                     "The AI model exploited 12 out of 15 test targets"):
+            self.assertNotIn("exploited", F.classify(text, WATCH)[0], text)
+        for text in ("Hackers exploited 3 of the 5 flaws before patches shipped",
+                     "Explained: How AI agents exploited security gaps to access Indian companies' data",
+                     "AWS Security Agent exploited 33 of 37 CVEs; separately, attackers exploited a Fortinet zero-day"):
+            self.assertIn("exploited", F.classify(text, WATCH)[0], text)
+
     def test_bare_teams_not_watch_match(self):
         _, watch, _ = F.classify("How security teams handle alerts", WATCH)
         self.assertNotIn("teams", watch)

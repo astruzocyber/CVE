@@ -89,7 +89,12 @@ NEGATED_EXPLOIT_RE = re.compile(
     r"(?:\b(?:not|never)|n't)\s+(?:(?:been|being|yet|currently|publicly|known|believed|thought|aware|"
     r"of|any|to|be|have|has|had)\s+)*(?:actively\s+)?exploit\w*(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?"
     r"|\bno\s+(?:evidence|indication|signs?|reports?|known)\b[^.!?]{0,80}?\bexploit\w*(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?"
-    r"|\bunaware\s+of\b[^.!?]{0,60}?\bexploit\w*(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?",
+    r"|\bunaware\s+of\b[^.!?]{0,60}?\bexploit\w*(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?"
+    # benchmark scores of a tool/AI ("AWS Security Agent ... exploited 33 of 37
+    # new real-world CVEs", "GPT-4 agents exploited 87% of one-day vulns"):
+    # a test result, not attackers exploiting anything
+    r"|\b(?:agents?|AI|models?|LLMs?|GPT[\w.-]*|tools?|scanners?|benchmarks?)\b(?:\W+\w+){0,6}?\W+"
+    r"exploited\s+\d+(?:\s*%|\s+(?:of|out\s+of)\s+(?:the\s+)?\d+)",
     re.I)
 
 
