@@ -1138,5 +1138,69 @@ class TestEpssOutageKeepsPriorScores(unittest.TestCase):
         self.assertIs(aggregate.keep_prior_epss_on_failure(fresh, set(), existing), fresh)
 
 
+class TestLegacyNvdBackfill(unittest.TestCase):
+    """Alerts written before nvd_last_modified/vuln_status existed (124 live,
+    first seen 2026-09-05) never got CWE/attack vector/status because they are
+    only rebuilt when NVD edits the record again."""
+
+    CVE = {
+        "id": "CVE-2026-11325", "published": "2026-08-12T12:17:44.370",
+        "lastModified": "2026-08-28T15:42:20.060", "vulnStatus": "Awaiting Analysis",
+        "descriptions": [{"lang": "en", "value": "fresh text"}],
+        "weaknesses": [{"description": [{"lang": "en", "value": "CWE-78"}]}],
+        "metrics": {"cvssMetricV31": [{"type": "Secondary", "cvssData": {
+            "baseScore": 9.9, "attackVector": "NETWORK", "attackComplexity": "LOW",
+            "privilegesRequired": "NONE", "userInteraction": "NONE"}}]},
+        "references": [{"url": "https://vendor.example/adv", "tags": ["Vendor Advisory"]}],
+    }
+
+    def legacy(self):
+        return {"cve_id": "CVE-2026-11325", "source": "nvd", "cvss_score": 8.8,
+                "description": "old text", "first_seen": "2026-09-05T15:02:54+00:00",
+                "affected": ["cloudflare/cloudflare"], "vuln_status": None,
+                "nvd_fix_versions": [], "nvd_reference_links": []}
+
+    def test_fills_missing_fields_only(self):
+        import aggregate
+        alerts = {"CVE-2026-11325::nvd": self.legacy(),
+                  "CVE-2026-1::kev": {"cve_id": "CVE-2026-1", "source": "kev", "vuln_status": None}}
+        resp = {"vulnerabilities": [{"cve": self.CVE}], "totalResults": 1}
+        with mock.patch.object(aggregate, "nvd_query", return_value=resp) as q:
+            n = aggregate.backfill_legacy_nvd_fields(alerts, set(), None, max_n=10, sleep=lambda s: None)
+        self.assertEqual(n, 1)
+        q.assert_called_once()  # KEV-only alert is not re-read
+        a = alerts["CVE-2026-11325::nvd"]
+        self.assertEqual(a["cwe_ids"], ["CWE-78"])
+        self.assertEqual(a["vuln_status"], "Awaiting Analysis")
+        self.assertEqual(a["nvd_last_modified"], "2026-08-28T15:42:20.060")
+        self.assertEqual(a["cvss_vector_components"]["attack_vector"], "NETWORK")
+        self.assertEqual(a["nvd_reference_links"][0]["url"] if isinstance(a["nvd_reference_links"][0], dict)
+                         else a["nvd_reference_links"][0], "https://vendor.example/adv")
+        # score, text, first_seen and matching untouched
+        self.assertEqual((a["cvss_score"], a["description"], a["first_seen"], a["affected"]),
+                         (8.8, "old text", "2026-09-05T15:02:54+00:00", ["cloudflare/cloudflare"]))
+        self.assertFalse(aggregate.needs_legacy_nvd_backfill(a))  # converges
+
+    def test_failed_lookup_and_skip_keys_leave_alert_unchanged(self):
+        import aggregate
+        before = self.legacy()
+        alerts = {"CVE-2026-11325::nvd": dict(before)}
+        with mock.patch.object(aggregate, "nvd_query", return_value=None):
+            self.assertEqual(aggregate.backfill_legacy_nvd_fields(alerts, set(), None, max_n=10,
+                                                                  sleep=lambda s: None), 0)
+        self.assertEqual(alerts["CVE-2026-11325::nvd"], before)
+        with mock.patch.object(aggregate, "nvd_query") as q:
+            aggregate.backfill_legacy_nvd_fields(alerts, {"CVE-2026-11325::nvd"}, None, max_n=10,
+                                                 sleep=lambda s: None)
+        q.assert_not_called()
+
+    def test_cap(self):
+        import aggregate
+        alerts = {f"CVE-2026-{i}::nvd": {"cve_id": f"CVE-2026-{i}", "source": "nvd"} for i in range(5)}
+        with mock.patch.object(aggregate, "nvd_query", return_value=None) as q:
+            aggregate.backfill_legacy_nvd_fields(alerts, set(), None, max_n=2, sleep=lambda s: None)
+        self.assertEqual(q.call_count, 2)
+
+
 if __name__ == "__main__":
     unittest.main()

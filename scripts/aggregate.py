@@ -1970,6 +1970,52 @@ def write_sitemap(generated_at_iso):
     print(f"Wrote sitemap: lastmod={lastmod} to {SITEMAP_PATH}")
 
 
+_LEGACY_NVD_FIELDS = ("cvss_vector_components", "cwe_ids", "nvd_last_modified", "vuln_status",
+                      "nvd_fix_versions", "nvd_reference_links")
+
+
+def needs_legacy_nvd_backfill(alert):
+    """True for an NVD-sourced alert written by an older pipeline version that
+    never stored nvd_last_modified / vuln_status. Such alerts are only rebuilt
+    when NVD edits the record again, so (audit 2026-10-21) 124 alerts first seen
+    2026-09-05 still had no CWE, attack vector, NVD status or vendor links while
+    NVD had all of them."""
+    return (alert.get("source") == "nvd" and str(alert.get("cve_id", "")).startswith("CVE-")
+            and ("nvd_last_modified" not in alert or alert.get("vuln_status") is None))
+
+
+def backfill_legacy_nvd_fields(alerts_by_key, skip_keys, api_key, max_n=None, sleep=time.sleep):
+    """Re-read up to `max_n` legacy alerts by cveId and fill ONLY their missing or
+    empty NVD-derived descriptive fields. Never overwrites a value already set and
+    never touches cvss_score, description, matching or first_seen. A failed or
+    mismatched NVD response leaves the alert as it was (retried next run)."""
+    max_n = max_n if max_n is not None else int(os.environ.get("LEGACY_NVD_BACKFILL_MAX", "60"))
+    todo = [k for k, a in alerts_by_key.items() if k not in skip_keys and needs_legacy_nvd_backfill(a)]
+    if not todo:
+        return 0
+    print(f"Legacy NVD backfill: {len(todo)} alert(s) missing NVD fields, re-reading up to {max_n} this run")
+    delay = 0.7 if api_key else 6.5
+    filled = 0
+    for key in todo[:max_n]:
+        alert = alerts_by_key[key]
+        cve_id = alert["cve_id"]
+        result = nvd_query({"cveId": cve_id}, api_key)
+        sleep(delay)
+        vulns = (result or {}).get("vulnerabilities") or []
+        if not (vulns and isinstance(vulns[0], dict) and vulns[0].get("cve", {}).get("id") == cve_id):
+            print(f"  legacy backfill {cve_id}: no matching NVD record this run -- left unchanged")
+            continue
+        fresh = nvd_entry_from_cve(vulns[0]["cve"])
+        for field in _LEGACY_NVD_FIELDS:
+            if alert.get(field) in (None, [], {}) and fresh.get(field) not in (None, [], {}):
+                alert[field] = fresh[field]
+            elif field not in alert:
+                alert[field] = fresh.get(field)
+        filled += 1
+    print(f"Legacy NVD backfill: filled {filled} alert(s)")
+    return filled
+
+
 def main():
     nvd_api_key = os.environ.get("NVD_API_KEY", "").strip() or None
     gh_token = os.environ.get("GH_DEPENDABOT_TOKEN", "").strip() or None
@@ -2128,6 +2174,8 @@ def main():
         # Backfill for records written before nvd_reference_links existed
         # (cycle 79) -- same self-heal pattern as nvd_fix_versions above.
         prior.setdefault("nvd_reference_links", [])
+
+    backfill_legacy_nvd_fields(existing_by_key, touched_keys, nvd_api_key)
 
     # Suppressed entries that were previously alerted should also disappear from the
     # cumulative view going forward (an analyst explicitly accepted the risk) -- but
