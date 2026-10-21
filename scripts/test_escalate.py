@@ -112,6 +112,18 @@ class EscalateTests(unittest.TestCase):
                              "route confusion issue.", 9.8)], {}, env(), NOW)
         self.assertEqual(tiers(out), {"CVE-2026-12": "work"})
 
+    def test_bare_palo_alto_headline_matches_palo_alto_asset(self):
+        # Real intel titles (2026-10): headlines drop "Networks"; the MFA-bypass
+        # story was attributed to VMware only and four others matched nothing.
+        pa = "Palo Alto (firewalls / GlobalProtect / Cortex)"
+        for text in ("Hackers Exploit Palo Alto VPN Flaw to Bypass MFA and Steal Credentials From VMware Disks",
+                     "Palo Alto's firewall OS has been under attack from multiple ransomware groups",
+                     "CISA flags exploited flaws in Palo Alto, Cisco and Ahsay products"):
+            self.assertIn(pa, [a["name"] for a, _ in E.match_assets(text, env()["assets"])], text)
+        for text in ("A Palo Alto, Calif.-based startup raised $40M for AI phishing defense",
+                     "Palo Alto-based vendor patches its scanner"):
+            self.assertNotIn(pa, [a["name"] for a, _ in E.match_assets(text, env()["assets"])], text)
+
     def test_teams_vishing_news_escalates(self):
         out = E.build([], {"items": [intel("t1", "Hackers pose as IT support in Microsoft Teams calls",
                                            ["social_engineering"])]}, env(), NOW)

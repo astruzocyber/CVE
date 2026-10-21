@@ -58,8 +58,12 @@ assets:
     terms: ["ManageEngine", "ADSelfService", "ADSelfService Plus", "Vulnerability Manager Plus"]
   - name: "Palo Alto (firewalls / GlobalProtect / Cortex)"
     criticality: critical
-    terms: ["Palo Alto Networks", "PAN-OS", "GlobalProtect", "Prisma Access",
+    # bare "Palo Alto": headlines say "Palo Alto VPN Flaw", "Palo Alto's firewall
+    # OS"; the city ("Palo Alto, Calif.") is excluded, "Palo Alto-based" never matches
+    terms: ["Palo Alto Networks", "Palo Alto", "PAN-OS", "GlobalProtect", "Prisma Access",
             "Cortex XDR", "Cortex XSOAR", "Cortex XSIAM"]
+    exclude: ["Palo Alto, Calif", "Palo Alto, CA", "Palo Alto Research Center", "Palo Alto Unified",
+              "Palo Alto city", "City of Palo Alto"]
   - name: "Fortinet perimeter"
     criticality: critical
     # inventory: Fortinet, Forti FW LA
