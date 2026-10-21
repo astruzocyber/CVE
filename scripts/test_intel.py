@@ -75,6 +75,22 @@ class TestFetchIntel(unittest.TestCase):
         cats, _, _ = F.classify("Bug that could be exploited by attackers", WATCH)
         self.assertNotIn("exploited", cats)
 
+    def test_denied_exploitation_not_tagged_exploited(self):
+        # real wording: Cisco hardening releases + Docker Hub story (intel.json 2026-10)
+        for text in ("These issues were found during internal testing and are not known to be actively exploited.",
+                     "Docker says it found no evidence that anyone exploited it.",
+                     "There is no evidence of exploitation in the wild.",
+                     "The flaw has not been exploited in the wild, Microsoft says"):
+            self.assertNotIn("exploited", F.classify(text, WATCH)[0], text)
+        for text in ("Patch not yet available for actively exploited zero-day in Chrome",
+                     "Ivanti says one bug was exploited in attacks; another has not been exploited",
+                     "CISA adds actively exploited Fortinet flaw to KEV"):
+            self.assertIn("exploited", F.classify(text, WATCH)[0], text)
+        import escalate as E
+        self.assertNotIn("exploited", E.current_categories(
+            {"title": "Cisco Meraki Security Hardening Release",
+             "summary": "found during internal testing and are not known to be actively exploited."}))
+
     def test_bare_teams_not_watch_match(self):
         _, watch, _ = F.classify("How security teams handle alerts", WATCH)
         self.assertNotIn("teams", watch)

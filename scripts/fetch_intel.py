@@ -74,6 +74,22 @@ CATEGORY_RULES = [
      r"command injection|authentication bypass"),
 ]
 CATEGORY_RES = [(k, l, re.compile(p, re.I)) for k, l, p in CATEGORY_RULES]
+# Explicit denials ("are not known to be actively exploited", "found no
+# evidence that anyone exploited it"). An "exploited" hit that starts inside
+# one of these spans is not evidence of exploitation. Kept narrow on purpose:
+# "Patch not yet available for actively exploited zero-day" must still match.
+NEGATED_EXPLOIT_RE = re.compile(
+    r"(?:\b(?:not|never)|n't)\s+(?:(?:been|being|yet|currently|publicly|known|believed|thought|aware|"
+    r"of|any|to|be|have|has|had)\s+)*(?:actively\s+)?exploit\w*(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?"
+    r"|\bno\s+(?:evidence|indication|signs?|reports?|known)\b[^.!?]{0,80}?\bexploit\w*(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?"
+    r"|\bunaware\s+of\b[^.!?]{0,60}?\bexploit\w*(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?",
+    re.I)
+
+
+def _affirmed(rx, text):
+    """True if rx matches somewhere outside an explicit 'not exploited' denial."""
+    spans = [(m.start(), m.end()) for m in NEGATED_EXPLOIT_RE.finditer(text)]
+    return any(not any(s <= m.start() < e for s, e in spans) for m in rx.finditer(text))
 CATEGORY_LABELS = {k: l for k, l, _ in CATEGORY_RULES}
 
 WEIGHTS = {"exploited": 40, "social_engineering": 20, "identity": 15, "vendor_issue": 10,
@@ -228,7 +244,8 @@ def parse_feed(data):
 
 
 def classify(text, watch_res):
-    cats = [k for k, _, rx in CATEGORY_RES if rx.search(text)]
+    cats = [k for k, _, rx in CATEGORY_RES
+            if (_affirmed(rx, text) if k == "exploited" else rx.search(text))]
     watch = []
     for term, rx in watch_res:
         if rx.search(text) and term not in watch:

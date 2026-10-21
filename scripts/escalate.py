@@ -241,10 +241,11 @@ def classify_alert(alert, env):
 def current_categories(item):
     text = f"{item.get('title') or ''} {item.get('summary') or ''}"
     try:
-        from fetch_intel import CATEGORY_RES
+        from fetch_intel import classify
     except Exception:  # pragma: no cover - fall back to the stored labels
         return list(item.get("categories") or [])
-    return [k for k, _, rx in CATEGORY_RES if rx.search(text)]
+    # same rules as fetch_intel, incl. "not known to be exploited" denials
+    return classify(text, [])[0]
 
 
 def classify_intel(item, env, labels):
