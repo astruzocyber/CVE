@@ -39,7 +39,7 @@ function statusBadges(a) {
     out.push(badge("overdue", `Overdue${isNum(d) ? ` ${d}d` : ""}`, `Past the CISA BOD 22-01 due date (${a.kev_due_date})`));
   } else {
     const d = daysUntilDue(a);
-    if (d !== null && d <= 7) out.push(badge("due-soon", `Due in ${d}d`, `CISA BOD 22-01 due date: ${a.kev_due_date}`));
+    if (d !== null && d <= 7) out.push(badge("due-soon", d === 0 ? "Due today" : `Due in ${d}d`, `CISA BOD 22-01 due date: ${a.kev_due_date}`));
   }
   const sev = severityClass(a.cvss_score);
   if (sev) out.push(badge(sev, sev));

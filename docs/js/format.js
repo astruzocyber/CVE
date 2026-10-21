@@ -64,27 +64,29 @@ export function cvssVersionText(raw) {
   return m ? `v${m[1]}.${m[2]}` : String(raw);
 }
 
-// KEV due dates are calendar dates (YYYY-MM-DD) and are interpreted as UTC midnight.
+// KEV due dates are calendar dates (YYYY-MM-DD, UTC). "Remediate by" the due
+// date includes that day, so an alert is overdue only from the next UTC day,
+// matching the pipeline's kev_overdue_count (due_date < today, UTC).
 function dueDate(alert) {
   return alert.kev_due_date ? parseDate(`${alert.kev_due_date}T00:00:00Z`) : null;
 }
 
 export function isOverdue(alert) {
   const due = dueDate(alert);
-  return Boolean(due) && due.getTime() < Date.now();
+  return Boolean(due) && due.getTime() + DAY_MS <= Date.now();
 }
 
+/** Whole days past the due date (1 on the day after it); null if not overdue. */
 export function overdueDays(alert) {
-  const due = dueDate(alert);
-  if (!due || due.getTime() >= Date.now()) return null;
-  return Math.floor((Date.now() - due.getTime()) / DAY_MS);
+  if (!isOverdue(alert)) return null;
+  return Math.floor((Date.now() - dueDate(alert).getTime()) / DAY_MS);
 }
 
-/** Whole days until the KEV due date; null if none or already overdue. */
+/** Whole days until the KEV due date (0 on the due date); null if none or overdue. */
 export function daysUntilDue(alert) {
   const due = dueDate(alert);
-  if (!due || due.getTime() < Date.now()) return null;
-  return Math.ceil((due.getTime() - Date.now()) / DAY_MS);
+  if (!due || isOverdue(alert)) return null;
+  return Math.max(0, Math.ceil((due.getTime() - Date.now()) / DAY_MS));
 }
 
 export function isDueSoon(alert) {
