@@ -32,6 +32,14 @@ thresholds:
   escalate_cvss: 9.0      # in-estate CVE at/above this on a CRITICAL asset, network-reachable -> ESCALATE
   escalate_epss: 0.5      # in-estate CVE with EPSS at/above this -> ESCALATE
 
+# CVEs whose description matches one of these phrases are about a third-party
+# add-on, not an estate product. Estate names inside them are integrations the
+# add-on talks to ("...Newsletters for Mailchimp, HubSpot ... plugin for
+# WordPress", "plugin for WooCommerce ... its Google Drive branch"), so the CVE
+# is never tiered. Applies to CVE alerts only, not to news.
+cve_exclude: ["plugin for WordPress", "WordPress plugin", "theme for WordPress", "WordPress theme",
+              "plugin for WooCommerce", "WooCommerce plugin"]
+
 assets:
   # ---------------------------------------------------------------- critical
   - name: "Identity (AD / AD FS / Entra ID)"

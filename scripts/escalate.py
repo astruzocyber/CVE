@@ -136,8 +136,10 @@ def load_env(path=ENV_PATH, priority_terms=None):
     win = cfg.get("window_days") or {}
     th = cfg.get("thresholds") or {}
     pt = load_priority_terms() if priority_terms is None else priority_terms
+    cx = [str(t).strip() for t in (cfg.get("cve_exclude") or []) if str(t).strip()]
     return {
         "assets": assets,
+        "cve_exclude_re": re.compile("|".join(re.escape(t) for t in cx), re.IGNORECASE) if cx else None,
         "vendor_words": vendor_words,
         "priority_re": (re.compile(r"(?<![\w-])(?:" + "|".join(re.escape(t) for t in pt) + r")(?![\w-])",
                                    re.IGNORECASE) if pt else None),
@@ -182,6 +184,11 @@ def _hits_desc(hits):
 
 
 def classify_alert(alert, env):
+    # third-party add-on CVE (e.g. a WordPress plugin): estate names in it are
+    # integrations, not the vulnerable product
+    cx = env.get("cve_exclude_re")
+    if cx and cx.search(alert.get("description") or ""):
+        return None
     text = " ".join([alert.get("description") or ""] + [str(x) for x in alert.get("affected") or []])
     hits = match_assets(text, env["assets"])
     if not hits:

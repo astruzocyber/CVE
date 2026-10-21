@@ -78,6 +78,22 @@ class EscalateTests(unittest.TestCase):
                       {}, env(), NOW)
         self.assertEqual(out["items"], [])
 
+    def test_wordpress_plugin_naming_an_estate_saas_is_not_in_estate(self):
+        # Real NVD shapes (CVE-2026-109515, CVE-2026-93388): the flaw is in the
+        # plugin; HubSpot / Google Drive are only integrations it talks to.
+        out = E.build([
+            alert("CVE-2026-5", "The MailOptin - Popup, Optin Forms & Email Newsletters for Mailchimp, "
+                  "HubSpot, AWeber Etc. plugin for WordPress is vulnerable to Privilege Escalation.", 9.8),
+            alert("CVE-2026-6", "The Printcart Store plugin for WooCommerce is vulnerable to arbitrary "
+                  "file upload; its Google Drive branch rebuilds the filename.", 9.8),
+            alert("CVE-2026-7", "The Download Manager WordPress plugin before 7.5.6 does not sanitise "
+                  "data (free Download Manager).", 9.8)], {}, env(), NOW)
+        self.assertEqual(out["items"], [])
+        # the estate product's own CVE still matches
+        out = E.build([alert("CVE-2026-8", "Privilege escalation in HubSpot CMS allows takeover.", 9.8)],
+                      {}, env(), NOW)
+        self.assertEqual(tiers(out), {"CVE-2026-8": "work"})
+
     def test_teams_vishing_news_escalates(self):
         out = E.build([], {"items": [intel("t1", "Hackers pose as IT support in Microsoft Teams calls",
                                            ["social_engineering"])]}, env(), NOW)
