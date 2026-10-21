@@ -37,8 +37,11 @@ thresholds:
 # add-on talks to ("...Newsletters for Mailchimp, HubSpot ... plugin for
 # WordPress", "plugin for WooCommerce ... its Google Drive branch"), so the CVE
 # is never tiered. Applies to CVE alerts only, not to news.
+# "for WordPress" catches add-ons named without the word plugin ("Rank Math SEO
+# PRO for WordPress", "rtMedia for WordPress", "plugin before 6.9 for
+# WordPress"); core WordPress CVEs read "WordPress 6.9.x before ...".
 cve_exclude: ["plugin for WordPress", "WordPress plugin", "theme for WordPress", "WordPress theme",
-              "plugin for WooCommerce", "WooCommerce plugin"]
+              "plugin for WooCommerce", "WooCommerce plugin", "for WordPress"]
 
 assets:
   # ---------------------------------------------------------------- critical

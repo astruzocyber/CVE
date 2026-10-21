@@ -94,6 +94,24 @@ class EscalateTests(unittest.TestCase):
                       {}, env(), NOW)
         self.assertEqual(tiers(out), {"CVE-2026-8": "work"})
 
+    def test_named_add_on_for_wordpress_is_not_core_wordpress(self):
+        # Real NVD shapes (CVE-2026-111862, CVE-2026-105892, CVE-2020-25213):
+        # the add-on is named "<X> for WordPress" without the word "plugin"
+        # next to it, so the plugin phrases missed them.
+        out = E.build([
+            alert("CVE-2026-9", "Rank Math SEO PRO for WordPress is affected by a supply-chain "
+                  "compromise.", 9.8),
+            alert("CVE-2026-10", "Path Traversal vulnerability in rtCamp Inc. rtMedia for WordPress, "
+                  "BuddyPress and bbPress allows traversal.", 9.8),
+            alert("CVE-2026-11", "The File Manager (wp-file-manager) plugin before 6.9 for WordPress "
+                  "allows remote attackers to upload PHP code.", 10.0, kev=True,
+                  kev_date_added="2026-10-14")], {}, env(), NOW)
+        self.assertEqual(out["items"], [])
+        # core WordPress CVEs still match
+        out = E.build([alert("CVE-2026-12", "WordPress 6.9.x before 6.9.5 is affected by a REST API "
+                             "route confusion issue.", 9.8)], {}, env(), NOW)
+        self.assertEqual(tiers(out), {"CVE-2026-12": "work"})
+
     def test_teams_vishing_news_escalates(self):
         out = E.build([], {"items": [intel("t1", "Hackers pose as IT support in Microsoft Teams calls",
                                            ["social_engineering"])]}, env(), NOW)
