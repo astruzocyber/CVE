@@ -15,6 +15,7 @@ on:
       - "docs/**"
       - "scripts/**"
       - "config/**"
+      - "tests/**"
       - ".github/workflows/ci.yml"
       - "requirements.txt"
   pull_request:
@@ -22,6 +23,7 @@ on:
       - "docs/**"
       - "scripts/**"
       - "config/**"
+      - "tests/**"
       - ".github/workflows/ci.yml"
       - "requirements.txt"
   workflow_dispatch: {}
@@ -71,3 +73,6 @@ jobs:
 
       - name: Unit tests for scoring/parsing logic (aggregate.py)
         run: python -m unittest discover -s scripts -p "test_*.py" -v
+
+      - name: Unit tests for frontend filter logic (docs/js/filters.js)
+        run: node --test tests/js/*.test.mjs
