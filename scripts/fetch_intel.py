@@ -90,6 +90,9 @@ NEGATED_EXPLOIT_RE = re.compile(
     r"of|any|to|be|have|has|had)\s+)*(?:actively\s+)?exploit\w*(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?"
     r"|\bno\s+(?:evidence|indication|signs?|reports?|known)\b[^.!?]{0,80}?\bexploit\w*(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?"
     r"|\bunaware\s+of\b[^.!?]{0,60}?\bexploit\w*(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?"
+    # conditions, not reports ("Coordinated vulnerability disclosure, unless
+    # there's evidence of active exploits in the wild")
+    r"|\b(?:unless|until)\b[^.!?]{0,80}?\b(?:exploit\w*|in[- ]the[- ]wild)(?:\s+in[- ]the[- ]wild|\s+in\s+attacks)?"
     # benchmark scores of a tool/AI ("AWS Security Agent ... exploited 33 of 37
     # new real-world CVEs", "GPT-4 agents exploited 87% of one-day vulns"):
     # a test result, not attackers exploiting anything

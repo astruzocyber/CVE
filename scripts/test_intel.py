@@ -80,11 +80,16 @@ class TestFetchIntel(unittest.TestCase):
         for text in ("These issues were found during internal testing and are not known to be actively exploited.",
                      "Docker says it found no evidence that anyone exploited it.",
                      "There is no evidence of exploitation in the wild.",
-                     "The flaw has not been exploited in the wild, Microsoft says"):
+                     "The flaw has not been exploited in the wild, Microsoft says",
+                     # The Register 2026-10-21 (PHP vs Chainguard disclosure row)
+                     "'Coordinated vulnerability disclosure, unless there's evidence of active "
+                     "exploits in the wild,' Chainguard CEO tells The Reg",
+                     "Details are withheld until the bug is exploited in the wild"):
             self.assertNotIn("exploited", F.classify(text, WATCH)[0], text)
         for text in ("Patch not yet available for actively exploited zero-day in Chrome",
                      "Ivanti says one bug was exploited in attacks; another has not been exploited",
-                     "CISA adds actively exploited Fortinet flaw to KEV"):
+                     "CISA adds actively exploited Fortinet flaw to KEV",
+                     "Attackers exploited the zero-day until Fortinet patched it"):
             self.assertIn("exploited", F.classify(text, WATCH)[0], text)
         import escalate as E
         self.assertNotIn("exploited", E.current_categories(
