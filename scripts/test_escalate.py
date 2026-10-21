@@ -226,6 +226,24 @@ class EstateAndTriageTests(unittest.TestCase):
         self.assertEqual(len(s["coverage"]), 3)
         self.assertEqual(sorted(s["member_keys"]), ["intel:pan1", "intel:pan2", "intel:pan3"])
 
+    def test_cveless_report_does_not_join_unrelated_psirt_advisory(self):
+        # Real: 'Ransomware Operators Exploit PAN-OS GlobalProtect Authentication Bypass'
+        # (no CVE named; it is CVE-2026-0257) was folded into the PSIRT entry for
+        # CVE-2026-0307, a GlobalProtect App local privilege escalation, on asset+date.
+        adv = self._pan(1, "CVE-2026-0307 GlobalProtect App: Local Privilege Escalation Vulnerabilities (Severity: MEDIUM)",
+                        13, ["CVE-2026-0307"])
+        adv["source"] = "Palo Alto PSIRT"
+        news = self._pan(2, "Ransomware Operators Exploit PAN-OS Authentication Bypass", 15)
+        story = self._pan(3, "Threat Brief: Active Exploitation of PAN-OS Authentication Bypass CVE-2026-0257", 15,
+                          ["CVE-2026-0257"])
+        out = E.build([], {"items": [adv, news, story]}, env(), NOW)
+        home = {m: it["key"] for it in out["items"] for m in (it.get("member_keys") or [it["key"]])}
+        self.assertNotEqual(home["intel:pan2"], home["intel:pan1"])
+        self.assertEqual(home["intel:pan2"], home["intel:pan3"])
+        # Without the CVE-specific story it stands alone rather than joining the advisory.
+        out = E.build([], {"items": [adv, news]}, env(), NOW)
+        self.assertEqual(len(out["items"]), 2)
+
     def test_different_cves_or_far_apart_stay_separate(self):
         items = [self._pan(1, "Palo Alto Networks bug A exploited", 14, ["CVE-2026-1"]),
                  self._pan(2, "Palo Alto Networks bug B exploited", 14, ["CVE-2026-2"]),

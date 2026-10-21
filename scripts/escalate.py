@@ -350,6 +350,7 @@ def bundle_work(items, triage, min_size=BUNDLE_MIN):
 STORY_DAYS = 3  # same-asset coverage published within this many days = one incident
 
 _TITLE_NOISE = re.compile(r"\s+[-|\u2013\u2014]\s+[^-|\u2013\u2014]{2,60}$")
+_CVE_TITLE = re.compile(r"\s*CVE-\d{4}-\d{4,}\b", re.I)
 
 
 def _norm_title(t):
@@ -414,6 +415,12 @@ def group_stories(items, triage, days=STORY_DAYS, vendor_words=None):
                 if (ci and cset and not ci & cset and topic < 2) or not (di and ds) \
                         or abs((di - ds).total_seconds()) > days * 86400 \
                         or not set(it["assets"]) & set(seed["assets"]):
+                    continue
+                # A seed titled "CVE-x ..." (a vendor PSIRT entry) is about that one CVE.
+                # A report naming no CVE joins it only on shared topic words, not on
+                # asset + date alone -- otherwise whichever same-batch advisory sorts
+                # first absorbs the vendor's unrelated zero-day coverage.
+                if not ci and cset and _CVE_TITLE.match(seed["title"]) and not topic:
                     continue
                 if set(it["assets"]) == set(seed["assets"]) or topic:
                     home = cl
