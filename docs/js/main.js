@@ -19,6 +19,7 @@ import { initTrend, refreshTrendTheme } from "./trend.js";
 import { saveView, deleteView, findView, renderViewsSelect } from "./saved-views.js";
 import { initIntel } from "./intel.js";
 import { initEscalations } from "./escalations.js";
+import { alertIdFromHash } from "./format.js";
 
 const VIEW_KEY = "viewMode";
 
@@ -103,9 +104,10 @@ function repaintKeepingScroll() {
 /* ---------- deep links (#alert-CVE-…) ---------- */
 
 function revealHash() {
-  const id = decodeURIComponent(location.hash.slice(1));
-  if (!id.startsWith("alert-")) return;
-  const cve = id.slice("alert-".length);
+  const cve = alertIdFromHash(location.hash);
+  if (!cve) return;
+  const id = `alert-${cve}`;
+  const hashNow = location.hash;
   const index = state.filtered.findIndex((a) => a.cve_id === cve);
   if (index === -1) {
     if (findAlert(cve)) toast(`${cve} is hidden by the current filters`);
@@ -123,7 +125,7 @@ function revealHash() {
   // after this and push the card down; re-aim once layout has settled.
   for (const ms of [800, 2000, 4000]) {
     setTimeout(() => {
-      if (location.hash.slice(1) !== id && decodeURIComponent(location.hash.slice(1)) !== id) return;
+      if (location.hash !== hashNow) return;
       const r = card.getBoundingClientRect();
       if (Math.abs(r.top) > 80) card.scrollIntoView({ behavior: "auto", block: "start" });
     }, ms);

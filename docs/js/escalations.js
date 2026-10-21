@@ -49,7 +49,7 @@ function triageLine(it) {
 function renderItem(it) {
   const title = it.kind === "intel"
     ? extLink(it.link, it.title) || escapeHtml(it.title)
-    : `<a href="#${encodeURIComponent(it.ref)}" title="Open this CVE on the dashboard">${escapeHtml(it.title)}</a>`;
+    : `<a href="#alert-${encodeURIComponent(it.ref)}" title="Open this CVE on the dashboard">${escapeHtml(it.title)}</a>`;
   const reasons = (it.reasons || []).map((r) => `<li>${escapeHtml(r)}</li>`).join("");
   const cov = it.coverage || [];
   const kind = it.kind === "cve" ? "CVE" : it.kind === "bundle" ? `Bundle · ${(it.cve_ids || []).length} CVEs`
@@ -108,7 +108,7 @@ function briefText(list) {
       lines.push(`   Assets: ${(it.assets || []).join(", ")} [${it.criticality}]`);
       for (const r of (it.reasons || []).slice(1)) lines.push(`   - ${r}`);
       if (it.triage) lines.push(`   Triage: ${it.triage.status}${it.triage.owner ? ` (${it.triage.owner})` : ""}${it.triage.note ? ` -- ${it.triage.note}` : ""}`);
-      lines.push(`   Link: ${it.kind === "intel" ? it.link : `${SITE}#${it.ref}`}`);
+      lines.push(`   Link: ${it.kind === "intel" ? it.link : `${SITE}#alert-${it.ref}`}`);
     });
     lines.push("");
   }

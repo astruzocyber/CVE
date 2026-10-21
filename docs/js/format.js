@@ -24,6 +24,19 @@ export function riskClass(score) {
   return "low";
 }
 
+/**
+ * URL hash -> alert id for deep links. Canonical form is "#alert-<id>"; a bare
+ * "#CVE-…" / "#GHSA-…" is also accepted because escalation-board links and
+ * already-sent Discord/briefing links used that form. Returns "" otherwise.
+ */
+export function alertIdFromHash(hash) {
+  let id = String(hash || "").replace(/^#/, "");
+  try { id = decodeURIComponent(id); } catch { return ""; }
+  if (id.startsWith("alert-")) id = id.slice("alert-".length);
+  else if (!/^(CVE-\d{4}-\d+|GHSA(-[0-9a-z]{4}){3})$/i.test(id)) return "";
+  return id;
+}
+
 export const isNum = (v) => typeof v === "number" && Number.isFinite(v);
 export const fmtScore = (v, digits = 1) => (isNum(v) ? v.toFixed(digits) : "n/a");
 export const fmtPct = (p, digits = 1) => (isNum(p) ? `${(p * 100).toFixed(digits)}%` : "n/a");

@@ -273,6 +273,13 @@ class DiscordTests(unittest.TestCase):
         self.calls = []
         D.time.sleep = lambda s: None
 
+    def test_cve_embed_links_to_the_card_anchor(self):
+        # dashboard cards are id="alert-<CVE>"; a bare #CVE-... link opened the
+        # page without jumping to the alert
+        e = D.build_embed({"kind": "cve", "ref": "CVE-2026-84731", "tier": "escalate",
+                           "title": "t"}, "https://x.example/CVE/")
+        self.assertEqual(e["url"], "https://x.example/CVE/#alert-CVE-2026-84731")
+
     def poster(self, ok=True):
         def p(url, payload):
             self.calls.append(payload)

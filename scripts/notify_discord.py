@@ -61,7 +61,7 @@ def select_new(items, sent, min_tier="escalate"):
 
 
 def build_embed(it, dashboard):
-    url = f"{dashboard}#{it['ref']}" if it.get("kind") == "cve" else (it.get("link") or dashboard)
+    url = f"{dashboard}#alert-{it['ref']}" if it.get("kind") == "cve" else (it.get("link") or dashboard)
     if not str(url).startswith(("https://", "http://")):
         url = dashboard
     reasons = "\n".join(f"• {_clip(r, 180)}" for r in (it.get("reasons") or [])[1:6]) or "—"
