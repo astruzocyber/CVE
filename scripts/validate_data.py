@@ -10,7 +10,7 @@ edit could ship a broken dashboard with zero automated safety net. This script
 is a cheap, dependency-free (stdlib-only) regression check wired into a new
 GitHub Actions workflow (.github/workflows/ci.yml) that runs on every push/PR
 touching docs/ or scripts/, independent of the aggregation pipeline's own
-30-minute/4-hour cadence.
+2-hour schedule.
 
 Exit code 0 = pass, 1 = fail (fails the CI job).
 """

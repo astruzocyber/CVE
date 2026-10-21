@@ -6,8 +6,8 @@ name: Cancel Stale Queued Aggregation Runs
 # workflow). Because cve-alerts.yml uses
 # `concurrency: {group: cve-aggregation, cancel-in-progress: false}` to
 # stop overlapping runs from double-hitting NVD/EPSS/KEV/Dependabot/GHSA,
-# every later 4-hourly trigger queued behind the stuck one instead of
-# running -- and cve-alerts.yml's own `timeout-minutes: 10` only bounds a
+# every later scheduled trigger queued behind the stuck one instead of
+# running -- and cve-alerts.yml's own `timeout-minutes` only bounds a
 # run's *execution* time, so it does nothing for a run that never leaves
 # `queued`. That silently stalled data updates for ~20 hours until a human
 # noticed and cancelled the backlog by hand.

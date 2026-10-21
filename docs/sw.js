@@ -13,7 +13,7 @@
 // data that must never be silently served stale from a cache without the
 // user knowing):
 //   - docs/data/*.json, feed.json, feed.xml: NETWORK-ONLY, never cached.
-//     These change every ~4h and staleness is already surfaced via the
+//     These change every few hours and staleness is already surfaced via the
 //     stale-data banner (cycle 9) which reads a live fetch of stats.json --
 //     caching them here would defeat that mechanism and could show a visitor
 //     confidently-wrong vulnerability data while offline with no warning.

@@ -9,7 +9,8 @@ Pages for the dashboard. No database, no server, no paid services.
 
 ## What it does
 
-Every 4 hours (and on-demand via `workflow_dispatch`), a GitHub Actions job:
+Every 2 hours on schedule (GitHub often delays scheduled runs, so in practice
+every 3 to 8 hours) and on demand via `workflow_dispatch`, a GitHub Actions job:
 
 1. Fetches the [CISA KEV catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
 2. Queries [NVD](https://nvd.nist.gov/) for CVEs matching the vendors/products/keywords in `config/watchlist.yaml`
@@ -64,7 +65,7 @@ what you actually run, and remove anything irrelevant.
 ### 4. Run it
 
 Actions tab -> "CVE/KEV/Dependabot Alert Aggregation" -> "Run workflow" to
-trigger manually, or just wait for the next scheduled run (every 4 hours).
+trigger manually, or just wait for the next scheduled run (scheduled every 2 hours).
 
 ## Notifications
 
