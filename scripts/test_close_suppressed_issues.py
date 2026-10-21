@@ -74,6 +74,40 @@ class TestCloseSuppressedIssues(unittest.TestCase):
         # Issue 43 (no matching suppression) must never be PATCHed.
         self.assertFalse(any("issues/43" in c[1] for c in patched))
 
+    def test_shorter_id_does_not_close_longer_id_issue(self):
+        # Real collision on the board: CVE-2025-5949 vs CVE-2025-59494.
+        suppressions = {"CVE-2025-5949": {"reason": "n/a", "expires": None}}
+        open_issues = [
+            {"number": 50, "title": "[VULN ALERT] CVE-2025-59494 (risk 40.0) - microsoft/azure"},
+            {"number": 51, "title": "[VULN ALERT] CVE-2025-5949 [KEV] (risk 60.0) - foo/bar"},
+        ]
+        patched = []
+
+        def fake_urlopen(req, timeout=30):
+            url = req.full_url
+            if "issues?state=open" in url:
+                return FakeResponse(open_issues if "page=1" in url else [])
+            if req.get_method() == "PATCH":
+                patched.append(url)
+                return FakeResponse({"state": "closed"})
+            return FakeResponse({"id": 1})
+
+        with mock.patch.object(csi, "load_suppressions", return_value=suppressions), \
+             mock.patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            os.environ["GITHUB_TOKEN"] = "x"
+            os.environ["GITHUB_REPOSITORY"] = "astruzocyber/CVE"
+            csi.main()
+
+        self.assertEqual(len(patched), 1)
+        self.assertTrue(patched[0].endswith("issues/51"))
+
+    def test_id_in_title_token_boundaries(self):
+        self.assertTrue(csi.id_in_title("CVE-2025-5949", "[VULN ALERT] CVE-2025-5949 - x"))
+        self.assertTrue(csi.id_in_title("CVE-2025-5949", "[VULN ALERT] CVE-2025-5949"))
+        self.assertFalse(csi.id_in_title("CVE-2025-5949", "[VULN ALERT] CVE-2025-59494 - x"))
+        self.assertFalse(csi.id_in_title("CVE-2025-1281", "[VULN ALERT] CVE-2025-12813 (risk 1)"))
+        self.assertTrue(csi.id_in_title("GHSA-abcd-efgh-ijkl", "[VULN ALERT] GHSA-abcd-efgh-ijkl - pip/x"))
+
 
 if __name__ == "__main__":
     unittest.main()

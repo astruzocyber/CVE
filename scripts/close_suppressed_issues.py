@@ -30,6 +30,7 @@ commit doesn't matter.
 """
 import json
 import os
+import re
 import sys
 import time
 import urllib.request
@@ -42,6 +43,15 @@ sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
 from aggregate import load_suppressions  # noqa: E402
 
 GITHUB_API = "https://api.github.com"
+
+
+def id_in_title(sid, title):
+    """True only if `sid` appears in `title` as a whole ID token (not as the
+    prefix of a longer CVE/GHSA number)."""
+    if not sid or not title:
+        return False
+    pattern = r"(?<![A-Za-z0-9-])" + re.escape(sid) + r"(?![A-Za-z0-9-])"
+    return re.search(pattern, title, flags=re.IGNORECASE) is not None
 
 
 def _api_request(url, token, method="GET", payload=None):
@@ -145,14 +155,11 @@ def main():
     for issue in open_issues:
         title = issue.get("title", "")
         number = issue.get("number")
-        # Title format is "[VULN ALERT] <CVE_ID>...", so a direct substring
-        # match against each active suppression ID is precise: CVE/GHSA IDs
-        # are unique tokens unlikely to collide as accidental substrings of
-        # unrelated titles, and this only ever *closes* (never creates/edits
-        # content), so a false-negative (miss) is the safe failure mode, not
-        # a false-positive.
+        # Title format is "[VULN ALERT] <CVE_ID>...". Match the ID as a whole
+        # token: CVE numbers vary in length, so a plain substring test let a
+        # suppression for CVE-2025-5949 close the issue for CVE-2025-59494.
         for sid, meta in suppressions.items():
-            if sid in title:
+            if id_in_title(sid, title):
                 if close_issue(repo, token, number, meta.get("reason", ""), sid):
                     closed_count += 1
                 break
