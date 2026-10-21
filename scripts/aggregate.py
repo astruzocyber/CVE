@@ -1831,6 +1831,27 @@ def build_kev_feed(kev_map):
             "_kev_product": kev_entry.get("product"),
             "_kev_ransomware_use": kev_entry.get("knownRansomwareCampaignUse") == "Known",
         }
+    # CISA revises the due date (e.g. CVE-2026-86950: 2026-10-02 -> 2026-10-13)
+    # and ransomware use (Unknown -> Known) of entries after adding them. The
+    # feed item is written once, so refresh those two live fields from the
+    # current catalog for items still listed; otherwise the feed keeps
+    # contradicting alerts.json. Items no longer in KEV are left as written.
+    refreshed = 0
+    for cve_id, item in existing_by_id.items():
+        kev_entry = kev_map.get(cve_id)
+        if not isinstance(kev_entry, dict) or not isinstance(item, dict):
+            continue
+        live = {}  # only fields the catalog actually states; never blank a value
+        if kev_entry.get("dueDate"):
+            live["_kev_due_date"] = kev_entry["dueDate"]
+        if kev_entry.get("knownRansomwareCampaignUse"):
+            live["_kev_ransomware_use"] = kev_entry["knownRansomwareCampaignUse"] == "Known"
+        changed = {k: v for k, v in live.items() if item.get(k) != v}
+        if changed:
+            item.update(changed)
+            refreshed += 1
+    if refreshed:
+        print(f"KEV feed: refreshed due date / ransomware use on {refreshed} existing item(s)")
     # Keep the feed bounded (most recent 200 entries by date_published) so the
     # JSON/XML files don't grow unbounded over years of runs.
     all_items = sorted(existing_by_id.values(), key=lambda i: i.get("date_published", ""), reverse=True)[:200]

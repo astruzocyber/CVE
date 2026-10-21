@@ -859,6 +859,41 @@ class TestBuildKevFeedRss(unittest.TestCase):
                 content = f.read()
             self.assertIn("<pubDate>not-a-real-timestamp</pubDate>", content)
 
+    def test_existing_items_track_catalog_due_date_and_ransomware(self):
+        # CISA moved CVE-2026-86950's due date 2026-10-02 -> 2026-10-13 after
+        # it was added; the feed item kept the old date forever.
+        import aggregate
+        with tempfile.TemporaryDirectory() as d:
+            snap = os.path.join(d, "kev_snapshot.json")
+            feed_json = os.path.join(d, "feed.json")
+            feed_xml = os.path.join(d, "feed.xml")
+            with open(snap, "w") as f:
+                json.dump(["CVE-2026-86950", "CVE-2020-1", "CVE-2020-2"], f)
+            old = {"id": "CVE-2026-86950", "title": "CVE-2026-86950: Apple", "content_text": "d",
+                   "url": "u", "date_published": "2026-09-29T16:12:56+00:00",
+                   "_kev_date_added": "2026-09-29", "_kev_due_date": "2026-10-02",
+                   "_kev_vendor_project": "Apple", "_kev_product": "Multiple Products",
+                   "_kev_ransomware_use": False}
+            gone = dict(old, id="CVE-2020-1", _kev_due_date="2020-01-01")
+            partial = dict(old, id="CVE-2020-2", _kev_due_date="2021-01-01")
+            with open(feed_json, "w") as f:
+                json.dump({"version": "https://jsonfeed.org/version/1", "title": "t",
+                           "items": [old, gone, partial]}, f)
+            kev_map = {"CVE-2026-86950": {"dateAdded": "2026-09-29", "dueDate": "2026-10-13",
+                                          "knownRansomwareCampaignUse": "Known"},
+                       "CVE-2020-2": {}}
+            self._run_with_tmp_paths(snap, feed_json, feed_xml,
+                                     lambda: aggregate.build_kev_feed(kev_map))
+            with open(feed_json) as f:
+                items = {i["id"]: i for i in json.load(f)["items"]}
+            self.assertEqual(items["CVE-2026-86950"]["_kev_due_date"], "2026-10-13")
+            self.assertTrue(items["CVE-2026-86950"]["_kev_ransomware_use"])
+            self.assertEqual(items["CVE-2026-86950"]["date_published"], "2026-09-29T16:12:56+00:00")
+            self.assertEqual(items["CVE-2026-86950"]["_kev_date_added"], "2026-09-29")
+            self.assertEqual(items["CVE-2020-1"]["_kev_due_date"], "2020-01-01")  # delisted: untouched
+            self.assertEqual(items["CVE-2020-2"]["_kev_due_date"], "2021-01-01")  # partial: not blanked
+            self.assertFalse(items["CVE-2020-2"]["_kev_ransomware_use"])
+
 
 class TestAdvisoryTwins(unittest.TestCase):
     def test_kev_only_twin_collapses_into_nvd_alert(self):
