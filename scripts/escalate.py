@@ -429,6 +429,10 @@ def group_stories(items, triage, days=STORY_DAYS, vendor_words=None):
             return 2
         return 1 if len(shared) + (1 if va & vb else 0) >= 2 else 0
 
+    def shares_word(a, b):
+        (na, va), (nb, vb) = sig(a), sig(b)
+        return bool(na & nb or va & vb)
+
     # Greedy, NON-transitive: an item joins a cluster only if it matches that
     # cluster's FIRST report directly, so roundup articles naming several vendors
     # ("CISA adds PAN-OS, BeyondTrust ... to KEV") cannot chain incidents together.
@@ -455,7 +459,10 @@ def group_stories(items, triage, days=STORY_DAYS, vendor_words=None):
                 # first absorbs the vendor's unrelated zero-day coverage.
                 if not ci and cset and _CVE_TITLE.match(seed["title"]) and not topic:
                     continue
-                if set(it["assets"]) == set(seed["assets"]) or topic:
+                # Same asset set alone is not one incident: broad assets (Windows,
+                # Microsoft 365, AI assistants) carry many unrelated stories a day.
+                # The headlines must share at least one word (product or topic).
+                if topic or (set(it["assets"]) == set(seed["assets"]) and shares_word(it, seed)):
                     home = cl
                     break
         if home is None:

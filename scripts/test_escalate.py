@@ -305,6 +305,23 @@ class EstateAndTriageTests(unittest.TestCase):
         self.assertIn("covered by 2 distinct reports", reason)
         self.assertIn("plus 1 reposts of the same headline", reason)
 
+    def test_same_asset_alone_does_not_fold_unrelated_stories(self):
+        # Real (2026-10-22 board): 'Microsoft Entra ID Adds Third-Party SMS and Voice MFA'
+        # was folded into the escalated 'Why password resets won't save you from OAuth
+        # consent phishing' card, and 'Authorities disrupt nearly 11,000 cybercrime
+        # networks in Africa' into 'M365 Token Spray and Replay Campaign...', only
+        # because each pair hit the same broad asset within the story window.
+        seed = intel("m1", "Why password resets won't save you from OAuth consent phishing",
+                     ["social_engineering"], summary="Attackers abuse Entra ID app consent.")
+        other = intel("m2", "Microsoft Entra ID Adds Third-Party SMS and Voice MFA", ["social_engineering"])
+        same = intel("m3", "OAuth consent phishing campaign hits Entra ID tenants", ["social_engineering"])
+        for x in (other, same):
+            x["published"] = "2026-10-15T14:00:00+00:00"
+        out = E.build([], {"items": [seed, other, same]}, env(), NOW)
+        home = {m: it["key"] for it in out["items"] for m in (it.get("member_keys") or [it["key"]])}
+        self.assertEqual(home["intel:m3"], home["intel:m1"])
+        self.assertNotEqual(home["intel:m2"], home["intel:m1"])
+
     def test_cveless_report_does_not_join_unrelated_psirt_advisory(self):
         # Real: 'Ransomware Operators Exploit PAN-OS GlobalProtect Authentication Bypass'
         # (no CVE named; it is CVE-2026-0257) was folded into the PSIRT entry for
