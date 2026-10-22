@@ -644,6 +644,56 @@ class DiscordSkipIssuesTests(unittest.TestCase):
         self.assertEqual(D.run_mode({"SKIP_ISSUES": "true", "LOOKBACK_DAYS": "14"}), "seed")
         self.assertEqual(D.run_mode({"SKIP_ISSUES": "true", "LOOKBACK_DAYS": "x"}), "seed")
 
+    def test_reply_errors_do_not_crash_or_lose_state(self):
+        # urlopen wraps only connect errors in URLError; a timeout or reset
+        # while reading Discord's reply raised out of main() before the state
+        # was written, so an item already posted was posted again next run.
+        import http.client
+        for exc in (TimeoutError("timed out"), ConnectionResetError(104, "reset"),
+                    http.client.RemoteDisconnected("closed")):
+            def boom(req, timeout=0, exc=exc):
+                raise exc
+            orig = D.urllib.request.urlopen
+            D.urllib.request.urlopen = boom
+            D.time.sleep = lambda s: None
+            try:
+                self.assertFalse(D.post("https://discord.com/api/webhooks/1/abc", {"content": "x"}))
+            finally:
+                D.urllib.request.urlopen = orig
+        # item post accepted, then the daily digest's reply times out
+        tmp = self.setup_tmp()
+        with open(os.path.join(tmp, "state.json"), "w", encoding="utf-8") as fh:
+            json.dump({"seeded": True, "sent": {}, "digest_date": "2000-01-01"}, fh)
+        calls = []
+
+        class Res:
+            status = 204
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+
+        def fake_urlopen(req, timeout=0):
+            calls.append(req.data)
+            if len(calls) > 1:
+                raise TimeoutError("The read operation timed out")
+            return Res()
+        saved = (D.ESC_PATH, D.STATE_PATH, D.urllib.request.urlopen, dict(os.environ))
+        D.ESC_PATH, D.STATE_PATH = os.path.join(tmp, "esc.json"), os.path.join(tmp, "state.json")
+        D.urllib.request.urlopen = fake_urlopen
+        try:
+            for k in ("DISCORD_SEED_ONLY", "SKIP_ISSUES", "LOOKBACK_DAYS", "DISCORD_DIGEST"):
+                os.environ.pop(k, None)
+            os.environ.update(self.step_env(False, None), DISCORD_DIGEST_HOUR_UTC="0")
+            D.main()
+        finally:
+            D.ESC_PATH, D.STATE_PATH, D.urllib.request.urlopen = saved[:3]
+            os.environ.clear()
+            os.environ.update(saved[3])
+        with open(os.path.join(tmp, "state.json"), encoding="utf-8") as fh:
+            st = json.load(fh)
+        self.assertEqual(len(calls), 2)
+        self.assertIn("cve:NEW", st["sent"])            # not posted again next run
+        self.assertEqual(st["digest_date"], "2000-01-01")  # digest retried next run
+
 
 if __name__ == "__main__":
     unittest.main()

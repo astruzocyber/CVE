@@ -26,6 +26,7 @@ State: docs/data/discord_notified.json  {"seeded": bool, "sent": {key: iso_date}
 Safety: the webhook URL is never printed; only discord.com webhook URLs are
 accepted; allowed_mentions is empty so feed text can never @everyone/@here.
 """
+import http.client
 import json
 import os
 import re
@@ -135,6 +136,14 @@ def post(webhook, payload, attempts=4):
         except urllib.error.URLError as e:
             print(f"Discord unreachable: {e.reason}")
             time.sleep(2)
+        except (OSError, http.client.HTTPException) as e:
+            # Raised while reading the reply (timeout, reset, dropped
+            # connection); urlopen only wraps connect-phase errors in URLError.
+            # Uncaught, main() died before saving state, so items posted
+            # earlier in the run (or before a failed digest) were posted
+            # again next run. The message may have landed, so no retry here.
+            print(f"Discord reply not received ({type(e).__name__}); will retry next run.")
+            return False
     return False
 
 
