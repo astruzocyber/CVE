@@ -124,6 +124,23 @@ class TestFetchIntel(unittest.TestCase):
                      "AWS Security Agent exploited 33 of 37 CVEs; separately, attackers exploited a Fortinet zero-day"):
             self.assertIn("exploited", F.classify(text, WATCH)[0], text)
 
+    def test_zdi_0day_disclosure_not_tagged_exploited(self):
+        # Real ZDI titles (2026-10): "(0Day)" means published without a vendor
+        # patch, not exploited. All 13 were tagged "Actively exploited" and two
+        # CVEs entered the board as "news: reported exploited".
+        for text in ("ZDI-26-708: (0Day) Microsoft Windows HTTP Proxy Link Following Local Privilege "
+                     "Escalation Vulnerability\nUser interaction is required to exploit this vulnerability",
+                     "ZDI-26-757: (0Day) Telegram rlottie Numeric Truncation Remote Code Execution Vulnerability",
+                     "ZDI-26-705: ( 0-Day ) BusyBox Arbitrary File Creation Vulnerability",
+                     "The ZDI is publishing this case as a zero-day advisory."):
+            self.assertNotIn("exploited", F.classify(text, WATCH)[0], text)
+        for text in ("BeyondTrust 0-Day Vulnerability Exploited Since August",
+                     "Palo Alto Warns of PAN-OS 0-day Flaw Actively Exploited in Attacks",
+                     "Cisco make-me-root email bug exploited as a 0-day by unknown crims",
+                     "Threat Brief: NetScaler Zero Days CVE-2026-88771 and CVE-2026-88772",
+                     "ZDI-26-800: (0Day) Foo RCE, now exploited in the wild"):
+            self.assertIn("exploited", F.classify(text, WATCH)[0], text)
+
     def test_plural_or_can_update_breakage_is_vendor_issue(self):
         # Real BleepingComputer / GBHackers titles (2026-10): plural "updates"
         # and "can break" missed the vendor_issue rule, so an update breaking
@@ -199,6 +216,32 @@ class TestKevAndNewsIngest(unittest.TestCase):
             {"categories": ["exploited"], "cve_ids": ["not-a-cve"], "published": "2026-10-13T18:00:00+00:00"},
         ]}
         self.assertEqual(A.intel_exploited_cve_ids(intel, 14, now=NOW), ["CVE-2026-96951"])
+
+    def test_news_exploited_label_withdrawn_when_news_no_longer_says_so(self):
+        # Real case 2026-10-22: ZDI "(0Day)" advisories put CVE-2026-88794 and
+        # CVE-2026-111105 on the board as "news: reported exploited" only.
+        lbl = A.NEWS_EXPLOITED_LABEL
+        intel = {"items": [
+            {"categories": ["vulnerability"], "cve_ids": ["CVE-2026-88794", "CVE-2026-111105"]},
+            {"categories": ["vulnerability"], "cve_ids": ["CVE-2026-110936"]},
+            {"categories": ["exploited"], "cve_ids": ["CVE-2026-0257"]},
+        ]}
+        alerts = [
+            {"cve_id": "CVE-2026-88794", "source": "nvd", "affected": [], "kev": False, "matched_keywords": [lbl]},
+            {"cve_id": "CVE-2026-111105", "source": "nvd", "affected": [], "kev": False,
+             "matched_keywords": [lbl, "Telegram"]},
+            {"cve_id": "CVE-2026-110936", "source": "nvd", "kev": True, "matched_keywords": [lbl, "CISA KEV"]},
+            {"cve_id": "CVE-2026-0257", "source": "nvd", "kev": True, "matched_keywords": [lbl, "CISA KEV"]},
+            # stories aged out of intel.json: nothing to re-check, label kept
+            {"cve_id": "CVE-2026-102255", "source": "nvd", "matched_keywords": [lbl]},
+        ]
+        kept, withdrawn, removed = A.withdraw_news_exploited(alerts, intel)
+        self.assertEqual(removed, ["CVE-2026-88794"])
+        self.assertEqual(withdrawn, ["CVE-2026-88794", "CVE-2026-111105", "CVE-2026-110936"])
+        by = {a["cve_id"]: a["matched_keywords"] for a in kept}
+        self.assertEqual(by, {"CVE-2026-111105": ["Telegram"], "CVE-2026-110936": ["CISA KEV"],
+                              "CVE-2026-0257": [lbl, "CISA KEV"], "CVE-2026-102255": [lbl]})
+        self.assertEqual(A.withdraw_news_exploited([], {}), ([], [], []))
 
     def test_kev_fallback_never_invents_score(self):
         e = A.kev_fallback_entry("CVE-2026-96951", {"vendorProject": "Microsoft", "product": "Windows",

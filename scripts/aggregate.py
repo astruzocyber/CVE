@@ -873,6 +873,41 @@ def intel_exploited_cve_ids(intel, days, now=None):
     return sorted(out)
 
 
+NEWS_EXPLOITED_LABEL = "news: reported exploited"
+
+
+def withdraw_news_exploited(alerts, intel):
+    """Withdraw the "news: reported exploited" label once the news that gave it
+    no longer says so. fetch_intel re-classifies every stored story with the
+    current rules each run, so a rule fix (e.g. ZDI's "(0Day)" tag means
+    unpatched, not exploited) leaves the CVE named in intel.json but no longer
+    in an "exploited" item. Only then is the label dropped -- a CVE whose
+    stories merely aged out of intel.json keeps it. An alert that the label
+    alone justified (no other keyword, vendor/product pair, KEV, or non-NVD
+    source; same test as prune_loose_phrase_matches) leaves the board.
+    Returns (kept, withdrawn_ids, removed_ids)."""
+    items = intel.get("items", []) if isinstance(intel, dict) else []
+    named, exploited = set(), set()
+    for it in items:
+        ids = {str(c).upper() for c in it.get("cve_ids") or []}
+        named |= ids
+        if "exploited" in (it.get("categories") or []):
+            exploited |= ids
+    kept, withdrawn, removed = [], [], []
+    for a in alerts:
+        cid = str(a.get("cve_id") or "").upper()
+        kws = a.get("matched_keywords") or []
+        if NEWS_EXPLOITED_LABEL not in kws or cid not in named or cid in exploited:
+            kept.append(a)
+            continue
+        a["matched_keywords"] = [k for k in kws if k != NEWS_EXPLOITED_LABEL]
+        withdrawn.append(cid)
+        justified = (a["matched_keywords"] or a.get("affected") or a.get("matched_vendor_product") or a.get("kev")
+                     or a.get("source") not in (None, "nvd"))
+        (kept if justified else removed).append(a if justified else cid)
+    return kept, withdrawn, removed
+
+
 def kev_watchlist_ids(kev_map, watchlist):
     """{cve_id: watchlist term} for EVERY KEV entry (any dateAdded) whose CISA
     vendor/product/name/description literally names a watchlist keyword or
@@ -2337,6 +2372,12 @@ def main():
     if loose_removed:
         print(f"  Removed {len(loose_removed)} alert(s) matched only by a keyword "
               f"that is not literally in the description (pre-exact/whole-word-match noise), e.g. {loose_removed[:5]}")
+    intel_data = load_json_file(INTEL_PATH, {})
+    existing_alerts, news_withdrawn, news_removed = withdraw_news_exploited(existing_alerts, intel_data)
+    if news_withdrawn:
+        print(f"  Withdrew '{NEWS_EXPLOITED_LABEL}' from {len(news_withdrawn)} alert(s) whose news is no longer "
+              f"tagged exploited: {news_withdrawn[:10]}; removed {len(news_removed)} that nothing else justified: "
+              f"{news_removed[:10]}")
     # KEV-driven ingest: tag KEV listings already surfaced by the watchlist,
     # and pull in any recent KEV addition nobody else produced (see
     # kev_recent_ids docstring for the miss this closes).
@@ -2345,7 +2386,7 @@ def main():
             c["matched_keywords"].append("CISA KEV")
     already_known = set(nvd_candidates) | {c.get("cve_id") for c in dependabot_candidates + ghsa_candidates} \
         | {a.get("cve_id") for a in existing_alerts}
-    news_ids = intel_exploited_cve_ids(load_json_file(INTEL_PATH, {}),
+    news_ids = intel_exploited_cve_ids(intel_data,
                                        int(os.environ.get("KEV_LOOKBACK_DAYS", "14")))
     kev_candidates = fetch_kev_candidates(kev_map, already_known, nvd_api_key, news_ids=news_ids,
                                           watchlist=watchlist)
