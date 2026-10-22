@@ -97,7 +97,11 @@ NEGATED_EXPLOIT_RE = re.compile(
     # new real-world CVEs", "GPT-4 agents exploited 87% of one-day vulns"):
     # a test result, not attackers exploiting anything
     r"|\b(?:agents?|AI|models?|LLMs?|GPT[\w.-]*|tools?|scanners?|benchmarks?)\b(?:\W+\w+){0,6}?\W+"
-    r"exploited\s+\d+(?:\s*%|\s+(?:of|out\s+of)\s+(?:the\s+)?\d+)",
+    r"exploited\s+\d+(?:\s*%|\s+(?:of|out\s+of)\s+(?:the\s+)?\d+)"
+    # Zero Day Initiative's "(0Day)" title tag / "publish ... as a zero-day
+    # advisory": disclosed with no vendor patch, NOT exploited in the wild
+    # (ZDI-26-708: vendor declined to service it; no exploitation reported)
+    r"|\(\s*(?:0|zero)[- ]?days?\s*\)|\b(?:0|zero)[- ]?day\s+advisor(?:y|ies)\b",
     re.I)
 
 
