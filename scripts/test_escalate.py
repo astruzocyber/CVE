@@ -453,6 +453,24 @@ class DiscordTests(unittest.TestCase):
         self.assertEqual(n, 0)
         self.assertNotIn("cve:B", st["sent"])
 
+    def test_story_not_reposted_when_its_oldest_report_ages_out(self):
+        # card key = oldest report; once it left the intel window the rest of
+        # the story looked new (run 39522290183 re-posted a Patch Tuesday story)
+        def card(key, members):
+            return {"items": [{"key": key, "kind": "intel", "title": "Patch Tuesday", "tier": "escalate",
+                               "member_keys": members, "reasons": ["x"]}]}
+        st, n = D.run("u", card("intel:a", ["intel:a", "intel:b", "intel:c"]),
+                      {"seeded": True, "sent": {}}, NOW, poster=self.poster())
+        self.assertEqual(n, 1)
+        st, n = D.run("u", card("intel:b", ["intel:b", "intel:c"]), st, NOW, poster=self.poster())
+        self.assertEqual(n, 0)
+        # state written before the fix holds only the card key: healed on the next run
+        old = {"seeded": True, "sent": {"intel:a": "2026-10-15T00:00:00+00:00"}}
+        st, n = D.run("u", card("intel:a", ["intel:a", "intel:b"]), old, NOW, poster=self.poster())
+        self.assertEqual((n, st["sent"]["intel:b"]), (0, "2026-10-15T00:00:00+00:00"))
+        st, n = D.run("u", card("intel:b", ["intel:b"]), st, NOW, poster=self.poster())
+        self.assertEqual(n, 0)
+
     def test_seed_only_records_without_posting(self):
         st, n = D.run("u", esc(("B", "escalate")), {"seeded": True, "sent": {}}, NOW, seed_only=True,
                       poster=self.poster())

@@ -19,7 +19,8 @@ State: docs/data/discord_notified.json  {"seeded": bool, "sent": {key: iso_date}
   - The first run with a webhook only seeds state and posts ONE "connected"
     message listing how many items are already on the board -- no backlog flood.
   - A key is recorded only after Discord accepts the message containing it, so
-    a failed post is retried next run.
+    a failed post is retried next run. All of a story's report keys are
+    recorded, so it is not re-posted when its oldest report ages out.
   - Keys older than 60 days are pruned.
 
 Safety: the webhook URL is never printed; only discord.com webhook URLs are
@@ -65,6 +66,31 @@ def select_new(items, sent, min_tier="escalate"):
     return [it for it in items if TIER_RANK.get(it.get("tier"), 9) <= limit
             and not any(k in sent for k in (it.get("member_keys") or [it.get("key")]))
             and not it.get("triage")]
+
+
+def _members(it):
+    return list(it.get("member_keys") or []) + [it["key"]]
+
+
+def mark_sent(sent, it, stamp):
+    """Record every report of a story, not just its card key. The card key is
+    its oldest report, the first one to age out of the intel window; with only
+    that key recorded, the remaining reports formed a 'new' card and the story
+    was posted again (run 39522290183 re-posted 'Microsoft Patches Massive
+    1,411 Security Vulnerabilities', first posted by run 39097059356)."""
+    for k in _members(it):
+        sent.setdefault(k, stamp)
+
+
+def heal_sent(sent, items):
+    """Cards announced before mark_sent existed: extend the recorded key to
+    all of the card's current reports, keeping the original timestamp."""
+    for it in items:
+        mem = _members(it)
+        hit = [sent[k] for k in mem if k in sent]
+        if hit:
+            for k in mem:
+                sent.setdefault(k, min(hit))
 
 
 def build_embed(it, dashboard):
@@ -121,12 +147,13 @@ def run(webhook, esc, state, now, seed_only=False, min_tier="escalate", dashboar
     """Returns (new_state, n_posted). Pure apart from `poster`."""
     sent = dict(state.get("sent") or {})
     items = esc.get("items") or []
+    heal_sent(sent, items)
     new = select_new(items, sent, min_tier)
     stamp = now.isoformat()
 
     if seed_only or not state.get("seeded"):
         for it in new:
-            sent[it["key"]] = stamp
+            mark_sent(sent, it, stamp)
         if not seed_only:
             n_esc = sum(1 for it in items if it.get("tier") == "escalate" and not it.get("closed"))
             n_work = sum(1 for it in items if it.get("tier") == "work" and not it.get("closed"))
@@ -151,7 +178,7 @@ def run(webhook, esc, state, now, seed_only=False, min_tier="escalate", dashboar
         if not poster(webhook, payload):
             break
         for it in chunk:
-            sent[it["key"]] = stamp
+            mark_sent(sent, it, stamp)
         posted += len(chunk)
         time.sleep(1)
     # anything beyond MAX_ITEMS_PER_RUN is left unsent and goes out next run
