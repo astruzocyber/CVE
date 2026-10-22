@@ -258,6 +258,21 @@ def parse_feed(data):
     return out
 
 
+def read_feed(url):
+    """Fetch + parse one feed. A response with no <item>/<entry> at all is a
+    failed fetch, not an empty feed: Cyber Security News and GBHackers return
+    such bodies to the CI runner on some runs (0 items, while the same URL
+    serves 10 items elsewhere), and reporting them ok hid the outage behind
+    'all feeds OK' on the Threat intel panel."""
+    data = fetch(url)
+    raws = parse_feed(data)
+    if not raws:
+        head = _WS_RE.sub(" ", data[:80].decode("utf-8", errors="replace")).strip()
+        head = "".join(ch for ch in head if ch.isprintable())[:60]
+        raise ValueError(f"no feed items in response ({len(data)} bytes, starts {head!r})")
+    return raws
+
+
 def classify(text, watch_res):
     cats = [k for k, _, rx in CATEGORY_RES
             if (_affirmed(rx, text) if k == "exploited" else rx.search(text))]
@@ -486,7 +501,7 @@ def main():
         if not name or not url:
             continue
         try:
-            raws = parse_feed(fetch(url))
+            raws = read_feed(url)
             adv = bool(feed.get("advisory"))
             items = [b for b in (build_item(r, name, watch_res, now, advisory=adv) for r in raws) if b]
             fresh.extend(items)

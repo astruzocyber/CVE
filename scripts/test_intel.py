@@ -169,6 +169,20 @@ class TestFetchIntel(unittest.TestCase):
                            "date": (NOW + timedelta(days=3)).strftime("%a, %d %b %Y %H:%M:%S GMT")}, "T", WATCH, NOW)
         self.assertIsNone(it["published"])
 
+    def test_itemless_feed_response_is_failure_not_ok(self):
+        # Oct 2026: Cyber Security News / GBHackers served the CI runner a
+        # 200 body with no <item>; the panel then said every feed was OK.
+        orig = F.fetch
+        try:
+            F.fetch = lambda url, timeout=25: b"<html><body>Just a moment...</body></html>"
+            with self.assertRaises(ValueError) as cm:
+                F.read_feed("https://example.com/feed/")
+            self.assertIn("no feed items", str(cm.exception))
+            F.fetch = lambda url, timeout=25: RSS
+            self.assertEqual(len(F.read_feed("https://example.com/feed/")), 4)
+        finally:
+            F.fetch = orig
+
 
 class TestKevAndNewsIngest(unittest.TestCase):
     def test_kev_recent_ids(self):
