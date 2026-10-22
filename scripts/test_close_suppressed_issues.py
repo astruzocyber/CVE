@@ -146,6 +146,23 @@ class TestCloseSuppressedIssues(unittest.TestCase):
         self.assertEqual([i["number"] for i in issues], list(range(1, 102)))
         self.assertIn("direction=asc", urls[0])
 
+    def test_fetch_retries_a_transient_empty_page(self):
+        # Measured live: a full page followed by a spurious empty one ended the listing.
+        calls = {"p2": 0}
+
+        def fake_urlopen(req, timeout=30):
+            if req.full_url.endswith("&page=1"):
+                return FakeResponse([{"number": i, "title": f"t{i}"} for i in range(1, 101)])
+            calls["p2"] += 1
+            if calls["p2"] == 1:
+                return FakeResponse([])
+            return FakeResponse([{"number": 101, "title": "t101"}])
+
+        with mock.patch("urllib.request.urlopen", side_effect=fake_urlopen), \
+             mock.patch.object(csi.time, "sleep"):
+            issues = csi.fetch_open_vuln_issues("astruzocyber/CVE", "x")
+        self.assertEqual(len(issues), 101)
+
     def test_id_in_title_token_boundaries(self):
         self.assertTrue(csi.id_in_title("CVE-2025-5949", "[VULN ALERT] CVE-2025-5949 - x"))
         self.assertTrue(csi.id_in_title("CVE-2025-5949", "[VULN ALERT] CVE-2025-5949"))

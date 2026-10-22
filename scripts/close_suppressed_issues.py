@@ -93,6 +93,8 @@ def _api_request(url, token, method="GET", payload=None):
 
 
 MAX_PAGES = 200  # 200 x 100 = 20,000 open issues; defensive loop bound only
+EMPTY_PAGE_RETRIES = 3
+EMPTY_PAGE_RETRY_S = float(os.environ.get("EMPTY_PAGE_RETRY_S") or 3.0)
 
 
 def fetch_open_vuln_issues(repo, token, max_pages=MAX_PAGES):
@@ -113,7 +115,19 @@ def fetch_open_vuln_issues(repo, token, max_pages=MAX_PAGES):
                f"?state=open&labels=vulnerability-alert&sort=created&direction=asc"
                f"&per_page=100&page={page}")
         data = _api_request(url, token)
+        # The listing sometimes returns an empty page right after a full one
+        # (measured 2026-10-22: 6 back-to-back listings stopped at 0, 100, 400,
+        # 900, 1500 of 2305). Retry before treating it as the end.
+        for _ in range(EMPTY_PAGE_RETRIES):
+            if data:
+                break
+            time.sleep(EMPTY_PAGE_RETRY_S)
+            data = _api_request(url, token)
         if not data:
+            if issues:
+                print(f"  NOTE: listing ended at page {page} with {len(issues)} open issues "
+                      f"(empty page after a full one); the rest are checked next run.",
+                      file=sys.stderr)
             break
         for issue in data:
             number = issue.get("number") if isinstance(issue, dict) else None
