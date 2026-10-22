@@ -113,6 +113,21 @@ export function isNewWithin24h(alert) {
   return Boolean(seen) && Date.now() - seen.getTime() <= NEW_WITHIN_MS;
 }
 
+/**
+ * "Time on board" bucket from first_seen, measured now (not when stats.json
+ * was written). "0-1d" uses the same cut-off as isNewWithin24h so that chip
+ * always equals the "New in last 24 h" tile. "" if first_seen is unusable.
+ */
+export function ageBucket(alert, now = Date.now()) {
+  const seen = parseDate(alert.first_seen);
+  if (!seen) return "";
+  const ms = now - seen.getTime();
+  if (ms <= NEW_WITHIN_MS) return "0-1d";
+  if (ms < 7 * DAY_MS) return "1-7d";
+  if (ms < 30 * DAY_MS) return "7-30d";
+  return "30d+";
+}
+
 export const isRejected = (alert) => alert.vuln_status === "Rejected";
 
 /** NVD revised the record on a different calendar day than it was published. */

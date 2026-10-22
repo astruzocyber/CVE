@@ -5,7 +5,7 @@
 import { byId, escapeHtml } from "./dom.js";
 import {
   SEVERITY_ORDER, severityClass, isOverdue, isDueSoon, isNewWithin24h, isRejected, riskDelta, fmtScore, fmtPct,
-  fmtDateTime, isNum,
+  fmtDateTime, isNum, ageBucket,
 } from "./format.js";
 import { cweName } from "./cwe-names.js";
 
@@ -102,7 +102,9 @@ export function renderBreakdowns(alerts, stats) {
     return chip(s, c, srcMax, SOURCE_FILTERS.has(base) ? ["source", base] : null, `Source: ${s}`);
   }));
 
-  const age = stats?.by_age_bucket ?? {};
+  // Measured now from first_seen (stats.json's by_age_bucket is frozen at
+  // generation time and drifts while the page is open or between runs).
+  const age = countBy(alerts, (a) => [ageBucket(a)]);
   const ageEntries = AGE_ORDER.filter((b) => age[b] > 0);
   const ageMax = Math.max(0, ...ageEntries.map((b) => age[b]));
   fillPanel("age-panel", "age-breakdown", ageEntries.map((b) => chip(b, age[b], ageMax, null, `First seen ${b} ago`)));
