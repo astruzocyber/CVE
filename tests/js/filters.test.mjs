@@ -113,3 +113,22 @@ test("dependency filter matches whole package names, not substrings of other wor
   assert.deepEqual(ids(["ws"]), ["CVE-5"]);
   assert.deepEqual(ids(["golang.org/x/net", "net"]), ["CVE-7"]);
 });
+
+test("marking an alert reviewed under 'Hide reviewed' drops only that alert and keeps the place", async () => {
+  const { dropFromResults } = await import("../../docs/js/filters.js");
+  assert.equal(typeof dropFromResults, "function");
+  const list = [A("CVE-1"), A("CVE-2"), A("CVE-3")];
+  let r = dropFromResults(list, "CVE-2");
+  assert.deepEqual(r.list.map((a) => a.cve_id), ["CVE-1", "CVE-3"]);
+  assert.equal(r.nextId, "CVE-3"); // focus moves to the next alert in that slot
+  r = dropFromResults(list, "CVE-3");
+  assert.equal(r.nextId, "CVE-2"); // last one: previous alert
+  assert.deepEqual(dropFromResults([A("CVE-1")], "CVE-1"), { list: [], nextId: null });
+  assert.equal(dropFromResults(list, "CVE-9").list, list);
+  assert.equal(list.length, 3, "input list must not be mutated");
+  // main.js must not fall back to a full render() (resets paging to page 1)
+  const src = readFileSync(fileURLToPath(new URL("../../docs/js/main.js", import.meta.url)), "utf8");
+  const branch = src.slice(src.indexOf('case "toggle-reviewed"'), src.indexOf('case "copy-link"'));
+  assert.ok(branch.includes("dropFromResults("), "toggle-reviewed should use dropFromResults");
+  assert.ok(!/\brender\(\)/.test(branch), "toggle-reviewed must not call render()");
+});

@@ -6,7 +6,7 @@ import { byId, debounce, toast, copyText, prefersReducedMotion, storage } from "
 import { state, PAGE_SIZE, buildSearchIndex, findAlert } from "./state.js";
 import {
   readFilters, setFilter, resetFilters, applyQueryString, toQueryString, syncUrl, countAdvanced, activeFilterChips,
-  filterAndSort, SORT_IS_ASCENDING,
+  filterAndSort, SORT_IS_ASCENDING, dropFromResults,
 } from "./filters.js";
 import { toggleReviewed, markReviewed, countReviewed, exportReviewedState, importReviewedState, isReviewed } from "./reviewed.js";
 import { parseDependencyFile } from "./deps.js";
@@ -171,9 +171,17 @@ async function handleCardAction(btn) {
     case "toggle-reviewed": {
       if (!alert) return;
       const now = toggleReviewed(cve);
-      if (readFilters().hideReviewed && now) render();
-      else repaintKeepingScroll();
-      document.querySelector(`[data-action="toggle-reviewed"][data-cve="${CSS.escape(cve)}"]`)?.focus();
+      let focusId = cve;
+      if (readFilters().hideReviewed && now) {
+        // Drop just this alert and keep the analyst's place: a full re-filter
+        // reset paging to page 1, so marking card #120 jumped the page and
+        // un-rendered the next card to review.
+        const { list, nextId } = dropFromResults(state.filtered, cve);
+        state.filtered = list;
+        focusId = nextId;
+      }
+      repaintKeepingScroll();
+      if (focusId) document.querySelector(`[data-action="toggle-reviewed"][data-cve="${CSS.escape(focusId)}"]`)?.focus({ preventScroll: true });
       break;
     }
     case "copy-link":

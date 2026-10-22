@@ -252,6 +252,20 @@ export const SORTS = {
 /** Ascending vs descending, used for aria-sort on table headers. */
 export const SORT_IS_ASCENDING = new Set(["first_seen_oldest", "kev_due_date", "cve_id"]);
 
+/**
+ * Remove one alert from the current result list without re-filtering, so the
+ * caller can keep paging and scroll position (marking an alert reviewed while
+ * "Hide reviewed" is on). Returns the remaining list and the id now in that
+ * slot (the next alert, or the previous one if it was last) for focus.
+ */
+export function dropFromResults(list, cveId) {
+  const i = list.findIndex((a) => a.cve_id === cveId);
+  if (i === -1) return { list, nextId: null };
+  const rest = list.slice(0, i).concat(list.slice(i + 1));
+  const next = rest[Math.min(i, rest.length - 1)];
+  return { list: rest, nextId: next ? next.cve_id : null };
+}
+
 export function filterAndSort(values) {
   const out = state.alerts.filter(makePredicate(values));
   out.sort(SORTS[values.sort] ?? SORTS.risk_score);
