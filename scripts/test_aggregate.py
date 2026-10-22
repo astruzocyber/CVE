@@ -1319,5 +1319,84 @@ class TestRevalidateAffectedPairs(unittest.TestCase):
         self.assertEqual(alerts, before)
 
 
+class TestResurfacedAlertKeepsStoredEnrichment(unittest.TestCase):
+    """OSV.dev enrichment runs only for NEW alerts, but every NVD alert is re-read
+    while it sits in the lookback window and the 'already known' merge rebuilt it
+    from build_final_entry() (osv_id None, osv_fixed_versions []): CVE-2026-56095
+    got its OSV record at e463957 and lost it on the next run (7f00d88)."""
+
+    STORED = {"cve_id": "CVE-2026-56095", "source": "nvd", "first_seen": "2026-09-17T08:12:06+00:00",
+              "cvss_score": 8.1, "risk_score": 30.0, "epss_score": 0.01, "matched_keywords": ["Linux"],
+              "description": "Linux bug",
+              "affected": [], "osv_id": "CVE-2026-56095",
+              "osv_fixed_versions": [{"package": None, "ecosystem": None, "fixed": "722363e5"}],
+              "affected_cpe_check": "ok"}
+
+    def run_main(self, stored, candidates, kev_candidates=()):
+        import aggregate as A
+        files = {A.ALERTS_PATH: [dict(a) for a in stored],
+                 A.SEEN_PATH: [A.unique_key(a) for a in stored]}
+        saved = {}
+        wl = {"cvss_minimum": 7.0, "vendors_products": [], "keywords": ["Linux"], "priority_keywords": [],
+              "dependabot_repos": [], "ghsa_packages": [], "require_kev_or_high_epss": False,
+              "epss_high_threshold": 0.5}
+        with mock.patch.object(A, "load_watchlist", return_value=wl), \
+             mock.patch.object(A, "load_suppressions", return_value={}), \
+             mock.patch.object(A, "fetch_kev", return_value={"CVE-2000-0001": {"cveID": "CVE-2000-0001"}}), \
+             mock.patch.object(A, "fetch_nvd_candidates", return_value={c["cve_id"]: c for c in candidates}), \
+             mock.patch.object(A, "fetch_dependabot_alerts", return_value=[]), \
+             mock.patch.object(A, "fetch_ghsa_advisories", return_value=[]), \
+             mock.patch.object(A, "fetch_kev_candidates", return_value=list(kev_candidates)), \
+             mock.patch.object(A, "fetch_epss", return_value={}), \
+             mock.patch.object(A, "fetch_osv_fix_info", return_value=None) as osv, \
+             mock.patch.object(A, "backfill_legacy_nvd_fields"), \
+             mock.patch.object(A, "revalidate_affected_pairs"), \
+             mock.patch.object(A, "load_json_file", side_effect=lambda p, d: files.get(p, d)), \
+             mock.patch.object(A, "save_json_file", side_effect=lambda p, o: saved.__setitem__(p, o)), \
+             mock.patch.object(A, "append_history"), mock.patch.object(A, "build_kev_feed"), \
+             mock.patch.object(A, "write_sitemap"), mock.patch.dict(os.environ, {"GITHUB_OUTPUT": ""}):
+            A.main()
+        return {A.unique_key(a): a for a in saved[A.ALERTS_PATH]}, saved[A.NEW_ALERTS_PATH], osv
+
+    def candidate(self, source="nvd"):
+        return {"cve_id": "CVE-2026-56095", "source": source, "cvss_score": 8.1, "description": "Linux bug",
+                "matched_keywords": ["Linux"], "matched_vendor_product": []}
+
+    def test_resurfaced_alert_keeps_osv_and_recheck_mark(self):
+        out, new, osv = self.run_main([self.STORED], [self.candidate()])
+        a = out["CVE-2026-56095::nvd"]
+        self.assertEqual(new, [])
+        osv.assert_not_called()
+        self.assertEqual(a["osv_id"], "CVE-2026-56095")
+        self.assertEqual(a["osv_fixed_versions"], self.STORED["osv_fixed_versions"])
+        self.assertEqual(a["affected_cpe_check"], "ok")
+        self.assertEqual(a["first_seen"], self.STORED["first_seen"])
+
+    def test_kev_twin_upgrade_keeps_osv(self):
+        kev = {**self.STORED, "source": "kev"}
+        del kev["affected_cpe_check"]
+        out, new, _ = self.run_main([kev], [self.candidate()])
+        self.assertEqual(list(out), ["CVE-2026-56095::nvd"])
+        self.assertEqual(out["CVE-2026-56095::nvd"]["osv_id"], "CVE-2026-56095")
+
+    def test_never_invents_enrichment(self):
+        bare = {k: v for k, v in self.STORED.items() if k not in A_STORED_ONLY}
+        out, _, _ = self.run_main([bare], [self.candidate()])
+        a = out["CVE-2026-56095::nvd"]
+        self.assertIsNone(a["osv_id"])
+        self.assertEqual(a["osv_fixed_versions"], [])
+        self.assertNotIn("affected_cpe_check", a)
+
+    def test_helper_fresh_value_wins(self):
+        import aggregate as A
+        merged = A.keep_stored_enrichment({"osv_id": "GHSA-new", "osv_fixed_versions": []},
+                                          {"osv_id": "OLD", "osv_fixed_versions": [{"fixed": "1"}]})
+        # a fresh OSV id is never paired with the old record's fixed versions
+        self.assertEqual(merged, {"osv_id": "GHSA-new", "osv_fixed_versions": []})
+
+
+A_STORED_ONLY = ("osv_id", "osv_fixed_versions", "affected_cpe_check")
+
+
 if __name__ == "__main__":
     unittest.main()

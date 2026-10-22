@@ -1532,6 +1532,33 @@ def known_first_seen(key, existing_by_key, pruned_first_seen, default):
     return prior.get("first_seen") or pruned_first_seen.get(key) or default
 
 
+# Fields only ever set on the STORED alert (OSV.dev enrichment runs once, for
+# new alerts; the CPE recheck mark is written by revalidate_affected_pairs).
+# build_final_entry() resets them, so a resurfaced alert must take them over
+# from its prior record or they are lost on the next run.
+STORED_ONLY_FIELDS = (("osv_id", "osv_fixed_versions"), ("affected_cpe_check",))
+
+
+def keep_stored_enrichment(merged, prior):
+    """Copy each STORED_ONLY_FIELDS group from `prior` onto `merged` when the
+    fresh entry has nothing for that whole group (None / [] / missing); a group
+    is copied as a unit, so an OSV id is never paired with another record's
+    fixed versions. Every NVD alert is re-read while it sits
+    in the lookback window, and the 'already known' merge used to replace the
+    stored record with a fresh build_final_entry(): 284 of 377 alerts still on
+    the board that ever had an OSV record had lost osv_id/osv_fixed_versions
+    (audit 2026-10-22, last 264 alerts.json commits), usually on the run right
+    after they were first seen. Returns `merged`."""
+    prior = prior or {}
+    for group in STORED_ONLY_FIELDS:
+        if all(merged.get(f) in (None, []) for f in group) and \
+                any(prior.get(f) not in (None, []) for f in group):
+            for f in group:
+                if f in prior:
+                    merged[f] = prior[f]
+    return merged
+
+
 def collapse_advisory_twins(by_key):
     """Self-heal: if a CVE has both an NVD alert and a KEV-only alert, keep the
     NVD one (richer record) with the earliest first_seen. Returns #removed."""
@@ -2209,9 +2236,11 @@ def main():
                 continue  # the richer NVD alert already exists
             prior_twin = existing_by_key.pop(twin)
             seen_ids.add(key)
-            existing_by_key[key] = {**final, "first_seen": prior_twin.get("first_seen", final["first_seen"]),
-                                    "risk_score_prev": prior_twin.get("risk_score"),
-                                    "epss_score_prev": prior_twin.get("epss_score")}
+            existing_by_key[key] = keep_stored_enrichment(
+                {**final, "first_seen": prior_twin.get("first_seen", final["first_seen"]),
+                 "risk_score_prev": prior_twin.get("risk_score"),
+                 "epss_score_prev": prior_twin.get("epss_score")},
+                {k: v for k, v in prior_twin.items() if k != "affected_cpe_check"})
             continue
         if key not in seen_ids:
             new_alerts.append(final)
@@ -2236,7 +2265,7 @@ def main():
                       # exploitation-likelihood shift vs. a CVSS/KEV change). Zero new API
                       # calls -- built from epss_score, already extracted every run.
                       "epss_score_prev": prior.get("epss_score")}
-            existing_by_key[key] = merged
+            existing_by_key[key] = keep_stored_enrichment(merged, prior)
 
     # Existing alerts not resurfaced by this run (outside the NVD lookback window,
     # or no longer returned by Dependabot/GHSA) still get their EPSS/KEV/risk_score
