@@ -17,6 +17,7 @@ on:
       - "config/**"
       - "tests/**"
       - ".github/workflows/ci.yml"
+      - ".github/workflows/cve-alerts.yml"   # tests read its step env (Discord / issue deferral)
       - "requirements.txt"
   pull_request:
     paths:
@@ -25,6 +26,7 @@ on:
       - "config/**"
       - "tests/**"
       - ".github/workflows/ci.yml"
+      - ".github/workflows/cve-alerts.yml"   # tests read its step env (Discord / issue deferral)
       - "requirements.txt"
   workflow_dispatch: {}
 
