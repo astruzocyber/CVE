@@ -9,6 +9,7 @@ import json
 import os
 import sys
 import unittest
+import urllib.error
 from unittest import mock
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -169,6 +170,37 @@ class TestCloseSuppressedIssues(unittest.TestCase):
         self.assertFalse(csi.id_in_title("CVE-2025-5949", "[VULN ALERT] CVE-2025-59494 - x"))
         self.assertFalse(csi.id_in_title("CVE-2025-1281", "[VULN ALERT] CVE-2025-12813 (risk 1)"))
         self.assertTrue(csi.id_in_title("GHSA-abcd-efgh-ijkl", "[VULN ALERT] GHSA-abcd-efgh-ijkl - pip/x"))
+
+
+class NetworkErrorTests(unittest.TestCase):
+    """A timeout/reset raised out of _api_request() and crashed the suppressed /
+    orphan / duplicate closers mid-run instead of counting as a failed call."""
+
+    def setUp(self):
+        self._sleep, csi.time.sleep = csi.time.sleep, (lambda s: None)
+
+    def tearDown(self):
+        csi.time.sleep = self._sleep
+
+    def test_get_retries_then_succeeds(self):
+        with mock.patch.object(csi.urllib.request, "urlopen",
+                               side_effect=[TimeoutError("t"), FakeResponse([{"number": 1}])]) as m:
+            self.assertEqual(csi._api_request("https://api.github.com/x", "t"), [{"number": 1}])
+        self.assertEqual(m.call_count, 2)
+
+    def test_persistent_error_returns_none(self):
+        with mock.patch.object(csi.urllib.request, "urlopen",
+                               side_effect=urllib.error.URLError("down")) as m:
+            self.assertIsNone(csi._api_request("https://api.github.com/x", "t", method="PATCH",
+                                               payload={"state": "closed"}))
+        self.assertEqual(m.call_count, 3)
+
+    def test_post_not_retried(self):
+        with mock.patch.object(csi.urllib.request, "urlopen",
+                               side_effect=ConnectionResetError()) as m:
+            self.assertIsNone(csi._api_request("https://api.github.com/x", "t", method="POST",
+                                               payload={"body": "c"}))
+        self.assertEqual(m.call_count, 1)
 
 
 if __name__ == "__main__":

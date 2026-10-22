@@ -28,6 +28,7 @@ Run after notify_github_issues.py in the same job -- it works off the live
 GitHub Issues API state, not any local file, so ordering relative to the data
 commit doesn't matter.
 """
+import http.client
 import json
 import os
 import re
@@ -88,6 +89,19 @@ def _api_request(url, token, method="GET", payload=None):
                 pass
             print(f"  ERROR {method} {url}: HTTP {e.code} {body_text}", file=sys.stderr)
             return None
+        except (OSError, http.client.HTTPException) as e:
+            # Timeout / reset / DNS failure: report None like any other failed
+            # call instead of crashing the whole closer step. GET/PATCH are
+            # retried; a POST (comment) is not, since it may have landed.
+            if method == "POST":
+                print(f"  Network error on POST {url} ({type(e).__name__}: {e}); not retried.",
+                      file=sys.stderr)
+                return None
+            wait = 5 * (attempt + 1)
+            print(f"  Network error on {method} {url} ({type(e).__name__}: {e}), retrying in "
+                  f"{wait}s (attempt {attempt + 1}/3)...", file=sys.stderr)
+            time.sleep(wait)
+            continue
     print(f"  ERROR {method} {url} failed after 3 attempts.", file=sys.stderr)
     return None
 

@@ -4,6 +4,9 @@ overflow digest, Retry-After handling). No network."""
 import os
 import sys
 import unittest
+import json
+import urllib.error
+from unittest import mock
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -35,6 +38,42 @@ class ThrottleTests(unittest.TestCase):
         self.assertEqual(N.retry_wait({"Retry-After": "9999"}, 0), 120)
         self.assertEqual(N.retry_wait({}, 0), 15)
         self.assertEqual(N.retry_wait({}, 5), 120)
+
+
+class NetworkErrorTests(unittest.TestCase):
+    """A timeout/reset on one issue POST raised out of create_issue() and ended
+    main(), so every later alert of that run lost its issue for good (seen_ids
+    is committed before the notifier runs)."""
+
+    def setUp(self):
+        self._sleep, N.time.sleep = N.time.sleep, (lambda s: None)
+        self._tiers, N._board_tiers = N._board_tiers, (lambda: {})
+
+    def tearDown(self):
+        N.time.sleep, N._board_tiers = self._sleep, self._tiers
+
+    def _ok(self, number):
+        resp = mock.MagicMock()
+        resp.__enter__.return_value.read.return_value = json.dumps({"number": number}).encode()
+        return resp
+
+    def test_network_error_is_retried(self):
+        with mock.patch.object(N.urllib.request, "urlopen",
+                               side_effect=[TimeoutError("read timed out"), self._ok(7)]) as m:
+            self.assertTrue(N.create_issue("o/r", "t", "x", "b", []))
+        self.assertEqual(m.call_count, 2)
+
+    def test_persistent_network_error_does_not_stop_later_alerts(self):
+        alerts = [{"cve_id": "CVE-2026-1", "risk_score": 90}, {"cve_id": "CVE-2026-2", "risk_score": 10}]
+        effects = [urllib.error.URLError("down")] * 4 + [self._ok(8)]
+        env = {"GITHUB_TOKEN": "t", "GITHUB_REPOSITORY": "o/r"}
+        with mock.patch.dict(os.environ, env), \
+             mock.patch.object(N, "load_new_alerts", return_value=alerts), \
+             mock.patch.object(N.urllib.request, "urlopen", side_effect=effects) as m:
+            N.main()
+        self.assertEqual(m.call_count, 5)
+        posted = json.loads(m.call_args_list[-1].args[0].data)
+        self.assertIn("CVE-2026-2", posted["title"])
 
 
 class RiskMethodTests(unittest.TestCase):

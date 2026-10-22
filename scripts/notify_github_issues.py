@@ -12,6 +12,7 @@ fails partway, the alerts are already marked "seen" so they won't be re-issued n
 -- that's an accepted tradeoff to avoid duplicate issues at the cost of possibly missing
 a notification on rare failure (visible in the Action run logs either way).
 """
+import http.client
 import json
 import os
 import re
@@ -276,6 +277,17 @@ def create_issue(repo, token, title, body, labels):
                 continue
             print(f"  ERROR creating issue for {title}: HTTP {e.code} {body_text[:300]}", file=sys.stderr)
             return False
+        except (OSError, http.client.HTTPException) as e:
+            # Timeout / reset / DNS failure. Uncaught, this ended main() and every
+            # later alert of the run lost its issue for good (seen_ids is already
+            # committed). Retry like a 5xx; if the POST did land, the duplicate
+            # closer folds the twin.
+            last_err = e
+            wait = retry_wait(None, attempt)
+            print(f"  Issue creation network error for {title} ({type(e).__name__}: {e}), "
+                  f"retrying in {wait}s (attempt {attempt + 1}/4)...", file=sys.stderr)
+            time.sleep(wait)
+            continue
     print(f"  ERROR creating issue for {title} after 4 attempts: {last_err}", file=sys.stderr)
     return False
 
