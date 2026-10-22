@@ -137,6 +137,26 @@ class EscalateTests(unittest.TestCase):
                      "Check Point Research found that Check Point Quantum Security Gateway VPN is exploited"):
             self.assertIn(cp, [a["name"] for a, _ in E.match_assets(text, env()["assets"])], text)
 
+    def test_cloudflare_as_reporter_is_not_cloud_asset(self):
+        # Real intel (CyberSecurityNews 2026-10-21): Cloudflare reporting exploitation of
+        # leaked PHP flaws sat on the board as ESCALATE for the Cloud platforms asset.
+        cl = "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
+        names = lambda text: [a["name"] for a, _ in E.match_assets(text, env()["assets"])]
+        for text in ("Cloudflare Detects Early Exploitation Attempts Targeting Two Leaked PHP "
+                     "Vulnerabilities || Cloudflare says it is seeing early attempts to exploit two "
+                     "critical PHP vulnerabilities",
+                     "Cloudflare Warns of Active Exploitation Attempts Against Two Leaked PHP Flaws",
+                     "Defending the NetScaler front door before the patch - Cloudflare Blog",
+                     "A large-scale scam operation impersonating Microsoft uses a malicious traffic "
+                     "distribution system and abuses thousands of Cloudflare links."):
+            self.assertNotIn(cl, names(text), text)
+        for text in ("How Cloudflare addressed a cross-tenant data exposure vulnerability in "
+                     "Cloudflare Containers - Cloudflare Blog",
+                     "Applications using the Cloudflare Zero Trust service token can be bypassed",
+                     "Cloudflare says attackers breached its Atlassian server using stolen Okta "
+                     "tokens; Cloudflare's systems were rotated"):
+            self.assertIn(cl, names(text), text)
+
     def test_teams_vishing_news_escalates(self):
         out = E.build([], {"items": [intel("t1", "Hackers pose as IT support in Microsoft Teams calls",
                                            ["social_engineering"])]}, env(), NOW)

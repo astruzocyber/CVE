@@ -150,6 +150,14 @@ assets:
     # in OUR cloud accounts -- those stories still show on the intel board
     exclude: ["Cloudflare Pages", "pages.dev", "workers.dev", "Cloudflare Workers domains",
               "Cloudflare-hosted", "hosted on Cloudflare", "abuse Cloudflare", "abusing Cloudflare"]
+    # Cloudflare as the reporter/blogger of someone else's flaw ("Cloudflare Detects
+    # Early Exploitation Attempts Targeting Two Leaked PHP Vulnerabilities") is not a
+    # flaw in our Cloudflare accounts, nor are scam "Cloudflare links"; other mentions
+    # in the same text still match
+    ignore: ["Cloudflare Blog", "Cloudflare says", "Cloudflare said", "Cloudflare warns",
+             "Cloudflare detects", "Cloudflare detected", "Cloudflare researchers",
+             "Cloudflare has issued a warning", "Cloudflare deploys protections",
+             "Cloudflare has deployed", "Cloudflare links"]
   - name: "Voice / meetings (3CX / Zoom / Avaya / Grandstream / Five9 / WeMeet)"
     criticality: high
     terms: ["3CX", "Zoom Workplace", "Zoom Client", "Zoom Meetings", "Zoom Rooms",
