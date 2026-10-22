@@ -37,6 +37,13 @@ export function alertIdFromHash(hash) {
   return id;
 }
 
+/**
+ * Deep-link re-aim check on a card's viewport top (px). Any negative top hides
+ * the card header (its CVE id); far below the scroll padding means the card
+ * was pushed down by panels that loaded late.
+ */
+export const deepLinkOffTarget = (top) => top < 0 || top > 80;
+
 export const isNum = (v) => typeof v === "number" && Number.isFinite(v);
 export const fmtScore = (v, digits = 1) => (isNum(v) ? v.toFixed(digits) : "n/a");
 export const fmtPct = (p, digits = 1) => (isNum(p) ? `${(p * 100).toFixed(digits)}%` : "n/a");

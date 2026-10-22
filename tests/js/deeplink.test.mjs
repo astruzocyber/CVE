@@ -26,3 +26,12 @@ test("escalation board CVE links use the #alert- deep-link form", () => {
   assert.equal(refs.length, 0, "found a bare #${it.ref} link; cards are id=alert-<id>");
   assert.ok(src.includes("#alert-${encodeURIComponent(it.ref)}"));
 });
+
+test("deep-link re-aim treats a card whose top is above the viewport as off target", async () => {
+  const { deepLinkOffTarget } = await import("../../docs/js/format.js");
+  // Seen live: panels above the board shifted the card up after the scroll,
+  // leaving its header (CVE id) 49-79px above the viewport. The old |top| > 80
+  // tolerance accepted that.
+  for (const top of [-49, -79, -1, 81, 600]) assert.equal(deepLinkOffTarget(top), true, String(top));
+  for (const top of [0, 48, 80]) assert.equal(deepLinkOffTarget(top), false, String(top));
+});

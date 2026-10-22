@@ -19,7 +19,7 @@ import { initTrend, refreshTrendTheme } from "./trend.js";
 import { saveView, deleteView, findView, renderViewsSelect } from "./saved-views.js";
 import { initIntel } from "./intel.js";
 import { initEscalations } from "./escalations.js";
-import { alertIdFromHash } from "./format.js";
+import { alertIdFromHash, deepLinkOffTarget } from "./format.js";
 
 const VIEW_KEY = "viewMode";
 
@@ -127,7 +127,7 @@ function revealHash() {
     setTimeout(() => {
       if (location.hash !== hashNow) return;
       const r = card.getBoundingClientRect();
-      if (Math.abs(r.top) > 80) card.scrollIntoView({ behavior: "auto", block: "start" });
+      if (deepLinkOffTarget(r.top)) card.scrollIntoView({ behavior: "auto", block: "start" });
     }, ms);
   }
   card.classList.add("is-highlighted");
