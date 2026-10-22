@@ -56,6 +56,43 @@ class EscalateTests(unittest.TestCase):
                              "Federation Services (AD FS).", 9.1)], {}, env(), NOW)
         self.assertEqual(tiers(out)["CVE-2026-96252"], "escalate")
 
+    # Each ESCALATE trigger of classify_alert on its own. Before these tests,
+    # removing the ransomware, news-exploited, EPSS or network-vector rule left
+    # the whole suite green.
+    PAN = "Buffer over-read in PAN-OS GlobalProtect portal."   # critical asset, no priority term
+
+    def test_cvss_below_floor_alone_is_not_tiered(self):
+        self.assertEqual(E.build([alert("CVE-2026-10", self.PAN, 5.0)], {}, env(), NOW)["items"], [])
+
+    def test_news_reported_exploited_escalates_and_withdrawal_drops_it(self):
+        out = E.build([alert("CVE-2026-11", self.PAN, 5.0, matched_keywords=["news: reported exploited"])],
+                      {}, env(), NOW)
+        self.assertEqual(tiers(out), {"CVE-2026-11": "escalate"})
+        self.assertIn("Security news reports this CVE as exploited", out["items"][0]["reasons"])
+        # aggregate.withdraw_news_exploited() removes the label -> no longer tiered
+        self.assertEqual(E.build([alert("CVE-2026-11", self.PAN, 5.0, matched_keywords=[])],
+                                 {}, env(), NOW)["items"], [])
+
+    def test_epss_threshold_escalates_only_at_or_above(self):
+        thr = env()["escalate_epss"]
+        out = E.build([alert("CVE-2026-12", self.PAN, 5.0, epss_score=thr),
+                       alert("CVE-2026-13", self.PAN, 5.0, epss_score=round(thr - 0.01, 4))], {}, env(), NOW)
+        self.assertEqual(tiers(out), {"CVE-2026-12": "escalate"})
+        self.assertTrue(any(r.startswith("EPSS ") for r in out["items"][0]["reasons"]))
+
+    def test_kev_ransomware_use_is_stated(self):
+        out = E.build([alert("CVE-2026-14", self.PAN, 5.0, kev=True, kev_date_added="2026-10-14",
+                             kev_ransomware_use=True)], {}, env(), NOW)
+        self.assertIn("CISA KEV: known ransomware use", out["items"][0]["reasons"])
+        out = E.build([alert("CVE-2026-14", self.PAN, 5.0, kev=True, kev_date_added="2026-10-14")],
+                      {}, env(), NOW)
+        self.assertNotIn("CISA KEV: known ransomware use", out["items"][0]["reasons"])
+
+    def test_critical_cvss_needs_network_vector_to_escalate(self):
+        out = E.build([alert("CVE-2026-15", self.PAN, 9.3, cvss_vector_components={"attack_vector": "LOCAL"}),
+                       alert("CVE-2026-16", self.PAN, 9.3)], {}, env(), NOW)
+        self.assertEqual(tiers(out), {"CVE-2026-15": "work", "CVE-2026-16": "escalate"})
+
     def test_out_of_estate_is_ignored_even_if_kev(self):
         out = E.build([alert("CVE-2026-1", "RCE in Acme Router firmware.", 9.8, kev=True,
                              kev_date_added="2026-10-14")], {}, env(), NOW)
