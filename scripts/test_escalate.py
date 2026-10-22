@@ -173,6 +173,36 @@ class EscalateTests(unittest.TestCase):
                                            ["social_engineering"], priority="medium")]}, env(), NOW)
         self.assertEqual(tiers(out), {"g1": "work"})
 
+    def _tier_alone(self, title, cats):
+        # one build per headline: story folding would merge similar test titles
+        out = E.build([], {"items": [intel("x", title, cats)]}, env(), NOW)
+        return out["items"][0]["tier"], out["items"][0]["reasons"]
+
+    def test_defensive_feature_and_takedown_news_is_work_not_escalate(self):
+        # real board headlines that were escalated as if they were campaigns
+        for title in ("Microsoft Teams to Detect Malicious QR Codes and Warn Users of Phishing Attacks",
+                      "Microsoft Disrupts 3 Phishing Kits Linked to Over 1 Billion Scam Messages for Microsoft 365",
+                      "Microsoft 365 Business Email Compromise (BEC) Attacks: How to Stop Them"):
+            tier, reasons = self._tier_alone(title, ["social_engineering"])
+            self.assertEqual(tier, "work", title)
+            self.assertTrue(any("not an active campaign" in r for r in reasons), reasons)
+
+    def test_campaign_headlines_with_defense_words_still_escalate(self):
+        for title, cats in (
+                # attack succeeds despite the defence
+                ("Phishing kit bypasses Microsoft Teams protections to steal logins", ["social_engineering"]),
+                ("Ransomware disables Windows Defender protections on Windows Server", ["ransomware"]),
+                # a takedown story that also reports tenants hacked
+                ("Crypto cop takes down scam network, and Microsoft 365 tenants hacked via backup provider",
+                 ["social_engineering"]),
+                # vendor warning ABOUT a live campaign is not a defensive feature
+                ("Microsoft warns of Microsoft Teams vishing campaign posing as IT support", ["social_engineering"]),
+                # exploitation news is never demoted
+                ("Hackers exploit Microsoft Teams flaw to bypass detection", ["exploited"])):
+            tier, reasons = self._tier_alone(title, cats)
+            self.assertEqual(tier, "escalate", title)
+            self.assertFalse(any("not an active campaign" in r for r in reasons), reasons)
+
     def test_escalate_sorted_first(self):
         out = E.build([alert("CVE-2026-69982", "Weak authentication in Active Directory Federation "
                              "Services.", 5.9)],

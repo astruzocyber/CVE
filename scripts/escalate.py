@@ -44,6 +44,26 @@ TRIAGE_PATH = os.path.join(ROOT, "config", "triage.yaml")
 TIER_RANK = {"escalate": 0, "work": 1}
 CRIT_RANK = {"critical": 0, "high": 1, "medium": 2}
 HOT_INTEL = {"exploited", "ransomware", "social_engineering"}
+# Headlines about DEFENDING against phishing/scams/ransomware: a vendor
+# feature ("Chrome Adds Gemini AI Scam Detection"), a takedown ("Microsoft
+# Disrupts 3 Phishing Kits"), a how-to ("BEC Attacks: How to Stop Them").
+# They carry the hot words but report no campaign to act on, so they stay
+# Work instead of Escalate. Title only. Never applied to exploitation news,
+# and a headline that also describes an attack succeeding (bypass, steal,
+# hacked, disable...) keeps its tier.
+DEFENSIVE_NEWS_RE = re.compile(
+    r"\b(?:detection|protections?|defen[cs]es?|safeguards?)\b|\bto detect\b|\bdetects\b"
+    r"|\b(?:adds?|rolls? out|launch(?:es|ed)?|introduc\w*|unveil\w*|integrat\w*)\b[^.!?]{0,40}?\bwarnings?\b"
+    r"|\b(?:disrupt(?:s|ed)?|dismantl\w*|takedown|takes? down|took down|arrest(?:s|ed)?|seiz(?:e|es|ed))\b"
+    r"|\bhow to (?:stop|prevent|defend|spot|avoid)\b|\bharden(?:s|ed)?\b", re.I)
+ATTACK_SUCCEEDS_RE = re.compile(
+    r"\b(?:bypass\w*|evad\w*|evasion|abus(?:e|es|ed|ing)|hijack\w*|hacked|breach(?:ed|es)?|compromised|"
+    r"stole|steal(?:s|ing)?|disabl\w*|kill\w*|tamper\w*)\b", re.I)
+
+
+def defensive_news(title):
+    title = title or ""
+    return bool(DEFENSIVE_NEWS_RE.search(title)) and not ATTACK_SUCCEEDS_RE.search(title)
 # Shared team triage (config/triage.yaml, edited in the GitHub web UI).
 TRIAGE_STATUSES = {"acknowledged", "in_progress", "escalated", "resolved", "false_positive",
                    "accepted_risk"}
@@ -268,6 +288,9 @@ def classify_intel(item, env, labels):
         return None
     best = min(CRIT_RANK[a["criticality"]] for a, _ in hits)
     hot = [c for c in cats if c in HOT_INTEL]
+    defensive = bool(hot) and "exploited" not in hot and defensive_news(item.get("title"))
+    if defensive:
+        hot = []
     reasons = [f"In your estate: {_hits_desc(hits)}"]
     if cats:
         reasons.append("Category: " + ", ".join(labels.get(c, c) for c in cats))
@@ -282,6 +305,8 @@ def classify_intel(item, env, labels):
     if vendor_critical:
         crit = [a["cve"] for a in item.get("advisory") or [] if a.get("severity") == "critical"]
         reasons.append("Vendor rates Critical: " + ", ".join(crit[:5]))
+    if defensive:
+        reasons.append("Defense, takedown or how-to news, not an active campaign: Work, not Escalate")
     if vendor_critical or (hot and (best <= CRIT_RANK["high"] or "exploited" in hot)):
         tier = "escalate"
     else:
