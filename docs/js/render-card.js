@@ -7,7 +7,7 @@ import { isReviewed } from "./reviewed.js";
 import {
   severityClass, riskClass, fmtScore, fmtPct, fmtDay, fmtDateTime, cvssVersionText, isOverdue, overdueDays,
   daysUntilDue, firstSeenAge, isNewWithin24h, isRejected, isRevised, riskDelta, epssDelta, attackVectorLabel,
-  osvFixText, nvdFixText, nvdUrl, isNum,
+  osvFixText, nvdFixText, nvdFixIsRelease, hasFixAvailable, nvdUrl, isNum,
 } from "./format.js";
 
 const badge = (cls, text, title = "") =>
@@ -100,7 +100,7 @@ function detailsSection(a) {
   const osv = Array.isArray(a.osv_fixed_versions) ? a.osv_fixed_versions : [];
   const nvd = Array.isArray(a.nvd_fix_versions) ? a.nvd_fix_versions : [];
   if (osv.length) rows.push(["Fix (OSV.dev)", osv.map((f) => escapeHtml(osvFixText(f))).join("<br>")]);
-  if (nvd.length) rows.push(["Fix (NVD)", nvd.map((f) => escapeHtml(nvdFixText(f))).join("<br>")]);
+  if (nvd.length) rows.push([nvd.some(nvdFixIsRelease) ? "Fix (NVD)" : "Affected (NVD)", nvd.map((f) => escapeHtml(nvdFixText(f))).join("<br>")]);
   const advisories = a.kev ? kevAdvisoryLinks(a.kev_notes) : [];
   if (advisories.length) rows.push(["KEV advisories", advisories.join(" · ")]);
   const refs = (Array.isArray(a.nvd_reference_links) ? a.nvd_reference_links : [])
@@ -113,7 +113,7 @@ function detailsSection(a) {
   if (!rows.length) return "";
   return `
     <details class="card__details">
-      <summary>Details${osv.length || nvd.length ? ` <span class="badge badge--fix">Fix available</span>` : ""}</summary>
+      <summary>Details${hasFixAvailable(a) ? ` <span class="badge badge--fix">Fix available</span>` : ""}</summary>
       <dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
     </details>`;
 }

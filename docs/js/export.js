@@ -2,7 +2,7 @@
 // per-alert clipboard snippets. The string builders are pure and DOM-free.
 
 import { downloadBlob, todayStamp } from "./dom.js";
-import { fmtScore, fmtPct, fmtDay, cvssVersionText, osvFixText, nvdFixText, nvdUrl, isNum } from "./format.js";
+import { fmtScore, fmtPct, fmtDay, cvssVersionText, osvFixText, nvdFixText, nvdFixIsRelease, nvdUrl, isNum } from "./format.js";
 
 // A cell starting with one of these is executed as a formula by Excel/Sheets
 // (CSV injection). Prefixing a single quote neutralises it.
@@ -98,7 +98,10 @@ export function alertToMarkdown(a) {
   if (nvd) lines.push(`- **NVD:** ${nvd}`);
   if (a.dependabot_url) lines.push(`- **Dependabot alert:** ${a.dependabot_url}`);
   if ((a.osv_fixed_versions || []).length) lines.push(`- **Fix available (OSV.dev):** ${a.osv_fixed_versions.map(osvFixText).join(", ")}`);
-  if ((a.nvd_fix_versions || []).length) lines.push(`- **Fix available (NVD):** ${a.nvd_fix_versions.map(nvdFixText).join(", ")}`);
+  if ((a.nvd_fix_versions || []).length) {
+    const label = a.nvd_fix_versions.some(nvdFixIsRelease) ? "Fix available (NVD)" : "Affected versions (NVD)";
+    lines.push(`- **${label}:** ${a.nvd_fix_versions.map(nvdFixText).join(", ")}`);
+  }
   if (a.osv_id) lines.push(`- **OSV.dev:** https://osv.dev/vulnerability/${encodeURIComponent(a.osv_id)}`);
   if ((a.nvd_reference_links || []).length) {
     lines.push(`- **Vendor links:** ${a.nvd_reference_links.map((r) => `[${r.tags?.[0] || "Reference"}](${r.url})`).join(", ")}`);

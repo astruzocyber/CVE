@@ -121,10 +121,17 @@ export function isRevised(alert) {
   return String(alert.nvd_last_modified).slice(0, 10) !== String(alert.published).slice(0, 10);
 }
 
+/**
+ * NVD bound that names a fixed release. versionEndExcluding ("before X") does;
+ * versionEndIncluding ("X and earlier") only bounds the affected range and is
+ * also used when no fix exists yet, so it is not evidence of a fix.
+ */
+export const nvdFixIsRelease = (f) => f?.fix_type === "before";
+
 export function hasFixAvailable(alert) {
   return (
     (Array.isArray(alert.osv_fixed_versions) && alert.osv_fixed_versions.length > 0) ||
-    (Array.isArray(alert.nvd_fix_versions) && alert.nvd_fix_versions.length > 0)
+    (Array.isArray(alert.nvd_fix_versions) && alert.nvd_fix_versions.some(nvdFixIsRelease))
   );
 }
 
@@ -160,8 +167,9 @@ export function osvFixText(f) {
 }
 
 export function nvdFixText(f) {
-  const rel = f.fix_type === "up_to_and_including" ? "next release after" : "before";
-  return `${f.vendor || "?"} ${f.product || "?"} → fixed ${rel} ${f.fixed || "?"}`;
+  const name = `${f.vendor || "?"} ${f.product || "?"}`;
+  if (f.fix_type === "up_to_and_including") return `${name} → affected through ${f.fixed || "?"} (no fixed version stated)`;
+  return `${name} → fixed before ${f.fixed || "?"}`;
 }
 
 export const nvdUrl = (cveId) =>

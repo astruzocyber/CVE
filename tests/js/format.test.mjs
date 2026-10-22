@@ -33,3 +33,21 @@ test("days until due before the due date", () => {
   at("2026-10-15T12:00:00Z", () => { assert.equal(daysUntilDue(A), 8); assert.equal(isDueSoon(A), false); });
   at("2026-10-22T12:00:00Z", () => assert.equal(isOverdue({ kev: true }), false));
 });
+
+// NVD versionEndIncluding ("X and earlier", "all versions up to, and including, X")
+// only bounds the affected range; it is not evidence that a fixed release exists
+// (CVE-2026-84975 pjsip: "<= 2.17", description: "No fixed version is available").
+// Only versionEndExcluding (first unaffected version) or OSV fixed versions count.
+test("an NVD 'up to and including' bound is not a fix; 'before X' and OSV are", async () => {
+  const { hasFixAvailable, nvdFixText } = await import("../../docs/js/format.js");
+  const through = { vendor: "teluu", product: "pjsip", fixed: "2.17", fix_type: "up_to_and_including" };
+  const before = { vendor: "fortinet", product: "fortios", fixed: "7.4.3", fix_type: "before" };
+  assert.equal(hasFixAvailable({ nvd_fix_versions: [through] }), false);
+  assert.equal(hasFixAvailable({ nvd_fix_versions: [through, before] }), true);
+  assert.equal(hasFixAvailable({ nvd_fix_versions: [before] }), true);
+  assert.equal(hasFixAvailable({ nvd_fix_versions: [through], osv_fixed_versions: [{ package: "p", fixed: "1" }] }), true);
+  assert.equal(hasFixAvailable({}), false);
+  assert.doesNotMatch(nvdFixText(through), /fixed before|next release after/);
+  assert.match(nvdFixText(through), /affected through 2\.17/);
+  assert.match(nvdFixText(before), /fixed before 7\.4\.3/);
+});
