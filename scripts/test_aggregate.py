@@ -1332,7 +1332,7 @@ class TestResurfacedAlertKeepsStoredEnrichment(unittest.TestCase):
               "osv_fixed_versions": [{"package": None, "ecosystem": None, "fixed": "722363e5"}],
               "affected_cpe_check": "ok"}
 
-    def run_main(self, stored, candidates, kev_candidates=()):
+    def run_main(self, stored, candidates, kev_candidates=(), osv_result=None):
         import aggregate as A
         files = {A.ALERTS_PATH: [dict(a) for a in stored],
                  A.SEEN_PATH: [A.unique_key(a) for a in stored]}
@@ -1348,7 +1348,7 @@ class TestResurfacedAlertKeepsStoredEnrichment(unittest.TestCase):
              mock.patch.object(A, "fetch_ghsa_advisories", return_value=[]), \
              mock.patch.object(A, "fetch_kev_candidates", return_value=list(kev_candidates)), \
              mock.patch.object(A, "fetch_epss", return_value={}), \
-             mock.patch.object(A, "fetch_osv_fix_info", return_value=None) as osv, \
+             mock.patch.object(A, "fetch_osv_fix_info", return_value=osv_result) as osv, \
              mock.patch.object(A, "backfill_legacy_nvd_fields"), \
              mock.patch.object(A, "revalidate_affected_pairs"), \
              mock.patch.object(A, "load_json_file", side_effect=lambda p, d: files.get(p, d)), \
@@ -1395,7 +1395,101 @@ class TestResurfacedAlertKeepsStoredEnrichment(unittest.TestCase):
         self.assertEqual(merged, {"osv_id": "GHSA-new", "osv_fixed_versions": []})
 
 
-A_STORED_ONLY = ("osv_id", "osv_fixed_versions", "affected_cpe_check")
+A_STORED_ONLY = ("osv_id", "osv_fixed_versions", "osv_checked", "affected_cpe_check")
+
+
+class TestRecheckOsv(unittest.TestCase):
+    """OSV.dev used to be queried once, when an alert was first seen, so alerts
+    whose OSV data was wiped (pre-5a8d6c7 merge) or that OSV had not ingested yet
+    stayed without a fix line forever (13 of 80 sampled board alerts without
+    osv_id had an OSV record on 2026-10-22)."""
+
+    from datetime import date as _date
+    TODAY = _date(2026, 10, 22)
+    REC = {"osv_id": "CVE-2026-1", "osv_fixed_versions": [{"package": "p", "ecosystem": "PyPI", "fixed": "1.2"}]}
+
+    def alerts(self):
+        return {
+            "a::nvd": {"cve_id": "CVE-2026-1", "risk_score": 50},                              # never checked
+            "b::nvd": {"cve_id": "CVE-2026-2", "risk_score": 90},                              # never checked, riskier
+            "c::nvd": {"cve_id": "CVE-2026-3", "osv_checked": "2026-10-20"},                   # checked recently
+            "d::nvd": {"cve_id": "CVE-2026-4", "osv_checked": "2026-09-01"},                   # check is stale
+            "e::nvd": {"cve_id": "CVE-2026-5", "osv_id": "GHSA-x", "osv_fixed_versions": []},  # has a record
+        }
+
+    def run_recheck(self, by_key, results, **kw):
+        import aggregate as A
+        calls = []
+
+        def fetch(cid):
+            calls.append(cid)
+            return results.get(cid)
+        kw.setdefault("max_lookups", 10)
+        kw.setdefault("recheck_days", 14)
+        kw.setdefault("time_budget_s", 60)
+        out = A.recheck_osv(by_key, today=self.TODAY, fetch=fetch, **kw)
+        return calls, out
+
+    def test_due_alerts_only_never_checked_first_by_risk(self):
+        by = self.alerts()
+        calls, (looked, found) = self.run_recheck(by, {"CVE-2026-1": self.REC})
+        self.assertEqual(calls, ["CVE-2026-2", "CVE-2026-1", "CVE-2026-4"])
+        self.assertEqual((looked, found), (3, 1))
+        self.assertEqual(by["a::nvd"]["osv_id"], "CVE-2026-1")
+        self.assertEqual(by["a::nvd"]["osv_fixed_versions"], self.REC["osv_fixed_versions"])
+        self.assertEqual(by["a::nvd"]["osv_checked"], "2026-10-22")
+        # a 404 records the check but invents nothing
+        self.assertNotIn("osv_id", by["b::nvd"])
+        self.assertEqual(by["b::nvd"]["osv_checked"], "2026-10-22")
+        self.assertEqual(by["d::nvd"]["osv_checked"], "2026-10-22")
+        self.assertEqual(by["c::nvd"]["osv_checked"], "2026-10-20")
+        self.assertEqual(by["e::nvd"], self.alerts()["e::nvd"])
+
+    def test_failed_lookup_is_not_recorded_and_outage_stops_the_pass(self):
+        import aggregate as A
+        by = {f"k{i}::nvd": {"cve_id": f"CVE-2026-{i}"} for i in range(10)}
+        calls, (looked, _) = self.run_recheck(by, {f"CVE-2026-{i}": A.OSV_LOOKUP_FAILED for i in range(10)})
+        self.assertEqual(len(calls), 3)           # stops after max_failures
+        self.assertEqual(looked, 0)
+        self.assertFalse(any("osv_checked" in a for a in by.values()))
+
+    def test_cap_and_skip_keys(self):
+        by = self.alerts()
+        calls, _ = self.run_recheck(by, {}, max_lookups=1, skip_keys={"b::nvd"})
+        self.assertEqual(calls, ["CVE-2026-1"])
+
+    def test_main_restores_osv_for_a_stored_alert_not_resurfaced(self):
+        # A board alert whose OSV data was lost and that NVD no longer resurfaces
+        lost = {k: v for k, v in TestResurfacedAlertKeepsStoredEnrichment.STORED.items()
+                if k not in A_STORED_ONLY}
+        lost.update(osv_id=None, osv_fixed_versions=[])
+        t = TestResurfacedAlertKeepsStoredEnrichment()
+        rec = {"osv_id": "CVE-2026-56095", "osv_fixed_versions": [{"package": None, "ecosystem": None, "fixed": "722363e5"}]}
+        out, new, osv = t.run_main([lost], [], osv_result=rec)
+        a = out["CVE-2026-56095::nvd"]
+        self.assertEqual(new, [])
+        osv.assert_called_once_with("CVE-2026-56095")
+        self.assertEqual(a["osv_id"], "CVE-2026-56095")
+        self.assertEqual(a["osv_fixed_versions"], rec["osv_fixed_versions"])
+        self.assertTrue(a["osv_checked"])
+
+    def test_main_new_alert_lookup_is_recorded_once(self):
+        t = TestResurfacedAlertKeepsStoredEnrichment()
+        out, new, osv = t.run_main([], [t.candidate()], osv_result=None)
+        self.assertEqual(len(new), 1)
+        osv.assert_called_once_with("CVE-2026-56095")   # not re-queried by the recheck pass
+        self.assertTrue(out["CVE-2026-56095::nvd"]["osv_checked"])
+        self.assertIsNone(out["CVE-2026-56095::nvd"]["osv_id"])
+
+    def test_resurfaced_alert_keeps_its_check_date(self):
+        t = TestResurfacedAlertKeepsStoredEnrichment()
+        stored = {k: v for k, v in t.STORED.items() if k not in A_STORED_ONLY}
+        from datetime import datetime, timezone
+        today = datetime.now(timezone.utc).date().isoformat()
+        stored.update(osv_id=None, osv_fixed_versions=[], osv_checked=today)
+        out, _, osv = t.run_main([stored], [t.candidate()])
+        osv.assert_not_called()
+        self.assertEqual(out["CVE-2026-56095::nvd"]["osv_checked"], today)
 
 
 if __name__ == "__main__":

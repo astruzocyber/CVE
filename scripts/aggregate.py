@@ -307,13 +307,18 @@ def fetch_osv_fix_info(cve_id):
     Only 429/5xx get the same bounded-retry treatment as every other fetch_*
     function in this file; any other failure degrades to None rather than
     raising, matching the project's schema/accuracy policy of never guessing.
+
+    Return values: a dict when OSV has a record, None when OSV answered that it
+    has none (404), and OSV_LOOKUP_FAILED (falsy, but `is`-distinguishable)
+    when the lookup itself failed, so a failed lookup is never recorded as
+    "checked, no record" (osv_checked) and is retried on a later run.
     """
     url = f"{OSV_URL}/{urllib.parse.quote(cve_id)}"
     for attempt in range(2):
         try:
             data, _ = http_get_json(url, timeout=10)
             if not validate_schema(f"OSV.dev {cve_id}", data, ["id"]):
-                return None
+                return OSV_LOOKUP_FAILED
             return {"osv_id": data.get("id"), "osv_fixed_versions": parse_osv_fixed_versions(data)}
         except urllib.error.HTTPError as e:
             if e.code == 404:
@@ -324,15 +329,81 @@ def fetch_osv_fix_info(cve_id):
                     continue
                 print(f"  WARNING: OSV.dev fetch failed for {cve_id}: HTTP {e.code}",
                       file=sys.stderr)
-                return None
-            return None
+                return OSV_LOOKUP_FAILED
+            return OSV_LOOKUP_FAILED
         except Exception as e:
             if attempt == 0:
                 time.sleep(2)
                 continue
             print(f"  WARNING: OSV.dev fetch failed for {cve_id}: {e}", file=sys.stderr)
-            return None
-    return None
+            return OSV_LOOKUP_FAILED
+    return OSV_LOOKUP_FAILED
+
+
+OSV_LOOKUP_FAILED = False  # see fetch_osv_fix_info(): falsy, unlike a found record
+
+
+def apply_osv_lookup(alert, info, today):
+    """Record one OSV lookup result on `alert`. A found record sets the OSV id +
+    fixed versions; a 404 leaves them empty; both stamp osv_checked=today. A
+    failed lookup (OSV_LOOKUP_FAILED) changes nothing, so it is retried."""
+    if info is OSV_LOOKUP_FAILED:
+        return False
+    if info:
+        alert["osv_id"] = info["osv_id"]
+        alert["osv_fixed_versions"] = info["osv_fixed_versions"]
+    alert["osv_checked"] = today
+    return True
+
+
+def recheck_osv(by_key, skip_keys=(), today=None, max_lookups=None, recheck_days=None,
+                time_budget_s=None, max_failures=3, fetch=None, clock=time.monotonic):
+    """Bounded OSV.dev lookup for tracked alerts that have no OSV record yet.
+
+    OSV enrichment used to run once, when an alert was first seen. That misses
+    (1) alerts whose OSV data the 'already known' merge wiped before 5a8d6c7
+    and (2) CVEs OSV had not ingested yet on the day they were first seen
+    (OSV imports NVD/GHSA records with a lag). Audit 2026-10-22: 13 of 80
+    random board alerts without osv_id had an OSV record with fixed versions.
+
+    Never-checked alerts go first (highest risk first), then alerts whose last
+    check is older than `recheck_days`. Capped per run (count, wall-clock
+    budget, and a stop after `max_failures` failed lookups, so an OSV outage
+    with 10 s timeouts can't push the job past its timeout). Alerts that
+    already have an OSV id are left alone. Returns (looked_up, found)."""
+    fetch = fetch or fetch_osv_fix_info
+    today_d = today or datetime.now(timezone.utc).date()
+    today_s = today_d.isoformat()
+    max_lookups = int(os.environ.get("OSV_RECHECK_MAX", "250")) if max_lookups is None else max_lookups
+    recheck_days = int(os.environ.get("OSV_RECHECK_DAYS", "14")) if recheck_days is None else recheck_days
+    time_budget_s = float(os.environ.get("OSV_RECHECK_BUDGET_S", "180")) if time_budget_s is None else time_budget_s
+    skip_keys = set(skip_keys)
+
+    def due(alert):
+        checked = alert.get("osv_checked")
+        if not checked:
+            return True
+        try:
+            return (today_d - date.fromisoformat(str(checked)[:10])).days >= recheck_days
+        except ValueError:
+            return True
+
+    queue = [(k, a) for k, a in by_key.items()
+             if k not in skip_keys and not a.get("osv_id") and a.get("cve_id") and due(a)]
+    queue.sort(key=lambda ka: (ka[1].get("osv_checked") or "", -(ka[1].get("risk_score") or 0)))
+    start, looked, found, failures = clock(), 0, 0, 0
+    for _, alert in queue[:max(0, max_lookups)]:
+        if failures >= max_failures or clock() - start > time_budget_s:
+            break
+        info = fetch(alert["cve_id"])
+        if not apply_osv_lookup(alert, info, today_s):
+            failures += 1
+            continue
+        looked += 1
+        found += 1 if info else 0
+    print(f"  OSV.dev recheck: {looked} looked up ({found} with a record), "
+          f"{failures} failed, {max(0, len(queue) - looked)} still due")
+    return looked, found
 
 
 # ---------------------------------------------------------------------------
@@ -1536,7 +1607,7 @@ def known_first_seen(key, existing_by_key, pruned_first_seen, default):
 # new alerts; the CPE recheck mark is written by revalidate_affected_pairs).
 # build_final_entry() resets them, so a resurfaced alert must take them over
 # from its prior record or they are lost on the next run.
-STORED_ONLY_FIELDS = (("osv_id", "osv_fixed_versions"), ("affected_cpe_check",))
+STORED_ONLY_FIELDS = (("osv_id", "osv_fixed_versions", "osv_checked"), ("affected_cpe_check",))
 
 
 def keep_stored_enrichment(merged, prior):
@@ -2326,22 +2397,24 @@ def main():
     # the suppression expires; they'll re-enter the normal filter/dedup path instead.
     existing_by_key = {k: v for k, v in existing_by_key.items() if v.get("cve_id") not in suppressions}
 
-    # OSV.dev read-only enrichment (osv_id / osv_fixed_versions): only for NEW alerts
-    # this run, not a re-check of all cumulative entries -- OSV.dev has no batch-by-CVE
-    # endpoint, so enriching the full tracked population every run would mean hundreds
-    # of serial per-CVE GETs each cycle for a field that, once set, almost never changes
-    # (a fix either exists in OSV's data or doesn't). Bounded, one-time cost per CVE;
-    # fails soft (404/error -> stays None) and never affects filtering, scoring, or
+    # OSV.dev read-only enrichment (osv_id / osv_fixed_versions): first for NEW alerts
+    # this run, then a capped recheck_osv() pass over tracked alerts that still have
+    # no OSV record (OSV.dev has no batch-by-CVE endpoint, so it is per-CVE GETs,
+    # bounded by count, time and failures).
+    # Fails soft (404/error -> stays None) and never affects filtering, scoring, or
     # which alerts get surfaced -- purely additive metadata on already-decided alerts.
+    osv_today = datetime.now(timezone.utc).date().isoformat()
+    new_keys = set()
     for final in new_alerts:
         osv_info = fetch_osv_fix_info(final["cve_id"])
-        if osv_info:
-            final["osv_id"] = osv_info["osv_id"]
-            final["osv_fixed_versions"] = osv_info["osv_fixed_versions"]
-            key = unique_key(final)
-            if key in existing_by_key:
-                existing_by_key[key]["osv_id"] = final["osv_id"]
-                existing_by_key[key]["osv_fixed_versions"] = final["osv_fixed_versions"]
+        key = unique_key(final)
+        new_keys.add(key)
+        apply_osv_lookup(final, osv_info, osv_today)
+        if key in existing_by_key and existing_by_key[key] is not final:
+            apply_osv_lookup(existing_by_key[key], osv_info, osv_today)
+    # Then a capped lookup for tracked alerts still without an OSV record
+    # (wiped by the pre-5a8d6c7 merge, or not yet in OSV when first seen).
+    recheck_osv(existing_by_key, skip_keys=new_keys)
 
     collapse_advisory_twins(existing_by_key)
     cumulative = sorted(existing_by_key.values(), key=lambda a: a.get("first_seen", ""), reverse=True)
