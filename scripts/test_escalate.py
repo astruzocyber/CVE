@@ -553,6 +553,125 @@ class DiscordTests(unittest.TestCase):
         st, _ = D.run("u", esc(("A", "escalate")), {}, NOW, poster=self.poster())
         self.assertEqual(D.run_digest("u", esc(("A", "escalate")), st, NOW, 12, poster=self.poster())[1], False)
 
+    def test_connect_message_counts_open_items_per_tier(self):
+        doc = esc(("A", "escalate"), ("B", "escalate"), ("F", "escalate"), ("C", "work"), ("D", "work"),
+                  ("E", "work"), ("G", "work"))
+        doc["items"][1]["closed"] = True
+        doc["items"][6]["closed"] = True
+        D.run("u", doc, {}, NOW, poster=self.poster())
+        self.assertIn("2 Escalate / 3 Work items", self.calls[0]["content"])
+
+    def test_failed_connect_message_leaves_state_unseeded(self):
+        st, n = D.run("u", esc(("A", "escalate")), {}, NOW, poster=self.poster(ok=False))
+        self.assertEqual((st, n), ({}, 0))
+
+    def test_header_only_on_first_message_and_cap_per_run(self):
+        items = [(f"X{i}", "escalate") for i in range(D.MAX_ITEMS_PER_RUN + 5)]
+        st, n = D.run("u", esc(*items), {"seeded": True, "sent": {}}, NOW, poster=self.poster())
+        self.assertEqual(n, D.MAX_ITEMS_PER_RUN)
+        self.assertIn(f"{D.MAX_ITEMS_PER_RUN + 5} new item(s)", self.calls[0]["content"])
+        self.assertTrue(all("content" not in c for c in self.calls[1:]))
+        # the overflow is not marked sent, so it goes out next run
+        self.assertEqual(len(st["sent"]), D.MAX_ITEMS_PER_RUN)
+
+    def test_prune_keeps_entries_exactly_at_the_cutoff(self):
+        from datetime import timedelta
+        cut = (NOW - timedelta(days=D.PRUNE_DAYS)).isoformat()
+        older = (NOW - timedelta(days=D.PRUNE_DAYS, seconds=1)).isoformat()
+        self.assertEqual(D.prune({"a": cut, "b": older}, NOW), {"a": cut})
+
+    def test_digest_counts_open_items_and_lists_triage(self):
+        doc = esc(("A", "escalate"), ("B", "escalate"), ("C", "work"), ("Y", "work"), ("Z", "work"))
+        doc["items"][0]["triage"] = {"status": "investigating", "owner": "ana"}
+        doc["items"][1]["closed"] = True
+        doc["items"][4]["closed"] = True
+        doc["triaged"] = 2
+        text = D.build_digest(doc, "https://d.example/")
+        self.assertIn("1 open Escalate · 2 open Work · 2 triaged", text)
+        self.assertIn("• A [investigating · ana]", text)
+        self.assertNotIn("• B", text)
+        self.assertNotIn("Nothing open", text)
+        self.assertNotIn("more on the board", text)
+
+    def test_digest_untriaged_tag_and_empty_board(self):
+        self.assertIn("• A [untriaged]", D.build_digest(esc(("A", "escalate")), ""))
+        self.assertIn("Nothing open at Escalate level.", D.build_digest(esc(("W", "work")), ""))
+
+    def test_digest_overflow_line_only_past_the_limit(self):
+        at = esc(*[(f"X{i}", "escalate") for i in range(3)])
+        self.assertNotIn("more on the board", D.build_digest(at, "", limit=3))
+        over = esc(*[(f"X{i}", "escalate") for i in range(4)])
+        text = D.build_digest(over, "", limit=3)
+        self.assertIn("…and 1 more on the board.", text)
+        self.assertNotIn("• X3", text)
+
+    def test_digest_capped_below_discord_limit(self):
+        doc = esc(*[("Y" * 140 + str(i), "escalate") for i in range(14)])
+        text = D.build_digest(doc, "", limit=14)
+        self.assertEqual(len(text), 1900)
+        self.assertTrue(text.endswith("…"))
+        short = D.build_digest(esc(("A", "escalate")), "")
+        self.assertFalse(short.endswith("…"))
+
+    def test_failed_digest_is_not_recorded_as_sent(self):
+        st = {"seeded": True, "sent": {}}
+        st2, ok = D.run_digest("u", esc(("A", "escalate")), st, NOW, 12, poster=self.poster(ok=False))
+        self.assertFalse(ok)
+        self.assertNotIn("digest_date", st2)
+
+    def _urlopen(self, outcomes):
+        """Fake urlopen yielding each outcome in turn: an int status or an exception."""
+        seen = []
+
+        class Res:
+            def __init__(self, status): self.status = status
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+
+        def fake(req, timeout=0):
+            seen.append(req)
+            o = outcomes[len(seen) - 1]
+            if isinstance(o, BaseException):
+                raise o
+            return Res(o)
+        return fake, seen
+
+    def _post_with(self, outcomes):
+        fake, seen = self._urlopen(outcomes)
+        orig = D.urllib.request.urlopen
+        D.urllib.request.urlopen = fake
+        try:
+            return D.post("https://discord.com/api/webhooks/1/abc", {"content": "x"}), len(seen)
+        finally:
+            D.urllib.request.urlopen = orig
+
+    def _http_error(self, code, body=b""):
+        import io
+        e = D.urllib.error.HTTPError("u", code, "x", {}, io.BytesIO(body))
+        self.addCleanup(e.close)
+        return e
+
+    def test_post_retries_after_429_then_succeeds(self):
+        ok, tries = self._post_with([self._http_error(429, b'{"retry_after": 0.1}'), 204])
+        self.assertEqual((ok, tries), (True, 2))
+        ok, tries = self._post_with([self._http_error(429, b"<html>"), 200])
+        self.assertEqual((ok, tries), (True, 2))
+
+    def test_post_gives_up_on_other_http_errors_without_retry(self):
+        self.assertEqual(self._post_with([self._http_error(400), 204]), (False, 1))
+
+    def test_post_non_2xx_status_is_failure(self):
+        self.assertEqual(self._post_with([299])[0], True)
+        self.assertEqual(self._post_with([300])[0], False)
+        self.assertEqual(self._post_with([199])[0], False)
+
+    def test_post_unreachable_retries_then_fails(self):
+        err = D.urllib.error.URLError("down")
+        self.assertEqual(self._post_with([err, err, err, err]), (False, 4))
+
+    def test_post_reply_lost_is_not_retried(self):
+        self.assertEqual(self._post_with([TimeoutError("read"), 204]), (False, 1))
+
     def test_webhook_url_validation(self):
         self.assertTrue(D.WEBHOOK_RE.match("https://discord.com/api/webhooks/123/abc-DEF_1"))
         self.assertFalse(D.WEBHOOK_RE.match("https://evil.example/api/webhooks/123/abc"))
