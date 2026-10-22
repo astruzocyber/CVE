@@ -162,7 +162,26 @@ export function attackVectorLabel(alert) {
   return noAuth ? `${base} · no auth/interaction` : base;
 }
 
+const GIT_SHA_RE = /^[0-9a-f]{40}$/i;
+
+/** OSV source-only records (GIT range, no package) name a fix commit, not a release. */
+export const osvFixIsCommit = (f) => !f?.package && GIT_SHA_RE.test(String(f?.fixed || ""));
+
+/** Web URL of the fix commit for GitHub/GitLab repos, else null. */
+export function osvFixCommitUrl(f) {
+  if (!osvFixIsCommit(f) || typeof f.repo !== "string") return null;
+  const m = f.repo.match(/^https:\/\/(github\.com|gitlab\.com)\/([\w.-]+\/[\w.-]+?)(?:\.git)?\/?$/i);
+  if (!m) return null;
+  return `https://${m[1]}/${m[2]}${m[1].toLowerCase() === "gitlab.com" ? "/-" : ""}/commit/${f.fixed}`;
+}
+
 export function osvFixText(f) {
+  if (osvFixIsCommit(f)) {
+    const where = typeof f.repo === "string" && f.repo
+      ? f.repo.replace(/^https?:\/\//i, "").replace(/\.git\/?$/i, "").replace(/\/$/, "")
+      : "upstream source";
+    return `${where} → fix commit ${f.fixed.slice(0, 12)} (source fix, no release version stated)`;
+  }
   return `${f.package || "?"}${f.ecosystem ? ` (${f.ecosystem})` : ""} → ${f.fixed || "?"}`;
 }
 

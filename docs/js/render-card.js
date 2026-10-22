@@ -7,7 +7,7 @@ import { isReviewed } from "./reviewed.js";
 import {
   severityClass, riskClass, fmtScore, fmtPct, fmtDay, fmtDateTime, cvssVersionText, isOverdue, overdueDays,
   daysUntilDue, firstSeenAge, isNewWithin24h, isRejected, isRevised, riskDelta, epssDelta, attackVectorLabel,
-  osvFixText, nvdFixText, nvdFixIsRelease, hasFixAvailable, nvdUrl, isNum,
+  osvFixText, osvFixCommitUrl, nvdFixText, nvdFixIsRelease, hasFixAvailable, nvdUrl, isNum,
 } from "./format.js";
 
 const badge = (cls, text, title = "") =>
@@ -99,7 +99,13 @@ function detailsSection(a) {
   const rows = [];
   const osv = Array.isArray(a.osv_fixed_versions) ? a.osv_fixed_versions : [];
   const nvd = Array.isArray(a.nvd_fix_versions) ? a.nvd_fix_versions : [];
-  if (osv.length) rows.push(["Fix (OSV.dev)", osv.map((f) => escapeHtml(osvFixText(f))).join("<br>")]);
+  if (osv.length) {
+    const line = (f) => {
+      const url = osvFixCommitUrl(f);
+      return escapeHtml(osvFixText(f)) + (url ? ` · ${extLink(url, "commit")}` : "");
+    };
+    rows.push(["Fix (OSV.dev)", osv.map(line).join("<br>")]);
+  }
   if (nvd.length) rows.push([nvd.some(nvdFixIsRelease) ? "Fix (NVD)" : "Affected (NVD)", nvd.map((f) => escapeHtml(nvdFixText(f))).join("<br>")]);
   const advisories = a.kev ? kevAdvisoryLinks(a.kev_notes) : [];
   if (advisories.length) rows.push(["KEV advisories", advisories.join(" · ")]);
