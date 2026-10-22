@@ -214,7 +214,9 @@ export function makePredicate(v) {
       if (src !== v.source && !src.startsWith(`${v.source}:`)) return false;
     }
     if (isNum(minRisk) && !(isNum(a.risk_score) && a.risk_score >= minRisk)) return false;
-    if (isNum(minEpss) && !(isNum(a.epss_score) && a.epss_score * 100 >= minEpss)) return false;
+    // Compare as a fraction: 0.29 * 100 is 28.999999999999996, which hid an
+    // alert shown as "29.0%" from "EPSS >= 29%"; 29 / 100 is exactly 0.29.
+    if (isNum(minEpss) && !(isNum(a.epss_score) && a.epss_score >= minEpss / 100)) return false;
     if (deps && !matchesPackages(a, deps)) return false;
     if (terms.length) {
       const hay = state.searchIndex.get(a.cve_id) ?? "";
