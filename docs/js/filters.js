@@ -178,10 +178,26 @@ const KEV_PREDICATES = {
   ransomware: (a) => Boolean(a.kev_ransomware_use),
 };
 
+/**
+ * Search box text -> lowercase terms that must ALL appear (any order), like the
+ * threat-intel search. A "quoted phrase" stays one term. Matching the whole box
+ * as one substring found 0 alerts for "wordpress sql injection" or "chrome v8"
+ * (110 and 93 alerts contain every word) unless the words happened to be
+ * adjacent and in that order in the text.
+ */
+export function searchTerms(text) {
+  const terms = [];
+  for (const m of String(text || "").toLowerCase().matchAll(/"([^"]*)"|(\S+)/g)) {
+    const t = (m[1] ?? m[2]).trim();
+    if (t) terms.push(t);
+  }
+  return terms;
+}
+
 export function makePredicate(v) {
   const minRisk = v.minRisk === "" ? null : Number(v.minRisk);
   const minEpss = v.minEpss === "" ? null : Number(v.minEpss);
-  const q = v.q.toLowerCase();
+  const terms = searchTerms(v.q);
   const kevOk = KEV_PREDICATES[v.kev] ?? KEV_PREDICATES.all;
   const deps = state.depPackages;
   const facet = v.facet ? parseFacet(v.facet) : null;
@@ -200,7 +216,10 @@ export function makePredicate(v) {
     if (isNum(minRisk) && !(isNum(a.risk_score) && a.risk_score >= minRisk)) return false;
     if (isNum(minEpss) && !(isNum(a.epss_score) && a.epss_score * 100 >= minEpss)) return false;
     if (deps && !matchesPackages(a, deps)) return false;
-    if (q && !(state.searchIndex.get(a.cve_id) ?? "").includes(q)) return false;
+    if (terms.length) {
+      const hay = state.searchIndex.get(a.cve_id) ?? "";
+      if (!terms.every((t) => hay.includes(t))) return false;
+    }
     return true;
   };
 }

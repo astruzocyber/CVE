@@ -132,3 +132,21 @@ test("marking an alert reviewed under 'Hide reviewed' drops only that alert and 
   assert.ok(branch.includes("dropFromResults("), "toggle-reviewed should use dropFromResults");
   assert.ok(!/\brender\(\)/.test(branch), "toggle-reviewed must not call render()");
 });
+
+test("search matches every word in any order; a quoted phrase stays exact", () => {
+  const alerts = [
+    A("CVE-1", { description: "SQL injection in the WordPress plugin Foo" }),
+    A("CVE-2", { description: "Use after free in V8 in Google Chrome" }),
+    A("CVE-3", { description: "WordPress plugin with an injection of SQL fragments" }),
+  ];
+  const ids = (q) => run(alerts, { q }).map((a) => a.cve_id);
+  // Whole-box substring matching returned nothing for these.
+  assert.deepEqual(ids("wordpress sql injection"), ["CVE-1", "CVE-3"]);
+  assert.deepEqual(ids("chrome v8"), ["CVE-2"]);
+  assert.deepEqual(ids("  Chrome   V8 "), ["CVE-2"]);
+  // Every word must be present, not any of them.
+  assert.deepEqual(ids("wordpress chrome"), []);
+  // Quotes keep an exact phrase.
+  assert.deepEqual(ids('"sql injection" wordpress'), ["CVE-1"]);
+  assert.deepEqual(ids('""'), ["CVE-1", "CVE-2", "CVE-3"]);
+});
