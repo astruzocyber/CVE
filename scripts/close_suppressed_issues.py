@@ -99,15 +99,28 @@ def fetch_open_vuln_issues(repo, token, max_pages=MAX_PAGES):
     """Paginate repos/{repo}/issues?state=open&labels=vulnerability-alert until
     a short page. The old 20-page (2000 issue) ceiling was passed in October
     2026 (2399 open), so the oldest issues (the API lists newest first) were
-    never checked against suppressions. Warns if the loop bound is reached."""
+    never checked against suppressions. Warns if the loop bound is reached.
+
+    Oldest-first, and each issue number kept once: offset pages over the
+    default newest-first order shift when issues the notifier just created
+    show up mid-listing, so the item at a page boundary came back twice
+    (run 39772977791 listed 2289 for ~2286 open) and close_orphaned_issues
+    closed #1595, #2486, #2487 as "duplicate of" themselves."""
     issues = []
+    seen = set()
     for page in range(1, max_pages + 1):
         url = (f"{GITHUB_API}/repos/{repo}/issues"
-               f"?state=open&labels=vulnerability-alert&per_page=100&page={page}")
+               f"?state=open&labels=vulnerability-alert&sort=created&direction=asc"
+               f"&per_page=100&page={page}")
         data = _api_request(url, token)
         if not data:
             break
-        issues.extend(data)
+        for issue in data:
+            number = issue.get("number") if isinstance(issue, dict) else None
+            if number is None or number not in seen:
+                if number is not None:
+                    seen.add(number)
+                issues.append(issue)
         if len(data) < 100:
             break
     else:

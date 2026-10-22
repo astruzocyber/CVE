@@ -35,6 +35,15 @@ class TestPlanClosures(unittest.TestCase):
                               iss(2181, "[VULN ALERT] CVE-2026-01500 - kev")], self.IDS)
         self.assertEqual(plan, [(2377, "duplicate", "CVE-2026-01500", 2181)])
 
+    def test_same_issue_listed_twice_is_not_its_own_duplicate(self):
+        # Run 39772977791: page overlap listed #1595/#2486/#2487 twice and each was
+        # closed as "a duplicate of" itself while its CVE was still on the board.
+        plan = plan_closures([iss(1595, "[VULN ALERT] CVE-2026-01500 - php/php"),
+                              iss(2486, "[VULN ALERT] CVE-2026-01600 - x"),
+                              iss(1595, "[VULN ALERT] CVE-2026-01500 - php/php"),
+                              iss(2486, "[VULN ALERT] CVE-2026-01600 - x")], self.IDS)
+        self.assertEqual(plan, [])
+
     def test_prefix_id_is_not_a_match(self):
         # CVE-2026-0150 must not count as present because CVE-2026-01500 is on the board
         plan = plan_closures([iss(9, "[VULN ALERT] CVE-2026-0150 - x")], self.IDS)

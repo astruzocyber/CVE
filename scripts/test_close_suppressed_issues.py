@@ -131,6 +131,21 @@ class TestCloseSuppressedIssues(unittest.TestCase):
         self.assertEqual(len(patched), 1)
         self.assertTrue(patched[0].endswith("issues/7"))
 
+    def test_fetch_lists_oldest_first_and_drops_page_overlap(self):
+        # Page 2 repeats the last issue of page 1 (listing shifted mid-pagination).
+        urls = []
+
+        def fake_urlopen(req, timeout=30):
+            urls.append(req.full_url)
+            if req.full_url.endswith("&page=1"):
+                return FakeResponse([{"number": i, "title": f"t{i}"} for i in range(1, 101)])
+            return FakeResponse([{"number": 100, "title": "t100"}, {"number": 101, "title": "t101"}])
+
+        with mock.patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            issues = csi.fetch_open_vuln_issues("astruzocyber/CVE", "x")
+        self.assertEqual([i["number"] for i in issues], list(range(1, 102)))
+        self.assertIn("direction=asc", urls[0])
+
     def test_id_in_title_token_boundaries(self):
         self.assertTrue(csi.id_in_title("CVE-2025-5949", "[VULN ALERT] CVE-2025-5949 - x"))
         self.assertTrue(csi.id_in_title("CVE-2025-5949", "[VULN ALERT] CVE-2025-5949"))

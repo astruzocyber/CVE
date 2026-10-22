@@ -58,9 +58,14 @@ def plan_closures(issues, ids, suppressed=(), min_board=MIN_BOARD, max_close=MAX
     suppressed = {s.upper() for s in suppressed}
     first = {}
     plan = []
+    numbers = set()
     for issue in sorted(issues, key=lambda i: i.get("number", 0)):
         if "pull_request" in issue:
             continue
+        # The same issue listed twice (page overlap) is not a duplicate of itself.
+        if issue.get("number") in numbers:
+            continue
+        numbers.add(issue.get("number"))
         found = [m.upper() for m in ID_RE.findall(issue.get("title", ""))]
         if not found or any(f in suppressed for f in found):
             continue
