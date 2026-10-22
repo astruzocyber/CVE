@@ -99,6 +99,30 @@ def issue_title(alert):
                       f"{', '.join(alert.get('affected', [])) or alert.get('source')}")
 
 
+STANDARD_RISK_METHOD = "35% CVSS + 40% EPSS + 25% KEV bonus"
+
+
+def risk_method(alert):
+    """How THIS alert's risk score was computed. When NVD/FIRST has not
+    published CVSS or EPSS yet (common on the day a CVE is new, i.e. exactly
+    when its issue is opened), aggregate.composite_risk_score redistributes
+    that weight onto the known components; the fixed 35/40/25 text then gave
+    a formula that does not produce the number shown (issue #2086: risk 51.3,
+    while 35% of CVSS 8.8 is 30.8). Use the alert's own breakdown instead."""
+    b = alert.get("risk_score_breakdown")
+    if not isinstance(b, dict) or not b.get("weight_redistributed"):
+        return STANDARD_RISK_METHOD
+    missing = [n for n, k in (("CVSS", "cvss_raw"), ("EPSS", "epss_raw")) if b.get(k) is None]
+    parts = [b.get(k) for k, raw in (("cvss_weight", "cvss_raw"), ("epss_weight", "epss_raw"))
+             if b.get(raw) is not None and b.get(k)]
+    if b.get("kev_weight"):
+        parts.append(b["kev_weight"])
+    if not missing or not parts:
+        return STANDARD_RISK_METHOD
+    return (f"{' and '.join(missing)} not published yet, so the weight is redistributed: "
+            + " + ".join(str(p) for p in parts))
+
+
 def build_issue_body(alert):
     return no_mention(_issue_body(alert))
 
@@ -115,7 +139,7 @@ def _issue_body(alert):
     lines = [
         f"**CVE:** {alert.get('cve_id', 'unknown')}",
         f"**Composite risk score:** {risk if risk is not None else 'n/a'}/100 "
-        f"(35% CVSS + 40% EPSS + 25% KEV bonus -- see dashboard footer for methodology)",
+        f"({risk_method(alert)} -- see dashboard footer for methodology)",
         f"**Source:** {alert.get('source', 'unknown')}",
         f"**CVSS score:** {alert.get('cvss_score', 'n/a')} ({alert.get('cvss_version', 'n/a')})",
         f"**EPSS score:** {epss_line}",

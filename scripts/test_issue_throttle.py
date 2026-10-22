@@ -37,6 +37,33 @@ class ThrottleTests(unittest.TestCase):
         self.assertEqual(N.retry_wait({}, 5), 120)
 
 
+class RiskMethodTests(unittest.TestCase):
+    """The issue body explains how the risk score was computed. Real case: issue
+    #2086 (CVE-2026-108444, CVSS 8.8, EPSS not published yet, not KEV) said
+    'risk 51.3 (35% CVSS + 40% EPSS + 25% KEV bonus)', but those weights give
+    30.8; the pipeline had redistributed EPSS's weight onto CVSS (58.3%)."""
+
+    def test_redistributed_weights_are_stated(self):
+        import aggregate
+        score, bd = aggregate.composite_risk_score(8.8, None, False)
+        a = {"cve_id": "CVE-2026-108444", "cvss_score": 8.8, "epss_score": None,
+             "risk_score": score, "risk_score_breakdown": bd}
+        body = N.build_issue_body(a)
+        line = next(ln for ln in body.splitlines() if ln.startswith("**Composite risk score:**"))
+        self.assertIn("51.3/100", line)
+        self.assertNotIn("35% CVSS + 40% EPSS", line)
+        self.assertIn("EPSS not published yet", line)
+        self.assertIn("58.3% of (CVSS/10)", line)
+
+    def test_standard_weights_when_nothing_missing(self):
+        import aggregate
+        score, bd = aggregate.composite_risk_score(9.8, 0.5, True)
+        a = {"cve_id": "CVE-2026-1", "risk_score": score, "risk_score_breakdown": bd}
+        self.assertIn("(35% CVSS + 40% EPSS + 25% KEV bonus", N.build_issue_body(a))
+        # alerts without a breakdown (old data) keep the documented default text
+        self.assertIn("(35% CVSS + 40% EPSS + 25% KEV bonus", N.build_issue_body({"risk_score": 50}))
+
+
 class MentionTests(unittest.TestCase):
     """Upstream text (NVD/GHSA descriptions, credits) is pasted into issues on a
     public repo. GitHub turns '@handle' into a user mention and notifies that
