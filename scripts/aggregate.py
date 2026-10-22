@@ -876,6 +876,28 @@ def intel_exploited_cve_ids(intel, days, now=None):
 NEWS_EXPLOITED_LABEL = "news: reported exploited"
 
 
+def label_news_exploited(alerts, news_ids):
+    """Add NEWS_EXPLOITED_LABEL to every board alert whose CVE recent news
+    reports as exploited (`news_ids`, from intel_exploited_cve_ids). The label
+    used to be set only by the news-only ingest in fetch_kev_candidates, which
+    skips CVEs already on the board, so a watchlist alert the press later
+    reported as exploited never got it and escalate.py kept it in 'work'.
+    Real case (audit 2026-10-22): CVE-2026-110447 (Collabora/Nextcloud RCE,
+    CVSS 9.2, 'Hackers exploit Collabora RCE flaw to backdoor Nextcloud
+    servers') sat on the board as a plain 'Nextcloud' match; the PHP2Shell
+    pair CVE-2026-109618/-109619 likewise. Never removes anything (withdrawal
+    is withdraw_news_exploited's job). Returns the CVE ids newly labelled."""
+    wanted = {str(c).upper() for c in news_ids or []}
+    out = []
+    for a in alerts:
+        cid = str(a.get("cve_id") or "").upper()
+        kws = list(a.get("matched_keywords") or [])
+        if cid in wanted and NEWS_EXPLOITED_LABEL not in kws:
+            a["matched_keywords"] = kws + [NEWS_EXPLOITED_LABEL]
+            out.append(cid)
+    return out
+
+
 def withdraw_news_exploited(alerts, intel):
     """Withdraw the "news: reported exploited" label once the news that gave it
     no longer says so. fetch_intel re-classifies every stored story with the
@@ -2512,6 +2534,11 @@ def main():
 
     backfill_legacy_nvd_fields(existing_by_key, touched_keys, nvd_api_key)
     revalidate_affected_pairs(existing_by_key, touched_keys, watchlist, nvd_api_key)
+
+    news_labelled = label_news_exploited(existing_by_key.values(), news_ids)
+    if news_labelled:
+        print(f"  Labelled '{NEWS_EXPLOITED_LABEL}' on {len(news_labelled)} tracked alert(s) "
+              f"that recent news reports as exploited: {news_labelled[:10]}")
 
     # Suppressed entries that were previously alerted should also disappear from the
     # cumulative view going forward (an analyst explicitly accepted the risk) -- but

@@ -296,6 +296,41 @@ class TestKevAndNewsIngest(unittest.TestCase):
         wl = {"cvss_minimum": 7.0}
         self.assertFalse(A.passes_filters(self._entry(9.8, True), wl, {"CVE-2026-69982": {}}, {}, {"CVE-2026-69982"}))
 
+    def test_tracked_alert_gets_news_exploited_label(self):
+        # Real case 2026-10-22: CVE-2026-110447 (Collabora/Nextcloud RCE, CVSS
+        # 9.2) was on the board via the "Nextcloud" keyword when BleepingComputer
+        # reported it exploited; the news-only ingest skips tracked CVEs, so it
+        # never got the label and escalate.py left it in 'work'.
+        lbl = A.NEWS_EXPLOITED_LABEL
+        intel = {"items": [
+            {"categories": ["exploited", "vulnerability"], "cve_ids": ["CVE-2026-110447"],
+             "published": "2026-10-15T20:25:00+00:00"},
+            {"categories": ["patch"], "cve_ids": ["CVE-2026-69982"], "published": "2026-10-15T20:25:00+00:00"},
+        ]}
+        alerts = [
+            {"cve_id": "CVE-2026-110447", "source": "nvd", "matched_keywords": ["Nextcloud"]},
+            {"cve_id": "CVE-2026-69982", "source": "nvd", "matched_keywords": ["Jira"]},
+            {"cve_id": "CVE-2026-0257", "source": "nvd", "matched_keywords": [lbl, "CISA KEV"]},
+            {"cve_id": "CVE-2026-109618", "source": "nvd", "matched_keywords": None},
+        ]
+        ids = A.intel_exploited_cve_ids(intel, 14, now=NOW) + ["CVE-2026-0257", "cve-2026-109618"]
+        self.assertEqual(A.label_news_exploited(alerts, ids), ["CVE-2026-110447", "CVE-2026-109618"])
+        by = {a["cve_id"]: a["matched_keywords"] for a in alerts}
+        self.assertEqual(by["CVE-2026-110447"], ["Nextcloud", lbl])
+        self.assertEqual(by["CVE-2026-69982"], ["Jira"])               # patch news only: untouched
+        self.assertEqual(by["CVE-2026-0257"], [lbl, "CISA KEV"])       # no duplicate label
+        self.assertEqual(by["CVE-2026-109618"], [lbl])
+        self.assertEqual(A.label_news_exploited(alerts, ids), [])      # idempotent
+        # and the withdraw pass on the next run keeps it (news still says exploited)
+        kept, withdrawn, removed = A.withdraw_news_exploited(alerts, intel)
+        self.assertEqual((withdrawn, removed), ([], []))
+
+    def test_main_labels_tracked_alerts(self):
+        import inspect
+        src = inspect.getsource(A.main)
+        self.assertIn("label_news_exploited(existing_by_key.values(), news_ids)", src)
+        self.assertLess(src.index("news_ids = intel_exploited_cve_ids("), src.index("label_news_exploited("))
+
 
 if __name__ == "__main__":
     unittest.main()
