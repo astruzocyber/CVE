@@ -217,6 +217,24 @@ class TestKevAndNewsIngest(unittest.TestCase):
         ]}
         self.assertEqual(A.intel_exploited_cve_ids(intel, 14, now=NOW), ["CVE-2026-96951"])
 
+    def test_window_edges_and_bad_dates(self):
+        # Mutation probe 2026-10-22: '>= cutoff' -> '>', '< cutoff' -> '<=' and
+        # skipping the unparseable-date 'continue' all left the suite green
+        # (a bad date silently reused the previous item's date).
+        kev = {"CVE-2026-1": {"dateAdded": "2026-10-13"},       # recent
+               "CVE-2026-2": {"dateAdded": "garbage"},          # must be skipped
+               "CVE-2026-3": {"dateAdded": "2026-10-02"},       # exactly 14 days: inside
+               "CVE-2026-4": {"dateAdded": "2026-10-01"}}       # 15 days: outside
+        self.assertEqual(A.kev_recent_ids(kev, 14, now=NOW), ["CVE-2026-1", "CVE-2026-3"])
+        edge = (NOW - timedelta(days=14)).isoformat()
+        intel = {"items": [
+            {"categories": ["exploited"], "cve_ids": ["CVE-2026-0001"], "published": "2026-10-13T18:00:00+00:00"},
+            {"categories": ["exploited"], "cve_ids": ["CVE-2026-0002"], "published": "not a date"},
+            {"categories": ["exploited"], "cve_ids": ["CVE-2026-0003"], "published": edge},
+            {"categories": ["exploited"], "cve_ids": ["CVE-2026-0004"], "published": "2026-10-02T11:59:59"},
+        ]}
+        self.assertEqual(A.intel_exploited_cve_ids(intel, 14, now=NOW), ["CVE-2026-0001", "CVE-2026-0003"])
+
     def test_news_exploited_label_withdrawn_when_news_no_longer_says_so(self):
         # Real case 2026-10-22: ZDI "(0Day)" advisories put CVE-2026-88794 and
         # CVE-2026-111105 on the board as "news: reported exploited" only.
