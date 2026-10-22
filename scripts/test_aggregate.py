@@ -1492,5 +1492,73 @@ class TestRecheckOsv(unittest.TestCase):
         self.assertEqual(out["CVE-2026-56095::nvd"]["osv_checked"], today)
 
 
+class TestNvdTimeBudget(unittest.TestCase):
+    """During an NVD brownout every lookup times out (3 x 45 s). Without a
+    run-wide budget the watchlist search alone ran ~606 requests / ~487 min,
+    so GitHub cancelled the job at its 30-minute timeout before the data
+    commit and the whole run (KEV, EPSS, OSV, intel) was lost."""
+
+    def setUp(self):
+        import aggregate
+        self.A = aggregate
+        self.sim = {"t": 0.0, "calls": 0}
+        self._saved = (aggregate._nvd_deadline, dict(aggregate._nvd_budget_note))
+        self.clock = mock.patch.object(aggregate, "_nvd_clock", lambda: self.sim["t"])
+        self.clock.start()
+
+    def tearDown(self):
+        self.clock.stop()
+        self.A._nvd_deadline, note = self._saved
+        self.A._nvd_budget_note.update(note)
+
+    def hang(self, url, headers=None, timeout=30):
+        self.sim["calls"] += 1
+        self.sim["t"] += timeout
+        raise TimeoutError("The read operation timed out")
+
+    def slp(self, s):
+        self.sim["t"] += s
+
+    def test_brownout_search_stops_at_budget(self):
+        A = self.A
+        wl = A.load_watchlist()
+        A.start_nvd_budget(1080)
+        with mock.patch.dict(os.environ, {"LOOKBACK_DAYS": "4"}), \
+             mock.patch.object(A, "http_get_json", side_effect=self.hang), \
+             mock.patch.object(A.time, "sleep", side_effect=self.slp), \
+             mock.patch("builtins.print"):
+            cands = A.fetch_nvd_candidates(wl, "k")
+        self.assertEqual(cands, {})
+        # the budget can be overrun by at most one in-flight request + retry sleep
+        self.assertLessEqual(self.sim["t"], 1080 + 45 + 60)
+        self.assertLess(self.sim["calls"], 30)
+
+    def test_budget_reads_env_and_zero_disables(self):
+        A = self.A
+        with mock.patch.dict(os.environ, {"NVD_TIME_BUDGET_S": "60"}):
+            A.start_nvd_budget()
+        self.assertFalse(A.nvd_budget_exhausted())
+        self.sim["t"] = 61
+        with mock.patch("builtins.print"):
+            self.assertTrue(A.nvd_budget_exhausted())
+        A.start_nvd_budget(0)
+        self.sim["t"] = 10 ** 9
+        self.assertFalse(A.nvd_budget_exhausted())
+
+    def test_spent_budget_skips_recheck_without_removing(self):
+        A = self.A
+        alerts = TestRevalidateAffectedPairs().alerts()
+        before = {k: dict(v) for k, v in alerts.items()}
+        A.start_nvd_budget(1)
+        self.sim["t"] = 5
+        with mock.patch.object(A, "nvd_query") as q, mock.patch("builtins.print"):
+            removed = A.revalidate_affected_pairs(alerts, set(), TestRevalidateAffectedPairs.WL, None,
+                                                  sleep=lambda s: None,
+                                                  today=__import__("datetime").date(2026, 10, 21), max_n=10)
+        q.assert_not_called()
+        self.assertFalse(removed)
+        self.assertEqual(alerts, before)  # nothing dropped, nothing marked checked
+
+
 if __name__ == "__main__":
     unittest.main()

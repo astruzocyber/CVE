@@ -409,12 +409,50 @@ def recheck_osv(by_key, skip_keys=(), today=None, max_lookups=None, recheck_days
 # ---------------------------------------------------------------------------
 # 2. NVD
 # ---------------------------------------------------------------------------
+# Run-wide wall-clock budget for NVD calls. Every NVD lookup can take up to
+# 3 x 45 s on a read timeout, so during an NVD brownout the 202-term search
+# alone would run for hours (probe: 606 requests, ~487 min) and GitHub cancels
+# the job at timeout-minutes (30) before the commit step: KEV, EPSS, intel and
+# OSV updates from that run are all lost, every run, until NVD recovers. Once
+# the budget is spent, remaining NVD lookups are skipped this run (each caller
+# already treats a skipped lookup like a failed one: nothing is removed or
+# marked checked, the next run retries), so the run still finishes and commits.
+# Default 1080 s (18 min) leaves room for EPSS, OSV (180 s cap) and the commit.
+_nvd_deadline = None
+_nvd_budget_note = {"warned": False}
+_nvd_clock = time.monotonic
+
+
+def start_nvd_budget(seconds=None):
+    global _nvd_deadline
+    if seconds is None:
+        try:
+            seconds = float(os.environ.get("NVD_TIME_BUDGET_S", "1080"))
+        except ValueError:
+            seconds = 1080.0
+    _nvd_deadline = _nvd_clock() + seconds if seconds > 0 else None
+    _nvd_budget_note["warned"] = False
+
+
+def nvd_budget_exhausted(what=""):
+    if _nvd_deadline is None or _nvd_clock() < _nvd_deadline:
+        return False
+    if not _nvd_budget_note["warned"]:
+        _nvd_budget_note["warned"] = True
+        print(f"::warning::NVD time budget spent (NVD_TIME_BUDGET_S); skipping the remaining "
+              f"NVD lookups this run{(' (' + what + ')') if what else ''}. Nothing is removed; "
+              f"the next run retries them.")
+    return True
+
+
 def nvd_query(params, api_key=None):
     headers = {}
     if api_key:
         headers["apiKey"] = api_key
     url = NVD_URL + "?" + urllib.parse.urlencode(params)
     for attempt in range(3):
+        if nvd_budget_exhausted():
+            return None
         try:
             data, _ = http_get_json(url, headers=headers, timeout=45)
             if not validate_schema("NVD response", data, ["vulnerabilities", "totalResults"]):
@@ -860,6 +898,8 @@ def fetch_kev_candidates(kev_map, already_known, api_key, days=None, news_ids=No
     delay = 0.7 if api_key else 6.5
     out = []
     for cve_id in news_only:
+        if nvd_budget_exhausted("news-reported CVEs"):
+            break  # not marked anywhere; re-derived from intel next run
         result = nvd_query({"cveId": cve_id}, api_key)
         time.sleep(delay)
         vulns = (result or {}).get("vulnerabilities") or []
@@ -872,8 +912,11 @@ def fetch_kev_candidates(kev_map, already_known, api_key, days=None, news_ids=No
         out.append(entry)
     for cve_id in kev_ids:
         kev_entry = kev_map.get(cve_id, {})
-        result = nvd_query({"cveId": cve_id}, api_key)
-        time.sleep(delay)
+        if nvd_budget_exhausted("KEV ingest"):
+            result = None  # KEV-only fallback below; the NVD record upgrades it in place later
+        else:
+            result = nvd_query({"cveId": cve_id}, api_key)
+            time.sleep(delay)
         vulns = (result or {}).get("vulnerabilities") or []
         if vulns and vulns[0].get("cve", {}).get("id") == cve_id:
             entry = nvd_entry_from_cve(vulns[0]["cve"], source="kev")
@@ -937,7 +980,12 @@ def fetch_nvd_candidates(watchlist, api_key):
     # worth surfacing, not silently paginating through unbounded.
     MAX_EXTRA_PAGES = 10
     NVD_PAGE = 2000
-    for kind, term, vendor, product in search_terms:
+    for i, (kind, term, vendor, product) in enumerate(search_terms):
+        if nvd_budget_exhausted("watchlist search"):
+            print(f"  NVD search stopped by the time budget: {len(search_terms) - i} of "
+                  f"{len(search_terms)} term(s) not queried this run (next run covers them; "
+                  f"the lookback window overlaps)")
+            break
         params = {
             "keywordSearch": term,
             "lastModStartDate": start.strftime(date_fmt),
@@ -2134,6 +2182,8 @@ def backfill_legacy_nvd_fields(alerts_by_key, skip_keys, api_key, max_n=None, sl
     delay = 0.7 if api_key else 6.5
     filled = 0
     for key in todo[:max_n]:
+        if nvd_budget_exhausted("legacy backfill"):
+            break
         alert = alerts_by_key[key]
         cve_id = alert["cve_id"]
         result = nvd_query({"cveId": cve_id}, api_key)
@@ -2199,6 +2249,8 @@ def revalidate_affected_pairs(alerts_by_key, skip_keys, watchlist, api_key, max_
     delay = 0.7 if api_key else 6.5
     removed, dropped_pairs = [], 0
     for key in todo[:max_n]:
+        if nvd_budget_exhausted("affected-pair recheck"):
+            break
         alert = alerts_by_key[key]
         cve_id = alert["cve_id"]
         result = nvd_query({"cveId": cve_id}, api_key)
@@ -2229,6 +2281,7 @@ def revalidate_affected_pairs(alerts_by_key, skip_keys, watchlist, api_key, max_
 def main():
     nvd_api_key = os.environ.get("NVD_API_KEY", "").strip() or None
     gh_token = os.environ.get("GH_DEPENDABOT_TOKEN", "").strip() or None
+    start_nvd_budget()
 
     watchlist = load_watchlist()
     suppressions = load_suppressions()
