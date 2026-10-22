@@ -290,6 +290,21 @@ class EstateAndTriageTests(unittest.TestCase):
         self.assertEqual(len(s["coverage"]), 3)
         self.assertEqual(sorted(s["member_keys"]), ["intel:pan1", "intel:pan2", "intel:pan3"])
 
+    def test_story_reason_counts_distinct_reports_not_reposts(self):
+        # Real: 'Suspected Chinese espionage attackers abusing BeyondTrust...' said
+        # 'reported by 43 sources' while 9 of the 43 were Google News re-listings of
+        # an article already in the cluster (the card lists only the 34 distinct ones).
+        items = [self._pan(1, "Palo Alto Networks PAN-OS zero-day exploited", 14, ["CVE-2026-0322"]),
+                 self._pan(2, "PAN-OS flaw exploited, Palo Alto Networks warns", 15, ["CVE-2026-0322"]),
+                 self._pan(3, "PAN-OS flaw exploited, Palo Alto Networks warns", 15, ["CVE-2026-0322"])]
+        items[2]["source"] = "GNews: firewalls"
+        s = E.build([], {"items": items}, env(), NOW)["items"][0]
+        self.assertEqual(len(s["coverage"]), 3)
+        self.assertEqual(sum(1 for c in s["coverage"] if not c["dup"]), 2)
+        reason = [r for r in s["reasons"] if r.startswith("Same incident")][0]
+        self.assertIn("covered by 2 distinct reports", reason)
+        self.assertIn("plus 1 reposts of the same headline", reason)
+
     def test_cveless_report_does_not_join_unrelated_psirt_advisory(self):
         # Real: 'Ransomware Operators Exploit PAN-OS GlobalProtect Authentication Bypass'
         # (no CVE named; it is CVE-2026-0257) was folded into the PSIRT entry for

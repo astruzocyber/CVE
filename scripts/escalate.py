@@ -508,6 +508,10 @@ def group_stories(items, triage, days=STORY_DAYS, vendor_words=None):
             coverage.append({"title": m["title"], "link": m["link"], "source": m.get("source"),
                              "date": m.get("date"), "dup": nt in seen_titles})
             seen_titles.add(nt)
+        # Count distinct reports, not feed items: Google News re-lists the same
+        # article under a second feed, and the card only lists distinct titles.
+        reports = sum(1 for c in coverage if not c["dup"])
+        reposts = len(coverage) - reports
         story = dict(lead)
         story.update({
             "key": first["key"],
@@ -522,8 +526,9 @@ def group_stories(items, triage, days=STORY_DAYS, vendor_words=None):
             "member_keys": [m["key"] for m in members],
             "coverage": coverage,
             "reasons": list(lead["reasons"]) + [
-                f"Same incident reported by {len(members)} sources "
-                f"({len({m.get('source') for m in members})} outlets/feeds) -- first seen "
+                f"Same incident covered by {reports} distinct reports "
+                f"({len({m.get('source') for m in members})} outlets/feeds"
+                f"{f', plus {reposts} reposts of the same headline' if reposts else ''}) -- first seen "
                 f"{(first.get('date') or '')[:10]}"],
         })
         if cves and not any(r.startswith("Names ") for r in story["reasons"]):

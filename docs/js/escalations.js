@@ -51,12 +51,13 @@ function renderItem(it) {
     ? extLink(it.link, it.title) || escapeHtml(it.title)
     : `<a href="#alert-${encodeURIComponent(it.ref)}" title="Open this CVE on the dashboard">${escapeHtml(it.title)}</a>`;
   const reasons = (it.reasons || []).map((r) => `<li>${escapeHtml(r)}</li>`).join("");
-  const cov = it.coverage || [];
+  // Reposts of an identical headline (dup) are hidden from the list, so every
+  // count shown must be the number of listed entries, not raw feed items.
+  const cov = (it.coverage || []).filter((c) => !c.dup);
   const kind = it.kind === "cve" ? "CVE" : it.kind === "bundle" ? `Bundle · ${(it.cve_ids || []).length} CVEs`
     : cov.length ? `News · ${cov.length} reports` : `News · ${it.source || ""}`;
   const coverage = cov.length
     ? `<details class="esc-coverage"><summary>${it.advisory_batch ? `All ${cov.length} advisories in this release` : `All ${cov.length} reports of this incident`}</summary><ul>${cov
-        .filter((c) => !c.dup)
         .map((c) => `<li>${extLink(c.link, c.title) || escapeHtml(c.title)} <span class="muted">· ${escapeHtml(c.source || "")} · ${escapeHtml(day(c.date))}</span></li>`)
         .join("")}</ul></details>`
     : "";
