@@ -571,6 +571,28 @@ class TestParseOsvFixedVersions(unittest.TestCase):
         self.assertEqual(parse_osv_fixed_versions({"affected": "not-a-list"}), [])
         self.assertEqual(parse_osv_fixed_versions({"affected": [{"ranges": "bad"}]}), [])
 
+    def test_source_only_git_range_keeps_its_repository(self):
+        # Real shape (OSV CVE-2026-114638, 2026-10-22): no package, GIT range.
+        # 67 of 70 board alerts with OSV fixes had only a bare commit hash.
+        osv_data = {"id": "CVE-2026-114638", "affected": [
+            {"ranges": [{"type": "GIT", "repo": "https://github.com/traefik/traefik", "events": [
+                {"introduced": "04aa6bb4f9776f2ba87e5cd181d250e3610e6419"},
+                {"fixed": "3bd7aa32e1b6c41166575529a10fb2346d9eaa2e"}]}]},
+            {"ranges": [{"type": "GIT", "events": [{"fixed": "abc"}]}]},
+        ]}
+        self.assertEqual(parse_osv_fixed_versions(osv_data), [
+            {"package": None, "ecosystem": None, "fixed": "3bd7aa32e1b6c41166575529a10fb2346d9eaa2e",
+             "repo": "https://github.com/traefik/traefik"},
+            {"package": None, "ecosystem": None, "fixed": "abc", "repo": None},
+        ])
+
+    def test_package_entries_unchanged(self):
+        osv_data = {"id": "X", "affected": [
+            {"package": {"name": "foo", "ecosystem": "PyPI"},
+             "ranges": [{"type": "ECOSYSTEM", "events": [{"fixed": "1.2"}]}]}]}
+        self.assertEqual(parse_osv_fixed_versions(osv_data),
+                         [{"package": "foo", "ecosystem": "PyPI", "fixed": "1.2"}])
+
     def test_caps_at_five_entries(self):
         osv_data = {"id": "X", "affected": [
             {"package": {"name": f"pkg{i}", "ecosystem": "PyPI"},
@@ -1329,7 +1351,8 @@ class TestResurfacedAlertKeepsStoredEnrichment(unittest.TestCase):
               "cvss_score": 8.1, "risk_score": 30.0, "epss_score": 0.01, "matched_keywords": ["Linux"],
               "description": "Linux bug",
               "affected": [], "osv_id": "CVE-2026-56095",
-              "osv_fixed_versions": [{"package": None, "ecosystem": None, "fixed": "722363e5"}],
+              "osv_fixed_versions": [{"package": None, "ecosystem": None, "fixed": "722363e5",
+                                      "repo": "https://github.com/torvalds/linux"}],
               "affected_cpe_check": "ok"}
 
     def run_main(self, stored, candidates, kev_candidates=(), osv_result=None):
@@ -1452,6 +1475,35 @@ class TestRecheckOsv(unittest.TestCase):
         self.assertEqual(len(calls), 3)           # stops after max_failures
         self.assertEqual(looked, 0)
         self.assertFalse(any("osv_checked" in a for a in by.values()))
+
+    def test_stored_commit_only_fix_is_refreshed_once_and_first(self):
+        by = self.alerts()
+        legacy = {"package": None, "ecosystem": None, "fixed": "3bd7aa32"}
+        by["f::nvd"] = {"cve_id": "CVE-2026-6", "osv_id": "CVE-2026-6", "osv_checked": "2026-10-21",
+                        "osv_fixed_versions": [legacy]}
+        fresh = {"osv_id": "CVE-2026-6", "osv_fixed_versions": [dict(legacy, repo="https://github.com/o/r")]}
+        calls, _ = self.run_recheck(by, {"CVE-2026-6": fresh})
+        self.assertEqual(calls[0], "CVE-2026-6")
+        self.assertNotIn("CVE-2026-5", calls)     # has a record with nothing to refresh
+        self.assertEqual(by["f::nvd"]["osv_fixed_versions"][0]["repo"], "https://github.com/o/r")
+        calls, _ = self.run_recheck(by, {})
+        self.assertNotIn("CVE-2026-6", calls)     # refreshed entries are not re-queried
+
+    def test_commit_only_refresh_on_vanished_record_is_not_retried_forever(self):
+        by = {"g::nvd": {"cve_id": "CVE-2026-7", "osv_id": "CVE-2026-7", "osv_checked": "2026-10-21",
+                         "osv_fixed_versions": [{"package": None, "ecosystem": None, "fixed": "abc"}]}}
+        calls, _ = self.run_recheck(by, {})       # OSV now answers 404
+        self.assertEqual(calls, ["CVE-2026-7"])
+        self.assertEqual(by["g::nvd"]["osv_fixed_versions"][0]["fixed"], "abc")  # nothing removed
+        calls, _ = self.run_recheck(by, {})
+        self.assertEqual(calls, [])
+
+    def test_commit_only_refresh_failure_keeps_it_queued(self):
+        by = {"h::nvd": {"cve_id": "CVE-2026-8", "osv_id": "CVE-2026-8",
+                         "osv_fixed_versions": [{"package": None, "ecosystem": None, "fixed": "abc"}]}}
+        import aggregate as A
+        calls, _ = self.run_recheck(by, {"CVE-2026-8": A.OSV_LOOKUP_FAILED})
+        self.assertNotIn("repo", by["h::nvd"]["osv_fixed_versions"][0])
 
     def test_cap_and_skip_keys(self):
         by = self.alerts()

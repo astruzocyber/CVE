@@ -284,13 +284,29 @@ def parse_osv_fixed_versions(osv_data):
                 continue
             for ev in rng.get("events", []) or []:
                 if isinstance(ev, dict) and ev.get("fixed"):
-                    fixed.append({
+                    entry = {
                         "package": pkg_name,
                         "ecosystem": ecosystem,
                         "fixed": ev["fixed"],
-                    })
+                    }
+                    if pkg_name is None:
+                        # Source-only OSV records (GIT ranges, no package) give a
+                        # fix COMMIT, which is meaningless without its repository.
+                        # Always set the key (None when OSV gives none) so the
+                        # one-time refresh in recheck_osv() can tell new entries
+                        # from ones stored before this field existed.
+                        repo = rng.get("repo")
+                        entry["repo"] = repo if isinstance(repo, str) and repo else None
+                    fixed.append(entry)
                     break  # first fixed event per range is enough
     return fixed[:5]
+
+
+def osv_fix_needs_repo(alert):
+    """True when a stored OSV fix entry predates the 'repo' field: a package-less
+    (source/GIT) entry without the key, displayed as a bare commit hash."""
+    return any(isinstance(f, dict) and f.get("package") is None and "repo" not in f
+               for f in alert.get("osv_fixed_versions") or [])
 
 
 def fetch_osv_fix_info(cve_id):
@@ -370,7 +386,9 @@ def recheck_osv(by_key, skip_keys=(), today=None, max_lookups=None, recheck_days
     check is older than `recheck_days`. Capped per run (count, wall-clock
     budget, and a stop after `max_failures` failed lookups, so an OSV outage
     with 10 s timeouts can't push the job past its timeout). Alerts that
-    already have an OSV id are left alone. Returns (looked_up, found)."""
+    already have an OSV id are left alone, except a one-time refresh of fix
+    entries stored before the 'repo' field (osv_fix_needs_repo). Returns
+    (looked_up, found)."""
     fetch = fetch or fetch_osv_fix_info
     today_d = today or datetime.now(timezone.utc).date()
     today_s = today_d.isoformat()
@@ -388,9 +406,14 @@ def recheck_osv(by_key, skip_keys=(), today=None, max_lookups=None, recheck_days
         except ValueError:
             return True
 
+    # Alerts with an OSV record are normally left alone; the exception is a
+    # one-time refresh of source-only fix entries stored before 'repo' existed
+    # (they show a bare commit hash). They go first so the cap can't starve them.
     queue = [(k, a) for k, a in by_key.items()
-             if k not in skip_keys and not a.get("osv_id") and a.get("cve_id") and due(a)]
-    queue.sort(key=lambda ka: (ka[1].get("osv_checked") or "", -(ka[1].get("risk_score") or 0)))
+             if k not in skip_keys and a.get("cve_id")
+             and ((not a.get("osv_id") and due(a)) or osv_fix_needs_repo(a))]
+    queue.sort(key=lambda ka: (not osv_fix_needs_repo(ka[1]), ka[1].get("osv_checked") or "",
+                               -(ka[1].get("risk_score") or 0)))
     start, looked, found, failures = clock(), 0, 0, 0
     for _, alert in queue[:max(0, max_lookups)]:
         if failures >= max_failures or clock() - start > time_budget_s:
@@ -399,6 +422,11 @@ def recheck_osv(by_key, skip_keys=(), today=None, max_lookups=None, recheck_days
         if not apply_osv_lookup(alert, info, today_s):
             failures += 1
             continue
+        # A 404 leaves the old entries in place; mark them refreshed (repo
+        # unknown) so a vanished OSV record isn't re-queried every run.
+        for f in alert.get("osv_fixed_versions") or []:
+            if isinstance(f, dict) and f.get("package") is None and "repo" not in f:
+                f["repo"] = None
         looked += 1
         found += 1 if info else 0
     print(f"  OSV.dev recheck: {looked} looked up ({found} with a record), "
