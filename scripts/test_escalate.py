@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Tests for environment tiering (scripts/escalate.py) and the Discord
 notifier (scripts/notify_discord.py). No network: the poster is injected."""
+import json
 import os
 import sys
 import unittest
@@ -438,6 +439,93 @@ class DiscordTests(unittest.TestCase):
     def test_webhook_url_validation(self):
         self.assertTrue(D.WEBHOOK_RE.match("https://discord.com/api/webhooks/123/abc-DEF_1"))
         self.assertFalse(D.WEBHOOK_RE.match("https://evil.example/api/webhooks/123/abc"))
+
+
+class DiscordSkipIssuesTests(unittest.TestCase):
+    """The workflow's Discord step, run as the workflow configures it. A
+    skip_issues dispatch at the normal lookback used to set DISCORD_SEED_ONLY,
+    which marked its new Escalate items as sent without posting them, so no
+    later run ever announced them (run 39660604872: two stories)."""
+
+    WF = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".github", "workflows",
+                      "cve-alerts.yml")
+
+    def step_env(self, skip_issues, lookback):
+        import re
+        import yaml
+        with open(self.WF, encoding="utf-8") as fh:
+            wf = yaml.safe_load(fh)
+        step = next(s for s in wf["jobs"]["aggregate"]["steps"] if s.get("run") == "python scripts/notify_discord.py")
+        out = {}
+        for k, v in (step.get("env") or {}).items():
+            v = str(v)
+            v = re.sub(r"\$\{\{\s*secrets\.\w+\s*\}\}", "https://discord.com/api/webhooks/1/abc", v)
+            v = re.sub(r"\$\{\{\s*inputs\.skip_issues && '([^']*)' \|\| '' \s*\}\}",
+                       lambda m: m.group(1) if skip_issues else "", v)
+            v = re.sub(r"\$\{\{\s*inputs\.lookback_days \|\| '(\d+)'\s*\}\}",
+                       lambda m: str(lookback) if lookback else m.group(1), v)
+            self.assertNotIn("${{", v, f"unhandled expression in {k}")
+            out[k] = v
+        return out
+
+    def run_main(self, env, tmp):
+        posted = []
+
+        class Res:
+            status = 204
+            def __enter__(self): return self
+            def __exit__(self, *a): return False
+
+        def fake_urlopen(req, timeout=0):
+            posted.append(req.data)
+            return Res()
+        saved = (D.ESC_PATH, D.STATE_PATH, D.urllib.request.urlopen, dict(os.environ))
+        D.ESC_PATH, D.STATE_PATH = os.path.join(tmp, "esc.json"), os.path.join(tmp, "state.json")
+        D.urllib.request.urlopen = fake_urlopen
+        D.time.sleep = lambda s: None
+        for k in ("DISCORD_SEED_ONLY", "SKIP_ISSUES", "LOOKBACK_DAYS", "NORMAL_LOOKBACK_DAYS", "DISCORD_DIGEST"):
+            os.environ.pop(k, None)
+        os.environ.update(env, DISCORD_DIGEST="0")
+        try:
+            D.main()
+        finally:
+            D.ESC_PATH, D.STATE_PATH, D.urllib.request.urlopen = saved[:3]
+            os.environ.clear()
+            os.environ.update(saved[3])
+        with open(os.path.join(tmp, "state.json"), encoding="utf-8") as fh:
+            return json.load(fh), posted
+
+    def setup_tmp(self):
+        import tempfile
+        tmp = tempfile.mkdtemp()
+        with open(os.path.join(tmp, "esc.json"), "w", encoding="utf-8") as fh:
+            json.dump(esc(("NEW", "escalate")), fh)
+        with open(os.path.join(tmp, "state.json"), "w", encoding="utf-8") as fh:
+            json.dump({"seeded": True, "sent": {}}, fh)
+        return tmp
+
+    def test_skip_issues_at_normal_window_defers_to_next_run(self):
+        tmp = self.setup_tmp()
+        st, posted = self.run_main(self.step_env(True, None), tmp)
+        self.assertEqual(posted, [])
+        self.assertNotIn("cve:NEW", st["sent"])   # not swallowed
+        st, posted = self.run_main(self.step_env(False, None), tmp)   # next scheduled run
+        self.assertEqual(len(posted), 1)
+        self.assertIn(b"[ESCALATE] NEW", posted[0])
+        self.assertIn("cve:NEW", st["sent"])
+
+    def test_skip_issues_backfill_still_seeds_without_posting(self):
+        tmp = self.setup_tmp()
+        st, posted = self.run_main(self.step_env(True, 30), tmp)
+        self.assertEqual(posted, [])
+        self.assertIn("cve:NEW", st["sent"])
+
+    def test_run_mode(self):
+        self.assertEqual(D.run_mode({}), "post")
+        self.assertEqual(D.run_mode({"DISCORD_SEED_ONLY": "1"}), "seed")
+        self.assertEqual(D.run_mode({"SKIP_ISSUES": "true", "LOOKBACK_DAYS": "4"}), "defer")
+        self.assertEqual(D.run_mode({"SKIP_ISSUES": "true", "LOOKBACK_DAYS": "14"}), "seed")
+        self.assertEqual(D.run_mode({"SKIP_ISSUES": "true", "LOOKBACK_DAYS": "x"}), "seed")
 
 
 if __name__ == "__main__":

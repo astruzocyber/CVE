@@ -3,8 +3,15 @@
 
 Env
   DISCORD_WEBHOOK_URL  repo secret. Absent -> do nothing (exit 0, state untouched).
-  DISCORD_SEED_ONLY    "1" -> record current items as already-sent without posting
-                       (used on backfill runs so they never flood the channel).
+  DISCORD_SEED_ONLY    "1" -> record current items as already-sent without posting.
+  SKIP_ISSUES, LOOKBACK_DAYS, NORMAL_LOOKBACK_DAYS (default 4)
+                       a skip_issues run with a longer lookback (backfill) only
+                       records items as sent, so it never floods the channel. A
+                       skip_issues run at the normal lookback (re-running the
+                       pipeline after a fix) touches nothing: its new items are
+                       posted by the next normal run instead of being recorded as
+                       sent and never announced (run 39660604872 swallowed two
+                       Escalate stories that way).
   DISCORD_MIN_TIER     "escalate" (default) or "work" to also post Work items.
   DASHBOARD_URL        link target (default https://astruzocyber.github.io/CVE/).
 
@@ -181,7 +188,27 @@ def run_digest(webhook, esc, state, now, hour_utc=12, dashboard="", poster=post)
     return {**state, "digest_date": today}, True
 
 
+def run_mode(env):
+    """'post' (normal), 'seed' (record without posting) or 'defer' (do nothing,
+    leave state untouched so the next normal run posts the new items).
+    An unparseable lookback counts as a backfill, so an unclear run never floods."""
+    if env.get("DISCORD_SEED_ONLY") == "1":
+        return "seed"
+    if str(env.get("SKIP_ISSUES") or "").strip().lower() not in ("1", "true", "yes"):
+        return "post"
+    try:
+        backfill = int(str(env.get("LOOKBACK_DAYS") or "4").strip()) > \
+            int(str(env.get("NORMAL_LOOKBACK_DAYS") or "4").strip())
+    except ValueError:
+        backfill = True
+    return "seed" if backfill else "defer"
+
+
 def main():
+    mode = run_mode(os.environ)
+    if mode == "defer":
+        print("skip_issues at the normal window: Discord deferred; new items go out on the next normal run.")
+        return 0
     webhook = (os.environ.get("DISCORD_WEBHOOK_URL") or "").strip()
     if not webhook:
         print("DISCORD_WEBHOOK_URL not set -- Discord notifications disabled.")
@@ -196,7 +223,7 @@ def main():
     state = _load(STATE_PATH, {}) or {}
     now = datetime.now(timezone.utc)
     dashboard = os.environ.get("DASHBOARD_URL") or "https://astruzocyber.github.io/CVE/"
-    seed_only = os.environ.get("DISCORD_SEED_ONLY") == "1"
+    seed_only = mode == "seed"
     new_state, n = run(
         webhook, esc, state, now, seed_only=seed_only,
         min_tier=(os.environ.get("DISCORD_MIN_TIER") or "escalate").strip().lower(),
