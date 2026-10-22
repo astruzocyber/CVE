@@ -1056,6 +1056,24 @@ class TestPruneSingleWord(unittest.TestCase):
         self.assertEqual(removed, [])
         self.assertEqual(kept[0]["matched_keywords"], [])
 
+    def test_priority_flag_dropped_with_its_loose_priority_phrase(self):
+        """A loose priority phrase removed by the prune must not leave
+        priority_match=True behind (it bypasses the CVSS floor and escalates)."""
+        from aggregate import prune_loose_phrase_matches
+        wl = {"keywords": ["Zoom"], "priority_keywords": ["Active Directory", "Okta"]}
+        alerts = [
+            {"cve_id": "CVE-P1", "source": "nvd", "priority_match": True, "affected": ["zoom/meetings"],
+             "matched_keywords": ["Active Directory"], "description": "Zoom client directory traversal, active exploit"},
+            {"cve_id": "CVE-P2", "source": "nvd", "priority_match": True, "affected": [],
+             "matched_keywords": ["Active Directory", "Okta"], "description": "Okta Verify for Windows flaw"},
+        ]
+        kept, removed = prune_loose_phrase_matches(alerts, wl)
+        by = {a["cve_id"]: a for a in kept}
+        self.assertEqual(removed, [])
+        self.assertFalse(by["CVE-P1"]["priority_match"])
+        self.assertTrue(by["CVE-P2"]["priority_match"])
+        self.assertEqual(by["CVE-P2"]["matched_keywords"], ["Okta"])
+
     def test_alerts_seen_after_fetch_filter_not_rechecked(self):
         """Post-filter alerts already passed single_word_hit (maybe via CPE, which the
         stored alert can't show); re-checking them would drop CPE-only hits."""
@@ -1066,6 +1084,7 @@ class TestPruneSingleWord(unittest.TestCase):
         kept, removed = prune_loose_phrase_matches(alerts, self.WL)
         self.assertEqual(removed, [])
         self.assertEqual(kept[0]["matched_keywords"], ["Zoom"])
+        self.assertEqual(len(kept), 1)  # an untouched alert is kept once, not twice
 
 
 class TestFetchPhraseBoundary(unittest.TestCase):

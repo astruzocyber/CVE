@@ -262,6 +262,36 @@ class TestKevAndNewsIngest(unittest.TestCase):
         wl = {"cvss_minimum": 7.0}
         self.assertTrue(A.passes_filters(self._entry(None), wl, {"CVE-2026-69982": {}}, {}, set()))
 
+    # The CVSS floor itself had no test: deleting either reject branch below
+    # left the suite green, i.e. the board's main admission gate was unguarded.
+    def test_cvss_floor_rejects_below_and_unscored(self):
+        wl = {"cvss_minimum": 7.0, "require_kev_or_high_epss": False}
+        self.assertFalse(A.passes_filters(self._entry(6.9), wl, {}, {}, set()))
+        self.assertFalse(A.passes_filters(self._entry(None), wl, {}, {}, set()))  # unknown never passes
+        self.assertTrue(A.passes_filters(self._entry(7.0), wl, {}, {}, set()))    # floor is inclusive
+
+    def test_require_kev_or_high_epss_gate(self):
+        wl = {"cvss_minimum": 7.0, "require_kev_or_high_epss": True, "epss_high_threshold": 0.5}
+        cid = "CVE-2026-69982"
+        self.assertFalse(A.passes_filters(self._entry(9.8), wl, {}, {}, set()))
+        self.assertFalse(A.passes_filters(self._entry(9.8), wl, {}, {cid: {"epss": None}}, set()))
+        self.assertFalse(A.passes_filters(self._entry(9.8), wl, {}, {cid: {"epss": 0.49}}, set()))
+        self.assertTrue(A.passes_filters(self._entry(9.8), wl, {}, {cid: {"epss": 0.5}}, set()))
+        self.assertTrue(A.passes_filters(self._entry(9.8), wl, {cid: {}}, {}, set()))
+
+    def test_withdraw_keeps_alert_justified_by_pair_or_non_nvd_source(self):
+        lbl = A.NEWS_EXPLOITED_LABEL
+        intel = {"items": [{"categories": ["vulnerability"], "cve_ids": ["CVE-2026-1", "CVE-2026-2", "CVE-2026-3"]}]}
+        alerts = [
+            {"cve_id": "CVE-2026-1", "source": "nvd", "affected": ["sparx/ea"], "matched_keywords": [lbl]},
+            {"cve_id": "CVE-2026-2", "source": "ghsa", "affected": [], "matched_keywords": [lbl]},
+            {"cve_id": "CVE-2026-3", "source": "nvd", "affected": [], "matched_keywords": [lbl]},
+        ]
+        kept, withdrawn, removed = A.withdraw_news_exploited(alerts, intel)
+        self.assertEqual(removed, ["CVE-2026-3"])
+        self.assertEqual(sorted(a["cve_id"] for a in kept), ["CVE-2026-1", "CVE-2026-2"])
+        self.assertTrue(all(a["matched_keywords"] == [] for a in kept))
+
     def test_suppression_still_wins(self):
         wl = {"cvss_minimum": 7.0}
         self.assertFalse(A.passes_filters(self._entry(9.8, True), wl, {"CVE-2026-69982": {}}, {}, {"CVE-2026-69982"}))
