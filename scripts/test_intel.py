@@ -200,6 +200,34 @@ class TestFetchIntel(unittest.TestCase):
         finally:
             F.fetch = orig
 
+    def test_large_advisory_feed_is_read_and_cap_still_applies(self):
+        # CISA all.xml was 5.7 MB (30 full-body advisories) on 2026-10-22; the
+        # old 5 MB cap failed the feed on every run.
+        class Resp:
+            def __init__(self, body):
+                self.body = body
+
+            def read(self, n=-1):
+                return self.body if n < 0 else self.body[:n]
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+        orig = F.urllib.request.urlopen
+        try:
+            big = b"<rss>" + b" " * int(5.7 * 1024 * 1024) + b"</rss>"
+            F.urllib.request.urlopen = lambda req, timeout=25: Resp(big)
+            self.assertEqual(F.fetch("https://example.com/all.xml"), big)
+            F.urllib.request.urlopen = lambda req, timeout=25: Resp(b"x" * (F.MAX_BYTES + 1))
+            with self.assertRaises(ValueError) as cm:
+                F.fetch("https://example.com/huge.xml")
+            self.assertIn("larger than", str(cm.exception))
+        finally:
+            F.urllib.request.urlopen = orig
+
 
 class TestKevAndNewsIngest(unittest.TestCase):
     def test_kev_recent_ids(self):

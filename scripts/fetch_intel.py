@@ -39,7 +39,11 @@ INTEL_PATH = os.path.join(REPO_ROOT, "docs", "data", "intel.json")
 # Plain UA on purpose: Cloudflare-fronted feeds (cybersecuritynews, gbhackers)
 # 403 a UA carrying "compatible;" / a "+https://" contact URL.
 USER_AGENT = "Mozilla/5.0 cve-dashboard"
-MAX_BYTES = 5 * 1024 * 1024
+# Size guard against a runaway response, not a content filter. CISA's
+# all.xml carries full advisory bodies: 30 items reached 5.7 MB on 2026-10-22,
+# and the old 5 MB cap then dropped the whole feed every run (panel: failed;
+# 18 ICS advisories missing). 20 MB leaves room while still bounding memory.
+MAX_BYTES = 20 * 1024 * 1024
 SUMMARY_CHARS = 400
 
 CVE_RE = re.compile(r"\bCVE-(\d{4})-(\d{4,7})\b", re.I)
@@ -168,7 +172,7 @@ def fetch(url, timeout=25):
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         data = resp.read(MAX_BYTES + 1)
     if len(data) > MAX_BYTES:
-        raise ValueError("feed larger than 5 MB")
+        raise ValueError(f"feed larger than {MAX_BYTES // (1024 * 1024)} MB")
     return data
 
 
