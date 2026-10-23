@@ -1,5 +1,171 @@
 [
   {
+    "cve_id": "CVE-2026-54630",
+    "description": "Part-DB is an open source inventory management system for electronic components. Prior to version 2.12.1, the part attachment upload handler stores uploaded files under the web-served media directory using the client-supplied file extension, and its extension blocklist does not include phar. AttachmentSubmitHandler::renameBlacklistedExtensions() rewrites dangerous extensions (php, phtml, sh, cgi, py, js, html, htaccess, ...) to .txt, but phar is absent from the list, so a .phar file keeps its extension. Public attachments (the default) are written into public/media/, which is the Apache document root. The shipped Apache configuration routes .phar to PHP-FPM, so the stored file is executed as PHP on request. The per-attachment-type extension filter is empty by default and is not consulted by the upload handler in a way that blocks this, and a non-admin user in the default users group can create an attachment type with no filter and attach files to parts. Any authenticated user in the default users group uploads a .phar attachment to a part and fetches it under /media/, executing arbitrary PHP as the www-data web user. Ability to exploit depends on the webserver config, docker image contained the vulnerability by default. This issue has been patched in version 2.12.1.",
+    "cvss_score": 9.6,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 56.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.6,
+      "cvss_component": 56.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-23T04:18:17.007",
+    "nvd_last_modified": "2026-10-23T04:18:17.007",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-23T07:35:31.444179+00:00",
+    "osv_checked": "2026-10-23"
+  },
+  {
+    "cve_id": "CVE-2026-115497",
+    "description": "The Music Store \u2013 WordPress eCommerce plugin for WordPress is vulnerable to Directory Traversal in all versions up to, and including, 1.4.7 via the 'f' parameter parameter. This makes it possible for unauthenticated attackers to read the contents of arbitrary files on the server, which can contain sensitive information. Exploitation requires a valid purchase_id token, which any user can obtain by making a single low-cost purchase or receiving a shared download link.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-23T05:17:15.063",
+    "nvd_last_modified": "2026-10-23T05:17:15.063",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-23T07:35:31.443611+00:00",
+    "osv_checked": "2026-10-23"
+  },
+  {
+    "cve_id": "CVE-2026-109198",
+    "description": "The Anti-Spam by CleanTalk \u2013 Spam Protection Without CAPTCHA plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'user_email' parameter in all versions up to, and including, 6.89.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Successful exploitation requires user registration to be open on the site, and script execution is triggered when an Administrator subsequently runs the plugin's user-spam scan and views the resulting Non-checkable users or Spam users tab \u2014 the plugin's own documented workflow.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-23T05:17:14.773",
+    "nvd_last_modified": "2026-10-23T05:17:14.773",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-23T07:35:31.443601+00:00",
+    "osv_checked": "2026-10-23"
+  },
+  {
     "cve_id": "CVE-2026-24301",
     "description": "Improper neutralization of special elements used in a command ('command injection') in Microsoft Copilot allows an unauthorized attacker to disclose information over a network.",
     "cvss_score": 7.5,
@@ -5182,7 +5348,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-21T22:48:26.123908+00:00"
+    "first_seen": "2026-10-21T22:48:26.123908+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-29001",
@@ -5299,7 +5466,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-21T22:48:26.114983+00:00"
+    "first_seen": "2026-10-21T22:48:26.114983+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-68798",
@@ -5362,7 +5530,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-21T22:48:26.114969+00:00"
+    "first_seen": "2026-10-21T22:48:26.114969+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-66805",
@@ -6341,7 +6510,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-21T13:50:47.113663+00:00"
+    "first_seen": "2026-10-21T13:50:47.113663+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-22258",
@@ -7375,7 +7545,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-21T13:50:47.108271+00:00"
+    "first_seen": "2026-10-21T13:50:47.108271+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-102499",
@@ -29517,7 +29688,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T21:59:40.126755+00:00"
+    "first_seen": "2026-10-20T21:59:40.126755+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-62813",
@@ -31015,7 +31187,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T21:59:40.126374+00:00"
+    "first_seen": "2026-10-20T21:59:40.126374+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59285",
@@ -31149,7 +31322,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T21:59:40.126255+00:00"
+    "first_seen": "2026-10-20T21:59:40.126255+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-47989",
@@ -34031,7 +34205,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-20T17:17:36.917",
-    "nvd_last_modified": "2026-10-20T19:53:10.247",
+    "nvd_last_modified": "2026-10-23T02:16:56.200",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -34129,8 +34303,15 @@
     },
     "risk_score_prev": 28.2,
     "epss_score_prev": 0.00396,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-11400",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "ce7e8c7b53cfd7e210abc6e6d73b248f488fcdcc",
+        "repo": "https://github.com/aws/aws-advanced-jdbc-wrapper"
+      }
+    ],
     "affected": [
       "amazon/aws"
     ],
@@ -34143,7 +34324,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T21:38:28.285108+00:00"
+    "first_seen": "2026-10-20T21:38:28.285108+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-104937",
@@ -34358,7 +34540,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-20T21:17:13.520",
-    "nvd_last_modified": "2026-10-22T17:40:46.877",
+    "nvd_last_modified": "2026-10-23T03:16:30.053",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -34578,7 +34760,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-20T21:17:12.720",
-    "nvd_last_modified": "2026-10-22T17:40:46.877",
+    "nvd_last_modified": "2026-10-23T03:16:29.903",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -77909,7 +78091,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.922590+00:00"
+    "first_seen": "2026-10-20T16:55:32.922590+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69624",
@@ -78524,8 +78707,15 @@
     },
     "risk_score_prev": 28.1,
     "epss_score_prev": 0.00193,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-100585",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "2d2ddc43d0dcf71f31283d780f9fe9ff4cc04fe4",
+        "repo": "https://github.com/openclaw/openclaw"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Claude Code"
@@ -78538,7 +78728,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.922323+00:00"
+    "first_seen": "2026-10-20T16:55:32.922323+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59536",
@@ -78645,8 +78836,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00462,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-70335",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "c2d1b13fdc4a77628e5f3bb70173351c8f2fbad1",
+        "repo": "https://github.com/microsoft/vscode"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "GitHub Copilot"
@@ -78674,7 +78872,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.922278+00:00"
+    "first_seen": "2026-10-20T16:55:32.922278+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-66389",
@@ -79003,7 +79202,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.922212+00:00"
+    "first_seen": "2026-10-20T16:55:32.922212+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2023-43086",
@@ -82636,7 +82836,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921592+00:00"
+    "first_seen": "2026-10-20T16:55:32.921592+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-47552",
@@ -82864,7 +83065,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921555+00:00"
+    "first_seen": "2026-10-20T16:55:32.921555+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62484",
@@ -83060,8 +83262,15 @@
     },
     "risk_score_prev": 27.4,
     "epss_score_prev": 0.00144,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-73077",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "c5a82fe013e73c98004ad7cd4f906b1ad1ed610e",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83095,7 +83304,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921485+00:00"
+    "first_seen": "2026-10-20T16:55:32.921485+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-73076",
@@ -83135,8 +83345,15 @@
     },
     "risk_score_prev": 27.4,
     "epss_score_prev": 0.00134,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-73076",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "581a2f3ac9c6f96a26324f6b2c8c11415fd0d452",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83170,7 +83387,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921478+00:00"
+    "first_seen": "2026-10-20T16:55:32.921478+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-73072",
@@ -83284,8 +83502,21 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00516,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2023-0433",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "129264dbb41404b94b835baadfc3fa25ffac3d3e",
+        "repo": "https://github.com/neovim/neovim"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "11977f917506d950b7e0cae558bd9189260b253b",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83336,7 +83567,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921455+00:00"
+    "first_seen": "2026-10-20T16:55:32.921455+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2023-0288",
@@ -83375,8 +83607,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00481,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2023-0288",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "232bdaaca98c34a99ffadf27bf6ee08be6cc8f6a",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83421,7 +83660,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921448+00:00"
+    "first_seen": "2026-10-20T16:55:32.921448+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2023-0049",
@@ -83460,8 +83700,21 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00582,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2023-0049",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "27fb62988e922c2739035f477f93cc052a4fee1e",
+        "repo": "https://github.com/neovim/neovim"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "7b17eb4b063a234376c1ec909ee293e42cff290c",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83494,7 +83747,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921442+00:00"
+    "first_seen": "2026-10-20T16:55:32.921442+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-3591",
@@ -83533,8 +83787,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00388,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-3591",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "8f3c3c6cd044e3b5bf08dbfa3b3f04bb3f711bad",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83567,7 +83828,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921435+00:00"
+    "first_seen": "2026-10-20T16:55:32.921435+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-4141",
@@ -83607,8 +83869,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00446,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-4141",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "cc762a48d42b579fb7bdec2c614636b830342dd5",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83647,7 +83916,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921428+00:00"
+    "first_seen": "2026-10-20T16:55:32.921428+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-3324",
@@ -83687,8 +83957,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00532,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-3324",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "8279af514ca7e5fd3c31cf13b0864163d1a0bfeb",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83721,7 +83998,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921422+00:00"
+    "first_seen": "2026-10-20T16:55:32.921422+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-3297",
@@ -83760,8 +84038,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.0052,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-3297",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "0ff01835a40f549c5c4a550502f62a2ac9ac447c",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83800,7 +84085,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921415+00:00"
+    "first_seen": "2026-10-20T16:55:32.921415+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-3296",
@@ -83840,8 +84126,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00561,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-3296",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "96b9bf8f74af8abf1e30054f996708db7dc285be",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83880,7 +84173,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921409+00:00"
+    "first_seen": "2026-10-20T16:55:32.921409+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-3256",
@@ -83919,8 +84213,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00489,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-3256",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "8ecfa2c56b4992c7f067b92488aa9acea5a454ad",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -83953,7 +84254,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921402+00:00"
+    "first_seen": "2026-10-20T16:55:32.921402+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-3134",
@@ -83992,8 +84294,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00561,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-3134",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "ccfde4d028e891a41e3548323c3d47b06fb0b83e",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84026,7 +84335,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921395+00:00"
+    "first_seen": "2026-10-20T16:55:32.921395+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-3037",
@@ -84065,8 +84375,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00529,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-3037",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "4f1b083be43f351bc107541e7b0c9655a5d2c0bb",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84105,7 +84422,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921388+00:00"
+    "first_seen": "2026-10-20T16:55:32.921388+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2946",
@@ -84144,8 +84462,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00538,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2946",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "adce965162dd89bf29ee0e5baf53652e7515762c",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84178,7 +84503,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921381+00:00"
+    "first_seen": "2026-10-20T16:55:32.921381+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2849",
@@ -84217,8 +84543,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00482,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2849",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "f6d39c31d2177549a986d170e192d8351bd571e2",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84251,7 +84584,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921370+00:00"
+    "first_seen": "2026-10-20T16:55:32.921370+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2845",
@@ -84290,8 +84624,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00534,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2845",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "e98c88c44c308edaea5994b8ad4363e65030968c",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84324,7 +84665,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921363+00:00"
+    "first_seen": "2026-10-20T16:55:32.921363+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2522",
@@ -84363,8 +84705,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00581,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2522",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "5fa9f23a63651a8abdb074b4fc2ec9b1adc6b089",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84403,7 +84752,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921356+00:00"
+    "first_seen": "2026-10-20T16:55:32.921356+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2345",
@@ -84442,8 +84792,15 @@
     },
     "risk_score_prev": 27.8,
     "epss_score_prev": 0.01272,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2345",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "baefde14550231f6468ac2ed2ed495bc381c0c92",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84476,7 +84833,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921349+00:00"
+    "first_seen": "2026-10-20T16:55:32.921349+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2344",
@@ -84516,8 +84874,15 @@
     },
     "risk_score_prev": 27.8,
     "epss_score_prev": 0.01291,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2344",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "caea66442d86e7bbba3bf3dc202c3c0d549b9853",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84550,7 +84915,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921342+00:00"
+    "first_seen": "2026-10-20T16:55:32.921342+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2343",
@@ -84589,8 +84955,15 @@
     },
     "risk_score_prev": 27.8,
     "epss_score_prev": 0.01372,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2343",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "b8329db36a886355e6e9cb9986a3668fef78c438",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84623,7 +84996,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921335+00:00"
+    "first_seen": "2026-10-20T16:55:32.921335+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2304",
@@ -84663,8 +85037,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01483,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2304",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "54e5fed6d27b747ff152cdb6edfb72ff60e70939",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84691,7 +85072,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921329+00:00"
+    "first_seen": "2026-10-20T16:55:32.921329+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2287",
@@ -84803,8 +85185,15 @@
     },
     "risk_score_prev": 27.8,
     "epss_score_prev": 0.0137,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2286",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "f12129f1714f7d2301935bb21d896609bdac221c",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84837,7 +85226,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921315+00:00"
+    "first_seen": "2026-10-20T16:55:32.921315+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2285",
@@ -84876,8 +85266,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01414,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2285",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "27efc62f5d86afcb2ecb7565587fe8dea4b036fe",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84910,7 +85307,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921307+00:00"
+    "first_seen": "2026-10-20T16:55:32.921307+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2284",
@@ -84949,8 +85347,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01436,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2284",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "3d51ce18ab1be4f9f6061568a4e7fabf00b21794",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -84983,7 +85388,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921301+00:00"
+    "first_seen": "2026-10-20T16:55:32.921301+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2257",
@@ -85022,8 +85428,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01402,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2257",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "083692d598139228e101b8c521aaef7bcf256e9a",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85050,7 +85463,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921291+00:00"
+    "first_seen": "2026-10-20T16:55:32.921291+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2210",
@@ -85089,8 +85503,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01395,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2210",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "c101abff4c6756db4f5e740fde289decb9452efa",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85123,7 +85544,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921221+00:00"
+    "first_seen": "2026-10-20T16:55:32.921221+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2207",
@@ -85162,8 +85584,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01404,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2207",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "0971c7a4e537ea120a6bb2195960be8d0815e97b",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85196,7 +85625,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921213+00:00"
+    "first_seen": "2026-10-20T16:55:32.921213+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2206",
@@ -85235,8 +85665,15 @@
     },
     "risk_score_prev": 27.8,
     "epss_score_prev": 0.01363,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2206",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "e178af5a586ea023622d460779fdcabbbfac0908",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85269,7 +85706,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921207+00:00"
+    "first_seen": "2026-10-20T16:55:32.921207+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2183",
@@ -85308,8 +85746,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01517,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2183",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "8eba2bd291b347e3008aa9e565652d51ad638cfa",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85342,7 +85787,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921200+00:00"
+    "first_seen": "2026-10-20T16:55:32.921200+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2182",
@@ -85381,8 +85827,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01541,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2182",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "f7c7c3fad6d2135d558f3b36d0d1a943118aeb5e",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85415,7 +85868,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921194+00:00"
+    "first_seen": "2026-10-20T16:55:32.921194+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2175",
@@ -85455,8 +85909,15 @@
     },
     "risk_score_prev": 27.8,
     "epss_score_prev": 0.01314,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2175",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "6046aded8da002b08d380db29de2ba0268b6616e",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85489,7 +85950,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921185+00:00"
+    "first_seen": "2026-10-20T16:55:32.921185+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2129",
@@ -85528,8 +85990,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01414,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2129",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "d6211a52ab9f53b82f884561ed43d2fe4d24ff7d",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85562,7 +86031,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921179+00:00"
+    "first_seen": "2026-10-20T16:55:32.921179+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2126",
@@ -85601,8 +86071,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01561,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2126",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "156d3911952d73b03d7420dc3540215247db0fe8",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85647,7 +86124,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921172+00:00"
+    "first_seen": "2026-10-20T16:55:32.921172+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2125",
@@ -85687,8 +86165,15 @@
     },
     "risk_score_prev": 28.0,
     "epss_score_prev": 0.01637,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2125",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "0e8e938d497260dd57be67b4966cb27a5f72376f",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85733,7 +86218,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921164+00:00"
+    "first_seen": "2026-10-20T16:55:32.921164+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2124",
@@ -85773,8 +86259,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01561,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2124",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "2f074f4685897ab7212e25931eeeb0212292829f",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85819,7 +86312,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921157+00:00"
+    "first_seen": "2026-10-20T16:55:32.921157+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-2042",
@@ -85858,8 +86352,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.01476,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-2042",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "2813f38e021c6e6581c0c88fcf107e41788bc835",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -85904,7 +86405,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921150+00:00"
+    "first_seen": "2026-10-20T16:55:32.921150+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-1620",
@@ -86017,8 +86519,15 @@
     },
     "risk_score_prev": 28.3,
     "epss_score_prev": 0.02544,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-1619",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "ef02f16609ff0a26ffc6e20263523424980898fe",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -86057,7 +86566,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921136+00:00"
+    "first_seen": "2026-10-20T16:55:32.921136+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-1616",
@@ -86196,8 +86706,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00609,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-0351",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "98056533b96b6b5d8849641de93185dd7bcadc44",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -86242,7 +86759,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921118+00:00"
+    "first_seen": "2026-10-20T16:55:32.921118+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2021-4166",
@@ -86373,8 +86891,15 @@
     },
     "risk_score_prev": 28.1,
     "epss_score_prev": 0.01969,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2021-4136",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "605ec91e5a7330d61be313637e495fa02a6dc264",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -86431,7 +86956,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921105+00:00"
+    "first_seen": "2026-10-20T16:55:32.921105+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2021-3973",
@@ -86471,8 +86997,15 @@
     },
     "risk_score_prev": 28.0,
     "epss_score_prev": 0.01786,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2021-3973",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "615ddd5342b50a6878a907062aa471740bd9a847",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -86505,7 +87038,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921098+00:00"
+    "first_seen": "2026-10-20T16:55:32.921098+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2021-3968",
@@ -86626,8 +87160,15 @@
     },
     "risk_score_prev": 27.8,
     "epss_score_prev": 0.01363,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2021-3974",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "64066b9acd9f8cffdf4840f797748f938a13f2d6",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -86660,7 +87201,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921085+00:00"
+    "first_seen": "2026-10-20T16:55:32.921085+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2021-3928",
@@ -86700,8 +87242,15 @@
     },
     "risk_score_prev": 27.6,
     "epss_score_prev": 0.00635,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2021-3928",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "15d9890eee53afc61eb0a03b878a19cb5672f732",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -86734,7 +87283,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921079+00:00"
+    "first_seen": "2026-10-20T16:55:32.921079+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2021-3927",
@@ -86774,8 +87324,15 @@
     },
     "risk_score_prev": 28.0,
     "epss_score_prev": 0.01708,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2021-3927",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "0b5b06cb4777d1401fdf83e7d48d287662236e7e",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -86808,7 +87365,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.921072+00:00"
+    "first_seen": "2026-10-20T16:55:32.921072+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-86864",
@@ -88285,7 +88843,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.920856+00:00"
+    "first_seen": "2026-10-20T16:55:32.920856+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-76978",
@@ -89120,7 +89679,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.920674+00:00"
+    "first_seen": "2026-10-20T16:55:32.920674+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2019-25261",
@@ -89173,7 +89733,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.920666+00:00"
+    "first_seen": "2026-10-20T16:55:32.920666+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2024-40766",
@@ -90142,7 +90703,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.920455+00:00"
+    "first_seen": "2026-10-20T16:55:32.920455+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-47856",
@@ -90536,7 +91098,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919937+00:00"
+    "first_seen": "2026-10-20T16:55:32.919937+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69779",
@@ -90720,7 +91283,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919923+00:00"
+    "first_seen": "2026-10-20T16:55:32.919923+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69706",
@@ -90905,7 +91469,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919909+00:00"
+    "first_seen": "2026-10-20T16:55:32.919909+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69652",
@@ -91451,7 +92016,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919860+00:00"
+    "first_seen": "2026-10-20T16:55:32.919860+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69274",
@@ -91636,7 +92202,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919838+00:00"
+    "first_seen": "2026-10-20T16:55:32.919838+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-72961",
@@ -92657,7 +93224,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919539+00:00"
+    "first_seen": "2026-10-20T16:55:32.919539+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69287",
@@ -93105,7 +93673,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919437+00:00"
+    "first_seen": "2026-10-20T16:55:32.919437+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69676",
@@ -93753,7 +94322,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.918983+00:00"
+    "first_seen": "2026-10-20T16:55:32.918983+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69366",
@@ -94307,7 +94877,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.918772+00:00"
+    "first_seen": "2026-10-20T16:55:32.918772+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69392",
@@ -94399,7 +94970,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.918764+00:00"
+    "first_seen": "2026-10-20T16:55:32.918764+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69383",
@@ -96892,7 +97464,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-18T22:27:16.012774+00:00"
+    "first_seen": "2026-10-18T22:27:16.012774+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-18262",
@@ -96945,7 +97518,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-18T22:27:16.012766+00:00"
+    "first_seen": "2026-10-18T22:27:16.012766+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-13121",
@@ -96998,7 +97572,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-18T22:27:16.012758+00:00"
+    "first_seen": "2026-10-18T22:27:16.012758+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-64755",
@@ -97166,8 +97741,15 @@
     },
     "risk_score_prev": 28.2,
     "epss_score_prev": 0.00598,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2025-64660",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "1e3c50d64110be466c0b4a45222e81d2c9352888",
+        "repo": "https://github.com/microsoft/vscode"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "GitHub Copilot"
@@ -97194,7 +97776,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-18T22:27:16.012715+00:00"
+    "first_seen": "2026-10-18T22:27:16.012715+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-43990",
@@ -97261,7 +97844,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-18T22:27:16.012644+00:00"
+    "first_seen": "2026-10-18T22:27:16.012644+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-55730",
@@ -98940,7 +99524,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-18T22:27:16.009861+00:00"
+    "first_seen": "2026-10-18T22:27:16.009861+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-46373",
@@ -99014,7 +99599,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-18T22:27:16.009852+00:00"
+    "first_seen": "2026-10-18T22:27:16.009852+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-4615",
@@ -99479,7 +100065,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-18T22:27:16.009743+00:00"
+    "first_seen": "2026-10-18T22:27:16.009743+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-55693",
@@ -99760,8 +100347,39 @@
     },
     "risk_score_prev": 28.3,
     "epss_score_prev": 0.00782,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2025-12967",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "a9c83b30a5cb7dbd4a2aa812da1d6dd6fa264d6a",
+        "repo": "https://github.com/aws/aws-advanced-go-wrapper"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "213c5f857c3752a71683dd1c9417389a6a076229",
+        "repo": "https://github.com/aws/aws-advanced-jdbc-wrapper"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "741fc89e941134d8932b1af9e5dba7543561c1fd",
+        "repo": "https://github.com/aws/aws-advanced-nodejs-wrapper"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "f74ee35bf3c732d7c65fec3869457f3e8fb43d62",
+        "repo": "https://github.com/aws/aws-advanced-python-wrapper"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "804fef474cb51bb0798a93464cc1f85455f27288",
+        "repo": "https://github.com/aws/aws-pgsql-odbc"
+      }
+    ],
     "affected": [
       "amazon/aws"
     ],
@@ -99775,7 +100393,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.008078+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-22"
+    "affected_cpe_check": "no_cpes:2026-10-22",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-76023",
@@ -102833,7 +103452,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.005333+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-22"
+    "affected_cpe_check": "no_cpes:2026-10-22",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-12484",
@@ -106201,7 +106821,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003199+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62205",
@@ -106264,7 +106885,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003190+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62204",
@@ -106405,7 +107027,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003171+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62202",
@@ -106545,7 +107168,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003154+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62200",
@@ -106615,7 +107239,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003145+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62199",
@@ -106685,7 +107310,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003123+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-60727",
@@ -106755,7 +107381,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003115+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-60726",
@@ -106888,7 +107515,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003099+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59238",
@@ -106951,7 +107579,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003091+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59237",
@@ -107092,7 +107721,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003073+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59234",
@@ -107162,7 +107792,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003066+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59233",
@@ -107232,7 +107863,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003058+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59231",
@@ -107302,7 +107934,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003049+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59228",
@@ -107443,7 +108076,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003032+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59226",
@@ -107506,7 +108140,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003024+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59225",
@@ -107576,7 +108211,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003015+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59224",
@@ -107646,7 +108282,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.003007+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59223",
@@ -107716,7 +108353,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.002998+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-54910",
@@ -107843,7 +108481,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.002981+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-54907",
@@ -107906,7 +108545,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.002971+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-54904",
@@ -107976,7 +108616,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.002960+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-54903",
@@ -108046,7 +108687,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.002952+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-54902",
@@ -108117,7 +108759,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.002943+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-54900",
@@ -108187,7 +108830,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.002934+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-54899",
@@ -108250,7 +108894,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.002924+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-54898",
@@ -108320,7 +108965,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.002915+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-54897",
@@ -108461,7 +109107,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.002896+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-10714",
@@ -108624,8 +109271,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00453,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2025-66476",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "083ec6d9a3b7b09006e0ce69ac802597d25856d6",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -108671,7 +109325,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-18T18:40:11.211706+00:00"
+    "first_seen": "2026-10-18T18:40:11.211706+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-53841",
@@ -108725,7 +109380,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T18:40:11.211417+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-22"
+    "affected_cpe_check": "no_cpes:2026-10-22",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-11727",
@@ -112909,8 +113565,15 @@
     },
     "risk_score_prev": 27.8,
     "epss_score_prev": 0.00169,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2025-61916",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "69792c33894111797a5c1a30f8bdeea068f555f0",
+        "repo": "https://github.com/spinnaker/spinnaker"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Bitbucket"
@@ -112943,7 +113606,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-17T16:34:36.811240+00:00"
+    "first_seen": "2026-10-17T16:34:36.811240+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-110769",
@@ -113222,8 +113886,35 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.00614,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2024-36904",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "84546cc1aeeb4df3e444b18a4293c9823f974be9",
+        "repo": "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "4.19.314"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.4.276"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.10.217"
+      },
+      {
+        "package": "Kernel",
+        "ecosystem": "Linux",
+        "fixed": "5.15.159"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "VMware"
@@ -113298,7 +113989,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-17T16:34:36.811020+00:00"
+    "first_seen": "2026-10-17T16:34:36.811020+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-84731",
@@ -113460,7 +114152,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-17T16:34:36.810978+00:00"
+    "first_seen": "2026-10-17T16:34:36.810978+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-53418",
@@ -113713,8 +114406,15 @@
     },
     "risk_score_prev": 27.4,
     "epss_score_prev": 0.0022,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-43961",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "8af0f098c3a42a28661d0295364e6e0fd7dbc92c",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -113727,7 +114427,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-17T16:34:36.810917+00:00"
+    "first_seen": "2026-10-17T16:34:36.810917+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-73073",
@@ -113767,8 +114468,15 @@
     },
     "risk_score_prev": 27.4,
     "epss_score_prev": 0.00152,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-73073",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "2f628d8104958fa7421664f792ca6d4f7a39a10f",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -113802,7 +114510,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-17T16:34:36.810907+00:00"
+    "first_seen": "2026-10-17T16:34:36.810907+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2018-20786",
@@ -113841,8 +114550,15 @@
     },
     "risk_score_prev": 27.4,
     "epss_score_prev": 0.02892,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2018-20786",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "cd929f7ba8cc5b6d6dcf35c8b34124e969fed6b8",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -113869,7 +114585,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-17T16:34:36.810895+00:00"
+    "first_seen": "2026-10-17T16:34:36.810895+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-110447",
@@ -115713,7 +116430,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.097754+00:00"
+    "first_seen": "2026-10-16T19:32:23.097754+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-110112",
@@ -116715,7 +117433,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093851+00:00"
+    "first_seen": "2026-10-16T19:32:23.093851+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-46774",
@@ -116925,7 +117644,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093783+00:00"
+    "first_seen": "2026-10-16T19:32:23.093783+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-59497",
@@ -117195,7 +117915,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093741+00:00"
+    "first_seen": "2026-10-16T19:32:23.093741+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-70341",
@@ -117441,7 +118162,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093685+00:00"
+    "first_seen": "2026-10-16T19:32:23.093685+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87692",
@@ -117494,7 +118216,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093675+00:00"
+    "first_seen": "2026-10-16T19:32:23.093675+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-77910",
@@ -118195,7 +118918,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093443+00:00"
+    "first_seen": "2026-10-16T19:32:23.093443+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83721",
@@ -118248,7 +118972,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093423+00:00"
+    "first_seen": "2026-10-16T19:32:23.093423+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83566",
@@ -118484,7 +119209,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093360+00:00"
+    "first_seen": "2026-10-16T19:32:23.093360+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83931",
@@ -118537,7 +119263,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093289+00:00"
+    "first_seen": "2026-10-16T19:32:23.093289+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62470",
@@ -118628,7 +119355,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093121+00:00"
+    "first_seen": "2026-10-16T19:32:23.093121+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83720",
@@ -118784,7 +119512,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092944+00:00"
+    "first_seen": "2026-10-16T19:32:23.092944+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-96868",
@@ -118996,7 +119725,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092726+00:00"
+    "first_seen": "2026-10-16T19:32:23.092726+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83796",
@@ -119049,7 +119779,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092573+00:00"
+    "first_seen": "2026-10-16T19:32:23.092573+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83735",
@@ -119102,7 +119833,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092530+00:00"
+    "first_seen": "2026-10-16T19:32:23.092530+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83675",
@@ -119208,7 +119940,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092486+00:00"
+    "first_seen": "2026-10-16T19:32:23.092486+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-70243",
@@ -119374,7 +120107,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092324+00:00"
+    "first_seen": "2026-10-16T19:32:23.092324+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2020-1054",
@@ -119563,7 +120297,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.091463+00:00"
+    "first_seen": "2026-10-16T19:32:23.091463+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83504",
@@ -119707,7 +120442,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.091150+00:00"
+    "first_seen": "2026-10-16T19:32:23.091150+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-64658",
@@ -122038,7 +122774,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.706038+00:00"
+    "first_seen": "2026-10-16T19:22:14.706038+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-55005",
@@ -122227,7 +122964,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.706014+00:00"
+    "first_seen": "2026-10-16T19:22:14.706014+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85901",
@@ -122319,7 +123057,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.706006+00:00"
+    "first_seen": "2026-10-16T19:22:14.706006+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83883",
@@ -122411,7 +123150,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705998+00:00"
+    "first_seen": "2026-10-16T19:22:14.705998+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83866",
@@ -122609,7 +123349,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705968+00:00"
+    "first_seen": "2026-10-16T19:22:14.705968+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83732",
@@ -122662,7 +123403,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705961+00:00"
+    "first_seen": "2026-10-16T19:22:14.705961+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-70286",
@@ -122715,7 +123457,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705954+00:00"
+    "first_seen": "2026-10-16T19:22:14.705954+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-62712",
@@ -122807,7 +123550,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705946+00:00"
+    "first_seen": "2026-10-16T19:22:14.705946+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-33104",
@@ -122991,7 +123735,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705931+00:00"
+    "first_seen": "2026-10-16T19:22:14.705931+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-88071",
@@ -123083,7 +123828,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705922+00:00"
+    "first_seen": "2026-10-16T19:22:14.705922+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87705",
@@ -123243,7 +123989,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705898+00:00"
+    "first_seen": "2026-10-16T19:22:14.705898+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83839",
@@ -123496,7 +124243,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705866+00:00"
+    "first_seen": "2026-10-16T19:22:14.705866+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-108399",
@@ -123880,7 +124628,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705820+00:00"
+    "first_seen": "2026-10-16T19:22:14.705820+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85870",
@@ -124092,7 +124841,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705790+00:00"
+    "first_seen": "2026-10-16T19:22:14.705790+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-32070",
@@ -124367,7 +125117,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705767+00:00"
+    "first_seen": "2026-10-16T19:22:14.705767+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69992",
@@ -124550,7 +125301,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705754+00:00"
+    "first_seen": "2026-10-16T19:22:14.705754+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-26159",
@@ -124641,7 +125393,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705746+00:00"
+    "first_seen": "2026-10-16T19:22:14.705746+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-26151",
@@ -124785,7 +125538,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705719+00:00"
+    "first_seen": "2026-10-16T19:22:14.705719+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-70241",
@@ -124891,7 +125645,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705705+00:00"
+    "first_seen": "2026-10-16T19:22:14.705705+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-108132",
@@ -125012,7 +125767,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705688+00:00"
+    "first_seen": "2026-10-16T19:22:14.705688+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-96929",
@@ -125085,7 +125841,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705681+00:00"
+    "first_seen": "2026-10-16T19:22:14.705681+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-96915",
@@ -125176,7 +125933,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705672+00:00"
+    "first_seen": "2026-10-16T19:22:14.705672+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-96913",
@@ -125267,7 +126025,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705665+00:00"
+    "first_seen": "2026-10-16T19:22:14.705665+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-96317",
@@ -125359,7 +126118,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705658+00:00"
+    "first_seen": "2026-10-16T19:22:14.705658+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-96312",
@@ -125451,7 +126211,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705651+00:00"
+    "first_seen": "2026-10-16T19:22:14.705651+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-96216",
@@ -125596,7 +126357,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705617+00:00"
+    "first_seen": "2026-10-16T19:22:14.705617+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85945",
@@ -125649,7 +126411,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705603+00:00"
+    "first_seen": "2026-10-16T19:22:14.705603+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85871",
@@ -125702,7 +126465,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705595+00:00"
+    "first_seen": "2026-10-16T19:22:14.705595+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85837",
@@ -125794,7 +126558,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705588+00:00"
+    "first_seen": "2026-10-16T19:22:14.705588+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85836",
@@ -125886,7 +126651,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705581+00:00"
+    "first_seen": "2026-10-16T19:22:14.705581+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85372",
@@ -126084,7 +126850,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705541+00:00"
+    "first_seen": "2026-10-16T19:22:14.705541+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83913",
@@ -126137,7 +126904,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705531+00:00"
+    "first_seen": "2026-10-16T19:22:14.705531+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83882",
@@ -126229,7 +126997,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705513+00:00"
+    "first_seen": "2026-10-16T19:22:14.705513+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83837",
@@ -126282,7 +127051,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705505+00:00"
+    "first_seen": "2026-10-16T19:22:14.705505+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83834",
@@ -126389,7 +127159,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705489+00:00"
+    "first_seen": "2026-10-16T19:22:14.705489+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83768",
@@ -126481,7 +127252,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705480+00:00"
+    "first_seen": "2026-10-16T19:22:14.705480+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83690",
@@ -128291,7 +129063,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.700451+00:00"
+    "first_seen": "2026-10-16T19:22:14.700451+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-32225",
@@ -130942,7 +131715,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647203+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-22"
+    "affected_cpe_check": "no_cpes:2026-10-22",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-104000",
@@ -132022,7 +132796,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647015+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-22"
+    "affected_cpe_check": "no_cpes:2026-10-22",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-109990",
@@ -137171,8 +137946,15 @@
     },
     "risk_score_prev": 27.9,
     "epss_score_prev": 0.0158,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2023-4807",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "e04bd3433fd84e1861bf258ea37928d9845e6a86",
+        "repo": "https://github.com/openssl/openssl"
+      }
+    ],
     "affected": [
       "openssl/openssl"
     ],
@@ -137230,7 +138012,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.584591+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2023-0464",
@@ -137269,8 +138052,15 @@
     },
     "risk_score_prev": 27.8,
     "epss_score_prev": 0.03985,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2023-0464",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+        "repo": "https://github.com/openssl/openssl"
+      }
+    ],
     "affected": [
       "openssl/openssl"
     ],
@@ -137334,7 +138124,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.584581+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2023-0215",
@@ -137373,8 +138164,15 @@
     },
     "risk_score_prev": 28.2,
     "epss_score_prev": 0.05024,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2023-0215",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "e818b74be2170fbe957a07b0da4401c2b694b3b8",
+        "repo": "https://github.com/openssl/openssl"
+      }
+    ],
     "affected": [
       "openssl/openssl"
     ],
@@ -137441,7 +138239,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.584561+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-55682",
@@ -138384,7 +139183,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.579413+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-63533",
@@ -138447,7 +139247,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.579403+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-55125",
@@ -138518,7 +139319,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.579392+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-64672",
@@ -138659,7 +139461,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.579371+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62563",
@@ -138729,7 +139532,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.579360+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62561",
@@ -138799,7 +139603,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.579349+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62560",
@@ -138870,7 +139675,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.579338+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62557",
@@ -139004,7 +139810,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.579308+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-62553",
@@ -139067,7 +139874,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T22:59:41.579295+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2015-6093",
@@ -139988,8 +140796,15 @@
     },
     "risk_score_prev": 28.0,
     "epss_score_prev": 0.04583,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2022-1473",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "4d346a188c27bdf78aa76590c641e1217732ca4b",
+        "repo": "https://github.com/openssl/openssl"
+      }
+    ],
     "affected": [
       "openssl/openssl"
     ],
@@ -140017,7 +140832,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T16:35:47.010831+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2022-1292",
@@ -148878,7 +149694,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740716+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-96997",
@@ -149204,7 +150021,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740669+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-88207",
@@ -151985,7 +152803,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740274+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-70215",
@@ -154334,7 +155153,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739964+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-96324",
@@ -154520,7 +155340,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739946+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-88191",
@@ -155271,7 +156092,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739845+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83575",
@@ -155923,7 +156745,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739703+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-70115",
@@ -161589,7 +162412,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-11T14:39:57.001423+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-22"
+    "affected_cpe_check": "no_cpes:2026-10-22",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87760",
@@ -170533,7 +171357,7 @@
     },
     "risk_score_prev": 28.3,
     "epss_score_prev": 0.09491,
-    "osv_id": null,
+    "osv_id": "CVE-2021-25329",
     "osv_fixed_versions": [],
     "affected": [
       "apache/tomcat"
@@ -170604,7 +171428,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-09T04:42:03.281566+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2021-25122",
@@ -180186,7 +181011,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-07T21:01:27.338680+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-106403",
@@ -202323,8 +203149,15 @@
     },
     "risk_score_prev": 28.1,
     "epss_score_prev": 0.00305,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2025-64112",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "542394951906c9332b645db00a6623762c00ac8f",
+        "repo": "https://github.com/statamic/cms"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "content management system"
@@ -202337,7 +203170,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-01T00:17:08.624749+00:00"
+    "first_seen": "2026-10-01T00:17:08.624749+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-54873",
@@ -202516,7 +203350,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-01T00:17:08.624463+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-95362",
@@ -202661,7 +203496,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-01T00:17:08.624274+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-95301",
@@ -207096,7 +207932,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-30T20:12:32.358060+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2025-14766",
@@ -217403,7 +218240,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-27T00:15:37.390268+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-23"
+    "affected_cpe_check": "no_cpes:2026-10-23",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-84095",
@@ -217459,7 +218297,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-27T00:15:37.390258+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-23"
+    "affected_cpe_check": "no_cpes:2026-10-23",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-16591",
@@ -222490,7 +223329,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-25T08:15:25.326997+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-93303",
@@ -222545,7 +223385,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-25T08:15:25.326990+00:00"
+    "first_seen": "2026-09-25T08:15:25.326990+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-89055",
@@ -222601,7 +223442,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-25T08:15:25.326982+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-84281",
@@ -222656,7 +223498,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-25T08:15:25.326975+00:00"
+    "first_seen": "2026-09-25T08:15:25.326975+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-84279",
@@ -222711,7 +223554,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-25T08:15:25.326966+00:00"
+    "first_seen": "2026-09-25T08:15:25.326966+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83591",
@@ -222766,7 +223610,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-25T08:15:25.326959+00:00"
+    "first_seen": "2026-09-25T08:15:25.326959+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-14281",
@@ -222822,7 +223667,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-25T08:15:25.326950+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-41447",
@@ -223222,7 +224068,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-25T00:15:34.577019+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-79766",
@@ -223285,7 +224132,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-24T20:11:46.754607+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-77581",
@@ -223348,7 +224196,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-24T20:11:46.754597+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-61788",
@@ -223943,7 +224792,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-24T16:11:37.482548+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-17713",
@@ -224392,7 +225242,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-24T12:13:28.022642+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85682",
@@ -224448,7 +225299,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-24T12:13:28.022631+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-77193",
@@ -224503,7 +225355,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-24T12:13:28.022619+00:00"
+    "first_seen": "2026-09-24T12:13:28.022619+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-88843",
@@ -224559,7 +225412,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-24T12:13:28.022606+00:00"
+    "first_seen": "2026-09-24T12:13:28.022606+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-80513",
@@ -224615,7 +225469,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-24T12:13:28.022593+00:00"
+    "first_seen": "2026-09-24T12:13:28.022593+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-18467",
@@ -224671,7 +225526,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-24T04:12:42.076583+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-93352",
@@ -224790,7 +225646,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-24T00:13:58.394980+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-19125",
@@ -224846,7 +225703,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-24T00:13:58.394968+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2008-4128",
@@ -225011,7 +225869,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-23T20:12:18.643817+00:00"
+    "first_seen": "2026-09-23T20:12:18.643817+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-86247",
@@ -225782,7 +226641,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-23T16:11:43.156423+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87022",
@@ -225954,7 +226814,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-23T16:11:43.156270+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2006-1316",
@@ -226018,7 +226879,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-23T16:11:43.156253+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2000-0967",
@@ -226129,7 +226991,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-23T12:13:51.598456+00:00"
+    "first_seen": "2026-09-23T12:13:51.598456+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-93508",
@@ -226185,7 +227048,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-23T12:13:51.598448+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-86608",
@@ -226241,7 +227105,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-23T12:13:51.598440+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-82843",
@@ -226297,7 +227162,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-23T12:13:51.598432+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-75799",
@@ -226354,7 +227220,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-23T12:13:51.598425+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-14321",
@@ -226410,7 +227277,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-23T12:13:51.598417+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2022-4997",
@@ -226466,7 +227334,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-23T12:13:51.598408+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2006-0033",
@@ -226534,7 +227403,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-23T12:13:51.597871+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-32996",
@@ -226589,7 +227459,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-23T08:11:59.862610+00:00"
+    "first_seen": "2026-09-23T08:11:59.862610+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-88419",
@@ -227106,7 +227977,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-22T12:14:01.134045+00:00"
+    "first_seen": "2026-09-22T12:14:01.134045+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-9231",
@@ -227162,7 +228034,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-22T12:14:01.134036+00:00"
+    "first_seen": "2026-09-22T12:14:01.134036+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-93836",
@@ -227217,7 +228090,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-22T12:14:01.134026+00:00"
+    "first_seen": "2026-09-22T12:14:01.134026+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-93778",
@@ -227272,7 +228146,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-22T12:14:01.134013+00:00"
+    "first_seen": "2026-09-22T12:14:01.134013+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-92969",
@@ -227329,7 +228204,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-22T12:14:01.134004+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-92235",
@@ -227385,7 +228261,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-22T12:14:01.133994+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-6922",
@@ -227440,7 +228317,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-22T12:14:01.133984+00:00"
+    "first_seen": "2026-09-22T12:14:01.133984+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2025-1281",
@@ -227496,7 +228374,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-22T12:14:01.133973+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-94504",
@@ -227551,7 +228430,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-22T08:11:39.372227+00:00"
+    "first_seen": "2026-09-22T08:11:39.372227+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-92438",
@@ -227607,7 +228487,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-22T08:11:39.372220+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-91827",
@@ -227663,7 +228544,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-22T08:11:39.372213+00:00"
+    "first_seen": "2026-09-22T08:11:39.372213+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-89412",
@@ -227718,7 +228600,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-22T08:11:39.372205+00:00"
+    "first_seen": "2026-09-22T08:11:39.372205+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-12470",
@@ -227773,7 +228656,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-22T08:11:39.372196+00:00"
+    "first_seen": "2026-09-22T08:11:39.372196+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-19658",
@@ -227830,7 +228714,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-22T08:11:39.372188+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-13355",
@@ -227886,7 +228771,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-22T08:11:39.372179+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-5883",
@@ -228202,7 +229088,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-21T16:11:15.272728+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-61629",
@@ -228625,7 +229512,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-20T16:10:41.300802+00:00"
+    "first_seen": "2026-09-20T16:10:41.300802+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-92540",
@@ -228680,7 +229568,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-20T16:10:41.300790+00:00"
+    "first_seen": "2026-09-20T16:10:41.300790+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87839",
@@ -228735,7 +229624,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-20T16:10:41.300780+00:00"
+    "first_seen": "2026-09-20T16:10:41.300780+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87067",
@@ -228791,7 +229681,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-20T16:10:41.300770+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85017",
@@ -228847,7 +229738,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-20T16:10:41.300760+00:00"
+    "first_seen": "2026-09-20T16:10:41.300760+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-82842",
@@ -228903,7 +229795,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-20T16:10:41.300748+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81650",
@@ -228958,7 +229851,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-20T16:10:41.300736+00:00"
+    "first_seen": "2026-09-20T16:10:41.300736+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-45363",
@@ -229077,7 +229971,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-19T16:10:36.215493+00:00"
+    "first_seen": "2026-09-19T16:10:36.215493+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-88926",
@@ -229133,7 +230028,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T16:10:36.215483+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-88824",
@@ -229189,7 +230085,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T16:10:36.215473+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-86814",
@@ -229245,7 +230142,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T16:10:36.215463+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-86591",
@@ -229301,7 +230199,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T16:10:36.215453+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85680",
@@ -229357,7 +230256,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T16:10:36.215443+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85574",
@@ -229412,7 +230312,9 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-19T16:10:36.215433+00:00"
+    "first_seen": "2026-09-19T16:10:36.215433+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-76790",
@@ -229467,7 +230369,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-19T16:10:36.215420+00:00"
+    "first_seen": "2026-09-19T16:10:36.215420+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-76554",
@@ -229522,7 +230425,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-19T16:10:36.215409+00:00"
+    "first_seen": "2026-09-19T16:10:36.215409+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-1255",
@@ -229577,7 +230481,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-19T12:12:57.525502+00:00"
+    "first_seen": "2026-09-19T12:12:57.525502+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85658",
@@ -229633,7 +230538,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T12:12:57.525492+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-4327",
@@ -229690,7 +230596,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T12:12:57.525482+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-15664",
@@ -229745,7 +230652,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-19T12:12:57.525471+00:00"
+    "first_seen": "2026-09-19T12:12:57.525471+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-92807",
@@ -229802,7 +230710,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T04:11:23.522484+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-92229",
@@ -229858,7 +230767,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T04:11:23.522478+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-89274",
@@ -229914,7 +230824,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T04:11:23.522472+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87909",
@@ -229969,7 +230880,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-19T04:11:23.522466+00:00"
+    "first_seen": "2026-09-19T04:11:23.522466+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-84434",
@@ -230025,7 +230937,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T04:11:23.522459+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-13354",
@@ -230080,7 +230993,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-19T04:11:23.522451+00:00"
+    "first_seen": "2026-09-19T04:11:23.522451+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-93872",
@@ -230190,7 +231104,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-19T00:14:29.257594+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-54623",
@@ -230703,7 +231618,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T16:10:10.303686+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-93374",
@@ -231030,7 +231946,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T16:10:10.302982+00:00"
+    "first_seen": "2026-09-18T16:10:10.302982+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-88825",
@@ -231086,7 +232003,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T16:10:10.302975+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87775",
@@ -231142,7 +232060,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T16:10:10.302967+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87774",
@@ -231198,7 +232117,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T16:10:10.302960+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87771",
@@ -231254,7 +232174,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T16:10:10.302953+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87770",
@@ -231310,7 +232231,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T16:10:10.302945+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87767",
@@ -231366,7 +232288,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T16:10:10.302938+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85127",
@@ -231422,7 +232345,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T16:10:10.302930+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85122",
@@ -231478,7 +232402,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T16:10:10.302923+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-84738",
@@ -231535,7 +232460,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T16:10:10.302914+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81810",
@@ -231590,7 +232516,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T16:10:10.302906+00:00"
+    "first_seen": "2026-09-18T16:10:10.302906+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-91732",
@@ -231853,7 +232780,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T12:12:55.052424+00:00"
+    "first_seen": "2026-09-18T12:12:55.052424+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-18405",
@@ -231908,7 +232836,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T12:12:55.052414+00:00"
+    "first_seen": "2026-09-18T12:12:55.052414+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85410",
@@ -231964,7 +232893,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T12:12:55.052404+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-83561",
@@ -232019,7 +232949,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T12:12:55.052395+00:00"
+    "first_seen": "2026-09-18T12:12:55.052395+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-85705",
@@ -232074,7 +233005,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T12:12:55.052385+00:00"
+    "first_seen": "2026-09-18T12:12:55.052385+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-18442",
@@ -232129,7 +233061,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T12:12:55.052375+00:00"
+    "first_seen": "2026-09-18T12:12:55.052375+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-15275",
@@ -232184,7 +233117,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T12:12:55.052364+00:00"
+    "first_seen": "2026-09-18T12:12:55.052364+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-14323",
@@ -232239,7 +233173,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T12:12:55.052354+00:00"
+    "first_seen": "2026-09-18T12:12:55.052354+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-12954",
@@ -232295,7 +233230,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T12:12:55.052343+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-92619",
@@ -232350,7 +233286,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T08:11:45.583052+00:00"
+    "first_seen": "2026-09-18T08:11:45.583052+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-89413",
@@ -232406,7 +233343,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T08:11:45.583045+00:00",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-93485",
@@ -232461,7 +233399,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-18T08:11:45.583038+00:00"
+    "first_seen": "2026-09-18T08:11:45.583038+00:00",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-17086",
@@ -232518,7 +233457,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-18T08:11:45.583030+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-54670",
@@ -233255,7 +234195,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-17T20:11:24.541859+00:00",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-10-23"
   },
   {
     "cve_id": "CVE-2026-92939",
@@ -237129,7 +238070,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-16T04:11:19.693886+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-91724",
@@ -239420,7 +240362,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-12T20:10:26.599571+00:00"
+    "first_seen": "2026-09-12T20:10:26.599571+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87842",
@@ -240523,8 +241466,15 @@
     },
     "risk_score_prev": 27.5,
     "epss_score_prev": 0.03227,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-85200",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "5a768bf1c6e44ded83a65be8789f3587515665ac",
+        "repo": "https://github.com/fitoussi/geo-my-wp"
+      }
+    ],
     "affected": [
       "wordpress/wordpress",
       "php/php"
@@ -240541,7 +241491,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-12T12:12:50.419174+00:00"
+    "first_seen": "2026-09-12T12:12:50.419174+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-78175",
@@ -246451,7 +247402,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-10T05:14:39.127317+00:00"
+    "first_seen": "2026-09-10T05:14:39.127317+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2016-7255",
@@ -249173,7 +250125,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759547+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87553",
@@ -249592,7 +250545,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759491+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87530",
@@ -249661,7 +250615,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759482+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87529",
@@ -250156,7 +251111,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759418+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87512",
@@ -250365,7 +251321,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759391+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87506",
@@ -251344,7 +252301,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759190+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87464",
@@ -251553,7 +252511,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T15:22:38.759162+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-87455",
@@ -253550,7 +254509,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-08T20:10:30.842067+00:00"
+    "first_seen": "2026-09-08T20:10:30.842067+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-86732",
@@ -253674,7 +254634,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841800+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81959",
@@ -253737,7 +254698,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841795+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81957",
@@ -253799,7 +254761,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841791+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81956",
@@ -253868,7 +254831,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841787+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81954",
@@ -253930,7 +254894,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841783+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81953",
@@ -253992,7 +254957,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841779+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81952",
@@ -254117,7 +255083,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841771+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81950",
@@ -254179,7 +255146,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841767+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81949",
@@ -254241,7 +255209,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841762+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81948",
@@ -254303,7 +255272,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841758+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81947",
@@ -254372,7 +255342,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841754+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81398",
@@ -254434,7 +255405,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841750+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81397",
@@ -254496,7 +255468,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841746+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81396",
@@ -254559,7 +255532,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841741+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81389",
@@ -254683,7 +255657,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841732+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81386",
@@ -254745,7 +255720,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841728+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81385",
@@ -258276,7 +259252,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841481+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81353",
@@ -258345,7 +259322,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841477+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-81352",
@@ -259638,7 +260616,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841311+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-69305",
@@ -260187,7 +261166,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841243+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-58599",
@@ -260274,7 +261254,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841209+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-18412",
@@ -261002,7 +261983,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-06T12:14:54.648486+00:00"
+    "first_seen": "2026-09-06T12:14:54.648486+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-84934",
@@ -261057,7 +262039,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-06T12:14:54.648478+00:00"
+    "first_seen": "2026-09-06T12:14:54.648478+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-82304",
@@ -265593,7 +266576,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485585+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-84333",
@@ -266347,7 +267331,8 @@
       "CWE-367"
     ],
     "nvd_last_modified": "2026-08-31T18:12:37.910",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-79257",
@@ -267813,7 +268798,8 @@
       "CWE-754"
     ],
     "nvd_last_modified": "2026-08-31T16:54:39.710",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-79058",
@@ -267952,7 +268938,8 @@
       "CWE-125"
     ],
     "nvd_last_modified": "2026-08-31T13:39:29.637",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-79011",
@@ -268021,7 +269008,8 @@
       "CWE-451"
     ],
     "nvd_last_modified": "2026-08-31T15:03:32.183",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-78892",
@@ -268656,8 +269644,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485425+00:00",
-    "affected_cpe_check": "ok",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-60623",
@@ -272056,8 +273044,15 @@
     },
     "risk_score_prev": 28.4,
     "epss_score_prev": 0.00295,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-69088",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "ad9709f865b09b68798fb1ac375b484a8cc1d892",
+        "repo": "https://github.com/getgrav/grav"
+      }
+    ],
     "affected": [
       "php/php"
     ],
@@ -272071,7 +273066,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485108+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-22"
+    "affected_cpe_check": "no_cpes:2026-10-22",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-49332",
@@ -272516,7 +273512,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485076+00:00"
+    "first_seen": "2026-09-05T15:02:54.485076+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-78657",
@@ -272962,7 +273959,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-09-05T15:02:54.485049+00:00"
+    "first_seen": "2026-09-05T15:02:54.485049+00:00",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-9055",
@@ -275074,7 +276072,8 @@
     "cwe_ids": [
       "CWE-269"
     ],
-    "nvd_last_modified": "2026-08-28T18:43:25.883"
+    "nvd_last_modified": "2026-08-28T18:43:25.883",
+    "osv_checked": "2026-10-23"
   },
   {
     "cve_id": "CVE-2026-19084",
