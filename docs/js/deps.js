@@ -59,14 +59,36 @@ function parseTomlDependencies(text) {
     const m = line.match(/^["']?([A-Za-z0-9._-]+)["']?\s*=/);
     if (m && m[1].toLowerCase() !== "python") names.add(m[1].toLowerCase());
   }
-  const arr = text.match(/dependencies\s*=\s*\[([^\]]*)\]/s); // PEP 621 array form
-  if (arr) {
-    for (const item of arr[1].match(/["']([^"']+)["']/g) || []) {
-      const m = item.replace(/["']/g, "").match(/^([A-Za-z0-9._-]+)/);
-      if (m) names.add(m[1].toLowerCase());
-    }
+  for (const item of pep621Requirements(text)) {
+    const m = item.trim().match(/^([A-Za-z0-9._-]+)/);
+    if (m) names.add(m[1].toLowerCase());
   }
   return names;
+}
+
+/** Quoted strings inside every PEP 621 `dependencies = [ ... ]` array.
+ *  Scans to the closing bracket outside quotes, because requirement strings
+ *  carry brackets themselves ("uvicorn[standard]>=0.20"), and skips # comments. */
+function pep621Requirements(text) {
+  const items = [];
+  const start = /^[ \t]*dependencies\s*=\s*\[/gm;
+  while (start.exec(text)) {
+    let quote = null;
+    let buf = "";
+    for (let i = start.lastIndex; i < text.length; i++) {
+      const ch = text[i];
+      if (quote) {
+        if (ch === quote) { items.push(buf); buf = ""; quote = null; } else buf += ch;
+      } else if (ch === "\"" || ch === "'") {
+        quote = ch;
+      } else if (ch === "#") {
+        while (i < text.length && text[i] !== "\n") i++;
+      } else if (ch === "]") {
+        break;
+      }
+    }
+  }
+  return items;
 }
 
 export function parseDependencyFile(text) {
@@ -75,4 +97,19 @@ export function parseDependencyFile(text) {
   if (/^module\s+\S+/m.test(t) && /^go\s+[0-9]/m.test(t)) return parseGoMod(t);
   if (/^\[(tool\.poetry|project|packages|dev-packages)/m.test(t)) return parseTomlDependencies(t);
   return parseRequirementsTxt(t);
+}
+
+/** What the Apply button does with the text. Never throws: `names` is the set
+ *  to filter by, or null to leave the board as it is; `message` is the status
+ *  line. `active` = a dependency filter is already applied. */
+export function readDependencies(text, active = false) {
+  const kept = active ? " The previous dependency filter is still applied." : "";
+  let names;
+  try {
+    names = parseDependencyFile(text || "");
+  } catch (err) {
+    return { names: null, message: `${err.message}.${kept}` };
+  }
+  if (!names.size) return { names: null, message: `No package names found. Check the file format.${kept}` };
+  return { names, message: `Filtering by ${names.size} package name(s).` };
 }

@@ -9,7 +9,7 @@ import {
   filterAndSort, SORT_IS_ASCENDING, dropFromResults,
 } from "./filters.js";
 import { toggleReviewed, markReviewed, countReviewed, exportReviewedState, importReviewedState, isReviewed } from "./reviewed.js";
-import { parseDependencyFile } from "./deps.js";
+import { readDependencies } from "./deps.js";
 import { renderCard } from "./render-card.js";
 import { renderRow } from "./render-table.js";
 import { renderOverview, renderBreakdowns, renderFreshness } from "./overview.js";
@@ -207,14 +207,10 @@ async function handleCardAction(btn) {
 }
 
 function applyDependencies(text) {
-  const status = byId("dep-status");
-  const names = parseDependencyFile(text || "");
-  if (!names.size) {
-    status.textContent = "No package names found. Check the file format.";
-    return;
-  }
+  const { names, message } = readDependencies(text, Boolean(state.depPackages));
+  byId("dep-status").textContent = message;
+  if (!names) return;
   state.depPackages = names;
-  status.textContent = `Filtering by ${names.size} package name(s).`;
   render();
 }
 
