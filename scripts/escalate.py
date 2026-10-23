@@ -390,6 +390,29 @@ def _norm_title(t):
     return re.sub(r"[^a-z0-9]+", " ", _TITLE_NOISE.sub("", t or "").lower()).strip()
 
 
+def _merged_estate(lead, members):
+    """'In your estate' line for a folded card. The card carries the union of
+    its reports' assets, so every asset chip must be backed by the term that
+    matched it -- otherwise a chip added by another outlet's headline (and the
+    criticality it brings) shows with no reason. Lead's hits come first; assets
+    found only in other reports say so."""
+    head = "In your estate: "
+    line = lead["reasons"][0] if lead.get("reasons") else ""
+    if not line.startswith(head):
+        return line
+    extra = []
+    for name in sorted({a for m in members for a in m["assets"]} - set(lead["assets"])):
+        terms = []
+        for m in members:
+            r0 = (m.get("reasons") or [""])[0]
+            for t in re.findall(re.escape(name) + r' \("([^"]*)"\)', r0):
+                if t not in terms:
+                    terms.append(t)
+        quoted = ", ".join(f'"{t}"' for t in terms) or "term not recorded"
+        extra.append(f"{name} ({quoted}, in another report on this incident)")
+    return line + "".join("; " + e for e in extra)
+
+
 def group_stories(items, triage, days=STORY_DAYS, vendor_words=None):
     """Fold duplicate press coverage of ONE incident (the same zero-day reported by
     20 outlets / Google News) into a single news card. Two stories are the same
@@ -520,6 +543,7 @@ def group_stories(items, triage, days=STORY_DAYS, vendor_words=None):
         reports = sum(1 for c in coverage if not c["dup"])
         reposts = len(coverage) - reports
         story = dict(lead)
+        estate = _merged_estate(lead, members)
         story.update({
             "key": first["key"],
             "ref": first["ref"],
@@ -532,7 +556,7 @@ def group_stories(items, triage, days=STORY_DAYS, vendor_words=None):
             "cve_ids": cves,
             "member_keys": [m["key"] for m in members],
             "coverage": coverage,
-            "reasons": list(lead["reasons"]) + [
+            "reasons": [estate] + list(lead["reasons"][1:]) + [
                 f"Same incident covered by {reports} distinct reports "
                 f"({len({m.get('source') for m in members})} outlets/feeds"
                 f"{f', plus {reposts} reposts of the same headline' if reposts else ''}) -- first seen "

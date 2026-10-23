@@ -342,6 +342,22 @@ class EstateAndTriageTests(unittest.TestCase):
         self.assertIn("covered by 2 distinct reports", reason)
         self.assertIn("plus 1 reposts of the same headline", reason)
 
+    def test_story_reason_backs_every_asset_chip(self):
+        # Real (2026-10-22 board): 'PEERSTITCH Malware Deployed via FortiOS Flaw...'
+        # showed a Palo Alto chip (from another outlet's headline) while its only
+        # estate reason named Fortinet; 6 of 29 folded cards had such unexplained chips.
+        items = [self._pan(1, "PEERSTITCH malware exploited via FortiOS flaw", 14),
+                 self._pan(2, "PEERSTITCH malware exploited on FortiOS and Palo Alto Networks firewalls", 15)]
+        out = E.build([], {"items": items}, env(), NOW)
+        self.assertEqual(len(out["items"]), 1)
+        s = out["items"][0]
+        self.assertEqual(len(s["assets"]), 2)
+        self.assertTrue(s["reasons"][0].startswith("In your estate: "))
+        for a in s["assets"]:
+            self.assertIn(a + ' ("', s["reasons"][0])
+        self.assertIn('"Palo Alto Networks", in another report on this incident', s["reasons"][0])
+        self.assertEqual(sum(1 for r in s["reasons"] if r.startswith("In your estate")), 1)
+
     def test_same_asset_alone_does_not_fold_unrelated_stories(self):
         # Real (2026-10-22 board): 'Microsoft Entra ID Adds Third-Party SMS and Voice MFA'
         # was folded into the escalated 'Why password resets won't save you from OAuth
