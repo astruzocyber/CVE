@@ -1,5 +1,172 @@
 [
   {
+    "cve_id": "CVE-2026-115975",
+    "description": "Broken access control in JiraController in Cervantes version v1.3-beta could allow an attacker to create, edit, or delete Jira tickets for vulnerabilities in other projects",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 41.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 41.4,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "Jira"
+    ],
+    "source": "nvd",
+    "published": "2026-10-24T08:16:52.630",
+    "nvd_last_modified": "2026-10-24T08:16:52.630",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-24T10:56:35.830473+00:00",
+    "osv_checked": "2026-10-24"
+  },
+  {
+    "cve_id": "CVE-2026-115807",
+    "description": "The User Profile Builder \u2013 Beautiful User Registration Forms, User Profiles & User Role Editor plugin for WordPress is vulnerable to Limited Privilege Escalation in all versions up to, and including, 4.0.3. This is due to the Gutenberg Register block passing the attacker-controlled Assigned Role attribute directly into the `[wppb-register]` shortcode without server-side authorization. The role guard in the form builder only downgrades roles that carry the manage_options or remove_users capability, leaving the Editor role and other privileged non-Administrator roles completely unrestricted. This makes it possible for authenticated attackers with Author-level access and above to create new WordPress accounts bearing the Editor role (or any other role that lacks the two guarded capabilities).",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-269"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 41.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 41.4,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-24T05:17:06.500",
+    "nvd_last_modified": "2026-10-24T05:17:06.500",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-24T10:56:35.817829+00:00",
+    "osv_checked": "2026-10-24"
+  },
+  {
+    "cve_id": "CVE-2026-115806",
+    "description": "The Prime Mover \u2013 Backup and Migration plugin for WordPress is vulnerable to PHP Object Injection in all versions up to, and including, 2.2.1 via deserialization of untrusted input in the migration search-and-replace routine (recursiveUnserializeReplace()). An unauthenticated attacker can store a crafted, base64-encoded serialized object in wp_comments.comment_content through the standard comment-submission endpoint (wp-comments-post.php). When an administrator subsequently performs a routine Prime Mover export or restore, the plugin base64-decodes that stored value and passes it to unserialize() with no allowed_classes restriction. A Property-Oriented Programming (POP) chain is present in the plugin's own bundled Freemius library (FS_Clone_Manager::__set \u2192 FS_Option_Manager::set_option \u2192 store() \u2192 update_option()), so no additional plugin or theme is required \u2014 the plugin ships the gadget itself.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-502"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-24T05:17:04.900",
+    "nvd_last_modified": "2026-10-24T05:17:04.900",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-24T10:56:35.817816+00:00",
+    "osv_checked": "2026-10-24"
+  },
+  {
     "cve_id": "CVE-2026-59243",
     "description": "The FAB auth manager's Azure AD OAuth login defaulted `verify_signature=False` when decoding the ID token, so an attacker able to present a forged or unsigned (`alg:none`) ID token to the OAuth callback could bypass authentication and log in as an arbitrary user, including one holding the Admin role (CWE-347). Deployments running the FAB auth manager with the Azure AD OAuth login path under its default configuration are affected; the Authentik path already defaulted to `True`. This issue affects `apache-airflow-providers-fab` before 3.7.3. Users are advised to upgrade to `apache-airflow-providers-fab` 3.7.3, which defaults `verify_signature=True`.",
     "cvss_score": 9.8,
@@ -34,8 +201,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.6,
+    "epss_score_prev": 0.00643,
     "osv_id": "CVE-2026-59243",
     "osv_fixed_versions": [
       {
@@ -115,8 +282,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.00808,
     "osv_id": "CVE-2026-66907",
     "osv_fixed_versions": [
       {
@@ -202,8 +369,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.0061,
     "osv_id": "CVE-2026-66908",
     "osv_fixed_versions": [
       {
@@ -278,8 +445,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00481,
     "osv_id": "CVE-2026-49258",
     "osv_fixed_versions": [
       {
@@ -339,8 +506,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.0,
+    "epss_score_prev": 0.00414,
     "osv_id": "CVE-2026-47726",
     "osv_fixed_versions": [
       {
@@ -401,8 +568,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.9,
+    "epss_score_prev": 0.00673,
     "osv_id": "CVE-2026-17566",
     "osv_fixed_versions": [
       {
@@ -483,8 +650,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.7,
+    "epss_score_prev": 0.00483,
     "osv_id": "CVE-2026-17351",
     "osv_fixed_versions": [
       {
@@ -572,8 +739,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.8,
+    "epss_score_prev": 0.00395,
     "osv_id": "CVE-2026-17349",
     "osv_fixed_versions": [
       {
@@ -661,8 +828,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00716,
     "osv_id": "CVE-2026-17347",
     "osv_fixed_versions": [
       {
@@ -749,8 +916,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00615,
     "osv_id": "CVE-2026-17346",
     "osv_fixed_versions": [
       {
@@ -837,8 +1004,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00768,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -905,8 +1072,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.0,
+    "epss_score_prev": 0.01066,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -973,8 +1140,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.0036,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1041,8 +1208,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00608,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1109,8 +1276,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.2,
+    "epss_score_prev": 0.01099,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1177,8 +1344,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00364,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1245,8 +1412,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00922,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1313,8 +1480,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.2,
+    "epss_score_prev": 0.00926,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1374,8 +1541,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00211,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1443,8 +1610,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00304,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1512,8 +1679,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00345,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1581,8 +1748,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00345,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1650,8 +1817,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00523,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1719,8 +1886,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 29.5,
+    "epss_score_prev": 0.00126,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1788,8 +1955,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00382,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1857,8 +2024,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00327,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1926,8 +2093,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00332,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1995,8 +2162,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00217,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2064,8 +2231,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00345,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2133,8 +2300,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.3,
+    "epss_score_prev": 0.00124,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2202,8 +2369,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00132,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2271,8 +2438,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00137,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2340,8 +2507,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00129,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2409,8 +2576,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00345,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2478,8 +2645,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00275,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2547,8 +2714,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00319,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2616,8 +2783,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00367,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2685,8 +2852,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00345,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2754,8 +2921,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00413,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2823,8 +2990,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00345,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2892,8 +3059,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00336,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2961,8 +3128,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00292,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3030,8 +3197,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00227,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3099,8 +3266,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00413,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3168,8 +3335,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00345,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3237,8 +3404,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00319,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3306,8 +3473,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.8,
+    "epss_score_prev": 0.00428,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3375,8 +3542,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00263,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3444,8 +3611,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.9,
+    "epss_score_prev": 0.00345,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3513,8 +3680,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00382,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3582,8 +3749,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00178,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3651,8 +3818,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00345,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3720,8 +3887,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.3,
+    "epss_score_prev": 0.00383,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3774,8 +3941,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00554,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -3829,8 +3996,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.007,
     "osv_id": "CVE-2026-59932",
     "osv_fixed_versions": [
       {
@@ -3891,8 +4058,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.5,
+    "epss_score_prev": 0.007,
     "osv_id": "CVE-2026-59933",
     "osv_fixed_versions": [
       {
@@ -3952,8 +4119,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.1,
+    "epss_score_prev": 0.0053,
     "osv_id": "CVE-2026-59931",
     "osv_fixed_versions": [
       {
@@ -4013,8 +4180,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.2,
+    "epss_score_prev": 0.00977,
     "osv_id": "CVE-2026-40521",
     "osv_fixed_versions": [
       {
@@ -4074,8 +4241,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00564,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4128,8 +4295,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00436,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4182,8 +4349,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00564,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4236,8 +4403,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.5,
+    "epss_score_prev": 0.00436,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4290,8 +4457,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00786,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -4347,8 +4514,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.0,
+    "epss_score_prev": 0.00523,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -14413,7 +14580,8 @@
       "arista/velocloud orchestrator"
     ],
     "matched_keywords": [
-      "CISA KEV"
+      "CISA KEV",
+      "news: reported exploited"
     ],
     "source": "kev",
     "published": "2026-10-22T21:17:16.870",
@@ -93998,7 +94166,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.922583+00:00"
+    "first_seen": "2026-10-20T16:55:32.922583+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-72978",
@@ -94091,7 +94260,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.922423+00:00"
+    "first_seen": "2026-10-20T16:55:32.922423+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-93026",
@@ -94144,7 +94314,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.922415+00:00"
+    "first_seen": "2026-10-20T16:55:32.922415+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-58069",
@@ -94305,7 +94476,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.922393+00:00"
+    "first_seen": "2026-10-20T16:55:32.922393+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2025-48983",
@@ -107047,7 +107219,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919945+00:00"
+    "first_seen": "2026-10-20T16:55:32.919945+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69844",
@@ -107232,7 +107405,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919930+00:00"
+    "first_seen": "2026-10-20T16:55:32.919930+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69762",
@@ -107604,7 +107778,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919902+00:00"
+    "first_seen": "2026-10-20T16:55:32.919902+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69630",
@@ -107696,7 +107871,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919895+00:00"
+    "first_seen": "2026-10-20T16:55:32.919895+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69610",
@@ -107788,7 +107964,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919889+00:00"
+    "first_seen": "2026-10-20T16:55:32.919889+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69410",
@@ -107874,7 +108051,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919873+00:00"
+    "first_seen": "2026-10-20T16:55:32.919873+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69335",
@@ -107966,7 +108144,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919867+00:00"
+    "first_seen": "2026-10-20T16:55:32.919867+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69301",
@@ -109364,7 +109543,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919531+00:00"
+    "first_seen": "2026-10-20T16:55:32.919531+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-68893",
@@ -109909,7 +110089,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919018+00:00"
+    "first_seen": "2026-10-20T16:55:32.919018+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69669",
@@ -110095,7 +110276,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.919005+00:00"
+    "first_seen": "2026-10-20T16:55:32.919005+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69473",
@@ -110187,7 +110369,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.918996+00:00"
+    "first_seen": "2026-10-20T16:55:32.918996+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69466",
@@ -110279,7 +110462,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.918990+00:00"
+    "first_seen": "2026-10-20T16:55:32.918990+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69421",
@@ -110837,7 +111021,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.918781+00:00"
+    "first_seen": "2026-10-20T16:55:32.918781+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69528",
@@ -111115,7 +111300,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-20T16:55:32.918757+00:00"
+    "first_seen": "2026-10-20T16:55:32.918757+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2023-0286",
@@ -111346,7 +111532,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-20T16:55:32.902104+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-22"
+    "affected_cpe_check": "no_cpes:2026-10-22",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2025-64391",
@@ -111402,7 +111589,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-20T16:55:32.902096+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-23"
+    "affected_cpe_check": "no_cpes:2026-10-23",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-105791",
@@ -112506,8 +112694,15 @@
     },
     "risk_score_prev": 15.5,
     "epss_score_prev": 0.00145,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2025-59044",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "9776141cad644f872501437b2485f77b105679d3",
+        "repo": "https://github.com/himmelblau-idm/himmelblau"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Intune",
@@ -112522,7 +112717,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-19T19:57:54.830061+00:00"
+    "first_seen": "2026-10-19T19:57:54.830061+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2025-62159",
@@ -127225,8 +127421,15 @@
     },
     "risk_score_prev": 23.9,
     "epss_score_prev": 0.00294,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-111895",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "9bf3d792e67da3c04217002a9642fdf74ced9554",
+        "repo": "https://github.com/thorsten/phpmyfaq"
+      }
+    ],
     "affected": [
       "php/php"
     ],
@@ -127243,7 +127446,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T20:36:03.702210+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-23"
+    "affected_cpe_check": "no_cpes:2026-10-23",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-111884",
@@ -130634,8 +130838,15 @@
     },
     "risk_score_prev": 24.6,
     "epss_score_prev": 0.00145,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-86022",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "01f60162d1188b57a1aa9033de7fdf6bb8cf4a9b",
+        "repo": "https://github.com/vnotex/vnote"
+      }
+    ],
     "affected": [],
     "matched_keywords": [
       "Vim"
@@ -130648,7 +130859,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-17T16:34:36.810927+00:00"
+    "first_seen": "2026-10-17T16:34:36.810927+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-43961",
@@ -132556,7 +132768,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.097775+00:00"
+    "first_seen": "2026-10-16T19:32:23.097775+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69395",
@@ -132649,7 +132862,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.097765+00:00"
+    "first_seen": "2026-10-16T19:32:23.097765+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-62810",
@@ -132844,7 +133058,7 @@
     },
     "risk_score_prev": 18.6,
     "epss_score_prev": 0.00105,
-    "osv_id": null,
+    "osv_id": "CVE-2026-104047",
     "osv_fixed_versions": [],
     "affected": [],
     "matched_keywords": [
@@ -132872,7 +133086,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.097733+00:00"
+    "first_seen": "2026-10-16T19:32:23.097733+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-96252",
@@ -133387,7 +133602,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.097617+00:00"
+    "first_seen": "2026-10-16T19:32:23.097617+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-103576",
@@ -133441,7 +133657,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.097581+00:00"
+    "first_seen": "2026-10-16T19:32:23.097581+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-77259",
@@ -134046,7 +134263,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093772+00:00"
+    "first_seen": "2026-10-16T19:32:23.093772+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-85893",
@@ -135362,7 +135580,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093413+00:00"
+    "first_seen": "2026-10-16T19:32:23.093413+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69498",
@@ -135454,7 +135673,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.093392+00:00"
+    "first_seen": "2026-10-16T19:32:23.093392+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2025-62458",
@@ -135745,7 +135965,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092999+00:00"
+    "first_seen": "2026-10-16T19:32:23.092999+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2022-24545",
@@ -135902,7 +136123,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092876+00:00"
+    "first_seen": "2026-10-16T19:32:23.092876+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-88141",
@@ -135955,7 +136177,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092812+00:00"
+    "first_seen": "2026-10-16T19:32:23.092812+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-88139",
@@ -136008,7 +136231,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092801+00:00"
+    "first_seen": "2026-10-16T19:32:23.092801+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-85850",
@@ -136223,7 +136447,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092507+00:00"
+    "first_seen": "2026-10-16T19:32:23.092507+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83568",
@@ -136351,7 +136576,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.092410+00:00"
+    "first_seen": "2026-10-16T19:32:23.092410+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-70114",
@@ -136687,7 +136913,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:32:23.091453+00:00"
+    "first_seen": "2026-10-16T19:32:23.091453+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2025-64661",
@@ -136941,7 +137168,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T19:32:23.087103+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2018-13374",
@@ -138583,7 +138811,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.707610+00:00"
+    "first_seen": "2026-10-16T19:22:14.707610+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69982",
@@ -138637,7 +138866,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.707603+00:00"
+    "first_seen": "2026-10-16T19:22:14.707603+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-108131",
@@ -139586,7 +139816,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705986+00:00"
+    "first_seen": "2026-10-16T19:22:14.705986+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83841",
@@ -139639,7 +139870,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705979+00:00"
+    "first_seen": "2026-10-16T19:22:14.705979+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83762",
@@ -139986,7 +140218,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705939+00:00"
+    "first_seen": "2026-10-16T19:22:14.705939+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-96223",
@@ -140387,7 +140620,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705888+00:00"
+    "first_seen": "2026-10-16T19:22:14.705888+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83728",
@@ -141028,7 +141262,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705812+00:00"
+    "first_seen": "2026-10-16T19:22:14.705812+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-85868",
@@ -141081,7 +141316,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705805+00:00"
+    "first_seen": "2026-10-16T19:22:14.705805+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-85355",
@@ -141134,7 +141370,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705798+00:00"
+    "first_seen": "2026-10-16T19:22:14.705798+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-70233",
@@ -141279,7 +141516,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705782+00:00"
+    "first_seen": "2026-10-16T19:22:14.705782+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-96322",
@@ -141371,7 +141609,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705775+00:00"
+    "first_seen": "2026-10-16T19:22:14.705775+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83861",
@@ -141940,7 +142179,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705712+00:00"
+    "first_seen": "2026-10-16T19:22:14.705712+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-70064",
@@ -142086,7 +142326,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705696+00:00"
+    "first_seen": "2026-10-16T19:22:14.705696+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-97803",
@@ -142691,7 +142932,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705635+00:00"
+    "first_seen": "2026-10-16T19:22:14.705635+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-88134",
@@ -143131,7 +143373,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705558+00:00"
+    "first_seen": "2026-10-16T19:22:14.705558+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83924",
@@ -143184,7 +143427,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705548+00:00"
+    "first_seen": "2026-10-16T19:22:14.705548+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83918",
@@ -143493,7 +143737,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.705497+00:00"
+    "first_seen": "2026-10-16T19:22:14.705497+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83833",
@@ -143933,7 +144178,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.700779+00:00"
+    "first_seen": "2026-10-16T19:22:14.700779+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-70121",
@@ -144396,7 +144642,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.700682+00:00"
+    "first_seen": "2026-10-16T19:22:14.700682+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-50436",
@@ -144581,7 +144828,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.700635+00:00"
+    "first_seen": "2026-10-16T19:22:14.700635+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-26180",
@@ -144964,7 +145212,8 @@
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.700542+00:00"
+    "first_seen": "2026-10-16T19:22:14.700542+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-108463",
@@ -145739,7 +145988,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.700408+00:00"
+    "first_seen": "2026-10-16T19:22:14.700408+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-26165",
@@ -145830,7 +146080,8 @@
     ],
     "severity": null,
     "dependabot_url": null,
-    "first_seen": "2026-10-16T19:22:14.700400+00:00"
+    "first_seen": "2026-10-16T19:22:14.700400+00:00",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-110916",
@@ -156990,7 +157241,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-14T16:35:47.010884+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2022-4450",
@@ -163288,7 +163540,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.741170+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-97773",
@@ -168627,7 +168880,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.740378+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-70269",
@@ -171628,7 +171882,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739975+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-96911",
@@ -172189,7 +172444,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739916+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-85869",
@@ -172392,7 +172648,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739888+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83920",
@@ -172722,7 +172979,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739835+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83574",
@@ -172776,7 +173034,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739827+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83570",
@@ -172885,7 +173144,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739808+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-83517",
@@ -173161,7 +173421,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739747+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-70150",
@@ -173215,7 +173476,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739724+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-70136",
@@ -173269,7 +173531,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739714+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-70131",
@@ -173378,7 +173641,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739693+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-70086",
@@ -173432,7 +173696,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.739684+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-21"
+    "affected_cpe_check": "no_cpes:2026-10-21",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69909",
@@ -265920,8 +266185,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-10T00:48:45.315999+00:00",
-    "affected_cpe_check": "no_cpes:2026-10-22",
-    "osv_checked": "2026-10-24"
+    "osv_checked": "2026-10-24",
+    "affected_cpe_check": "no_cpes:2026-10-22"
   },
   {
     "cve_id": "CVE-2026-55676",
@@ -273454,7 +273719,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841737+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-81388",
@@ -277360,7 +277626,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841457+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69608",
@@ -277641,7 +277908,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841429+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-69586",
@@ -278676,7 +278944,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-08T20:10:30.841291+00:00",
-    "affected_cpe_check": "ok"
+    "affected_cpe_check": "ok",
+    "osv_checked": "2026-10-24"
   },
   {
     "cve_id": "CVE-2026-68896",
