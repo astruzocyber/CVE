@@ -52,7 +52,7 @@ HOT_INTEL = {"exploited", "ransomware", "social_engineering"}
 # and a headline that also describes an attack succeeding (bypass, steal,
 # hacked, disable...) keeps its tier.
 DEFENSIVE_NEWS_RE = re.compile(
-    r"\b(?:detection|protections?|defen[cs]es?|safeguards?)\b|\bto detect\b|\bdetects\b"
+    r"\b(?:detection|protections?|defen[cs]es?|safeguards?)\b|\bto detect\b|\bdetect(?:s|ing)\b"
     r"|\b(?:adds?|rolls? out|launch(?:es|ed)?|introduc\w*|unveil\w*|integrat\w*)\b[^.!?]{0,40}?\bwarnings?\b"
     r"|\b(?:disrupt(?:s|ed)?|dismantl\w*|takedown|takes? down|took down|arrest(?:s|ed)?|seiz(?:e|es|ed))\b"
     r"|\bhow to (?:stop|prevent|defend|spot|avoid)\b|\bharden(?:s|ed)?\b", re.I)

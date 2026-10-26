@@ -219,7 +219,10 @@ class EscalateTests(unittest.TestCase):
         # real board headlines that were escalated as if they were campaigns
         for title in ("Microsoft Teams to Detect Malicious QR Codes and Warn Users of Phishing Attacks",
                       "Microsoft Disrupts 3 Phishing Kits Linked to Over 1 Billion Scam Messages for Microsoft 365",
-                      "Microsoft 365 Business Email Compromise (BEC) Attacks: How to Stop Them"):
+                      "Microsoft 365 Business Email Compromise (BEC) Attacks: How to Stop Them",
+                      # same Teams feature story, -ing form (was escalated while its
+                      # "Phishing Detection" siblings were demoted)
+                      "Microsoft Teams to Use AI for Detecting Phishing Attacks Using Teams Conversations"):
             tier, reasons = self._tier_alone(title, ["social_engineering"])
             self.assertEqual(tier, "work", title)
             self.assertTrue(any("not an active campaign" in r for r in reasons), reasons)
