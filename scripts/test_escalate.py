@@ -361,6 +361,22 @@ class EstateAndTriageTests(unittest.TestCase):
         self.assertIn('"Palo Alto Networks", in another report on this incident', s["reasons"][0])
         self.assertEqual(sum(1 for r in s["reasons"] if r.startswith("In your estate")), 1)
 
+    def test_merged_estate_line_edge_cases(self):
+        lead = {"assets": ["Fortinet"], "reasons": ['In your estate: Fortinet ("FortiOS")']}
+        m2 = {"assets": ["Palo Alto", "Browsers"],
+              "reasons": ['In your estate: Palo Alto ("PAN-OS"); Palo Alto ("GlobalProtect")']}
+        m3 = {"assets": ["Palo Alto"], "reasons": ['In your estate: Palo Alto ("PAN-OS")']}
+        line = E._merged_estate(lead, [lead, m2, m3])
+        # extras sorted by name, every distinct term once, missing term stated, not guessed
+        self.assertEqual(line, 'In your estate: Fortinet ("FortiOS"); '
+                               'Browsers (term not recorded, in another report on this incident); '
+                               'Palo Alto ("PAN-OS", "GlobalProtect", in another report on this incident)')
+        # nothing extra -> the lead's line unchanged; a non-estate first reason is left alone
+        self.assertEqual(E._merged_estate(lead, [lead]), lead["reasons"][0])
+        odd = {"assets": [], "reasons": ["Something else"]}
+        self.assertEqual(E._merged_estate(odd, [odd, m2]), "Something else")
+        self.assertEqual(E._merged_estate({"assets": []}, [m2]), "")
+
     def test_same_asset_alone_does_not_fold_unrelated_stories(self):
         # Real (2026-10-22 board): 'Microsoft Entra ID Adds Third-Party SMS and Voice MFA'
         # was folded into the escalated 'Why password resets won't save you from OAuth

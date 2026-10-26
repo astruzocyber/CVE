@@ -225,8 +225,45 @@ class TestFetchIntel(unittest.TestCase):
             with self.assertRaises(ValueError) as cm:
                 F.fetch("https://example.com/huge.xml")
             self.assertIn("larger than", str(cm.exception))
+            # exactly at the cap is accepted whole (no silent truncation)
+            exact = b"x" * F.MAX_BYTES
+            F.urllib.request.urlopen = lambda req, timeout=25: Resp(exact)
+            self.assertEqual(len(F.fetch("https://example.com/exact.xml")), F.MAX_BYTES)
+            self.assertEqual(F.MAX_BYTES, 20 * 1024 * 1024)
+            self.assertIn("larger than 20 MB", str(cm.exception))
         finally:
             F.urllib.request.urlopen = orig
+
+    def test_fetch_sends_plain_user_agent_and_feed_accept(self):
+        # Cloudflare-fronted feeds (cybersecuritynews, gbhackers) 403 a UA with
+        # "compatible;" or a "+https://" contact URL.
+        seen = {}
+
+        class Resp:
+            def read(self, n=-1):
+                return b"<rss/>"
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+        def fake(req, timeout=25):
+            seen["ua"] = req.get_header("User-agent")
+            seen["accept"] = req.get_header("Accept")
+            return Resp()
+
+        orig = F.urllib.request.urlopen
+        try:
+            F.urllib.request.urlopen = fake
+            F.fetch("https://example.com/feed")
+        finally:
+            F.urllib.request.urlopen = orig
+        self.assertEqual(seen["ua"], F.USER_AGENT)
+        self.assertNotIn("compatible;", seen["ua"])
+        self.assertNotIn("+http", seen["ua"])
+        self.assertIn("application/rss+xml", seen["accept"])
 
 
 class TestKevAndNewsIngest(unittest.TestCase):

@@ -122,6 +122,51 @@ class WhatMatchedLabelTests(unittest.TestCase):
         self.assertTrue(N.issue_title(a).endswith(" - php/php"))
         b = {"cve_id": "CVE-2", "source": "ghsa", "affected": [], "matched_keywords": []}
         self.assertTrue(N.issue_title(b).endswith(" - ghsa"))
+        c = {"cve_id": "CVE-3", "affected": ["a/b", "c/d"], "matched_keywords": ["k1", "k2"]}
+        self.assertTrue(N.issue_title(c).endswith(" - a/b, c/d"))
+        c["affected"] = []
+        self.assertTrue(N.issue_title(c).endswith(" - keyword: k1, k2"))
+        self.assertEqual(N.what_matched({}), "unknown")
+
+
+class TitleAndDigestFormatTests(unittest.TestCase):
+    """The title is what the team reads in the issue list and what the closers
+    parse the ID from; the digest must stay a valid table and say how many
+    rows it left out. Example alert is real board data (CVE-2021-42287)."""
+
+    REAL = {"cve_id": "CVE-2021-42287", "kev": True, "kev_ransomware_use": True, "risk_score": 82.1,
+            "affected": ["microsoft/active directory"], "source": "kev", "cvss_score": 7.5}
+
+    def setUp(self):
+        self._orig, N._board_tiers = N._board_tiers, (lambda: {})
+
+    def tearDown(self):
+        N._board_tiers = self._orig
+
+    def test_title_tags(self):
+        self.assertEqual(N.issue_title(self.REAL),
+                         "[VULN ALERT] CVE-2021-42287 [KEV] [RANSOMWARE] (risk 82.1) - microsoft/active directory")
+        plain = dict(self.REAL, kev=False, kev_ransomware_use=False, risk_score=None)
+        self.assertEqual(N.issue_title(plain), "[VULN ALERT] CVE-2021-42287 - microsoft/active directory")
+        # a 0.0 score is a real score, not a missing one
+        self.assertIn("(risk 0.0)", N.issue_title(dict(plain, risk_score=0.0)))
+        self.assertIn("UNKNOWN", N.issue_title({"affected": ["a/b"]}))
+
+    def test_digest_row_is_a_valid_table_row(self):
+        body = N.build_digest_body([self.REAL, dict(self.REAL, cve_id="CVE-2026-2", kev=False,
+                                                    affected=["x|y/z"])])
+        self.assertIn("| CVE-2021-42287 | 7.5 | 82.1 | yes | microsoft/active directory |", body)
+        self.assertIn("| CVE-2026-2 | 7.5 | 82.1 |  | x/y/z |", body)
+
+    def test_digest_lists_300_and_counts_the_rest(self):
+        over = [{"cve_id": f"CVE-2026-{i}", "affected": ["v/p"]} for i in range(305)]
+        body = N.build_digest_body(over)
+        rows = [ln for ln in body.splitlines() if ln.startswith("| CVE-")]
+        self.assertEqual(len(rows), 300)
+        self.assertIn("…and 5 more (see the dashboard).", body)
+        self.assertNotIn("more (see the dashboard)", N.build_digest_body(over[:300]))
+        self.assertIn("…and 1 more (see the dashboard).", N.build_digest_body(over[:301]))
+        self.assertEqual(body.count("\n\n…and"), 1)
 
 
 class MentionTests(unittest.TestCase):
