@@ -103,6 +103,27 @@ class RiskMethodTests(unittest.TestCase):
         self.assertIn("(35% CVSS + 40% EPSS + 25% KEV bonus", N.build_issue_body({"risk_score": 50}))
 
 
+class WhatMatchedLabelTests(unittest.TestCase):
+    """Real case (run 40240601329): CVE-2026-53943 (Ghost CMS, keyword
+    'content management system', no CPE pair) got the issue title
+    '... (risk 33.8) - nvd' and 'nvd' in the digest's Affected column. 'nvd' is
+    the data source, not an affected product; 222 open issues read that way."""
+
+    def test_keyword_only_alert_names_its_keyword_not_the_source(self):
+        a = {"cve_id": "CVE-2026-53943", "risk_score": 33.8, "source": "nvd", "affected": [],
+             "matched_keywords": ["content management system"], "cvss_score": 9.6}
+        title = N.issue_title(a)
+        self.assertTrue(title.endswith(" - keyword: content management system"), title)
+        self.assertNotIn("| nvd |", N.build_digest_body([a]))
+        self.assertIn("| keyword: content management system |", N.build_digest_body([a]))
+
+    def test_pairs_win_and_source_is_last_resort(self):
+        a = {"cve_id": "CVE-1", "source": "nvd", "affected": ["php/php"], "matched_keywords": ["x"]}
+        self.assertTrue(N.issue_title(a).endswith(" - php/php"))
+        b = {"cve_id": "CVE-2", "source": "ghsa", "affected": [], "matched_keywords": []}
+        self.assertTrue(N.issue_title(b).endswith(" - ghsa"))
+
+
 class MentionTests(unittest.TestCase):
     """Upstream text (NVD/GHSA descriptions, credits) is pasted into issues on a
     public repo. GitHub turns '@handle' into a user mention and notifies that

@@ -96,8 +96,20 @@ def issue_title(alert):
     ransomware_tag = " [RANSOMWARE]" if alert.get("kev_ransomware_use") else ""
     risk = alert.get("risk_score")
     risk_tag = f" (risk {risk})" if risk is not None else ""
-    return no_mention(f"[VULN ALERT] {cve_id}{kev_tag}{ransomware_tag}{risk_tag} - "
-                      f"{', '.join(alert.get('affected', [])) or alert.get('source')}")
+    return no_mention(f"[VULN ALERT] {cve_id}{kev_tag}{ransomware_tag}{risk_tag} - {what_matched(alert)}")
+
+
+def what_matched(alert, limit=120):
+    """Why the alert is on the board, for issue titles and the digest: the
+    watchlist vendor/product pairs, else the matched keywords. The source name
+    ('nvd') is only a last resort: it is not an affected product."""
+    pairs = ", ".join(alert.get("affected") or [])
+    if pairs:
+        return pairs[:limit]
+    kws = ", ".join(str(k) for k in (alert.get("matched_keywords") or []))
+    if kws:
+        return f"keyword: {kws}"[:limit]
+    return str(alert.get("source") or "unknown")
 
 
 STANDARD_RISK_METHOD = "35% CVSS + 40% EPSS + 25% KEV bonus"
@@ -222,9 +234,9 @@ def _board_tiers():
 def build_digest_body(overflow):
     lines = [f"{len(overflow)} additional new alert(s) this run were above the per-run issue cap "
              f"({MAX_ISSUES_PER_RUN}). They are all on the dashboard; listed here so none is lost.", "",
-             "| CVE | CVSS | Risk | KEV | Affected |", "|---|---|---|---|---|"]
+             "| CVE | CVSS | Risk | KEV | Affected / keyword |", "|---|---|---|---|---|"]
     for a in overflow[:300]:
-        aff = ", ".join(a.get("affected") or [])[:80].replace("|", "/") or (a.get("source") or "")
+        aff = what_matched(a, limit=80).replace("|", "/")
         lines.append(f"| {a.get('cve_id')} | {a.get('cvss_score')} | {a.get('risk_score')} | "
                      f"{'yes' if a.get('kev') else ''} | {aff} |")
     if len(overflow) > 300:
