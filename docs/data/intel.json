@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-26T19:54:55.396328+00:00",
+ "generated_at": "2026-10-26T23:50:21.441091+00:00",
  "category_labels": {
   "exploited": "Actively exploited",
   "social_engineering": "Social engineering",
@@ -14,7 +14,7 @@
    "name": "BleepingComputer",
    "ok": true,
    "items": 15,
-   "kept": 10
+   "kept": 9
   },
   {
    "name": "The Hacker News",
@@ -26,19 +26,19 @@
    "name": "SANS ISC",
    "ok": true,
    "items": 10,
-   "kept": 3
+   "kept": 4
   },
   {
    "name": "Dark Reading",
    "ok": true,
    "items": 50,
-   "kept": 25
+   "kept": 24
   },
   {
    "name": "SecurityWeek",
    "ok": true,
    "items": 10,
-   "kept": 5
+   "kept": 4
   },
   {
    "name": "Help Net Security",
@@ -50,7 +50,7 @@
    "name": "The Register",
    "ok": true,
    "items": 50,
-   "kept": 21
+   "kept": 20
   },
   {
    "name": "Microsoft Security Blog",
@@ -66,15 +66,13 @@
   },
   {
    "name": "Cyber Security News",
-   "ok": true,
-   "items": 10,
-   "kept": 7
+   "ok": false,
+   "error": "no feed items in response (175 bytes, starts '<html><head><link rel=\"icon\" href=\"data:;\"><meta http-equiv=')"
   },
   {
    "name": "GBHackers",
-   "ok": true,
-   "items": 10,
-   "kept": 7
+   "ok": false,
+   "error": "no feed items in response (1113 bytes, starts '<html><head><link rel=\"icon\" href=\"data:;\"><meta http-equiv=')"
   },
   {
    "name": "Krebs on Security",
@@ -158,7 +156,7 @@
    "name": "Security Affairs",
    "ok": true,
    "items": 10,
-   "kept": 7
+   "kept": 6
   },
   {
    "name": "The Record",
@@ -170,64 +168,223 @@
    "name": "Cloudflare Security",
    "ok": true,
    "items": 20,
-   "kept": 16
+   "kept": 17
   },
   {
    "name": "GNews: Teams / help-desk vishing",
    "ok": true,
-   "items": 16,
-   "kept": 12
+   "items": 15,
+   "kept": 11
   },
   {
    "name": "GNews: estate perimeter exploited",
    "ok": true,
-   "items": 49,
-   "kept": 42
+   "items": 30,
+   "kept": 30
   },
   {
    "name": "GNews: remote access & password managers",
    "ok": true,
-   "items": 36,
-   "kept": 17
+   "items": 25,
+   "kept": 14
   },
   {
    "name": "GNews: identity & M365 attacks",
    "ok": true,
-   "items": 59,
-   "kept": 49
+   "items": 31,
+   "kept": 28
   },
   {
    "name": "GNews: business SaaS breaches",
    "ok": true,
-   "items": 25,
+   "items": 24,
    "kept": 13
   },
   {
    "name": "GNews: Veeam & backup attacks",
    "ok": true,
-   "items": 15,
-   "kept": 12
+   "items": 8,
+   "kept": 5
   },
   {
    "name": "GNews: virtualization & cloud",
    "ok": true,
-   "items": 61,
-   "kept": 51
+   "items": 31,
+   "kept": 28
   },
   {
    "name": "GNews: dev & AI tools",
    "ok": true,
-   "items": 100,
-   "kept": 51
+   "items": 76,
+   "kept": 34
   },
   {
    "name": "GNews: media & publishing sector",
    "ok": true,
-   "items": 67,
-   "kept": 7
+   "items": 30,
+   "kept": 4
   }
  ],
  "items": [
+  {
+   "id": "4490e418e8c73616",
+   "title": "CVE-2026-111497 Portfolio Status: Impact of Brotli Vulnerability (CVE-2026-111497) on Palo Alto Networks Products (Severity: CRITICAL)",
+   "link": "https://security.paloaltonetworks.com/CVE-2026-111497",
+   "source": "Palo Alto PSIRT",
+   "published": "2026-10-26T23:40:00+00:00",
+   "summary": "",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "palo alto",
+    "palo alto networks"
+   ],
+   "cve_ids": [
+    "CVE-2026-111497"
+   ],
+   "score": 35,
+   "priority": "medium",
+   "first_seen": "2026-10-26T19:54:55.396328+00:00"
+  },
+  {
+   "id": "39fb6abcb30e3011",
+   "title": "Apple Patches for October 2026, (Mon, Oct 26th)",
+   "link": "https://isc.sans.edu/diary/rss/33458",
+   "source": "SANS ISC",
+   "published": "2026-10-26T23:34:37+00:00",
+   "summary": "Apple today released patches for 304 vulnerabilties. This number is still in line with prior Apple updates, and comes just about a month after the last apple update.",
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 15,
+   "priority": "low",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
+  },
+  {
+   "id": "18fffeb57097c4c8",
+   "title": "VU#701544: mpc-lib Hardened Derivation Fails to Protect Ancestor Isolation",
+   "link": "https://kb.cert.org/vuls/id/701544",
+   "source": "CERT/CC",
+   "published": "2026-10-26T22:45:54.629708+00:00",
+   "summary": "Overview Fireblocks' mpc-lib library contains a cryptographic fail-open vulnerability in its BIP32 hardened derivation implementation in the case of a missing private parent key. This breaks the ancestor isolation property of hardened derivation, allowing an attacker with a compromised lower-level signer share to recover the higher-level share it was derived from. Description Fireblocks is a…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 5,
+   "priority": "low",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
+  },
+  {
+   "id": "95d5916fd6281c36",
+   "title": "Cross-request KV cache exposure in the GLM-5.3 Workers AI model, and our remediation with SGLang",
+   "link": "https://blog.cloudflare.com/kv-cache-exposure-remediation/",
+   "source": "Cloudflare Security",
+   "published": "2026-10-26T22:01:23+00:00",
+   "summary": "A configuration mismatch in GLM 5.3 on Workers AI triggered an SGLang bug that exposed KV cache pages across requests. Here is how we addressed the issue.",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 10,
+   "priority": "low",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
+  },
+  {
+   "id": "c2f7e3ac7bd1eb69",
+   "title": "BeyondTrust named leader in Gartner PAM report again - ChannelLife Australia",
+   "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPUXVlT1VlQUFXOVUyYkkySmtCWXNZNEdiRWpBR2tzNXZSMjFwb1RQa3NhUlVYSHBsYnlpZXItOUltS3otMkZDOEx5Qnp6REw1Z1BhOE9vUDMyUDIzdHFfMVZQOU1zQTl3c09PUmVLbllaeTU1QUk3bEhtTG5RWnJ1MUI3ZmxhMG1JTXZtUUFB?oc=5",
+   "source": "GNews: remote access & password managers",
+   "published": "2026-10-26T21:52:00+00:00",
+   "summary": "BeyondTrust named leader in Gartner PAM report again ChannelLife Australia",
+   "categories": [],
+   "watch_matches": [
+    "beyondtrust"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
+  },
+  {
+   "id": "c25a5812afa3a3ff",
+   "title": "In-the-Wild Attack Abuses AI Agents' Trust in Markdown",
+   "link": "https://www.darkreading.com/application-security/in-the-wild-attack-ai-agents-trust-markdown",
+   "source": "Dark Reading",
+   "published": "2026-10-26T20:59:26+00:00",
+   "summary": "A new AI agent prompt injection technique exploits how coding assistants consume local instruction files, blurring the line between text documents and executable actions.",
+   "categories": [
+    "exploited"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 40,
+   "priority": "medium",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
+  },
+  {
+   "id": "e31796c6fe686409",
+   "title": "Cisco Informational for Emergency Distrust of eMudhra Root and Intermediate Certificate Authorities",
+   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-emudhra-info-ScS22A1r?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Cisco%20Informational%20for%20Emergency%20Distrust%20of%20eMudhra%20Root%20and%20Intermediate%20Certificate%20Authorities%26vs_k=1",
+   "source": "Cisco PSIRT",
+   "published": "2026-10-26T20:34:19+00:00",
+   "summary": "Between October 17 and October 20, 2026, a critical security compromise involving Certificate Authorities that are managed by eMudhra was uncovered. A security researcher demonstrated that the private keys for eight eMudhra intermediate certificates were fundamentally broken due to an unprecedented error in their Key Generation Ceremony (KGC) in April 2025. This allows anyone to brute-force…",
+   "categories": [],
+   "watch_matches": [
+    "cisco"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-10-23T23:07:13.309036+00:00"
+  },
+  {
+   "id": "6b5accef8fff6ab0",
+   "title": "Vulnerabilities in PHP Affecting Cisco Products: October 2026",
+   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-php-october26-Jj384Daq?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Vulnerabilities%20in%20PHP%20Affecting%20Cisco%20Products:%20October%202026%26vs_k=1",
+   "source": "Cisco PSIRT",
+   "published": "2026-10-26T20:00:23+00:00",
+   "summary": "On October 21, the PHP Foundation announced the availability of a Critical PHP Security release addressing two critical vulnerabilities: CVE-2026-109618 - RCE via OOM corruption CVE-2026-109619 - RCE via stale global state For information about these vulnerabilities, see the advisories GHSA-w8hw-w9fx-j79w and GHSA-6wmf-4rv5-p3rp . These vulnerabilities are being referenced as PHP2shell. For…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "cisco",
+    "php"
+   ],
+   "cve_ids": [
+    "CVE-2026-109618",
+    "CVE-2026-109619"
+   ],
+   "score": 35,
+   "priority": "medium",
+   "first_seen": "2026-10-21T19:19:28.833719+00:00"
+  },
+  {
+   "id": "a8e3871dbd294b9b",
+   "title": "Microsoft Teams to Use AI for Detecting Phishing Attacks Using Teams Conversations - CyberSecurityNews",
+   "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1FcVV2X2pOOFlKRzNTMFFTYWRGTVhOcU9uSGl1N3BDU0ZRYzRGeHRLVEJYMlV4X0VVelF1WE5kU1JMUEZPazQzd3FWaWE0ZmlyR3ZGU1JhOE9RS1NneGF3NS1DYy1RWWEta0pn0gFwQVVfeXFMTS10YzhVTy1YVkVIWnpSTlc0dkt1V05aWmt2WWpuMTNONzBRejJtM0RibUEtbWc4V25sZDZiT001NzR3MzJnZWVnb0ZIV1FEbW91Tmp4TjUtQ3BMRzRxRjZXV0hIZWFJWFdGM0xVSUNBTg?oc=5",
+   "source": "GNews: Teams / help-desk vishing",
+   "published": "2026-10-26T19:56:19+00:00",
+   "summary": "Microsoft Teams to Use AI for Detecting Phishing Attacks Using Teams Conversations CyberSecurityNews",
+   "categories": [
+    "social_engineering"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft teams"
+   ],
+   "cve_ids": [],
+   "score": 60,
+   "priority": "high",
+   "first_seen": "2026-10-25T11:19:06.870469+00:00"
+  },
   {
    "id": "082795207170a149",
    "title": "VU#128947: COVESA vsomeip excessive memory allocation in reliable (TCP) endpoint buffer handling",
@@ -277,27 +434,6 @@
    "first_seen": "2026-10-26T19:54:55.396328+00:00"
   },
   {
-   "id": "4490e418e8c73616",
-   "title": "CVE-2026-111497 Portfolio Status: Impact of Brotli Vulnerability (CVE-2026-111497) on Palo Alto Networks Products (Severity: CRITICAL)",
-   "link": "https://security.paloaltonetworks.com/CVE-2026-111497",
-   "source": "Palo Alto PSIRT",
-   "published": "2026-10-26T18:45:00+00:00",
-   "summary": "",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "palo alto",
-    "palo alto networks"
-   ],
-   "cve_ids": [
-    "CVE-2026-111497"
-   ],
-   "score": 35,
-   "priority": "medium",
-   "first_seen": "2026-10-26T19:54:55.396328+00:00"
-  },
-  {
    "id": "58e679e292e6d1ac",
    "title": "Microsoft releases emergency .NET security fixes for Google Brotli bug",
    "link": "https://www.theregister.com/security/2026/10/26/microsoft-releases-emergency-net-security-fixes-for-google-brotli-bug/5305515",
@@ -315,6 +451,22 @@
    "cve_ids": [],
    "score": 40,
    "priority": "medium",
+   "first_seen": "2026-10-26T19:54:55.396328+00:00"
+  },
+  {
+   "id": "0b49dba25ed6b663",
+   "title": "Keeper Security Recognized in 2026 Gartner® Magic Quadrant™ for Privileged Access Management - PR Newswire",
+   "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOSVBWYktoQlA3ckpxNnRFcVZhZ3pfWHU4bUhjVkowMV9nVW5NcXRDLWZ0S3loZ2pZeXRESnJVS093cjkwNkVIS0ozcjNnMzlDWWd3OS11d2NlOGs2MXhKdzBaLUFYc0VqNllldkNIZDQzenhSQXFjcWhoWHY4N056VS02ZDVhZ1pGVko4a0FlYV9IWXpHbEtGNDJBRnl4T0dDNWVCOS1ZWHd0d1A3NGRobkRZMzlvWlBBbkl4R1A2U0lJdlh1VnY4R3o5LWF5anEwSXpLYjc5YzRiaS1rNWhN?oc=5",
+   "source": "GNews: remote access & password managers",
+   "published": "2026-10-26T17:54:00+00:00",
+   "summary": "Keeper Security Recognized in 2026 Gartner® Magic Quadrant™ for Privileged Access Management PR Newswire",
+   "categories": [],
+   "watch_matches": [
+    "keeper security"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
    "first_seen": "2026-10-26T19:54:55.396328+00:00"
   },
   {
@@ -338,6 +490,22 @@
    "score": 45,
    "priority": "medium",
    "first_seen": "2026-10-26T19:54:55.396328+00:00"
+  },
+  {
+   "id": "5c8dea32f2c96dd7",
+   "title": "CVE-2026-111497: Critical out-of-bounds write in the Node.js Brotli decoder - Rapid7",
+   "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPQ2V2Yi0tMmxscjhodzZNX0M1OS1acU1wU3VJRDgyVENZeFUxUUE1MlpzTG1QajZEdlc0YkdIbUo4eG81aFF3cEc1cjY1ZkJZamVOc1NMMmJmVllqNE5XS0V6WGgxeTM1OUdFSGZHVEN4VUNoazZ2bFdJajE5Ujh0cDhZU2Vmbi1LZzlfMC1FZWRpZjduN09jeEFlTmR0R3ZQLVN3YTNvaUJYWmVER3FlT0Z3?oc=5",
+   "source": "GNews: remote access & password managers",
+   "published": "2026-10-26T17:36:11+00:00",
+   "summary": "CVE-2026-111497: Critical out-of-bounds write in the Node.js Brotli decoder Rapid7",
+   "categories": [],
+   "watch_matches": [],
+   "cve_ids": [
+    "CVE-2026-111497"
+   ],
+   "score": 5,
+   "priority": "low",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
   },
   {
    "id": "5041b6d8e61e009a",
@@ -371,22 +539,6 @@
    "watch_matches": [
     "microsoft",
     "microsoft teams"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-26T19:54:55.396328+00:00"
-  },
-  {
-   "id": "0b49dba25ed6b663",
-   "title": "Keeper Security Recognized in 2026 Gartner® Magic Quadrant™ for Privileged Access Management - PR Newswire",
-   "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOSVBWYktoQlA3ckpxNnRFcVZhZ3pfWHU4bUhjVkowMV9nVW5NcXRDLWZ0S3loZ2pZeXRESnJVS093cjkwNkVIS0ozcjNnMzlDWWd3OS11d2NlOGs2MXhKdzBaLUFYc0VqNllldkNIZDQzenhSQXFjcWhoWHY4N056VS02ZDVhZ1pGVko4a0FlYV9IWXpHbEtGNDJBRnl4T0dDNWVCOS1ZWHd0d1A3NGRobkRZMzlvWlBBbkl4R1A2U0lJdlh1VnY4R3o5LWF5anEwSXpLYjc5YzRiaS1rNWhN?oc=5",
-   "source": "GNews: remote access & password managers",
-   "published": "2026-10-26T17:03:31+00:00",
-   "summary": "Keeper Security Recognized in 2026 Gartner® Magic Quadrant™ for Privileged Access Management PR Newswire",
-   "categories": [],
-   "watch_matches": [
-    "keeper security"
    ],
    "cve_ids": [],
    "score": 25,
@@ -718,25 +870,6 @@
    "score": 20,
    "priority": "low",
    "first_seen": "2026-10-26T19:54:55.396328+00:00"
-  },
-  {
-   "id": "a8e3871dbd294b9b",
-   "title": "Microsoft Teams to Use AI for Detecting Phishing Attacks Using Teams Conversations - CyberSecurityNews",
-   "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1FcVV2X2pOOFlKRzNTMFFTYWRGTVhOcU9uSGl1N3BDU0ZRYzRGeHRLVEJYMlV4X0VVelF1WE5kU1JMUEZPazQzd3FWaWE0ZmlyR3ZGU1JhOE9RS1NneGF3NS1DYy1RWWEta0pn0gFwQVVfeXFMTS10YzhVTy1YVkVIWnpSTlc0dkt1V05aWmt2WWpuMTNONzBRejJtM0RibUEtbWc4V25sZDZiT001NzR3MzJnZWVnb0ZIV1FEbW91Tmp4TjUtQ3BMRzRxRjZXV0hIZWFJWFdGM0xVSUNBTg?oc=5",
-   "source": "GNews: Teams / help-desk vishing",
-   "published": "2026-10-26T13:54:11+00:00",
-   "summary": "Microsoft Teams to Use AI for Detecting Phishing Attacks Using Teams Conversations CyberSecurityNews",
-   "categories": [
-    "social_engineering"
-   ],
-   "watch_matches": [
-    "microsoft",
-    "microsoft teams"
-   ],
-   "cve_ids": [],
-   "score": 60,
-   "priority": "high",
-   "first_seen": "2026-10-25T11:19:06.870469+00:00"
   },
   {
    "id": "cf9d3ee81896d3e5",
@@ -1520,6 +1653,24 @@
    "first_seen": "2026-10-26T12:54:31.714274+00:00"
   },
   {
+   "id": "68a67cb1281c87fb",
+   "title": "Foundation Says Compromised Cloudflare API Keys Fueled Passport Wallet Phishing Emails - The Crypto Times",
+   "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPSURZazRPOEpWa0RvRFBvdmQ2UFJ6d3FYUW43dlJLdFk0WVFEaUo1Zl9KMVN5NHNEUDh1QW91X3NhMW1ZZGw3ZjY3OU5YNEswOG5BQk5fbEpLa3NnN29WMmw2dkpyYUFGLXRqQ3NjYWxSYTczSjdQOVhOWmtPSzNQZTViQTJTYm5wWEtxbVhfbnFwSFlob3dQeU5nZjhPS1AtWEo4cGo0S0lQQUwyVXRGMEt5bk1WUGhHcWE3SDFaNDQ4aUE?oc=5",
+   "source": "GNews: virtualization & cloud",
+   "published": "2026-10-26T06:35:28+00:00",
+   "summary": "Foundation Says Compromised Cloudflare API Keys Fueled Passport Wallet Phishing Emails The Crypto Times",
+   "categories": [
+    "social_engineering"
+   ],
+   "watch_matches": [
+    "cloudflare"
+   ],
+   "cve_ids": [],
+   "score": 60,
+   "priority": "high",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
+  },
+  {
    "id": "9ee9188fa55bd6ee",
    "title": "Microsoft Authenticator Flaw Lets Malicious Android Apps Steal Account Tokens With Zero Permissions",
    "link": "https://cybersecuritynews.com/microsoft-authenticator-flaw/",
@@ -2294,22 +2445,6 @@
    "first_seen": "2026-10-25T11:19:06.870469+00:00"
   },
   {
-   "id": "e31796c6fe686409",
-   "title": "Cisco Informational for Emergency Distrust of eMudhra Root and Intermediate Certificate Authorities",
-   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-emudhra-info-ScS22A1r?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Cisco%20Informational%20for%20Emergency%20Distrust%20of%20eMudhra%20Root%20and%20Intermediate%20Certificate%20Authorities%26vs_k=1",
-   "source": "Cisco PSIRT",
-   "published": "2026-10-24T20:55:18+00:00",
-   "summary": "Between October 17 and October 20, 2026, a critical security compromise involving Certificate Authorities that are managed by eMudhra was uncovered. A security researcher demonstrated that the private keys for eight eMudhra intermediate certificates were fundamentally broken due to an unprecedented error in their Key Generation Ceremony (KGC) in April 2025. This allows anyone to brute-force…",
-   "categories": [],
-   "watch_matches": [
-    "cisco"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-23T23:07:13.309036+00:00"
-  },
-  {
    "id": "06fec0d892780511",
    "title": "Pierluigi Paganini answers questions about the PHP2Shell flaws",
    "link": "https://securityaffairs.com/201662/hacking/pierluigi-paganini-answers-questions-about-the-php2shell-flaws.html",
@@ -2676,6 +2811,23 @@
    "first_seen": "2026-10-22T10:16:32.120787+00:00"
   },
   {
+   "id": "fc60153fe77de043",
+   "title": "Amazon ends its six-year legal fight with former AWS managers over alleged data center kickbacks - GeekWire",
+   "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOZU1nOGtkcXl1SW1Xc09SbVR3c25hbk1tQllkQXhkX0pqSEk4RmppRTQxTlBmR1Z6Z0puU24tSlJKcmYyUERXRXlzOEhhZ0VaR1d5VmhjZmVIQVctb2VUZGhOWTBhOS0zV0hrUkJ2QWVEUVphZXV5MWJ4YnRldk1FNDJBT2hERjZhQ3ZBQ1kyNF9lSHRJTVNBVlI0R1hqTGZ1cEdhbjV3WUZtNV9JOUw3VGtpWUQ4X2VDeE1LT2V2elRxcDJscnc?oc=5",
+   "source": "GNews: virtualization & cloud",
+   "published": "2026-10-24T03:02:08+00:00",
+   "summary": "Amazon ends its six-year legal fight with former AWS managers over alleged data center kickbacks GeekWire",
+   "categories": [],
+   "watch_matches": [
+    "amazon",
+    "aws"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
+  },
+  {
    "id": "09c75048e52cec0f",
    "title": "US, UK and Germany Warn of Active SafePay Ransomware - BankInfoSecurity",
    "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNNVdOVGg0YVUzN2x0X3dlU0RXWkRMWHFkeURpNU5sU3RrRDY1c3NvM042dHJYT1E2Q29RenhISFhfSzAydmJPcjZnampBeWE2MHN2b3BmeHl1UWwtdV94VERSUGllTGZRNkR6UVBnS1Q5WVBySWQ1RHdBLWxuS2Y0LTZsNDhpalgzZUVZajd3?oc=5",
@@ -2711,6 +2863,24 @@
    "first_seen": "2026-10-24T04:30:49.940462+00:00"
   },
   {
+   "id": "3ab7f6cc0f39d61a",
+   "title": "Keeper Security adds AI phishing protection to browser extension - ReadITQuik",
+   "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOLWFtZVBzNDI5eXAxeDFkZzZOV2QtRzZaUFRvd1E3cGRjczM5MW9wYXBpSm40MUFUUUNlWGN6N21wSHRrcmFzTWt6cmtRYlVERlpPbVNZSDltaWQ5SnBNOUZqQ0ROc0JBV0ZlRFdSS0hrQS1tQmtnakRJMlZQakhtVUVfaVNwX1NJX1NYQWlPb1piTEgtR3cxcA?oc=5",
+   "source": "GNews: remote access & password managers",
+   "published": "2026-10-24T00:51:49+00:00",
+   "summary": "Keeper Security adds AI phishing protection to browser extension ReadITQuik",
+   "categories": [
+    "social_engineering"
+   ],
+   "watch_matches": [
+    "keeper security"
+   ],
+   "cve_ids": [],
+   "score": 60,
+   "priority": "high",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
+  },
+  {
    "id": "17472fcdbbbc593d",
    "title": "Storage and Data Protection News for the Week of October 23; Updates from Apricorn, Everpure, Veeam & More - Solutions Review",
    "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxOUzhKTkFKalJTWXQxZEVnQzZGUElBdVJHa2EyaWk2cWoyTnh4c2dSb282LWNGYXZ0Znh4N3FHQnRib2Q1d1RYcGlrR2JTOU9VeVF0VG5GTFJoX1pINEJqUHhNVmNkRlpZTjluOEc3bS1uNGIyenBXeTVfVTBldUxfcEE4cGRpbEJNY3dwbnhrTVNTMDlVUTVsWW50cm4wUVpWODM1T25DMlJqT2pTVmQyMDZ2S0g1cFltT3EtX1Y4RlZldG9NMGc0R3N2NmVIVzAxeEVSRF9fSXNScVY3MXJBak0yYXY4ZTdSLU5V?oc=5",
@@ -2742,28 +2912,6 @@
    "score": 20,
    "priority": "low",
    "first_seen": "2026-10-24T10:52:52.962180+00:00"
-  },
-  {
-   "id": "6b5accef8fff6ab0",
-   "title": "Vulnerabilities in PHP Affecting Cisco Products: October 2026",
-   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-php-october26-Jj384Daq?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Vulnerabilities%20in%20PHP%20Affecting%20Cisco%20Products:%20October%202026%26vs_k=1",
-   "source": "Cisco PSIRT",
-   "published": "2026-10-23T22:39:09+00:00",
-   "summary": "On October 21, the PHP Foundation announced the availability of a Critical PHP Security release addressing two critical vulnerabilities: CVE-2026-109618 - RCE via OOM corruption CVE-2026-109619 - RCE via stale global state For information about these vulnerabilities, see the advisories GHSA-w8hw-w9fx-j79w and GHSA-6wmf-4rv5-p3rp . These vulnerabilities are being referenced as PHP2shell. For…",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "cisco",
-    "php"
-   ],
-   "cve_ids": [
-    "CVE-2026-109618",
-    "CVE-2026-109619"
-   ],
-   "score": 35,
-   "priority": "medium",
-   "first_seen": "2026-10-21T19:19:28.833719+00:00"
   },
   {
    "id": "5b4d9efdb17ad7e4",
@@ -2892,6 +3040,24 @@
    "score": 10,
    "priority": "low",
    "first_seen": "2026-10-23T23:07:13.309036+00:00"
+  },
+  {
+   "id": "3d653cef85d3395a",
+   "title": "Qualys, Tenable, Cloudflare, CrowdStrike, and Okta shares skyrocket, what you need to know - TradingView",
+   "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQSGRxNWNlMmdRWWZrRFE2SHVzWmpiMTFFRlF4T1lGLUNReXVaenhSR0NQemlPRnBWZ2VwNnYwMF9tbEREUjdiMUJGX1p1dTlkcnloRi1iRjhQOWpkdEl2Z1Y0SzU5WGVaQUFkQ1p4aXFkS1RSa1dGUjNjQk1GY1dEaDhJS1BZeS1YQ2NnYnIxbHhkNjJnZVE5N0FoQWZEaGRUUVhmM2Rfc1NxcDFfM2FfUnVOU0M4S1JaSnhmR1czSGpEV0hZUkp5dUdMT29nZmc5aXZtTzVVZDI4UVZ1d3Uw?oc=5",
+   "source": "GNews: virtualization & cloud",
+   "published": "2026-10-23T19:55:37+00:00",
+   "summary": "Qualys, Tenable, Cloudflare, CrowdStrike, and Okta shares skyrocket, what you need to know TradingView",
+   "categories": [
+    "identity"
+   ],
+   "watch_matches": [
+    "cloudflare"
+   ],
+   "cve_ids": [],
+   "score": 40,
+   "priority": "medium",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
   },
   {
    "id": "f1cc9ef1de56563f",
@@ -3380,7 +3546,7 @@
    "id": "7908ed3923a694f9",
    "title": "Threat Brief: Critical Vulnerabilities in PHP: CVE-2026-109618, CVE-2026-109619 (Updated October 25) - Unit 42",
    "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBaSXRUMkVsWkF3TjhoV29oTXdyZHhrMGZINFBHNVVrNmZubTA4SkFzMzlWMlNMLW15ZWdISDJYeURJbVdpTFB5ZzNTU21aazFfTmc4R0VkLWVyMVY4S1JRYTZ5UjJqWk82SlR5Q0ZMOTJrNEJVeXNV?oc=5",
-   "source": "GNews: virtualization & cloud",
+   "source": "GNews: business SaaS breaches",
    "published": "2026-10-23T13:47:22+00:00",
    "summary": "Threat Brief: Critical Vulnerabilities in PHP: CVE-2026-109618, CVE-2026-109619 (Updated October 25) Unit 42",
    "categories": [
@@ -5236,24 +5402,6 @@
    "first_seen": "2026-10-22T15:21:01.750980+00:00"
   },
   {
-   "id": "54c8e268e7967ce0",
-   "title": "A basic explanation of the 'critical' PHP vulnerability - USA Today",
-   "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOU1gtLVg2Z0c4UEpaZ2xGTDkxa3JoOFRQRExJdEJodHRrNDJvUXdGRjJVTElqbGZLVC1vbmxQOEpOT3d4M2FqSTd6UU9Gckc0VG1PRGZSWUdwSXE4YTgya2h2RHZoOEJZX0E0X3R6X2w3S1RfeUhrbW1VUzBiWWNGeE9iM1FvZnB5Wk4xSlR0Y1lIVU9kVk1mVWk0ZnlHREhKSWdIZHNlclBsTU0?oc=5",
-   "source": "GNews: business SaaS breaches",
-   "published": "2026-10-22T13:59:00+00:00",
-   "summary": "A basic explanation of the 'critical' PHP vulnerability USA Today",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "php"
-   ],
-   "cve_ids": [],
-   "score": 30,
-   "priority": "medium",
-   "first_seen": "2026-10-23T07:26:12.038819+00:00"
-  },
-  {
    "id": "dc791df90edd872d",
    "title": "Microsoft says China-aligned hackers used AI agents in ConnectWise attack - The Next Web",
    "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNNGRPUGdOTzQ3M2VsN2FzWGl1S1Q4ZDJlWmtwSkhrc1gwdHhfeEx3b2M2TzNaQXd3VTdoeEJmNXVYWGMtVk5pYjV1aHJHb2lxTHhLR2VWTE40Z2FMWFJoUER5X2V4OW5RTDY1d1d0UE9FaVBfaXBBUG54NERiaDRlSFpkdw?oc=5",
@@ -6013,7 +6161,7 @@
    "id": "e67707411ae8616d",
    "title": "Websites across world hit by millions of attempts to exploit PHP code flaw - The Guardian",
    "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPOExPYWZSWVRrcVdBOGpVRW9FSmFvTUVvcDdOSHRLWjVyTzI1U3dXZ250cGlHR1pYZHJlQXVXTDBvY3hWSVgzanJwMVFfOWpnNndDaFR2MWJ0WGxWcWpjdTZZWlpuenRWYTVTejIxaDEyOVdDX2ZlX2FLZXV6ckZVMWhpeWdGM0xLMWl3VHlDdDQtRV9ya2pfc2RUMy1Wdlo4OHFXWUxEVXdUSDFaQWFzMWc3bXVoNGdiaWFVcGVSSWhHYWc?oc=5",
-   "source": "GNews: virtualization & cloud",
+   "source": "GNews: business SaaS breaches",
    "published": "2026-10-22T11:36:00+00:00",
    "summary": "Websites across world hit by millions of attempts to exploit PHP code flaw The Guardian",
    "categories": [
@@ -6393,7 +6541,7 @@
    "id": "ec886c8262296ad7",
    "title": "Qilin and INC Exploit Palo Alto VPN Flaw in Ransomware Attacks - Hackread",
    "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNdm9tYnBpajZfck92ejFtRU5WaWZpS1AxcDBfWWRUMjdxXy0tN1pjeFd3NVZyZGVNTEpuTVY1T3hpdVBHcEJYRnExTW44UUtPYUlrQnJ2b0ktR3pyVEV6VmNTazNGS282Vkh6WFZXSkdxV0lhV2tBWGRVUzV1bDhXRkotMA?oc=5",
-   "source": "GNews: virtualization & cloud",
+   "source": "GNews: Veeam & backup attacks",
    "published": "2026-10-22T10:15:31+00:00",
    "summary": "Qilin and INC Exploit Palo Alto VPN Flaw in Ransomware Attacks Hackread",
    "categories": [
@@ -6530,10 +6678,7 @@
    "cve_ids": [],
    "score": 10,
    "priority": "low",
-   "first_seen": "2026-10-26T19:54:55.396328+00:00",
-   "also_reported_by": [
-    "GNews: remote access & password managers"
-   ]
+   "first_seen": "2026-10-26T19:54:55.396328+00:00"
   },
   {
    "id": "10d897541872b28f",
@@ -6933,6 +7078,24 @@
    "score": 30,
    "priority": "medium",
    "first_seen": "2026-10-26T12:54:31.714274+00:00"
+  },
+  {
+   "id": "e29a71225a616205",
+   "title": "No breach of Budget security after critical flaw found in PHP, minister says - The Irish News",
+   "link": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPZFhFNXRrTWtQUFNjYzdHR2NGaVVOR1pSeW1mY0RTanFPRG85M1Z5WkNWaTRnajVfdXoxbmd3NUFRdkU4ZG1qUTdtZ3NSYXBFOVB1WE02cDNWd0VCQlpnQ05mZzA3MHhNNW1nTzl1dVkxMEh0MkVTeGt1N0lZVVNSa1JIUDhaeVJ6dWZRMlhnUTgzX0UyZ242N3VxMmhEM2lHXy1GVnZ5QWV0NktGelhReEpRd010SFN1dG51Rlc0ZjVvRzR1a3RWR2Q0Y1FqS2otUW44?oc=5",
+   "source": "GNews: virtualization & cloud",
+   "published": "2026-10-22T07:17:31+00:00",
+   "summary": "No breach of Budget security after critical flaw found in PHP, minister says The Irish News",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "php"
+   ],
+   "cve_ids": [],
+   "score": 30,
+   "priority": "medium",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
   },
   {
    "id": "0d20542cc2ee40e4",
@@ -7425,7 +7588,7 @@
    "id": "abdd377a088599c0",
    "title": "BeyondTrust Zero-Day CVE-2026-102764: China APT, CVSS 9.3 - shattered.io",
    "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9LNTVZeVRCWG04TE9ERnF3UEhzQzZiRVotb0RubkhSRDNtLW52N1RkSzk4TEVsOWR5aUxHNXIwbmZQQ3Q2WER2aVdIMmt0dlNhMDBEU1RGSV9IVWdGTWhSMEk3d2pGR3ZYc29YUFA2RjEwQ3hwZFVINUd2dGNHZw?oc=5",
-   "source": "GNews: remote access & password managers",
+   "source": "GNews: estate perimeter exploited",
    "published": "2026-10-22T04:02:10+00:00",
    "summary": "BeyondTrust Zero-Day CVE-2026-102764: China APT, CVSS 9.3 shattered.io",
    "categories": [
@@ -7835,6 +7998,24 @@
    "first_seen": "2026-10-21T22:37:30.019842+00:00"
   },
   {
+   "id": "54c8e268e7967ce0",
+   "title": "A basic explanation of the 'critical' PHP vulnerability - USA Today",
+   "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOU1gtLVg2Z0c4UEpaZ2xGTDkxa3JoOFRQRExJdEJodHRrNDJvUXdGRjJVTElqbGZLVC1vbmxQOEpOT3d4M2FqSTd6UU9Gckc0VG1PRGZSWUdwSXE4YTgya2h2RHZoOEJZX0E0X3R6X2w3S1RfeUhrbW1VUzBiWWNGeE9iM1FvZnB5Wk4xSlR0Y1lIVU9kVk1mVWk0ZnlHREhKSWdIZHNlclBsTU0?oc=5",
+   "source": "GNews: business SaaS breaches",
+   "published": "2026-10-21T22:11:16+00:00",
+   "summary": "A basic explanation of the 'critical' PHP vulnerability USA Today",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "php"
+   ],
+   "cve_ids": [],
+   "score": 30,
+   "priority": "medium",
+   "first_seen": "2026-10-23T07:26:12.038819+00:00"
+  },
+  {
    "id": "5980ef2c3164b916",
    "title": "Microsoft pins ConnectWise supply-chain attack to China-state aligned threat group - CyberScoop",
    "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQRE83d3BnWTRGLVJlcjRYaG03SzBVLUF4eDcwdXd2b29IUnBKWkJkTGRTUjNFX2ZWUnRmRXpBXzZxZzdZZ3RNa2Y1M2RyUXhWUXlnclgyeGdfRmVLeUQxZ3dZLS1vMkt2ZFgtdE1TY24yYVgxWlh3d05KWFNYblA0Qmp3ajdXSEhfUzkxYW01RmhOWlRWYmhaXw?oc=5",
@@ -8137,7 +8318,7 @@
    "id": "ebfc32078a1ab247",
    "title": "AI-driven, large-scale nation-state campaign using ARTEX enables supply chain compromise - Microsoft",
    "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPa3J3OXpucXRXM28xZy1CakJNcjh6X0ZWSU1pOHo3cjMwQVpDMkhqUlQyOGQ4b2dDSENEWllIOTNBT2V6RWlnM1M3OUVyRGNXd3pIOFdlaGlFNTJ5a1pWX3pUWnVLNFRsOHdZNzl3WHV3Y1F4aW8wWGthREhGNDlOVHBBOU45NXdjNkcxOFRtOXFlVzFkN1JwSVBlYTZFc1ZBN2NXN0VjREs0YzRaUW5Pek9PMC1xMlIyZWtma0x2TEhSbWpx?oc=5",
-   "source": "GNews: virtualization & cloud",
+   "source": "GNews: identity & M365 attacks",
    "published": "2026-10-21T18:23:55+00:00",
    "summary": "AI-driven, large-scale nation-state campaign using ARTEX enables supply chain compromise Microsoft",
    "categories": [],
@@ -8294,7 +8475,7 @@
    "id": "be6cb851d07a5c4f",
    "title": "Qilin and INC Exploited a Patched Palo Alto VPN Bypass for Four Months. ConnectWise Shows Where the Same Trust Failure Went Next. - Forkast News",
    "link": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxPWlBOaWhsRUtFZlhqUkhKU1JNZTRZQmEwQmxkN1h1RHJHWjVBZ0w1ZHZKckxPdzJyS2x6WUswUHBFNlVrLUtpUWQyTEpLUm1FYjdXVTJUb1hkUHRVdENib3RpSi1OVk9aSFlYWkJwQXVzOEZiOTZFbUpWTkpDM3NSNFpXTlNkWnNnOU1MWXJNZ2RuR3ZUeTZPeEthang0MXJweGlfOHFydVNQblVTVDUwZEg0T050YmJXbEozSHhwNVktejAyQVNmLWNsYkdtelU5Wjl4Q1BCM0JSNzZTWlJOYzVYdw?oc=5",
-   "source": "GNews: estate perimeter exploited",
+   "source": "GNews: remote access & password managers",
    "published": "2026-10-21T17:17:46+00:00",
    "summary": "Qilin and INC Exploited a Patched Palo Alto VPN Bypass for Four Months. ConnectWise Shows Where the Same Trust Failure Went Next. Forkast News",
    "categories": [
@@ -9557,9 +9738,9 @@
    "link": "https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching",
    "source": "CISA Advisories",
    "published": "2026-10-21T12:00:00+00:00",
-   "summary": "Update October 23, 2026 : CISA has updated this Alert to: (1) provide a SIGMA detection rule to help identify potentially suspicious activity; (2) incorporate partner resources; and (3) reinforce existing mitigation guidance. Purpose CISA strongly urges organizations to immediately patch the recently disclosed critical vulnerabilities in PHP, CVE-2026-109618 and CVE-2026-109619 . These…",
+   "summary": "Update October 26, 2026: CISA has updated this Alert to reflect the addition of CVE-2026-109618 and CVE-2026-109619 to its Known Exploited Vulnerabilities (KEV) Catalog on Oct. 26, 2026. Update October 23, 2026 : CISA has updated this Alert to: (1) provide a SIGMA detection rule to help identify potentially suspicious activity; (2) incorporate partner resources; and (3) reinforce existing…",
    "categories": [
-    "patch",
+    "exploited",
     "vulnerability"
    ],
    "watch_matches": [
@@ -9569,8 +9750,8 @@
     "CVE-2026-109618",
     "CVE-2026-109619"
    ],
-   "score": 45,
-   "priority": "medium",
+   "score": 75,
+   "priority": "high",
    "first_seen": "2026-10-21T18:29:44.097817+00:00"
   },
   {
@@ -10762,7 +10943,7 @@
    "id": "a6c6e75a5720f554",
    "title": "The 9 best phishing simulation tools in 2026 - Aikido Security",
    "link": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5ZRm1CWlYwUVRicVhQRmg4WWxQMzV3T3g1QzBxa3N4bEF3bHBwUmozeXlzV0p5NU1Mc2VmVUZWT2pTLWdlTjFKT2ZQLXJyWHkxSk1VWUV6eS1vU1E3NWV3clVpQlBEbk5WX1E?oc=5",
-   "source": "GNews: identity & M365 attacks",
+   "source": "GNews: Teams / help-desk vishing",
    "published": "2026-10-20T23:21:36+00:00",
    "summary": "The 9 best phishing simulation tools in 2026 Aikido Security",
    "categories": [
@@ -10969,6 +11150,27 @@
    "score": 50,
    "priority": "medium",
    "first_seen": "2026-10-20T22:03:28.223081+00:00"
+  },
+  {
+   "id": "47e5fbc54960d2a6",
+   "title": "Frequently Asked Questions About PHP Remote Code Execution (PHP2Shell CVE-2026-109618 & CVE-2026-109619) - watchTowr",
+   "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE13WUo0REpMZ0xGU3FiNFQ2OWJvQXF2Y2tyOHp0d1dYelZ4NWt2SDFibm1zbWppWnhkeGhzQmRXcjRmNlIwSmdqMFZ3WnNLWllOT0hLQlBxc3V6UDBoYXNValBvdFRRdmNuVVNv?oc=5",
+   "source": "GNews: remote access & password managers",
+   "published": "2026-10-20T19:40:10+00:00",
+   "summary": "Frequently Asked Questions About PHP Remote Code Execution (PHP2Shell CVE-2026-109618 & CVE-2026-109619) watchTowr",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "php"
+   ],
+   "cve_ids": [
+    "CVE-2026-109618",
+    "CVE-2026-109619"
+   ],
+   "score": 35,
+   "priority": "medium",
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
   },
   {
    "id": "46f047b8a9eabcc3",
@@ -12233,11 +12435,11 @@
    "first_seen": "2026-10-20T16:51:13.159084+00:00"
   },
   {
-   "id": "bc20ac1c06883516",
+   "id": "5a566c19cb7546a6",
    "title": "Hackers Exploit Palo Alto VPN Flaw to Bypass MFA and Steal Credentials From VMware Disks - CyberSecurityNews",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE83bERGcEpONENzbWg2LWFMY1dTRnQxa0FId1k1OGMtQ2JMUHJUbWxoTVBDX0h6MUxNRnVQTUlpUTRhNERsNUk0cUtZVDl1Y0FBTXJpeFgxTHpwUW1URmlLZVA2SWVKcHpCX1RJMEFnOWjSAXBBVV95cUxPN2xERnBKTjRDc21oNi1hTGNXU0Z0MWtBSHdZNThjLUNiTFByVG1saE1QQ19IejFMTUZ1UE1JaVE0YTREbDVJNHFLWVQ5dWNBQU1yaXhYMUx6cFFtVEZpS2VQNkllSnB6Ql9USTBBZzlo?oc=5",
+   "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5ldlZBRGg3SU9oR1JFdE5Ca2RSRUc5UnRsWWtFQXQwSDRIWVhMX0VJNm9rNjBMbTM2Z09iWk82Qzd3Wm9zMWR4SmdLTERQbDFBQUpHVmJUTnZvaTEyOUVVWGFOMElGc2Myc1kw0gFwQVVfeXFMTzdsREZwSk40Q3NtaDYtYUxjV1NGdDFrQUh3WTU4Yy1DYkxQclRtbGhNUENfSHoxTE1GdVBNSWlRNGE0RGw1STRxS1lUOXVjQUFNcml4WDFMenBRbVRGaUtlUDZJZUpwekJfVEkwQWc5aA?oc=5",
    "source": "GNews: virtualization & cloud",
-   "published": "2026-10-20T10:04:10+00:00",
+   "published": "2026-10-20T10:03:54+00:00",
    "summary": "Hackers Exploit Palo Alto VPN Flaw to Bypass MFA and Steal Credentials From VMware Disks CyberSecurityNews",
    "categories": [
     "exploited",
@@ -12250,7 +12452,7 @@
    "cve_ids": [],
    "score": 70,
    "priority": "high",
-   "first_seen": "2026-10-24T15:53:32.494122+00:00"
+   "first_seen": "2026-10-26T23:50:21.441091+00:00"
   },
   {
    "id": "711a00fd6e792344",
@@ -26750,221 +26952,6 @@
    "score": 30,
    "priority": "medium",
    "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "a572a26f0792e738",
-   "title": "Cisco Secure Firewall Adaptive Security Appliance and Secure Firewall Threat Defense Software EIGRP Denial of Service Vulnerability",
-   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-eigrp-dos-GOhNejSj?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Cisco%20Secure%20Firewall%20Adaptive%20Security%20Appliance%20and%20Secure%20Firewall%20Threat%20Defense%20Software%20EIGRP%20Denial%20of%20Service%20Vulnerability%26vs_k=1",
-   "source": "Cisco PSIRT",
-   "published": "2026-09-18T15:50:28+00:00",
-   "summary": "A vulnerability in the EIGRP implementation in Cisco Secure Firewall Adaptive Security Appliance (ASA) Software and Cisco Secure Firewall Threat Defense (FTD) Software could allow an unauthenticated, adjacent attacker to cause the device to reload unexpectedly, resulting in a denial of service (DoS) condition. This vulnerability is due to improper resource management when handling EIGRP update…",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "cisco"
-   ],
-   "cve_ids": [],
-   "score": 30,
-   "priority": "medium",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "ff43291f79f46d3c",
-   "title": "A Vault with a Heap-View: The Uncomfortable Space Between AgentCore Harness and Identity",
-   "link": "https://unit42.paloaltonetworks.com/securing-aws-agentcore-harness-credentials/",
-   "source": "Unit 42",
-   "published": "2026-09-18T10:00:36+00:00",
-   "summary": "Analysis of how default configurations in AWS AgentCore Harness allow prompt injection to exfiltrate credentials, and key steps to secure your agents. The post A Vault with a Heap-View: The Uncomfortable Space Between AgentCore Harness and Identity appeared first on Unit 42 .",
-   "categories": [],
-   "watch_matches": [
-    "aws"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "2298cf7b79941bab",
-   "title": "Zero-click RCE vulnerability hit four major AI coding agents, two remain unpatched - Help Net Security",
-   "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNNjBOY1NZcUJQWnIzVGd2dG1mNVRWck5NZzRIaTlJMUdueURmTEJZZXRQbkJrU2ZxUjB3TjJxUnZVTzN6cmRSTmpjcU5MOHVMenNDT3ViNWYtMWM4OXZGNmowMU83dFRlbGZ2WnZHSnpiREJoVmNrR2ZjNFhRMHZZamZCV3h2eTN2dG9SWndscDc?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-09-18T07:00:00+00:00",
-   "summary": "Zero-click RCE vulnerability hit four major AI coding agents, two remain unpatched Help Net Security",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 5,
-   "priority": "low",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "79e7d2b05482603f",
-   "title": "ZDI-26-718: Cisco Identity Services Engine MnTRESTLivelogService XML External Entity Processing Information Disclosure Vulnerability",
-   "link": "http://www.zerodayinitiative.com/advisories/ZDI-26-718/",
-   "source": "Zero Day Initiative",
-   "published": "2026-09-18T05:00:00+00:00",
-   "summary": "This vulnerability allows remote attackers to disclose sensitive information on affected installations of Cisco Identity Services Engine. Authentication is required to exploit this vulnerability. The ZDI has assigned a CVSS rating of 4.9. The following CVEs are assigned: CVE-2026-20235.",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "cisco"
-   ],
-   "cve_ids": [
-    "CVE-2026-20235"
-   ],
-   "score": 35,
-   "priority": "medium",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "8e35bf8943041913",
-   "title": "ZDI-26-717: Cisco Identity Services Engine AlarmMessageDiskQueue Deserialization of Untrusted Data Remote Code Execution Vulnerability",
-   "link": "http://www.zerodayinitiative.com/advisories/ZDI-26-717/",
-   "source": "Zero Day Initiative",
-   "published": "2026-09-18T05:00:00+00:00",
-   "summary": "This vulnerability allows remote attackers to execute arbitrary code on affected installations of Cisco Identity Services Engine. Authentication is required to exploit this vulnerability. The ZDI has assigned a CVSS rating of 7.2. The following CVEs are assigned: CVE-2026-20211.",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "cisco"
-   ],
-   "cve_ids": [
-    "CVE-2026-20211"
-   ],
-   "score": 35,
-   "priority": "medium",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "2fda39f193708467",
-   "title": "ZDI-26-716: Cisco Identity Services Engine createDBLink Command Injection Remote Code Execution Vulnerability",
-   "link": "http://www.zerodayinitiative.com/advisories/ZDI-26-716/",
-   "source": "Zero Day Initiative",
-   "published": "2026-09-18T05:00:00+00:00",
-   "summary": "This vulnerability allows remote attackers to execute arbitrary code on affected installations of Cisco Identity Services Engine. Authentication is required to exploit this vulnerability. The ZDI has assigned a CVSS rating of 7.2. The following CVEs are assigned: CVE-2026-20176.",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "cisco"
-   ],
-   "cve_ids": [
-    "CVE-2026-20176"
-   ],
-   "score": 35,
-   "priority": "medium",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "7ca75e01abd369e5",
-   "title": "ZDI-26-715: Linux Mint Xreader PDF File Parsing Type Confusion Remote Code Execution Vulnerability",
-   "link": "http://www.zerodayinitiative.com/advisories/ZDI-26-715/",
-   "source": "Zero Day Initiative",
-   "published": "2026-09-18T05:00:00+00:00",
-   "summary": "This vulnerability allows remote attackers to execute arbitrary code on affected installations of Linux Mint Xreader. User interaction is required to exploit this vulnerability in that the target must visit a malicious page or open a malicious file. The ZDI has assigned a CVSS rating of 7.8. The following CVEs are assigned: CVE-2026-19772.",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "linux"
-   ],
-   "cve_ids": [
-    "CVE-2026-19772"
-   ],
-   "score": 35,
-   "priority": "medium",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "5312c3ef7d1841c6",
-   "title": "Cisco IOS XR Software Security Hardening Release: September 2026",
-   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-hardening-iosxr-qg64NcM?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Cisco%20IOS%20XR%20Software%20Security%20Hardening%20Release:%20September%202026%26vs_k=1",
-   "source": "Cisco PSIRT",
-   "published": "2026-09-17T21:13:28+00:00",
-   "summary": "As part of Cisco's ongoing commitment to proactive security and product quality, the Cisco IOS XR Software engineering team has conducted a comprehensive internal security review. This review resulted in software hardening releases that address multiple internally discovered vulnerabilities. These vulnerabilities were found during internal testing and are not known to be actively exploited. To…",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "cisco",
-    "ios"
-   ],
-   "cve_ids": [],
-   "score": 30,
-   "priority": "medium",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "bc6e59db16faa9de",
-   "title": "Cisco Secure Email Gateway SQL Injection Vulnerability",
-   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-esa-inj-2bLVGmhX?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Cisco%20Secure%20Email%20Gateway%20SQL%20Injection%20Vulnerability%26vs_k=1",
-   "source": "Cisco PSIRT",
-   "published": "2026-09-17T16:47:12+00:00",
-   "summary": "A vulnerability in the email parsing of Cisco AsyncOS Software for Cisco Secure Email Gateway could allow an unauthenticated, remote attacker to execute arbitrary commands with root privileges on the underlying operating system. This vulnerability is due to insufficient validation in the email parsing logic. An attacker could exploit this vulnerability by sending a crafted email message that…",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "cisco"
-   ],
-   "cve_ids": [],
-   "score": 30,
-   "priority": "medium",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "fa03fab307c3e03b",
-   "title": "AI Threat Landscape Digest: July–August 2026",
-   "link": "https://research.checkpoint.com/2026/ai-threat-landscape-digest-july-august-2026/",
-   "source": "Check Point Research",
-   "published": "2026-09-17T14:41:15+00:00",
-   "summary": "The defining development of the period came not from attackers but from the AI labs themselves, whose models broke out of controlled evaluations and reached real systems. In the wild, the criminal and state use of AI continued to mature along the lines tracked in earlier editions: models now act as attack operators, an underground […] The post AI Threat Landscape Digest: July–August 2026 appeared…",
-   "categories": [
-    "exploited"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 40,
-   "priority": "medium",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "0a1e518651649aa9",
-   "title": "Ready, Settra, Go: New Settra Ransomware Variant Deploys MeshAgent RMM",
-   "link": "https://www.huntress.com/blog/new-settra-ransomware-variant",
-   "source": "Huntress",
-   "published": "2026-09-17T13:00:00+00:00",
-   "summary": "Huntress has recently seen two incidents involving Settra, a ransomware variant that was first publicly reported in June 2026.",
-   "categories": [
-    "ransomware"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 10,
-   "priority": "low",
-   "first_seen": "2026-10-17T16:31:45.315937+00:00"
-  },
-  {
-   "id": "5647db05bd957224",
-   "title": "Fake OpenAI Billing Emails Target ChatGPT Users in Credential Phishing Scam - Hackread",
-   "link": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQdW93dUYtQTNicjJDVDAyS0ZkTlQwNXdjcXBFcm05LVVvcl9kREVKRlB4V1FMQ0hLSTFTalBJMjdGSU9nUU9ySXAwTW9teUhCR1V0akNnazVPbVlxWEd2RE9LSFJxOUx5c0lOdVd4U2hZclJmZXBuWFJMSk5fUkFzTV90V1c3M0k4WEE?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-09-17T07:00:00+00:00",
-   "summary": "Fake OpenAI Billing Emails Target ChatGPT Users in Credential Phishing Scam Hackread",
-   "categories": [
-    "social_engineering"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 20,
-   "priority": "low",
-   "first_seen": "2026-10-18T22:24:30.089639+00:00"
   }
  ]
 }
