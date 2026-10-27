@@ -18,11 +18,23 @@ const SITE = "https://astruzocyber.github.io/CVE/";
 
 const day = (iso) => (iso ? String(iso).slice(0, 10) : "date unknown");
 
+const inScope = (it, s) => (!s.tier || it.tier === s.tier) && (s.closed || !it.closed);
+
 function visible() {
   return (state.data?.items || []).filter(
-    (it) => (!state.tier || it.tier === state.tier) && (!state.asset || (it.assets || []).includes(state.asset))
-      && (state.closed || !it.closed),
+    (it) => inScope(it, state) && (!state.asset || (it.assets || []).includes(state.asset)),
   );
+}
+
+/** Per-asset counts for the asset dropdown, scoped to the current tier and
+ *  closed-items setting so "Asset (N)" equals the cards that choosing it shows. */
+export function assetCounts(items, s) {
+  const counts = {};
+  for (const it of items || []) {
+    if (!inScope(it, s)) continue;
+    for (const a of it.assets || []) counts[a] = (counts[a] || 0) + 1;
+  }
+  return counts;
 }
 
 // YAML snippet to paste under `entries:` in config/triage.yaml (GitHub web editor).
@@ -124,12 +136,16 @@ function present() {
 }
 
 function renderAssetSelect() {
-  const counts = {};
-  for (const it of state.data.items) for (const a of it.assets || []) counts[a] = (counts[a] || 0) + 1;
-  byId("esc-asset").innerHTML = `<option value="">All assets</option>` + (state.data.assets || [])
-    .filter((a) => counts[a.name])
-    .map((a) => `<option value="${escapeHtml(a.name)}">${escapeHtml(a.name)} (${counts[a.name]})</option>`)
+  // List every asset that has any item (stable option set), but count only
+  // the items the current tier / closed setting would actually show.
+  const any = assetCounts(state.data.items, { tier: "", closed: true });
+  const counts = assetCounts(state.data.items, state);
+  const sel = byId("esc-asset");
+  sel.innerHTML = `<option value="">All assets</option>` + (state.data.assets || [])
+    .filter((a) => any[a.name])
+    .map((a) => `<option value="${escapeHtml(a.name)}">${escapeHtml(a.name)} (${counts[a.name] || 0})</option>`)
     .join("");
+  sel.value = state.asset;
 }
 
 /** Loads data/escalations.json, renders the board, and tags matching alerts
@@ -162,13 +178,13 @@ export async function initEscalations(alerts, rerender) {
   byId("esc-hint").textContent =
     `Matched against ${state.data.assets?.length || 0} assets in your environment profile · updated ${day(state.data.generated_at)}`;
   renderAssetSelect();
-  byId("esc-tier").addEventListener("change", (e) => { state.tier = e.target.value; render(); });
+  byId("esc-tier").addEventListener("change", (e) => { state.tier = e.target.value; renderAssetSelect(); render(); });
   byId("esc-asset").addEventListener("change", (e) => { state.asset = e.target.value; render(); });
   byId("esc-copy").addEventListener("click", () => copyText(briefText(visible()), "Briefing copied"));
   byId("esc-download").addEventListener("click", () =>
     downloadBlob(briefText(visible()), "text/plain", `security-briefing-${todayStamp()}.txt`));
   byId("esc-present").addEventListener("click", present);
-  byId("esc-closed")?.addEventListener("change", (e) => { state.closed = e.target.checked; render(); });
+  byId("esc-closed")?.addEventListener("change", (e) => { state.closed = e.target.checked; renderAssetSelect(); render(); });
   byId("esc-grid").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-esc-triage]");
     if (!btn) return;
