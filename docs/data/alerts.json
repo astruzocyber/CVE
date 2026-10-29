@@ -1,5 +1,730 @@
 [
   {
+    "cve_id": "CVE-2026-61571",
+    "description": "AVideo is a video-sharing Platform. Prior to 8.1.0, the encoder lacks a global authentication layer and exposes control and status PHP endpoints to anonymous network callers. `view/run.php` has a commented-out guard and invokes `Encoder::run()`. `view/queue.json.php` calls `Encoder::getAll(true)`, reveals streamer URLs through `getSiteURL()`, and triggers processing with `execRun()`. `view/status.php` returns `Access-Control-Allow-Origin` with a wildcard, reads the queue, triggers processing, and exposes host memory statistics through `ServerMonitor::getMemory()` when `serverStatus` is set. `view/listFiles.json.php` checks only `Login::canBulkEncode()`, which admits anonymous callers whenever `disableBulkEncode` is empty, the default. Its `path` parameter is resolved with `realpath()` and listed with `scandir()` without a base-directory restriction. An unauthenticated attacker can drive the privileged queue processor, read queue and streamer-site information, obtain memory statistics and enumerate media file names and paths in any directory readable by the web-server user. Enumeration is limited to configured media extensions and does not itself disclose arbitrary file contents. This issue is fixed in version 8.1.0.",
+    "cvss_score": 7.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-306",
+      "CWE-862"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.3,
+      "cvss_component": 42.6,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-28T22:17:16.193",
+    "nvd_last_modified": "2026-10-28T22:17:16.193",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.679168+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-61564",
+    "description": "AVideo is a video-sharing Platform. Prior to 8.1.0, the unauthenticated installer endpoint `install/checkConfiguration.php` assembles `videos/configuration.php` by interpolating request parameters, including `webSiteRootURL`, into single-quoted PHP string literals without escaping. An attacker can terminate a literal and inject PHP that executes as the web-server user when the generated, directly requestable file is loaded. Exploitation requires `videos/configuration.php` to be absent, as on every fresh deployment or after the file is removed or moved; an existing file blocks this endpoint. The supplied `systemRootPath` must contain index.php and a connection using `databaseHost`, `databaseUser`, and `databasePass` must succeed, but the attacker can point those parameters to their own database server and needs no target credentials. The write location is also derived from `systemRootPath` without a base-directory constraint. This permits arbitrary command execution, reading and overwriting files owned by the web-server user, persistent PHP code, and control over stored database connection settings. The endpoint additionally interpolates request values into streamer and configuration INSERT statements, creating a secondary SQL-injection sink. This issue is fixed in version 8.1.0.",
+    "cvss_score": 10.0,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-94"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 58.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 10.0,
+      "cvss_component": 58.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-28T22:17:15.750",
+    "nvd_last_modified": "2026-10-28T22:17:15.750",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.679158+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-54453",
+    "description": "OpenCATS is an open-source applicant tracking system and recruitment CRM for staffing agencies and hiring teams. Prior to version 0.10.0, the Professional License configuration feature in `SettingsUI` (`manageProfessional`) accepts administrator-controlled license key input that is reconstructed into a PHP `define()` statement in `config.php` without safe escaping. Because the application includes `config.php`, crafted input can alter the file's PHP syntax and cause persistent arbitrary PHP execution with the web server process privileges. An authenticated administrator must have Settings module access and permission to update Professional License configuration, and `config.php` must be writable for this write-based path. Successful exploitation can read, modify or delete application data, expose candidate, contact, company, job order and user account information, alter the installation or configuration, and provide a foothold for further attacks. Unauthenticated exploitation and exploitation without Settings access are not established. This issue is fixed in version 0.10.0.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-74",
+      "CWE-94"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-28T22:17:15.100",
+    "nvd_last_modified": "2026-10-28T22:17:15.233",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.679147+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-96741",
+    "description": "The DSGVO All in one for WP plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Comment Content via Output Buffer Regex Corruption in all versions up to, and including, 5.0 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This is only exploitable when the administrator has enabled both the 'Google Tag Manager' integration and the 'Replace integration automatically [Beta]' option, and requires the crafted comment to be approved by an administrator.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress",
+      "wp plugin"
+    ],
+    "source": "nvd",
+    "published": "2026-10-29T04:18:45.600",
+    "nvd_last_modified": "2026-10-29T04:18:45.600",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.676161+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-96669",
+    "description": "The Food Store \u2013 Online Food Delivery & Pickup plugin for WordPress is vulnerable to Stored Cross-Site Scripting via 'service_type' Cookie in all versions up to, and including, 1.5.5 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The attack is seeded unauthenticated by supplying a payload via the ?type= query parameter on the public checkout page, which the plugin writes directly into the browser's service_type cookie; this cookie value is later persisted to order meta and rendered unescaped in the admin panel.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-29T04:18:45.430",
+    "nvd_last_modified": "2026-10-29T04:18:45.430",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.676150+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-96666",
+    "description": "The Schema App Structured Data plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Comment Content via 'Remove Microdata' Output Filter in all versions up to, and including, 2.3.2 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Exploitation requires that an administrator has enabled the plugin's 'Remove Microdata' option and approves the malicious comment.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-29T04:18:45.273",
+    "nvd_last_modified": "2026-10-29T04:18:45.273",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.676140+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-96228",
+    "description": "SSL Wireless SMS Notification for WordPress is vulnerable to Authentication Bypass in all versions up to, and including, 3.8.1. The public final_login_ajax_action handler resolves a user and issues an authenticated session by matching the wp_sslcare_otp table on only the attacker-supplied phone and cap_data, without verifying the SMS OTP or any server-side single-use state. Because cap_data was chosen by the attacker in the public otp_login_ajax_action step (which stores the row before sending the SMS), the finalize step trivially matches and the user is looked up solely by the sslcare_login_phone meta. This makes it possible for unauthenticated attackers who know a phone-linked user's number to take over that account.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-287"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-29T04:18:45.110",
+    "nvd_last_modified": "2026-10-29T04:18:45.110",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.676130+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-93904",
+    "description": "The Social Web Suite \u2013 Social Media Auto Post, Social Media Auto Publish plugin for WordPress is vulnerable to generic SQL Injection via the 'exclude_posts' parameter in all versions up to, and including, 4.1.12 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. The HMAC authentication gate protecting the endpoint is bypassable on any freshly activated installation where an administrator has not yet visited the settings page, because the secret_key option remains empty until lazily generated at that point, allowing an attacker to compute a valid token using hash_hmac('sha256', '', $timestamp) with any chosen timestamp.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-29T04:18:44.543",
+    "nvd_last_modified": "2026-10-29T04:18:44.543",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.676119+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-93855",
+    "description": "The SendPress Newsletters plugin for WordPress is vulnerable to time-based SQL Injection via the 'subscriberid' parameter in all versions up to, and including, 1.26.1.20 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database. The nonce gating the handler uses the hardcoded action value 'sendpress-is-awesome', which is rendered on the same public page served by the [sp-form formid=\"manage\"] shortcode, making it trivially obtainable by unauthenticated visitors and effectively bypassing the nonce as an access control.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-89"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-29T04:18:43.923",
+    "nvd_last_modified": "2026-10-29T04:18:43.923",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.676107+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-93757",
+    "description": "The Wild Apricot Login plugin for WordPress is vulnerable to Authentication Bypass via SSO Email-Collision Account Binding in all versions up to, and including, 1.0.18. When no WildApricot contact-ID mapping is found for an incoming SSO login, the plugin falls back to a network-global `get_user_by('email', ...)` lookup in `Module.php` to resolve a WordPress user, then `UserSynchronizer::syncWaContact()` binds and `Controller::login()` issues a session cookie via `wp_set_auth_cookie()` for that resolved user \u2014 both guarded only by `is_super_admin()` \u2014 without ever requiring proof of ownership of the matched WordPress account such as a password, local account-linking confirmation, inbox verification, or administrator approval. This makes it possible for attackers with custom-level WildApricot membership access to authenticate as an existing WordPress subsite administrator on a path-based Multisite network, obtaining a valid network-global authentication cookie for the victim without their credentials. Exploitation requires that the attacker control a WildApricot contact whose email address matches the target WordPress administrator's email \u2014 achievable via a public zero-fee membership application on the connected WildApricot organization \u2014 and that they complete the SSO flow on any subsite where Wild Apricot Login is active; because WordPress user identities and authentication cookies are network-global, the cookie issued on that subsite is equally valid on any other subsite where the victim user holds an administrator role.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-287"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-29T04:18:43.763",
+    "nvd_last_modified": "2026-10-29T04:18:43.763",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.676098+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-109516",
+    "description": "The Bot for Telegram on WooCommerce plugin for WordPress is vulnerable to Authentication Bypass leading to Account Takeover in all versions up to, and including, 1.3.0. The `/wp-json/woo-telegram/v1/main/` REST endpoint is registered with `permission_callback => '__return_true'` and performs no Telegram webhook signature verification, allowing an unauthenticated attacker to POST a forged bot update with a `message.chat.id` set to any WordPress login name; `bftow_get_user_system_id()` resolves this attacker-supplied value to the targeted account via `get_user_by('login', $tgId)` with no ownership proof, and writes a login token computed as `md5($_SERVER['HTTP_USER_AGENT'] . time())` \u2014 both inputs are fully attacker-controlled or bounded within seconds using the response's own `Date` header. The resulting token is redeemable at the unauthenticated, capability-check-free, and nonce-less `?action=bftow_create_order&bftow_token=` endpoint, which calls `wp_set_auth_cookie()` unconditionally via `login_user_by_id`, issuing a persistent authenticated session cookie for the targeted account to the attacker. This makes it possible for unauthenticated attackers to log in as any WordPress user, including administrators, given only that user's username.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-287"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-29T04:18:22.763",
+    "nvd_last_modified": "2026-10-29T04:18:22.763",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.676087+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-113387",
+    "description": "The Ortto plugin for WordPress before 1.0.25 did not authenticate configuration update requests, relying only on a secret exposed in public HTML. An unauthenticated threat actor could overwrite the plugin's configuration to serve arbitrary scripts.",
+    "cvss_score": 8.6,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-306"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 50.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.6,
+      "cvss_component": 50.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-29T02:16:49.937",
+    "nvd_last_modified": "2026-10-29T04:18:23.603",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.676076+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
+    "cve_id": "CVE-2026-118804",
+    "description": "Bricks Builder 2.4.3 and before contains a broken access control vulnerability that allows unauthenticated attackers to access restricted post content by submitting crafted post_status and post_type values in the originalQueryVars parameter to the POST /wp-json/bricks/v1/query_result REST endpoint using a publicly obtainable nonce. Attackers can set post_status to draft or private, or post_type to shop_coupon, to disclose unpublished posts, private content, and WooCommerce coupon data that is otherwise blocked by the standard WordPress REST API routes.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 43.8,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 43.8,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-10-28T22:17:14.963",
+    "nvd_last_modified": "2026-10-28T22:17:14.963",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-10-29T05:47:02.676064+00:00",
+    "osv_checked": "2026-10-29"
+  },
+  {
     "cve_id": "CVE-2026-46300",
     "description": "In the Linux kernel, the following vulnerability has been resolved:\n\nnet: skbuff: preserve shared-frag marker during coalescing\n\nskb_try_coalesce() can attach paged frags from @from to @to.  If @from\nhas SKBFL_SHARED_FRAG set, the resulting @to skb can contain the same\nexternally-owned or page-cache-backed frags, but the shared-frag marker\nis currently lost.\n\nThat breaks the invariant relied on by later in-place writers.  In\nparticular, ESP input checks skb_has_shared_frag() before deciding\nwhether an uncloned nonlinear skb can skip skb_cow_data().  If TCP\nreceive coalescing has moved shared frags into an unmarked skb, ESP can\nsee skb_has_shared_frag() as false and decrypt in place over page-cache\nbacked frags.\n\nPropagate SKBFL_SHARED_FRAG when skb_try_coalesce() transfers paged\nfrags.  The tailroom copy path does not need the marker because it copies\nbytes into @to's linear data rather than transferring frag descriptors.",
     "cvss_score": 7.8,
@@ -36,8 +761,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 56.4,
+    "epss_score_prev": 0.10192,
     "osv_id": "CVE-2026-46300",
     "osv_fixed_versions": [
       {
@@ -181,8 +906,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 95.7,
+    "epss_score_prev": 0.89294,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -276,7 +1001,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -330,7 +1055,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -384,7 +1109,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -438,8 +1163,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.6,
+    "epss_score_prev": 0.00297,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -451,7 +1176,7 @@
     ],
     "source": "nvd",
     "published": "2026-07-30T14:16:57.420",
-    "nvd_last_modified": "2026-10-28T20:17:25.583",
+    "nvd_last_modified": "2026-10-29T04:18:36.507",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -496,8 +1221,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00188,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -564,8 +1289,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00249,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -639,8 +1364,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.8,
+    "epss_score_prev": 0.01319,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -700,8 +1425,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00273,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -768,7 +1493,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -823,8 +1548,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -916,8 +1641,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -1009,8 +1734,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00207,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1063,8 +1788,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00207,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1117,8 +1842,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00222,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1171,8 +1896,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00207,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1225,8 +1950,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00222,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1279,8 +2004,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00207,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1333,8 +2058,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00222,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1387,8 +2112,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00222,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1441,8 +2166,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00222,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1495,8 +2220,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00222,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1549,8 +2274,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00238,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1603,8 +2328,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 33.7,
+    "epss_score_prev": 0.00238,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1657,8 +2382,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00649,
     "osv_id": "CVE-2023-0698",
     "osv_fixed_versions": [],
     "affected": [
@@ -1725,8 +2450,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.4,
+    "epss_score_prev": 0.00187,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1823,7 +2548,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 54.8,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -1877,8 +2602,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.1,
+    "epss_score_prev": 0.00332,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1931,8 +2656,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00148,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1987,8 +2712,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00171,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2043,8 +2768,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00194,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2099,8 +2824,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00241,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2156,8 +2881,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.0031,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2212,8 +2937,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 27.5,
+    "epss_score_prev": 0.00466,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2448,7 +3173,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:05.130",
-    "nvd_last_modified": "2026-10-28T19:35:11.907",
+    "nvd_last_modified": "2026-10-29T04:18:35.047",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -2517,7 +3242,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:05.017",
-    "nvd_last_modified": "2026-10-28T19:35:42.530",
+    "nvd_last_modified": "2026-10-29T04:18:34.870",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -2586,7 +3311,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:04.907",
-    "nvd_last_modified": "2026-10-28T19:36:22.657",
+    "nvd_last_modified": "2026-10-29T04:18:34.707",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -2655,7 +3380,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:04.750",
-    "nvd_last_modified": "2026-10-28T19:37:06.787",
+    "nvd_last_modified": "2026-10-29T04:18:34.550",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -2724,7 +3449,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:04.507",
-    "nvd_last_modified": "2026-10-28T19:40:28.643",
+    "nvd_last_modified": "2026-10-29T04:18:34.387",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -2793,7 +3518,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:04.380",
-    "nvd_last_modified": "2026-10-28T19:41:47.750",
+    "nvd_last_modified": "2026-10-29T04:18:34.207",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -2862,7 +3587,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:04.263",
-    "nvd_last_modified": "2026-10-28T19:42:05.093",
+    "nvd_last_modified": "2026-10-29T04:18:34.030",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -2931,7 +3656,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:04.157",
-    "nvd_last_modified": "2026-10-28T19:42:19.730",
+    "nvd_last_modified": "2026-10-29T04:18:33.867",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3000,7 +3725,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:04.050",
-    "nvd_last_modified": "2026-10-28T19:42:58.003",
+    "nvd_last_modified": "2026-10-29T04:18:33.693",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3069,7 +3794,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:03.943",
-    "nvd_last_modified": "2026-10-28T19:10:24.027",
+    "nvd_last_modified": "2026-10-29T04:18:33.540",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3138,7 +3863,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:03.833",
-    "nvd_last_modified": "2026-10-28T19:08:56.153",
+    "nvd_last_modified": "2026-10-29T04:18:33.377",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3207,7 +3932,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:03.723",
-    "nvd_last_modified": "2026-10-28T19:09:01.577",
+    "nvd_last_modified": "2026-10-29T04:18:33.210",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3276,7 +4001,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:03.613",
-    "nvd_last_modified": "2026-10-28T19:09:22.890",
+    "nvd_last_modified": "2026-10-29T04:18:33.043",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3414,7 +4139,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:03.393",
-    "nvd_last_modified": "2026-10-28T19:09:14.257",
+    "nvd_last_modified": "2026-10-29T04:18:32.880",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3483,7 +4208,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:03.283",
-    "nvd_last_modified": "2026-10-28T19:09:09.620",
+    "nvd_last_modified": "2026-10-29T04:18:32.717",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3552,7 +4277,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:03.077",
-    "nvd_last_modified": "2026-10-28T19:09:30.887",
+    "nvd_last_modified": "2026-10-29T04:18:32.537",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3621,7 +4346,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:02.863",
-    "nvd_last_modified": "2026-10-28T19:10:30.977",
+    "nvd_last_modified": "2026-10-29T04:18:32.367",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3690,7 +4415,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:02.753",
-    "nvd_last_modified": "2026-10-28T19:10:38.530",
+    "nvd_last_modified": "2026-10-29T04:18:32.203",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3759,7 +4484,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:01.907",
-    "nvd_last_modified": "2026-10-28T19:10:46.183",
+    "nvd_last_modified": "2026-10-29T04:18:32.050",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3828,7 +4553,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:01.790",
-    "nvd_last_modified": "2026-10-28T14:17:00.637",
+    "nvd_last_modified": "2026-10-29T04:18:31.793",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -3882,7 +4607,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:01.687",
-    "nvd_last_modified": "2026-10-28T19:08:09.420",
+    "nvd_last_modified": "2026-10-29T04:18:31.627",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3951,7 +4676,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:01.370",
-    "nvd_last_modified": "2026-10-28T19:08:02.683",
+    "nvd_last_modified": "2026-10-29T04:18:31.470",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4020,7 +4745,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:01.267",
-    "nvd_last_modified": "2026-10-28T14:17:00.217",
+    "nvd_last_modified": "2026-10-29T04:18:31.183",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -4074,7 +4799,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:01.157",
-    "nvd_last_modified": "2026-10-28T19:08:22.870",
+    "nvd_last_modified": "2026-10-29T04:18:31.000",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4143,7 +4868,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:01.053",
-    "nvd_last_modified": "2026-10-28T19:08:29.650",
+    "nvd_last_modified": "2026-10-29T04:18:30.817",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4212,7 +4937,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:00.943",
-    "nvd_last_modified": "2026-10-28T19:08:37.180",
+    "nvd_last_modified": "2026-10-29T04:18:30.647",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4281,7 +5006,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:00.637",
-    "nvd_last_modified": "2026-10-28T19:05:13.650",
+    "nvd_last_modified": "2026-10-29T04:18:30.443",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4350,7 +5075,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:00.303",
-    "nvd_last_modified": "2026-10-28T19:07:23.383",
+    "nvd_last_modified": "2026-10-29T04:18:30.257",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4419,7 +5144,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:17:00.087",
-    "nvd_last_modified": "2026-10-28T19:07:29.927",
+    "nvd_last_modified": "2026-10-29T04:18:30.027",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4488,7 +5213,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:16:59.970",
-    "nvd_last_modified": "2026-10-28T19:07:37.963",
+    "nvd_last_modified": "2026-10-29T04:18:29.833",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4557,7 +5282,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:16:59.863",
-    "nvd_last_modified": "2026-10-28T14:16:59.077",
+    "nvd_last_modified": "2026-10-29T04:18:29.623",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -4611,7 +5336,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:16:59.650",
-    "nvd_last_modified": "2026-10-28T14:16:58.920",
+    "nvd_last_modified": "2026-10-29T04:18:29.407",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -4665,7 +5390,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:16:59.203",
-    "nvd_last_modified": "2026-10-28T14:16:58.777",
+    "nvd_last_modified": "2026-10-29T04:18:29.177",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -4719,7 +5444,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T23:16:58.863",
-    "nvd_last_modified": "2026-10-28T14:16:58.633",
+    "nvd_last_modified": "2026-10-29T04:18:28.950",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5113,7 +5838,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T08:16:30.250",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:55.440",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5226,7 +5951,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T07:16:46.680",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:49.230",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5282,7 +6007,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T07:16:46.357",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:48.997",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5339,7 +6064,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T07:16:44.570",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:46.997",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5452,7 +6177,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T07:16:44.120",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:46.770",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5508,7 +6233,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T06:16:36.043",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:51.693",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5565,7 +6290,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T04:18:02.320",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:51.953",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5621,7 +6346,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T04:17:57.390",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:50.980",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5733,7 +6458,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T03:17:16.317",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:55.690",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5790,7 +6515,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T03:17:16.157",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:53.910",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5846,7 +6571,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T03:17:09.817",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:49.477",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5958,7 +6683,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T02:17:01.303",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-10-29T02:16:46.157",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -6311,7 +7036,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-27T21:19:34.117",
-    "nvd_last_modified": "2026-10-27T21:31:20.490",
+    "nvd_last_modified": "2026-10-29T04:18:41.447",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -6365,7 +7090,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-27T21:19:08.030",
-    "nvd_last_modified": "2026-10-27T21:31:20.477",
+    "nvd_last_modified": "2026-10-29T04:18:41.277",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -7336,7 +8061,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-27T12:17:04.543",
-    "nvd_last_modified": "2026-10-27T14:52:13.410",
+    "nvd_last_modified": "2026-10-29T02:16:47.920",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -7775,7 +8500,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-27T07:16:32.500",
-    "nvd_last_modified": "2026-10-27T14:52:13.410",
+    "nvd_last_modified": "2026-10-29T02:16:53.327",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -7831,7 +8556,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-27T06:17:23.437",
-    "nvd_last_modified": "2026-10-27T14:52:13.410",
+    "nvd_last_modified": "2026-10-29T02:16:49.820",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -79626,7 +80351,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-24T05:17:06.500",
-    "nvd_last_modified": "2026-10-26T13:41:11.497",
+    "nvd_last_modified": "2026-10-29T02:16:50.750",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -79683,7 +80408,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-24T05:17:04.900",
-    "nvd_last_modified": "2026-10-26T13:41:11.497",
+    "nvd_last_modified": "2026-10-29T02:16:50.623",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -94799,7 +95524,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-23T12:18:14.897",
-    "nvd_last_modified": "2026-10-23T12:18:15.013",
+    "nvd_last_modified": "2026-10-29T04:18:38.833",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -100028,7 +100753,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-22T11:17:05.300",
-    "nvd_last_modified": "2026-10-22T17:40:46.877",
+    "nvd_last_modified": "2026-10-29T04:18:19.740",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -100083,7 +100808,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-22T11:17:04.690",
-    "nvd_last_modified": "2026-10-22T17:40:46.877",
+    "nvd_last_modified": "2026-10-29T04:18:18.380",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -214827,7 +215552,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.1,
+    "risk_score_prev": 31.1,
     "epss_score_prev": 0.00637,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -221337,7 +222062,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 28.8,
+    "risk_score_prev": 30.9,
     "epss_score_prev": 0.00333,
     "osv_id": null,
     "osv_fixed_versions": [],
