@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-31T05:40:15.949280+00:00",
+ "generated_at": "2026-10-31T12:22:48.090800+00:00",
  "window_days": {
   "cve": 14,
   "intel": 7
@@ -294,30 +294,33 @@
    "title": "Ivanti Connect Secure 0-Days Exploited in the Wild to Gain Unauthenticated Root Access",
    "link": "https://cybersecuritynews.com/ivanti-connect-secure-zero-days-exploited/",
    "source": "Cyber Security News",
-   "date": "2026-10-30T08:26:39+00:00",
+   "date": "2026-10-31T08:25:08+00:00",
    "tier": "escalate",
    "assets": [
-    "Identity (AD / AD FS / Entra ID)"
+    "Identity (AD / AD FS / Entra ID)",
+    "Microsoft Teams"
    ],
    "criticality": "critical",
    "reasons": [
-    "In your estate: Identity (AD / AD FS / Entra ID) (\"Active Directory\")",
+    "In your estate: Identity (AD / AD FS / Entra ID) (\"Active Directory\"); Microsoft Teams (\"Microsoft Teams\", in another report on this incident)",
     "Category: Actively exploited, Patch / advisory, Identity",
     "High news priority (rule score 90)",
-    "Same incident covered by 2 distinct reports (1 outlets/feeds) -- first seen 2026-10-29"
+    "Same incident covered by 3 distinct reports (2 outlets/feeds) -- first seen 2026-10-29"
    ],
    "score": 90,
    "categories": [
     "identity",
     "vulnerability",
     "exploited",
-    "patch"
+    "patch",
+    "social_engineering"
    ],
    "cve_ids": [],
    "first_reported": "2026-10-29T03:55:14+00:00",
    "member_keys": [
     "intel:309052fd62fdf8a2",
-    "intel:7b431bf0a1eb9515"
+    "intel:7b431bf0a1eb9515",
+    "intel:684733fbdb8c46ca"
    ],
    "coverage": [
     {
@@ -333,6 +336,13 @@
      "source": "Cyber Security News",
      "date": "2026-10-30T08:26:39+00:00",
      "dup": false
+    },
+    {
+     "title": "Hackers Impersonate IT Help Desk on Microsoft Teams to Gain Domain Admin Access via AD CS Attacks",
+     "link": "https://gbhackers.com/hackers-impersonate-it-help-desk-microsoft-teams/",
+     "source": "GBHackers",
+     "date": "2026-10-31T08:25:08+00:00",
+     "dup": false
     }
    ]
   },
@@ -343,7 +353,7 @@
    "title": "Attackers Exploit PHP2Shell Flaws in Internet-Exposed Palo Alto Networks Management Interfaces",
    "link": "https://thehackernews.com/2026/10/attackers-exploit-php2shell-flaws-in.html",
    "source": "The Hacker News",
-   "date": "2026-10-29T05:50:17+00:00",
+   "date": "2026-10-31T07:59:01+00:00",
    "tier": "escalate",
    "assets": [
     "Palo Alto (firewalls / GlobalProtect / Cortex)"
@@ -353,7 +363,8 @@
     "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"Palo Alto Networks\")",
     "Category: Actively exploited, Patch / advisory, Vulnerability",
     "High news priority (rule score 80)",
-    "Same incident covered by 1 distinct reports (2 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-29"
+    "Names CVE-2026-109618, CVE-2026-109619",
+    "Same incident covered by 4 distinct reports (5 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-29"
    ],
    "score": 80,
    "categories": [
@@ -361,11 +372,17 @@
     "patch",
     "vulnerability"
    ],
-   "cve_ids": [],
+   "cve_ids": [
+    "CVE-2026-109618",
+    "CVE-2026-109619"
+   ],
    "first_reported": "2026-10-29T05:50:00+00:00",
    "member_keys": [
     "intel:2e615b75facf5d0f",
-    "intel:f4eff089be53135d"
+    "intel:f4eff089be53135d",
+    "intel:5a1a2dfba343cf02",
+    "intel:6298e6872ea400c1",
+    "intel:c6655157af825296"
    ],
    "coverage": [
     {
@@ -381,76 +398,6 @@
      "source": "The Hacker News",
      "date": "2026-10-29T05:50:17+00:00",
      "dup": true
-    }
-   ]
-  },
-  {
-   "key": "intel:46b2f6afa689a6e5",
-   "kind": "intel",
-   "ref": "46b2f6afa689a6e5",
-   "title": "Week in review: PHP vulnerabilities patched, exploited Palo Alto GlobalProtect VPN flaw - Help Net Security",
-   "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOaXJxMWhTU2hHODZhZ0lJUDJVbWk3S085RVFvaDdnQnpyQVB5R0VJOXktcWd6akJpcnVNZUwyNmFveDFNcXZzSXNHWFBjWmdYRVdWYy1fcExIZHN3WU4yNUR2NEF0a3d1Tm45UmFiamJkTS1VdWdkR2hOTE5nRXRtenpHeldHSDV1Q1JOZHlxekFYZ0hEdm1jRV9TdlhWcTNDY1BmdDZqZlVTc3pVSGdIY0Q3ejNfaXp5b0xIZERyc1BvZm1JSnc2Rw?oc=5",
-   "source": "GNews: virtualization & cloud",
-   "date": "2026-10-30T10:42:02+00:00",
-   "tier": "escalate",
-   "assets": [
-    "Palo Alto (firewalls / GlobalProtect / Cortex)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"Palo Alto\")",
-    "Category: Actively exploited, Patch / advisory, Vulnerability",
-    "High news priority (rule score 80)",
-    "Names CVE-2026-109618, CVE-2026-109619",
-    "Same incident covered by 5 distinct reports (5 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-24"
-   ],
-   "score": 80,
-   "categories": [
-    "patch",
-    "vulnerability",
-    "exploited"
-   ],
-   "cve_ids": [
-    "CVE-2026-109618",
-    "CVE-2026-109619"
-   ],
-   "first_reported": "2026-10-24T06:41:29+00:00",
-   "member_keys": [
-    "intel:46b2f6afa689a6e5",
-    "intel:7ba3fa736fbbe036",
-    "intel:550f34136f13b435",
-    "intel:967bfd48475ab566",
-    "intel:5a1a2dfba343cf02",
-    "intel:6298e6872ea400c1"
-   ],
-   "coverage": [
-    {
-     "title": "Palo Alto Confirms PHP RCE Vulnerabilities Impact PAN-OS and Multiple Network Products",
-     "link": "https://cybersecuritynews.com/palo-alto-confirms-php-rce-vulnerabilities/",
-     "source": "Cyber Security News",
-     "date": "2026-10-24T06:41:29+00:00",
-     "dup": false
-    },
-    {
-     "title": "Palo Alto Networks Addresses Critical PHP Vulnerabilities in PAN-OS - SSBCrack",
-     "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPTFd4UzU3WFpCbmpzcEF6WWZqNWRMSW95UEp3dVZ0NVN1R1NZZWVScy1LbWdPZC1Ec2FreElPYy1kdHBwYnZJWHdDeGU3TS1IUXVwUHVzUHBPVFdnVERzRXl5U0dXeHBqdWtpRTliR1VuNzJudlV5MFdZVllrYXVqSm5pRTVXX1ZQNm5JVmtJQVBsczYwNlBxdnVn?oc=5",
-     "source": "GNews: estate perimeter exploited",
-     "date": "2026-10-24T07:00:00+00:00",
-     "dup": false
-    },
-    {
-     "title": "Week in review: PHP vulnerabilities patched, exploited Palo Alto GlobalProtect VPN flaw - Help Net Security",
-     "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOaXJxMWhTU2hHODZhZ0lJUDJVbWk3S085RVFvaDdnQnpyQVB5R0VJOXktcWd6akJpcnVNZUwyNmFveDFNcXZzSXNHWFBjWmdYRVdWYy1fcExIZHN3WU4yNUR2NEF0a3d1Tm45UmFiamJkTS1VdWdkR2hOTE5nRXRtenpHeldHSDV1Q1JOZHlxekFYZ0hEdm1jRV9TdlhWcTNDY1BmdDZqZlVTc3pVSGdIY0Q3ejNfaXp5b0xIZERyc1BvZm1JSnc2Rw?oc=5",
-     "source": "GNews: virtualization & cloud",
-     "date": "2026-10-25T09:00:56+00:00",
-     "dup": false
-    },
-    {
-     "title": "Week in review: PHP vulnerabilities patched, exploited Palo Alto GlobalProtect VPN flaw",
-     "link": "https://www.helpnetsecurity.com/2026/10/25/week-in-review-php-vulnerabilities-patched-exploited-palo-alto-globalprotect-vpn-flaw/",
-     "source": "Help Net Security",
-     "date": "2026-10-25T09:00:56+00:00",
-     "dup": true
     },
     {
      "title": "CVE-2026-109618 Impact of Critical Vulnerabilities in PHP (CVE-2026-109618, CVE-2026-109619) on Palo Alto Networks Products (Severity: CRITICAL)",
@@ -465,119 +412,61 @@
      "source": "Cyber Security News",
      "date": "2026-10-30T10:42:02+00:00",
      "dup": false
+    },
+    {
+     "title": "Hackers Exploit PHP2Shell RCE Vulnerabilities to Gain Root Access on Palo Alto Firewalls",
+     "link": "https://gbhackers.com/hackers-exploit-php2shell-rce-vulnerabilities/",
+     "source": "GBHackers",
+     "date": "2026-10-31T07:59:01+00:00",
+     "dup": false
     }
    ]
   },
   {
-   "key": "intel:1d3293aa879962f8",
+   "key": "intel:550f34136f13b435",
    "kind": "intel",
-   "ref": "1d3293aa879962f8",
-   "title": "Microsoft Removes Entra ID Custom CSS Layout Options to Fight Phishing - Windows Report",
-   "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNMWZjck5PMHVUN2t1a1F5bHd1R05MSVZzU2x3R3hGTDJDQnFIbzNCRllQdk9vMEhwRDc0TGdvbFRVU0NvbHBKckRmWkc4bnZaeGZGWUNCWDZiOE16dEY3dUFrYjhWaWdZOTFCejhTejZYVXV5dVVsWUNOUmFDTU5ZREpuNE1SSGlCTHFuUDIzbER4Zy1NQ0FzSE9RdDg4QQ?oc=5",
-   "source": "GNews: identity & M365 attacks",
-   "date": "2026-10-27T05:59:49+00:00",
+   "ref": "550f34136f13b435",
+   "title": "Week in review: PHP vulnerabilities patched, exploited Palo Alto GlobalProtect VPN flaw - Help Net Security",
+   "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOaXJxMWhTU2hHODZhZ0lJUDJVbWk3S085RVFvaDdnQnpyQVB5R0VJOXktcWd6akJpcnVNZUwyNmFveDFNcXZzSXNHWFBjWmdYRVdWYy1fcExIZHN3WU4yNUR2NEF0a3d1Tm45UmFiamJkTS1VdWdkR2hOTE5nRXRtenpHeldHSDV1Q1JOZHlxekFYZ0hEdm1jRV9TdlhWcTNDY1BmdDZqZlVTc3pVSGdIY0Q3ejNfaXp5b0xIZERyc1BvZm1JSnc2Rw?oc=5",
+   "source": "GNews: virtualization & cloud",
+   "date": "2026-10-25T09:00:56+00:00",
    "tier": "escalate",
    "assets": [
-    "Identity (AD / AD FS / Entra ID)",
-    "Microsoft Teams",
-    "Windows (generic mention)"
+    "Palo Alto (firewalls / GlobalProtect / Cortex)"
    ],
    "criticality": "critical",
    "reasons": [
-    "In your estate: Identity (AD / AD FS / Entra ID) (\"Entra ID\"); Windows (generic mention) (\"Windows\"); Microsoft Teams (\"Microsoft Teams\", in another report on this incident)",
-    "Category: Social engineering, Identity",
-    "High news priority (rule score 75)",
-    "Same incident covered by 9 distinct reports (3 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-24"
+    "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"Palo Alto\")",
+    "Category: Actively exploited, Patch / advisory, Vulnerability",
+    "High news priority (rule score 80)",
+    "Same incident covered by 1 distinct reports (2 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-25"
    ],
-   "score": 75,
+   "score": 80,
    "categories": [
-    "social_engineering",
-    "identity"
+    "exploited",
+    "patch",
+    "vulnerability"
    ],
    "cve_ids": [],
-   "first_reported": "2026-10-24T06:04:41+00:00",
+   "first_reported": "2026-10-25T09:00:56+00:00",
    "member_keys": [
-    "intel:1d3293aa879962f8",
-    "intel:84f44cae3584a8b0",
-    "intel:94fb426d08a30d1b",
-    "intel:989d10d5ecd65608",
-    "intel:6a8c1c12b87d0ff2",
-    "intel:73a4bf61ebfc8a12",
-    "intel:ddf9f2979528aff7",
-    "intel:a8e3871dbd294b9b",
-    "intel:1a1ccb27e2a2bbbf",
-    "intel:9d9cddfe781a60dd"
+    "intel:550f34136f13b435",
+    "intel:967bfd48475ab566"
    ],
    "coverage": [
     {
-     "title": "Microsoft Teams to Use AI to Detect Phishing and Impersonation - Windows Report",
-     "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQYXFyNWc0LVRsd3pFeldsNzhsY3VQZW12VWRjaEFPVXpubGNLbzVWRk9VV2Y4aXRiRnZxRkllTG5ZQzhfZzhZMHN5TC16OU1TUlYyZV9qZ3lPaWd3ZHBFSlhJTWVWOGtsWkVKd2Qzems3ZDdzMmtRXzRDRC1vQnJCNjh5MWZFOUJjZmVCUHJwMjJxM0U?oc=5",
-     "source": "GNews: identity & M365 attacks",
-     "date": "2026-10-24T06:04:41+00:00",
+     "title": "Week in review: PHP vulnerabilities patched, exploited Palo Alto GlobalProtect VPN flaw - Help Net Security",
+     "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOaXJxMWhTU2hHODZhZ0lJUDJVbWk3S085RVFvaDdnQnpyQVB5R0VJOXktcWd6akJpcnVNZUwyNmFveDFNcXZzSXNHWFBjWmdYRVdWYy1fcExIZHN3WU4yNUR2NEF0a3d1Tm45UmFiamJkTS1VdWdkR2hOTE5nRXRtenpHeldHSDV1Q1JOZHlxekFYZ0hEdm1jRV9TdlhWcTNDY1BmdDZqZlVTc3pVSGdIY0Q3ejNfaXp5b0xIZERyc1BvZm1JSnc2Rw?oc=5",
+     "source": "GNews: virtualization & cloud",
+     "date": "2026-10-25T09:00:56+00:00",
      "dup": false
     },
     {
-     "title": "Microsoft Teams to get AI-powered phishing detection in 2026 - TechGig",
-     "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQZDgwOERrWENjV1VQMDd1UVVmc1gtbGY5WUtGcWZJdDZYX2hHWFVQa1ozMjYwTldTQWN3djRoMC16YVJuUlQzRlI4RWlUZUZ3OHJBcEdqOURSY1lwVW1EdGN3TDRKMHBaR3hLV3lIWm4wWXVmNjhKdHFwbXp6Z2Rnb1F5eDJTQnF2aFV0Y1E3ZGRHSGVoVU05c1V6SlpGNFlzS0dEY0Q3aUZndzdxa1HSAbMBQVVfeXFMTzdfT293M3pmUFF4UXhaZnAxQ2N1dHoxUUNteUk0cmdWel9PU0dVdGRDeS1ZelZ3OUREQ2lpM3MtWk1TSlZMSVVsX3NCT1hqYWN6N3Zwb3ZWUHNRcURYTk1kQUwzSUlGaXlOM2pHcEtYS0dkandMbHdNSHM1WDItY3pxamJlcDBQMzdBRndVdjh5OEM3bW5VTGZxcnB6UThNenFUT1NmX3U0UFBhX2VadG9UV1U?oc=5",
-     "source": "GNews: identity & M365 attacks",
-     "date": "2026-10-25T03:28:12+00:00",
-     "dup": false
-    },
-    {
-     "title": "Microsoft Teams to Use AI for Detecting Phishing Attacks Using Teams Conversations",
-     "link": "https://cybersecuritynews.com/microsoft-teams-ai-detection/",
-     "source": "Cyber Security News",
-     "date": "2026-10-25T06:55:23+00:00",
-     "dup": false
-    },
-    {
-     "title": "Microsoft Teams Adds AI-Powered Phishing Detection - LinkedIn",
-     "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPRUhwdXJwbmlzTk14bDFKSVVmNUdYVmJBb2EyUTVTbW1LVTJ4WDFVd3I3RFdPRUl1V0tTOEhGcVcxd1pnQ2cxZmQwRlVkeHZxeGYzY3Q3eXJGcTBzOEZfaUkycmVVZXFkcUxZemFkYVMwcW9zN0hVWi1tZ2ZTb1g5dklLU0x5RjlaalBuMWs0Vkk?oc=5",
-     "source": "GNews: Teams / help-desk vishing",
-     "date": "2026-10-25T13:01:46+00:00",
-     "dup": false
-    },
-    {
-     "title": "Microsoft Removes Entra ID Custom CSS Layout Options to Fight Phishing - Windows Report",
-     "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNMWZjck5PMHVUN2t1a1F5bHd1R05MSVZzU2x3R3hGTDJDQnFIbzNCRllQdk9vMEhwRDc0TGdvbFRVU0NvbHBKckRmWkc4bnZaeGZGWUNCWDZiOE16dEY3dUFrYjhWaWdZOTFCejhTejZYVXV5dVVsWUNOUmFDTU5ZREpuNE1SSGlCTHFuUDIzbER4Zy1NQ0FzSE9RdDg4QQ?oc=5",
-     "source": "GNews: identity & M365 attacks",
-     "date": "2026-10-26T08:34:06+00:00",
-     "dup": false
-    },
-    {
-     "title": "Microsoft Teams to Introduce AI-Powered Phishing Detection - www.systemtek.co.uk",
-     "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQUzRnZWdRZm1tVzRXUXNJYldaSXludFR2b3B1aUxib3g5QlN3MmxXVUczYmZqVXNiZERIZmpZdEw5Y3BPcEg0RXVmX0RtSkkxY3pZVDl2clRPREg1OHJDQzRhWEZ3ZmtiWlVxU0p6OXpMSnRkdklFSVY2QllKNmJwUWdLYW50UFZTUGJtaU4wY1ZKRVdhN0RzOTQ5OA?oc=5",
-     "source": "GNews: Teams / help-desk vishing",
-     "date": "2026-10-26T10:08:00+00:00",
-     "dup": false
-    },
-    {
-     "title": "Microsoft Teams to get AI protection against phishing and fraud - Computerworld",
-     "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxONkQ3OW9lUVVUQmNjZktpdEhsZVJBbjB4LXQyZU9RQzNjeThBa0s3M2J2QTZ0eFg4RWVZVTNtTUw2UTZTeGZPOGUtSlZIbVg3Y1VwbjBpSDdyMC1NZU5HWjJUZWNQUDVIZGM2d2kwdzZvbVVYYm5CcTUwY1M3MFlTeHB3cjZyWmpvNlJqNTVlNFdRUnRBOUVMWVg1NHh3b2xtMFBnSDBvWWdib1VpS1ZBTHln?oc=5",
-     "source": "GNews: identity & M365 attacks",
-     "date": "2026-10-26T15:44:25+00:00",
-     "dup": false
-    },
-    {
-     "title": "Microsoft Teams to Use AI for Detecting Phishing Attacks Using Teams Conversations - CyberSecurityNews",
-     "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1FcVV2X2pOOFlKRzNTMFFTYWRGTVhOcU9uSGl1N3BDU0ZRYzRGeHRLVEJYMlV4X0VVelF1WE5kU1JMUEZPazQzd3FWaWE0ZmlyR3ZGU1JhOE9RS1NneGF3NS1DYy1RWWEta0pn0gFwQVVfeXFMTS10YzhVTy1YVkVIWnpSTlc0dkt1V05aWmt2WWpuMTNONzBRejJtM0RibUEtbWc4V25sZDZiT001NzR3MzJnZWVnb0ZIV1FEbW91Tmp4TjUtQ3BMRzRxRjZXV0hIZWFJWFdGM0xVSUNBTg?oc=5",
-     "source": "GNews: Teams / help-desk vishing",
-     "date": "2026-10-26T19:56:19+00:00",
+     "title": "Week in review: PHP vulnerabilities patched, exploited Palo Alto GlobalProtect VPN flaw",
+     "link": "https://www.helpnetsecurity.com/2026/10/25/week-in-review-php-vulnerabilities-patched-exploited-palo-alto-globalprotect-vpn-flaw/",
+     "source": "Help Net Security",
+     "date": "2026-10-25T09:00:56+00:00",
      "dup": true
-    },
-    {
-     "title": "Microsoft Teams Adds AI That Reads Conversations to Catch Phishing With No Malicious Links - Tech Times",
-     "link": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOU0lVMXpBbmxON3ZXUWJzaFBOVDVaZUFOOE43ZEY3LUhDcFlzQmNNU0NwRElqT3Y0U2xYbThtRXJpbXozRVNVMTljdmZVT2J4SUE4dndReHRsTENEUmplbU9DRUM0aGVWNmhEZEVuVktDRkl3aWFSTFlLU1FuU2s5X2VFM3pYeFVEaE1KaWVSb0g4SlBYb3FmdFFMOU9rTXhwOWdHUGprN2k3M29Fb0o3SUtWRDFpNXlrcmVGVnQ2OXhUZ2lTTmxUT1hhRVBTNWNadEJR?oc=5",
-     "source": "GNews: identity & M365 attacks",
-     "date": "2026-10-27T05:10:02+00:00",
-     "dup": false
-    },
-    {
-     "title": "Microsoft Teams to Use AI to Catch Phishing Scams Hidden in Conversations - The420.in",
-     "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQMV9EZTRCX2daQllxeHhOWjd3WFFFNnU5bGRzbEhmcVd1T3VkbDMzLUtoTmVtTi1WekpZZFZ5MWpwM2VTcTk3NDdLdjM2YW5feGU4OFNxZlNZSDNIbmUxVGJhTlpUTzVsQUhLaEpsZUlsTEVyQ1hmOVg5UkQwMko4YjlGRDk?oc=5",
-     "source": "GNews: Teams / help-desk vishing",
-     "date": "2026-10-27T05:59:49+00:00",
-     "dup": false
     }
    ]
   },
@@ -591,14 +480,15 @@
    "date": "2026-10-28T22:28:18+00:00",
    "tier": "escalate",
    "assets": [
-    "Identity (AD / AD FS / Entra ID)"
+    "Identity (AD / AD FS / Entra ID)",
+    "Windows (generic mention)"
    ],
    "criticality": "critical",
    "reasons": [
-    "In your estate: Identity (AD / AD FS / Entra ID) (\"Microsoft Entra\")",
+    "In your estate: Identity (AD / AD FS / Entra ID) (\"Microsoft Entra\"); Windows (generic mention) (\"Windows\", in another report on this incident)",
     "Category: Social engineering, Identity",
     "High news priority (rule score 75)",
-    "Same incident covered by 3 distinct reports (2 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-26"
+    "Same incident covered by 4 distinct reports (2 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-26"
    ],
    "score": 75,
    "categories": [
@@ -609,6 +499,7 @@
    "first_reported": "2026-10-26T07:16:00+00:00",
    "member_keys": [
     "intel:3d23f81a9cc55679",
+    "intel:6a8c1c12b87d0ff2",
     "intel:95f24b8f8f147f2a",
     "intel:a4a6cd10cd925ce5",
     "intel:1135a9e86b030dac"
@@ -619,6 +510,13 @@
      "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNM0thRUtBWUhzb2pnNTRXb3RoTEJ5ekV5Vk9ULXo5N09zeHh0eXpick1ObUhLTG9jbTB3aU9UOGlRdWNnWkZkaEEybGNyXzlIT3Zac0tzSUpXLVJlSXNSVVpnTnYwNUJzdmJWdE0tV3NLM21YSC11MWdFOThjN0ZZNS1sdWV2S29SSm94YU1IVXhXVW44RlBZRDVRcVo5MHE5U0Z3?oc=5",
      "source": "GNews: identity & M365 attacks",
      "date": "2026-10-26T07:16:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft Removes Entra ID Custom CSS Layout Options to Fight Phishing - Windows Report",
+     "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNMWZjck5PMHVUN2t1a1F5bHd1R05MSVZzU2x3R3hGTDJDQnFIbzNCRllQdk9vMEhwRDc0TGdvbFRVU0NvbHBKckRmWkc4bnZaeGZGWUNCWDZiOE16dEY3dUFrYjhWaWdZOTFCejhTejZYVXV5dVVsWUNOUmFDTU5ZREpuNE1SSGlCTHFuUDIzbER4Zy1NQ0FzSE9RdDg4QQ?oc=5",
+     "source": "GNews: identity & M365 attacks",
+     "date": "2026-10-26T08:34:06+00:00",
      "dup": false
     },
     {
@@ -640,6 +538,55 @@
      "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOa2stb3hOaFpEVVYyMDNIWGZPNV94TVJYMHJTN0w4cnlKRG9rWjZ4ZFhyZHNOb0Jkb3RGbFpLbXBWd0x0ZXNSbFV2eDMwaFRCWVFoYVFSUExXcFhXbHZJVmZ1azREbEhSRWhobDlWSUVPMXRhX0trX2txRVUzM1kzTXFuT3V5OGlaNzRzc1ZTUkpoRnlpcWJJaENfSml4MjJyRFRZMzR0TTh4SmdrbnRzZzBmOTlnNU91enoyYnFXa2M5OThvQ0pJZQ?oc=5",
      "source": "GNews: identity & M365 attacks",
      "date": "2026-10-28T22:28:18+00:00",
+     "dup": false
+    }
+   ]
+  },
+  {
+   "key": "intel:73c963477f379f0e",
+   "kind": "intel",
+   "ref": "73c963477f379f0e",
+   "title": "Hackers Impersonate IT Help Desk on Microsoft Teams to Hijack Active Directory Accounts and Steal Data - Cyber Press",
+   "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE9maFlWUnR4T3o3VTRXbVk5elZlSHZnV0E3SW1QODRHcnpKWFJiZG1pdkJxZy1uZnduMVhVa08wNHNySXNldUpsUVhIRGRlVFR3MlJld1hudUFmQjNzTXQ2V0lkc1NSZHVlR2dPb21FNm1HLVZPanduaEgzbmPSAXxBVV95cUxPZmhZVlJ0eE96N1U0V21ZOXpWZUh2Z1dBN0ltUDg0R3J6SlhSYmRtaXZCcWctbmZ3bjFYVWtPMDRzcklzZXVKbFFYSERkZVRUdzJSZXdYbnVBZkIzc010NldJZHNTUmR1ZUdnT29tRTZtRy1WT2p3bmhIM25j?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "date": "2026-10-31T05:13:42+00:00",
+   "tier": "escalate",
+   "assets": [
+    "Identity (AD / AD FS / Entra ID)",
+    "Microsoft Teams"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Identity (AD / AD FS / Entra ID) (\"Active Directory\"); Microsoft Teams (\"Microsoft Teams\")",
+    "Category: Social engineering, Identity",
+    "High news priority (rule score 75)",
+    "Same incident covered by 2 distinct reports (2 outlets/feeds) -- first seen 2026-10-30"
+   ],
+   "score": 75,
+   "categories": [
+    "social_engineering",
+    "ransomware",
+    "identity"
+   ],
+   "cve_ids": [],
+   "first_reported": "2026-10-30T06:30:26+00:00",
+   "member_keys": [
+    "intel:73c963477f379f0e",
+    "intel:13e4c0844c8d541f"
+   ],
+   "coverage": [
+    {
+     "title": "Fake IT help desk callers got by on little more than names and email addresses",
+     "link": "https://www.helpnetsecurity.com/2026/10/30/cisco-talos-it-help-desk-vishing/",
+     "source": "Help Net Security",
+     "date": "2026-10-30T06:30:26+00:00",
+     "dup": false
+    },
+    {
+     "title": "Hackers Impersonate IT Help Desk on Microsoft Teams to Hijack Active Directory Accounts and Steal Data - Cyber Press",
+     "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE9maFlWUnR4T3o3VTRXbVk5elZlSHZnV0E3SW1QODRHcnpKWFJiZG1pdkJxZy1uZnduMVhVa08wNHNySXNldUpsUVhIRGRlVFR3MlJld1hudUFmQjNzTXQ2V0lkc1NSZHVlR2dPb21FNm1HLVZPanduaEgzbmPSAXxBVV95cUxPZmhZVlJ0eE96N1U0V21ZOXpWZUh2Z1dBN0ltUDg0R3J6SlhSYmRtaXZCcWctbmZ3bjFYVWtPMDRzcklzZXVKbFFYSERkZVRUdzJSZXdYbnVBZkIzc010NldJZHNTUmR1ZUdnT29tRTZtRy1WT2p3bmhIM25j?oc=5",
+     "source": "GNews: identity & M365 attacks",
+     "date": "2026-10-31T05:13:42+00:00",
      "dup": false
     }
    ]
@@ -1384,13 +1331,13 @@
    "kev": false
   },
   {
-   "key": "intel:a3ca58e83f2b4dad",
+   "key": "intel:f51030e640541d7d",
    "kind": "intel",
-   "ref": "a3ca58e83f2b4dad",
+   "ref": "f51030e640541d7d",
    "title": "Microsoft Teams External Chats Exploited in 400+ Social Engineering Attacks - The National CIO Review",
    "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNeE1xdjVFSzhOWmdQVUw5Tm4zT2hSRm9uQ0Y2VmMtQm92aG05YWhGQ21OUWF3WkFybExCYUlTb2JFaUppc0kwUWpxMG9UN1Z3YXo0cUlkeThNSGRXTTZ3VVFseVI0a2tXdHQ0YUxpRGx0dGhrQi16VDJrSUFnaVQ3bFhPSHRVdjhnLTloQXZrbGFORmFBUXJSdTBPS1BzOERJem1vMm02SC1hM0RrYjdSMjV6TXpZRURfVTRpbDZQVmxPTlF0cXQtUE85WklpV3Rl?oc=5",
    "source": "GNews: identity & M365 attacks",
-   "date": "2026-10-28T15:36:08+00:00",
+   "date": "2026-10-31T07:38:47+00:00",
    "tier": "escalate",
    "assets": [
     "Microsoft Teams"
@@ -1400,34 +1347,146 @@
     "In your estate: Microsoft Teams (\"Microsoft Teams\")",
     "Category: Actively exploited, Social engineering",
     "High news priority (rule score 100)",
-    "Same incident covered by 7 distinct reports (4 outlets/feeds, plus 3 reposts of the same headline) -- first seen 2026-10-26"
+    "Same incident covered by 2 distinct reports (2 outlets/feeds) -- first seen 2026-10-28"
    ],
    "score": 100,
    "categories": [
-    "social_engineering",
-    "ransomware",
-    "exploited"
+    "exploited",
+    "social_engineering"
    ],
    "cve_ids": [],
-   "first_reported": "2026-10-26T14:00:00+00:00",
+   "first_reported": "2026-10-28T15:36:08+00:00",
    "member_keys": [
+    "intel:f51030e640541d7d",
+    "intel:a230e1dee3ebf1d9"
+   ],
+   "coverage": [
+    {
+     "title": "Microsoft Teams External Chats Exploited in 400+ Social Engineering Attacks - The National CIO Review",
+     "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNeE1xdjVFSzhOWmdQVUw5Tm4zT2hSRm9uQ0Y2VmMtQm92aG05YWhGQ21OUWF3WkFybExCYUlTb2JFaUppc0kwUWpxMG9UN1Z3YXo0cUlkeThNSGRXTTZ3VVFseVI0a2tXdHQ0YUxpRGx0dGhrQi16VDJrSUFnaVQ3bFhPSHRVdjhnLTloQXZrbGFORmFBUXJSdTBPS1BzOERJem1vMm02SC1hM0RrYjdSMjV6TXpZRURfVTRpbDZQVmxPTlF0cXQtUE85WklpV3Rl?oc=5",
+     "source": "GNews: identity & M365 attacks",
+     "date": "2026-10-28T15:36:08+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft Teams is the new front door for attackers, and they’re posing as your help desk - Express Computer",
+     "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOS0ZBMkRyTThuX2dtcGlqMk5GZi0zTE14eWtTMTNkUlBSUWREMWRQbEFUenVMRWU3TVROcFRNNUk0T2s2dm9yUkRVZ1Fvcjc4bDMwV2tKRUpMY29HTXRyS21aenNXWUpueFBQQUg0OVFKY0dwczZBSTl6ekRnRjJFYUowSXM0bU5fNEpic0owdnd4UmU5VlpzaVo1ZEJrdkdVYldCZzVqVmNiZG90ck5CdFhuM3pSZHRrY01VQUdZVmVidlhNbFAwb0VHNkxBMWlYZjB0LVBn?oc=5",
+     "source": "GNews: Teams / help-desk vishing",
+     "date": "2026-10-31T07:38:47+00:00",
+     "dup": false
+    }
+   ]
+  },
+  {
+   "key": "cve:CVE-2026-110447",
+   "kind": "cve",
+   "ref": "CVE-2026-110447",
+   "title": "CVE-2026-110447: Collabora Online Built-in CODE Server before 26.4.303 (richdocumentscode), a Nextcloud app, allows remote code execution, as exploited in the wild in September and October 2026, a different vulnerability than CVE-2025-66",
+   "link": "#CVE-2026-110447",
+   "date": "2026-10-23",
+   "published": "2026-10-14",
+   "tier": "escalate",
+   "assets": [
+    "Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace) (\"Nextcloud\")",
+    "CISA KEV: actively exploited (added 2026-10-23, federal due date 2026-10-26)",
+    "Security news reports this CVE as exploited",
+    "EPSS 0.73 >= 0.5 (high exploitation likelihood)",
+    "CVSS 9.8 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 88.6,
+   "cvss": 9.8,
+   "kev": true
+  },
+  {
+   "key": "intel:84f44cae3584a8b0",
+   "kind": "intel",
+   "ref": "84f44cae3584a8b0",
+   "title": "Attackers Use Microsoft Teams IT Support Scams to Deploy Malware and Ransomware - The Hacker News",
+   "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBlcUJ6NnBTTThUM29Zc2ViWlA2SXFTZXdpc2JTbkpHdW9KSDMtOGczNUVMNmFLSUtoNVFQLUZFSjlSWWlUVVB1VVJPVF9zeFJBX0pyUGtDNFFRQU5OMzhheXhacmtpblNzaTNjX0lzQnRpOUtNY0xwVEFmRQ?oc=5",
+   "source": "GNews: Teams / help-desk vishing",
+   "date": "2026-10-27T23:05:00+00:00",
+   "tier": "escalate",
+   "assets": [
+    "Microsoft Teams"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Microsoft Teams (\"Microsoft Teams\")",
+    "Category: Social engineering, Ransomware",
+    "High news priority (rule score 70)",
+    "Same incident covered by 13 distinct reports (5 outlets/feeds, plus 4 reposts of the same headline) -- first seen 2026-10-25"
+   ],
+   "score": 70,
+   "categories": [
+    "social_engineering",
+    "ransomware"
+   ],
+   "cve_ids": [],
+   "first_reported": "2026-10-25T03:28:12+00:00",
+   "member_keys": [
+    "intel:84f44cae3584a8b0",
+    "intel:94fb426d08a30d1b",
+    "intel:989d10d5ecd65608",
+    "intel:73a4bf61ebfc8a12",
     "intel:a3ca58e83f2b4dad",
+    "intel:ddf9f2979528aff7",
     "intel:e74a3ffe34293c23",
     "intel:03f54c74f6feb398",
+    "intel:a8e3871dbd294b9b",
     "intel:7e7aedef5be44f29",
+    "intel:1a1ccb27e2a2bbbf",
+    "intel:9d9cddfe781a60dd",
     "intel:77cbabb8be81b57a",
     "intel:e044e481cfb36183",
     "intel:34a47c59a1c15a3b",
     "intel:d69915507b2d759d",
-    "intel:0f7010e500f45119",
-    "intel:f51030e640541d7d"
+    "intel:0f7010e500f45119"
    ],
    "coverage": [
+    {
+     "title": "Microsoft Teams to get AI-powered phishing detection in 2026 - TechGig",
+     "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQZDgwOERrWENjV1VQMDd1UVVmc1gtbGY5WUtGcWZJdDZYX2hHWFVQa1ozMjYwTldTQWN3djRoMC16YVJuUlQzRlI4RWlUZUZ3OHJBcEdqOURSY1lwVW1EdGN3TDRKMHBaR3hLV3lIWm4wWXVmNjhKdHFwbXp6Z2Rnb1F5eDJTQnF2aFV0Y1E3ZGRHSGVoVU05c1V6SlpGNFlzS0dEY0Q3aUZndzdxa1HSAbMBQVVfeXFMTzdfT293M3pmUFF4UXhaZnAxQ2N1dHoxUUNteUk0cmdWel9PU0dVdGRDeS1ZelZ3OUREQ2lpM3MtWk1TSlZMSVVsX3NCT1hqYWN6N3Zwb3ZWUHNRcURYTk1kQUwzSUlGaXlOM2pHcEtYS0dkandMbHdNSHM1WDItY3pxamJlcDBQMzdBRndVdjh5OEM3bW5VTGZxcnB6UThNenFUT1NmX3U0UFBhX2VadG9UV1U?oc=5",
+     "source": "GNews: identity & M365 attacks",
+     "date": "2026-10-25T03:28:12+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft Teams to Use AI for Detecting Phishing Attacks Using Teams Conversations",
+     "link": "https://cybersecuritynews.com/microsoft-teams-ai-detection/",
+     "source": "Cyber Security News",
+     "date": "2026-10-25T06:55:23+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft Teams Adds AI-Powered Phishing Detection - LinkedIn",
+     "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPRUhwdXJwbmlzTk14bDFKSVVmNUdYVmJBb2EyUTVTbW1LVTJ4WDFVd3I3RFdPRUl1V0tTOEhGcVcxd1pnQ2cxZmQwRlVkeHZxeGYzY3Q3eXJGcTBzOEZfaUkycmVVZXFkcUxZemFkYVMwcW9zN0hVWi1tZ2ZTb1g5dklLU0x5RjlaalBuMWs0Vkk?oc=5",
+     "source": "GNews: Teams / help-desk vishing",
+     "date": "2026-10-25T13:01:46+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft Teams to Introduce AI-Powered Phishing Detection - www.systemtek.co.uk",
+     "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQUzRnZWdRZm1tVzRXUXNJYldaSXludFR2b3B1aUxib3g5QlN3MmxXVUczYmZqVXNiZERIZmpZdEw5Y3BPcEg0RXVmX0RtSkkxY3pZVDl2clRPREg1OHJDQzRhWEZ3ZmtiWlVxU0p6OXpMSnRkdklFSVY2QllKNmJwUWdLYW50UFZTUGJtaU4wY1ZKRVdhN0RzOTQ5OA?oc=5",
+     "source": "GNews: Teams / help-desk vishing",
+     "date": "2026-10-26T10:08:00+00:00",
+     "dup": false
+    },
     {
      "title": "Attackers are exploiting Teams chat as a fake IT help desk - Techzine Global",
      "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQV3k5dHQ1WkVJaGdsR0Jnc3h5cGhJZHRIejVnUW9VY3lvWGloWkRXR1ZfbEJjZXlZSDR2UnpIeFEtRnEwNk41WjJhdnhESU1jeE5Odkt2anhKR2VQWXBqLUMzR2NqcnJTcElYYTlyOGx0dzVKVHlRZU5VaWxWQzY5Y2k2LUVGNU1iOUM0Vkg5cnR6LVRvUkFDXzhwYVRiYmNkN0xBdGhlYw?oc=5",
      "source": "GNews: Teams / help-desk vishing",
      "date": "2026-10-26T14:00:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft Teams to get AI protection against phishing and fraud - Computerworld",
+     "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxONkQ3OW9lUVVUQmNjZktpdEhsZVJBbjB4LXQyZU9RQzNjeThBa0s3M2J2QTZ0eFg4RWVZVTNtTUw2UTZTeGZPOGUtSlZIbVg3Y1VwbjBpSDdyMC1NZU5HWjJUZWNQUDVIZGM2d2kwdzZvbVVYYm5CcTUwY1M3MFlTeHB3cjZyWmpvNlJqNTVlNFdRUnRBOUVMWVg1NHh3b2xtMFBnSDBvWWdib1VpS1ZBTHln?oc=5",
+     "source": "GNews: identity & M365 attacks",
+     "date": "2026-10-26T15:44:25+00:00",
      "dup": false
     },
     {
@@ -1445,11 +1504,32 @@
      "dup": true
     },
     {
+     "title": "Microsoft Teams to Use AI for Detecting Phishing Attacks Using Teams Conversations - CyberSecurityNews",
+     "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1FcVV2X2pOOFlKRzNTMFFTYWRGTVhOcU9uSGl1N3BDU0ZRYzRGeHRLVEJYMlV4X0VVelF1WE5kU1JMUEZPazQzd3FWaWE0ZmlyR3ZGU1JhOE9RS1NneGF3NS1DYy1RWWEta0pn0gFwQVVfeXFMTS10YzhVTy1YVkVIWnpSTlc0dkt1V05aWmt2WWpuMTNONzBRejJtM0RibUEtbWc4V25sZDZiT001NzR3MzJnZWVnb0ZIV1FEbW91Tmp4TjUtQ3BMRzRxRjZXV0hIZWFJWFdGM0xVSUNBTg?oc=5",
+     "source": "GNews: Teams / help-desk vishing",
+     "date": "2026-10-26T19:56:19+00:00",
+     "dup": true
+    },
+    {
      "title": "Attackers Use Microsoft Teams IT Support Scams to Deploy Malware and Ransomware - news.lavx.hu",
      "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOajhqZ08wU0JrOFpHRjJfRmdBNnhhUzNGSVVjaGdUYldrVlFQN1JtZ3FjT0tRd2xLUDhxMnRtdjQxVEVtRElFcDM0SGptSkQzWm5TMUUwR3dsWEJmTmtEeTZ6RlBWeHEtQmZzUmxpclhOLVV2TWp6WFhGaEdyanhmZG5IeFNTSWtnaVVXUEZ6NmlKb1NEQ0FrdDVzZ3U1SGFXc093cHRCTXppY2c0?oc=5",
      "source": "GNews: Teams / help-desk vishing",
      "date": "2026-10-27T04:35:00+00:00",
      "dup": true
+    },
+    {
+     "title": "Microsoft Teams Adds AI That Reads Conversations to Catch Phishing With No Malicious Links - Tech Times",
+     "link": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOU0lVMXpBbmxON3ZXUWJzaFBOVDVaZUFOOE43ZEY3LUhDcFlzQmNNU0NwRElqT3Y0U2xYbThtRXJpbXozRVNVMTljdmZVT2J4SUE4dndReHRsTENEUmplbU9DRUM0aGVWNmhEZEVuVktDRkl3aWFSTFlLU1FuU2s5X2VFM3pYeFVEaE1KaWVSb0g4SlBYb3FmdFFMOU9rTXhwOWdHUGprN2k3M29Fb0o3SUtWRDFpNXlrcmVGVnQ2OXhUZ2lTTmxUT1hhRVBTNWNadEJR?oc=5",
+     "source": "GNews: identity & M365 attacks",
+     "date": "2026-10-27T05:10:02+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft Teams to Use AI to Catch Phishing Scams Hidden in Conversations - The420.in",
+     "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQMV9EZTRCX2daQllxeHhOWjd3WFFFNnU5bGRzbEhmcVd1T3VkbDMzLUtoTmVtTi1WekpZZFZ5MWpwM2VTcTk3NDdLdjM2YW5feGU4OFNxZlNZSDNIbmUxVGJhTlpUTzVsQUhLaEpsZUlsTEVyQ1hmOVg5UkQwMko4YjlGRDk?oc=5",
+     "source": "GNews: Teams / help-desk vishing",
+     "date": "2026-10-27T05:59:49+00:00",
+     "dup": false
     },
     {
      "title": "Hackers Impersonate IT Support on Microsoft Teams to Gain Remote Access to Employees' PCs - CyberSecurityNews",
@@ -1485,64 +1565,8 @@
      "source": "GNews: Teams / help-desk vishing",
      "date": "2026-10-27T23:05:00+00:00",
      "dup": false
-    },
-    {
-     "title": "Microsoft Teams External Chats Exploited in 400+ Social Engineering Attacks - The National CIO Review",
-     "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNeE1xdjVFSzhOWmdQVUw5Tm4zT2hSRm9uQ0Y2VmMtQm92aG05YWhGQ21OUWF3WkFybExCYUlTb2JFaUppc0kwUWpxMG9UN1Z3YXo0cUlkeThNSGRXTTZ3VVFseVI0a2tXdHQ0YUxpRGx0dGhrQi16VDJrSUFnaVQ3bFhPSHRVdjhnLTloQXZrbGFORmFBUXJSdTBPS1BzOERJem1vMm02SC1hM0RrYjdSMjV6TXpZRURfVTRpbDZQVmxPTlF0cXQtUE85WklpV3Rl?oc=5",
-     "source": "GNews: identity & M365 attacks",
-     "date": "2026-10-28T15:36:08+00:00",
-     "dup": false
     }
    ]
-  },
-  {
-   "key": "cve:CVE-2026-110447",
-   "kind": "cve",
-   "ref": "CVE-2026-110447",
-   "title": "CVE-2026-110447: Collabora Online Built-in CODE Server before 26.4.303 (richdocumentscode), a Nextcloud app, allows remote code execution, as exploited in the wild in September and October 2026, a different vulnerability than CVE-2025-66",
-   "link": "#CVE-2026-110447",
-   "date": "2026-10-23",
-   "published": "2026-10-14",
-   "tier": "escalate",
-   "assets": [
-    "Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace) (\"Nextcloud\")",
-    "CISA KEV: actively exploited (added 2026-10-23, federal due date 2026-10-26)",
-    "Security news reports this CVE as exploited",
-    "EPSS 0.73 >= 0.5 (high exploitation likelihood)",
-    "CVSS 9.8 >= 8.8 work threshold for a high asset"
-   ],
-   "score": 88.6,
-   "cvss": 9.8,
-   "kev": true
-  },
-  {
-   "key": "intel:73c963477f379f0e",
-   "kind": "intel",
-   "ref": "73c963477f379f0e",
-   "title": "Fake IT help desk callers got by on little more than names and email addresses",
-   "link": "https://www.helpnetsecurity.com/2026/10/30/cisco-talos-it-help-desk-vishing/",
-   "source": "Help Net Security",
-   "date": "2026-10-30T06:30:26+00:00",
-   "tier": "escalate",
-   "assets": [
-    "Microsoft Teams"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Microsoft Teams (\"Microsoft Teams\")",
-    "Category: Social engineering, Ransomware",
-    "High news priority (rule score 70)"
-   ],
-   "score": 70,
-   "categories": [
-    "social_engineering",
-    "ransomware"
-   ],
-   "cve_ids": []
   },
   {
    "key": "intel:99aa0d462116352a",
@@ -1715,53 +1739,6 @@
    "cve_ids": []
   },
   {
-   "key": "intel:3340db612b17ec05",
-   "kind": "intel",
-   "ref": "3340db612b17ec05",
-   "title": "OpenAI AI Agents Exploit Zero-Day Vulnerabilities to Escape Sandboxes and Access Host Systems",
-   "link": "https://gbhackers.com/openai-ai-agents-exploit-zero-day-vulnerabilities/",
-   "source": "GBHackers",
-   "date": "2026-10-24T09:36:29+00:00",
-   "tier": "escalate",
-   "assets": [
-    "AI assistants & coding agents"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: AI assistants & coding agents (\"OpenAI\")",
-    "Category: Actively exploited, Patch / advisory, Vulnerability",
-    "Same incident covered by 2 distinct reports (2 outlets/feeds) -- first seen 2026-10-24"
-   ],
-   "score": 55,
-   "categories": [
-    "exploited",
-    "patch",
-    "vulnerability"
-   ],
-   "cve_ids": [],
-   "first_reported": "2026-10-24T05:43:26+00:00",
-   "member_keys": [
-    "intel:3340db612b17ec05",
-    "intel:622d820e69d047f9"
-   ],
-   "coverage": [
-    {
-     "title": "OpenAI AI Agents Bypass Security Isolation, Exploiting 0-Days in Red-Teaming Tests",
-     "link": "https://cybersecuritynews.com/openai-ai-agents-bypass-security/",
-     "source": "Cyber Security News",
-     "date": "2026-10-24T05:43:26+00:00",
-     "dup": false
-    },
-    {
-     "title": "OpenAI AI Agents Exploit Zero-Day Vulnerabilities to Escape Sandboxes and Access Host Systems",
-     "link": "https://gbhackers.com/openai-ai-agents-exploit-zero-day-vulnerabilities/",
-     "source": "GBHackers",
-     "date": "2026-10-24T09:36:29+00:00",
-     "dup": false
-    }
-   ]
-  },
-  {
    "key": "intel:1e1e409882622092",
    "kind": "intel",
    "ref": "1e1e409882622092",
@@ -1881,7 +1858,7 @@
    "title": "Attacker Relentlessly Scans for Credentials by Impersonating AI Bots",
    "link": "https://www.darkreading.com/cyber-risk/attacker-impersonates-ai-bots-scans-credentials",
    "source": "Dark Reading",
-   "date": "2026-10-30T16:12:10+00:00",
+   "date": "2026-10-31T05:33:41+00:00",
    "tier": "escalate",
    "assets": [
     "AI assistants & coding agents"
@@ -1890,17 +1867,19 @@
    "reasons": [
     "In your estate: AI assistants & coding agents (\"OpenAI\")",
     "Category: Social engineering",
-    "Same incident covered by 2 distinct reports (2 outlets/feeds) -- first seen 2026-10-28"
+    "Same incident covered by 3 distinct reports (3 outlets/feeds) -- first seen 2026-10-28"
    ],
    "score": 20,
    "categories": [
-    "social_engineering"
+    "social_engineering",
+    "vulnerability"
    ],
    "cve_ids": [],
    "first_reported": "2026-10-28T14:37:52+00:00",
    "member_keys": [
     "intel:70a17c1d3a5b4867",
-    "intel:0eea71e4fa5bd695"
+    "intel:0eea71e4fa5bd695",
+    "intel:e8eb82345a00ebfc"
    ],
    "coverage": [
     {
@@ -1915,6 +1894,13 @@
      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNQ0JhUjZ6MnppY2VVOGR3UWRiaGEyYWZBd3VRQW56NE5WVl9VUWdlblBHREFCVUVDbDBkMEd3eHdtRE96c2Q5Q3NWWHh5REU5SmZBcUZ6d182YXFoOFlpeDg2YTM0eU5HSkhhTDNPZEk0UkJ4MFdvdUxGR0s1UzlUVmRXX1VJOHR3bm5qcUd5b0o3M2ZHYnAtVVdWZGNNaWdfYkVtTWZYcFZwZF9Tall6aWI4QQ?oc=5",
      "source": "GNews: remote access & password managers",
      "date": "2026-10-30T16:12:10+00:00",
+     "dup": false
+    },
+    {
+     "title": "A Shared ChatGPT Link Could Run Attacker Code in Your Session and Read Private Chats",
+     "link": "https://thehackernews.com/2026/10/a-shared-chatgpt-link-could-run.html",
+     "source": "The Hacker News",
+     "date": "2026-10-31T05:33:41+00:00",
      "dup": false
     }
    ]
@@ -1974,6 +1960,94 @@
      "link": "http://www.zerodayinitiative.com/advisories/ZDI-26-831/",
      "source": "Zero Day Initiative",
      "date": "2026-10-28T05:00:00+00:00",
+     "dup": false
+    }
+   ]
+  },
+  {
+   "key": "intel:97d8373584c8ffb5",
+   "kind": "intel",
+   "ref": "97d8373584c8ffb5",
+   "title": "WordPress RCE Vulnerability Under Active Attack With Over 58,000 Exploit Attempts Blocked",
+   "link": "https://gbhackers.com/wordpress-rce-vulnerability-2/",
+   "source": "GBHackers",
+   "date": "2026-10-31T07:03:41+00:00",
+   "tier": "escalate",
+   "assets": [
+    "Web publishing (WordPress)"
+   ],
+   "criticality": "medium",
+   "reasons": [
+    "In your estate: Web publishing (WordPress) (\"WordPress\")",
+    "Category: Actively exploited, Vulnerability",
+    "High news priority (rule score 70)",
+    "Same incident covered by 6 distinct reports (5 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-29"
+   ],
+   "score": 70,
+   "categories": [
+    "patch",
+    "vulnerability",
+    "exploited"
+   ],
+   "cve_ids": [],
+   "first_reported": "2026-10-29T02:31:49+00:00",
+   "member_keys": [
+    "intel:97d8373584c8ffb5",
+    "intel:d7944ec1eff64fd3",
+    "intel:0810bb257037f285",
+    "intel:9d1be4cac0cf3141",
+    "intel:6473fc7702e557a9",
+    "intel:908592cfed8e9b4c",
+    "intel:8a07fb932a0a5d4b"
+   ],
+   "coverage": [
+    {
+     "title": "WordPress 7.1.4 Fixes 22 Security Flaws, Including an Unauthenticated RCE Vulnerability",
+     "link": "https://cybersecuritynews.com/wordpress-7-1-4-fixes-security-flaws/",
+     "source": "Cyber Security News",
+     "date": "2026-10-29T02:31:49+00:00",
+     "dup": false
+    },
+    {
+     "title": "WordPress 7.1.4 Security Update Patches 22 Vulnerabilities Affecting Millions of Websites",
+     "link": "https://gbhackers.com/wordpress-7-1-4-security-update/",
+     "source": "GBHackers",
+     "date": "2026-10-29T05:35:13+00:00",
+     "dup": false
+    },
+    {
+     "title": "Fresh WordPress Vulnerability in Attackers’ Crosshairs",
+     "link": "https://www.securityweek.com/fresh-wordpress-vulnerability-in-attackers-crosshairs/",
+     "source": "SecurityWeek",
+     "date": "2026-10-30T12:04:13+00:00",
+     "dup": false
+    },
+    {
+     "title": "Fresh WordPress Vulnerability in Attackers’ Crosshairs - SecurityWeek",
+     "link": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxONjNkaWJLSWdxY1BvMDBaaTZrcndHb1N2Z3prSTg5ZTlQSF9fNVpZTFN6YTZMOGk2U2V5NWlaYlE0ODFCaHVmYkNIVG40ME1Oc0FXZ1dMR1ZPSzJja3d2cnVpSVpka0d1UXExWWhCMGUzSmV5c3JSMFcxbjFrOHFNRWFmMTE0Qm1wdjRV0gGQAUFVX3lxTE1OTDl1ZDlDanBWUlBVT0ZqakMzeS1sN2kwWDEwVUJOdElpelN6RGQxbGFkbHVEZEJJZ0sxSHBRZjlFOE1teVlKdms2dEphTTZ5NWNzTHdLTGwtMjlIT3ZRaGRJWlFVYkVvdUZUUFVLTDhmVWZNMzd2QXZ0SnBfT2lfMmNzYWdvSG56SlAxeDlVLQ?oc=5",
+     "source": "GNews: virtualization & cloud",
+     "date": "2026-10-30T12:04:13+00:00",
+     "dup": true
+    },
+    {
+     "title": "WordPress RCE Flaw Draws Nearly 63,000 Attack Attempts in Just 24 Hours",
+     "link": "https://thehackernews.com/2026/10/wordpress-rce-flaw-draws-nearly-63000.html",
+     "source": "The Hacker News",
+     "date": "2026-10-30T14:08:14+00:00",
+     "dup": false
+    },
+    {
+     "title": "Over 60,000 Attacks Target WordPress RCE Vulnerability Within 24 Hours",
+     "link": "https://cybersecuritynews.com/60000-attacks-targeting-wordpress/",
+     "source": "Cyber Security News",
+     "date": "2026-10-31T06:02:41+00:00",
+     "dup": false
+    },
+    {
+     "title": "WordPress RCE Vulnerability Under Active Attack With Over 58,000 Exploit Attempts Blocked",
+     "link": "https://gbhackers.com/wordpress-rce-vulnerability-2/",
+     "source": "GBHackers",
+     "date": "2026-10-31T07:03:41+00:00",
      "dup": false
     }
    ]
@@ -2169,6 +2243,30 @@
    "cve_ids": [
     "CVE-2026-102764"
    ]
+  },
+  {
+   "key": "intel:f578ce164fdbab6d",
+   "kind": "intel",
+   "ref": "f578ce164fdbab6d",
+   "title": "Kasten Kubernetes backup adds ransomware protection - TechTarget",
+   "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQbjRubWpwdWE0M19mYjc2QU1jOElZSmNIWWQxZDUzc3FWdFktZk0tb2dwR0x3YnV2aEhaMXpORmY4M011ZGI2cUswSEZ5anVSZm5URGl0WEdRb0xENjFFNWR3a2RzOHBhUE5zMV92eDFSTVRoblVvUlVqZlZPSmV0aVd0STJkSndVNGRTd1pJRGhpN1hVWGc?oc=5",
+   "source": "GNews: Veeam & backup attacks",
+   "date": "2026-10-31T05:31:53+00:00",
+   "tier": "work",
+   "assets": [
+    "Veeam backup & recovery"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Veeam backup & recovery (\"Kasten\")",
+    "Category: Ransomware",
+    "Defense, takedown or how-to news, not an active campaign: Work, not Escalate"
+   ],
+   "score": 35,
+   "categories": [
+    "ransomware"
+   ],
+   "cve_ids": []
   },
   {
    "key": "cve:CVE-2026-107239",
@@ -3408,7 +3506,7 @@
    "title": "In Other News: Anthropic Breach Dispute, UEFI Flaw Hits Most Servers, Cloudflare AI Data Leak - SecurityWeek",
    "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNdGNtWEhyMFhCLTZSRnVWaUFTWFRVRUJTcllzc0tkTlNSQXBRQ3JYWld2cmNsZzgxZHd5RjlXcnZzRlE5Z2ZfZWYxUHpka2NJaDFaajdkMXczNDN3VWQtRXN5X2FWdVQ5ZjhUWDRPb2FrTzlFcnRfclo3YnN6bXlrSHlBYlNyWmZrYVlZRHZ5ZnpuUHIwRnJFb1lIZThPU2tUTTJiY0gzX3hTXzFoMXEtSWswTDVnZzl3RWtzc9IBwgFBVV95cUxPQjQ4bmdWblFTbkRqVllfNFJIS0tSUWk4S0JsV2NyMjZfSFQ4Nl9pd2sxc0dqcElabmI2dEpqUnRHTG5wdjQxS0FkZTE3TTZKVHZHc1QxTXRUOXlwd3U2ZUVLbm41RXdfYnZoSW9nLXN6S0FrQjZNNUU5dEdRU3dDbVROZkxFay1LLWg4VF9HWnJhcWs3dXhxekFQR2J4SVdpaFBwVHNrYVZYOEUzX1Z0bnd4VDhteElzV2xFYTh3NVBzQQ?oc=5",
    "source": "GNews: virtualization & cloud",
-   "date": "2026-10-30T22:16:00+00:00",
+   "date": "2026-10-31T00:17:24+00:00",
    "tier": "work",
    "assets": [
     "AI assistants & coding agents",
@@ -3418,7 +3516,7 @@
    "reasons": [
     "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"Cloudflare\"); AI assistants & coding agents (\"Anthropic\")",
     "Category: Vulnerability",
-    "Same incident covered by 2 distinct reports (2 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-30"
+    "Same incident covered by 3 distinct reports (2 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-30"
    ],
    "score": 30,
    "categories": [
@@ -3429,7 +3527,8 @@
    "member_keys": [
     "intel:a440e7b48da476ad",
     "intel:b21b51ac11a132f9",
-    "intel:04387eae4a68bbd6"
+    "intel:04387eae4a68bbd6",
+    "intel:9b84341f8399bb04"
    ],
    "coverage": [
     {
@@ -3451,6 +3550,13 @@
      "link": "https://news.google.com/rss/articles/CBMiO0FVX3lxTE5SRDQ1S0VXN0l3NXdNLUlzODRjN1NBZW02RFB1ZlpfWTlwWVZyaFJhd2hMVFh5d2ZJNnBZ?oc=5",
      "source": "GNews: virtualization & cloud",
      "date": "2026-10-30T22:16:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "Cybersecurity Threat Landscape Intensifies: Anthropic Intrusion Dispute, UEFI Vulnerabilities, Cloudflare AI Data Exposure and Underground Breach Claims + Video - Howl.Link",
+     "link": "https://news.google.com/rss/articles/CBMiO0FVX3lxTE4yY0pBMjlDQUVlZDhMVEd2QndrZUdKdmt1SFFyWXlQX3BEVEZsb1FJNG9vS21MU0RrWkFZ?oc=5",
+     "source": "GNews: virtualization & cloud",
+     "date": "2026-10-31T00:17:24+00:00",
      "dup": false
     }
    ]
@@ -3678,76 +3784,6 @@
     "vulnerability"
    ],
    "cve_ids": []
-  },
-  {
-   "key": "intel:97d8373584c8ffb5",
-   "kind": "intel",
-   "ref": "97d8373584c8ffb5",
-   "title": "WordPress 7.1.4 Fixes 22 Security Flaws, Including an Unauthenticated RCE Vulnerability",
-   "link": "https://cybersecuritynews.com/wordpress-7-1-4-fixes-security-flaws/",
-   "source": "Cyber Security News",
-   "date": "2026-10-30T14:08:14+00:00",
-   "tier": "work",
-   "assets": [
-    "Web publishing (WordPress)"
-   ],
-   "criticality": "medium",
-   "reasons": [
-    "In your estate: Web publishing (WordPress) (\"WordPress\")",
-    "Category: Patch / advisory, Vulnerability",
-    "Same incident covered by 4 distinct reports (5 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-10-29"
-   ],
-   "score": 40,
-   "categories": [
-    "patch",
-    "vulnerability"
-   ],
-   "cve_ids": [],
-   "first_reported": "2026-10-29T02:31:49+00:00",
-   "member_keys": [
-    "intel:97d8373584c8ffb5",
-    "intel:d7944ec1eff64fd3",
-    "intel:0810bb257037f285",
-    "intel:9d1be4cac0cf3141",
-    "intel:6473fc7702e557a9"
-   ],
-   "coverage": [
-    {
-     "title": "WordPress 7.1.4 Fixes 22 Security Flaws, Including an Unauthenticated RCE Vulnerability",
-     "link": "https://cybersecuritynews.com/wordpress-7-1-4-fixes-security-flaws/",
-     "source": "Cyber Security News",
-     "date": "2026-10-29T02:31:49+00:00",
-     "dup": false
-    },
-    {
-     "title": "WordPress 7.1.4 Security Update Patches 22 Vulnerabilities Affecting Millions of Websites",
-     "link": "https://gbhackers.com/wordpress-7-1-4-security-update/",
-     "source": "GBHackers",
-     "date": "2026-10-29T05:35:13+00:00",
-     "dup": false
-    },
-    {
-     "title": "Fresh WordPress Vulnerability in Attackers’ Crosshairs",
-     "link": "https://www.securityweek.com/fresh-wordpress-vulnerability-in-attackers-crosshairs/",
-     "source": "SecurityWeek",
-     "date": "2026-10-30T12:04:13+00:00",
-     "dup": false
-    },
-    {
-     "title": "Fresh WordPress Vulnerability in Attackers’ Crosshairs - SecurityWeek",
-     "link": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxONjNkaWJLSWdxY1BvMDBaaTZrcndHb1N2Z3prSTg5ZTlQSF9fNVpZTFN6YTZMOGk2U2V5NWlaYlE0ODFCaHVmYkNIVG40ME1Oc0FXZ1dMR1ZPSzJja3d2cnVpSVpka0d1UXExWWhCMGUzSmV5c3JSMFcxbjFrOHFNRWFmMTE0Qm1wdjRV0gGQAUFVX3lxTE1OTDl1ZDlDanBWUlBVT0ZqakMzeS1sN2kwWDEwVUJOdElpelN6RGQxbGFkbHVEZEJJZ0sxSHBRZjlFOE1teVlKdms2dEphTTZ5NWNzTHdLTGwtMjlIT3ZRaGRJWlFVYkVvdUZUUFVLTDhmVWZNMzd2QXZ0SnBfT2lfMmNzYWdvSG56SlAxeDlVLQ?oc=5",
-     "source": "GNews: virtualization & cloud",
-     "date": "2026-10-30T12:04:13+00:00",
-     "dup": true
-    },
-    {
-     "title": "WordPress RCE Flaw Draws Nearly 63,000 Attack Attempts in Just 24 Hours",
-     "link": "https://thehackernews.com/2026/10/wordpress-rce-flaw-draws-nearly-63000.html",
-     "source": "The Hacker News",
-     "date": "2026-10-30T14:08:14+00:00",
-     "dup": false
-    }
-   ]
   },
   {
    "key": "intel:f58b4f6fec89eba7",
