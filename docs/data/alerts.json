@@ -1,5 +1,1740 @@
 [
   {
+    "cve_id": "CVE-2026-105769",
+    "description": "kaniko before 1.25.20 can send a Microsoft Entra ID (Azure AD) access token for Azure Resource Manager to an attacker-controlled registry host. kaniko uses the Azure Container Registry credential helper github.com/chrismellard/docker-credential-acr-env, which decides whether a host is an ACR registry with an unanchored regular expression, so any hostname containing .azurecr.io, .azurecr.cn, .azurecr.de or .azurecr.us is accepted. kaniko consults this helper for any registry that has no credentials in the Docker config and is not a Google or Amazon ECR registry, before contacting the registry. A Dockerfile that references an image on a lookalike host, such as FROM x.azurecr.io.attacker.com/img or COPY --from=<image>, causes the helper to obtain a token from the build's Azure identity (service principal environment variables, federated workload identity token, or managed identity) and POST it to https://<host>/oauth2/exchange. The attacker can use the token against Azure Resource Manager with the identity's role assignments until it expires, and can exchange it for credentials to any ACR registry the identity can access. No RUN instruction or push is required. This issue is fixed in 1.25.20.",
+    "cvss_score": 9.3,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-346",
+      "CWE-522"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 54.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.3,
+      "cvss_component": 54.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "Entra ID",
+      "Microsoft Entra"
+    ],
+    "source": "nvd",
+    "published": "2026-11-02T17:17:32.670",
+    "nvd_last_modified": "2026-11-02T19:34:23.993",
+    "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.957130+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-34382",
+    "description": "Dell Command Update, Dell Update and Alienware Update versions prior to 4.6.0 contains a Local Privilege Escalation Vulnerability in the custom catalog configuration. A local malicious user may potentially exploit this vulnerability in order to elevate their privileges.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00193,
+    "epss_percentile": 0.09014,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00193,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "Dell Command"
+    ],
+    "source": "nvd",
+    "published": "2022-09-02T18:15:12.093",
+    "nvd_last_modified": "2026-11-02T22:17:15.903",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "dell",
+        "product": "alienware_update",
+        "fixed": "4.6.0",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "dell",
+        "product": "command_update",
+        "fixed": "4.6.0",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "dell",
+        "product": "update",
+        "fixed": "4.6.0",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://www.dell.com/support/kbdoc/000202198",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956922+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2023-39214",
+    "description": "Exposure of sensitive information in Zoom Client SDK's before 5.15.5 may allow an authenticated user to enable a denial of service via network access.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-749",
+      "CWE-668"
+    ],
+    "epss_score": 0.0096,
+    "epss_percentile": 0.61548,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0096,
+      "epss_component": 0.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "Zoom"
+    ],
+    "source": "nvd",
+    "published": "2023-08-08T22:15:10.737",
+    "nvd_last_modified": "2026-11-02T23:17:17.370",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "zoom",
+        "product": "meeting_software_development_kit",
+        "fixed": "5.15.5",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "zoom",
+        "product": "rooms",
+        "fixed": "5.15.5",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "zoom",
+        "product": "zoom",
+        "fixed": "5.15.5",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://explore.zoom.us/en/trust/security/security-bulletin/",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956844+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-3235",
+    "description": "Use After Free in GitHub repository vim/vim prior to 9.0.0490.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00505,
+    "epss_percentile": 0.43158,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00505,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2022-3235",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "1c3dd8ddcba63c1af5112e567215b3cec2de11d0",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2022-09-18T20:15:09.303",
+    "nvd_last_modified": "2026-11-02T22:17:17.107",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "9.0.0490",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/1c3dd8ddcba63c1af5112e567215b3cec2de11d0",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://huntr.dev/bounties/96d5f7a0-a834-4571-b73b-0fe523b941af",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956797+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-3234",
+    "description": "Heap-based Buffer Overflow in GitHub repository vim/vim prior to 9.0.0483.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122",
+      "CWE-787"
+    ],
+    "epss_score": 0.00532,
+    "epss_percentile": 0.44985,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00532,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2022-3234",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "c249913edc35c0e666d783bfc21595cf9f7d9e0d",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2022-09-17T22:15:09.377",
+    "nvd_last_modified": "2026-11-02T22:17:16.913",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "9.0.0483",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/c249913edc35c0e666d783bfc21595cf9f7d9e0d",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://huntr.dev/bounties/90fdf374-bf04-4386-8a23-38c83b88f0da",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956787+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-3099",
+    "description": "Use After Free in GitHub repository vim/vim prior to 9.0.0360.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00499,
+    "epss_percentile": 0.4278,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00499,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2022-3099",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "35d21c6830fc2d68aca838424a0e786821c5891c",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2022-09-03T16:15:08.270",
+    "nvd_last_modified": "2026-11-02T22:17:16.410",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "9.0.0360",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/35d21c6830fc2d68aca838424a0e786821c5891c",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://huntr.dev/bounties/403210c7-6cc7-4874-8934-b57f88bd4f5e",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956757+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-3016",
+    "description": "Use After Free in GitHub repository vim/vim prior to 9.0.0286.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00534,
+    "epss_percentile": 0.4506,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00534,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2022-3016",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "6d24a51b94beb1991cddce221f90b455e2d50db7",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2022-08-28T12:15:08.897",
+    "nvd_last_modified": "2026-11-02T22:17:16.057",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "9.0.0286",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/6d24a51b94beb1991cddce221f90b455e2d50db7",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://huntr.dev/bounties/260516c2-5c4a-4b7f-a01c-04b1aeeea371",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956727+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-2982",
+    "description": "Use After Free in GitHub repository vim/vim prior to 9.0.0260.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00948,
+    "epss_percentile": 0.61197,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00948,
+      "epss_component": 0.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2022-2982",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "d6c67629ed05aae436164eec474832daf8ba7420",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2022-08-25T20:15:09.650",
+    "nvd_last_modified": "2026-11-02T22:17:15.290",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "9.0.0260",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/d6c67629ed05aae436164eec474832daf8ba7420",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://huntr.dev/bounties/53f53d9a-ba8a-4985-b7ba-23efbe6833be",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956717+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-2889",
+    "description": "Use After Free in GitHub repository vim/vim prior to 9.0.0225.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00534,
+    "epss_percentile": 0.4506,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00534,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2022-2889",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "91c7cbfe31bbef57d5fcf7d76989fc159f73ef15",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2022-08-19T13:15:08.423",
+    "nvd_last_modified": "2026-11-02T22:17:14.643",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "9.0.0225",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/91c7cbfe31bbef57d5fcf7d76989fc159f73ef15",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://huntr.dev/bounties/d1ac9817-825d-49ce-b514-1d5b12b6bdaa",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956705+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-2862",
+    "description": "Use After Free in GitHub repository vim/vim prior to 9.0.0221.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00913,
+    "epss_percentile": 0.60049,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.7,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00913,
+      "epss_component": 0.4,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2022-2862",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "1889f499a4f248cd84e0e0bf6d0d820016774494",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2022-08-17T20:15:07.693",
+    "nvd_last_modified": "2026-11-02T22:17:14.307",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "9.0.0221",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/1889f499a4f248cd84e0e0bf6d0d820016774494",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://huntr.dev/bounties/71180988-1ab6-4311-bca8-e9a879b06765",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956691+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-2817",
+    "description": "Use After Free in GitHub repository vim/vim prior to 9.0.0213.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.00535,
+    "epss_percentile": 0.4517,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00535,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2022-2817",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "249e1b903a9c0460d618f6dcc59aeb8c03b24b20",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2022-08-15T23:15:09.057",
+    "nvd_last_modified": "2026-11-02T22:17:13.913",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "9.0.0213",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/249e1b903a9c0460d618f6dcc59aeb8c03b24b20",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://huntr.dev/bounties/a7b7d242-3d88-4bde-a681-6c986aff886f",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956681+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-2819",
+    "description": "Heap-based Buffer Overflow in GitHub repository vim/vim prior to 9.0.0211.",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-122"
+    ],
+    "epss_score": 0.00571,
+    "epss_percentile": 0.47238,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.5,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00571,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2022-2819",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "d1d8f6bacb489036d0fd479c9dd3c0102c988889",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2022-08-15T11:21:31.383",
+    "nvd_last_modified": "2026-11-02T22:17:14.150",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "9.0.0211",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/d1d8f6bacb489036d0fd479c9dd3c0102c988889",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://huntr.dev/bounties/0a9bd71e-66b8-4eb1-9566-7dfd9b097e59",
+        "tags": [
+          "Patch"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956671+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2021-4187",
+    "description": "vim is vulnerable to Use After Free",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.01758,
+    "epss_percentile": 0.7797,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.01758,
+      "epss_component": 0.7,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2021-4187",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "4bf1006cae7e87259ccd5219128c3dba75774441",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2021-12-29T17:15:07.630",
+    "nvd_last_modified": "2026-11-02T19:17:46.533",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "8.2.3912",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "apple",
+        "product": "macos",
+        "fixed": "12.3",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "apple",
+        "product": "macos",
+        "fixed": "11.6.6",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/4bf1006cae7e87259ccd5219128c3dba75774441",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://support.apple.com/kb/HT213183",
+        "tags": [
+          "Release Notes"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956660+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2021-4173",
+    "description": "vim is vulnerable to Use After Free",
+    "cvss_score": 7.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "LOCAL",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-416"
+    ],
+    "epss_score": 0.01758,
+    "epss_percentile": 0.77971,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.8,
+      "cvss_component": 27.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.01758,
+      "epss_component": 0.7,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2021-4173",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "9c23f9bb5fe435b28245ba8ac65aa0ca6b902c04",
+        "repo": "https://github.com/vim/vim"
+      }
+    ],
+    "affected": [],
+    "matched_keywords": [
+      "Vim"
+    ],
+    "source": "nvd",
+    "published": "2021-12-27T13:15:07.653",
+    "nvd_last_modified": "2026-11-02T19:17:46.227",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "vim",
+        "product": "vim",
+        "fixed": "8.2.3902",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "apple",
+        "product": "macos",
+        "fixed": "12.3",
+        "fix_type": "before"
+      },
+      {
+        "vendor": "apple",
+        "product": "macos",
+        "fixed": "11.6.6",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://github.com/vim/vim/commit/9c23f9bb5fe435b28245ba8ac65aa0ca6b902c04",
+        "tags": [
+          "Patch"
+        ]
+      },
+      {
+        "url": "https://support.apple.com/kb/HT213183",
+        "tags": [
+          "Release Notes"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956648+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-26931",
+    "description": "Windows Kerberos Elevation of Privilege Vulnerability",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.02688,
+    "epss_percentile": 0.85868,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 27.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.02688,
+      "epss_component": 1.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "Windows Kerberos"
+    ],
+    "source": "nvd",
+    "published": "2022-05-10T21:15:10.410",
+    "nvd_last_modified": "2026-11-02T19:17:48.157",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [
+      {
+        "url": "https://portal.msrc.microsoft.com/en-US/security-guidance/advisory/CVE-2022-26931",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.956000+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2026-119085",
+    "description": "Improper neutralization of special elements used in a template engine in the publishing component of Amazon Virtual Engineering Workbench (VEW) could allow a remote authenticated third party to run arbitrary code with the permissions of the publishing Lambda's IAM role. This could allow access to data and resources across all tenant projects. The code is reachable through a crafted CloudFormation template body containing template engine directives submitted through the product versioning API.\n\n\n\nTo remediate this issue, users should redeploy from the latest version of awslabs/virtual-engineering-workbench.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-1336"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "amazon/aws"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-02T18:18:44.283",
+    "nvd_last_modified": "2026-11-02T19:34:23.993",
+    "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.955879+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2019-1543",
+    "description": "ChaCha20-Poly1305 is an AEAD cipher, and requires a unique nonce input for every encryption operation. RFC 7539 specifies that the nonce value (IV) should be 96 bits (12 bytes). OpenSSL allows a variable nonce length and front pads the nonce with 0 bytes if it is less than 12 bytes. However it also incorrectly allows a nonce to be set of up to 16 bytes. In this case only the last 12 bytes are significant and any additional leading bytes are ignored. It is a requirement of using this cipher that nonce values are unique. Messages encrypted using a reused nonce value are susceptible to serious confidentiality and integrity attacks. If an application changes the default nonce length to be longer than 12 bytes and then makes a change to the leading bytes of the nonce expecting the new value to be a new unique nonce then such an application could inadvertently encrypt messages with a reused nonce. Additionally the ignored bytes in a long nonce are not covered by the integrity guarantee of this cipher. Any application that relies on the integrity of these ignored leading bytes of a long nonce may be further affected. Any OpenSSL internal use of this cipher, including in SSL/TLS, is safe because no such use sets such a long nonce value. However user applications that use this cipher directly and set a non-default nonce length to be longer than 12 bytes may be vulnerable. OpenSSL versions 1.1.1 and 1.1.0 are affected by this issue. Due to the limited scope of affected deployments this has been assessed as low severity and therefore we are not creating new releases at this time. Fixed in OpenSSL 1.1.1c (Affected 1.1.1-1.1.1b). Fixed in OpenSSL 1.1.0k (Affected 1.1.0-1.1.0j).",
+    "cvss_score": 7.4,
+    "cvss_version": "CVSS V30",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-327",
+      "CWE-330"
+    ],
+    "epss_score": 0.05701,
+    "epss_percentile": 0.93012,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.4,
+      "cvss_component": 25.9,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.05701,
+      "epss_component": 2.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2019-1543",
+    "osv_fixed_versions": [],
+    "affected": [
+      "openssl/openssl"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2019-03-06T21:29:00.247",
+    "nvd_last_modified": "2026-11-02T18:18:26.603",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "1.1.0j",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "openssl",
+        "product": "openssl",
+        "fixed": "1.1.1b",
+        "fix_type": "up_to_and_including"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://www.openssl.org/news/secadv/20190306.txt",
+        "tags": [
+          "Vendor Advisory"
+        ]
+      }
+    ],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.955833+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2026-118697",
+    "description": "In JetBrains Toolbox App before 3.9.1 and 3.8.2; IntelliJ IDEA, PyCharm, PhpStorm, RubyMine, WebStorm, GoLand and Rider before 2026.3 and 2026.2.4; CLion before 2026.3 and 2026.2.4.1; DataGrip before 2026.3 and 2026.2.6.1; RustRover before 2026.3 and 2026.2.5, the jetbrainsd daemon trusted compromised intermediate certificates",
+    "cvss_score": 9.0,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-295"
+    ],
+    "epss_score": 0.00275,
+    "epss_percentile": 0.19947,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.0,
+      "cvss_component": 31.5,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00275,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-10-30T18:17:24.687",
+    "nvd_last_modified": "2026-11-02T17:17:39.100",
+    "vuln_status": "Awaiting Analysis",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.955123+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2026-86596",
+    "description": "The s2Member plugin for WordPress is vulnerable to Remote Code Execution in all versions up to, and including, <= 260927 via the 'item_name' parameter parameter. This is due to insufficient sanitization in strip_php_tags_deep(), which only strips literal '<?' sequences, combined with a post-interpolation placeholder cleanup that reassembles a valid '<?php' opener after the attacker-controlled value has already been embedded in the email template. This makes it possible for authenticated attackers, with custom-level access and above, to execute code on the server.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-94"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-02T22:17:23.490",
+    "nvd_last_modified": "2026-11-02T22:17:23.633",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.954438+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2026-102435",
+    "description": "The Ultra Addons for Contact Form 7 plugin for WordPress is vulnerable to arbitrary file deletion due to insufficient file path validation in the _getObjAttr function in all versions up to, and including, 3.5.54. This makes it possible for unauthenticated attackers to delete arbitrary files on the server, which can easily lead to remote code execution when the right file is deleted (such as wp-config.php). This requires the PDF Generator add-on to be active and a Contact Form 7 form to be configured for PDF generation, as the WPCF7_Submission POP gadget chain relies on CF7 being present to complete the file deletion via __destruct(). Note: This vulnerability can only be exploited when the PDF generator feature is enabled.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-502"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-02T20:17:26.287",
+    "nvd_last_modified": "2026-11-02T20:17:26.440",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.954426+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2019-10072",
+    "description": "The fix for CVE-2019-0199 was incomplete and did not address HTTP/2 connection window exhaustion on write in Apache Tomcat versions 9.0.0.M1 to 9.0.19 and 8.5.0 to 8.5.40 . By not sending WINDOW_UPDATE messages for the connection window (stream 0) clients were able to cause server-side threads to block eventually leading to thread exhaustion and a DoS.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V30",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-667"
+    ],
+    "epss_score": 0.72988,
+    "epss_percentile": 0.99454,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 55.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.72988,
+      "epss_component": 29.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2019-10072",
+    "osv_fixed_versions": [],
+    "affected": [
+      "apache/tomcat"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2019-06-21T18:15:09.513",
+    "nvd_last_modified": "2026-11-02T18:18:22.753",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "apache",
+        "product": "tomcat",
+        "fixed": "8.5.40",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "apache",
+        "product": "tomcat",
+        "fixed": "9.0.19",
+        "fix_type": "up_to_and_including"
+      }
+    ],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.953163+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2019-0232",
+    "description": "When running on Windows with enableCmdLineArguments enabled, the CGI Servlet in Apache Tomcat 9.0.0.M1 to 9.0.17, 8.5.0 to 8.5.39 and 7.0.0 to 7.0.93 is vulnerable to Remote Code Execution due to a bug in the way the JRE passes command line arguments to Windows. The CGI Servlet is disabled by default. The CGI option enableCmdLineArguments is disable by default in Tomcat 9.0.x (and will be disabled by default in all versions in response to this vulnerability). For a detailed explanation of the JRE behaviour, see Markus Wulftange's blog (https://codewhitesec.blogspot.com/2016/02/java-and-command-line-injections-in-windows.html) and this archived MSDN blog (https://web.archive.org/web/20161228144344/https://blogs.msdn.microsoft.com/twistylittlepassagesallalike/2011/04/23/everyone-quotes-command-line-arguments-the-wrong-way/).",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V30",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-78"
+    ],
+    "epss_score": 0.99923,
+    "epss_percentile": 0.99969,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 68.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.99923,
+      "epss_component": 40.0,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2019-0232",
+    "osv_fixed_versions": [],
+    "affected": [
+      "apache/tomcat"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2019-04-15T15:29:00.420",
+    "nvd_last_modified": "2026-11-02T18:18:21.063",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [
+      {
+        "vendor": "apache",
+        "product": "tomcat",
+        "fixed": "7.0.93",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "apache",
+        "product": "tomcat",
+        "fixed": "8.5.39",
+        "fix_type": "up_to_and_including"
+      },
+      {
+        "vendor": "apache",
+        "product": "tomcat",
+        "fixed": "9.0.17",
+        "fix_type": "up_to_and_including"
+      }
+    ],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.953143+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2017-5647",
+    "description": "A bug in the handling of the pipelined requests in Apache Tomcat 9.0.0.M1 to 9.0.0.M18, 8.5.0 to 8.5.12, 8.0.0.RC1 to 8.0.42, 7.0.0 to 7.0.76, and 6.0.0 to 6.0.52, when send file was used, results in the pipelined request being lost when send file processing of the previous request completed. This could result in responses appearing to be sent for the wrong request. For example, a user agent that sent requests A, B and C could see the correct response for request A, the response for request C for request B and no response for request C.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V30",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-200"
+    ],
+    "epss_score": 0.1684,
+    "epss_percentile": 0.97045,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.1684,
+      "epss_component": 6.7,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2017-5647",
+    "osv_fixed_versions": [],
+    "affected": [
+      "apache/tomcat"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2017-04-17T16:59:00.320",
+    "nvd_last_modified": "2026-11-02T18:18:19.767",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.953112+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
+    "cve_id": "CVE-2022-34717",
+    "description": "Microsoft Office Remote Code Execution Vulnerability",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.01994,
+    "epss_percentile": 0.80698,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.01994,
+      "epss_component": 0.8,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "microsoft/office"
+    ],
+    "matched_keywords": [
+      "Microsoft Office"
+    ],
+    "source": "nvd",
+    "published": "2022-08-09T20:15:11.720",
+    "nvd_last_modified": "2026-11-02T23:17:11.087",
+    "vuln_status": "Modified",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-02T23:32:32.952781+00:00",
+    "osv_checked": "2026-11-02"
+  },
+  {
     "cve_id": "CVE-2026-8923",
     "description": "Zohocorp ManageEngine Eventlog Analyzer and ManageEngine Log360 versions\u00a0before 13062 are vulnerable to\u00a0Authenticated Remote Code Execution in Log Forward option.",
     "cvss_score": 8.7,
@@ -34,7 +1769,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.7,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -44,8 +1779,8 @@
     ],
     "source": "nvd",
     "published": "2026-11-02T11:17:33.380",
-    "nvd_last_modified": "2026-11-02T11:17:33.380",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T20:18:03.050",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -88,7 +1823,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 51.3,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -98,8 +1833,8 @@
     ],
     "source": "nvd",
     "published": "2026-11-02T08:17:36.083",
-    "nvd_last_modified": "2026-11-02T08:17:36.083",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T20:17:41.190",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -109,13 +1844,13 @@
   },
   {
     "cve_id": "CVE-2026-73697",
-    "description": "Control Web Panel (CWP) before webpanel_version 1.16 contains an arbitrary file write and OS command injection vulnerability in the phpini_editor user panel module. The acc=update action writes attacker-controlled content to an attacker-supplied path via file_put_contents with no path confinement, and the acc=addlabelphpiniadv action passes unsanitized attacker input into shell_exec without escaping. An attacker with access to the module can write arbitrary files and execute arbitrary OS commands, resulting in remote code execution.",
-    "cvss_score": 9.8,
+    "description": "Control Web Panel (CWP) before webpanel_version 1.16 contains an arbitrary file write and OS command injection vulnerability in the phpini_editor user panel module that allows attackers with access to the module to write attacker-controlled content to arbitrary paths and execute arbitrary OS commands. Attackers can exploit the acc=update action to write files via file_put_contents without path confinement and the acc=addlabelphpiniadv action to pass unsanitized input into shell_exec, achieving code execution in the user panel context.",
+    "cvss_score": 8.8,
     "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
-      "privileges_required": "NONE",
+      "privileges_required": "LOW",
       "user_interaction": "NONE"
     },
     "cwe_ids": [
@@ -130,10 +1865,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 57.2,
+    "risk_score": 51.3,
     "risk_score_breakdown": {
-      "cvss_raw": 9.8,
-      "cvss_component": 57.2,
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
       "cvss_weight": "58.3% of (CVSS/10)",
       "epss_raw": null,
       "epss_component": 0.0,
@@ -143,7 +1878,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -153,8 +1888,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-02T15:17:37.660",
-    "nvd_last_modified": "2026-11-02T15:17:37.660",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:35:33.347",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -164,8 +1899,8 @@
   },
   {
     "cve_id": "CVE-2026-73696",
-    "description": "Control Web Panel (CWP) before webpanel_version 1.12 contains an execution after redirect vulnerability in the user panel authentication flow, where CWPUserIndex's unauthenticatedFlow() calls toLoginWithIntendedUri() which emits a redirect header without exit(), allowing PHP execution to continue and the module dispatcher include to run without authentication. Attackers with nothing more than a valid hosting username can bypass authentication to reach user-panel module code paths, enabling a pre-authentication chain to root access.",
-    "cvss_score": 9.8,
+    "description": "Control Web Panel (CWP) before webpanel_version 1.12 contains an execution after redirect vulnerability in the user panel authentication flow (CWPUserIndex) that allows unauthenticated attackers to bypass authentication by exploiting a missing exit() call after a header('Location: ...') redirect. Attackers can send unauthenticated requests to continue PHP execution past the redirect, reaching user panel functionality that should require authentication.",
+    "cvss_score": 9.1,
     "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
@@ -184,10 +1919,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 57.2,
+    "risk_score": 53.1,
     "risk_score_breakdown": {
-      "cvss_raw": 9.8,
-      "cvss_component": 57.2,
+      "cvss_raw": 9.1,
+      "cvss_component": 53.1,
       "cvss_weight": "58.3% of (CVSS/10)",
       "epss_raw": null,
       "epss_component": 0.0,
@@ -197,7 +1932,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -207,8 +1942,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-02T15:17:37.480",
-    "nvd_last_modified": "2026-11-02T15:17:37.480",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:35:33.347",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -218,13 +1953,13 @@
   },
   {
     "cve_id": "CVE-2026-73695",
-    "description": "Control Web Panel (CWP) before webpanel_version 1.16 contains a path traversal vulnerability in services/users/index.php, where an attacker-supplied module name is concatenated directly into an include path with no allowlist, basename(), or traversal sanitization. An attacker can supply directory traversal sequences in the module name to include arbitrary local .php files, resulting in local PHP file inclusion.",
-    "cvss_score": 9.8,
+    "description": "Control Web Panel (CWP) before webpanel_version 1.16 contains a path traversal vulnerability in services/users/index.php that allows attackers to include arbitrary local PHP files by supplying an unsanitized module name parameter concatenated directly into an include path. Attackers can inject directory traversal sequences into the module name to achieve local file inclusion and execute arbitrary PHP code in the user panel context.",
+    "cvss_score": 8.8,
     "cvss_version": "CVSS V31",
     "cvss_vector_components": {
       "attack_vector": "NETWORK",
       "attack_complexity": "LOW",
-      "privileges_required": "NONE",
+      "privileges_required": "LOW",
       "user_interaction": "NONE"
     },
     "cwe_ids": [
@@ -238,10 +1973,10 @@
     "kev_ransomware_use": false,
     "kev_required_action": null,
     "kev_notes": null,
-    "risk_score": 57.2,
+    "risk_score": 51.3,
     "risk_score_breakdown": {
-      "cvss_raw": 9.8,
-      "cvss_component": 57.2,
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
       "cvss_weight": "58.3% of (CVSS/10)",
       "epss_raw": null,
       "epss_component": 0.0,
@@ -251,7 +1986,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 57.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -261,8 +1996,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-02T15:17:37.287",
-    "nvd_last_modified": "2026-11-02T15:17:37.287",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:35:33.347",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -305,7 +2040,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -315,8 +2050,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-02T14:17:34.520",
-    "nvd_last_modified": "2026-11-02T14:17:34.520",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T17:17:32.280",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -359,7 +2094,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -369,8 +2104,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-02T14:17:34.363",
-    "nvd_last_modified": "2026-11-02T14:17:34.363",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T17:17:31.760",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -413,7 +2148,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 51.9,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -423,8 +2158,8 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-02T14:17:34.057",
-    "nvd_last_modified": "2026-11-02T14:17:34.057",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T17:17:31.493",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -467,7 +2202,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -479,8 +2214,8 @@
     ],
     "source": "nvd",
     "published": "2026-11-02T15:17:22.303",
-    "nvd_last_modified": "2026-11-02T15:17:22.303",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:35:33.347",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -523,8 +2258,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 41.4,
-    "epss_score_prev": null,
+    "risk_score_prev": 24.9,
+    "epss_score_prev": 0.00201,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -535,8 +2270,8 @@
     ],
     "source": "nvd",
     "published": "2026-11-01T16:18:15.323",
-    "nvd_last_modified": "2026-11-01T18:18:13.433",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -580,7 +2315,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00147,
+    "epss_score_prev": 0.00253,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -591,8 +2326,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T06:16:34.330",
-    "nvd_last_modified": "2026-11-01T18:17:11.857",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:20:09.333",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -636,7 +2371,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00182,
+    "epss_score_prev": 0.00286,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -647,8 +2382,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T06:16:33.503",
-    "nvd_last_modified": "2026-11-01T18:17:10.920",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:20:09.333",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -692,7 +2427,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
-    "epss_score_prev": 0.00161,
+    "epss_score_prev": 0.00238,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -703,8 +2438,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T06:16:33.080",
-    "nvd_last_modified": "2026-11-01T18:17:10.040",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:20:09.333",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -759,8 +2494,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T10:16:38.547",
-    "nvd_last_modified": "2026-11-02T15:17:37.827",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -815,8 +2550,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T10:16:38.183",
-    "nvd_last_modified": "2026-11-01T18:17:13.340",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -927,8 +2662,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T09:16:33.897",
-    "nvd_last_modified": "2026-11-01T18:17:13.190",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -983,8 +2718,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T09:16:33.620",
-    "nvd_last_modified": "2026-11-02T15:17:17.050",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1039,8 +2774,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T09:16:32.933",
-    "nvd_last_modified": "2026-11-01T18:17:07.577",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1095,8 +2830,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T09:16:32.510",
-    "nvd_last_modified": "2026-10-31T09:16:32.510",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1151,8 +2886,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T08:16:49.183",
-    "nvd_last_modified": "2026-10-31T08:16:49.183",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1207,8 +2942,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T08:16:49.043",
-    "nvd_last_modified": "2026-10-31T08:16:49.043",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T18:18:44.467",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1263,8 +2998,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T08:16:48.903",
-    "nvd_last_modified": "2026-11-01T18:17:10.233",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1320,8 +3055,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T08:16:48.603",
-    "nvd_last_modified": "2026-11-02T15:17:16.720",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1376,8 +3111,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T08:16:48.033",
-    "nvd_last_modified": "2026-11-01T18:17:06.830",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1432,8 +3167,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T08:16:47.893",
-    "nvd_last_modified": "2026-11-02T15:17:13.320",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1488,8 +3223,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T08:16:47.460",
-    "nvd_last_modified": "2026-10-31T08:16:47.460",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1544,8 +3279,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:37.707",
-    "nvd_last_modified": "2026-10-31T07:16:37.707",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T18:18:56.643",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1600,8 +3335,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:37.370",
-    "nvd_last_modified": "2026-10-31T07:16:37.370",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1656,8 +3391,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:36.600",
-    "nvd_last_modified": "2026-10-31T07:16:36.600",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1712,8 +3447,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:36.457",
-    "nvd_last_modified": "2026-11-01T18:17:12.550",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1768,8 +3503,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:36.313",
-    "nvd_last_modified": "2026-11-01T18:17:12.197",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1824,8 +3559,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:36.163",
-    "nvd_last_modified": "2026-11-01T18:17:12.047",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1880,8 +3615,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:36.007",
-    "nvd_last_modified": "2026-11-01T18:17:10.377",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1936,8 +3671,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:35.857",
-    "nvd_last_modified": "2026-10-31T07:16:35.857",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -1992,8 +3727,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:35.717",
-    "nvd_last_modified": "2026-11-01T18:17:09.620",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2048,8 +3783,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:35.410",
-    "nvd_last_modified": "2026-11-01T18:17:09.170",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2104,8 +3839,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:35.140",
-    "nvd_last_modified": "2026-11-01T18:17:08.883",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2160,8 +3895,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:34.987",
-    "nvd_last_modified": "2026-11-01T18:17:08.203",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2217,8 +3952,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:34.367",
-    "nvd_last_modified": "2026-10-31T07:16:34.367",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2273,8 +4008,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:33.920",
-    "nvd_last_modified": "2026-11-01T18:17:06.683",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2329,8 +4064,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T07:16:32.940",
-    "nvd_last_modified": "2026-11-01T18:17:06.390",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2385,8 +4120,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T06:16:34.550",
-    "nvd_last_modified": "2026-10-31T06:16:34.550",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2441,8 +4176,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T06:16:32.630",
-    "nvd_last_modified": "2026-11-01T18:17:09.020",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2497,8 +4232,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T06:16:31.853",
-    "nvd_last_modified": "2026-11-01T18:17:07.250",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2553,8 +4288,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-31T06:16:31.510",
-    "nvd_last_modified": "2026-11-01T18:17:07.107",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T16:19:19.997",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2662,8 +4397,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T20:17:05.027",
-    "nvd_last_modified": "2026-10-30T20:17:05.027",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:14:53.030",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2717,8 +4452,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T20:17:04.750",
-    "nvd_last_modified": "2026-10-30T20:17:04.750",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:14:53.030",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2772,8 +4507,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T20:17:04.467",
-    "nvd_last_modified": "2026-10-30T20:17:04.467",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:14:53.030",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2827,8 +4562,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T20:17:04.327",
-    "nvd_last_modified": "2026-10-30T20:17:04.327",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:14:53.030",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2882,8 +4617,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T20:17:04.160",
-    "nvd_last_modified": "2026-10-30T20:17:04.160",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:14:53.030",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2937,8 +4672,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T20:17:03.983",
-    "nvd_last_modified": "2026-10-30T20:17:03.983",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:14:53.030",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -2992,8 +4727,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T20:17:03.813",
-    "nvd_last_modified": "2026-10-30T20:17:03.813",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:14:53.030",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -3047,8 +4782,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T20:17:03.017",
-    "nvd_last_modified": "2026-10-30T20:17:03.017",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:14:53.030",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -3102,8 +4837,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T20:17:02.433",
-    "nvd_last_modified": "2026-10-30T20:17:02.433",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:14:53.030",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -3159,8 +4894,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T21:17:15.593",
-    "nvd_last_modified": "2026-10-30T23:17:13.267",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:35:33.347",
+    "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -3594,8 +5329,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-30T22:16:53.880",
-    "nvd_last_modified": "2026-10-31T01:17:06.210",
-    "vuln_status": "Received",
+    "nvd_last_modified": "2026-11-02T19:34:23.993",
+    "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -3994,7 +5729,7 @@
     "source": "nvd",
     "published": "2026-10-30T16:17:55.473",
     "nvd_last_modified": "2026-10-30T19:14:38.697",
-    "vuln_status": "Awaiting Analysis",
+    "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -6689,7 +8424,7 @@
     "source": "nvd",
     "published": "2026-10-30T12:16:39.683",
     "nvd_last_modified": "2026-10-30T19:14:38.697",
-    "vuln_status": "Awaiting Analysis",
+    "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
@@ -7359,7 +9094,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T23:59:42.233613+00:00",
-    "osv_checked": "2026-10-30"
+    "osv_checked": "2026-10-30",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-119325",
@@ -7471,7 +9207,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T23:59:42.232507+00:00",
-    "osv_checked": "2026-10-30"
+    "osv_checked": "2026-10-30",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2017-20243",
@@ -7527,7 +9264,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T23:59:42.232485+00:00",
-    "osv_checked": "2026-10-30"
+    "osv_checked": "2026-10-30",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-97229",
@@ -8342,7 +10080,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.936524+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-62131",
@@ -8450,7 +10189,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929790+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-62017",
@@ -8504,7 +10244,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929779+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-62016",
@@ -8720,7 +10461,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929731+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-62012",
@@ -8774,7 +10516,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929719+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-62011",
@@ -8990,7 +10733,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929673+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-62006",
@@ -9044,7 +10788,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929663+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-62005",
@@ -9260,7 +11005,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929623+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-62001",
@@ -9314,7 +11060,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929613+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-61998",
@@ -9530,7 +11277,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929573+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-54858",
@@ -9584,7 +11332,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929564+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-54857",
@@ -9800,7 +11549,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929520+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-118080",
@@ -9854,7 +11604,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929510+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-118079",
@@ -10070,7 +11821,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929468+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-118075",
@@ -10124,7 +11876,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929458+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-118074",
@@ -10340,7 +12093,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929416+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-116867",
@@ -10394,7 +12148,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.929407+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-116866",
@@ -10667,7 +12422,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.924864+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-88041",
@@ -10721,7 +12477,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.924851+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-80353",
@@ -10775,7 +12532,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T19:40:43.924837+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-76418",
@@ -11630,7 +13388,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T05:47:02.679168+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-61564",
@@ -11684,7 +13443,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T05:47:02.679158+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-54453",
@@ -12310,7 +14070,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-29T05:47:02.676064+00:00",
-    "osv_checked": "2026-10-29"
+    "osv_checked": "2026-10-29",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-46300",
@@ -12600,7 +14361,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T19:17:32.247",
-    "nvd_last_modified": "2026-10-28T19:17:32.377",
+    "nvd_last_modified": "2026-11-02T21:17:27.087",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -13370,7 +15131,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195709+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118342",
@@ -13439,7 +15201,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195506+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118340",
@@ -13508,7 +15271,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195481+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118332",
@@ -13577,7 +15341,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195370+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118321",
@@ -13646,7 +15411,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195280+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118316",
@@ -13715,7 +15481,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195235+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118312",
@@ -13784,7 +15551,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195173+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118310",
@@ -13853,7 +15621,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195147+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118309",
@@ -13922,7 +15691,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195137+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118308",
@@ -13991,7 +15761,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195126+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118306",
@@ -14060,7 +15831,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195098+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118305",
@@ -14129,7 +15901,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.195085+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2023-0698",
@@ -14351,7 +16124,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T22:35:44.187816+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2023-27753",
@@ -14858,7 +16632,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T16:17:07.400",
-    "nvd_last_modified": "2026-10-29T16:21:34.310",
+    "nvd_last_modified": "2026-11-02T21:17:31.277",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -14912,7 +16686,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-28T14:17:04.137",
-    "nvd_last_modified": "2026-10-28T15:24:56.033",
+    "nvd_last_modified": "2026-11-02T21:17:32.357",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -17157,7 +18931,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T16:41:43.482764+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118311",
@@ -17226,7 +19001,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T16:41:43.482756+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118307",
@@ -17295,7 +19071,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T16:41:43.482745+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2026-118304",
@@ -17364,7 +19141,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T16:41:43.482732+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "ok"
   },
   {
     "cve_id": "CVE-2024-33288",
@@ -17475,7 +19253,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-28T16:41:43.473549+00:00",
-    "osv_checked": "2026-10-28"
+    "osv_checked": "2026-10-28",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-116390",
@@ -17643,7 +19422,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-28T03:17:12.283",
-    "nvd_last_modified": "2026-10-28T15:24:56.033",
+    "nvd_last_modified": "2026-11-02T20:17:36.363",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -17698,7 +19477,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-28T03:17:08.043",
-    "nvd_last_modified": "2026-10-28T14:52:57.517",
+    "nvd_last_modified": "2026-11-02T20:17:21.527",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -18660,7 +20439,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 26.4,
+    "risk_score_prev": 28.5,
     "epss_score_prev": 0.00438,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -18986,10 +20765,25 @@
     ],
     "source": "nvd",
     "published": "2026-10-27T21:19:34.117",
-    "nvd_last_modified": "2026-10-29T11:17:35.613",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-02T15:43:20.417",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "edge",
+        "fixed": "154.0.4258.48",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-85898",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-27T22:14:10.860110+00:00",
@@ -19040,10 +20834,25 @@
     ],
     "source": "nvd",
     "published": "2026-10-27T21:19:08.030",
-    "nvd_last_modified": "2026-10-31T18:17:44.603",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-02T15:43:55.880",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "microsoft",
+        "product": "edge",
+        "fixed": "154.0.4258.48",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-83831",
+        "tags": [
+          "Patch",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-27T22:14:10.860098+00:00",
@@ -19189,7 +20998,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T18:17:36.343",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-11-02T20:17:35.110",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -19793,7 +21602,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-27T16:17:28.640",
-    "nvd_last_modified": "2026-10-28T15:24:56.033",
+    "nvd_last_modified": "2026-11-02T20:17:26.480",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -19848,7 +21657,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T17:17:00.153",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-11-02T20:17:34.863",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -19904,7 +21713,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T17:16:59.947",
-    "nvd_last_modified": "2026-10-28T13:46:33.207",
+    "nvd_last_modified": "2026-11-02T20:17:34.640",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -20183,7 +21992,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T11:17:34.833",
-    "nvd_last_modified": "2026-10-27T11:17:34.953",
+    "nvd_last_modified": "2026-11-02T19:18:01.290",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -27092,7 +28901,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-26T23:55:38.035970+00:00",
-    "osv_checked": "2026-10-27"
+    "osv_checked": "2026-10-27",
+    "affected_cpe_check": "no_cpes:2026-11-02"
   },
   {
     "cve_id": "CVE-2026-6249",
@@ -29419,7 +31229,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-26T16:17:23.090",
-    "nvd_last_modified": "2026-10-26T16:50:49.857",
+    "nvd_last_modified": "2026-11-02T22:17:23.327",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -29849,7 +31659,7 @@
     ],
     "source": "nvd",
     "published": "2026-10-26T17:17:16.533",
-    "nvd_last_modified": "2026-10-26T19:16:30.093",
+    "nvd_last_modified": "2026-11-02T22:17:18.700",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -105784,7 +107594,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-23T22:16:59.597",
-    "nvd_last_modified": "2026-10-26T18:34:17.050",
+    "nvd_last_modified": "2026-11-02T16:17:29.370",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -110958,7 +112768,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00317,
+    "epss_score_prev": 0.00339,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -111028,7 +112838,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00277,
+    "epss_score_prev": 0.00296,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -111097,8 +112907,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00354,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.0038,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -114375,7 +116185,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00425,
+    "epss_score_prev": 0.00401,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -114515,7 +116325,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.0032,
+    "epss_score_prev": 0.00343,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -116432,7 +118242,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00271,
+    "epss_score_prev": 0.0029,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -118215,7 +120025,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 33.8,
-    "epss_score_prev": 0.005,
+    "epss_score_prev": 0.00559,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -119323,7 +121133,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00452,
+    "epss_score_prev": 0.00443,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -120728,8 +122538,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00601,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00672,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -121079,7 +122889,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00452,
+    "epss_score_prev": 0.00443,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -121989,7 +123799,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00456,
+    "epss_score_prev": 0.0051,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -122059,7 +123869,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00456,
+    "epss_score_prev": 0.0051,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -122555,7 +124365,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00456,
+    "epss_score_prev": 0.0051,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -122625,7 +124435,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00538,
+    "epss_score_prev": 0.00549,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -123395,7 +125205,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.0039,
+    "epss_score_prev": 0.00401,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -124037,7 +125847,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00452,
+    "epss_score_prev": 0.00443,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -125099,7 +126909,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00406,
+    "epss_score_prev": 0.00426,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -127339,7 +129149,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00452,
+    "epss_score_prev": 0.00443,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -132799,7 +134609,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00404,
+    "epss_score_prev": 0.00412,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -132939,7 +134749,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00528,
+    "epss_score_prev": 0.00539,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -133079,7 +134889,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.0042,
+    "epss_score_prev": 0.00424,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -133995,7 +135805,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00406,
+    "epss_score_prev": 0.00417,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -134695,7 +136505,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00534,
+    "epss_score_prev": 0.00548,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -136317,7 +138127,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00452,
+    "epss_score_prev": 0.00443,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -160275,8 +162085,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 74.4,
-    "epss_score_prev": 0.76267,
+    "risk_score_prev": 73.8,
+    "epss_score_prev": 0.74816,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -162206,7 +164016,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 60.9,
-    "epss_score_prev": 0.05846,
+    "epss_score_prev": 0.05765,
     "osv_id": "CVE-2022-3075",
     "osv_fixed_versions": [],
     "affected": [
@@ -194283,7 +196093,7 @@
     ],
     "source": "nvd",
     "published": "2022-09-06T20:15:09.150",
-    "nvd_last_modified": "2026-09-24T15:53:08.370",
+    "nvd_last_modified": "2026-11-02T22:17:16.593",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -194364,7 +196174,7 @@
     ],
     "source": "nvd",
     "published": "2022-08-30T21:15:09.723",
-    "nvd_last_modified": "2026-09-24T15:52:28.627",
+    "nvd_last_modified": "2026-11-02T22:17:16.220",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -205872,8 +207682,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 94.8,
-    "epss_score_prev": 0.95012,
+    "risk_score_prev": 95.1,
+    "epss_score_prev": 0.95642,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -207545,8 +209355,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 35.6,
-    "epss_score_prev": 0.01532,
+    "risk_score_prev": 35.7,
+    "epss_score_prev": 0.01842,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -219481,7 +221291,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.5,
-    "epss_score_prev": 0.00453,
+    "epss_score_prev": 0.00455,
     "osv_id": "CVE-2025-66476",
     "osv_fixed_versions": [
       {
@@ -220017,8 +221827,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 34.4,
-    "epss_score_prev": 0.00372,
+    "risk_score_prev": 34.5,
+    "epss_score_prev": 0.00399,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -220075,7 +221885,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00332,
+    "epss_score_prev": 0.00356,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -220132,7 +221942,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 27.0,
-    "epss_score_prev": 0.00314,
+    "epss_score_prev": 0.00336,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [],
@@ -220193,7 +222003,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 25.3,
-    "epss_score_prev": 0.00298,
+    "epss_score_prev": 0.00319,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -220250,7 +222060,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.0055,
+    "epss_score_prev": 0.0059,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -220307,7 +222117,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.7,
-    "epss_score_prev": 0.00967,
+    "epss_score_prev": 0.01036,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -222886,7 +224696,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 52.9,
-    "epss_score_prev": 0.0157,
+    "epss_score_prev": 0.01607,
     "osv_id": "CVE-2025-39964",
     "osv_fixed_versions": [
       {
@@ -271786,7 +273596,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.4,
-    "epss_score_prev": 0.00508,
+    "epss_score_prev": 0.00504,
     "osv_id": "CVE-2025-14177",
     "osv_fixed_versions": [
       {
@@ -334120,7 +335930,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 26.3,
-    "epss_score_prev": 0.00248,
+    "epss_score_prev": 0.00258,
     "osv_id": "CVE-2025-13721",
     "osv_fixed_versions": [],
     "affected": [
@@ -334196,7 +336006,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00318,
+    "epss_score_prev": 0.00331,
     "osv_id": "CVE-2025-13720",
     "osv_fixed_versions": [],
     "affected": [
@@ -334272,7 +336082,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 28.4,
-    "epss_score_prev": 0.00298,
+    "epss_score_prev": 0.0031,
     "osv_id": "CVE-2025-13639",
     "osv_fixed_versions": [],
     "affected": [
@@ -334342,7 +336152,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 30.9,
-    "epss_score_prev": 0.00305,
+    "epss_score_prev": 0.00318,
     "osv_id": "CVE-2025-13638",
     "osv_fixed_versions": [],
     "affected": [
@@ -334412,7 +336222,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00482,
+    "epss_score_prev": 0.00502,
     "osv_id": "CVE-2025-13633",
     "osv_fixed_versions": [],
     "affected": [
@@ -334480,7 +336290,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.0,
-    "epss_score_prev": 0.00402,
+    "epss_score_prev": 0.00419,
     "osv_id": "CVE-2025-13631",
     "osv_fixed_versions": [],
     "affected": [
@@ -334619,8 +336429,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 34.2,
-    "epss_score_prev": 0.0839,
+    "risk_score_prev": 34.3,
+    "epss_score_prev": 0.08683,
     "osv_id": "CVE-2025-10891",
     "osv_fixed_versions": [],
     "affected": [
@@ -334691,7 +336501,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 31.9,
-    "epss_score_prev": 0.00359,
+    "epss_score_prev": 0.00372,
     "osv_id": "CVE-2025-10890",
     "osv_fixed_versions": [],
     "affected": [
@@ -335110,8 +336920,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 68.5,
-    "epss_score_prev": 0.41502,
+    "risk_score_prev": 68.1,
+    "epss_score_prev": 0.40575,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -336898,7 +338708,7 @@
       "weight_redistributed": false
     },
     "risk_score_prev": 29.5,
-    "epss_score_prev": 0.00234,
+    "epss_score_prev": 0.00251,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
