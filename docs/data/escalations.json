@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-12T09:50:24.824814+00:00",
+ "generated_at": "2026-11-12T18:20:02.655903+00:00",
  "window_days": {
   "cve": 14,
   "intel": 7
@@ -139,12 +139,12 @@
   }
  ],
  "counts": {
-  "escalate": 56,
-  "work": 84
+  "escalate": 59,
+  "work": 94
  },
  "open": {
-  "escalate": 56,
-  "work": 84
+  "escalate": 59,
+  "work": 94
  },
  "triaged": 0,
  "items": [
@@ -211,27 +211,30 @@
    "title": "Microsoft Outlook Zero-Day Vulnerability Actively Exploited to Steal NTLM Authentication Hashes",
    "link": "https://gbhackers.com/microsoft-outlook-zero-day-vulnerability/",
    "source": "GBHackers",
-   "date": "2026-11-11T15:22:30+00:00",
+   "date": "2026-11-12T17:50:27+00:00",
    "tier": "escalate",
    "assets": [
+    "Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems)",
     "Identity (AD / AD FS / Entra ID)",
     "Microsoft 365 / email",
-    "Windows (generic mention)"
+    "Windows (generic mention)",
+    "Windows endpoints"
    ],
    "criticality": "critical",
    "reasons": [
-    "In your estate: Identity (AD / AD FS / Entra ID) (\"NTLM\"); Microsoft 365 / email (\"Microsoft Outlook\"); Windows (generic mention) (\"Windows\")",
+    "In your estate: Identity (AD / AD FS / Entra ID) (\"NTLM\"); Microsoft 365 / email (\"Microsoft Outlook\"); Windows (generic mention) (\"Windows\"); Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems) (\"GitHub\", in another report on this incident); Windows endpoints (\"Windows 11\", \"Windows 10\", \"Common Log File System\", \"Microsoft Defender\", \"Patch Tuesday\", in another report on this incident)",
     "Category: Actively exploited, Patch / advisory, Identity, Vulnerability",
     "High news priority (rule score 100)",
     "Names CVE-2026-124194",
-    "Same incident covered by 6 distinct reports (5 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-11-09"
+    "Same incident covered by 18 distinct reports (6 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-11-09"
    ],
    "score": 100,
    "categories": [
     "patch",
     "vulnerability",
     "exploited",
-    "identity"
+    "identity",
+    "ransomware"
    ],
    "cve_ids": [
     "CVE-2026-124194"
@@ -239,12 +242,24 @@
    "first_reported": "2026-11-09T21:12:24+00:00",
    "member_keys": [
     "intel:eae4ff98ab3e26a3",
+    "intel:e22b6495757a7468",
+    "intel:9914bb09b775fc18",
     "intel:883a78abe06a76dd",
     "intel:b3954d551bbd3d0d",
     "intel:7618f3841e30fafc",
     "intel:972eb5c163be44e3",
     "intel:8e11503624e3900d",
-    "intel:c59f30d4efde8b4e"
+    "intel:ec8767150e02e7ec",
+    "intel:c59f30d4efde8b4e",
+    "intel:f51ac709b07ee131",
+    "intel:963e0f0cd535bf02",
+    "intel:d6a7aefd33114f62",
+    "intel:4fb3f4a554eb775b",
+    "intel:a933d7397d9daaac",
+    "intel:8241b94b6c88317b",
+    "intel:b7142c165e215c25",
+    "intel:1fe252b0a65e12c9",
+    "intel:1acaa8e77a2e5854"
    ],
    "coverage": [
     {
@@ -252,6 +267,20 @@
      "link": "https://www.darkreading.com/application-security/microsoft-rce-bug-windows-paint-confusion",
      "source": "Dark Reading",
      "date": "2026-11-09T21:12:24+00:00",
+     "dup": false
+    },
+    {
+     "title": "Windows 11 KB5132061 & KB5131087 cumulative updates released",
+     "link": "https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5132061-and-kb5131087-cumulative-updates-released/",
+     "source": "BleepingComputer",
+     "date": "2026-11-10T18:33:26+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft releases Windows 10 KB5131096 extended security update",
+     "link": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-windows-10-kb5131096-extended-security-update/",
+     "source": "BleepingComputer",
+     "date": "2026-11-10T20:04:36+00:00",
      "dup": false
     },
     {
@@ -290,13 +319,109 @@
      "dup": false
     },
     {
+     "title": "Windows SignDrop 0-Day Exploit Lets Attackers Gain SYSTEM Privileges Through CLFS Protection",
+     "link": "https://cybersecuritynews.com/windows-signdrop-zero-day-exploit/",
+     "source": "Cyber Security News",
+     "date": "2026-11-11T13:57:20+00:00",
+     "dup": false
+    },
+    {
      "title": "Microsoft fixes actively exploited Outlook flaw that can expose Windows login credentials - TechloMedia",
      "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPbURIU2h4YXd3VFc1UEVvR2p4WUxqcUhTYUkxN0tZUjZVclFvQmdiWGtRSmZDY1NTdFJhZmREdGhuTkZWM0JjdlFGLWQyTVhXNHNoYVJWS3I3NENIWUdvMnVSWnhTZjM5WVlESWs2eUQ1TmhubF9lQVZER1F0d2VLNTBFaUNtVDlWZjFXQXhDS3pZd0I0X2JKc3BvdVhaSnNtOHhDOHNGcDJJT0xjU0d2Q2FpTmYtV0diTTdVUVM2QVJoYVlVVzIw0gHMAUFVX3lxTFAybWVHcTM5M2owU3piY3hKN0JVc2xGeXBTQmdUajB0QjJCUUJpUmRBRW5BRTUySlRvdHljTk1kcmdITUlnaFpSVmVEYzE4MHo4cFlTTnl0bEtzd2Z3QUhyaGZJTzBhQ0VQYTExMWJGS1E1TnM5SEYtTVNrWGxYc0JYYTdQbVhuRUJObkpEVWdCbVpDNlBILTV4aC01OXFkLVo0QVVieGlaYnV6T1VsNHNuUGJZanlWdHdHTUFoWlBBNktoM18tTVFscUxtUg?oc=5",
      "source": "GNews: identity & M365 attacks",
      "date": "2026-11-11T15:22:30+00:00",
      "dup": false
+    },
+    {
+     "title": "New Windows SignDrop Zero-Day Exploit Allows Attackers to Gain SYSTEM Privileges",
+     "link": "https://gbhackers.com/new-windows-signdrop-zero-day/",
+     "source": "GBHackers",
+     "date": "2026-11-12T06:41:09+00:00",
+     "dup": false
+    },
+    {
+     "title": "Hackers Abuse Windows Group Policy to Deploy Citrus Ransomware and Disable Microsoft Defender",
+     "link": "https://cybersecuritynews.com/hackers-abuse-windows-group-policy/",
+     "source": "Cyber Security News",
+     "date": "2026-11-12T06:46:42+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft confirms Windows security updates installation issues",
+     "link": "https://www.bleepingcomputer.com/news/microsoft/microsoft-confirms-kb5132061-installation-issues-0x80070306-0x800f0989-0x800f0993-errors/",
+     "source": "BleepingComputer",
+     "date": "2026-11-12T10:24:07+00:00",
+     "dup": false
+    },
+    {
+     "title": "New N-central Exploits Work Against Patched Servers, Enable Root RCE and Windows SYSTEM Access",
+     "link": "https://thehackernews.com/2026/11/new-n-central-exploits-work-against.html",
+     "source": "The Hacker News",
+     "date": "2026-11-12T11:51:43+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft: Recent Windows updates cause SQL Server performance issues",
+     "link": "https://www.bleepingcomputer.com/news/microsoft/microsoft-recent-windows-updates-cause-sql-server-performance-issues/",
+     "source": "BleepingComputer",
+     "date": "2026-11-12T12:11:11+00:00",
+     "dup": false
+    },
+    {
+     "title": "CISA Warns of Actively Exploited Microsoft Outlook Zero-Day Vulnerability",
+     "link": "https://gbhackers.com/cisa-warns-of-microsoft-outlook-zero-day-vulnerability/",
+     "source": "GBHackers",
+     "date": "2026-11-12T13:32:25+00:00",
+     "dup": false
+    },
+    {
+     "title": "CISA Confirms Active Exploitation of Outlook User Interaction 0-Day Vulnerability",
+     "link": "https://cybersecuritynews.com/active-exploitation-of-outlook-0-day-vulnerability/",
+     "source": "Cyber Security News",
+     "date": "2026-11-12T14:11:54+00:00",
+     "dup": false
+    },
+    {
+     "title": "New Windows SignDrop zero-day gives hackers SYSTEM privileges",
+     "link": "https://www.bleepingcomputer.com/news/security/new-windows-signdrop-zero-day-gives-hackers-system-privileges/",
+     "source": "BleepingComputer",
+     "date": "2026-11-12T16:04:00+00:00",
+     "dup": false
+    },
+    {
+     "title": "New SignDrop Zero-Day Exploit Turns Windows CLFS Security Feature Into SYSTEM Access",
+     "link": "https://thehackernews.com/2026/11/new-signdrop-zero-day-exploit-turns.html",
+     "source": "The Hacker News",
+     "date": "2026-11-12T17:50:27+00:00",
+     "dup": false
     }
    ]
+  },
+  {
+   "key": "intel:17df0ad0b0d431ed",
+   "kind": "intel",
+   "ref": "17df0ad0b0d431ed",
+   "title": "PHP2Shell Exploitation on Check Point Gateway",
+   "link": "https://research.checkpoint.com/2026/php2shell-exploitation-on-check-point-gateway/",
+   "source": "Check Point Research",
+   "date": "2026-11-12T13:56:37+00:00",
+   "tier": "escalate",
+   "assets": [
+    "Check Point / Avanan"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Check Point / Avanan (\"Check Point\")",
+    "Category: Actively exploited, Patch / advisory, Vulnerability",
+    "High news priority (rule score 80)"
+   ],
+   "score": 80,
+   "categories": [
+    "exploited",
+    "patch",
+    "vulnerability"
+   ],
+   "cve_ids": []
   },
   {
    "key": "intel:5ededc9ff7b732d0",
@@ -402,269 +527,26 @@
    ]
   },
   {
-   "key": "cve:CVE-2026-12591",
+   "key": "cve:CVE-2026-19422",
    "kind": "cve",
-   "ref": "CVE-2026-12591",
-   "title": "CVE-2026-12591: Zohocorp ManageEngine M365 Manager Plus versions below 4818 is affected by an authenticated technician may exploit insufficient permission validation in the delegated administration interface to escalate privileges beyon",
-   "link": "#CVE-2026-12591",
-   "date": "2026-11-12T09:50:22.428110+00:00",
+   "ref": "CVE-2026-19422",
+   "title": "CVE-2026-19422: Zohocorp ManageEngine DDI Central versions below 6301 is affected by an authentication bypass vulnerability in Windows DNS and DHCP agent synchronization APIs, allowing unauthenticated user to impersonate onboarded Windo",
+   "link": "#CVE-2026-19422",
+   "date": "2026-11-12T18:19:46.453431+00:00",
    "published": "2026-11-12",
    "tier": "escalate",
    "assets": [
     "ManageEngine (ADSelfService / Vulnerability Manager)",
-    "Microsoft 365 / email"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\"); Microsoft 365 / email (\"M365\")",
-    "CVSS 9.9 network-reachable on a critical asset",
-    "CVSS 9.9 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 57.8,
-   "cvss": 9.9,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126147",
-   "kind": "cve",
-   "ref": "CVE-2026-126147",
-   "title": "CVE-2026-126147: A improper limitation of a pathname to a restricted directory ('path traversal') vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6, FortiMail 7.4.0 through 7.4.8, FortiMail 7.2 all ve",
-   "link": "#CVE-2026-126147",
-   "date": "2026-11-12T00:42:35.382715+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.8 network-reachable on a critical asset",
-    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 57.2,
-   "cvss": 9.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126148",
-   "kind": "cve",
-   "ref": "CVE-2026-126148",
-   "title": "CVE-2026-126148: A improper neutralization of special elements used in an os command ('os command injection') vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6 may allow an unauthenticated attacker to",
-   "link": "#CVE-2026-126148",
-   "date": "2026-11-12T00:42:35.382725+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.8 network-reachable on a critical asset",
-    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 57.2,
-   "cvss": 9.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126170",
-   "kind": "cve",
-   "ref": "CVE-2026-126170",
-   "title": "CVE-2026-126170: A improper encoding or escaping of output vulnerability in Fortinet FortiAnalyzer 8.0.0 through 8.0.2, FortiAnalyzer 7.6.0 through 7.6.7, FortiAnalyzer Cloud 8.0.1 through 8.0.2, FortiAnalyzer Cloud 7.6.0 through 7.6.7, ",
-   "link": "#CVE-2026-126170",
-   "date": "2026-11-12T00:42:35.382954+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.8 network-reachable on a critical asset",
-    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 57.2,
-   "cvss": 9.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126259",
-   "kind": "cve",
-   "ref": "CVE-2026-126259",
-   "title": "CVE-2026-126259: A missing authentication for critical function vulnerability in Fortinet FortiOS 8.0.0, FortiOS 7.6.0 through 7.6.7, FortiOS 7.4.0 through 7.4.12, FortiOS 7.2.0 through 7.2.13 may allow an unauthenticated attacker with H",
-   "link": "#CVE-2026-126259",
-   "date": "2026-11-12T00:42:35.380478+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.8 network-reachable on a critical asset",
-    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 57.2,
-   "cvss": 9.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126261",
-   "kind": "cve",
-   "ref": "CVE-2026-126261",
-   "title": "CVE-2026-126261: A improper authorization vulnerability in Fortinet FortiManager 8.0.0, FortiManager 7.6.0 through 7.6.7, FortiManager 7.4.0 through 7.4.5, FortiManager 7.2.0 through 7.2.8 may allow an unauthenticated attacker that can r",
-   "link": "#CVE-2026-126261",
-   "date": "2026-11-11T02:00:07.701514+00:00",
-   "published": "2026-11-10",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.8 network-reachable on a critical asset",
-    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 57.2,
-   "cvss": 9.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126262",
-   "kind": "cve",
-   "ref": "CVE-2026-126262",
-   "title": "CVE-2026-126262: A improper neutralization of special elements used in an sql command ('sql injection') vulnerability in Fortinet FortiAnalyzer 8.0.0 through 8.0.1, FortiAnalyzer 7.6.0 through 7.6.7, FortiAnalyzer 7.4.0 through 7.4.11, F",
-   "link": "#CVE-2026-126262",
-   "date": "2026-11-12T00:42:35.383584+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.8 network-reachable on a critical asset",
-    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 57.2,
-   "cvss": 9.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126263",
-   "kind": "cve",
-   "ref": "CVE-2026-126263",
-   "title": "CVE-2026-126263: A improper neutralization of special elements used in an sql command ('sql injection') vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.4, FortiMail 7.4.0 through 7.4.6 may allow an au",
-   "link": "#CVE-2026-126263",
-   "date": "2026-11-12T00:42:35.383593+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.8 network-reachable on a critical asset",
-    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 57.2,
-   "cvss": 9.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-85844",
-   "kind": "cve",
-   "ref": "CVE-2026-85844",
-   "title": "CVE-2026-85844: Authentication bypass using an alternate path or channel in Windows Kerberos allows an unauthorized attacker to elevate privileges over a network.",
-   "link": "#CVE-2026-85844",
-   "date": "2026-11-10T20:52:44.159749+00:00",
-   "published": "2026-11-10",
-   "tier": "escalate",
-   "assets": [
-    "Identity (AD / AD FS / Entra ID)",
     "Windows (generic mention)"
    ],
    "criticality": "critical",
    "reasons": [
-    "In your estate: Identity (AD / AD FS / Entra ID) (\"Kerberos\"); Windows (generic mention) (\"Windows\")",
-    "CVSS 9.8 network-reachable on a critical asset",
-    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\"); Windows (generic mention) (\"Windows\")",
+    "CVSS 9.1 network-reachable on a critical asset",
+    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
    ],
-   "score": 57.2,
-   "cvss": 9.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-121529",
-   "kind": "cve",
-   "ref": "CVE-2026-121529",
-   "title": "CVE-2026-121529: A origin validation error vulnerability in Fortinet FortiClientMac 7.4.0 through 7.4.7, FortiClientWindows 7.4.0 through 7.4.7, FortiClientWindows 7.2.0 through 7.2.14, FortiClientWindowsPAM 7.4.7, FortiClientWindowsPAM ",
-   "link": "#CVE-2026-121529",
-   "date": "2026-11-10T20:52:44.160159+00:00",
-   "published": "2026-11-10",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.6 network-reachable on a critical asset",
-    "CVSS 9.6 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 56.0,
-   "cvss": 9.6,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126254",
-   "kind": "cve",
-   "ref": "CVE-2026-126254",
-   "title": "CVE-2026-126254: A numeric truncation error vulnerability in Fortinet FortiOS 8.0.0 through 8.0.1, FortiOS 7.6.0 through 7.6.7, FortiOS 7.4.0 through 7.4.12, FortiOS 7.2.0 through 7.2.13 may allow a configured ibgp neighbor to send malic",
-   "link": "#CVE-2026-126254",
-   "date": "2026-11-12T00:42:35.380367+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.6 network-reachable on a critical asset",
-    "CVSS 9.6 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 56.0,
-   "cvss": 9.6,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126164",
-   "kind": "cve",
-   "ref": "CVE-2026-126164",
-   "title": "CVE-2026-126164: A improper neutralization of special elements used in an sql command ('sql injection') vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6, FortiMail 7.4.0 through 7.4.8, FortiMail 7.2 ",
-   "link": "#CVE-2026-126164",
-   "date": "2026-11-12T00:42:35.382895+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.4 network-reachable on a critical asset",
-    "CVSS 9.4 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 54.8,
-   "cvss": 9.4,
+   "score": 53.1,
+   "cvss": 9.1,
    "kev": false
   },
   {
@@ -685,17 +567,40 @@
     "CVSS 9.1 network-reachable on a critical asset",
     "CVSS 9.1 >= 7.0 work threshold for a critical asset"
    ],
-   "score": 53.1,
+   "score": 35.6,
    "cvss": 9.1,
    "kev": false
   },
   {
-   "key": "cve:CVE-2026-126150",
+   "key": "cve:CVE-2026-12591",
    "kind": "cve",
-   "ref": "CVE-2026-126150",
-   "title": "CVE-2026-126150: A weak password recovery mechanism for forgotten password vulnerability in Fortinet FortiMail 8.0.0, FortiMail 7.6.0 through 7.6.5, FortiMail 7.4.0 through 7.4.7, FortiMail 7.2.0 through 7.2.9 may allow an unauthenticate",
-   "link": "#CVE-2026-126150",
-   "date": "2026-11-12T00:42:35.382748+00:00",
+   "ref": "CVE-2026-12591",
+   "title": "CVE-2026-12591: Zohocorp ManageEngine M365 Manager Plus versions below 4818 is affected by an authenticated technician may exploit insufficient permission validation in the delegated administration interface to escalate privileges beyon",
+   "link": "#CVE-2026-12591",
+   "date": "2026-11-12T09:50:22.428110+00:00",
+   "published": "2026-11-12",
+   "tier": "escalate",
+   "assets": [
+    "ManageEngine (ADSelfService / Vulnerability Manager)",
+    "Microsoft 365 / email"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\"); Microsoft 365 / email (\"M365\")",
+    "CVSS 9.9 network-reachable on a critical asset",
+    "CVSS 9.9 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 35.3,
+   "cvss": 9.9,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126148",
+   "kind": "cve",
+   "ref": "CVE-2026-126148",
+   "title": "CVE-2026-126148: A improper neutralization of special elements used in an os command ('os command injection') vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6 may allow an unauthenticated attacker to",
+   "link": "#CVE-2026-126148",
+   "date": "2026-11-12T00:42:35.382725+00:00",
    "published": "2026-11-11",
    "tier": "escalate",
    "assets": [
@@ -704,143 +609,11 @@
    "criticality": "critical",
    "reasons": [
     "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.1 network-reachable on a critical asset",
-    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
+    "CVSS 9.8 network-reachable on a critical asset",
+    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
    ],
-   "score": 53.1,
-   "cvss": 9.1,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126155",
-   "kind": "cve",
-   "ref": "CVE-2026-126155",
-   "title": "CVE-2026-126155: A incorrect authorization vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6, FortiMail 7.4.0 through 7.4.8, FortiMail 7.2 all versions may allow an unauthenticated remote attacker to ",
-   "link": "#CVE-2026-126155",
-   "date": "2026-11-12T00:42:35.382801+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.1 network-reachable on a critical asset",
-    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 53.1,
-   "cvss": 9.1,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126156",
-   "kind": "cve",
-   "ref": "CVE-2026-126156",
-   "title": "CVE-2026-126156: A authorization bypass through user-controlled key vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6, FortiMail 7.4.0 through 7.4.8, FortiMail 7.2 all versions may allow an unauthenti",
-   "link": "#CVE-2026-126156",
-   "date": "2026-11-12T00:42:35.382811+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.1 network-reachable on a critical asset",
-    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 53.1,
-   "cvss": 9.1,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126157",
-   "kind": "cve",
-   "ref": "CVE-2026-126157",
-   "title": "CVE-2026-126157: A improper authentication vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6, FortiMail 7.4.0 through 7.4.8, FortiMail 7.2 all versions may allow an unauthenticated attacker to gain ac",
-   "link": "#CVE-2026-126157",
-   "date": "2026-11-12T00:42:35.382822+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.1 network-reachable on a critical asset",
-    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 53.1,
-   "cvss": 9.1,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126229",
-   "kind": "cve",
-   "ref": "CVE-2026-126229",
-   "title": "CVE-2026-126229: A authorization bypass through user-controlled key vulnerability in Fortinet FortiAnalyzer 8.0.0 through 8.0.1, FortiAnalyzer 7.6.0 through 7.6.7, FortiAnalyzer 7.4.0 through 7.4.11, FortiAnalyzer 7.2 all versions, Forti",
-   "link": "#CVE-2026-126229",
-   "date": "2026-11-12T00:42:35.383324+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.1 network-reachable on a critical asset",
-    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 53.1,
-   "cvss": 9.1,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126251",
-   "kind": "cve",
-   "ref": "CVE-2026-126251",
-   "title": "CVE-2026-126251: A incorrect authorization vulnerability in Fortinet FortiAuthenticator 8.0.0 through 8.0.3, FortiAuthenticator 6.6.0 through 6.6.10 may allow an attacker to bypass authentication and gain unauthorized access.",
-   "link": "#CVE-2026-126251",
-   "date": "2026-11-12T00:42:35.383552+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.1 network-reachable on a critical asset",
-    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 53.1,
-   "cvss": 9.1,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-126257",
-   "kind": "cve",
-   "ref": "CVE-2026-126257",
-   "title": "CVE-2026-126257: A use of hard-coded password vulnerability in Fortinet FortiAuthenticator 8.0.0 through 8.0.3, FortiAuthenticator 6.6.0 through 6.6.10 may allow an unauthenticated attacker to bypass credential validation in certain circ",
-   "link": "#CVE-2026-126257",
-   "date": "2026-11-12T00:42:35.383575+00:00",
-   "published": "2026-11-11",
-   "tier": "escalate",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 9.0 network-reachable on a critical asset",
-    "CVSS 9.0 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 52.5,
-   "cvss": 9.0,
+   "score": 35.3,
+   "cvss": 9.8,
    "kev": false
   },
   {
@@ -850,7 +623,7 @@
    "title": "New GhostFrame Malware Lets Hackers Hijack VMware ESXi VMs and Steal Windows Credentials",
    "link": "https://cybersecuritynews.com/ghostframe-malware-hijack-vmware-esxi/",
    "source": "Cyber Security News",
-   "date": "2026-11-11T11:09:48+00:00",
+   "date": "2026-11-12T07:49:08+00:00",
    "tier": "escalate",
    "assets": [
     "Virtualization (VMware / Nutanix)",
@@ -860,7 +633,7 @@
    "reasons": [
     "In your estate: Virtualization (VMware / Nutanix) (\"VMware\"); Windows (generic mention) (\"Windows\")",
     "Category: Ransomware",
-    "Same incident covered by 4 distinct reports (3 outlets/feeds) -- first seen 2026-11-10"
+    "Same incident covered by 5 distinct reports (3 outlets/feeds) -- first seen 2026-11-10"
    ],
    "score": 35,
    "categories": [
@@ -873,7 +646,8 @@
     "intel:a5afb5580180f3a2",
     "intel:79a00a8e58aea3a8",
     "intel:2d122308e7cccef4",
-    "intel:85bdf0da9ce5ae62"
+    "intel:85bdf0da9ce5ae62",
+    "intel:39ba7f3b7ca3df4c"
    ],
    "coverage": [
     {
@@ -902,6 +676,13 @@
      "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE4yM005d1l5UjIzTFpycnYtTnpBT3pHZzltUWV6Rkxic3hwNE9TR0h1Wnh2SlJlNWR6N0J5YjFHTmphOFdNdV8xOE5pZk82ZFpvY1pxcEpROHRFVjdnTEtqeG90aWV2bExBR1dJaEdDMA?oc=5",
      "source": "GNews: virtualization & cloud",
      "date": "2026-11-11T11:09:48+00:00",
+     "dup": false
+    },
+    {
+     "title": "GhostFrame ESXi Implant Linked to Settra Ransomware - SOC Prime",
+     "link": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOUkNOZWhncGlUbl81d3ZjTkZlbzdUSXQ4T1ZNOS1DVnFWUGpwWGJSc2oweUFvLVVxN2RpX3hLdU5YeDVPcG16QVkyVnlFdUI4bnMyVFdzY09fd1o3TWtSMzB6aVJxMGhPaUVUbHlSZFVFbkFlWDFtZzR2R0hJS2hmdXNQWExOaGNMNWFiUkFianlqZw?oc=5",
+     "source": "GNews: virtualization & cloud",
+     "date": "2026-11-12T07:49:08+00:00",
      "dup": false
     }
    ]
@@ -952,6 +733,139 @@
    ]
   },
   {
+   "key": "cve:CVE-2026-85844",
+   "kind": "cve",
+   "ref": "CVE-2026-85844",
+   "title": "CVE-2026-85844: Authentication bypass using an alternate path or channel in Windows Kerberos allows an unauthorized attacker to elevate privileges over a network.",
+   "link": "#CVE-2026-85844",
+   "date": "2026-11-10T20:52:44.159749+00:00",
+   "published": "2026-11-10",
+   "tier": "escalate",
+   "assets": [
+    "Identity (AD / AD FS / Entra ID)",
+    "Windows (generic mention)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Identity (AD / AD FS / Entra ID) (\"Kerberos\"); Windows (generic mention) (\"Windows\")",
+    "CVSS 9.8 network-reachable on a critical asset",
+    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 34.7,
+   "cvss": 9.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126147",
+   "kind": "cve",
+   "ref": "CVE-2026-126147",
+   "title": "CVE-2026-126147: A improper limitation of a pathname to a restricted directory ('path traversal') vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6, FortiMail 7.4.0 through 7.4.8, FortiMail 7.2 all ve",
+   "link": "#CVE-2026-126147",
+   "date": "2026-11-12T00:42:35.382715+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.8 network-reachable on a critical asset",
+    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 34.6,
+   "cvss": 9.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126170",
+   "kind": "cve",
+   "ref": "CVE-2026-126170",
+   "title": "CVE-2026-126170: A improper encoding or escaping of output vulnerability in Fortinet FortiAnalyzer 8.0.0 through 8.0.2, FortiAnalyzer 7.6.0 through 7.6.7, FortiAnalyzer Cloud 8.0.1 through 8.0.2, FortiAnalyzer Cloud 7.6.0 through 7.6.7, ",
+   "link": "#CVE-2026-126170",
+   "date": "2026-11-12T00:42:35.382954+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.8 network-reachable on a critical asset",
+    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 34.6,
+   "cvss": 9.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126259",
+   "kind": "cve",
+   "ref": "CVE-2026-126259",
+   "title": "CVE-2026-126259: A missing authentication for critical function vulnerability in Fortinet FortiOS 8.0.0, FortiOS 7.6.0 through 7.6.7, FortiOS 7.4.0 through 7.4.12, FortiOS 7.2.0 through 7.2.13 may allow an unauthenticated attacker with H",
+   "link": "#CVE-2026-126259",
+   "date": "2026-11-12T00:42:35.380478+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.8 network-reachable on a critical asset",
+    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 34.6,
+   "cvss": 9.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126261",
+   "kind": "cve",
+   "ref": "CVE-2026-126261",
+   "title": "CVE-2026-126261: A improper authorization vulnerability in Fortinet FortiManager 8.0.0, FortiManager 7.6.0 through 7.6.7, FortiManager 7.4.0 through 7.4.5, FortiManager 7.2.0 through 7.2.8 may allow an unauthenticated attacker that can r",
+   "link": "#CVE-2026-126261",
+   "date": "2026-11-11T02:00:07.701514+00:00",
+   "published": "2026-11-10",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.8 network-reachable on a critical asset",
+    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 34.6,
+   "cvss": 9.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126262",
+   "kind": "cve",
+   "ref": "CVE-2026-126262",
+   "title": "CVE-2026-126262: A improper neutralization of special elements used in an sql command ('sql injection') vulnerability in Fortinet FortiAnalyzer 8.0.0 through 8.0.1, FortiAnalyzer 7.6.0 through 7.6.7, FortiAnalyzer 7.4.0 through 7.4.11, F",
+   "link": "#CVE-2026-126262",
+   "date": "2026-11-12T00:42:35.383584+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.8 network-reachable on a critical asset",
+    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 34.6,
+   "cvss": 9.8,
+   "kev": false
+  },
+  {
    "key": "cve:CVE-2026-116238",
    "kind": "cve",
    "ref": "CVE-2026-116238",
@@ -972,6 +886,50 @@
    ],
    "score": 34.5,
    "cvss": 9.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126263",
+   "kind": "cve",
+   "ref": "CVE-2026-126263",
+   "title": "CVE-2026-126263: A improper neutralization of special elements used in an sql command ('sql injection') vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.4, FortiMail 7.4.0 through 7.4.6 may allow an au",
+   "link": "#CVE-2026-126263",
+   "date": "2026-11-12T00:42:35.383593+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.8 network-reachable on a critical asset",
+    "CVSS 9.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 34.5,
+   "cvss": 9.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126254",
+   "kind": "cve",
+   "ref": "CVE-2026-126254",
+   "title": "CVE-2026-126254: A numeric truncation error vulnerability in Fortinet FortiOS 8.0.0 through 8.0.1, FortiOS 7.6.0 through 7.6.7, FortiOS 7.4.0 through 7.4.12, FortiOS 7.2.0 through 7.2.13 may allow a configured ibgp neighbor to send malic",
+   "link": "#CVE-2026-126254",
+   "date": "2026-11-12T00:42:35.380367+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.6 network-reachable on a critical asset",
+    "CVSS 9.6 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 33.8,
+   "cvss": 9.6,
    "kev": false
   },
   {
@@ -996,6 +954,50 @@
    ],
    "score": 33.7,
    "cvss": 9.6,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-121529",
+   "kind": "cve",
+   "ref": "CVE-2026-121529",
+   "title": "CVE-2026-121529: A origin validation error vulnerability in Fortinet FortiClientMac 7.4.0 through 7.4.7, FortiClientWindows 7.4.0 through 7.4.7, FortiClientWindows 7.2.0 through 7.2.14, FortiClientWindowsPAM 7.4.7, FortiClientWindowsPAM ",
+   "link": "#CVE-2026-121529",
+   "date": "2026-11-10T20:52:44.160159+00:00",
+   "published": "2026-11-10",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.6 network-reachable on a critical asset",
+    "CVSS 9.6 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 33.7,
+   "cvss": 9.6,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126164",
+   "kind": "cve",
+   "ref": "CVE-2026-126164",
+   "title": "CVE-2026-126164: A improper neutralization of special elements used in an sql command ('sql injection') vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6, FortiMail 7.4.0 through 7.4.8, FortiMail 7.2 ",
+   "link": "#CVE-2026-126164",
+   "date": "2026-11-12T00:42:35.382895+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.4 network-reachable on a critical asset",
+    "CVSS 9.4 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 33.1,
+   "cvss": 9.4,
    "kev": false
   },
   {
@@ -1065,6 +1067,160 @@
    ],
    "score": 32.3,
    "cvss": 9.1,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126155",
+   "kind": "cve",
+   "ref": "CVE-2026-126155",
+   "title": "CVE-2026-126155: A incorrect authorization vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6, FortiMail 7.4.0 through 7.4.8, FortiMail 7.2 all versions may allow an unauthenticated remote attacker to ",
+   "link": "#CVE-2026-126155",
+   "date": "2026-11-12T00:42:35.382801+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.1 network-reachable on a critical asset",
+    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 32.1,
+   "cvss": 9.1,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126156",
+   "kind": "cve",
+   "ref": "CVE-2026-126156",
+   "title": "CVE-2026-126156: A authorization bypass through user-controlled key vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6, FortiMail 7.4.0 through 7.4.8, FortiMail 7.2 all versions may allow an unauthenti",
+   "link": "#CVE-2026-126156",
+   "date": "2026-11-12T00:42:35.382811+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.1 network-reachable on a critical asset",
+    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 32.1,
+   "cvss": 9.1,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126229",
+   "kind": "cve",
+   "ref": "CVE-2026-126229",
+   "title": "CVE-2026-126229: A authorization bypass through user-controlled key vulnerability in Fortinet FortiAnalyzer 8.0.0 through 8.0.1, FortiAnalyzer 7.6.0 through 7.6.7, FortiAnalyzer 7.4.0 through 7.4.11, FortiAnalyzer 7.2.0 through 7.2.12, F",
+   "link": "#CVE-2026-126229",
+   "date": "2026-11-12T00:42:35.383324+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.1 network-reachable on a critical asset",
+    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 32.1,
+   "cvss": 9.1,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126150",
+   "kind": "cve",
+   "ref": "CVE-2026-126150",
+   "title": "CVE-2026-126150: A weak password recovery mechanism for forgotten password vulnerability in Fortinet FortiMail 8.0.0, FortiMail 7.6.0 through 7.6.5, FortiMail 7.4.0 through 7.4.7, FortiMail 7.2.0 through 7.2.9 may allow an unauthenticate",
+   "link": "#CVE-2026-126150",
+   "date": "2026-11-12T00:42:35.382748+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.1 network-reachable on a critical asset",
+    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 32.0,
+   "cvss": 9.1,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126157",
+   "kind": "cve",
+   "ref": "CVE-2026-126157",
+   "title": "CVE-2026-126157: A improper authentication vulnerability in Fortinet FortiMail 8.0.0 through 8.0.1, FortiMail 7.6.0 through 7.6.6, FortiMail 7.4.0 through 7.4.8, FortiMail 7.2 all versions may allow an unauthenticated attacker to gain ac",
+   "link": "#CVE-2026-126157",
+   "date": "2026-11-12T00:42:35.382822+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.1 network-reachable on a critical asset",
+    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 32.0,
+   "cvss": 9.1,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126251",
+   "kind": "cve",
+   "ref": "CVE-2026-126251",
+   "title": "CVE-2026-126251: A incorrect authorization vulnerability in Fortinet FortiAuthenticator 8.0.0 through 8.0.3, FortiAuthenticator 6.6.0 through 6.6.10 may allow an attacker to bypass authentication and gain unauthorized access.",
+   "link": "#CVE-2026-126251",
+   "date": "2026-11-12T00:42:35.383552+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.1 network-reachable on a critical asset",
+    "CVSS 9.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 32.0,
+   "cvss": 9.1,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126257",
+   "kind": "cve",
+   "ref": "CVE-2026-126257",
+   "title": "CVE-2026-126257: A use of hard-coded password vulnerability in Fortinet FortiAuthenticator 8.0.0 through 8.0.3, FortiAuthenticator 6.6.0 through 6.6.10 may allow an unauthenticated attacker to bypass credential validation in certain circ",
+   "link": "#CVE-2026-126257",
+   "date": "2026-11-12T00:42:35.383575+00:00",
+   "published": "2026-11-11",
+   "tier": "escalate",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 9.0 network-reachable on a critical asset",
+    "CVSS 9.0 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 31.7,
+   "cvss": 9.0,
    "kev": false
   },
   {
@@ -1214,27 +1370,57 @@
    "cve_ids": []
   },
   {
-   "key": "cve:CVE-2026-125350",
-   "kind": "cve",
-   "ref": "CVE-2026-125350",
-   "title": "CVE-2026-125350: Use after free in XML in Google Chrome prior to 157.0.8103.50 allowed a remote attacker to execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: High)",
-   "link": "#CVE-2026-125350",
-   "date": "2026-11-10",
-   "published": "2026-11-10",
+   "key": "intel:8b35f69eac704b22",
+   "kind": "intel",
+   "ref": "8b35f69eac704b22",
+   "title": "Zoom Fixes Critical Windows Vulnerability Allowing Privilege Escalation",
+   "link": "https://securityaffairs.com/202911/security/zoom-fixes-critical-windows-vulnerability-allowing-privilege-escalation.html",
+   "source": "Security Affairs",
+   "date": "2026-11-12T12:33:13+00:00",
    "tier": "escalate",
    "assets": [
-    "Browsers (Edge / Chromium / WebView2 / others)"
+    "Voice / meetings (3CX / Zoom / Avaya / Grandstream / Five9 / WeMeet)",
+    "Windows (generic mention)"
    ],
    "criticality": "high",
    "reasons": [
-    "In your estate: Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
-    "CISA KEV: actively exploited (added 2026-11-10, federal due date 2026-11-24)",
-    "Security news reports this CVE as exploited",
-    "CVSS 8.8 >= 8.8 work threshold for a high asset"
+    "In your estate: Windows (generic mention) (\"Windows\"); Voice / meetings (3CX / Zoom / Avaya / Grandstream / Five9 / WeMeet) (\"Zoom Workplace\")",
+    "Category: Actively exploited, Vendor / update issue, Patch / advisory, Vulnerability",
+    "High news priority (rule score 100)",
+    "Names CVE-2026-108186",
+    "Same incident covered by 2 distinct reports (2 outlets/feeds) -- first seen 2026-11-11"
    ],
-   "score": 93.0,
-   "cvss": 8.8,
-   "kev": true
+   "score": 100,
+   "categories": [
+    "vendor_issue",
+    "vulnerability",
+    "exploited",
+    "patch"
+   ],
+   "cve_ids": [
+    "CVE-2026-108186"
+   ],
+   "first_reported": "2026-11-11T16:12:46+00:00",
+   "member_keys": [
+    "intel:8b35f69eac704b22",
+    "intel:c21e94cd46f9e2f1"
+   ],
+   "coverage": [
+    {
+     "title": "Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation",
+     "link": "https://thehackernews.com/2026/11/critical-zoom-workplace-flaw-could.html",
+     "source": "The Hacker News",
+     "date": "2026-11-11T16:12:46+00:00",
+     "dup": false
+    },
+    {
+     "title": "Zoom Fixes Critical Windows Vulnerability Allowing Privilege Escalation",
+     "link": "https://securityaffairs.com/202911/security/zoom-fixes-critical-windows-vulnerability-allowing-privilege-escalation.html",
+     "source": "Security Affairs",
+     "date": "2026-11-12T12:33:13+00:00",
+     "dup": false
+    }
+   ]
   },
   {
    "key": "intel:9844bc61915e12db",
@@ -1243,7 +1429,7 @@
    "title": "Google Issues Chrome Security Update for Eighth Actively Exploited Zero-Day of 2026",
    "link": "https://thehackernews.com/2026/11/google-issues-chrome-security-update.html",
    "source": "The Hacker News",
-   "date": "2026-11-11T15:09:48+00:00",
+   "date": "2026-11-12T13:28:29+00:00",
    "tier": "escalate",
    "assets": [
     "Browsers (Edge / Chromium / WebView2 / others)"
@@ -1254,7 +1440,7 @@
     "Category: Actively exploited, Patch / advisory, Vulnerability",
     "High news priority (rule score 85)",
     "Names CVE-2026-125350",
-    "Same incident covered by 2 distinct reports (2 outlets/feeds) -- first seen 2026-11-10"
+    "Same incident covered by 3 distinct reports (2 outlets/feeds) -- first seen 2026-11-10"
    ],
    "score": 85,
    "categories": [
@@ -1268,7 +1454,8 @@
    "first_reported": "2026-11-10T06:52:54+00:00",
    "member_keys": [
     "intel:9844bc61915e12db",
-    "intel:2ef8419b8767d654"
+    "intel:2ef8419b8767d654",
+    "intel:e9ba70d87ea8e1f1"
    ],
    "coverage": [
     {
@@ -1283,6 +1470,13 @@
      "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE8wQjZiLTgzcks3NzBQa0pTRWtKSFNpYWN0Qld0dndhbkhGR1pKdElZWG9MdFhueVgtWnRtVTFKdjlDTHl2bWhXMklaUWxRWnRqUW12WWRSemNiNnZsWl9YcjYzaTRHZXFWS0RuSNIBckFVX3lxTE5qZVNkS3U4TW5ndnZmbk5IRVdJTnZXSzZrR1dzckV3VTdUWmtPNkhUUW1LbE9VUTg3by03M2wtdU9pY0hiVHNuUi10bkZIc1lhRGlHLXlfX1VSMWNQSDRFQ2NORncyUjlUcFFZeU9wcWNiZw?oc=5",
      "source": "GNews: identity & M365 attacks",
      "date": "2026-11-11T15:09:48+00:00",
+     "dup": false
+    },
+    {
+     "title": "CISA Warns of Google Chromium 0-Day Vulnerability Actively Exploited in Attacks - CyberSecurityNews",
+     "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQQmFlbVlrcmQ0anFkWGZ3R2ZFMzkteThwTnBsUm5hOGFkWjJla1NMbWFXNVJYblF4RXVxZXZOdFpQblN4cUYtUGVSeFlGMlVzUkVyY21OakZ2RGFzRElDNGs3TTZ6cGZ1YU9CX0tQZFM4Mlc4Y0twVWFqMmlvbTZpSGpn0gGHAUFVX3lxTE1DbFRONFdHNHN3VWZkZUFqRnpHWGFBT05ISFdHclBMSDl0cUhiemI0ZUtIaU04SmdhODQ3bGhFa2JCUmZBWGItOXBTRkhmV01aUmJmZUZRZVBFSWhKanZYeEJtSk5oTm9PRkVDMXNCSFlwLWFBTjRRNGt0bUFLNy1sVnZ1TFV4WQ?oc=5",
+     "source": "GNews: identity & M365 attacks",
+     "date": "2026-11-12T13:28:29+00:00",
      "dup": false
     }
    ]
@@ -1304,7 +1498,7 @@
     "In your estate: Windows endpoints (\"Patch Tuesday\")",
     "Category: Actively exploited, Patch / advisory, Vulnerability",
     "High news priority (rule score 80)",
-    "Same incident covered by 12 distinct reports (7 outlets/feeds) -- first seen 2026-11-10"
+    "Same incident covered by 12 distinct reports (8 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-11-10"
    ],
    "score": 80,
    "categories": [
@@ -1326,7 +1520,8 @@
     "intel:f5a20c2d121f935d",
     "intel:6ccbba1d201a8084",
     "intel:da22cee42dbcfecd",
-    "intel:475cdd82d582fc95"
+    "intel:475cdd82d582fc95",
+    "intel:b291ffd18bd28711"
    ],
    "coverage": [
     {
@@ -1412,6 +1607,13 @@
      "source": "SecurityWeek",
      "date": "2026-11-11T10:35:15+00:00",
      "dup": false
+    },
+    {
+     "title": "ICS Patch Tuesday: Siemens Flags High-Severity Flaws, Node2Shell Exposure - SecurityWeek",
+     "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQT0VSWGZmT1dOUzZIVWFXSVBENFNDcDFuX2JDb0o4RXloWmRQbVBIc3VTME1xQklHb1FyNlpvdjJ0U3c5RWZteEpvaEE5TjNnSmR4T3dkT1ZrclotTWYtWTBncnhZSEdVVFFBY2dKaWltdnIzVFBmXzhVMmRXay1YazFPc05zUGFUUmd5NXdaSlA0RDd5M0RMRWQwQXJOUUI4ZXJB?oc=5",
+     "source": "GNews: estate perimeter exploited",
+     "date": "2026-11-11T10:35:15+00:00",
+     "dup": true
     }
    ]
   },
@@ -1495,81 +1697,6 @@
    "cve_ids": []
   },
   {
-   "key": "intel:e22b6495757a7468",
-   "kind": "intel",
-   "ref": "e22b6495757a7468",
-   "title": "Windows SignDrop 0-Day Exploit Lets Attackers Gain SYSTEM Privileges Through CLFS Protection",
-   "link": "https://cybersecuritynews.com/windows-signdrop-zero-day-exploit/",
-   "source": "Cyber Security News",
-   "date": "2026-11-12T06:46:42+00:00",
-   "tier": "escalate",
-   "assets": [
-    "Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems)",
-    "Windows (generic mention)",
-    "Windows endpoints"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Windows endpoints (\"Common Log File System\"); Windows (generic mention) (\"Windows\"); Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems) (\"GitHub\", in another report on this incident)",
-    "Category: Actively exploited, Patch / advisory, Vulnerability",
-    "High news priority (rule score 80)",
-    "Same incident covered by 5 distinct reports (3 outlets/feeds) -- first seen 2026-11-10"
-   ],
-   "score": 80,
-   "categories": [
-    "patch",
-    "vulnerability",
-    "exploited",
-    "ransomware"
-   ],
-   "cve_ids": [],
-   "first_reported": "2026-11-10T18:33:26+00:00",
-   "member_keys": [
-    "intel:e22b6495757a7468",
-    "intel:9914bb09b775fc18",
-    "intel:ec8767150e02e7ec",
-    "intel:f51ac709b07ee131",
-    "intel:963e0f0cd535bf02"
-   ],
-   "coverage": [
-    {
-     "title": "Windows 11 KB5132061 & KB5131087 cumulative updates released",
-     "link": "https://www.bleepingcomputer.com/news/microsoft/windows-11-kb5132061-and-kb5131087-cumulative-updates-released/",
-     "source": "BleepingComputer",
-     "date": "2026-11-10T18:33:26+00:00",
-     "dup": false
-    },
-    {
-     "title": "Microsoft releases Windows 10 KB5131096 extended security update",
-     "link": "https://www.bleepingcomputer.com/news/microsoft/microsoft-releases-windows-10-kb5131096-extended-security-update/",
-     "source": "BleepingComputer",
-     "date": "2026-11-10T20:04:36+00:00",
-     "dup": false
-    },
-    {
-     "title": "Windows SignDrop 0-Day Exploit Lets Attackers Gain SYSTEM Privileges Through CLFS Protection",
-     "link": "https://cybersecuritynews.com/windows-signdrop-zero-day-exploit/",
-     "source": "Cyber Security News",
-     "date": "2026-11-11T13:57:20+00:00",
-     "dup": false
-    },
-    {
-     "title": "New Windows SignDrop Zero-Day Exploit Allows Attackers to Gain SYSTEM Privileges",
-     "link": "https://gbhackers.com/new-windows-signdrop-zero-day/",
-     "source": "GBHackers",
-     "date": "2026-11-12T06:41:09+00:00",
-     "dup": false
-    },
-    {
-     "title": "Hackers Abuse Windows Group Policy to Deploy Citrus Ransomware and Disable Microsoft Defender",
-     "link": "https://cybersecuritynews.com/hackers-abuse-windows-group-policy/",
-     "source": "Cyber Security News",
-     "date": "2026-11-12T06:46:42+00:00",
-     "dup": false
-    }
-   ]
-  },
-  {
    "key": "intel:fb904ba6593cab96",
    "kind": "intel",
    "ref": "fb904ba6593cab96",
@@ -1595,28 +1722,6 @@
     "vulnerability"
    ],
    "cve_ids": []
-  },
-  {
-   "key": "cve:CVE-2026-124194",
-   "kind": "cve",
-   "ref": "CVE-2026-124194",
-   "title": "CVE-2026-124194: Product ui does not warn user of unsafe actions in Microsoft Office Outlook allows an unauthorized attacker to perform spoofing over a network.",
-   "link": "#CVE-2026-124194",
-   "date": "2026-11-10",
-   "published": "2026-11-10",
-   "tier": "escalate",
-   "assets": [
-    "Windows endpoints"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Windows endpoints (\"Microsoft Office\")",
-    "CISA KEV: actively exploited (added 2026-11-10, federal due date 2026-11-24)",
-    "Security news reports this CVE as exploited"
-   ],
-   "score": 79.6,
-   "cvss": 6.5,
-   "kev": true
   },
   {
    "key": "intel:95f883361cdc02d1",
@@ -1646,12 +1751,106 @@
    "cve_ids": []
   },
   {
-   "key": "intel:25c3eda20cfedcbc",
+   "key": "intel:4720393fd82f906b",
    "kind": "intel",
-   "ref": "25c3eda20cfedcbc",
-   "title": "AI Agents Got Root on Linux via 948 Kernel Flaws in OpenAI Research",
-   "link": "https://www.securityweek.com/ai-agents-got-root-on-linux-via-948-kernel-flaws-in-openai-research/",
-   "source": "SecurityWeek",
+   "ref": "4720393fd82f906b",
+   "title": "AI agents are a 'bane' for some website operators, says Cloudflare",
+   "link": "https://www.theregister.com/networks/2026/11/06/ai-agents-are-a-bane-for-some-website-operators-says-cloudflare/5308022",
+   "source": "The Register",
+   "date": "2026-11-06T04:25:14+00:00",
+   "tier": "escalate",
+   "assets": [
+    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"Cloudflare\")",
+    "Category: Actively exploited",
+    "High news priority (rule score 65)"
+   ],
+   "score": 65,
+   "categories": [
+    "exploited"
+   ],
+   "cve_ids": []
+  },
+  {
+   "key": "intel:306659c824b3526e",
+   "kind": "intel",
+   "ref": "306659c824b3526e",
+   "title": "Crafty Microsoft Teams Booking Flow Disguises Device Code Phishing - Huntress",
+   "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOM3VhaW1YZnZTMDBtR3pHRVBqbjltR1FXXzdTNmZsUlduRlpwSVFTNm12UkNoNmJvcnlYLU1iSWpCRV9sa3ZxdTVZSzZfY2U5MTlycGlvcHVuM2F2VENhSVVwc0lHQlVEWXFidFhLMHctSDNtU3V3bkczLWVfXzRPRWhkNU8wLUgxUjVqZmJxVHZoOUE3MFc3aWNDeXQ?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "date": "2026-11-12T13:58:30+00:00",
+   "tier": "escalate",
+   "assets": [
+    "Microsoft Teams"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Microsoft Teams (\"Microsoft Teams\")",
+    "Category: Social engineering",
+    "High news priority (rule score 60)",
+    "Same incident covered by 2 distinct reports (2 outlets/feeds) -- first seen 2026-11-11"
+   ],
+   "score": 60,
+   "categories": [
+    "social_engineering"
+   ],
+   "cve_ids": [],
+   "first_reported": "2026-11-11T10:41:32+00:00",
+   "member_keys": [
+    "intel:306659c824b3526e",
+    "intel:8ad9defe3229ae56"
+   ],
+   "coverage": [
+    {
+     "title": "Microsoft Teams AI Phishing Detection: Rollout and Deepfake Warnings - TechRepublic",
+     "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPUHh3MXlzMHRfRHdxYnJnS0t4dUpsN3dwTDhEUDUxQVJpQ0V3dWl6UzJZZ3pXYVFaX0s0bFlxWHFWUUdJc1lVa3NXV3VwcTVuV0MzcTdEdzlhVlJEdkxFUmUyQ0wzdE94M1ozZEtFbVRueEotdGZNM1I4dFNsYkhlMGdQM2hUUmFjbV9oQXdxa2tLOGlPOHZKSDEtX0dDamM?oc=5",
+     "source": "GNews: Teams / help-desk vishing",
+     "date": "2026-11-11T10:41:32+00:00",
+     "dup": false
+    },
+    {
+     "title": "Crafty Microsoft Teams Booking Flow Disguises Device Code Phishing - Huntress",
+     "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOM3VhaW1YZnZTMDBtR3pHRVBqbjltR1FXXzdTNmZsUlduRlpwSVFTNm12UkNoNmJvcnlYLU1iSWpCRV9sa3ZxdTVZSzZfY2U5MTlycGlvcHVuM2F2VENhSVVwc0lHQlVEWXFidFhLMHctSDNtU3V3bkczLWVfXzRPRWhkNU8wLUgxUjVqZmJxVHZoOUE3MFc3aWNDeXQ?oc=5",
+     "source": "GNews: identity & M365 attacks",
+     "date": "2026-11-12T13:58:30+00:00",
+     "dup": false
+    }
+   ]
+  },
+  {
+   "key": "intel:52e0d82c6ed40a07",
+   "kind": "intel",
+   "ref": "52e0d82c6ed40a07",
+   "title": "Docusign email scam disguises remote access software as a document download - MailGuard",
+   "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNWjc1ZEhQX1hwd3dIaHY5VGxzY0hpcVVsZ29hLS1Ka3Zub3dDVmhid3Utc2lPcVRvdTRMUkl1NWNRX3ZtOTE3eTBpRlZoSXdmQ002dVQzVm4tMEFVR2dqWVVKSGxmVFdwT0pUZTF1ZkU0Q05TZUpZdnVreHNlNmtUeUFVU1NqckV2eUxKajVQZkxBUnFMWFZzd3FyUmNFS3J0NlNoNUtubl9BSG5BdjRwZWRqbGlIcUpmMHUtcWxn0gG-AUFVX3lxTE1aNzVkSFBfWHB3d0hodjlUbHNjSGlxVWxnb2EtLUprdm5vd0NWaGJ3dS1zaU9xVG91NExSSXU1Y1Ffdm05MTd5MGlGVmhJd2ZDTTZ1VDNWbi0wQVVHZ2pZVUpIbGZUV3BPSlRlMXVmRTRDTlNlSll2dWt4c2U2a1R5QVVTU2pyRXZ5TEpqNVBmTEFScUxYVnN3cXJSY0VLcnQ2U2g1S25uX0FIbkF2NHBlZGpsaUhxSmYwdS1xbGc?oc=5",
+   "source": "GNews: business SaaS breaches",
+   "date": "2026-11-11T03:33:04+00:00",
+   "tier": "escalate",
+   "assets": [
+    "Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace) (\"Docusign\")",
+    "Category: Social engineering",
+    "High news priority (rule score 60)"
+   ],
+   "score": 60,
+   "categories": [
+    "social_engineering"
+   ],
+   "cve_ids": []
+  },
+  {
+   "key": "intel:571eb31b3413a342",
+   "kind": "intel",
+   "ref": "571eb31b3413a342",
+   "title": "Fake OpenAI, SpaceX events used to steal Microsoft, Google accounts",
+   "link": "https://www.bleepingcomputer.com/news/security/fake-openai-spacex-events-used-to-steal-microsoft-google-accounts/",
+   "source": "BleepingComputer",
    "date": "2026-11-06T20:24:19+00:00",
    "tier": "escalate",
    "assets": [
@@ -1660,22 +1859,19 @@
    "criticality": "high",
    "reasons": [
     "In your estate: AI assistants & coding agents (\"OpenAI\")",
-    "Category: Actively exploited, Vulnerability",
-    "High news priority (rule score 70)",
-    "Same incident covered by 9 distinct reports (7 outlets/feeds) -- first seen 2026-11-05"
+    "Category: Social engineering",
+    "High news priority (rule score 60)",
+    "Same incident covered by 7 distinct reports (6 outlets/feeds) -- first seen 2026-11-05"
    ],
-   "score": 70,
+   "score": 60,
    "categories": [
-    "patch",
+    "social_engineering",
     "vulnerability",
-    "exploited",
-    "social_engineering"
+    "patch"
    ],
    "cve_ids": [],
-   "first_reported": "2026-11-05T12:08:54+00:00",
+   "first_reported": "2026-11-05T21:30:30+00:00",
    "member_keys": [
-    "intel:25c3eda20cfedcbc",
-    "intel:f49c8cffc26c8dcf",
     "intel:571eb31b3413a342",
     "intel:0e5e0d1696fb8df0",
     "intel:7854cf1dab3fd0f2",
@@ -1685,20 +1881,6 @@
     "intel:2ecaec703ee9a14c"
    ],
    "coverage": [
-    {
-     "title": "OpenAI AI Pipeline Generates 948 Linux Root Escalation Exploits in 30-Hour Run",
-     "link": "https://thehackernews.com/2026/11/openai-ai-pipeline-generates-948-linux.html",
-     "source": "The Hacker News",
-     "date": "2026-11-05T12:08:54+00:00",
-     "dup": false
-    },
-    {
-     "title": "AI Agents Got Root on Linux via 948 Kernel Flaws in OpenAI Research",
-     "link": "https://www.securityweek.com/ai-agents-got-root-on-linux-via-948-kernel-flaws-in-openai-research/",
-     "source": "SecurityWeek",
-     "date": "2026-11-05T17:32:37+00:00",
-     "dup": false
-    },
     {
      "title": "Fake OpenAI, SpaceX events used to steal Microsoft, Google accounts",
      "link": "https://www.bleepingcomputer.com/news/security/fake-openai-spacex-events-used-to-steal-microsoft-google-accounts/",
@@ -1751,158 +1933,6 @@
    ]
   },
   {
-   "key": "intel:1e9f8c6cb4be4924",
-   "kind": "intel",
-   "ref": "1e9f8c6cb4be4924",
-   "title": "ChatGPT Lockdown Mode Bypass: Phishing, Malware Delivery, and Silent Data Exfiltration",
-   "link": "https://research.checkpoint.com/2026/chatgpt-lockdown-mode-bypass-phishing-malware-delivery-and-silent-data-exfiltration/",
-   "source": "Check Point Research",
-   "date": "2026-11-08T09:50:53+00:00",
-   "tier": "escalate",
-   "assets": [
-    "AI assistants & coding agents"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: AI assistants & coding agents (\"ChatGPT\")",
-    "Category: Social engineering, Vulnerability",
-    "High news priority (rule score 65)",
-    "Same incident covered by 8 distinct reports (4 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-11-05"
-   ],
-   "score": 65,
-   "categories": [
-    "social_engineering",
-    "vulnerability",
-    "patch"
-   ],
-   "cve_ids": [],
-   "first_reported": "2026-11-05T14:00:11+00:00",
-   "member_keys": [
-    "intel:1e9f8c6cb4be4924",
-    "intel:9312bb7d07e4e055",
-    "intel:306be99284dc169e",
-    "intel:35ae234cd8fd1380",
-    "intel:c30b38004a2de857",
-    "intel:f241a281dc29638f",
-    "intel:4de5cfc99022d2b5",
-    "intel:89e8bac61204d8c5",
-    "intel:ba052c16da3df2ef"
-   ],
-   "coverage": [
-    {
-     "title": "ChatGPT Lockdown Mode Bypass: Phishing, Malware Delivery, and Silent Data Exfiltration",
-     "link": "https://research.checkpoint.com/2026/chatgpt-lockdown-mode-bypass-phishing-malware-delivery-and-silent-data-exfiltration/",
-     "source": "Check Point Research",
-     "date": "2026-11-05T14:00:11+00:00",
-     "dup": false
-    },
-    {
-     "title": "ChatGPT Lockdown Mode Bypass: Phishing, Malware Delivery, and Silent Data Exfiltration - Check Point Research",
-     "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOc1VNQm9mc0pLUXBMVVdoOExfQWlUYUtWaXpYaTduME5iQm9yRDBpUFVybW1rV2ZxVXN3WDdrZGFuTEV1NjUwTXpQOFpfR3Y5TEFiS3dTN1NHYWg3bEJJb3ZRcUZDVEtyS1l2X0hxOG5NZWx4anc5NXNOeC1QblZhUW1DdUhCY1Voc3k0Tmg4QS1rLU53SDNldlVWT2xheHJWUmZJU1RoRzlsSzRsYmd4N1NBMUpOTHowTE9LMFJB?oc=5",
-     "source": "GNews: dev & AI tools",
-     "date": "2026-11-05T15:46:28+00:00",
-     "dup": true
-    },
-    {
-     "title": "Researchers Bypass ChatGPT Lockdown Mode to Exfiltrate Chats Without User Interaction",
-     "link": "https://thehackernews.com/2026/11/researchers-bypass-chatgpt-lockdown.html",
-     "source": "The Hacker News",
-     "date": "2026-11-05T16:42:32+00:00",
-     "dup": false
-    },
-    {
-     "title": "ChatGPT Shared-Link Flaw Exposed Private Conversations Before October Fix - CEO Magazyn",
-     "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQWDlVWnRDU3Q1d0dCazRyYTJKZHQ1U3FKdURTQkd1NFJwQUNvZklfQ1lBVlltamthd005TWREOXJ3VlZPRVE0RUdCU1NNWTUxTXFaUUNBMUV1SmV4enpuU0JvSENPWTh4VHhiekszSmFERmZ4aks5eFBFQ2tEN0JhQQ?oc=5",
-     "source": "GNews: dev & AI tools",
-     "date": "2026-11-05T19:41:08+00:00",
-     "dup": false
-    },
-    {
-     "title": "Critical ChatGPT vulnerability allowed account hijacking via a single link - Escudo Digital",
-     "link": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxNLVlxUVc2UnhzRWJ6VC1zSTlXMGdPenM3ODA4XzAySVVlN1lYR210NzR2U0NfbmdQWHYxZnk5NTFxT3ZKbVgtZUZXeUI3ekhKWmdwYzlUV0ZZUFA4RVF3eHZ2akZwNmpCSU54V0FuSkRBQjRPdndVNGt1dHJlVXI5cWFWeTVDVUpQZDVQWUpZYWVmTW44U0dlRFRLY1RBc05OYWljX1ByUmtHSGpsek9id2FhZEJTdTREUUxqVENMbEpQODJyR0V1YWtiWEpvNW54eGkweVR0MHc2RHdFR2RKeg?oc=5",
-     "source": "GNews: dev & AI tools",
-     "date": "2026-11-06T05:15:02+00:00",
-     "dup": false
-    },
-    {
-     "title": "Using ChatGPT Lockdown Mode? A security flaw can expose your private chats, check details - Digit",
-     "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQX2ZQRFZLWEd6YkF1aFp1ZG81NS0zcklGLUtvdHRjZl80TGZkUlg3Z0I0azA4QUR6ZldYVWZjQzlxbGpsYzlhbnhwTEdwSDNTcExqMFpPYTlTeUhLSTFHeS02U2ZWZUwxTnBKQUNBMjhyRkRRTDZiTHlMa2l5cVRpS0JIcV9GaGFlRzlGcVdwaXRiWjZFaWlUX2dGVHUwTUJfLVZTNVdBZ0EybTVqQVpvVVE0RmFIdGdvV2xrWDNtYUNSQ3BF0gHLAUFVX3lxTE56VWJBb3JjLVBZcFFsSkV2R3pXTW9wTXJoOVo3eFdHSno5YnJCWDRqYUNzbG1iRzJHQTlMbmVzT0J4SFFLdGRNYUpkQVRnWV9pWEI5Mm1RdzIySkxpSldrYTNZenljalhUQTR1T3dSSWJDcVlQajhycGFfS1ZHLW1EZk9hdmdFVVRPNnM3Ujd6VG9RalBUbGRRUkJocndwZ3ZkOVFKVkczTkYzcEY2eEUxczgwSVBwUjBEVmVGcjlrWFk4MDAxUFRJYkRJ?oc=5",
-     "source": "GNews: dev & AI tools",
-     "date": "2026-11-06T08:10:08+00:00",
-     "dup": false
-    },
-    {
-     "title": "ChatGPT Lockdown Mode Bypass Allowed Hackers to Steal Private Chats Without User Interaction",
-     "link": "https://gbhackers.com/chatgpt-lockdown-mode-bypass/",
-     "source": "GBHackers",
-     "date": "2026-11-06T08:56:59+00:00",
-     "dup": false
-    },
-    {
-     "title": "ChatGPT Security Flaw Exposes AI Risks - varindia",
-     "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE8td0lfY0N1NFpZVjZhNEZ2ZzZsSEFORldwQmI0b3Fic195bVlLd2tyMnpjOHBvS2kzdkdvZHJWWnlSelg1OXpial9FOTNmSUZhT1lQT0FyWUlSQndfdU14MmVtcjVxcWoyRGdRWDNZNGR5cHBZckhr?oc=5",
-     "source": "GNews: dev & AI tools",
-     "date": "2026-11-06T14:18:36+00:00",
-     "dup": false
-    },
-    {
-     "title": "ChatGPT Memory Prompt Raises Phishing Risk for Crypto Holders - Bitcoin Foundation",
-     "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNVENFS0xRZzlaYzRwdHkzN3RONnd3S1FYWVRsNlB6VHVZcEZZYW1OTHhtTnBOOFNzeXRDZzVNTnFaOGRFSmpvdms3Y2IzUFdubVpWMzA0alJ4TTRYeDFMQm0wenVjb0FpajlHNk01ZHdWeW5HRG5ZU0tsRGZNaFlEQzRISmlwamJ6MHU1dm92QWxKdzA0SjJ1MGFfUXZXSGNwOGc?oc=5",
-     "source": "GNews: dev & AI tools",
-     "date": "2026-11-08T09:50:53+00:00",
-     "dup": false
-    }
-   ]
-  },
-  {
-   "key": "intel:4720393fd82f906b",
-   "kind": "intel",
-   "ref": "4720393fd82f906b",
-   "title": "AI agents are a 'bane' for some website operators, says Cloudflare",
-   "link": "https://www.theregister.com/networks/2026/11/06/ai-agents-are-a-bane-for-some-website-operators-says-cloudflare/5308022",
-   "source": "The Register",
-   "date": "2026-11-06T04:25:14+00:00",
-   "tier": "escalate",
-   "assets": [
-    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"Cloudflare\")",
-    "Category: Actively exploited",
-    "High news priority (rule score 65)"
-   ],
-   "score": 65,
-   "categories": [
-    "exploited"
-   ],
-   "cve_ids": []
-  },
-  {
-   "key": "intel:22864e57ed253df5",
-   "kind": "intel",
-   "ref": "22864e57ed253df5",
-   "title": "Docusign email scam disguises remote access software as a document download - MailGuard",
-   "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPcndvUnU3anQtZ2tpbV83dDRqMEFkWllLNXc2TWlCLTBLM1dKUDNELWRfSUxpd2R5bndxNVRBM1hQUjczX3huNi1GUUU5UWo5M2pVRTdSTVFsX3AxRmFnNl9CWXd3SHVCT2tDUmhJYkJ2T1duazhlcXN4aU5qUlZUdVFQQ2QyUmFaVWlmMjQ0MTdrOTVKbGtuenpXaEdHeHNENmV0RkhFTXhHZjVXV3fSAb4BQVVfeXFMTVo3NWRIUF9YcHd3SGh2OVRsc2NIaXFVbGdvYS0tSmt2bm93Q1ZoYnd1LXNpT3FUb3U0TFJJdTVjUV92bTkxN3kwaUZWaEl3ZkNNNnVUM1ZuLTBBVUdnallVSkhsZlRXcE9KVGUxdWZFNENOU2VKWXZ1a3hzZTZrVHlBVVNTanJFdnlMSmo1UGZMQVJxTFhWc3dxclJjRUtydDZTaDVLbm5fQUhuQXY0cGVkamxpSHFKZjB1LXFsZw?oc=5",
-   "source": "GNews: business SaaS breaches",
-   "date": "2026-11-11T09:56:15+00:00",
-   "tier": "escalate",
-   "assets": [
-    "Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace) (\"Docusign\")",
-    "Category: Social engineering",
-    "High news priority (rule score 60)"
-   ],
-   "score": 60,
-   "categories": [
-    "social_engineering"
-   ],
-   "cve_ids": []
-  },
-  {
    "key": "intel:7a3ef0463563d22e",
    "kind": "intel",
    "ref": "7a3ef0463563d22e",
@@ -1925,6 +1955,29 @@
     "social_engineering"
    ],
    "cve_ids": []
+  },
+  {
+   "key": "cve:CVE-2026-125350",
+   "kind": "cve",
+   "ref": "CVE-2026-125350",
+   "title": "CVE-2026-125350: Use after free in XML in Google Chrome prior to 157.0.8103.50 allowed a remote attacker to execute arbitrary code inside the sandbox via a crafted HTML page. (Chromium security severity: High)",
+   "link": "#CVE-2026-125350",
+   "date": "2026-11-10",
+   "published": "2026-11-10",
+   "tier": "escalate",
+   "assets": [
+    "Browsers (Edge / Chromium / WebView2 / others)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
+    "CISA KEV: actively exploited (added 2026-11-10, federal due date 2026-11-24)",
+    "Security news reports this CVE as exploited",
+    "CVSS 8.8 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 56.2,
+   "cvss": 8.8,
+   "kev": true
   },
   {
    "key": "intel:adccb074fbff64d1",
@@ -2021,9 +2074,31 @@
    ]
   },
   {
-   "key": "intel:c29bbce4a31ed04c",
+   "key": "cve:CVE-2026-124194",
+   "kind": "cve",
+   "ref": "CVE-2026-124194",
+   "title": "CVE-2026-124194: Product ui does not warn user of unsafe actions in Microsoft Office Outlook allows an unauthorized attacker to perform spoofing over a network.",
+   "link": "#CVE-2026-124194",
+   "date": "2026-11-10",
+   "published": "2026-11-10",
+   "tier": "escalate",
+   "assets": [
+    "Windows endpoints"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Windows endpoints (\"Microsoft Office\")",
+    "CISA KEV: actively exploited (added 2026-11-10, federal due date 2026-11-24)",
+    "Security news reports this CVE as exploited"
+   ],
+   "score": 48.4,
+   "cvss": 6.5,
+   "kev": true
+  },
+  {
+   "key": "intel:9419d795d1538427",
    "kind": "intel",
-   "ref": "c29bbce4a31ed04c",
+   "ref": "9419d795d1538427",
    "title": "Malicious Browser Extensions Could Use Claude Dispatch to Run Code on Users' Computers",
    "link": "https://thehackernews.com/2026/11/malicious-browser-extensions-could-use.html",
    "source": "The Hacker News",
@@ -2036,30 +2111,21 @@
    "reasons": [
     "In your estate: AI assistants & coding agents (\"Claude Desktop\")",
     "Category: Actively exploited, Vulnerability",
-    "Same incident covered by 4 distinct reports (4 outlets/feeds) -- first seen 2026-11-05"
+    "Same incident covered by 3 distinct reports (3 outlets/feeds) -- first seen 2026-11-06"
    ],
    "score": 45,
    "categories": [
-    "patch",
     "vulnerability",
     "exploited"
    ],
    "cve_ids": [],
-   "first_reported": "2026-11-05T13:00:00+00:00",
+   "first_reported": "2026-11-06T08:40:43+00:00",
    "member_keys": [
-    "intel:c29bbce4a31ed04c",
     "intel:9419d795d1538427",
     "intel:d51cd538739d490a",
     "intel:cea41b0360f6d357"
    ],
    "coverage": [
-    {
-     "title": "Anthropic won't fix a Claude Dispatch flaw that could let attackers execute remote commands across corporate boundaries",
-     "link": "https://www.theregister.com/research/2026/11/05/anthropic-wont-fix-a-claude-dispatch-flaw-that-could-let-attackers-execute-remote-commands-across-corporate-boundaries/5307684",
-     "source": "The Register",
-     "date": "2026-11-05T13:00:00+00:00",
-     "dup": false
-    },
     {
      "title": "Claude Dispatch Flaw Lets Malicious Browser Extensions Run Code on Connected Computers",
      "link": "https://cybersecuritynews.com/claude-dispatch-vulnerability/",
@@ -2079,6 +2145,85 @@
      "link": "https://thehackernews.com/2026/11/malicious-browser-extensions-could-use.html",
      "source": "The Hacker News",
      "date": "2026-11-06T12:06:35+00:00",
+     "dup": false
+    }
+   ]
+  },
+  {
+   "key": "intel:35ae234cd8fd1380",
+   "kind": "intel",
+   "ref": "35ae234cd8fd1380",
+   "title": "ChatGPT Lockdown Mode Bypass Allowed Hackers to Steal Private Chats Without User Interaction",
+   "link": "https://gbhackers.com/chatgpt-lockdown-mode-bypass/",
+   "source": "GBHackers",
+   "date": "2026-11-08T09:50:53+00:00",
+   "tier": "escalate",
+   "assets": [
+    "AI assistants & coding agents"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: AI assistants & coding agents (\"ChatGPT\")",
+    "Category: Social engineering, Vulnerability",
+    "Same incident covered by 6 distinct reports (2 outlets/feeds) -- first seen 2026-11-05"
+   ],
+   "score": 25,
+   "categories": [
+    "patch",
+    "vulnerability",
+    "social_engineering"
+   ],
+   "cve_ids": [],
+   "first_reported": "2026-11-05T19:41:08+00:00",
+   "member_keys": [
+    "intel:35ae234cd8fd1380",
+    "intel:c30b38004a2de857",
+    "intel:f241a281dc29638f",
+    "intel:4de5cfc99022d2b5",
+    "intel:89e8bac61204d8c5",
+    "intel:ba052c16da3df2ef"
+   ],
+   "coverage": [
+    {
+     "title": "ChatGPT Shared-Link Flaw Exposed Private Conversations Before October Fix - CEO Magazyn",
+     "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQWDlVWnRDU3Q1d0dCazRyYTJKZHQ1U3FKdURTQkd1NFJwQUNvZklfQ1lBVlltamthd005TWREOXJ3VlZPRVE0RUdCU1NNWTUxTXFaUUNBMUV1SmV4enpuU0JvSENPWTh4VHhiekszSmFERmZ4aks5eFBFQ2tEN0JhQQ?oc=5",
+     "source": "GNews: dev & AI tools",
+     "date": "2026-11-05T19:41:08+00:00",
+     "dup": false
+    },
+    {
+     "title": "Critical ChatGPT vulnerability allowed account hijacking via a single link - Escudo Digital",
+     "link": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxNLVlxUVc2UnhzRWJ6VC1zSTlXMGdPenM3ODA4XzAySVVlN1lYR210NzR2U0NfbmdQWHYxZnk5NTFxT3ZKbVgtZUZXeUI3ekhKWmdwYzlUV0ZZUFA4RVF3eHZ2akZwNmpCSU54V0FuSkRBQjRPdndVNGt1dHJlVXI5cWFWeTVDVUpQZDVQWUpZYWVmTW44U0dlRFRLY1RBc05OYWljX1ByUmtHSGpsek9id2FhZEJTdTREUUxqVENMbEpQODJyR0V1YWtiWEpvNW54eGkweVR0MHc2RHdFR2RKeg?oc=5",
+     "source": "GNews: dev & AI tools",
+     "date": "2026-11-06T05:15:02+00:00",
+     "dup": false
+    },
+    {
+     "title": "Using ChatGPT Lockdown Mode? A security flaw can expose your private chats, check details - Digit",
+     "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQX2ZQRFZLWEd6YkF1aFp1ZG81NS0zcklGLUtvdHRjZl80TGZkUlg3Z0I0azA4QUR6ZldYVWZjQzlxbGpsYzlhbnhwTEdwSDNTcExqMFpPYTlTeUhLSTFHeS02U2ZWZUwxTnBKQUNBMjhyRkRRTDZiTHlMa2l5cVRpS0JIcV9GaGFlRzlGcVdwaXRiWjZFaWlUX2dGVHUwTUJfLVZTNVdBZ0EybTVqQVpvVVE0RmFIdGdvV2xrWDNtYUNSQ3BF0gHLAUFVX3lxTE56VWJBb3JjLVBZcFFsSkV2R3pXTW9wTXJoOVo3eFdHSno5YnJCWDRqYUNzbG1iRzJHQTlMbmVzT0J4SFFLdGRNYUpkQVRnWV9pWEI5Mm1RdzIySkxpSldrYTNZenljalhUQTR1T3dSSWJDcVlQajhycGFfS1ZHLW1EZk9hdmdFVVRPNnM3Ujd6VG9RalBUbGRRUkJocndwZ3ZkOVFKVkczTkYzcEY2eEUxczgwSVBwUjBEVmVGcjlrWFk4MDAxUFRJYkRJ?oc=5",
+     "source": "GNews: dev & AI tools",
+     "date": "2026-11-06T08:10:08+00:00",
+     "dup": false
+    },
+    {
+     "title": "ChatGPT Lockdown Mode Bypass Allowed Hackers to Steal Private Chats Without User Interaction",
+     "link": "https://gbhackers.com/chatgpt-lockdown-mode-bypass/",
+     "source": "GBHackers",
+     "date": "2026-11-06T08:56:59+00:00",
+     "dup": false
+    },
+    {
+     "title": "ChatGPT Security Flaw Exposes AI Risks - varindia",
+     "link": "https://news.google.com/rss/articles/CBMid0FVX3lxTE8td0lfY0N1NFpZVjZhNEZ2ZzZsSEFORldwQmI0b3Fic195bVlLd2tyMnpjOHBvS2kzdkdvZHJWWnlSelg1OXpial9FOTNmSUZhT1lQT0FyWUlSQndfdU14MmVtcjVxcWoyRGdRWDNZNGR5cHBZckhr?oc=5",
+     "source": "GNews: dev & AI tools",
+     "date": "2026-11-06T14:18:36+00:00",
+     "dup": false
+    },
+    {
+     "title": "ChatGPT Memory Prompt Raises Phishing Risk for Crypto Holders - Bitcoin Foundation",
+     "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNVENFS0xRZzlaYzRwdHkzN3RONnd3S1FYWVRsNlB6VHVZcEZZYW1OTHhtTnBOOFNzeXRDZzVNTnFaOGRFSmpvdms3Y2IzUFdubVpWMzA0alJ4TTRYeDFMQm0wenVjb0FpajlHNk01ZHdWeW5HRG5ZU0tsRGZNaFlEQzRISmlwamJ6MHU1dm92QWxKdzA0SjJ1MGFfUXZXSGNwOGc?oc=5",
+     "source": "GNews: dev & AI tools",
+     "date": "2026-11-08T09:50:53+00:00",
      "dup": false
     }
    ]
@@ -2427,361 +2572,111 @@
    ]
   },
   {
-   "key": "bundle:fortinet-perimeter:2026-11-11",
-   "kind": "bundle",
-   "ref": "CVE-2026-126253",
-   "title": "75 Fortinet perimeter CVEs published 2026-11-11 -- one patch cycle (highest CVSS 9.3)",
-   "link": "#CVE-2026-126253",
-   "date": "2026-11-12T00:42:35.383562+00:00",
-   "published": "2026-11-11",
-   "tier": "work",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "75 CVEs at/above the WORK threshold, all published 2026-11-11 (typically one vendor release -- patch together)",
-    "CVEs: CVE-2026-126253, CVE-2026-126144, CVE-2026-126175, CVE-2026-126241, CVE-2026-126162, CVE-2026-126183, CVE-2026-126217, CVE-2026-126238, CVE-2026-126180, CVE-2026-126252, CVE-2026-126160, CVE-2026-126184, CVE-2026-126215, CVE-2026-126218, CVE-2026-126240, CVE-2026-126250, CVE-2026-121528, CVE-2026-126163, CVE-2026-126176, CVE-2026-126177, CVE-2026-126245, CVE-2026-126181, CVE-2026-126152, CVE-2026-126149, CVE-2026-126151, CVE-2026-126153, CVE-2026-126154, CVE-2026-126159, CVE-2026-126161, CVE-2026-126165, CVE-2026-126232, CVE-2026-126237, CVE-2026-126239, CVE-2026-126244, CVE-2026-126246, CVE-2026-126248, CVE-2026-126258, CVE-2026-126242, CVE-2026-126255, CVE-2026-126256, CVE-2026-126145, CVE-2026-126146, CVE-2026-126158, CVE-2026-126166, CVE-2026-126167, CVE-2026-126168, CVE-2026-126169, CVE-2026-126171, CVE-2026-126178, CVE-2026-126179, CVE-2026-126182, CVE-2026-126185, CVE-2026-126211, CVE-2026-126212, CVE-2026-126214, CVE-2026-126219, CVE-2026-126220, CVE-2026-126221, CVE-2026-126222, CVE-2026-126223, CVE-2026-126224, CVE-2026-126226, CVE-2026-126227, CVE-2026-126228, CVE-2026-126230, CVE-2026-126231, CVE-2026-126233, CVE-2026-126234, CVE-2026-126235, CVE-2026-126236, CVE-2026-126243, CVE-2026-126247, CVE-2026-126249, CVE-2026-126213, CVE-2026-126225"
-   ],
-   "score": 54.3,
-   "cvss": 9.3,
-   "kev": false,
-   "cve_ids": [
-    "CVE-2026-126253",
-    "CVE-2026-126144",
-    "CVE-2026-126175",
-    "CVE-2026-126241",
-    "CVE-2026-126162",
-    "CVE-2026-126183",
-    "CVE-2026-126217",
-    "CVE-2026-126238",
-    "CVE-2026-126180",
-    "CVE-2026-126252",
-    "CVE-2026-126160",
-    "CVE-2026-126184",
-    "CVE-2026-126215",
-    "CVE-2026-126218",
-    "CVE-2026-126240",
-    "CVE-2026-126250",
-    "CVE-2026-121528",
-    "CVE-2026-126163",
-    "CVE-2026-126176",
-    "CVE-2026-126177",
-    "CVE-2026-126245",
-    "CVE-2026-126181",
-    "CVE-2026-126152",
-    "CVE-2026-126149",
-    "CVE-2026-126151",
-    "CVE-2026-126153",
-    "CVE-2026-126154",
-    "CVE-2026-126159",
-    "CVE-2026-126161",
-    "CVE-2026-126165",
-    "CVE-2026-126232",
-    "CVE-2026-126237",
-    "CVE-2026-126239",
-    "CVE-2026-126244",
-    "CVE-2026-126246",
-    "CVE-2026-126248",
-    "CVE-2026-126258",
-    "CVE-2026-126242",
-    "CVE-2026-126255",
-    "CVE-2026-126256",
-    "CVE-2026-126145",
-    "CVE-2026-126146",
-    "CVE-2026-126158",
-    "CVE-2026-126166",
-    "CVE-2026-126167",
-    "CVE-2026-126168",
-    "CVE-2026-126169",
-    "CVE-2026-126171",
-    "CVE-2026-126178",
-    "CVE-2026-126179",
-    "CVE-2026-126182",
-    "CVE-2026-126185",
-    "CVE-2026-126211",
-    "CVE-2026-126212",
-    "CVE-2026-126214",
-    "CVE-2026-126219",
-    "CVE-2026-126220",
-    "CVE-2026-126221",
-    "CVE-2026-126222",
-    "CVE-2026-126223",
-    "CVE-2026-126224",
-    "CVE-2026-126226",
-    "CVE-2026-126227",
-    "CVE-2026-126228",
-    "CVE-2026-126230",
-    "CVE-2026-126231",
-    "CVE-2026-126233",
-    "CVE-2026-126234",
-    "CVE-2026-126235",
-    "CVE-2026-126236",
-    "CVE-2026-126243",
-    "CVE-2026-126247",
-    "CVE-2026-126249",
-    "CVE-2026-126213",
-    "CVE-2026-126225"
-   ]
-  },
-  {
-   "key": "bundle:identity-ad-ad-fs-entra-id:2026-11-10",
-   "kind": "bundle",
-   "ref": "CVE-2026-118146",
-   "title": "4 Identity (AD / AD FS / Entra ID) CVEs published 2026-11-10 -- one patch cycle (highest CVSS 8.8)",
-   "link": "#CVE-2026-118146",
-   "date": "2026-11-10T20:52:44.160794+00:00",
-   "published": "2026-11-10",
-   "tier": "work",
-   "assets": [
-    "Identity (AD / AD FS / Entra ID)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Identity (AD / AD FS / Entra ID) (\"Active Directory\")",
-    "4 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
-    "CVEs: CVE-2026-118146, CVE-2026-118148, CVE-2026-118735, CVE-2026-109460"
-   ],
-   "score": 51.3,
-   "cvss": 8.8,
-   "kev": false,
-   "cve_ids": [
-    "CVE-2026-118146",
-    "CVE-2026-118148",
-    "CVE-2026-118735",
-    "CVE-2026-109460"
-   ]
-  },
-  {
-   "key": "cve:CVE-2026-12062",
+   "key": "cve:CVE-2026-19421",
    "kind": "cve",
-   "ref": "CVE-2026-12062",
-   "title": "CVE-2026-12062: Zoho Corporation ManageEngine ADAudit Plus versions below 8703 are vulnerable to an authenticated SQL injection vulnerability in ADAudit Plus Reports API.",
-   "link": "#CVE-2026-12062",
-   "date": "2026-11-11T09:23:44.272083+00:00",
-   "published": "2026-11-11",
-   "tier": "work",
-   "assets": [
-    "ManageEngine (ADSelfService / Vulnerability Manager)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\")",
-    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 51.3,
-   "cvss": 8.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-123717",
-   "kind": "cve",
-   "ref": "CVE-2026-123717",
-   "title": "CVE-2026-123717: OS command injection in the pass and bitwarden credential providers in Eclipse Foundation Eclipse Otterdog through 1.7.1 allows a user able to modify an organization configuration to execute arbitrary commands with the p",
-   "link": "#CVE-2026-123717",
-   "date": "2026-11-10T12:41:08.982347+00:00",
-   "published": "2026-11-10",
-   "tier": "work",
-   "assets": [
-    "Password managers"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Password managers (\"bitwarden\")",
-    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 51.3,
-   "cvss": 8.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-12573",
-   "kind": "cve",
-   "ref": "CVE-2026-12573",
-   "title": "CVE-2026-12573: Zoho Corporation ManageEngine DDI Central versions 6200 and below are vulnerable to Cisco IOS command injection via DHCP pool name leading to arbitrary commands on managed Cisco routers.",
-   "link": "#CVE-2026-12573",
-   "date": "2026-11-10T12:41:08.981637+00:00",
-   "published": "2026-11-10",
-   "tier": "work",
-   "assets": [
-    "ManageEngine (ADSelfService / Vulnerability Manager)",
-    "Network edge (Cisco / Meraki / Peplink / SonicWall CSE)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\"); Network edge (Cisco / Meraki / Peplink / SonicWall CSE) (\"Cisco IOS\")",
-    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 51.3,
-   "cvss": 8.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-26248",
-   "kind": "cve",
-   "ref": "CVE-2026-26248",
-   "title": "CVE-2026-26248: A improper neutralization of input during web page generation ('cross-site scripting') vulnerability in Fortinet FortiSandbox 5.0.0 through 5.0.5, FortiSandbox 4.4.0 through 4.4.8, FortiSandbox 4.2 all versions, FortiSan",
-   "link": "#CVE-2026-26248",
-   "date": "2026-11-10T20:52:44.160204+00:00",
-   "published": "2026-11-10",
-   "tier": "work",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 51.3,
-   "cvss": 8.8,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-76981",
-   "kind": "cve",
-   "ref": "CVE-2026-76981",
-   "title": "CVE-2026-76981: Zoho Corporation ManageEngine ADAudit Plus versions below 8711 are vulnerable to an authenticated second order SQL injection vulnerability affecting ADAudit Plus custom reports module.",
-   "link": "#CVE-2026-76981",
-   "date": "2026-11-11T09:23:44.272092+00:00",
-   "published": "2026-11-11",
-   "tier": "work",
-   "assets": [
-    "ManageEngine (ADSelfService / Vulnerability Manager)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\")",
-    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 51.3,
-   "cvss": 8.8,
-   "kev": false
-  },
-  {
-   "key": "bundle:manageengine-adselfservice-vulnerability:2026-11-10",
-   "kind": "bundle",
-   "ref": "CVE-2026-12574",
-   "title": "4 ManageEngine (ADSelfService / Vulnerability Manager) CVEs published 2026-11-10 -- one patch cycle (highest CVSS 8.1)",
-   "link": "#CVE-2026-12574",
-   "date": "2026-11-10T12:41:08.982294+00:00",
-   "published": "2026-11-10",
-   "tier": "work",
-   "assets": [
-    "ManageEngine (ADSelfService / Vulnerability Manager)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\")",
-    "4 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
-    "CVEs: CVE-2026-12574, CVE-2026-12266, CVE-2026-95651, CVE-2026-12572"
-   ],
-   "score": 47.2,
-   "cvss": 8.1,
-   "kev": false,
-   "cve_ids": [
-    "CVE-2026-12574",
-    "CVE-2026-12266",
-    "CVE-2026-95651",
-    "CVE-2026-12572"
-   ]
-  },
-  {
-   "key": "cve:CVE-2025-61625",
-   "kind": "cve",
-   "ref": "CVE-2025-61625",
-   "title": "CVE-2025-61625: An improper limitation of a pathname to a restricted directory ('path traversal') vulnerability in Fortinet FortiAnalyzer 7.6.0 through 7.6.4, FortiAnalyzer 7.4.0 through 7.4.7, FortiAnalyzer 7.2.0 through 7.2.11, FortiM",
-   "link": "#CVE-2025-61625",
-   "date": "2026-11-10T20:52:44.160193+00:00",
-   "published": "2026-11-10",
-   "tier": "work",
-   "assets": [
-    "Fortinet perimeter"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Fortinet perimeter (\"Fortinet\")",
-    "CVSS 8.1 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 47.2,
-   "cvss": 8.1,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-81584",
-   "kind": "cve",
-   "ref": "CVE-2026-81584",
-   "title": "CVE-2026-81584: An improper neutralization of special elements used in an SQL command vulnerability in the User API in Synology DiskStation Manager (DSM) before 7.3.2-86009-5 and 7.4.1-90080-1 allows remote attackers with control over a",
-   "link": "#CVE-2026-81584",
-   "date": "2026-11-12T09:50:22.428534+00:00",
+   "ref": "CVE-2026-19421",
+   "title": "CVE-2026-19421: Zohocorp ManageEngine DDI Central versions below 6301 is affected by a PowerShell injection vulnerability due to insufficient validation of user-supplied TXT record values in Windows DNS operations.",
+   "link": "#CVE-2026-19421",
+   "date": "2026-11-12T18:19:46.453423+00:00",
    "published": "2026-11-12",
    "tier": "work",
    "assets": [
-    "Identity (AD / AD FS / Entra ID)"
-   ],
-   "criticality": "critical",
-   "reasons": [
-    "In your estate: Identity (AD / AD FS / Entra ID) (\"Active Directory\")",
-    "CVSS 8.1 >= 7.0 work threshold for a critical asset"
-   ],
-   "score": 47.2,
-   "cvss": 8.1,
-   "kev": false
-  },
-  {
-   "key": "bundle:identity-ad-ad-fs-entra-id-windows-gener:2026-11-10",
-   "kind": "bundle",
-   "ref": "CVE-2026-122164",
-   "title": "8 Identity (AD / AD FS / Entra ID) + Windows (generic mention) CVEs published 2026-11-10 -- one patch cycle (highest CVSS 8.0)",
-   "link": "#CVE-2026-122164",
-   "date": "2026-11-10T20:52:44.160784+00:00",
-   "published": "2026-11-10",
-   "tier": "work",
-   "assets": [
-    "Identity (AD / AD FS / Entra ID)",
+    "ManageEngine (ADSelfService / Vulnerability Manager)",
     "Windows (generic mention)"
    ],
    "criticality": "critical",
    "reasons": [
-    "In your estate: Identity (AD / AD FS / Entra ID) (\"Kerberos\"); Windows (generic mention) (\"Windows\")",
-    "8 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
-    "CVEs: CVE-2026-122164, CVE-2026-123387, CVE-2026-119847, CVE-2026-119948, CVE-2026-121680, CVE-2026-70240, CVE-2026-105590, CVE-2026-95884"
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\"); Windows (generic mention) (\"Windows\")",
+    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
    ],
-   "score": 46.7,
-   "cvss": 8.0,
-   "kev": false,
-   "cve_ids": [
-    "CVE-2026-122164",
-    "CVE-2026-123387",
-    "CVE-2026-119847",
-    "CVE-2026-119948",
-    "CVE-2026-121680",
-    "CVE-2026-70240",
-    "CVE-2026-105590",
-    "CVE-2026-95884"
-   ]
+   "score": 51.3,
+   "cvss": 8.8,
+   "kev": false
   },
   {
-   "key": "cve:CVE-2026-95646",
+   "key": "cve:CVE-2026-75869",
    "kind": "cve",
-   "ref": "CVE-2026-95646",
-   "title": "CVE-2026-95646: Zoho Corporation ManageEngine DDI Central versions 6500 and below are vulnerable to a Unicode-based command injection vulnerability in the Cisco IOS DHCP configuration functionality. This vulnerability could allow cluste",
-   "link": "#CVE-2026-95646",
-   "date": "2026-11-10T12:41:08.981630+00:00",
-   "published": "2026-11-10",
+   "ref": "CVE-2026-75869",
+   "title": "CVE-2026-75869: Zohocorp ManageEngine DDI Central versions below 6301 is affected by an authorization bypass and PowerShell command injection vulnerability that allowed authenticated non-administrative users to target unauthorized Windo",
+   "link": "#CVE-2026-75869",
+   "date": "2026-11-12T18:19:46.453461+00:00",
+   "published": "2026-11-12",
    "tier": "work",
    "assets": [
     "ManageEngine (ADSelfService / Vulnerability Manager)",
-    "Network edge (Cisco / Meraki / Peplink / SonicWall CSE)"
+    "Windows (generic mention)"
    ],
    "criticality": "critical",
    "reasons": [
-    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\"); Network edge (Cisco / Meraki / Peplink / SonicWall CSE) (\"Cisco IOS\")",
-    "CVSS 8.0 >= 7.0 work threshold for a critical asset"
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\"); Windows (generic mention) (\"Windows\")",
+    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
    ],
-   "score": 46.7,
-   "cvss": 8.0,
+   "score": 51.3,
+   "cvss": 8.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-75864",
+   "kind": "cve",
+   "ref": "CVE-2026-75864",
+   "title": "CVE-2026-75864: Zohocorp ManageEngine DDI Central versions below 6301 is affected by an improper authorization vulnerability that allowed authenticated non-administrative users to delete DNS zones outside their assigned scope.",
+   "link": "#CVE-2026-75864",
+   "date": "2026-11-12T18:19:46.453438+00:00",
+   "published": "2026-11-12",
+   "tier": "work",
+   "assets": [
+    "ManageEngine (ADSelfService / Vulnerability Manager)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\")",
+    "CVSS 8.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 47.2,
+   "cvss": 8.1,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-75867",
+   "kind": "cve",
+   "ref": "CVE-2026-75867",
+   "title": "CVE-2026-75867: Zohocorp ManageEngine DDI Central versions below 6301 is affected by an authorization bypass vulnerability that allowed authenticated non-administrative users to modify Windows DHCP filter-list configurations across unau",
+   "link": "#CVE-2026-75867",
+   "date": "2026-11-12T18:19:46.453446+00:00",
+   "published": "2026-11-12",
+   "tier": "work",
+   "assets": [
+    "ManageEngine (ADSelfService / Vulnerability Manager)",
+    "Windows (generic mention)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\"); Windows (generic mention) (\"Windows\")",
+    "CVSS 8.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 47.2,
+   "cvss": 8.1,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-75868",
+   "kind": "cve",
+   "ref": "CVE-2026-75868",
+   "title": "CVE-2026-75868: Zohocorp ManageEngine DDI Central versions below 6301 is affected by an authorization bypass vulnerability that allowed authenticated non-administrative users to modify DHCP options on subnets belonging to unauthorized c",
+   "link": "#CVE-2026-75868",
+   "date": "2026-11-12T18:19:46.453453+00:00",
+   "published": "2026-11-12",
+   "tier": "work",
+   "assets": [
+    "ManageEngine (ADSelfService / Vulnerability Manager)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\")",
+    "CVSS 8.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 47.2,
+   "cvss": 8.1,
    "kev": false
   },
   {
@@ -2856,7 +2751,7 @@
    "title": "Palo Alto PAN-OS RCE Flaw Allows Attackers to Execute Arbitrary Code With Root Privileges",
    "link": "https://cybersecuritynews.com/palo-alto-networks-pan-os-rce-vulnerability/",
    "source": "Cyber Security News",
-   "date": "2026-11-12T08:09:33+00:00",
+   "date": "2026-11-12T10:34:34+00:00",
    "tier": "work",
    "assets": [
     "Palo Alto (firewalls / GlobalProtect / Cortex)"
@@ -2866,7 +2761,7 @@
     "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"Palo Alto\")",
     "Category: Patch / advisory, Vulnerability",
     "Names CVE-2026-0330",
-    "Same incident covered by 2 distinct reports (2 outlets/feeds) -- first seen 2026-11-11"
+    "Same incident covered by 3 distinct reports (3 outlets/feeds) -- first seen 2026-11-11"
    ],
    "score": 45,
    "categories": [
@@ -2879,7 +2774,8 @@
    "first_reported": "2026-11-11T17:00:00+00:00",
    "member_keys": [
     "intel:cc7b34deff9ca6ab",
-    "intel:450035c297831190"
+    "intel:450035c297831190",
+    "intel:f372fd4ba006a6e1"
    ],
    "coverage": [
     {
@@ -2894,6 +2790,13 @@
      "link": "https://cybersecuritynews.com/palo-alto-networks-pan-os-rce-vulnerability/",
      "source": "Cyber Security News",
      "date": "2026-11-12T08:09:33+00:00",
+     "dup": false
+    },
+    {
+     "title": "Palo Alto Networks Patches PAN-OS Vulnerability Allowing Remote Code Execution With Root Privileges",
+     "link": "https://gbhackers.com/palo-alto-networks-patches-pan-os-vulnerability/",
+     "source": "GBHackers",
+     "date": "2026-11-12T10:34:34+00:00",
      "dup": false
     }
    ]
@@ -2966,6 +2869,30 @@
      "dup": false
     }
    ]
+  },
+  {
+   "key": "intel:d1b92d164acb5a89",
+   "kind": "intel",
+   "ref": "d1b92d164acb5a89",
+   "title": "Siemens RUGGEDCOM APE1808",
+   "link": "https://www.cisa.gov/news-events/ics-advisories/icsa-26-316-05",
+   "source": "CISA Advisories",
+   "date": "2026-11-12T12:00:00+00:00",
+   "tier": "work",
+   "assets": [
+    "Palo Alto (firewalls / GlobalProtect / Cortex)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Palo Alto (firewalls / GlobalProtect / Cortex) (\"Palo Alto Networks\")",
+    "Category: Patch / advisory, Vulnerability"
+   ],
+   "score": 40,
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "cve_ids": []
   },
   {
    "key": "intel:e384e69b8ea7c52b",
@@ -3052,7 +2979,7 @@
    "title": "One Identity Unveils Active Roles 8.6 with Enhanced Security and Administration",
    "link": "https://cybersecuritynews.com/one-identity-active-roles-8-6-security-administration/",
    "source": "Cyber Security News",
-   "date": "2026-11-10T15:50:35+00:00",
+   "date": "2026-11-12T11:04:24+00:00",
    "tier": "work",
    "assets": [
     "Identity (AD / AD FS / Entra ID)"
@@ -3060,13 +2987,35 @@
    "criticality": "critical",
    "reasons": [
     "In your estate: Identity (AD / AD FS / Entra ID) (\"Active Directory\")",
-    "Category: Identity"
+    "Category: Identity",
+    "Same incident covered by 2 distinct reports (2 outlets/feeds) -- first seen 2026-11-10"
    ],
    "score": 40,
    "categories": [
     "identity"
    ],
-   "cve_ids": []
+   "cve_ids": [],
+   "first_reported": "2026-11-10T15:50:35+00:00",
+   "member_keys": [
+    "intel:fb3f4f4f182b7c08",
+    "intel:44a7bee842bd74e1"
+   ],
+   "coverage": [
+    {
+     "title": "One Identity Unveils Active Roles 8.6 with Enhanced Security and Administration",
+     "link": "https://cybersecuritynews.com/one-identity-active-roles-8-6-security-administration/",
+     "source": "Cyber Security News",
+     "date": "2026-11-10T15:50:35+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft Entra adds a seven-day safeguard against irreversible identity deletion",
+     "link": "https://www.helpnetsecurity.com/2026/11/12/microsoft-entra-hard-deletion-protection/",
+     "source": "Help Net Security",
+     "date": "2026-11-12T11:04:24+00:00",
+     "dup": false
+    }
+   ]
   },
   {
    "key": "cve:CVE-2026-77690",
@@ -3211,30 +3160,167 @@
    ]
   },
   {
-   "key": "intel:63a4e5fb9a82406f",
-   "kind": "intel",
-   "ref": "63a4e5fb9a82406f",
-   "title": "Vulnerability Scans for Older Cisco IOS Vulnerability / Opt-Out Headers, (Thu, Nov 5th)",
-   "link": "https://isc.sans.edu/diary/rss/33492",
-   "source": "SANS ISC",
-   "date": "2026-11-05T15:29:08+00:00",
+   "key": "bundle:fortinet-perimeter:2026-11-11",
+   "kind": "bundle",
+   "ref": "CVE-2026-126253",
+   "title": "75 Fortinet perimeter CVEs published 2026-11-11 -- one patch cycle (highest CVSS 9.3)",
+   "link": "#CVE-2026-126253",
+   "date": "2026-11-12T00:42:35.383562+00:00",
+   "published": "2026-11-11",
    "tier": "work",
    "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "75 CVEs at/above the WORK threshold, all published 2026-11-11 (typically one vendor release -- patch together)",
+    "CVEs: CVE-2026-126253, CVE-2026-126144, CVE-2026-126175, CVE-2026-126241, CVE-2026-126162, CVE-2026-126183, CVE-2026-126217, CVE-2026-126238, CVE-2026-126180, CVE-2026-126252, CVE-2026-126160, CVE-2026-126184, CVE-2026-126215, CVE-2026-126218, CVE-2026-126240, CVE-2026-126250, CVE-2026-121528, CVE-2026-126163, CVE-2026-126176, CVE-2026-126177, CVE-2026-126245, CVE-2026-126181, CVE-2026-126152, CVE-2026-126149, CVE-2026-126151, CVE-2026-126153, CVE-2026-126154, CVE-2026-126159, CVE-2026-126161, CVE-2026-126165, CVE-2026-126232, CVE-2026-126237, CVE-2026-126239, CVE-2026-126244, CVE-2026-126246, CVE-2026-126248, CVE-2026-126258, CVE-2026-126242, CVE-2026-126255, CVE-2026-126256, CVE-2026-126145, CVE-2026-126146, CVE-2026-126158, CVE-2026-126166, CVE-2026-126167, CVE-2026-126168, CVE-2026-126169, CVE-2026-126171, CVE-2026-126178, CVE-2026-126179, CVE-2026-126182, CVE-2026-126185, CVE-2026-126211, CVE-2026-126212, CVE-2026-126214, CVE-2026-126219, CVE-2026-126220, CVE-2026-126221, CVE-2026-126222, CVE-2026-126223, CVE-2026-126224, CVE-2026-126226, CVE-2026-126227, CVE-2026-126228, CVE-2026-126230, CVE-2026-126231, CVE-2026-126233, CVE-2026-126234, CVE-2026-126235, CVE-2026-126236, CVE-2026-126243, CVE-2026-126247, CVE-2026-126249, CVE-2026-126213, CVE-2026-126225"
+   ],
+   "score": 32.7,
+   "cvss": 9.3,
+   "kev": false,
+   "cve_ids": [
+    "CVE-2026-126253",
+    "CVE-2026-126144",
+    "CVE-2026-126175",
+    "CVE-2026-126241",
+    "CVE-2026-126162",
+    "CVE-2026-126183",
+    "CVE-2026-126217",
+    "CVE-2026-126238",
+    "CVE-2026-126180",
+    "CVE-2026-126252",
+    "CVE-2026-126160",
+    "CVE-2026-126184",
+    "CVE-2026-126215",
+    "CVE-2026-126218",
+    "CVE-2026-126240",
+    "CVE-2026-126250",
+    "CVE-2026-121528",
+    "CVE-2026-126163",
+    "CVE-2026-126176",
+    "CVE-2026-126177",
+    "CVE-2026-126245",
+    "CVE-2026-126181",
+    "CVE-2026-126152",
+    "CVE-2026-126149",
+    "CVE-2026-126151",
+    "CVE-2026-126153",
+    "CVE-2026-126154",
+    "CVE-2026-126159",
+    "CVE-2026-126161",
+    "CVE-2026-126165",
+    "CVE-2026-126232",
+    "CVE-2026-126237",
+    "CVE-2026-126239",
+    "CVE-2026-126244",
+    "CVE-2026-126246",
+    "CVE-2026-126248",
+    "CVE-2026-126258",
+    "CVE-2026-126242",
+    "CVE-2026-126255",
+    "CVE-2026-126256",
+    "CVE-2026-126145",
+    "CVE-2026-126146",
+    "CVE-2026-126158",
+    "CVE-2026-126166",
+    "CVE-2026-126167",
+    "CVE-2026-126168",
+    "CVE-2026-126169",
+    "CVE-2026-126171",
+    "CVE-2026-126178",
+    "CVE-2026-126179",
+    "CVE-2026-126182",
+    "CVE-2026-126185",
+    "CVE-2026-126211",
+    "CVE-2026-126212",
+    "CVE-2026-126214",
+    "CVE-2026-126219",
+    "CVE-2026-126220",
+    "CVE-2026-126221",
+    "CVE-2026-126222",
+    "CVE-2026-126223",
+    "CVE-2026-126224",
+    "CVE-2026-126226",
+    "CVE-2026-126227",
+    "CVE-2026-126228",
+    "CVE-2026-126230",
+    "CVE-2026-126231",
+    "CVE-2026-126233",
+    "CVE-2026-126234",
+    "CVE-2026-126235",
+    "CVE-2026-126236",
+    "CVE-2026-126243",
+    "CVE-2026-126247",
+    "CVE-2026-126249",
+    "CVE-2026-126213",
+    "CVE-2026-126225"
+   ]
+  },
+  {
+   "key": "cve:CVE-2026-12573",
+   "kind": "cve",
+   "ref": "CVE-2026-12573",
+   "title": "CVE-2026-12573: Zoho Corporation ManageEngine DDI Central versions 6200 and below are vulnerable to Cisco IOS command injection via DHCP pool name leading to arbitrary commands on managed Cisco routers.",
+   "link": "#CVE-2026-12573",
+   "date": "2026-11-10T12:41:08.981637+00:00",
+   "published": "2026-11-10",
+   "tier": "work",
+   "assets": [
+    "ManageEngine (ADSelfService / Vulnerability Manager)",
     "Network edge (Cisco / Meraki / Peplink / SonicWall CSE)"
    ],
    "criticality": "critical",
    "reasons": [
-    "In your estate: Network edge (Cisco / Meraki / Peplink / SonicWall CSE) (\"Cisco IOS\")",
-    "Category: Vulnerability",
-    "Names CVE-2023-20198"
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\"); Network edge (Cisco / Meraki / Peplink / SonicWall CSE) (\"Cisco IOS\")",
+    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
    ],
-   "score": 35,
-   "categories": [
-    "vulnerability"
+   "score": 32.1,
+   "cvss": 8.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-12062",
+   "kind": "cve",
+   "ref": "CVE-2026-12062",
+   "title": "CVE-2026-12062: Zoho Corporation ManageEngine ADAudit Plus versions below 8703 are vulnerable to an authenticated SQL injection vulnerability in ADAudit Plus Reports API.",
+   "link": "#CVE-2026-12062",
+   "date": "2026-11-11T09:23:44.272083+00:00",
+   "published": "2026-11-11",
+   "tier": "work",
+   "assets": [
+    "ManageEngine (ADSelfService / Vulnerability Manager)"
    ],
-   "cve_ids": [
-    "CVE-2023-20198"
-   ]
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\")",
+    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 32.0,
+   "cvss": 8.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-76981",
+   "kind": "cve",
+   "ref": "CVE-2026-76981",
+   "title": "CVE-2026-76981: Zoho Corporation ManageEngine ADAudit Plus versions below 8711 are vulnerable to an authenticated second order SQL injection vulnerability affecting ADAudit Plus custom reports module.",
+   "link": "#CVE-2026-76981",
+   "date": "2026-11-11T09:23:44.272092+00:00",
+   "published": "2026-11-11",
+   "tier": "work",
+   "assets": [
+    "ManageEngine (ADSelfService / Vulnerability Manager)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\")",
+    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 32.0,
+   "cvss": 8.8,
+   "kev": false
   },
   {
    "key": "cve:CVE-2026-18199",
@@ -3276,6 +3362,55 @@
    ],
    "score": 31.3,
    "cvss": 8.7,
+   "kev": false
+  },
+  {
+   "key": "bundle:identity-ad-ad-fs-entra-id:2026-11-10",
+   "kind": "bundle",
+   "ref": "CVE-2026-118146",
+   "title": "4 Identity (AD / AD FS / Entra ID) CVEs published 2026-11-10 -- one patch cycle (highest CVSS 8.8)",
+   "link": "#CVE-2026-118146",
+   "date": "2026-11-10T20:52:44.160794+00:00",
+   "published": "2026-11-10",
+   "tier": "work",
+   "assets": [
+    "Identity (AD / AD FS / Entra ID)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Identity (AD / AD FS / Entra ID) (\"Active Directory\")",
+    "4 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
+    "CVEs: CVE-2026-118146, CVE-2026-118148, CVE-2026-118735, CVE-2026-109460"
+   ],
+   "score": 31.2,
+   "cvss": 8.8,
+   "kev": false,
+   "cve_ids": [
+    "CVE-2026-118146",
+    "CVE-2026-118148",
+    "CVE-2026-118735",
+    "CVE-2026-109460"
+   ]
+  },
+  {
+   "key": "cve:CVE-2026-123717",
+   "kind": "cve",
+   "ref": "CVE-2026-123717",
+   "title": "CVE-2026-123717: OS command injection in the pass and bitwarden credential providers in Eclipse Foundation Eclipse Otterdog through 1.7.1 allows a user able to modify an organization configuration to execute arbitrary commands with the p",
+   "link": "#CVE-2026-123717",
+   "date": "2026-11-10T12:41:08.982347+00:00",
+   "published": "2026-11-10",
+   "tier": "work",
+   "assets": [
+    "Password managers"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Password managers (\"bitwarden\")",
+    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 31.2,
+   "cvss": 8.8,
    "kev": false
   },
   {
@@ -3337,6 +3472,27 @@
    "criticality": "critical",
    "reasons": [
     "In your estate: Remote access / support tools (\"Devolutions\")",
+    "CVSS 8.8 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 31.0,
+   "cvss": 8.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-26248",
+   "kind": "cve",
+   "ref": "CVE-2026-26248",
+   "title": "CVE-2026-26248: A improper neutralization of input during web page generation ('cross-site scripting') vulnerability in Fortinet FortiSandbox 5.0.0 through 5.0.5, FortiSandbox 4.4.0 through 4.4.8, FortiSandbox 4.2 all versions, FortiSan",
+   "link": "#CVE-2026-26248",
+   "date": "2026-11-10T20:52:44.160204+00:00",
+   "published": "2026-11-10",
+   "tier": "work",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
     "CVSS 8.8 >= 7.0 work threshold for a critical asset"
    ],
    "score": 31.0,
@@ -3478,6 +3634,28 @@
    "cve_ids": []
   },
   {
+   "key": "cve:CVE-2026-95646",
+   "kind": "cve",
+   "ref": "CVE-2026-95646",
+   "title": "CVE-2026-95646: Zoho Corporation ManageEngine DDI Central versions 6500 and below are vulnerable to a Unicode-based command injection vulnerability in the Cisco IOS DHCP configuration functionality. This vulnerability could allow cluste",
+   "link": "#CVE-2026-95646",
+   "date": "2026-11-10T12:41:08.981630+00:00",
+   "published": "2026-11-10",
+   "tier": "work",
+   "assets": [
+    "ManageEngine (ADSelfService / Vulnerability Manager)",
+    "Network edge (Cisco / Meraki / Peplink / SonicWall CSE)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\"); Network edge (Cisco / Meraki / Peplink / SonicWall CSE) (\"Cisco IOS\")",
+    "CVSS 8.0 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 29.6,
+   "cvss": 8.0,
+   "kev": false
+  },
+  {
    "key": "bundle:manageengine-adselfservice-vulnerability:2026-11-03",
    "kind": "bundle",
    "ref": "CVE-2026-77691",
@@ -3507,6 +3685,34 @@
    ]
   },
   {
+   "key": "bundle:manageengine-adselfservice-vulnerability:2026-11-10",
+   "kind": "bundle",
+   "ref": "CVE-2026-12574",
+   "title": "4 ManageEngine (ADSelfService / Vulnerability Manager) CVEs published 2026-11-10 -- one patch cycle (highest CVSS 8.1)",
+   "link": "#CVE-2026-12574",
+   "date": "2026-11-10T12:41:08.982294+00:00",
+   "published": "2026-11-10",
+   "tier": "work",
+   "assets": [
+    "ManageEngine (ADSelfService / Vulnerability Manager)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: ManageEngine (ADSelfService / Vulnerability Manager) (\"ManageEngine\")",
+    "4 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
+    "CVEs: CVE-2026-12574, CVE-2026-12266, CVE-2026-95651, CVE-2026-12572"
+   ],
+   "score": 28.6,
+   "cvss": 8.1,
+   "kev": false,
+   "cve_ids": [
+    "CVE-2026-12574",
+    "CVE-2026-12266",
+    "CVE-2026-95651",
+    "CVE-2026-12572"
+   ]
+  },
+  {
    "key": "bundle:virtualization-vmware-nutanix:2026-11-10",
    "kind": "bundle",
    "ref": "CVE-2026-91754",
@@ -3533,6 +3739,48 @@
     "CVE-2026-91756",
     "CVE-2026-91757"
    ]
+  },
+  {
+   "key": "cve:CVE-2025-61625",
+   "kind": "cve",
+   "ref": "CVE-2025-61625",
+   "title": "CVE-2025-61625: An improper limitation of a pathname to a restricted directory ('path traversal') vulnerability in Fortinet FortiAnalyzer 7.6.0 through 7.6.4, FortiAnalyzer 7.4.0 through 7.4.7, FortiAnalyzer 7.2.0 through 7.2.11, FortiM",
+   "link": "#CVE-2025-61625",
+   "date": "2026-11-10T20:52:44.160193+00:00",
+   "published": "2026-11-10",
+   "tier": "work",
+   "assets": [
+    "Fortinet perimeter"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Fortinet perimeter (\"Fortinet\")",
+    "CVSS 8.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 28.6,
+   "cvss": 8.1,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-81584",
+   "kind": "cve",
+   "ref": "CVE-2026-81584",
+   "title": "CVE-2026-81584: An improper neutralization of special elements used in an SQL command vulnerability in the User API in Synology DiskStation Manager (DSM) before 7.3.2-86009-5 and 7.4.1-90080-1 allows remote attackers with control over a",
+   "link": "#CVE-2026-81584",
+   "date": "2026-11-12T09:50:22.428534+00:00",
+   "published": "2026-11-12",
+   "tier": "work",
+   "assets": [
+    "Identity (AD / AD FS / Entra ID)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Identity (AD / AD FS / Entra ID) (\"Active Directory\")",
+    "CVSS 8.1 >= 7.0 work threshold for a critical asset"
+   ],
+   "score": 28.5,
+   "cvss": 8.1,
+   "kev": false
   },
   {
    "key": "cve:CVE-2026-120715",
@@ -3577,6 +3825,39 @@
    "score": 28.4,
    "cvss": 8.1,
    "kev": false
+  },
+  {
+   "key": "bundle:identity-ad-ad-fs-entra-id-windows-gener:2026-11-10",
+   "kind": "bundle",
+   "ref": "CVE-2026-122164",
+   "title": "8 Identity (AD / AD FS / Entra ID) + Windows (generic mention) CVEs published 2026-11-10 -- one patch cycle (highest CVSS 8.0)",
+   "link": "#CVE-2026-122164",
+   "date": "2026-11-10T20:52:44.160784+00:00",
+   "published": "2026-11-10",
+   "tier": "work",
+   "assets": [
+    "Identity (AD / AD FS / Entra ID)",
+    "Windows (generic mention)"
+   ],
+   "criticality": "critical",
+   "reasons": [
+    "In your estate: Identity (AD / AD FS / Entra ID) (\"Kerberos\"); Windows (generic mention) (\"Windows\")",
+    "8 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
+    "CVEs: CVE-2026-122164, CVE-2026-123387, CVE-2026-119847, CVE-2026-119948, CVE-2026-121680, CVE-2026-70240, CVE-2026-105590, CVE-2026-95884"
+   ],
+   "score": 28.3,
+   "cvss": 8.0,
+   "kev": false,
+   "cve_ids": [
+    "CVE-2026-122164",
+    "CVE-2026-123387",
+    "CVE-2026-119847",
+    "CVE-2026-119948",
+    "CVE-2026-121680",
+    "CVE-2026-70240",
+    "CVE-2026-105590",
+    "CVE-2026-95884"
+   ]
   },
   {
    "key": "cve:CVE-2026-119682",
@@ -3780,58 +4061,447 @@
    "cve_ids": []
   },
   {
-   "key": "intel:306659c824b3526e",
-   "kind": "intel",
-   "ref": "306659c824b3526e",
-   "title": "Microsoft Teams AI Phishing Detection: Rollout and Deepfake Warnings - TechRepublic",
-   "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPUHh3MXlzMHRfRHdxYnJnS0t4dUpsN3dwTDhEUDUxQVJpQ0V3dWl6UzJZZ3pXYVFaX0s0bFlxWHFWUUdJc1lVa3NXV3VwcTVuV0MzcTdEdzlhVlJEdkxFUmUyQ0wzdE94M1ozZEtFbVRueEotdGZNM1I4dFNsYkhlMGdQM2hUUmFjbV9oQXdxa2tLOGlPOHZKSDEtX0dDamM?oc=5",
-   "source": "GNews: Teams / help-desk vishing",
-   "date": "2026-11-11T10:41:32+00:00",
+   "key": "bundle:browsers-edge-chromium-webview2-others:2026-11-10",
+   "kind": "bundle",
+   "ref": "CVE-2026-125347",
+   "title": "4 Browsers (Edge / Chromium / WebView2 / others) CVEs published 2026-11-10 -- one patch cycle (highest CVSS 9.6)",
+   "link": "#CVE-2026-125347",
+   "date": "2026-11-11T02:00:07.700110+00:00",
+   "published": "2026-11-10",
    "tier": "work",
    "assets": [
+    "Browsers (Edge / Chromium / WebView2 / others)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
+    "4 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
+    "CVEs: CVE-2026-125347, CVE-2026-125344, CVE-2026-125346, CVE-2026-125348"
+   ],
+   "score": 51.3,
+   "cvss": 9.6,
+   "kev": false,
+   "cve_ids": [
+    "CVE-2026-125347",
+    "CVE-2026-125344",
+    "CVE-2026-125346",
+    "CVE-2026-125348"
+   ]
+  },
+  {
+   "key": "intel:8e3dc75e9ab2de27",
+   "kind": "intel",
+   "ref": "8e3dc75e9ab2de27",
+   "title": "Microsoft Teams Outage Hits Users in North America",
+   "link": "https://cybersecuritynews.com/microsoft-teams-outagenorth-america/",
+   "source": "Cyber Security News",
+   "date": "2026-11-12T16:44:18+00:00",
+   "tier": "work",
+   "assets": [
+    "Microsoft 365 / email",
     "Microsoft Teams"
    ],
    "criticality": "high",
    "reasons": [
-    "In your estate: Microsoft Teams (\"Microsoft Teams\")",
-    "Category: Social engineering",
-    "High news priority (rule score 60)",
-    "Defense, takedown or how-to news, not an active campaign: Work, not Escalate"
+    "In your estate: Microsoft 365 / email (\"Microsoft 365\"); Microsoft Teams (\"Microsoft Teams\")",
+    "Category: Vendor / update issue"
    ],
-   "score": 60,
+   "score": 50,
    "categories": [
-    "social_engineering"
+    "vendor_issue"
    ],
    "cve_ids": []
   },
   {
-   "key": "intel:8b35f69eac704b22",
+   "key": "intel:1c2cb82e02d8d6f7",
    "kind": "intel",
-   "ref": "8b35f69eac704b22",
-   "title": "Critical Zoom Workplace Flaw Could Allow Unauthenticated Remote Privilege Escalation",
-   "link": "https://thehackernews.com/2026/11/critical-zoom-workplace-flaw-could.html",
-   "source": "The Hacker News",
-   "date": "2026-11-11T16:12:46+00:00",
+   "ref": "1c2cb82e02d8d6f7",
+   "title": "Apache Patches Critical HTTP Server RCE Found by Anthropic, Google",
+   "link": "https://www.securityweek.com/apache-patches-critical-http-server-rce-found-by-anthropic-google/",
+   "source": "SecurityWeek",
+   "date": "2026-11-12T15:38:31+00:00",
    "tier": "work",
    "assets": [
-    "Voice / meetings (3CX / Zoom / Avaya / Grandstream / Five9 / WeMeet)",
+    "AI assistants & coding agents"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: AI assistants & coding agents (\"Anthropic\")",
+    "Category: Patch / advisory, Vulnerability",
+    "Names CVE-2026-119618",
+    "Same incident covered by 2 distinct reports (1 outlets/feeds) -- first seen 2026-11-10"
+   ],
+   "score": 45,
+   "categories": [
+    "vulnerability",
+    "patch"
+   ],
+   "cve_ids": [
+    "CVE-2026-119618"
+   ],
+   "first_reported": "2026-11-10T12:17:13+00:00",
+   "member_keys": [
+    "intel:1c2cb82e02d8d6f7",
+    "intel:ef88bdf45c7769c6"
+   ],
+   "coverage": [
+    {
+     "title": "Anthropic Rolls Out Mythos 5.2 With Improved Bug Hunting, Fewer Sandbox Escapes",
+     "link": "https://www.securityweek.com/anthropic-rolls-out-mythos-5-2-with-improved-bug-hunting-fewer-sandbox-escapes/",
+     "source": "SecurityWeek",
+     "date": "2026-11-10T12:17:13+00:00",
+     "dup": false
+    },
+    {
+     "title": "Apache Patches Critical HTTP Server RCE Found by Anthropic, Google",
+     "link": "https://www.securityweek.com/apache-patches-critical-http-server-rce-found-by-anthropic-google/",
+     "source": "SecurityWeek",
+     "date": "2026-11-12T15:38:31+00:00",
+     "dup": false
+    }
+   ]
+  },
+  {
+   "key": "intel:1d615b36e58e7ea2",
+   "kind": "intel",
+   "ref": "1d615b36e58e7ea2",
+   "title": "PoC Exploit Released for Critical Cisco Expressway RCE Vulnerability With CVSS 9.8 Score",
+   "link": "https://gbhackers.com/poc-exploit-released-for-critical-cisco-expressway-rce/",
+   "source": "GBHackers",
+   "date": "2026-11-12T10:53:36+00:00",
+   "tier": "work",
+   "assets": [
+    "Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems) (\"GitHub\")",
+    "Category: Patch / advisory, Vulnerability",
+    "Names CVE-2026-76466"
+   ],
+   "score": 45,
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "cve_ids": [
+    "CVE-2026-76466"
+   ]
+  },
+  {
+   "key": "intel:5af74d5ce665225d",
+   "kind": "intel",
+   "ref": "5af74d5ce665225d",
+   "title": "AWS MCP Gateway Security Flaw Allowing Access to Internal Networks and Cloud Credentials",
+   "link": "https://cybersecuritynews.com/aws-mcp-gateway-security-flaw/",
+   "source": "Cyber Security News",
+   "date": "2026-11-12T13:52:16+00:00",
+   "tier": "work",
+   "assets": [
+    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"AWS\")",
+    "Category: Patch / advisory, Vulnerability",
+    "Names CVE-2026-125926",
+    "Same incident covered by 2 distinct reports (3 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-11-12"
+   ],
+   "score": 45,
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "cve_ids": [
+    "CVE-2026-125926"
+   ],
+   "first_reported": "2026-11-12T12:09:14+00:00",
+   "member_keys": [
+    "intel:5af74d5ce665225d",
+    "intel:df5cc34d5eba0b8f",
+    "intel:ef3cb1d3b1f2f202"
+   ],
+   "coverage": [
+    {
+     "title": "Google Cloud Warns Three AMD Turin CPU Flaws Could Leak Data Across Processes in VMs",
+     "link": "https://thehackernews.com/2026/11/google-cloud-warns-three-amd-turin-cpu.html",
+     "source": "The Hacker News",
+     "date": "2026-11-12T12:09:14+00:00",
+     "dup": false
+    },
+    {
+     "title": "AWS MCP Gateway Security Flaw Allowing Access to Internal Networks and Cloud Credentials",
+     "link": "https://cybersecuritynews.com/aws-mcp-gateway-security-flaw/",
+     "source": "Cyber Security News",
+     "date": "2026-11-12T13:51:59+00:00",
+     "dup": false
+    },
+    {
+     "title": "AWS MCP Gateway Security Flaw Allowing Access to Internal Networks and Cloud Credentials - CyberSecurityNews",
+     "link": "https://news.google.com/rss/articles/CBMickFVX3lxTFBPbHZvYWNVOF9jX3QtQmZPWEEyLXFkQkZiRVVQUDZpeG5WVUM5YnVidjVwZUdsTkVhUUpZMGZjSFpsTkdLM3hlSFByN05TYUhyYmpBejdtU19Ta2NFRENoU3FFZThxaHRXUWJYN3ZycW94d9IBckFVX3lxTFBPbHZvYWNVOF9jX3QtQmZPWEEyLXFkQkZiRVVQUDZpeG5WVUM5YnVidjVwZUdsTkVhUUpZMGZjSFpsTkdLM3hlSFByN05TYUhyYmpBejdtU19Ta2NFRENoU3FFZThxaHRXUWJYN3ZycW94dw?oc=5",
+     "source": "GNews: virtualization & cloud",
+     "date": "2026-11-12T13:52:16+00:00",
+     "dup": true
+    }
+   ]
+  },
+  {
+   "key": "intel:76eaa00f81ca15e5",
+   "kind": "intel",
+   "ref": "76eaa00f81ca15e5",
+   "title": "Microsoft Paint RCE Fix Now Available, but Windows Update Won't Deliver It",
+   "link": "https://thehackernews.com/2026/11/microsoft-paint-rce-fix-now-available.html",
+   "source": "The Hacker News",
+   "date": "2026-11-06T12:06:43+00:00",
+   "tier": "work",
+   "assets": [
+    "Windows (generic mention)",
+    "Windows endpoints"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Windows endpoints (\"Windows Update\"); Windows (generic mention) (\"Windows\")",
+    "Category: Patch / advisory, Vulnerability",
+    "Names CVE-2026-83844",
+    "Same incident covered by 3 distinct reports (4 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-11-06"
+   ],
+   "score": 45,
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "cve_ids": [
+    "CVE-2026-83844"
+   ],
+   "first_reported": "2026-11-06T00:58:05+00:00",
+   "member_keys": [
+    "intel:76eaa00f81ca15e5",
+    "intel:ba08f28ae89d689a",
+    "intel:e3fa5b41337c9698",
+    "intel:649e0d8b078ebcc3"
+   ],
+   "coverage": [
+    {
+     "title": "Microsoft Paint 0-Click Vulnerability Could Allow Hackers to Take Control of Windows PCs",
+     "link": "https://cybersecuritynews.com/windows-paint-rce-vulnerability/",
+     "source": "Cyber Security News",
+     "date": "2026-11-06T00:58:05+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft Paint 0-Click Vulnerability Could Allow Hackers to Take Control of Windows PCs - CyberSecurityNews",
+     "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1CbndEY2VDMEdlM0dNLTgtVnhQNU9JMkdESllmN0YyUGI3Y0tTb2dHZ2VBcUxDZVVSb0F5anBCdUZ2UWp1ZnlxNnJDdWxuZ0VBNmRoTUs2YVdfT2pMS2J1Sk9pdzBZUjUzckNDQ1JDMNIBdEFVX3lxTFBMVnZZSlpXcWgwTnhndkRXUEhLb2FuWVdFZUE2NlRSNDVBVkwwQnM2cmdGR1A0a0hja05zcHVaYXpCY2F3MWVhcEJoWENFckdRME5DbGlMUkhjcFplWWlNV1JEXzE5YXBDS1I3cFBGMWlDR3hu?oc=5",
+     "source": "GNews: identity & M365 attacks",
+     "date": "2026-11-06T00:58:05+00:00",
+     "dup": true
+    },
+    {
+     "title": "Microsoft Paint Vulnerability Allows Hackers to Execute Malicious Code Remotely Without User Interaction",
+     "link": "https://gbhackers.com/microsoft-paint-vulnerability/",
+     "source": "GBHackers",
+     "date": "2026-11-06T05:33:10+00:00",
+     "dup": false
+    },
+    {
+     "title": "Microsoft Paint RCE Fix Now Available, but Windows Update Won't Deliver It",
+     "link": "https://thehackernews.com/2026/11/microsoft-paint-rce-fix-now-available.html",
+     "source": "The Hacker News",
+     "date": "2026-11-06T12:06:43+00:00",
+     "dup": false
+    }
+   ]
+  },
+  {
+   "key": "intel:01cc4fb33d639820",
+   "kind": "intel",
+   "ref": "01cc4fb33d639820",
+   "title": "Threat actors use agentic AI tooling to find and abuse exposed secrets",
+   "link": "https://www.microsoft.com/en-us/security/blog/2026/11/05/threat-actors-use-agentic-ai-tooling-to-find-and-abuse-exposed-secrets/",
+   "source": "Microsoft Security Blog",
+   "date": "2026-11-05T23:46:50+00:00",
+   "tier": "work",
+   "assets": [
+    "Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems) (\"GitHub\")",
+    "Category: Identity"
+   ],
+   "score": 40,
+   "categories": [
+    "identity"
+   ],
+   "cve_ids": []
+  },
+  {
+   "key": "intel:20da40c1f156b565",
+   "kind": "intel",
+   "ref": "20da40c1f156b565",
+   "title": "Google Chrome Fixes 83 Security Flaws, Including 5 Critical Use-After-Free Vulnerabilities",
+   "link": "https://gbhackers.com/google-chrome-fixes-83-security-flaws/",
+   "source": "GBHackers",
+   "date": "2026-11-12T12:06:39+00:00",
+   "tier": "work",
+   "assets": [
+    "Apple / creative (macOS, Final Cut Pro, Photo Mechanic, Affinity)",
+    "Browsers (Edge / Chromium / WebView2 / others)",
     "Windows (generic mention)"
    ],
    "criticality": "high",
    "reasons": [
-    "In your estate: Windows (generic mention) (\"Windows\"); Voice / meetings (3CX / Zoom / Avaya / Grandstream / Five9 / WeMeet) (\"Zoom Workplace\")",
-    "Category: Vendor / update issue, Vulnerability",
-    "High news priority (rule score 60)",
-    "Names CVE-2026-108186"
+    "In your estate: Windows (generic mention) (\"Windows\"); Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\"); Apple / creative (macOS, Final Cut Pro, Photo Mechanic, Affinity) (\"macOS\")",
+    "Category: Patch / advisory, Vulnerability"
    ],
-   "score": 60,
+   "score": 40,
    "categories": [
-    "vendor_issue",
+    "patch",
     "vulnerability"
    ],
-   "cve_ids": [
-    "CVE-2026-108186"
+   "cve_ids": []
+  },
+  {
+   "key": "intel:6da26adf46a9e43c",
+   "kind": "intel",
+   "ref": "6da26adf46a9e43c",
+   "title": "Microsoft Patch Tuesday November 2026, (Tue, Nov 10th)",
+   "link": "https://isc.sans.edu/diary/rss/33508",
+   "source": "SANS ISC",
+   "date": "2026-11-11T18:28:43+00:00",
+   "tier": "work",
+   "assets": [
+    "Browsers (Edge / Chromium / WebView2 / others)",
+    "Windows endpoints"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Windows endpoints (\"Patch Tuesday\"); Browsers (Edge / Chromium / WebView2 / others) (\"Chromium\")",
+    "Category: Patch / advisory, Vulnerability"
+   ],
+   "score": 40,
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "cve_ids": []
+  },
+  {
+   "key": "intel:d58e1f007a51618c",
+   "kind": "intel",
+   "ref": "d58e1f007a51618c",
+   "title": "Patch Tuesday - November 2026",
+   "link": "https://www.rapid7.com/blog/post/em-patch-tuesday-november-2026",
+   "source": "Rapid7",
+   "date": "2026-11-10T21:55:37+00:00",
+   "tier": "work",
+   "assets": [
+    "Windows (generic mention)",
+    "Windows endpoints"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Windows endpoints (\"Patch Tuesday\"); Windows (generic mention) (\"Windows\")",
+    "Category: Patch / advisory, Vulnerability"
+   ],
+   "score": 40,
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "cve_ids": []
+  },
+  {
+   "key": "intel:618db6904925c6a2",
+   "kind": "intel",
+   "ref": "618db6904925c6a2",
+   "title": "November 2026 Patch Tuesday forecast: Old software continues to bite",
+   "link": "https://www.helpnetsecurity.com/2026/11/06/november-2026-patch-tuesday-forecast/",
+   "source": "Help Net Security",
+   "date": "2026-11-08T09:00:21+00:00",
+   "tier": "work",
+   "assets": [
+    "Windows endpoints"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Windows endpoints (\"Patch Tuesday\")",
+    "Category: Patch / advisory",
+    "Same incident covered by 2 distinct reports (1 outlets/feeds) -- first seen 2026-11-06"
+   ],
+   "score": 35,
+   "categories": [
+    "patch"
+   ],
+   "cve_ids": [],
+   "first_reported": "2026-11-06T07:00:48+00:00",
+   "member_keys": [
+    "intel:618db6904925c6a2",
+    "intel:9af371f2f690a939"
+   ],
+   "coverage": [
+    {
+     "title": "November 2026 Patch Tuesday forecast: Old software continues to bite",
+     "link": "https://www.helpnetsecurity.com/2026/11/06/november-2026-patch-tuesday-forecast/",
+     "source": "Help Net Security",
+     "date": "2026-11-06T07:00:48+00:00",
+     "dup": false
+    },
+    {
+     "title": "Week in review: Refrigeration cyberattacks hit European retailers again, Patch Tuesday forecast",
+     "link": "https://www.helpnetsecurity.com/2026/11/08/week-in-review-refrigeration-cyberattacks-hit-european-retailers-again-patch-tuesday-forecast/",
+     "source": "Help Net Security",
+     "date": "2026-11-08T09:00:21+00:00",
+     "dup": false
+    }
    ]
+  },
+  {
+   "key": "intel:72d37fa1ae76c7db",
+   "kind": "intel",
+   "ref": "72d37fa1ae76c7db",
+   "title": "AWS Launches AI Security Service That Verifies and Fixes Code Flaws - Seoul Economic Daily",
+   "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNWm1wWnlQNWJzSE5JR2dPYmo4S3YyZWR0M3FmWGZEVl83T05JSlhJSWpiTVhveXQ5Y2dmSU9FbUVndVVVY2s3Y1NSb0lfLWt6U2xSU04zQXJLamtDYnBYVEpKMlJiZXI2R2R3emstNkl4Uzl5S2RaX2FvZVEtWkh0MFA0X1pETlRVOGc5dTJjM0twVXN5aFdWTXRfd1U4Q2JzM0c4?oc=5",
+   "source": "GNews: virtualization & cloud",
+   "date": "2026-11-05T21:30:05+00:00",
+   "tier": "work",
+   "assets": [
+    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"AWS\")",
+    "Category: Patch / advisory"
+   ],
+   "score": 35,
+   "categories": [
+    "patch"
+   ],
+   "cve_ids": []
+  },
+  {
+   "key": "intel:ba110c77735afade",
+   "kind": "intel",
+   "ref": "ba110c77735afade",
+   "title": "Microsoft fixes Exchange sign-ins broken by Windows Server updates",
+   "link": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-exchange-sign-ins-broken-by-october-windows-server-updates/",
+   "source": "BleepingComputer",
+   "date": "2026-11-11T09:07:27+00:00",
+   "tier": "work",
+   "assets": [
+    "Microsoft 365 / email",
+    "Windows (generic mention)",
+    "Windows Server / RDP / virtual desktop"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Microsoft 365 / email (\"Exchange Server\"); Windows (generic mention) (\"Windows\"); Windows Server / RDP / virtual desktop (\"Windows Server\")",
+    "Category: Patch / advisory"
+   ],
+   "score": 35,
+   "categories": [
+    "patch"
+   ],
+   "cve_ids": []
   },
   {
    "key": "bundle:microsoft-365-email-windows-endpoints:2026-11-10",
@@ -3852,7 +4522,7 @@
     "11 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
     "CVEs: CVE-2026-120002, CVE-2026-109454, CVE-2026-80095, CVE-2026-109464, CVE-2026-109472, CVE-2026-109499, CVE-2026-109502, CVE-2026-110044, CVE-2026-123390, CVE-2026-123391, CVE-2026-88176"
    ],
-   "score": 57.8,
+   "score": 34.9,
    "cvss": 9.9,
    "kev": false,
    "cve_ids": [
@@ -3870,13 +4540,34 @@
    ]
   },
   {
-   "key": "bundle:browsers-edge-chromium-webview2-others:2026-11-10",
+   "key": "cve:CVE-2026-121686",
+   "kind": "cve",
+   "ref": "CVE-2026-121686",
+   "title": "CVE-2026-121686: FrodoBots EarthRover Mini+ firmware (version 6.2.4_6.2.5_0.614.0) is vulnerable to unauthenticated, remote code execution via MQTT. A firmware method accepts arbitrary shell commands delivered via Amazon Web Services Int",
+   "link": "#CVE-2026-121686",
+   "date": "2026-11-12T18:19:46.453746+00:00",
+   "published": "2026-11-09",
+   "tier": "work",
+   "assets": [
+    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"Amazon Web Services\")",
+    "CVSS 9.8 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 34.5,
+   "cvss": 9.8,
+   "kev": false
+  },
+  {
+   "key": "bundle:browsers-edge-chromium-webview2-others:2026-11-03",
    "kind": "bundle",
-   "ref": "CVE-2026-125347",
-   "title": "4 Browsers (Edge / Chromium / WebView2 / others) CVEs published 2026-11-10 -- one patch cycle (highest CVSS 9.6)",
-   "link": "#CVE-2026-125347",
-   "date": "2026-11-11T02:00:07.700110+00:00",
-   "published": "2026-11-10",
+   "ref": "CVE-2026-121157",
+   "title": "99 Browsers (Edge / Chromium / WebView2 / others) CVEs published 2026-11-03 -- one patch cycle (highest CVSS 9.8)",
+   "link": "#CVE-2026-121157",
+   "date": "2026-11-10T04:11:01.678048+00:00",
+   "published": "2026-11-03",
    "tier": "work",
    "assets": [
     "Browsers (Edge / Chromium / WebView2 / others)"
@@ -3884,18 +4575,135 @@
    "criticality": "high",
    "reasons": [
     "In your estate: Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
-    "4 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
-    "CVEs: CVE-2026-125347, CVE-2026-125344, CVE-2026-125346, CVE-2026-125348"
+    "99 CVEs at/above the WORK threshold, all published 2026-11-03 (typically one vendor release -- patch together)",
+    "CVEs: CVE-2026-121157, CVE-2026-120931, CVE-2026-121030, CVE-2026-121035, CVE-2026-121060, CVE-2026-121071, CVE-2026-121073, CVE-2026-121074, CVE-2026-121076, CVE-2026-121077, CVE-2026-121086, CVE-2026-121089, CVE-2026-121104, CVE-2026-121114, CVE-2026-121126, CVE-2026-121131, CVE-2026-121148, CVE-2026-121156, CVE-2026-121185, CVE-2026-121189, CVE-2026-121200, CVE-2026-121202, CVE-2026-121214, CVE-2026-121229, CVE-2026-121234, CVE-2026-121241, CVE-2026-121246, CVE-2026-121247, CVE-2026-121249, CVE-2026-121250, CVE-2026-121257, CVE-2026-121036, CVE-2026-121044, CVE-2026-121047, CVE-2026-121048, CVE-2026-121050, CVE-2026-121052, CVE-2026-121054, CVE-2026-121057, CVE-2026-121061, CVE-2026-121065, CVE-2026-121068, CVE-2026-121069, CVE-2026-121070, CVE-2026-121078, CVE-2026-121079, CVE-2026-121082, CVE-2026-121083, CVE-2026-121087, CVE-2026-121092, CVE-2026-121094, CVE-2026-121097, CVE-2026-121100, CVE-2026-121102, CVE-2026-121107, CVE-2026-121108, CVE-2026-121113, CVE-2026-121117, CVE-2026-121118, CVE-2026-121119, CVE-2026-121120, CVE-2026-121123, CVE-2026-121124, CVE-2026-121127, CVE-2026-121128, CVE-2026-121129, CVE-2026-121134, CVE-2026-121135, CVE-2026-121137, CVE-2026-121166, CVE-2026-121168, CVE-2026-121170, CVE-2026-121171, CVE-2026-121174, CVE-2026-121179, CVE-2026-121180, CVE-2026-121181, CVE-2026-121182, CVE-2026-121184, CVE-2026-121188, CVE-2026-121195, CVE-2026-121198, CVE-2026-121201, CVE-2026-121203, CVE-2026-121204, CVE-2026-121205, CVE-2026-121208, CVE-2026-121210, CVE-2026-121212, CVE-2026-121218, CVE-2026-121221, CVE-2026-121222, CVE-2026-121226, CVE-2026-121228, CVE-2026-121233, CVE-2026-121236, CVE-2026-121238, CVE-2026-121251, CVE-2026-121252"
    ],
-   "score": 56.0,
-   "cvss": 9.6,
+   "score": 34.4,
+   "cvss": 9.8,
    "kev": false,
    "cve_ids": [
-    "CVE-2026-125347",
-    "CVE-2026-125344",
-    "CVE-2026-125346",
-    "CVE-2026-125348"
+    "CVE-2026-121157",
+    "CVE-2026-120931",
+    "CVE-2026-121030",
+    "CVE-2026-121035",
+    "CVE-2026-121060",
+    "CVE-2026-121071",
+    "CVE-2026-121073",
+    "CVE-2026-121074",
+    "CVE-2026-121076",
+    "CVE-2026-121077",
+    "CVE-2026-121086",
+    "CVE-2026-121089",
+    "CVE-2026-121104",
+    "CVE-2026-121114",
+    "CVE-2026-121126",
+    "CVE-2026-121131",
+    "CVE-2026-121148",
+    "CVE-2026-121156",
+    "CVE-2026-121185",
+    "CVE-2026-121189",
+    "CVE-2026-121200",
+    "CVE-2026-121202",
+    "CVE-2026-121214",
+    "CVE-2026-121229",
+    "CVE-2026-121234",
+    "CVE-2026-121241",
+    "CVE-2026-121246",
+    "CVE-2026-121247",
+    "CVE-2026-121249",
+    "CVE-2026-121250",
+    "CVE-2026-121257",
+    "CVE-2026-121036",
+    "CVE-2026-121044",
+    "CVE-2026-121047",
+    "CVE-2026-121048",
+    "CVE-2026-121050",
+    "CVE-2026-121052",
+    "CVE-2026-121054",
+    "CVE-2026-121057",
+    "CVE-2026-121061",
+    "CVE-2026-121065",
+    "CVE-2026-121068",
+    "CVE-2026-121069",
+    "CVE-2026-121070",
+    "CVE-2026-121078",
+    "CVE-2026-121079",
+    "CVE-2026-121082",
+    "CVE-2026-121083",
+    "CVE-2026-121087",
+    "CVE-2026-121092",
+    "CVE-2026-121094",
+    "CVE-2026-121097",
+    "CVE-2026-121100",
+    "CVE-2026-121102",
+    "CVE-2026-121107",
+    "CVE-2026-121108",
+    "CVE-2026-121113",
+    "CVE-2026-121117",
+    "CVE-2026-121118",
+    "CVE-2026-121119",
+    "CVE-2026-121120",
+    "CVE-2026-121123",
+    "CVE-2026-121124",
+    "CVE-2026-121127",
+    "CVE-2026-121128",
+    "CVE-2026-121129",
+    "CVE-2026-121134",
+    "CVE-2026-121135",
+    "CVE-2026-121137",
+    "CVE-2026-121166",
+    "CVE-2026-121168",
+    "CVE-2026-121170",
+    "CVE-2026-121171",
+    "CVE-2026-121174",
+    "CVE-2026-121179",
+    "CVE-2026-121180",
+    "CVE-2026-121181",
+    "CVE-2026-121182",
+    "CVE-2026-121184",
+    "CVE-2026-121188",
+    "CVE-2026-121195",
+    "CVE-2026-121198",
+    "CVE-2026-121201",
+    "CVE-2026-121203",
+    "CVE-2026-121204",
+    "CVE-2026-121205",
+    "CVE-2026-121208",
+    "CVE-2026-121210",
+    "CVE-2026-121212",
+    "CVE-2026-121218",
+    "CVE-2026-121221",
+    "CVE-2026-121222",
+    "CVE-2026-121226",
+    "CVE-2026-121228",
+    "CVE-2026-121233",
+    "CVE-2026-121236",
+    "CVE-2026-121238",
+    "CVE-2026-121251",
+    "CVE-2026-121252"
    ]
+  },
+  {
+   "key": "cve:CVE-2026-121685",
+   "kind": "cve",
+   "ref": "CVE-2026-121685",
+   "title": "CVE-2026-121685: FrodoBots EarthRover Mini+ firmware (version 6.2.4_6.2.5_0.614.0) contains multiple sets of hard-coded credentials. These include fleet‑wide credentials, including BasicAuth credentials for an Agora token service, AWS IA",
+   "link": "#CVE-2026-121685",
+   "date": "2026-11-12T18:19:46.453687+00:00",
+   "published": "2026-11-09",
+   "tier": "work",
+   "assets": [
+    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)",
+    "Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"AWS\"); Collaboration SaaS (Slack / HubSpot / DocuSign / Nextcloud / Google Workspace) (\"Slack\")",
+    "CVSS 9.8 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 34.4,
+   "cvss": 9.8,
+   "kev": false
   },
   {
    "key": "cve:CVE-2026-108186",
@@ -3915,8 +4723,227 @@
     "In your estate: Windows (generic mention) (\"Windows\"); Voice / meetings (3CX / Zoom / Avaya / Grandstream / Five9 / WeMeet) (\"Zoom Workplace\")",
     "CVSS 9.6 >= 8.8 work threshold for a high asset"
    ],
-   "score": 56.0,
+   "score": 33.8,
    "cvss": 9.6,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-121034",
+   "kind": "cve",
+   "ref": "CVE-2026-121034",
+   "title": "CVE-2026-121034: Use after free in Views in Google Chrome on on Windows prior to 157.0.8103.38 allowed a remote attacker leveraging social engineering to execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium secur",
+   "link": "#CVE-2026-121034",
+   "date": "2026-11-04T02:21:42.355930+00:00",
+   "published": "2026-11-03",
+   "tier": "work",
+   "assets": [
+    "Browsers (Edge / Chromium / WebView2 / others)",
+    "Windows (generic mention)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Windows (generic mention) (\"Windows\"); Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
+    "CVSS 9.6 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 33.8,
+   "cvss": 9.6,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-121037",
+   "kind": "cve",
+   "ref": "CVE-2026-121037",
+   "title": "CVE-2026-121037: Out of bounds write in ANGLE in Google Chrome on on Windows prior to 157.0.8103.38 allowed a remote attacker to potentially execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity:",
+   "link": "#CVE-2026-121037",
+   "date": "2026-11-04T02:21:42.355954+00:00",
+   "published": "2026-11-03",
+   "tier": "work",
+   "assets": [
+    "Browsers (Edge / Chromium / WebView2 / others)",
+    "Windows (generic mention)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Windows (generic mention) (\"Windows\"); Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
+    "CVSS 9.6 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 33.8,
+   "cvss": 9.6,
+   "kev": false
+  },
+  {
+   "key": "bundle:browsers-edge-chromium-webview2-others:2026-10-30",
+   "kind": "bundle",
+   "ref": "CVE-2026-119261",
+   "title": "18 Browsers (Edge / Chromium / WebView2 / others) CVEs published 2026-10-30 -- one patch cycle (highest CVSS 9.6)",
+   "link": "#CVE-2026-119261",
+   "date": "2026-10-30T19:22:45.389768+00:00",
+   "published": "2026-10-30",
+   "tier": "work",
+   "assets": [
+    "Browsers (Edge / Chromium / WebView2 / others)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
+    "18 CVEs at/above the WORK threshold, all published 2026-10-30 (typically one vendor release -- patch together)",
+    "CVEs: CVE-2026-119261, CVE-2026-119263, CVE-2026-119260, CVE-2026-119262, CVE-2026-119264, CVE-2026-119265, CVE-2026-119266, CVE-2026-119267, CVE-2026-119268, CVE-2026-119269, CVE-2026-119270, CVE-2026-119271, CVE-2026-76025, CVE-2026-76026, CVE-2026-76028, CVE-2026-76029, CVE-2026-76030, CVE-2026-76031"
+   ],
+   "score": 33.7,
+   "cvss": 9.6,
+   "kev": false,
+   "cve_ids": [
+    "CVE-2026-119261",
+    "CVE-2026-119263",
+    "CVE-2026-119260",
+    "CVE-2026-119262",
+    "CVE-2026-119264",
+    "CVE-2026-119265",
+    "CVE-2026-119266",
+    "CVE-2026-119267",
+    "CVE-2026-119268",
+    "CVE-2026-119269",
+    "CVE-2026-119270",
+    "CVE-2026-119271",
+    "CVE-2026-76025",
+    "CVE-2026-76026",
+    "CVE-2026-76028",
+    "CVE-2026-76029",
+    "CVE-2026-76030",
+    "CVE-2026-76031"
+   ]
+  },
+  {
+   "key": "bundle:browsers-edge-chromium-webview2-others:2026-11-11",
+   "kind": "bundle",
+   "ref": "CVE-2026-126842",
+   "title": "46 Browsers (Edge / Chromium / WebView2 / others) CVEs published 2026-11-11 -- one patch cycle (highest CVSS 9.6)",
+   "link": "#CVE-2026-126842",
+   "date": "2026-11-12T18:19:46.450884+00:00",
+   "published": "2026-11-11",
+   "tier": "work",
+   "assets": [
+    "Browsers (Edge / Chromium / WebView2 / others)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
+    "46 CVEs at/above the WORK threshold, all published 2026-11-11 (typically one vendor release -- patch together)",
+    "CVEs: CVE-2026-126842, CVE-2026-126846, CVE-2026-126859, CVE-2026-126872, CVE-2026-126885, CVE-2026-126909, CVE-2026-126912, CVE-2026-126840, CVE-2026-126843, CVE-2026-126847, CVE-2026-126849, CVE-2026-126851, CVE-2026-126852, CVE-2026-126860, CVE-2026-126861, CVE-2026-126863, CVE-2026-126864, CVE-2026-126865, CVE-2026-126868, CVE-2026-126869, CVE-2026-126874, CVE-2026-126876, CVE-2026-126879, CVE-2026-126880, CVE-2026-126881, CVE-2026-126886, CVE-2026-126887, CVE-2026-126888, CVE-2026-126889, CVE-2026-126890, CVE-2026-126892, CVE-2026-126893, CVE-2026-126895, CVE-2026-126897, CVE-2026-126899, CVE-2026-126900, CVE-2026-126901, CVE-2026-126905, CVE-2026-126908, CVE-2026-126910, CVE-2026-126911, CVE-2026-126916, CVE-2026-126917, CVE-2026-126918, CVE-2026-126919, CVE-2026-126921"
+   ],
+   "score": 33.7,
+   "cvss": 9.6,
+   "kev": false,
+   "cve_ids": [
+    "CVE-2026-126842",
+    "CVE-2026-126846",
+    "CVE-2026-126859",
+    "CVE-2026-126872",
+    "CVE-2026-126885",
+    "CVE-2026-126909",
+    "CVE-2026-126912",
+    "CVE-2026-126840",
+    "CVE-2026-126843",
+    "CVE-2026-126847",
+    "CVE-2026-126849",
+    "CVE-2026-126851",
+    "CVE-2026-126852",
+    "CVE-2026-126860",
+    "CVE-2026-126861",
+    "CVE-2026-126863",
+    "CVE-2026-126864",
+    "CVE-2026-126865",
+    "CVE-2026-126868",
+    "CVE-2026-126869",
+    "CVE-2026-126874",
+    "CVE-2026-126876",
+    "CVE-2026-126879",
+    "CVE-2026-126880",
+    "CVE-2026-126881",
+    "CVE-2026-126886",
+    "CVE-2026-126887",
+    "CVE-2026-126888",
+    "CVE-2026-126889",
+    "CVE-2026-126890",
+    "CVE-2026-126892",
+    "CVE-2026-126893",
+    "CVE-2026-126895",
+    "CVE-2026-126897",
+    "CVE-2026-126899",
+    "CVE-2026-126900",
+    "CVE-2026-126901",
+    "CVE-2026-126905",
+    "CVE-2026-126908",
+    "CVE-2026-126910",
+    "CVE-2026-126911",
+    "CVE-2026-126916",
+    "CVE-2026-126917",
+    "CVE-2026-126918",
+    "CVE-2026-126919",
+    "CVE-2026-126921"
+   ]
+  },
+  {
+   "key": "cve:CVE-2026-123025",
+   "kind": "cve",
+   "ref": "CVE-2026-123025",
+   "title": "CVE-2026-123025: An OS Command Injection vulnerability was discovered in the Google Cloud DNS validation module of the OPNsense os-acme-client plugin through 4.17. The DnsGcloud::prepare() method decodes the dns_gcloud_key model field an",
+   "link": "#CVE-2026-123025",
+   "date": "2026-11-05T09:30:22.717637+00:00",
+   "published": "2026-11-05",
+   "tier": "work",
+   "assets": [
+    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"Google Cloud\")",
+    "CVSS 9.4 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 33.2,
+   "cvss": 9.4,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-93327",
+   "kind": "cve",
+   "ref": "CVE-2026-93327",
+   "title": "CVE-2026-93327: A Deserialization of Untrusted Data vulnerability in the SubWorkflow task in Google Cloud Application Integration versions prior to 2026-09-11 on Google Cloud Platform allows an authenticated attacker to execute arbitrar",
+   "link": "#CVE-2026-93327",
+   "date": "2026-10-30T19:22:45.394010+00:00",
+   "published": "2026-10-30",
+   "tier": "work",
+   "assets": [
+    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"Google Cloud\")",
+    "CVSS 9.4 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 33.1,
+   "cvss": 9.4,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-57566",
+   "kind": "cve",
+   "ref": "CVE-2026-57566",
+   "title": "CVE-2026-57566: Readest is a modern, feature-rich ebook reader designed for seamless cross-platform access and an intuitive reading experience. Prior to 0.11.10, the unauthenticated /api/opds/proxy route in apps/readest-app/src/app/api/",
+   "link": "#CVE-2026-57566",
+   "date": "2026-11-05T00:57:27.685035+00:00",
+   "published": "2026-11-04",
+   "tier": "work",
+   "assets": [
+    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"Cloudflare\")",
+    "CVSS 9.3 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 32.8,
+   "cvss": 9.3,
    "kev": false
   },
   {
@@ -3937,7 +4964,7 @@
     "4 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
     "CVEs: CVE-2026-118149, CVE-2026-118150, CVE-2026-118154, CVE-2026-118207"
    ],
-   "score": 51.3,
+   "score": 31.3,
    "cvss": 8.8,
    "kev": false,
    "cve_ids": [
@@ -3965,7 +4992,7 @@
     "127 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
     "CVEs: CVE-2026-109493, CVE-2026-109494, CVE-2026-109496, CVE-2026-109501, CVE-2026-109503, CVE-2026-109505, CVE-2026-110043, CVE-2026-110047, CVE-2026-110048, CVE-2026-110050, CVE-2026-110054, CVE-2026-110055, CVE-2026-110058, CVE-2026-110059, CVE-2026-110060, CVE-2026-110061, CVE-2026-110062, CVE-2026-110064, CVE-2026-110067, CVE-2026-110068, CVE-2026-111285, CVE-2026-111289, CVE-2026-111290, CVE-2026-111294, CVE-2026-111295, CVE-2026-111298, CVE-2026-111299, CVE-2026-111301, CVE-2026-111304, CVE-2026-111305, CVE-2026-111306, CVE-2026-111307, CVE-2026-111308, CVE-2026-111309, CVE-2026-111310, CVE-2026-112714, CVE-2026-112715, CVE-2026-112716, CVE-2026-112717, CVE-2026-112718, CVE-2026-112719, CVE-2026-112721, CVE-2026-112722, CVE-2026-112723, CVE-2026-112724, CVE-2026-112726, CVE-2026-112728, CVE-2026-112729, CVE-2026-112730, CVE-2026-112733, CVE-2026-112734, CVE-2026-112735, CVE-2026-112737, CVE-2026-112739, CVE-2026-112741, CVE-2026-116717, CVE-2026-116719, CVE-2026-116720, CVE-2026-116722, CVE-2026-116923, CVE-2026-116925, CVE-2026-116927, CVE-2026-118292, CVE-2026-118293, CVE-2026-118294, CVE-2026-118295, CVE-2026-118296, CVE-2026-118297, CVE-2026-118298, CVE-2026-118299, CVE-2026-118302, CVE-2026-118700, CVE-2026-118701, CVE-2026-118702, CVE-2026-118703, CVE-2026-118704, CVE-2026-118705, CVE-2026-118706, CVE-2026-118707, CVE-2026-118708, CVE-2026-118709, CVE-2026-118710, CVE-2026-118711, CVE-2026-118712, CVE-2026-118713, CVE-2026-118714, CVE-2026-118715, CVE-2026-118716, CVE-2026-118717, CVE-2026-118718, CVE-2026-118719, CVE-2026-118720, CVE-2026-118721, CVE-2026-118722, CVE-2026-118724, CVE-2026-118725, CVE-2026-118726, CVE-2026-118729, CVE-2026-118730, CVE-2026-118731, CVE-2026-118732, CVE-2026-119986, CVE-2026-120001, CVE-2026-120003, CVE-2026-120005, CVE-2026-120785, CVE-2026-120786, CVE-2026-120788, CVE-2026-120789, CVE-2026-120790, CVE-2026-120791, CVE-2026-122194, CVE-2026-122198, CVE-2026-123375, CVE-2026-123376, CVE-2026-123377, CVE-2026-123380, CVE-2026-123381, CVE-2026-123382, CVE-2026-123383, CVE-2026-123384, CVE-2026-123385, CVE-2026-123394, CVE-2026-124174, CVE-2026-124176, CVE-2026-124187, CVE-2026-124228"
    ],
-   "score": 51.3,
+   "score": 31.2,
    "cvss": 8.8,
    "kev": false,
    "cve_ids": [
@@ -4116,7 +5143,7 @@
     "In your estate: Windows (generic mention) (\"Windows\"); Windows Server / RDP / virtual desktop (\"Remote Desktop\")",
     "CVSS 8.8 >= 8.8 work threshold for a high asset"
    ],
-   "score": 51.3,
+   "score": 31.2,
    "cvss": 8.8,
    "kev": false
   },
@@ -4138,545 +5165,9 @@
     "In your estate: Windows endpoints (\"Windows Kernel\"); Windows (generic mention) (\"Windows\")",
     "CVSS 8.8 >= 8.8 work threshold for a high asset"
    ],
-   "score": 51.3,
+   "score": 30.9,
    "cvss": 8.8,
    "kev": false
-  },
-  {
-   "key": "intel:76eaa00f81ca15e5",
-   "kind": "intel",
-   "ref": "76eaa00f81ca15e5",
-   "title": "Microsoft Paint RCE Fix Now Available, but Windows Update Won't Deliver It",
-   "link": "https://thehackernews.com/2026/11/microsoft-paint-rce-fix-now-available.html",
-   "source": "The Hacker News",
-   "date": "2026-11-06T12:06:43+00:00",
-   "tier": "work",
-   "assets": [
-    "Windows (generic mention)",
-    "Windows endpoints"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Windows endpoints (\"Windows Update\"); Windows (generic mention) (\"Windows\")",
-    "Category: Patch / advisory, Vulnerability",
-    "Names CVE-2026-83844",
-    "Same incident covered by 3 distinct reports (4 outlets/feeds, plus 1 reposts of the same headline) -- first seen 2026-11-06"
-   ],
-   "score": 45,
-   "categories": [
-    "patch",
-    "vulnerability"
-   ],
-   "cve_ids": [
-    "CVE-2026-83844"
-   ],
-   "first_reported": "2026-11-06T00:58:05+00:00",
-   "member_keys": [
-    "intel:76eaa00f81ca15e5",
-    "intel:ba08f28ae89d689a",
-    "intel:e3fa5b41337c9698",
-    "intel:649e0d8b078ebcc3"
-   ],
-   "coverage": [
-    {
-     "title": "Microsoft Paint 0-Click Vulnerability Could Allow Hackers to Take Control of Windows PCs",
-     "link": "https://cybersecuritynews.com/windows-paint-rce-vulnerability/",
-     "source": "Cyber Security News",
-     "date": "2026-11-06T00:58:05+00:00",
-     "dup": false
-    },
-    {
-     "title": "Microsoft Paint 0-Click Vulnerability Could Allow Hackers to Take Control of Windows PCs - CyberSecurityNews",
-     "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1CbndEY2VDMEdlM0dNLTgtVnhQNU9JMkdESllmN0YyUGI3Y0tTb2dHZ2VBcUxDZVVSb0F5anBCdUZ2UWp1ZnlxNnJDdWxuZ0VBNmRoTUs2YVdfT2pMS2J1Sk9pdzBZUjUzckNDQ1JDMNIBdEFVX3lxTFBMVnZZSlpXcWgwTnhndkRXUEhLb2FuWVdFZUE2NlRSNDVBVkwwQnM2cmdGR1A0a0hja05zcHVaYXpCY2F3MWVhcEJoWENFckdRME5DbGlMUkhjcFplWWlNV1JEXzE5YXBDS1I3cFBGMWlDR3hu?oc=5",
-     "source": "GNews: identity & M365 attacks",
-     "date": "2026-11-06T00:58:05+00:00",
-     "dup": true
-    },
-    {
-     "title": "Microsoft Paint Vulnerability Allows Hackers to Execute Malicious Code Remotely Without User Interaction",
-     "link": "https://gbhackers.com/microsoft-paint-vulnerability/",
-     "source": "GBHackers",
-     "date": "2026-11-06T05:33:10+00:00",
-     "dup": false
-    },
-    {
-     "title": "Microsoft Paint RCE Fix Now Available, but Windows Update Won't Deliver It",
-     "link": "https://thehackernews.com/2026/11/microsoft-paint-rce-fix-now-available.html",
-     "source": "The Hacker News",
-     "date": "2026-11-06T12:06:43+00:00",
-     "dup": false
-    }
-   ]
-  },
-  {
-   "key": "intel:01cc4fb33d639820",
-   "kind": "intel",
-   "ref": "01cc4fb33d639820",
-   "title": "Threat actors use agentic AI tooling to find and abuse exposed secrets",
-   "link": "https://www.microsoft.com/en-us/security/blog/2026/11/05/threat-actors-use-agentic-ai-tooling-to-find-and-abuse-exposed-secrets/",
-   "source": "Microsoft Security Blog",
-   "date": "2026-11-05T23:46:50+00:00",
-   "tier": "work",
-   "assets": [
-    "Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Dev & code platforms (GitHub / Bitbucket / Atlassian / OutSystems) (\"GitHub\")",
-    "Category: Identity"
-   ],
-   "score": 40,
-   "categories": [
-    "identity"
-   ],
-   "cve_ids": []
-  },
-  {
-   "key": "intel:6da26adf46a9e43c",
-   "kind": "intel",
-   "ref": "6da26adf46a9e43c",
-   "title": "Microsoft Patch Tuesday November 2026, (Tue, Nov 10th)",
-   "link": "https://isc.sans.edu/diary/rss/33508",
-   "source": "SANS ISC",
-   "date": "2026-11-11T18:28:43+00:00",
-   "tier": "work",
-   "assets": [
-    "Browsers (Edge / Chromium / WebView2 / others)",
-    "Windows endpoints"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Windows endpoints (\"Patch Tuesday\"); Browsers (Edge / Chromium / WebView2 / others) (\"Chromium\")",
-    "Category: Patch / advisory, Vulnerability"
-   ],
-   "score": 40,
-   "categories": [
-    "patch",
-    "vulnerability"
-   ],
-   "cve_ids": []
-  },
-  {
-   "key": "intel:d58e1f007a51618c",
-   "kind": "intel",
-   "ref": "d58e1f007a51618c",
-   "title": "Patch Tuesday - November 2026",
-   "link": "https://www.rapid7.com/blog/post/em-patch-tuesday-november-2026",
-   "source": "Rapid7",
-   "date": "2026-11-10T21:55:37+00:00",
-   "tier": "work",
-   "assets": [
-    "Windows (generic mention)",
-    "Windows endpoints"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Windows endpoints (\"Patch Tuesday\"); Windows (generic mention) (\"Windows\")",
-    "Category: Patch / advisory, Vulnerability"
-   ],
-   "score": 40,
-   "categories": [
-    "patch",
-    "vulnerability"
-   ],
-   "cve_ids": []
-  },
-  {
-   "key": "intel:618db6904925c6a2",
-   "kind": "intel",
-   "ref": "618db6904925c6a2",
-   "title": "November 2026 Patch Tuesday forecast: Old software continues to bite",
-   "link": "https://www.helpnetsecurity.com/2026/11/06/november-2026-patch-tuesday-forecast/",
-   "source": "Help Net Security",
-   "date": "2026-11-08T09:00:21+00:00",
-   "tier": "work",
-   "assets": [
-    "Windows endpoints"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Windows endpoints (\"Patch Tuesday\")",
-    "Category: Patch / advisory",
-    "Same incident covered by 2 distinct reports (1 outlets/feeds) -- first seen 2026-11-06"
-   ],
-   "score": 35,
-   "categories": [
-    "patch"
-   ],
-   "cve_ids": [],
-   "first_reported": "2026-11-06T07:00:48+00:00",
-   "member_keys": [
-    "intel:618db6904925c6a2",
-    "intel:9af371f2f690a939"
-   ],
-   "coverage": [
-    {
-     "title": "November 2026 Patch Tuesday forecast: Old software continues to bite",
-     "link": "https://www.helpnetsecurity.com/2026/11/06/november-2026-patch-tuesday-forecast/",
-     "source": "Help Net Security",
-     "date": "2026-11-06T07:00:48+00:00",
-     "dup": false
-    },
-    {
-     "title": "Week in review: Refrigeration cyberattacks hit European retailers again, Patch Tuesday forecast",
-     "link": "https://www.helpnetsecurity.com/2026/11/08/week-in-review-refrigeration-cyberattacks-hit-european-retailers-again-patch-tuesday-forecast/",
-     "source": "Help Net Security",
-     "date": "2026-11-08T09:00:21+00:00",
-     "dup": false
-    }
-   ]
-  },
-  {
-   "key": "intel:72d37fa1ae76c7db",
-   "kind": "intel",
-   "ref": "72d37fa1ae76c7db",
-   "title": "AWS Launches AI Security Service That Verifies and Fixes Code Flaws - Seoul Economic Daily",
-   "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNWm1wWnlQNWJzSE5JR2dPYmo4S3YyZWR0M3FmWGZEVl83T05JSlhJSWpiTVhveXQ5Y2dmSU9FbUVndVVVY2s3Y1NSb0lfLWt6U2xSU04zQXJLamtDYnBYVEpKMlJiZXI2R2R3emstNkl4Uzl5S2RaX2FvZVEtWkh0MFA0X1pETlRVOGc5dTJjM0twVXN5aFdWTXRfd1U4Q2JzM0c4?oc=5",
-   "source": "GNews: virtualization & cloud",
-   "date": "2026-11-05T21:30:05+00:00",
-   "tier": "work",
-   "assets": [
-    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"AWS\")",
-    "Category: Patch / advisory"
-   ],
-   "score": 35,
-   "categories": [
-    "patch"
-   ],
-   "cve_ids": []
-  },
-  {
-   "key": "intel:ba110c77735afade",
-   "kind": "intel",
-   "ref": "ba110c77735afade",
-   "title": "Microsoft fixes Exchange sign-ins broken by Windows Server updates",
-   "link": "https://www.bleepingcomputer.com/news/microsoft/microsoft-fixes-exchange-sign-ins-broken-by-october-windows-server-updates/",
-   "source": "BleepingComputer",
-   "date": "2026-11-11T09:07:27+00:00",
-   "tier": "work",
-   "assets": [
-    "Microsoft 365 / email",
-    "Windows (generic mention)",
-    "Windows Server / RDP / virtual desktop"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Microsoft 365 / email (\"Exchange Server\"); Windows (generic mention) (\"Windows\"); Windows Server / RDP / virtual desktop (\"Windows Server\")",
-    "Category: Patch / advisory"
-   ],
-   "score": 35,
-   "categories": [
-    "patch"
-   ],
-   "cve_ids": []
-  },
-  {
-   "key": "bundle:browsers-edge-chromium-webview2-others:2026-11-03",
-   "kind": "bundle",
-   "ref": "CVE-2026-121157",
-   "title": "99 Browsers (Edge / Chromium / WebView2 / others) CVEs published 2026-11-03 -- one patch cycle (highest CVSS 9.8)",
-   "link": "#CVE-2026-121157",
-   "date": "2026-11-10T04:11:01.678048+00:00",
-   "published": "2026-11-03",
-   "tier": "work",
-   "assets": [
-    "Browsers (Edge / Chromium / WebView2 / others)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
-    "99 CVEs at/above the WORK threshold, all published 2026-11-03 (typically one vendor release -- patch together)",
-    "CVEs: CVE-2026-121157, CVE-2026-120931, CVE-2026-121030, CVE-2026-121035, CVE-2026-121060, CVE-2026-121071, CVE-2026-121073, CVE-2026-121074, CVE-2026-121076, CVE-2026-121077, CVE-2026-121086, CVE-2026-121089, CVE-2026-121104, CVE-2026-121114, CVE-2026-121126, CVE-2026-121131, CVE-2026-121148, CVE-2026-121156, CVE-2026-121185, CVE-2026-121189, CVE-2026-121200, CVE-2026-121202, CVE-2026-121214, CVE-2026-121229, CVE-2026-121234, CVE-2026-121241, CVE-2026-121246, CVE-2026-121247, CVE-2026-121249, CVE-2026-121250, CVE-2026-121257, CVE-2026-121036, CVE-2026-121044, CVE-2026-121047, CVE-2026-121048, CVE-2026-121050, CVE-2026-121052, CVE-2026-121054, CVE-2026-121057, CVE-2026-121061, CVE-2026-121065, CVE-2026-121068, CVE-2026-121069, CVE-2026-121070, CVE-2026-121078, CVE-2026-121079, CVE-2026-121082, CVE-2026-121083, CVE-2026-121087, CVE-2026-121092, CVE-2026-121094, CVE-2026-121097, CVE-2026-121100, CVE-2026-121102, CVE-2026-121107, CVE-2026-121108, CVE-2026-121113, CVE-2026-121117, CVE-2026-121118, CVE-2026-121119, CVE-2026-121120, CVE-2026-121123, CVE-2026-121124, CVE-2026-121127, CVE-2026-121128, CVE-2026-121129, CVE-2026-121134, CVE-2026-121135, CVE-2026-121137, CVE-2026-121166, CVE-2026-121168, CVE-2026-121170, CVE-2026-121171, CVE-2026-121174, CVE-2026-121179, CVE-2026-121180, CVE-2026-121181, CVE-2026-121182, CVE-2026-121184, CVE-2026-121188, CVE-2026-121195, CVE-2026-121198, CVE-2026-121201, CVE-2026-121203, CVE-2026-121204, CVE-2026-121205, CVE-2026-121208, CVE-2026-121210, CVE-2026-121212, CVE-2026-121218, CVE-2026-121221, CVE-2026-121222, CVE-2026-121226, CVE-2026-121228, CVE-2026-121233, CVE-2026-121236, CVE-2026-121238, CVE-2026-121251, CVE-2026-121252"
-   ],
-   "score": 34.4,
-   "cvss": 9.8,
-   "kev": false,
-   "cve_ids": [
-    "CVE-2026-121157",
-    "CVE-2026-120931",
-    "CVE-2026-121030",
-    "CVE-2026-121035",
-    "CVE-2026-121060",
-    "CVE-2026-121071",
-    "CVE-2026-121073",
-    "CVE-2026-121074",
-    "CVE-2026-121076",
-    "CVE-2026-121077",
-    "CVE-2026-121086",
-    "CVE-2026-121089",
-    "CVE-2026-121104",
-    "CVE-2026-121114",
-    "CVE-2026-121126",
-    "CVE-2026-121131",
-    "CVE-2026-121148",
-    "CVE-2026-121156",
-    "CVE-2026-121185",
-    "CVE-2026-121189",
-    "CVE-2026-121200",
-    "CVE-2026-121202",
-    "CVE-2026-121214",
-    "CVE-2026-121229",
-    "CVE-2026-121234",
-    "CVE-2026-121241",
-    "CVE-2026-121246",
-    "CVE-2026-121247",
-    "CVE-2026-121249",
-    "CVE-2026-121250",
-    "CVE-2026-121257",
-    "CVE-2026-121036",
-    "CVE-2026-121044",
-    "CVE-2026-121047",
-    "CVE-2026-121048",
-    "CVE-2026-121050",
-    "CVE-2026-121052",
-    "CVE-2026-121054",
-    "CVE-2026-121057",
-    "CVE-2026-121061",
-    "CVE-2026-121065",
-    "CVE-2026-121068",
-    "CVE-2026-121069",
-    "CVE-2026-121070",
-    "CVE-2026-121078",
-    "CVE-2026-121079",
-    "CVE-2026-121082",
-    "CVE-2026-121083",
-    "CVE-2026-121087",
-    "CVE-2026-121092",
-    "CVE-2026-121094",
-    "CVE-2026-121097",
-    "CVE-2026-121100",
-    "CVE-2026-121102",
-    "CVE-2026-121107",
-    "CVE-2026-121108",
-    "CVE-2026-121113",
-    "CVE-2026-121117",
-    "CVE-2026-121118",
-    "CVE-2026-121119",
-    "CVE-2026-121120",
-    "CVE-2026-121123",
-    "CVE-2026-121124",
-    "CVE-2026-121127",
-    "CVE-2026-121128",
-    "CVE-2026-121129",
-    "CVE-2026-121134",
-    "CVE-2026-121135",
-    "CVE-2026-121137",
-    "CVE-2026-121166",
-    "CVE-2026-121168",
-    "CVE-2026-121170",
-    "CVE-2026-121171",
-    "CVE-2026-121174",
-    "CVE-2026-121179",
-    "CVE-2026-121180",
-    "CVE-2026-121181",
-    "CVE-2026-121182",
-    "CVE-2026-121184",
-    "CVE-2026-121188",
-    "CVE-2026-121195",
-    "CVE-2026-121198",
-    "CVE-2026-121201",
-    "CVE-2026-121203",
-    "CVE-2026-121204",
-    "CVE-2026-121205",
-    "CVE-2026-121208",
-    "CVE-2026-121210",
-    "CVE-2026-121212",
-    "CVE-2026-121218",
-    "CVE-2026-121221",
-    "CVE-2026-121222",
-    "CVE-2026-121226",
-    "CVE-2026-121228",
-    "CVE-2026-121233",
-    "CVE-2026-121236",
-    "CVE-2026-121238",
-    "CVE-2026-121251",
-    "CVE-2026-121252"
-   ]
-  },
-  {
-   "key": "cve:CVE-2026-121034",
-   "kind": "cve",
-   "ref": "CVE-2026-121034",
-   "title": "CVE-2026-121034: Use after free in Views in Google Chrome on on Windows prior to 157.0.8103.38 allowed a remote attacker leveraging social engineering to execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium secur",
-   "link": "#CVE-2026-121034",
-   "date": "2026-11-04T02:21:42.355930+00:00",
-   "published": "2026-11-03",
-   "tier": "work",
-   "assets": [
-    "Browsers (Edge / Chromium / WebView2 / others)",
-    "Windows (generic mention)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Windows (generic mention) (\"Windows\"); Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
-    "CVSS 9.6 >= 8.8 work threshold for a high asset"
-   ],
-   "score": 33.8,
-   "cvss": 9.6,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-121037",
-   "kind": "cve",
-   "ref": "CVE-2026-121037",
-   "title": "CVE-2026-121037: Out of bounds write in ANGLE in Google Chrome on on Windows prior to 157.0.8103.38 allowed a remote attacker to potentially execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity:",
-   "link": "#CVE-2026-121037",
-   "date": "2026-11-04T02:21:42.355954+00:00",
-   "published": "2026-11-03",
-   "tier": "work",
-   "assets": [
-    "Browsers (Edge / Chromium / WebView2 / others)",
-    "Windows (generic mention)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Windows (generic mention) (\"Windows\"); Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
-    "CVSS 9.6 >= 8.8 work threshold for a high asset"
-   ],
-   "score": 33.8,
-   "cvss": 9.6,
-   "kev": false
-  },
-  {
-   "key": "bundle:browsers-edge-chromium-webview2-others:2026-10-30",
-   "kind": "bundle",
-   "ref": "CVE-2026-119261",
-   "title": "18 Browsers (Edge / Chromium / WebView2 / others) CVEs published 2026-10-30 -- one patch cycle (highest CVSS 9.6)",
-   "link": "#CVE-2026-119261",
-   "date": "2026-10-30T19:22:45.389768+00:00",
-   "published": "2026-10-30",
-   "tier": "work",
-   "assets": [
-    "Browsers (Edge / Chromium / WebView2 / others)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
-    "18 CVEs at/above the WORK threshold, all published 2026-10-30 (typically one vendor release -- patch together)",
-    "CVEs: CVE-2026-119261, CVE-2026-119263, CVE-2026-119260, CVE-2026-119262, CVE-2026-119264, CVE-2026-119265, CVE-2026-119266, CVE-2026-119267, CVE-2026-119268, CVE-2026-119269, CVE-2026-119270, CVE-2026-119271, CVE-2026-76025, CVE-2026-76026, CVE-2026-76028, CVE-2026-76029, CVE-2026-76030, CVE-2026-76031"
-   ],
-   "score": 33.7,
-   "cvss": 9.6,
-   "kev": false,
-   "cve_ids": [
-    "CVE-2026-119261",
-    "CVE-2026-119263",
-    "CVE-2026-119260",
-    "CVE-2026-119262",
-    "CVE-2026-119264",
-    "CVE-2026-119265",
-    "CVE-2026-119266",
-    "CVE-2026-119267",
-    "CVE-2026-119268",
-    "CVE-2026-119269",
-    "CVE-2026-119270",
-    "CVE-2026-119271",
-    "CVE-2026-76025",
-    "CVE-2026-76026",
-    "CVE-2026-76028",
-    "CVE-2026-76029",
-    "CVE-2026-76030",
-    "CVE-2026-76031"
-   ]
-  },
-  {
-   "key": "cve:CVE-2026-123025",
-   "kind": "cve",
-   "ref": "CVE-2026-123025",
-   "title": "CVE-2026-123025: An OS Command Injection vulnerability was discovered in the Google Cloud DNS validation module of the OPNsense os-acme-client plugin through 4.17. The DnsGcloud::prepare() method decodes the dns_gcloud_key model field an",
-   "link": "#CVE-2026-123025",
-   "date": "2026-11-05T09:30:22.717637+00:00",
-   "published": "2026-11-05",
-   "tier": "work",
-   "assets": [
-    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"Google Cloud\")",
-    "CVSS 9.4 >= 8.8 work threshold for a high asset"
-   ],
-   "score": 33.2,
-   "cvss": 9.4,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-93327",
-   "kind": "cve",
-   "ref": "CVE-2026-93327",
-   "title": "CVE-2026-93327: A Deserialization of Untrusted Data vulnerability in the SubWorkflow task in Google Cloud Application Integration versions prior to 2026-09-11 on Google Cloud Platform allows an authenticated attacker to execute arbitrar",
-   "link": "#CVE-2026-93327",
-   "date": "2026-10-30T19:22:45.394010+00:00",
-   "published": "2026-10-30",
-   "tier": "work",
-   "assets": [
-    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"Google Cloud\")",
-    "CVSS 9.4 >= 8.8 work threshold for a high asset"
-   ],
-   "score": 33.1,
-   "cvss": 9.4,
-   "kev": false
-  },
-  {
-   "key": "cve:CVE-2026-57566",
-   "kind": "cve",
-   "ref": "CVE-2026-57566",
-   "title": "CVE-2026-57566: Readest is a modern, feature-rich ebook reader designed for seamless cross-platform access and an intuitive reading experience. Prior to 0.11.10, the unauthenticated /api/opds/proxy route in apps/readest-app/src/app/api/",
-   "link": "#CVE-2026-57566",
-   "date": "2026-11-05T00:57:27.685035+00:00",
-   "published": "2026-11-04",
-   "tier": "work",
-   "assets": [
-    "Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Cloud platforms (AWS / Azure / Google Cloud / DigitalOcean / Cloudflare) (\"Cloudflare\")",
-    "CVSS 9.3 >= 8.8 work threshold for a high asset"
-   ],
-   "score": 32.8,
-   "cvss": 9.3,
-   "kev": false
-  },
-  {
-   "key": "bundle:browsers-edge-chromium-webview2-others:2026-10-29",
-   "kind": "bundle",
-   "ref": "CVE-2026-85890",
-   "title": "8 Browsers (Edge / Chromium / WebView2 / others) CVEs published 2026-10-29 -- one patch cycle (highest CVSS 8.8)",
-   "link": "#CVE-2026-85890",
-   "date": "2026-10-29T19:40:43.938719+00:00",
-   "published": "2026-10-29",
-   "tier": "work",
-   "assets": [
-    "Browsers (Edge / Chromium / WebView2 / others)"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: Browsers (Edge / Chromium / WebView2 / others) (\"Microsoft Edge\")",
-    "8 CVEs at/above the WORK threshold, all published 2026-10-29 (typically one vendor release -- patch together)",
-    "CVEs: CVE-2026-85890, CVE-2026-85897, CVE-2026-88077, CVE-2026-96192, CVE-2026-96196, CVE-2026-96198, CVE-2026-96199, CVE-2026-96203"
-   ],
-   "score": 31.1,
-   "cvss": 8.8,
-   "kev": false,
-   "cve_ids": [
-    "CVE-2026-85890",
-    "CVE-2026-85897",
-    "CVE-2026-88077",
-    "CVE-2026-96192",
-    "CVE-2026-96196",
-    "CVE-2026-96198",
-    "CVE-2026-96199",
-    "CVE-2026-96203"
-   ]
   },
   {
    "key": "cve:CVE-2026-116243",
@@ -4700,6 +5191,73 @@
    "score": 30.9,
    "cvss": 8.8,
    "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126867",
+   "kind": "cve",
+   "ref": "CVE-2026-126867",
+   "title": "CVE-2026-126867: Use after free in Browser in Google Chrome on on Windows prior to 157.0.8103.78 allowed a remote attacker to potentially execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium security severity: Hi",
+   "link": "#CVE-2026-126867",
+   "date": "2026-11-12T18:19:46.450573+00:00",
+   "published": "2026-11-11",
+   "tier": "work",
+   "assets": [
+    "Browsers (Edge / Chromium / WebView2 / others)",
+    "Windows (generic mention)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Windows (generic mention) (\"Windows\"); Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
+    "CVSS 8.8 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 30.9,
+   "cvss": 8.8,
+   "kev": false
+  },
+  {
+   "key": "cve:CVE-2026-126873",
+   "kind": "cve",
+   "ref": "CVE-2026-126873",
+   "title": "CVE-2026-126873: Use after free in Extensions in Google Chrome on on Windows prior to 157.0.8103.78 allowed a remote attacker leveraging social engineering to execute arbitrary code outside the sandbox via a crafted HTML page. (Chromium ",
+   "link": "#CVE-2026-126873",
+   "date": "2026-11-12T18:19:46.450606+00:00",
+   "published": "2026-11-11",
+   "tier": "work",
+   "assets": [
+    "Browsers (Edge / Chromium / WebView2 / others)",
+    "Windows (generic mention)"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Windows (generic mention) (\"Windows\"); Browsers (Edge / Chromium / WebView2 / others) (\"Google Chrome\")",
+    "CVSS 8.8 >= 8.8 work threshold for a high asset"
+   ],
+   "score": 30.9,
+   "cvss": 8.8,
+   "kev": false
+  },
+  {
+   "key": "intel:2a38c65665076c7f",
+   "kind": "intel",
+   "ref": "2a38c65665076c7f",
+   "title": "Microsoft Exchange Server 2016 and 2019 enter their 'permanently vulnerable' era",
+   "link": "https://www.theregister.com/saas/2026/11/12/microsoft-exchange-server-2016-and-2019-enter-their-permanently-vulnerable-era/5309401",
+   "source": "The Register",
+   "date": "2026-11-12T14:55:00+00:00",
+   "tier": "work",
+   "assets": [
+    "Microsoft 365 / email"
+   ],
+   "criticality": "high",
+   "reasons": [
+    "In your estate: Microsoft 365 / email (\"Microsoft Exchange\")",
+    "Category: Vulnerability"
+   ],
+   "score": 30,
+   "categories": [
+    "vulnerability"
+   ],
+   "cve_ids": []
   },
   {
    "key": "intel:7fa52bd49fd618e4",
@@ -4842,29 +5400,6 @@
    "cve_ids": []
   },
   {
-   "key": "intel:1c2cb82e02d8d6f7",
-   "kind": "intel",
-   "ref": "1c2cb82e02d8d6f7",
-   "title": "Anthropic Rolls Out Mythos 5.2 With Improved Bug Hunting, Fewer Sandbox Escapes",
-   "link": "https://www.securityweek.com/anthropic-rolls-out-mythos-5-2-with-improved-bug-hunting-fewer-sandbox-escapes/",
-   "source": "SecurityWeek",
-   "date": "2026-11-10T12:17:13+00:00",
-   "tier": "work",
-   "assets": [
-    "AI assistants & coding agents"
-   ],
-   "criticality": "high",
-   "reasons": [
-    "In your estate: AI assistants & coding agents (\"Anthropic\")",
-    "Category: Vulnerability"
-   ],
-   "score": 5,
-   "categories": [
-    "vulnerability"
-   ],
-   "cve_ids": []
-  },
-  {
    "key": "intel:30dcae9b3c700ef2",
    "kind": "intel",
    "ref": "30dcae9b3c700ef2",
@@ -4909,34 +5444,6 @@
     "vulnerability"
    ],
    "cve_ids": []
-  },
-  {
-   "key": "bundle:windows-generic-mention:2026-11-10",
-   "kind": "bundle",
-   "ref": "CVE-2026-116928",
-   "title": "4 Windows (generic mention) CVEs published 2026-11-10 -- one patch cycle (highest CVSS 9.8)",
-   "link": "#CVE-2026-116928",
-   "date": "2026-11-10T20:52:44.153676+00:00",
-   "published": "2026-11-10",
-   "tier": "work",
-   "assets": [
-    "Windows (generic mention)"
-   ],
-   "criticality": "medium",
-   "reasons": [
-    "In your estate: Windows (generic mention) (\"Windows\")",
-    "4 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
-    "CVEs: CVE-2026-116928, CVE-2026-95882, CVE-2026-95901, CVE-2026-96157"
-   ],
-   "score": 57.2,
-   "cvss": 9.8,
-   "kev": false,
-   "cve_ids": [
-    "CVE-2026-116928",
-    "CVE-2026-95882",
-    "CVE-2026-95901",
-    "CVE-2026-96157"
-   ]
   },
   {
    "key": "intel:d3eef4386e8dc886",
@@ -4985,13 +5492,13 @@
    ]
   },
   {
-   "key": "intel:d9cdefe570e0e29b",
-   "kind": "intel",
-   "ref": "d9cdefe570e0e29b",
-   "title": "Hackers Develop New HYFLOCK Ransomware That Encrypts Files and Attempts to Block Recovery",
-   "link": "https://gbhackers.com/hyflock-ransomware/",
-   "source": "GBHackers",
-   "date": "2026-11-05T11:35:38+00:00",
+   "key": "bundle:windows-generic-mention:2026-11-10",
+   "kind": "bundle",
+   "ref": "CVE-2026-116928",
+   "title": "4 Windows (generic mention) CVEs published 2026-11-10 -- one patch cycle (highest CVSS 9.8)",
+   "link": "#CVE-2026-116928",
+   "date": "2026-11-10T20:52:44.153676+00:00",
+   "published": "2026-11-10",
    "tier": "work",
    "assets": [
     "Windows (generic mention)"
@@ -4999,34 +5506,18 @@
    "criticality": "medium",
    "reasons": [
     "In your estate: Windows (generic mention) (\"Windows\")",
-    "Category: Ransomware"
+    "4 CVEs at/above the WORK threshold, all published 2026-11-10 (typically one vendor release -- patch together)",
+    "CVEs: CVE-2026-116928, CVE-2026-95882, CVE-2026-95901, CVE-2026-96157"
    ],
-   "score": 35,
-   "categories": [
-    "ransomware"
-   ],
-   "cve_ids": []
-  },
-  {
-   "key": "cve:CVE-2026-61992",
-   "kind": "cve",
-   "ref": "CVE-2026-61992",
-   "title": "CVE-2026-61992: Unauthenticated PHP Object Injection in GEO my WordPress <= 4.5.5.3 versions.",
-   "link": "#CVE-2026-61992",
-   "date": "2026-10-29T19:40:43.926660+00:00",
-   "published": "2026-10-29",
-   "tier": "work",
-   "assets": [
-    "Web publishing (WordPress)"
-   ],
-   "criticality": "medium",
-   "reasons": [
-    "In your estate: Web publishing (WordPress) (\"WordPress\")",
-    "CVSS 9.8 >= 9.8 work threshold for a medium asset"
-   ],
-   "score": 34.5,
+   "score": 34.8,
    "cvss": 9.8,
-   "kev": false
+   "kev": false,
+   "cve_ids": [
+    "CVE-2026-116928",
+    "CVE-2026-95882",
+    "CVE-2026-95901",
+    "CVE-2026-96157"
+   ]
   }
  ]
 }
