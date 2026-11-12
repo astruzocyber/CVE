@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-12T18:14:29.642295+00:00",
+ "generated_at": "2026-11-12T23:38:11.321249+00:00",
  "category_labels": {
   "exploited": "Actively exploited",
   "social_engineering": "Social engineering",
@@ -14,7 +14,7 @@
    "name": "BleepingComputer",
    "ok": true,
    "items": 15,
-   "kept": 10
+   "kept": 9
   },
   {
    "name": "The Hacker News",
@@ -38,19 +38,19 @@
    "name": "SecurityWeek",
    "ok": true,
    "items": 10,
-   "kept": 6
+   "kept": 7
   },
   {
    "name": "Help Net Security",
    "ok": true,
    "items": 10,
-   "kept": 6
+   "kept": 7
   },
   {
    "name": "The Register",
    "ok": true,
    "items": 50,
-   "kept": 20
+   "kept": 19
   },
   {
    "name": "Microsoft Security Blog",
@@ -72,9 +72,8 @@
   },
   {
    "name": "GBHackers",
-   "ok": true,
-   "items": 10,
-   "kept": 8
+   "ok": false,
+   "error": "HTTP Error 502: Bad Gateway"
   },
   {
    "name": "Krebs on Security",
@@ -158,13 +157,13 @@
    "name": "Security Affairs",
    "ok": true,
    "items": 10,
-   "kept": 6
+   "kept": 5
   },
   {
    "name": "The Record",
    "ok": true,
    "items": 5,
-   "kept": 0
+   "kept": 1
   },
   {
    "name": "Cloudflare Security",
@@ -187,20 +186,20 @@
   {
    "name": "GNews: remote access & password managers",
    "ok": true,
-   "items": 10,
-   "kept": 4
+   "items": 11,
+   "kept": 5
   },
   {
    "name": "GNews: identity & M365 attacks",
    "ok": true,
-   "items": 29,
+   "items": 28,
    "kept": 25
   },
   {
    "name": "GNews: business SaaS breaches",
    "ok": true,
-   "items": 8,
-   "kept": 5
+   "items": 15,
+   "kept": 6
   },
   {
    "name": "GNews: Veeam & backup attacks",
@@ -211,23 +210,414 @@
   {
    "name": "GNews: virtualization & cloud",
    "ok": true,
-   "items": 29,
-   "kept": 24
+   "items": 28,
+   "kept": 23
   },
   {
    "name": "GNews: dev & AI tools",
    "ok": true,
    "items": 72,
-   "kept": 40
+   "kept": 39
   },
   {
    "name": "GNews: media & publishing sector",
    "ok": true,
-   "items": 26,
+   "items": 25,
    "kept": 5
   }
  ],
  "items": [
+  {
+   "id": "d4b3320d00670cee",
+   "title": "Fake Zillow pages use ClickFix NetSupport RAT to target apartment hunters",
+   "link": "https://www.helpnetsecurity.com/2026/11/13/fake-zillow-clickfix-netsupport-rat/",
+   "source": "Help Net Security",
+   "published": "2026-11-12T23:15:23+00:00",
+   "summary": "EfficientIP Research Labs traced a ClickFix campaign that used fake Zillow apartment-review pages to install NetSupport RAT on visitors’ Windows computers. Each page showed what looked like a routine verification check. Behind it, the page quietly copied a PowerShell command to the clipboard and walked the visitor through pasting and running it. Doing that installs remote-control software that…",
+   "categories": [
+    "social_engineering"
+   ],
+   "watch_matches": [
+    "windows"
+   ],
+   "cve_ids": [],
+   "score": 60,
+   "priority": "high",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "4a406d08432a017c",
+   "title": "PostgreSQL security update fixes 52 vulnerabilities, ends support for PostgreSQL 14",
+   "link": "https://www.helpnetsecurity.com/2026/11/13/postgresql-security-update-november-2026/",
+   "source": "Help Net Security",
+   "published": "2026-11-12T23:05:33+00:00",
+   "summary": "The PostgreSQL Global Development Group released PostgreSQL 18.7, 17.12, 16.16, 15.20 and 14.25 on November 12, fixing 52 security vulnerabilities and more than 140 other bugs. Most of those code execution bugs are memory errors or type confusion, where PostgreSQL handles a value as the wrong data type. They turn up in PL/Perl and PL/Tcl, text search functions such as ts_rank_cd(), parallel…",
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 15,
+   "priority": "low",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "e31796c6fe686409",
+   "title": "Cisco Informational for Emergency Distrust of eMudhra Root and Intermediate Certificate Authorities",
+   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-emudhra-info-ScS22A1r?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Cisco%20Informational%20for%20Emergency%20Distrust%20of%20eMudhra%20Root%20and%20Intermediate%20Certificate%20Authorities%26vs_k=1",
+   "source": "Cisco PSIRT",
+   "published": "2026-11-12T22:57:57+00:00",
+   "summary": "Between October 17 and October 20, 2026, a critical security compromise involving Certificate Authorities that are managed by eMudhra was uncovered. A security researcher demonstrated that the private keys for eight eMudhra intermediate certificates were fundamentally broken due to an unprecedented error in their Key Generation Ceremony (KGC) in April 2025. This allows anyone to brute-force…",
+   "categories": [],
+   "watch_matches": [
+    "cisco"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-10-23T23:07:13.309036+00:00"
+  },
+  {
+   "id": "5077dcbe01d1d237",
+   "title": "PayPal and Workday Team Up to Offer Employees Early Direct Deposit - Small Business Trends",
+   "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQcmRIQlhRcGZ3bEQzd0s5LWU2X0R1YkNPVnJHYzN1c29BVTNjaVU5aTNoS0FMWTNiVXJTNE1zWVp5dGZUN2lla1NHTk94X3MtWjUtbDVwSHJ4akItS0RaRWk5SlZYN0w4bk01a2xad216YkZwaU1UeTk0QW5aQi1ZdDE5RE9tZF8wX3Z0X2hHekpqV2VVanNoOHN3?oc=5",
+   "source": "GNews: business SaaS breaches",
+   "published": "2026-11-12T22:21:31+00:00",
+   "summary": "PayPal and Workday Team Up to Offer Employees Early Direct Deposit Small Business Trends",
+   "categories": [],
+   "watch_matches": [
+    "workday"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "36a0b582324813fb",
+   "title": "Microsoft confirms Outlook outage across the Americas and potentially the globe amid U.S. Cyber Security Agency’s discovery of Outlook vulnerability - play 103.7",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9NbWZLajB2eVJHdDBVZXBNV0pMdkNsaTdOcVI5d0VUUlhiZEJyS3lzSW0yMGRsdlltTVc4UlRHb09INUFVN3cwNEt4T0hUR2VmOTQ0?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-12T22:04:03+00:00",
+   "summary": "Microsoft confirms Outlook outage across the Americas and potentially the globe amid U.S. Cyber Security Agency’s discovery of Outlook vulnerability play 103.7",
+   "categories": [
+    "vendor_issue",
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "outlook"
+   ],
+   "cve_ids": [],
+   "score": 55,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "b3c847993bcc13e3",
+   "title": "Vulnerabilities in Node.js and Brotli Affecting Cisco Products: October 2026",
+   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-oct2026-node-js-Jj3SQ19u?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Vulnerabilities%20in%20Node.js%20and%20Brotli%20Affecting%20Cisco%20Products:%20October%202026%26vs_k=1",
+   "source": "Cisco PSIRT",
+   "published": "2026-11-12T21:33:41+00:00",
+   "summary": "On October 21, 2026, Node.js announced the availability of fixes for multiple vulnerabilities across the following supported release lines: 22.x, 24.x, and 26.x. These vulnerabilities impact critical operations such as the Brotli decoder, DNS resolution, and TLS certificate validation. The vulnerabilities pose risks for remote code execution and traffic interception. For more information, see…",
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "cisco"
+   ],
+   "cve_ids": [],
+   "score": 40,
+   "priority": "medium",
+   "first_seen": "2026-11-04T19:42:42.213958+00:00"
+  },
+  {
+   "id": "b6b73f99568132e6",
+   "title": "Was the Microsoft Outlook outage a cyberattack? Microsoft has pointed to failing servers, not a hack - Nacionale",
+   "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNcmF5ZVdPMThLNXpUOU5SVTUwVUhXdFR2TXR0QmZ6YUNsZ1RnTzhsTXpFZUdjaGszWEFpZ1RjckZjY1d1UjJldUhRY0ZIRzNmX1BqaFBRUkx2MTFkaWd5UUV2d1JlSlp5UTN0Q3A1cUZOWTdZUE9Edkp0TTQyZ3FCYjhxRE96QWVYekNnSno3U3NYYVFpeEVDcURZeU85TTctZVJsOEpWZ0kyN0FqaTFhS2FSNkU?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-12T21:31:20+00:00",
+   "summary": "Was the Microsoft Outlook outage a cyberattack? Microsoft has pointed to failing servers, not a hack Nacionale",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft outlook",
+    "outlook"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "0cddf7b800746504",
+   "title": "Microsoft 365 Outage Disrupts Outlook, Exchange Online and Teams",
+   "link": "https://www.securityweek.com/microsoft-365-outage-disrupts-outlook-exchange-online-and-teams/",
+   "source": "SecurityWeek",
+   "published": "2026-11-12T20:55:30+00:00",
+   "summary": "Microsoft says failed server health checks disrupted Outlook and other Microsoft 365 services. The company is still investigating the cause and has disclosed no evidence of a cyberattack. The post Microsoft 365 Outage Disrupts Outlook, Exchange Online and Teams appeared first on SecurityWeek .",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "exchange",
+    "exchange online",
+    "microsoft",
+    "microsoft 365",
+    "outlook"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "113c23fa2d9e106d",
+   "title": "Microsoft 365 Outage Disrupts Outlook, Exchange Online and Teams - SecurityWeek",
+   "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxONUpZX08wc0l2M09xZjJIMEp0MkJHbTBsSFB0bkE5Y2hudy1LV3BQX3BhZ0o3Mk5pWVFYYkVUN181N2tiR18yTUJDRDNSSjljaDY1Vm1xWFFZT19VbWxvMGd2TU9kNElLdWNTcEFuN2VfQnRYLXU2ck9vNGJCbC1mOGh4eVNfbURkQUxlVG5tc2dVYmF3a3YxWA?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-12T20:55:30+00:00",
+   "summary": "Microsoft 365 Outage Disrupts Outlook, Exchange Online and Teams SecurityWeek",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "exchange",
+    "exchange online",
+    "microsoft",
+    "microsoft 365",
+    "outlook"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "a4cf8f411221734b",
+   "title": "Microsoft Cloud Outage Hits Outlook, Teams, Copilot and AI Services",
+   "link": "https://securityaffairs.com/202932/security/microsoft-cloud-outage-hits-outlook-teams-copilot-and-ai-services.html",
+   "source": "Security Affairs",
+   "published": "2026-11-12T20:41:47+00:00",
+   "summary": "A Microsoft outage disrupted Outlook, Teams and Copilot, also breaking OpenAI and Anthropic connectors to Microsoft 365 accounts. Microsoft 365, Outlook and Teams went down for thousands of US users on Thursday, November 12. Reuters reported that the disruption also hit the connectors OpenAI’s and Anthropic’s AI services use to reach Microsoft accounts. “Microsoft 365, […]",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft 365",
+    "outlook"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "a1916f9c67d7225a",
+   "title": "Massive Microsoft 365 outage disrupts Outlook, Teams, Copilot worldwide",
+   "link": "https://www.bleepingcomputer.com/news/microsoft/massive-microsoft-365-outage-disrupts-outlook-teams-copilot-worldwide/",
+   "source": "BleepingComputer",
+   "published": "2026-11-12T20:15:16+00:00",
+   "summary": "Microsoft is investigating a widespread outage affecting multiple Microsoft 365 services, including Outlook, Microsoft Teams, and Copilot, as users report connectivity problems worldwide. [...]",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft 365",
+    "microsoft teams",
+    "outlook"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "b4f11e5460dbc638",
+   "title": "Massive Microsoft 365 outage disrupts Outlook, Teams, Copilot worldwide - BleepingComputer",
+   "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxORUEtbE82eDZxeC1ubkhOcFFPUFhLQUNMdXdKbDlVTGtDbmFfakxXd2hpVmJZTEw1UFdOaThfNTdtcUhXWTU4TWgtUnF3RkowN0xRNlM5SW9ZOFhvMUpZaUFPQXNJOHh5bzlSMHk0QmhTNTNXWkgwVGVsVTlDbE5fMnhDQXJndU5hOG9FUl9GaEtreTVkWENOUnhpMVIyNUpTMndwQ3gxd08yNUN0aVVnem9sc3owcUdweFE?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-12T20:15:16+00:00",
+   "summary": "Massive Microsoft 365 outage disrupts Outlook, Teams, Copilot worldwide BleepingComputer",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft 365",
+    "outlook"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "43b2bb31ce77af50",
+   "title": "Extortion Group Luna Moth Flits Into Law Firms a Second Time",
+   "link": "https://www.darkreading.com/data-privacy/extortion-luna-moth-law-firms-second-time",
+   "source": "Dark Reading",
+   "published": "2026-11-12T20:09:41+00:00",
+   "summary": "The cybercriminals are retargeting law firms that refused to pay its first ransom, with a social engineering con aimed at stealing Microsoft access tokens.",
+   "categories": [
+    "social_engineering",
+    "ransomware"
+   ],
+   "watch_matches": [
+    "microsoft"
+   ],
+   "cve_ids": [],
+   "score": 70,
+   "priority": "high",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "e230b9f03142b977",
+   "title": "Outlook and Microsoft 365 down worldwide, over 120,000 reports - Pasquale Pillitteri",
+   "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQZlJtTnNvbm51OGpHM0hjYkM2NnR6RWg0WnZPWlpfVGxBYXBYOThlcXpMMk1QNnR5RXVPTWk5Wk45dDVwNUN3Z1hPeTdsWVlPa3B3aGI2c0lmU1oxLWZRMlN4ZzRNSzZzMDhoU3NETndxcGhNNXlNZ2RiZHZkQlRzLXIySnp6aERKSGlZNjAyTW1ydWpwb0hiQ2Q1TQ?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-12T20:09:35+00:00",
+   "summary": "Outlook and Microsoft 365 down worldwide, over 120,000 reports Pasquale Pillitteri",
+   "categories": [],
+   "watch_matches": [
+    "microsoft",
+    "microsoft 365",
+    "outlook"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "30fb76b04d226242",
+   "title": "Lego marketplace BrickLink in pieces after 'unusual activity' takes it offline for almost a week",
+   "link": "https://www.theregister.com/security/2026/11/12/lego-marketplace-bricklink-in-pieces-after-unusual-activity-takes-it-offline-for-almost-a-week/5309425",
+   "source": "The Register",
+   "published": "2026-11-12T20:08:08+00:00",
+   "summary": "Lego fans demand answers as outage approaches a week with no confirmed cause",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 10,
+   "priority": "low",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "d0fcc7f26addefd4",
+   "title": "Microsoft issues update as mass outage sparks cyber attack fears - Newswav",
+   "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOaTZMNml0S1ZjTVNOMzZ5aUxXMHUxVVgyWWJSaW1IVTNjWGxqX0dXQ0UzNmR3N3BWbmlMeV9vS2pxZEZFOUU3cDBoZTVNbHFfOXZKR1REMUFxMW5CNUxRemQwVS1MN281OWdQNmI1YW95SmUwajNiYTN1X1ZoLU96UHVuUUVKWDRMX2luNUZ0UUhqTnNYcmthZkVsSmRFRWJ0eWIyX1RlN3g?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-12T20:00:50+00:00",
+   "summary": "Microsoft issues update as mass outage sparks cyber attack fears Newswav",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "microsoft"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "4ab159d0eae49e7a",
+   "title": "New N-able \"4EverAble2Shell\" zero-day exploited hours after PoC released",
+   "link": "https://www.bleepingcomputer.com/news/security/new-n-able-4everable2shell-zero-day-exploited-hours-after-poc-released/",
+   "source": "BleepingComputer",
+   "published": "2026-11-12T19:51:16+00:00",
+   "summary": "Hackers are actively exploiting a newly disclosed N-able N-central zero-day vulnerability dubbed \"4EverAble2Shell\" to compromise servers and deploy cryptocurrency miners, with researchers reporting at least 21 affected systems, including 19 running the company's latest security update. [...]",
+   "categories": [
+    "exploited",
+    "patch",
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 55,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "2f0ee0fa1bf2fd76",
+   "title": "Microsoft Fixes 1,093 Flaws in Outlook Cyber Attack Response - شبكة تواصل الإخبارية",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1HZmJTNmpCSFFBSzZNaHdXbGVjRGlCWVR0dVpONTF0elNrcDBUSFMyNkppUG9uZ3ZKQ1VGb00zWXExa2J5V3RHbl9wVEczc2QyV1lj?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-12T19:34:50+00:00",
+   "summary": "Microsoft Fixes 1,093 Flaws in Outlook Cyber Attack Response شبكة تواصل الإخبارية",
+   "categories": [
+    "patch"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "outlook"
+   ],
+   "cve_ids": [],
+   "score": 35,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "86013c2901eeeb33",
+   "title": "Apache HTTP Server patches critical HTTP/2 remote code execution flaw",
+   "link": "https://www.bleepingcomputer.com/news/security/apache-http-server-patches-critical-http-2-remote-code-execution-flaw/",
+   "source": "BleepingComputer",
+   "published": "2026-11-12T19:12:55+00:00",
+   "summary": "A critical vulnerability in the HTTP/2 module of Apache HTTP Server could be exploited by an unauthenticated attacker to obtain remote code execution (RCE). [...]",
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "apache",
+    "http server"
+   ],
+   "cve_ids": [],
+   "score": 40,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "2559f20953506e5d",
+   "title": "Shipping giant Maersk says recent cyber incident affected legacy system",
+   "link": "https://therecord.media/shipping-giant-maersk-says-recent-incident-affected-legacy-system",
+   "source": "The Record",
+   "published": "2026-11-12T18:28:00+00:00",
+   "summary": "The incident is the latest in a string of attacks on ports and other shipping organizations worldwide, with Brazil’s largest port hit with ransomware last week.",
+   "categories": [
+    "ransomware"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 10,
+   "priority": "low",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "08a3c75b797f5ee7",
+   "title": "VU#580079: Arbitrary file read/write vulnerability in ImageMagick-based applications with default configuration",
+   "link": "https://kb.cert.org/vuls/id/580079",
+   "source": "CERT/CC",
+   "published": "2026-11-12T18:12:09.576890+00:00",
+   "summary": "Overview Multiple arbitrary file read and write vulnerabilities have been identified in applications that use ImageMagick with insufficiently restrictive security policies. Collectively referred to as ImageTragick2 , these issues arise when ImageMagick processes attacker-controlled SVG or PostScript content using dangerous coders or delegates permitted by its default or application-supplied…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 5,
+   "priority": "low",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
   {
    "id": "0215fb6873aed2b7",
    "title": "ThreatsDay: 59 Linux Kernel Bugs, Falcon Spyware, GSocket Backdoors + 17 More Stories",
@@ -281,6 +671,61 @@
    "score": 55,
    "priority": "medium",
    "first_seen": "2026-11-12T18:14:29.642295+00:00"
+  },
+  {
+   "id": "76b979997d62051c",
+   "title": "Microsoft Teams Outage Hits Users in North America - CyberSecurityNews",
+   "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9EbTA5WHJrSzRoTHFXN2R5d1JjZ1hVaDdKbUdIMk84Z1NfYUFibUFNQ3U5Y1UzN0RWdnNvbnpyQXFqTkNDeEhtS2VraG4wRVpnb0FwdlhUTGx6dVV4SE1nVHh2OHkwZWloamdHRlNmM2ppQ1NH0gF6QVVfeXFMUENCSlJ2bnZDRTdwYjRBS3pzTnpoV1BucTF4bGhxMmZTZzF3OFk0WE92TERTaHMzQ2dMaFFsUFRyWlRLUW9ibVh6bGFORi1NX0JodlFfYUFZUmRCMjVqWHVJYkoyd3ZvMkk0ZTludHA0ckV6djE4Vlg0ZkE?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-12T17:10:47+00:00",
+   "summary": "Microsoft Teams Outage Hits Users in North America CyberSecurityNews",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft teams"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "e5c9a94783e7a77b",
+   "title": "New N-able N-central Zero-Day Exploits Target Patched Servers, Claiming Unauthenticated Root Access - CyberSecurityNews",
+   "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9jVjhfYnpIMS11NXh3a2lTVklkVVhpa2RjTTNBMXAtWF9xUkpMamVUbm1sbkVQRHlUXzFyUEJEdjh0elVhQUxLN05FalZLTnZaSFZ2SHlPdERXajB2bW1kTUlYVnEtdEZ4cFZIemtCZjdyYk3SAXhBVV95cUxQVkxRbnRVRjNqVmZwanlLcWpyQTFSeEpvb0FaUXZmaWRVbUJtckJDeEFQTkRsVFU4YmpmcXVvQnVZVEpfODltdUNuZkJmX21ZaTdBRnlUMElOZ2RsM2VtVG42MTdQcDA5Z3NaVGU2STFYSDlrS25YTTk?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-12T17:10:47+00:00",
+   "summary": "New N-able N-central Zero-Day Exploits Target Patched Servers, Claiming Unauthenticated Root Access CyberSecurityNews",
+   "categories": [
+    "exploited",
+    "patch"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
+   "id": "1db6496180d42520",
+   "title": "Trained to betray: How post-training supply chain attacks hijack coding agents",
+   "link": "https://www.microsoft.com/en-us/security/blog/2026/11/12/trained-to-betray-how-post-training-supply-chain-attacks-hijack-coding-agents/",
+   "source": "Microsoft Security Blog",
+   "published": "2026-11-12T17:00:00+00:00",
+   "summary": "Microsoft Defender Research and the AI Red Team discuss how poisoned datasets and poisoned model checkpoints can trigger remote code execution and other malicious activities. The post Trained to betray: How post-training supply chain attacks hijack coding agents appeared first on Microsoft Security Blog .",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft defender"
+   ],
+   "cve_ids": [],
+   "score": 30,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
   },
   {
    "id": "dbf89d372e93106b",
@@ -530,6 +975,25 @@
    "first_seen": "2026-11-12T18:14:29.642295+00:00"
   },
   {
+   "id": "8ad9defe3229ae56",
+   "title": "Crafty Microsoft Teams Booking Flow Disguises Device Code Phishing - Huntress",
+   "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOM3VhaW1YZnZTMDBtR3pHRVBqbjltR1FXXzdTNmZsUlduRlpwSVFTNm12UkNoNmJvcnlYLU1iSWpCRV9sa3ZxdTVZSzZfY2U5MTlycGlvcHVuM2F2VENhSVVwc0lHQlVEWXFidFhLMHctSDNtU3V3bkczLWVfXzRPRWhkNU8wLUgxUjVqZmJxVHZoOUE3MFc3aWNDeXQ?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-12T14:35:46+00:00",
+   "summary": "Crafty Microsoft Teams Booking Flow Disguises Device Code Phishing Huntress",
+   "categories": [
+    "social_engineering"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft teams"
+   ],
+   "cve_ids": [],
+   "score": 60,
+   "priority": "high",
+   "first_seen": "2026-11-12T18:14:29.642295+00:00"
+  },
+  {
    "id": "a42f83897ebc0319",
    "title": "nDiligence Releases Four-Year Study Identifying a Critical Supply-Chain Vulnerability Across 50 Platform Types",
    "link": "https://gbhackers.com/ndiligence-releases-four-year-study-identifying-a-critical-supply-chain-vulnerability-across-50-platform-types/",
@@ -588,25 +1052,6 @@
     "CVE-2026-124194"
    ],
    "score": 85,
-   "priority": "high",
-   "first_seen": "2026-11-12T18:14:29.642295+00:00"
-  },
-  {
-   "id": "8ad9defe3229ae56",
-   "title": "Crafty Microsoft Teams Booking Flow Disguises Device Code Phishing - Huntress",
-   "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOM3VhaW1YZnZTMDBtR3pHRVBqbjltR1FXXzdTNmZsUlduRlpwSVFTNm12UkNoNmJvcnlYLU1iSWpCRV9sa3ZxdTVZSzZfY2U5MTlycGlvcHVuM2F2VENhSVVwc0lHQlVEWXFidFhLMHctSDNtU3V3bkczLWVfXzRPRWhkNU8wLUgxUjVqZmJxVHZoOUE3MFc3aWNDeXQ?oc=5",
-   "source": "GNews: identity & M365 attacks",
-   "published": "2026-11-12T13:58:30+00:00",
-   "summary": "Crafty Microsoft Teams Booking Flow Disguises Device Code Phishing Huntress",
-   "categories": [
-    "social_engineering"
-   ],
-   "watch_matches": [
-    "microsoft",
-    "microsoft teams"
-   ],
-   "cve_ids": [],
-   "score": 60,
    "priority": "high",
    "first_seen": "2026-11-12T18:14:29.642295+00:00"
   },
@@ -1244,6 +1689,23 @@
    "first_seen": "2026-11-12T18:14:29.642295+00:00"
   },
   {
+   "id": "b8a2f266197eb3eb",
+   "title": "ZenRAT Malware Targets Windows Users Via Fake Bitwarden Password Manager Installation Package - TechRepublic",
+   "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQRWpLMEc5T0Y1RC1GWTdEYTFTcmROSEFnNG82NzhuSzlxV1laOGkwT2dnVHVabHRHcnR3Zm9fLWFKZmFDZ2hwenVHeUZiNXh0QTc5VHNyWkpralhFMXI4SHJ4R3NiLXJFOGp5cGx3Szl5QjNQOWJFZHkyU3hhcDRoLTY3dw?oc=5",
+   "source": "GNews: remote access & password managers",
+   "published": "2026-11-12T09:54:10+00:00",
+   "summary": "ZenRAT Malware Targets Windows Users Via Fake Bitwarden Password Manager Installation Package TechRepublic",
+   "categories": [],
+   "watch_matches": [
+    "bitwarden",
+    "windows"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
+  },
+  {
    "id": "016b87c3bb7a791b",
    "title": "Microsoft Warns Hackers Are Using GSocket Backdoors to Keep Linux Servers Compromised After Patching",
    "link": "https://cybersecuritynews.com/gsocket-backdoors/",
@@ -1531,6 +1993,26 @@
    "score": 15,
    "priority": "low",
    "first_seen": "2026-11-12T09:45:21.983006+00:00"
+  },
+  {
+   "id": "c97e7f2d2232a36a",
+   "title": "Security Advisory: Active Exploitation of PHP2Shell and Local Privilege Escalation - Check Point Blog",
+   "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQMVRSZV9wa3p6MG1sYmZOd3pKQWJSb2FMQlpiZXJKSXJxQy1LWGtOVGl6VmhrOFZqSURnMGJJb3VzeXV3UXlGY1AtTk1veDA5VllIRC1ORnh0WEdZejB1a3Q5LWNwWVdaZXBzeVNDV3NnZmExWVFPVVVBZmZ0R1htR3JaN3RZTXVDTV9VN1k4eTVWc3Jra3E2RExLN1E3bG5wWllJWGU0a3pRYk5fRzQwRUFwNVJzWjg2WVQ4?oc=5",
+   "source": "GNews: estate perimeter exploited",
+   "published": "2026-11-12T06:58:03+00:00",
+   "summary": "Security Advisory: Active Exploitation of PHP2Shell and Local Privilege Escalation Check Point Blog",
+   "categories": [
+    "exploited",
+    "patch",
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "check point"
+   ],
+   "cve_ids": [],
+   "score": 80,
+   "priority": "high",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
   },
   {
    "id": "8d7b3941d17859a6",
@@ -4914,22 +5396,6 @@
    "first_seen": "2026-11-11T01:54:40.965200+00:00"
   },
   {
-   "id": "e31796c6fe686409",
-   "title": "Cisco Informational for Emergency Distrust of eMudhra Root and Intermediate Certificate Authorities",
-   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-emudhra-info-ScS22A1r?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Cisco%20Informational%20for%20Emergency%20Distrust%20of%20eMudhra%20Root%20and%20Intermediate%20Certificate%20Authorities%26vs_k=1",
-   "source": "Cisco PSIRT",
-   "published": "2026-11-10T21:50:24+00:00",
-   "summary": "Between October 17 and October 20, 2026, a critical security compromise involving Certificate Authorities that are managed by eMudhra was uncovered. A security researcher demonstrated that the private keys for eight eMudhra intermediate certificates were fundamentally broken due to an unprecedented error in their Key Generation Ceremony (KGC) in April 2025. This allows anyone to brute-force…",
-   "categories": [],
-   "watch_matches": [
-    "cisco"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-23T23:07:13.309036+00:00"
-  },
-  {
    "id": "cd42927ef69a79ec",
    "title": "Ring robots ready to patrol paranoids’ pads",
    "link": "https://www.theregister.com/offbeat/2026/11/10/ring-robots-ready-to-patrol-paranoids-pads/5308932",
@@ -4980,25 +5446,6 @@
    "score": 45,
    "priority": "medium",
    "first_seen": "2026-11-11T01:54:40.965200+00:00"
-  },
-  {
-   "id": "b3c847993bcc13e3",
-   "title": "Vulnerabilities in Node.js and Brotli Affecting Cisco Products: October 2026",
-   "link": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-oct2026-node-js-Jj3SQ19u?vs_f=Cisco%20Security%20Advisory%26vs_cat=Security%20Intelligence%26vs_type=RSS%26vs_p=Vulnerabilities%20in%20Node.js%20and%20Brotli%20Affecting%20Cisco%20Products:%20October%202026%26vs_k=1",
-   "source": "Cisco PSIRT",
-   "published": "2026-11-10T21:02:32+00:00",
-   "summary": "On October 21, 2026, Node.js announced the availability of fixes for multiple vulnerabilities across the following supported release lines: 22.x, 24.x, and 26.x. These vulnerabilities impact critical operations such as the Brotli decoder, DNS resolution, and TLS certificate validation. The vulnerabilities pose risks for remote code execution and traffic interception. For more information, see…",
-   "categories": [
-    "patch",
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "cisco"
-   ],
-   "cve_ids": [],
-   "score": 40,
-   "priority": "medium",
-   "first_seen": "2026-11-04T19:42:42.213958+00:00"
   },
   {
    "id": "612ae5f08dba0aa0",
@@ -6784,6 +7231,24 @@
    "score": 30,
    "priority": "medium",
    "first_seen": "2026-11-11T17:52:35.888596+00:00"
+  },
+  {
+   "id": "ea72929525709f09",
+   "title": "Numeric truncation error",
+   "link": "https://fortiguard.fortinet.com/psirt/FG-IR-26-268",
+   "source": "Fortinet PSIRT",
+   "published": "2026-11-10T08:00:00+00:00",
+   "summary": "CVSSv3 Score: 9.6 A Numeric Truncation Error vulnerability [cwe-197] in FortiOS and FortiSASE bgp daemon may allow a configured ibgp neighbor to send malicious/malformed attributes to all connected routers via a specially crafted request Revised on 2026-11-13 00:00:00",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "fortios"
+   ],
+   "cve_ids": [],
+   "score": 30,
+   "priority": "medium",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
   },
   {
    "id": "157e787edd9f5ebc",
@@ -8770,7 +9235,7 @@
    "id": "9a7ff693ec124c4f",
    "title": "Exploited SonicWall SSL-VPN flaw lets attackers bypass SAML-enforced MFA (CVE-2026-19868) - Help Net Security",
    "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOMEpWTzNXbkQzbmdZTmI2WE5Da2J4QzZXVURIX3R2NEdvMmRlcWtMZU5MeGpoSDhJUGtSWTlNVktHQXgyQkFDbW9YQ29XMkl6UG5tRThicEM4bjJTQ19oRHE4akowLURwOHBycDVRaHkzNmt0VW56dmV3T3l2RGw3d2NpTUtMZFVrcGVaRHNSOHFibmtucmxyVHhLN1NuU0Vqbk1Oa3pabWFMd0FuZmNWcS1peHFYWW9ndi1BdjlBbXhEUC1Hc2x0M1JRRQ?oc=5",
-   "source": "GNews: identity & M365 attacks",
+   "source": "GNews: estate perimeter exploited",
    "published": "2026-11-09T10:30:25+00:00",
    "summary": "Exploited SonicWall SSL-VPN flaw lets attackers bypass SAML-enforced MFA (CVE-2026-19868) Help Net Security",
    "categories": [
@@ -9477,7 +9942,7 @@
    "id": "854b202b6f6626b5",
    "title": "SonicWall Warns of Potential In-the-Wild Exploitation of SSLVPN Flaw That Bypasses MFA - CyberSecurityNews",
    "link": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1jWnRpbDN2ZnotYWtycl9nX1NNd0N3QmpGT0xfaTc1MGlaS2FvOG15UE1Ld2dfbFlIcVJIY0NvSVBOZjR4NlJkWXNDN0FyUVM0bV82dTFvN05LckxHQ3o3Zl9LOWpvSVVDMHRKRDdCcW9sZTlHb2I2YtIBfkFVX3lxTE16amxEaXo5a1pqb2NJVnFzTjZIa3RscWRwb3A5R3lSSnByU3k2Q19PNFplR1ZYZno1eHQ1M09FOVA3SVI4ZUlCVXE4VzQ0eVVNV2l0cE5uTUVQTWZkR1hXZXZWWjJ6NTR4Y2F4QjYxTEJfNXh3ZkpzZWtwRzFuZw?oc=5",
-   "source": "GNews: identity & M365 attacks",
+   "source": "GNews: estate perimeter exploited",
    "published": "2026-11-07T12:59:02+00:00",
    "summary": "SonicWall Warns of Potential In-the-Wild Exploitation of SSLVPN Flaw That Bypasses MFA CyberSecurityNews",
    "categories": [
@@ -9679,6 +10144,22 @@
    "score": 75,
    "priority": "high",
    "first_seen": "2026-11-07T16:23:50.517901+00:00"
+  },
+  {
+   "id": "3a34c71dcab55673",
+   "title": "SafePay: Email bombs, phone scams and really big ransoms - Barracuda Blog",
+   "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNck5VREFYYW1TSFB4dGZBOEx1R2VBR2p0MG4tMFpNekFuajhhWjk2Vmc5QmRFWGZzYmVBdkZvbjhKdDFwTEhucTBBd2RfSlY3RUphNktUN3ZVcEc2amZHcnhJWFNSSS1iRGhjMi1uTlRnS251bkZ3UWhULXVOcnRsWFRkOGZfWW1qMW5Tc2tONzI3UlJuc2lON2pzYw?oc=5",
+   "source": "GNews: Teams / help-desk vishing",
+   "published": "2026-11-07T08:00:00+00:00",
+   "summary": "SafePay: Email bombs, phone scams and really big ransoms Barracuda Blog",
+   "categories": [
+    "social_engineering"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 20,
+   "priority": "low",
+   "first_seen": "2026-11-12T23:38:11.321249+00:00"
   },
   {
    "id": "73705d9dcb805db9",
@@ -26154,447 +26635,6 @@
    "score": 25,
    "priority": "low",
    "first_seen": "2026-10-28T22:31:30.431083+00:00"
-  },
-  {
-   "id": "43dac3e88348c01e",
-   "title": "Veeam APJ Ransomware Webinar: 2 Execs, Zero Trust [2026] - tech-insider.org",
-   "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE4wWFluTTdQblBlYkhUV2cyMmo2bWdRTW9LT3BwUnRrX3hYNEplRlBuQkI1TkJ3XzZwUDZfaUQ5SW5mV2V2NEFUdTlKR09mV2JtalYtZEE3YzQyekFJUmJoZmxSWURWN0t3cGFXcG1tQ1pVc0ZydUkyWVd0NkIxZw?oc=5",
-   "source": "GNews: Veeam & backup attacks",
-   "published": "2026-10-28T16:57:45+00:00",
-   "summary": "Veeam APJ Ransomware Webinar: 2 Execs, Zero Trust [2026] tech-insider.org",
-   "categories": [
-    "ransomware"
-   ],
-   "watch_matches": [
-    "veeam"
-   ],
-   "cve_ids": [],
-   "score": 35,
-   "priority": "medium",
-   "first_seen": "2026-10-28T22:31:30.431083+00:00"
-  },
-  {
-   "id": "bce30872ee07ee09",
-   "title": "Researcher Reveals How Logic Bugs Alone Cracked Microsoft Edge in $175,000 Pwn2Own Win",
-   "link": "https://thehackernews.com/2026/10/researcher-reveals-how-logic-bugs-alone.html",
-   "source": "The Hacker News",
-   "published": "2026-10-28T16:23:34+00:00",
-   "summary": "A chain of logic flaws, with no memory corruption, can turn a malicious web page into code running on a Windows computer outside Microsoft Edge's sandbox, a security researcher has shown. Orange Tsai of DEVCORE published the full method on October 28, five months after the chain won $175,000 at the Pwn2Own Berlin contest in May. Microsoft fixed the Edge bugs the day after the contest,",
-   "categories": [
-    "patch"
-   ],
-   "watch_matches": [
-    "microsoft",
-    "microsoft edge",
-    "windows"
-   ],
-   "cve_ids": [],
-   "score": 35,
-   "priority": "medium",
-   "first_seen": "2026-10-28T22:31:30.431083+00:00"
-  },
-  {
-   "id": "7dad70dccbd14ace",
-   "title": "Silent Train: Volt Typhoon’s Sophisticated Infection Chain into US Targets Exposed - ZERO DAY",
-   "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOSXN3NmRWUU5nT0Jud2tCV0FRYm5jNTl1c0NxN1FMZ2p2RzZUcWh3czlaRGhqNVkxUm0zYkF4ZzFUOUpPSkxuZU01ZTh3VjlHMW5wcnlCUm53RW1maV9SLVN0NVV1TVFXNjVUVVVKMklVNDl0RnZwak95UlY4OHJUSlZZSE1kYnl0R3daWXN1cnpzcU0yQ19ET1RMQVp0VC1VTnVnbzJRN2RZOTRRZU1IX0VR?oc=5",
-   "source": "GNews: estate perimeter exploited",
-   "published": "2026-10-28T16:03:32+00:00",
-   "summary": "Silent Train: Volt Typhoon’s Sophisticated Infection Chain into US Targets Exposed ZERO DAY",
-   "categories": [
-    "exploited"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 40,
-   "priority": "medium",
-   "first_seen": "2026-10-30T05:41:12.948138+00:00"
-  },
-  {
-   "id": "eb73651e36eef1c5",
-   "title": "PHP2Shell Attack Roots 25 Servers, Breaches U.S. Government-Affiliated Network",
-   "link": "https://thehackernews.com/2026/10/php2shell-attack-roots-25-servers.html",
-   "source": "The Hacker News",
-   "published": "2026-10-28T16:02:45+00:00",
-   "summary": "Cybersecurity researchers have disclosed details of what appears to be an artificial intelligence (AI)-assisted attack orchestrated by a suspected China-nexus threat actor that has leveraged the PHP2Shell vulnerabilities to breach exposed systems. The activity, which was observed on October 25, 2026, involved an attacker combining PHP2Shell with a kernel privilege escalation exploit to root",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 5,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "b04e18da36efcabe",
-   "title": "Volt Typhoon hides zero-day attacks using 'Silent Train' framework",
-   "link": "https://www.bleepingcomputer.com/news/security/volt-typhoon-hides-zero-day-attacks-using-silent-train-framework/",
-   "source": "BleepingComputer",
-   "published": "2026-10-28T16:00:00+00:00",
-   "summary": "Chinese state-sponsored hacking group Volt Typhoon has been using a framework that relies on rotating chains of connected devices compromised on demand, including for zero-day attacks targeting high-value systems. [...]",
-   "categories": [
-    "exploited"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 40,
-   "priority": "medium",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "98505fcbb4a98d48",
-   "title": "The CISO’s evolving role: Protecting and defending in the agentic era",
-   "link": "https://www.microsoft.com/en-us/security/blog/2026/10/28/the-cisos-evolving-role-protecting-and-defending-in-the-agentic-era/",
-   "source": "Microsoft Security Blog",
-   "published": "2026-10-28T16:00:00+00:00",
-   "summary": "As AI and agents reshape the enterprise, CISOs face two critical priorities: enabling innovation with the right identity and data guardrails, and modernizing defense to keep pace with AI-powered threats. Aarti Borkar shares how security leaders can approach both. The post The CISO’s evolving role: Protecting and defending in the agentic era appeared first on Microsoft Security Blog .",
-   "categories": [],
-   "watch_matches": [
-    "microsoft"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "5373a3824ef15011",
-   "title": "TeamViewer Vulnerabilities Could Let Hackers Execute Malicious Code Through Remote Desktop Sessions",
-   "link": "https://cybersecuritynews.com/teamviewer-desktop-session-vulnerabilities/",
-   "source": "Cyber Security News",
-   "published": "2026-10-28T15:59:46+00:00",
-   "summary": "TeamViewer has released security updates for three high-severity vulnerabilities that could let attackers run malicious code, crash remote desktop clients, or gain root access on macOS. The flaws affect client components used with TeamViewer Remote, TeamViewer Tensor, and TeamViewer ONE, with CVSS scores reaching 8.8. The company published security bulletin TV-2026-1011 on October 27, 2026, […]…",
-   "categories": [
-    "vendor_issue",
-    "patch",
-    "vulnerability"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "28e02983a33a0aa6",
-   "title": "Serial ransomware crook gets 70 months behind bars for Nefilim, Hive roles",
-   "link": "https://www.theregister.com/cyber-crime/2026/10/28/serial-ransomware-crook-gets-70-months-behind-bars-for-nefilim-hive-roles/5306050",
-   "source": "The Register",
-   "published": "2026-10-28T15:52:17+00:00",
-   "summary": "Artem Stryzhak joined both gangs, which targeted businesses and a hospital during the pandemic",
-   "categories": [
-    "ransomware"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 10,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "b9524dd14fbf462b",
-   "title": "Strategies to Counter the Ransomware Threat in APJ - iTnews",
-   "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPSDJ2SVVxbklYcjZuTndreF82WUpGZXd3RG1JalBfQU9rSjFzaVVIR2MxckNtRXI2cmxsOG1EU3JfNmdPNG55eDdqLWlQbFBvTVotaUNZOVBFR2FZYzZMY0Jjb3dtcEVNc2R4NjMtWHp5OUdSdEdWTld5XzBNeFpWLXU1X1NSVW1pWlZKeHA4Sk9ZOU5nZ2xN?oc=5",
-   "source": "GNews: Veeam & backup attacks",
-   "published": "2026-10-28T15:50:14+00:00",
-   "summary": "Strategies to Counter the Ransomware Threat in APJ iTnews",
-   "categories": [
-    "ransomware"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 10,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "427f72cb55377ea2",
-   "title": "Researchers Chain Cloudflare Security Flaws to Bypass CSP and Execute Malicious JavaScript",
-   "link": "https://cybersecuritynews.com/cloudflare-xss-vulnerability/",
-   "source": "Cyber Security News",
-   "published": "2026-10-28T15:38:06+00:00",
-   "summary": "Security researchers at Searchlight Cyber chained several small flaws in Cloudflare’s image feature. The chain let them run JavaScript on a site that was meant to block it. Kevin Gervot and Adam Kues published the work on October 28, 2026, in a write-up titled Cache Me If You Can. They showed a working cross-site scripting […] The post Researchers Chain Cloudflare Security Flaws to Bypass CSP and…",
-   "categories": [],
-   "watch_matches": [
-    "cloudflare"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "f51030e640541d7d",
-   "title": "Microsoft Teams External Chats Exploited in 400+ Social Engineering Attacks - The National CIO Review",
-   "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNeE1xdjVFSzhOWmdQVUw5Tm4zT2hSRm9uQ0Y2VmMtQm92aG05YWhGQ21OUWF3WkFybExCYUlTb2JFaUppc0kwUWpxMG9UN1Z3YXo0cUlkeThNSGRXTTZ3VVFseVI0a2tXdHQ0YUxpRGx0dGhrQi16VDJrSUFnaVQ3bFhPSHRVdjhnLTloQXZrbGFORmFBUXJSdTBPS1BzOERJem1vMm02SC1hM0RrYjdSMjV6TXpZRURfVTRpbDZQVmxPTlF0cXQtUE85WklpV3Rl?oc=5",
-   "source": "GNews: identity & M365 attacks",
-   "published": "2026-10-28T15:36:08+00:00",
-   "summary": "Microsoft Teams External Chats Exploited in 400+ Social Engineering Attacks The National CIO Review",
-   "categories": [
-    "exploited",
-    "social_engineering"
-   ],
-   "watch_matches": [
-    "microsoft",
-    "microsoft teams"
-   ],
-   "cve_ids": [],
-   "score": 100,
-   "priority": "high",
-   "first_seen": "2026-10-28T22:31:30.431083+00:00"
-  },
-  {
-   "id": "49765264efb94ae0",
-   "title": "Google warns of China-linked hack on BeyondTrust appliances - IT Brief UK",
-   "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQSmlsczROU1d3WTN1RjVZRUxCYzFwbFNzTGJ6Y0hIS29nOE9DcVRGdHRkbjlvMm5VNjItcDQ0UHNCX3pnMVotOHpBTFNZT21fRTVqYzZqNHktRHRMYWRBX0lhLWFyS29qdFB6YjdvNjZzemhsQ1dEVzZnMWdhbUFScUZTbGhZaU02Zm14ckFlX3k?oc=5",
-   "source": "GNews: remote access & password managers",
-   "published": "2026-10-28T15:30:00+00:00",
-   "summary": "Google warns of China-linked hack on BeyondTrust appliances IT Brief UK",
-   "categories": [],
-   "watch_matches": [
-    "beyondtrust",
-    "google"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-29T05:41:35.583784+00:00"
-  },
-  {
-   "id": "1eb36f2fcce93bda",
-   "title": "Google warns of China-linked hack on BeyondTrust appliances - SecurityBrief Australia",
-   "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNY1M4bVlGLU1oZjNoaml2cVJ3ekRrRV9xMS1QTWZqVWxVT2VEZFVQakxlcE1IUWprMEdhTVBPV0tpZzlLMVFmTWZjcWVyRmZsWFB5eE5rNHY4aThLdFRUOFBtS0x4QW1QT0hKMFVodnB1S0J3blZqT1dWYzNoTjRMSlh6aWk2aTZSb2c5cjdCcGhxcFBvV2N2blpB?oc=5",
-   "source": "GNews: remote access & password managers",
-   "published": "2026-10-28T15:30:00+00:00",
-   "summary": "Google warns of China-linked hack on BeyondTrust appliances SecurityBrief Australia",
-   "categories": [],
-   "watch_matches": [
-    "beyondtrust",
-    "google"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-31T05:33:39.187335+00:00"
-  },
-  {
-   "id": "a2155547be98ad2d",
-   "title": "PropellerAds: Why Modern Malware Delivery Starts Before the Payload",
-   "link": "https://cybersecuritynews.com/propellerads-why-modern-malware-delivery-starts-before-the-payload/",
-   "source": "Cyber Security News",
-   "published": "2026-10-28T15:28:59+00:00",
-   "summary": "By Farukh Rakhimov, Head of Compliance, Data Protection, and Information Security at AdTech Holding In March 2026, Google Threat Intelligence Group (GTIG) disclosed Coruna, an iOS exploit kit with five exploit chains and 23 exploits covering iOS 13.0 through 17.2.1. The most instructive part of the disclosure is what happened before the exploit got any […] The post PropellerAds: Why Modern…",
-   "categories": [],
-   "watch_matches": [
-    "google",
-    "ios"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "f10f056d2cf49b98",
-   "title": "Ukrainian Hive and Nefilim Ransomware Affiliate Gets 70 Months in US Prison",
-   "link": "https://www.securityweek.com/ukrainian-hive-and-nefilim-ransomware-affiliate-gets-70-months-in-us-prison/",
-   "source": "SecurityWeek",
-   "published": "2026-10-28T15:05:06+00:00",
-   "summary": "Artem Stryzhak was sentenced to 70 months in prison after pleading guilty to using Nefilim ransomware in attacks. The post Ukrainian Hive and Nefilim Ransomware Affiliate Gets 70 Months in US Prison appeared first on SecurityWeek .",
-   "categories": [
-    "ransomware"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 10,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "1bb08f3d619956c3",
-   "title": "Ukrainian Hive and Nefilim Ransomware Affiliate Gets 70 Months in US Prison - SecurityWeek",
-   "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNbFdMa01yZi01cWw0Q055N09lcGdYTWtfel9PZVFWWTVEdmdEeTlQNmxJZHFCRDJYN2ticWQ4TnJSRmpBZUJ4UGdVcXhjeFRKOEVrNHVKOFRWN09tNnhlR0Q1WWxXeE55aThsdi1yUEJMRGk4NlhxTVhiWkZ3VjkwY2JvcDVKUGZXb2c2WDJMM3Fod29KUmZZaVZTb0sxM19EUDA4Z2p6Y0zSAa4BQVVfeXFMUFBZUXYyR1RScEwwZng3cjhLbTJfTWN2Z21qY090S0UzbWFDQWZnZTlFWEU1SXVkV3JvOEtKNUtYU2VRTVhCOUlPaU52dVMtWk5HUUJhcm5QMXZXV0thdjliYVF1LW5jdTlKOXo3M1cxUFVvM3JycDR2LWhYTW1YMUV2YTNZRnVnRlJDeUluNVk3MjFFdTlkdmpWaWVxR212ZWszSXBOWDhBWDRWcFBn?oc=5",
-   "source": "GNews: virtualization & cloud",
-   "published": "2026-10-28T15:05:06+00:00",
-   "summary": "Ukrainian Hive and Nefilim Ransomware Affiliate Gets 70 Months in US Prison SecurityWeek",
-   "categories": [
-    "ransomware"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 10,
-   "priority": "low",
-   "first_seen": "2026-10-31T18:30:21.186745+00:00"
-  },
-  {
-   "id": "71fd64242ec7cc40",
-   "title": "Andrei Curăraru: Cyberattack can undermine administrative reform and trust in digital services. Stolen data can be used for scams and hybrid warfare - cotidianul.md",
-   "link": "https://news.google.com/rss/articles/CBMiigJBVV95cUxQdEp2UnA5ZE1CbS1zYndjX0pSX3V2QmZkcHlpUTZuSVBDV01GcE5TWmQ5TnZiZWJUaHZGTjlpX2VoWnRkb0ZIUndUVEVTeGdjbWhMRUxDa0JyTjBraDd3V2NCLVFqYXJRb3FQN0lZVjBkUWxkX3o3emJTeVVtdFFycTFNazNNb3AwNFVwSkYxNjQ2TGQzcmxpS1pKeTlCcmJjX2hqOVN1aTJCZ3c0UmtiQU5VdXdQUHg0Ykx4VnZhQzN6eUZ3WFRQZGhTVk93dmg1ZTZiSHV0dFJYOUkxY0lvRXFvcmRvemZGdTVzXy13M0RTSWFKYWttN3FDVzNJRGthTFphYWdQampLdw?oc=5",
-   "source": "GNews: media & publishing sector",
-   "published": "2026-10-28T15:01:33+00:00",
-   "summary": "Andrei Curăraru: Cyberattack can undermine administrative reform and trust in digital services. Stolen data can be used for scams and hybrid warfare cotidianul.md",
-   "categories": [
-    "social_engineering"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 20,
-   "priority": "low",
-   "first_seen": "2026-10-28T22:31:30.431083+00:00"
-  },
-  {
-   "id": "a81faad014019aa8",
-   "title": "Splashtop launches Agentic Packr for Intune packaging - IT Brief UK",
-   "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNcXFubHJKSFBsVV9malpraGhnLVUyRDdnRWF0eFFNNmF6S2c4RklUQkRCelIwSkZSdHctWXpsNWtBUkFpWWFpOXhxbEFLOGotaHhFcXl2QlFmM2J0Rk1kajdIbm5DTG5mdV9PWS1kMmZuWFpTYklUWllhdjUtTHBhMloxNVVkUXpN?oc=5",
-   "source": "GNews: identity & M365 attacks",
-   "published": "2026-10-28T15:00:00+00:00",
-   "summary": "Splashtop launches Agentic Packr for Intune packaging IT Brief UK",
-   "categories": [],
-   "watch_matches": [
-    "intune"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "10d46fc416306628",
-   "title": "HubSpot options signal 12% move on Nov. 4 earnings report - Investing.com",
-   "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQeDhrbEdtdVotWlo4OElVZmI0bW01ZEQwYmVPYkItR0d6Vm1aRk9taGRKbUZITEZ5X0VoYjdrbWRES3lTc1JpMUNoTWt6RTNYVUh2eHd2RHpUWXdObEx2R2c0dTQ3TjVFV1VxYTcwS1h1UGt4aTRzemdKSzV3VmpLOGRYZEhBZ2FHamR2QzhFVXpOQmhKMWhZYWpZWURfbTRWT0J3NGZKbC1GZ3VuNmx4ME9jVVBOdnRy?oc=5",
-   "source": "GNews: business SaaS breaches",
-   "published": "2026-10-28T14:51:10+00:00",
-   "summary": "HubSpot options signal 12% move on Nov. 4 earnings report Investing.com",
-   "categories": [],
-   "watch_matches": [
-    "hubspot"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "95f24b8f8f147f2a",
-   "title": "Microsoft urges Entra ID admins to migrate users to passkeys",
-   "link": "https://www.bleepingcomputer.com/news/microsoft/microsoft-reminds-entra-id-admins-to-migrate-users-to-passkeys/",
-   "source": "BleepingComputer",
-   "published": "2026-10-28T14:48:32+00:00",
-   "summary": "Microsoft again asked Entra ID administrators to migrate users to phishing-resistant methods to avoid sign-in disruptions before it retires SMS and voice authentication in February 2027. [...]",
-   "categories": [
-    "social_engineering",
-    "identity"
-   ],
-   "watch_matches": [
-    "entra id",
-    "microsoft"
-   ],
-   "cve_ids": [],
-   "score": 75,
-   "priority": "high",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "a4a6cd10cd925ce5",
-   "title": "Microsoft urges Entra ID admins to migrate users to passkeys - BleepingComputer",
-   "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQV2ZvTU1JWVhVM0VGNkZ5aWdsTV9Xd2drYTBDcmxndTRDOVY3M2laMHRHcFp6bDBhU1cyd1J4eG9PQlBxQ2M0X184dVZMQnJzLTNqYXhPb2ljMV9fOGRZUTZ2MjVmY1UzMEZod3FhUUh3OFluakV2YjJ1MWdkS3IwOFM2d0NtMDhxM1Y2ZEM3M1V4LUZ6X3JzQnV4N1pJSENZRjYyZ091Z2NPY2dzYWRGRw?oc=5",
-   "source": "GNews: identity & M365 attacks",
-   "published": "2026-10-28T14:48:32+00:00",
-   "summary": "Microsoft urges Entra ID admins to migrate users to passkeys BleepingComputer",
-   "categories": [
-    "identity"
-   ],
-   "watch_matches": [
-    "entra id",
-    "microsoft"
-   ],
-   "cve_ids": [],
-   "score": 40,
-   "priority": "medium",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "70a17c1d3a5b4867",
-   "title": "Attacker Relentlessly Scans for Credentials by Impersonating AI Bots",
-   "link": "https://www.darkreading.com/cyber-risk/attacker-impersonates-ai-bots-scans-credentials",
-   "source": "Dark Reading",
-   "published": "2026-10-28T14:37:52+00:00",
-   "summary": "The threat actor lurked behind bots posing as agents from OpenAI, Anthropic, Meta, and others to find exposed data.",
-   "categories": [
-    "social_engineering"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 20,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "b1a96239b409a68c",
-   "title": "Digitate adds AI agents for patch planning, service desks, and SAP operations",
-   "link": "https://www.helpnetsecurity.com/2026/10/28/digitate-ignio-hummingbird/",
-   "source": "Help Net Security",
-   "published": "2026-10-28T14:36:59+00:00",
-   "summary": "Digitate has announced ignio Hummingbird, the latest release of its agentic AIOps platform. Hummingbird introduces AI agents that bring operational expertise to specific IT tasks, move from diagnosis through approved action and verification, and operate within enterprise change, approval and audit controls. The release also enables enterprises to build their own IT operations agents and includes…",
-   "categories": [
-    "patch"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 10,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "1e1a17b5cec4b744",
-   "title": "PHP2Shell flaws exploited: CISA gives US agencies until Thursday - The Next Web",
-   "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBjZDZBNFBsRndBazNSanVBd2kwcEp6Vkd2OGJBc1lNckJXbWxjTGlmSldvSVJsRllZZjZIWHVPM1dLM2RnbGxtRzhBMkFaODh6T2JkZHh0RlRTWDNkRjduV0w1UEFqZnJIOTVPMDJBMA?oc=5",
-   "source": "GNews: virtualization & cloud",
-   "published": "2026-10-28T14:24:30+00:00",
-   "summary": "PHP2Shell flaws exploited: CISA gives US agencies until Thursday The Next Web",
-   "categories": [
-    "exploited"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 40,
-   "priority": "medium",
-   "first_seen": "2026-10-31T18:30:21.186745+00:00"
-  },
-  {
-   "id": "f3a75117e8c69a1c",
-   "title": "ADP Q1 fiscal 2027 slides: 13% EPS growth, raised outlook - Investing.com",
-   "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOYnNacGtaemJRSGxXVV9uX3UxYV9hQm5mR1dPTVMzVmlLQ1Y5Y3Y0enVONHNRVXN5LXM1eGFpZlNYTUxTOWdTREw2U3l5MDNIUTFoWjBtR0IxV1gxcmtHOU1jTEJHSnhZU3dGLU1NZ0hTbF9sX2JuVFB1eGN3YWZQU19JeXZyZC1lUE9lVzhELS1lNGxOZjdwSUxvdlF1X2hXQ1RfWHFuckpfMEZLVXJFXw?oc=5",
-   "source": "GNews: business SaaS breaches",
-   "published": "2026-10-28T14:13:55+00:00",
-   "summary": "ADP Q1 fiscal 2027 slides: 13% EPS growth, raised outlook Investing.com",
-   "categories": [],
-   "watch_matches": [
-    "outlook"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
-  },
-  {
-   "id": "3bc8c2dc80c607f0",
-   "title": "InfraTrust report warns of exploited flaws in critical network infrastructure",
-   "link": "https://www.bleepingcomputer.com/news/security/infratrust-report-warns-of-exploited-flaws-in-critical-network-infrastructure/",
-   "source": "BleepingComputer",
-   "published": "2026-10-28T14:00:00+00:00",
-   "summary": "Attackers are actively exploiting vulnerabilities across critical network infrastructure, and PHP flaws known as \"PHP2Shell\" put the web management interfaces of firewalls, VPNs, application delivery controllers, and other appliances at risk. [...]",
-   "categories": [
-    "exploited",
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "php"
-   ],
-   "cve_ids": [],
-   "score": 70,
-   "priority": "high",
-   "first_seen": "2026-10-28T16:36:09.090424+00:00"
   }
  ]
 }
