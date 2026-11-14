@@ -1,5 +1,113 @@
 [
   {
+    "cve_id": "CVE-2026-126173",
+    "description": "The AutomatorWP Pro plugin for WordPress' webhook addon is vulnerable to authorization bypass in all versions up to, and including, 1.4.4. This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for unauthenticated attackers to reset the password of any WordPress account, including administrators, resulting in full account takeover. This is only exploitable when an administrator has configured an automation pairing a Receive Webhook trigger \u2014 with an 'Is the user ID' field \u2014 to an Update-User action whose User ID field is left blank and whose Password field is mapped to the webhook password tag, which is a documented, supported plugin configuration.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-14T05:18:37.750",
+    "nvd_last_modified": "2026-11-14T05:18:37.887",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T11:43:31.633190+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
+    "cve_id": "CVE-2026-124969",
+    "description": "The Optimole \u2013 Optimize Images | Convert WebP & AVIF | CDN & Lazy Load | Image Optimization plugin for WordPress is vulnerable to arbitrary file deletion due to insufficient file path validation in the replace_urls_in_value function in all versions up to, and including, 4.2.19. This makes it possible for unauthenticated attackers to delete arbitrary files on the server, which can easily lead to remote code execution when the right file is deleted (such as wp-config.php). Successful exploitation requires PEAR's Archive_Tar library to be present and loadable on the host (common in official WordPress Docker images and many PHP distributions), and an administrator must subsequently use the plugin's Rename control on any attachment after the attacker has staged a malicious payload in a comment. Successful exploitation additionally requires an action by an administrator \u2014 the attacker cannot trigger the vulnerability on their own.",
+    "cvss_score": 7.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-502"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 41.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.1,
+      "cvss_component": 41.4,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-14T05:18:32.480",
+    "nvd_last_modified": "2026-11-14T05:18:32.670",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T11:43:31.633178+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
     "cve_id": "CVE-2026-128046",
     "description": "OpenMage magento-lts 20.17.0 before 20.18.2 and 21.0.0-beta1 before 21.0.0-beta3 contains an unrestricted file upload vulnerability because the general/file/protected_extensions blocklist omits phar, php8, and phps. Unauthenticated attackers can upload a .phar file through a product File custom option to a predictable media/custom_options path and request it directly to execute code on servers that map .phar to PHP and serve that directory.",
     "cvss_score": 8.1,
@@ -34,8 +142,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.6,
+    "epss_score_prev": 0.00708,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -86,8 +194,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.6,
+    "epss_score_prev": 0.00857,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -140,8 +248,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.1,
+    "epss_score_prev": 0.00511,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -194,8 +302,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.6,
+    "epss_score_prev": 0.00746,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -248,8 +356,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.4,
+    "epss_score_prev": 0.00603,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -302,8 +410,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.1,
+    "epss_score_prev": 0.00643,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -356,8 +464,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 32.1,
+    "epss_score_prev": 0.0082,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -410,8 +518,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.0,
+    "epss_score_prev": 0.00539,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -464,8 +572,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.1,
+    "epss_score_prev": 0.00835,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -526,7 +634,8 @@
       "unrealircd/unrealircd"
     ],
     "matched_keywords": [
-      "CISA KEV"
+      "CISA KEV",
+      "news: reported exploited"
     ],
     "source": "kev",
     "published": "2026-11-08T03:16:33.410",
@@ -632,9 +741,7 @@
     "epss_score_prev": 0.00225,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -688,9 +795,7 @@
     "epss_score_prev": 0.00153,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -744,9 +849,7 @@
     "epss_score_prev": 0.00162,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -1125,9 +1228,7 @@
     "epss_score_prev": 0.00162,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -1181,9 +1282,7 @@
     "epss_score_prev": 0.00213,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -1619,9 +1718,7 @@
     "epss_score_prev": 0.01337,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -1729,9 +1826,7 @@
     "epss_score_prev": 0.00968,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -2336,9 +2431,7 @@
     "epss_score_prev": 0.00559,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -2946,7 +3039,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450884+00:00",
-    "osv_checked": "2026-11-12"
+    "osv_checked": "2026-11-12",
+    "affected_cpe_check": "no_cpes:2026-11-14"
   },
   {
     "cve_id": "CVE-2026-126919",
@@ -3000,7 +3094,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450877+00:00",
-    "osv_checked": "2026-11-12"
+    "osv_checked": "2026-11-12",
+    "affected_cpe_check": "no_cpes:2026-11-14"
   },
   {
     "cve_id": "CVE-2026-126918",
@@ -3054,7 +3149,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450869+00:00",
-    "osv_checked": "2026-11-12"
+    "osv_checked": "2026-11-12",
+    "affected_cpe_check": "no_cpes:2026-11-14"
   },
   {
     "cve_id": "CVE-2026-126917",
@@ -6612,9 +6708,7 @@
     "epss_score_prev": 0.00462,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -8484,7 +8578,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:22.753",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:39.363",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -8808,7 +8902,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:21.447",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:39.117",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -9456,7 +9550,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:19.240",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:38.903",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10050,7 +10144,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:16.587",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:38.530",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10104,7 +10198,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:16.370",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:38.163",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10266,7 +10360,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:15.747",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:37.940",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10320,7 +10414,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:15.500",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:37.497",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10374,7 +10468,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:15.340",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:37.347",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10428,7 +10522,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:15.200",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:37.230",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10482,7 +10576,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:15.067",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:37.110",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10536,7 +10630,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:14.940",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:36.987",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10590,7 +10684,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:14.803",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:36.870",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10698,7 +10792,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:14.537",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:36.737",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10752,7 +10846,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:14.403",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:36.600",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10806,7 +10900,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:14.270",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:36.410",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10914,7 +11008,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:13.990",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:36.283",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11022,7 +11116,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:13.723",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:35.537",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11292,7 +11386,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:13.050",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:35.420",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11400,7 +11494,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:12.720",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:34.517",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11562,7 +11656,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:12.010",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:34.397",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11616,7 +11710,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:11.880",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:34.157",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11670,7 +11764,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:11.720",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:33.010",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11724,7 +11818,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:11.580",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:32.890",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11778,7 +11872,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:11.400",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-14T05:18:32.733",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -11883,7 +11977,7 @@
     "osv_fixed_versions": [],
     "affected": [],
     "matched_keywords": [
-      "FortiGate"
+      "Fortinet"
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:16.987",
@@ -13394,10 +13488,10 @@
     "epss_score_prev": 0.00647,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:26.200",
     "nvd_last_modified": "2026-11-13T05:18:27.217",
@@ -13448,10 +13542,10 @@
     "epss_score_prev": 0.00578,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:26.073",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -13502,10 +13596,10 @@
     "epss_score_prev": 0.00572,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.783",
     "nvd_last_modified": "2026-11-13T05:18:26.830",
@@ -13556,10 +13650,10 @@
     "epss_score_prev": 0.00753,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.623",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -13610,10 +13704,10 @@
     "epss_score_prev": 0.00466,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.490",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -13664,10 +13758,10 @@
     "epss_score_prev": 0.00374,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.347",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -13718,13 +13812,13 @@
     "epss_score_prev": 0.00243,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:11.250",
-    "nvd_last_modified": "2026-11-13T19:19:10.053",
+    "nvd_last_modified": "2026-11-14T05:18:31.270",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -14837,9 +14931,7 @@
     "epss_score_prev": 0.00672,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -15487,9 +15579,7 @@
     "epss_score_prev": 0.00555,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -15549,7 +15639,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-10T23:17:20.897",
-    "nvd_last_modified": "2026-11-13T14:17:54.193",
+    "nvd_last_modified": "2026-11-14T05:18:39.560",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -16020,9 +16110,7 @@
     "epss_score_prev": 0.00704,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -17099,7 +17187,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-10T20:19:11.280",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-13T17:17:31.787",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -17153,7 +17241,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-10T20:17:20.203",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-13T23:10:00.153",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -17204,7 +17292,8 @@
     "affected": [],
     "matched_keywords": [
       "FortiClientWindows",
-      "FortiClientMac"
+      "FortiClientMac",
+      "Fortinet"
     ],
     "source": "nvd",
     "published": "2026-11-10T20:18:56.790",
@@ -18830,7 +18919,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-10T19:20:31.833",
-    "nvd_last_modified": "2026-11-11T15:17:16.960",
+    "nvd_last_modified": "2026-11-13T19:19:11.570",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -20301,9 +20390,7 @@
     "affected": [
       "cloudflare/cloudflare"
     ],
-    "matched_keywords": [
-      "cloudflare"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T14:17:29.980",
     "nvd_last_modified": "2026-11-13T23:17:19.340",
@@ -33214,9 +33301,7 @@
     "epss_score_prev": 0.00481,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress",
       "wp-content"
@@ -35229,9 +35314,7 @@
     "epss_score_prev": 0.00418,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -35879,9 +35962,7 @@
     "epss_score_prev": 0.00406,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -36698,9 +36779,7 @@
     "epss_score_prev": 0.00462,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -37135,9 +37214,7 @@
     "epss_score_prev": 0.00395,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "php/php"
-    ],
+    "affected": [],
     "matched_keywords": [
       "wordpress"
     ],
@@ -44858,9 +44935,7 @@
     "affected": [
       "cloudflare/cloudflare"
     ],
-    "matched_keywords": [
-      "cloudflare"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-04T22:18:06.850",
     "nvd_last_modified": "2026-11-12T19:13:56.813",
@@ -79733,10 +79808,10 @@
     "epss_score_prev": 0.00305,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T07:16:32.040",
     "nvd_last_modified": "2026-11-10T13:18:19.303",
