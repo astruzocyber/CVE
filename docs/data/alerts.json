@@ -1,5 +1,489 @@
 [
   {
+    "cve_id": "CVE-2026-128046",
+    "description": "OpenMage magento-lts 20.17.0 before 20.18.2 and 21.0.0-beta1 before 21.0.0-beta3 contains an unrestricted file upload vulnerability because the general/file/protected_extensions blocklist omits phar, php8, and phps. Unauthenticated attackers can upload a .phar file through a product File custom option to a predictable media/custom_options path and request it directly to execute code on servers that map .phar to PHP and serve that directory.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-184"
+    ],
+    "epss_score": 0.00708,
+    "epss_percentile": 0.54009,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00708,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-13T10:18:10.400",
+    "nvd_last_modified": "2026-11-13T17:17:27.287",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T02:42:28.720042+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
+    "cve_id": "CVE-2026-128027",
+    "description": "FrankenPHP Docker images before 1.1.11 were rebuilt only when new base image tags were created, so security fixes that Alpine, PHP, and Go applied under existing tags were not propagated. Remote attackers could exploit known flaws in the stale system libraries, such as CVE-2025-15467 in libcrypto3, to execute code.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [],
+    "epss_score": 0.00857,
+    "epss_percentile": 0.58949,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 34.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 34.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00857,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-13T10:18:08.563",
+    "nvd_last_modified": "2026-11-13T10:18:08.663",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T02:42:28.720034+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
+    "cve_id": "CVE-2026-128023",
+    "description": "FrankenPHP before 1.13.0 contains an authentication bypass vulnerability that allows unauthenticated attackers to spoof trusted headers by sending dot-form header names that PHP rewrites to underscores. Attackers can send headers like X.Authenticated.User or X.Forwarded.For that map to $_SERVER keys, spoofing user identity, client IP, or scheme.",
+    "cvss_score": 7.4,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-290"
+    ],
+    "epss_score": 0.00511,
+    "epss_percentile": 0.44171,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.4,
+      "cvss_component": 25.9,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00511,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-13T10:18:07.930",
+    "nvd_last_modified": "2026-11-13T10:18:08.043",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T02:42:28.720026+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
+    "cve_id": "CVE-2026-128014",
+    "description": "FrankenPHP standalone static binaries 1.8.0 before 1.13.2 bundle the PHP brotli extension statically linked with Brotli 1.2.0, whose decoder contains an out-of-bounds write (CVE-2026-111497). Unauthenticated remote attackers can send crafted data to applications that pass it to brotli_uncompress_add() to crash the entire FrankenPHP process, and possibly cause memory disclosure or code execution.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-787"
+    ],
+    "epss_score": 0.00746,
+    "epss_percentile": 0.55383,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 28.6,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 28.3,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00746,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-13T10:18:06.457",
+    "nvd_last_modified": "2026-11-13T10:18:06.583",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T02:42:28.720015+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
+    "cve_id": "CVE-2026-126428",
+    "description": "OpenEMR before 8.5.0 contains a remote code execution vulnerability that allows authenticated billing users to store attacker-controlled PHP by uploading a malformed ERA file to era_payments.php. Attackers with a database-write primitive such as SQL injection can register a background_services row whose require_once loads the stored .edi file, executing PHP as the web-server user.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "HIGH",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00603,
+    "epss_percentile": 0.49432,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.4,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00603,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-13T10:17:49.193",
+    "nvd_last_modified": "2026-11-13T20:18:36.087",
+    "vuln_status": "Undergoing Analysis",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T02:42:28.720004+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
+    "cve_id": "CVE-2026-126380",
+    "description": "Vvveb before 1.0.9.0 contains a denylist bypass in system/traits/media.php where '.phar' is misconfigured with a leading dot, allowing authenticated administrators to upload .phar PHP files. Attackers can upload a GIF magic-byte polyglot webshell bypassing binary inspection and execute arbitrary OS commands as the web-server user.",
+    "cvss_score": 9.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00643,
+    "epss_percentile": 0.51394,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.1,
+      "cvss_component": 31.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00643,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-13T10:17:40.773",
+    "nvd_last_modified": "2026-11-13T21:17:42.083",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T02:42:28.719996+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
+    "cve_id": "CVE-2026-126378",
+    "description": "Vvveb through 1.0.8.6 contains a file upload vulnerability in the theme installer validFile() function that uses strpos() instead of strict path matching. Attackers with admin credentials can upload a ZIP containing a PHP file whose path includes /theme.php to achieve remote code execution on nginx deployments.",
+    "cvss_score": 9.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "HIGH",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.0082,
+    "epss_percentile": 0.57781,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 32.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.1,
+      "cvss_component": 31.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.0082,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-13T10:17:40.430",
+    "nvd_last_modified": "2026-11-13T10:17:40.557",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T02:42:28.719988+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
+    "cve_id": "CVE-2026-126372",
+    "description": "Vvveb through 1.0.8.6 contains an incomplete fix for CVE-2026-41934 that allows authenticated editor or site_admin users to write server-side templates by bypassing save restrictions. Attackers can upload or rename .tpl files via editor/code upload and rename actions, or evade isExecutableFile checks in save(), to inject PHP code into templates.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00539,
+    "epss_percentile": 0.45922,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00539,
+      "epss_component": 0.2,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-13T10:17:39.410",
+    "nvd_last_modified": "2026-11-13T21:17:41.820",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T02:42:28.719979+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
+    "cve_id": "CVE-2026-126370",
+    "description": "Vvveb through 1.0.8.6 contains a remote code execution vulnerability allowing restricted site_admin roles to inject PHP by saving .sql files through the admin code editor. Attackers can bypass extension and content deny-lists with an @IF macro payload that compiles into executable PHP when the model loads, running OS commands as the web user.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-184"
+    ],
+    "epss_score": 0.00835,
+    "epss_percentile": 0.58229,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 31.1,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00835,
+      "epss_component": 0.3,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-13T10:17:39.060",
+    "nvd_last_modified": "2026-11-13T10:17:39.187",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-14T02:42:28.719969+00:00",
+    "osv_checked": "2026-11-14"
+  },
+  {
     "cve_id": "CVE-2026-114713",
     "description": "The labeled-response module in UnrealIRCd 6.0.0 before 6.2.7.1 does not escape the IRCv3 \"label\" message tag when echoing it into replies, which allows any user on a network with two or more linked servers to inject server-to-server commands that are executed with server authority.",
     "cvss_score": 8.6,
@@ -34,8 +518,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 55.2,
+    "epss_score_prev": 0.00302,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -90,14 +574,14 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.2,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T20:18:55.757",
     "nvd_last_modified": "2026-11-13T20:18:55.757",
@@ -144,14 +628,16 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00225,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-13T06:16:54.350",
     "nvd_last_modified": "2026-11-13T19:19:23.517",
@@ -198,14 +684,16 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.3,
+    "epss_score_prev": 0.00153,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-13T06:16:54.260",
     "nvd_last_modified": "2026-11-13T19:19:23.297",
@@ -252,14 +740,16 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00162,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-13T06:16:54.057",
     "nvd_last_modified": "2026-11-13T19:19:22.500",
@@ -306,14 +796,14 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 35.1,
+    "epss_score_prev": 0.00146,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:53.960",
     "nvd_last_modified": "2026-11-13T19:19:22.350",
@@ -360,14 +850,14 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.8,
+    "epss_score_prev": 0.001,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:53.870",
     "nvd_last_modified": "2026-11-13T19:19:22.197",
@@ -414,14 +904,15 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00137,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress",
+      "WeChat"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:53.687",
     "nvd_last_modified": "2026-11-13T19:19:20.320",
@@ -468,14 +959,14 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00173,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:53.487",
     "nvd_last_modified": "2026-11-13T19:19:18.620",
@@ -522,14 +1013,14 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00168,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:53.387",
     "nvd_last_modified": "2026-11-13T19:19:18.473",
@@ -576,14 +1067,14 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00137,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:52.997",
     "nvd_last_modified": "2026-11-13T19:18:36.277",
@@ -630,14 +1121,16 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00162,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-13T06:16:52.897",
     "nvd_last_modified": "2026-11-13T19:18:36.110",
@@ -684,14 +1177,16 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00213,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-13T06:16:52.807",
     "nvd_last_modified": "2026-11-13T19:18:35.953",
@@ -738,14 +1233,14 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 30.2,
+    "epss_score_prev": 0.00173,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:52.700",
     "nvd_last_modified": "2026-11-13T19:18:32.717",
@@ -793,7 +1288,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 27.8,
+    "risk_score_prev": 52.8,
     "epss_score_prev": 0.01274,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -854,10 +1349,10 @@
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T15:17:43.257",
     "nvd_last_modified": "2026-11-13T17:17:24.207",
@@ -908,13 +1403,13 @@
     "epss_score_prev": 0.01141,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:28.153",
-    "nvd_last_modified": "2026-11-13T10:17:28.277",
+    "nvd_last_modified": "2026-11-13T23:17:15.190",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -962,10 +1457,10 @@
     "epss_score_prev": 0.01019,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:27.993",
     "nvd_last_modified": "2026-11-13T17:17:20.253",
@@ -1016,10 +1511,10 @@
     "epss_score_prev": 0.00577,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:27.823",
     "nvd_last_modified": "2026-11-13T10:17:27.953",
@@ -1070,10 +1565,10 @@
     "epss_score_prev": 0.00419,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:27.137",
     "nvd_last_modified": "2026-11-13T17:17:18.830",
@@ -1125,12 +1620,14 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-13T10:17:26.483",
-    "nvd_last_modified": "2026-11-13T10:17:26.613",
+    "nvd_last_modified": "2026-11-13T23:17:13.633",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -1178,10 +1675,10 @@
     "epss_score_prev": 0.01059,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:26.150",
     "nvd_last_modified": "2026-11-13T20:17:52.917",
@@ -1233,9 +1730,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-13T10:17:25.983",
     "nvd_last_modified": "2026-11-13T20:17:51.890",
@@ -1292,10 +1791,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:20.133",
-    "nvd_last_modified": "2026-11-12T19:17:02.910",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T17:54:33.363",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T23:42:16.059178+00:00",
@@ -1402,10 +1916,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:16.310",
-    "nvd_last_modified": "2026-11-12T18:17:34.570",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:30:20.630",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T23:42:16.058916+00:00",
@@ -1457,10 +1986,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:15.103",
-    "nvd_last_modified": "2026-11-12T18:17:33.073",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:49:14.780",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T23:42:16.058831+00:00",
@@ -1512,10 +2056,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:14.553",
-    "nvd_last_modified": "2026-11-12T18:17:32.570",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:50:51.533",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T23:42:16.058787+00:00",
@@ -1615,10 +2174,10 @@
     "epss_score_prev": 0.00279,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T19:16:48.553",
     "nvd_last_modified": "2026-11-12T22:19:08.640",
@@ -1669,10 +2228,10 @@
     "epss_score_prev": 0.00348,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T18:17:18.017",
     "nvd_last_modified": "2026-11-12T22:19:08.513",
@@ -1723,10 +2282,10 @@
     "epss_score_prev": 0.00372,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T18:17:16.130",
     "nvd_last_modified": "2026-11-12T19:16:48.103",
@@ -1778,9 +2337,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-06-09T13:16:35.140",
     "nvd_last_modified": "2026-11-12T22:17:32.630",
@@ -2378,7 +2939,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:22.663",
-    "nvd_last_modified": "2026-11-12T17:17:42.753",
+    "nvd_last_modified": "2026-11-13T05:18:39.070",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2432,7 +2993,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:22.397",
-    "nvd_last_modified": "2026-11-12T17:17:42.537",
+    "nvd_last_modified": "2026-11-13T05:18:38.863",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2486,7 +3047,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:22.267",
-    "nvd_last_modified": "2026-11-12T17:17:42.353",
+    "nvd_last_modified": "2026-11-13T05:18:38.653",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2540,7 +3101,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:22.107",
-    "nvd_last_modified": "2026-11-12T17:17:42.163",
+    "nvd_last_modified": "2026-11-13T05:18:38.440",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2594,7 +3155,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:21.950",
-    "nvd_last_modified": "2026-11-12T17:17:41.933",
+    "nvd_last_modified": "2026-11-13T05:18:38.207",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2648,10 +3209,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:21.800",
-    "nvd_last_modified": "2026-11-12T16:19:06.910",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:44:16.790",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450845+00:00",
@@ -2702,7 +3278,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:21.357",
-    "nvd_last_modified": "2026-11-12T17:17:41.740",
+    "nvd_last_modified": "2026-11-13T05:18:37.663",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2756,7 +3332,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:21.220",
-    "nvd_last_modified": "2026-11-12T17:17:41.557",
+    "nvd_last_modified": "2026-11-13T05:18:37.420",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2810,7 +3386,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:21.093",
-    "nvd_last_modified": "2026-11-12T17:17:41.350",
+    "nvd_last_modified": "2026-11-13T05:18:37.220",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2864,7 +3440,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:20.963",
-    "nvd_last_modified": "2026-11-12T17:17:41.113",
+    "nvd_last_modified": "2026-11-13T05:18:37.000",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2918,7 +3494,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:20.830",
-    "nvd_last_modified": "2026-11-12T17:17:40.910",
+    "nvd_last_modified": "2026-11-13T05:18:36.797",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -2972,7 +3548,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:20.403",
-    "nvd_last_modified": "2026-11-12T17:17:40.717",
+    "nvd_last_modified": "2026-11-13T05:18:36.620",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -3026,7 +3602,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:20.273",
-    "nvd_last_modified": "2026-11-12T16:19:06.707",
+    "nvd_last_modified": "2026-11-13T05:18:36.377",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -3080,10 +3656,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:20.000",
-    "nvd_last_modified": "2026-11-12T16:19:06.523",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:44:51.133",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450782+00:00",
@@ -3134,7 +3725,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:19.857",
-    "nvd_last_modified": "2026-11-12T17:17:40.523",
+    "nvd_last_modified": "2026-11-13T05:18:35.800",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -3188,7 +3779,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:19.730",
-    "nvd_last_modified": "2026-11-12T17:17:40.330",
+    "nvd_last_modified": "2026-11-13T05:18:35.567",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -3242,7 +3833,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:19.600",
-    "nvd_last_modified": "2026-11-12T17:17:40.133",
+    "nvd_last_modified": "2026-11-13T05:18:35.330",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -3296,7 +3887,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:19.307",
-    "nvd_last_modified": "2026-11-12T17:17:39.940",
+    "nvd_last_modified": "2026-11-13T05:18:35.080",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -3351,10 +3942,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:19.020",
-    "nvd_last_modified": "2026-11-12T17:17:39.760",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:46:01.457",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450740+00:00",
@@ -3406,10 +4012,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:18.760",
-    "nvd_last_modified": "2026-11-12T17:17:39.557",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:16:40.213",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450731+00:00",
@@ -3461,10 +4082,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:18.617",
-    "nvd_last_modified": "2026-11-12T17:17:39.357",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:17:41.793",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450715+00:00",
@@ -3516,10 +4152,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:18.307",
-    "nvd_last_modified": "2026-11-12T17:17:39.177",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:19:43.090",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450707+00:00",
@@ -3571,10 +4222,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:18.180",
-    "nvd_last_modified": "2026-11-12T17:17:38.987",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:23:30.867",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450700+00:00",
@@ -3626,10 +4292,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:18.033",
-    "nvd_last_modified": "2026-11-12T17:17:38.793",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:24:25.687",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450693+00:00",
@@ -3681,10 +4362,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:17.907",
-    "nvd_last_modified": "2026-11-12T17:17:38.600",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:25:55.867",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450686+00:00",
@@ -3736,10 +4432,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:17.780",
-    "nvd_last_modified": "2026-11-12T17:17:38.390",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:27:04.907",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450677+00:00",
@@ -3791,10 +4502,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:17.650",
-    "nvd_last_modified": "2026-11-12T17:17:38.210",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:28:04.833",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450669+00:00",
@@ -3845,7 +4571,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:17.400",
-    "nvd_last_modified": "2026-11-12T19:49:11.053",
+    "nvd_last_modified": "2026-11-13T05:18:32.703",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -3984,7 +4710,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:17.007",
-    "nvd_last_modified": "2026-11-12T19:49:38.353",
+    "nvd_last_modified": "2026-11-13T05:18:32.533",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4054,7 +4780,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:16.860",
-    "nvd_last_modified": "2026-11-12T19:49:50.487",
+    "nvd_last_modified": "2026-11-13T05:18:32.300",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4124,7 +4850,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:16.580",
-    "nvd_last_modified": "2026-11-12T19:50:02.273",
+    "nvd_last_modified": "2026-11-13T05:18:32.100",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4194,10 +4920,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:16.450",
-    "nvd_last_modified": "2026-11-12T17:17:37.427",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:29:59.090",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450620+00:00",
@@ -4248,10 +4989,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:16.163",
-    "nvd_last_modified": "2026-11-12T17:17:37.230",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:46:11.583",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450613+00:00",
@@ -4302,10 +5058,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:16.040",
-    "nvd_last_modified": "2026-11-12T17:17:37.033",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:47:45.330",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450606+00:00",
@@ -4356,10 +5127,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:15.907",
-    "nvd_last_modified": "2026-11-12T17:17:36.840",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:47:54.673",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450598+00:00",
@@ -4410,10 +5196,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:15.517",
-    "nvd_last_modified": "2026-11-12T17:17:36.657",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:48:31.857",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450590+00:00",
@@ -4464,10 +5265,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:15.363",
-    "nvd_last_modified": "2026-11-12T17:17:36.470",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:48:42.783",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450580+00:00",
@@ -4518,10 +5334,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:15.230",
-    "nvd_last_modified": "2026-11-12T17:17:36.267",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:48:58.493",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450573+00:00",
@@ -4572,10 +5403,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:14.960",
-    "nvd_last_modified": "2026-11-12T17:17:36.043",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:50:08.853",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450565+00:00",
@@ -4626,10 +5472,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:14.820",
-    "nvd_last_modified": "2026-11-12T17:17:35.830",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:50:30.330",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450558+00:00",
@@ -4680,10 +5541,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:14.687",
-    "nvd_last_modified": "2026-11-12T17:17:35.620",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T15:50:39.900",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.78",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop_01744469280.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-12T18:19:46.450548+00:00",
@@ -4734,7 +5610,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:14.423",
-    "nvd_last_modified": "2026-11-12T19:50:16.070",
+    "nvd_last_modified": "2026-11-13T05:18:29.767",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4803,7 +5679,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:14.287",
-    "nvd_last_modified": "2026-11-12T19:50:30.680",
+    "nvd_last_modified": "2026-11-13T05:18:29.577",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4872,7 +5748,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:14.153",
-    "nvd_last_modified": "2026-11-12T19:50:42.067",
+    "nvd_last_modified": "2026-11-13T05:18:29.380",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -4995,7 +5871,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:13.070",
-    "nvd_last_modified": "2026-11-12T17:17:34.650",
+    "nvd_last_modified": "2026-11-13T05:18:29.140",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5049,7 +5925,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:12.793",
-    "nvd_last_modified": "2026-11-12T19:50:59.723",
+    "nvd_last_modified": "2026-11-13T05:18:28.927",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -5118,7 +5994,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:12.527",
-    "nvd_last_modified": "2026-11-12T19:51:12.953",
+    "nvd_last_modified": "2026-11-13T05:18:28.730",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -5187,7 +6063,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:12.403",
-    "nvd_last_modified": "2026-11-12T17:17:34.070",
+    "nvd_last_modified": "2026-11-13T05:18:28.547",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5241,7 +6117,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:12.000",
-    "nvd_last_modified": "2026-11-12T17:17:33.870",
+    "nvd_last_modified": "2026-11-13T05:18:28.383",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5295,7 +6171,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:11.860",
-    "nvd_last_modified": "2026-11-12T17:17:33.680",
+    "nvd_last_modified": "2026-11-13T05:18:28.200",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -5349,7 +6225,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T23:17:11.553",
-    "nvd_last_modified": "2026-11-12T19:51:24.453",
+    "nvd_last_modified": "2026-11-13T05:18:28.023",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -5412,10 +6288,10 @@
     "epss_score_prev": 0.00652,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T14:17:27.040",
     "nvd_last_modified": "2026-11-12T21:36:06.743",
@@ -5466,10 +6342,10 @@
     "epss_score_prev": 0.00442,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T12:18:24.087",
     "nvd_last_modified": "2026-11-13T02:18:56.770",
@@ -5520,10 +6396,10 @@
     "epss_score_prev": 0.00442,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T12:18:23.920",
     "nvd_last_modified": "2026-11-13T19:19:32.200",
@@ -5574,10 +6450,10 @@
     "epss_score_prev": 0.00506,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T12:18:23.753",
     "nvd_last_modified": "2026-11-12T18:17:45.153",
@@ -5628,10 +6504,10 @@
     "epss_score_prev": 0.00226,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:14.937",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -5682,10 +6558,10 @@
     "epss_score_prev": 0.00283,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:13.853",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -5737,9 +6613,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-12T06:17:13.743",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -5790,10 +6668,10 @@
     "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:13.150",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -5844,10 +6722,10 @@
     "epss_score_prev": 0.00227,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:13.023",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -5898,10 +6776,10 @@
     "epss_score_prev": 0.00216,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:12.920",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -5952,10 +6830,10 @@
     "epss_score_prev": 0.0013,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:12.810",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -6006,10 +6884,10 @@
     "epss_score_prev": 0.00231,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:12.257",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -6060,10 +6938,10 @@
     "epss_score_prev": 0.00417,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:11.100",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -12516,10 +13394,10 @@
     "epss_score_prev": 0.00647,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "Fortinet"
+    "affected": [
+      "fortinet/fortios"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:26.200",
     "nvd_last_modified": "2026-11-13T05:18:27.217",
@@ -12570,10 +13448,10 @@
     "epss_score_prev": 0.00578,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "Fortinet"
+    "affected": [
+      "fortinet/fortios"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:26.073",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -12624,10 +13502,10 @@
     "epss_score_prev": 0.00572,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "Fortinet"
+    "affected": [
+      "fortinet/fortios"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.783",
     "nvd_last_modified": "2026-11-13T05:18:26.830",
@@ -12678,10 +13556,10 @@
     "epss_score_prev": 0.00753,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "Fortinet"
+    "affected": [
+      "fortinet/fortios"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.623",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -12732,10 +13610,10 @@
     "epss_score_prev": 0.00466,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "Fortinet"
+    "affected": [
+      "fortinet/fortios"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.490",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -12786,10 +13664,10 @@
     "epss_score_prev": 0.00374,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "Fortinet"
+    "affected": [
+      "fortinet/fortios"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.347",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -12803,7 +13681,7 @@
   },
   {
     "cve_id": "CVE-2026-121528",
-    "description": "A improper certificate validation vulnerability in Fortinet FortiOS 7.6.0 through 7.6.4, FortiOS 7.4.0 through 7.4.9, FortiOS 7.2.0 through 7.2.13 may allow a remote and unauthenticated attacker to perform a Man-in-the-Middle attack on the communication channel between the SSLVPN web portal and the backend destination website.",
+    "description": "A improper certificate validation vulnerability in Fortinet FortiOS 7.6.0 through 7.6.4, FortiOS 7.4.0 through 7.4.9, FortiOS 7.2.0 through 7.2.13, FortiOS 7.0 all versions, FortiOS 6.4 all versions may allow a remote and unauthenticated attacker to perform a Man-in-the-Middle attack on the communication channel between the SSLVPN web portal and the backend destination website.",
     "cvss_score": 8.1,
     "cvss_version": "CVSS V31",
     "cvss_vector_components": {
@@ -12840,13 +13718,13 @@
     "epss_score_prev": 0.00243,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "Fortinet"
+    "affected": [
+      "fortinet/fortios"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:11.250",
-    "nvd_last_modified": "2026-11-12T19:14:29.340",
+    "nvd_last_modified": "2026-11-13T19:19:10.053",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -12900,7 +13778,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T21:16:44.583",
-    "nvd_last_modified": "2026-11-11T21:16:44.747",
+    "nvd_last_modified": "2026-11-13T18:17:33.850",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -13258,7 +14136,7 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "openssl/openssl"
+      "oracle/mysql"
     ],
     "matched_keywords": [],
     "source": "nvd",
@@ -13311,10 +14189,10 @@
     "epss_score_prev": 0.00928,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T13:17:23.810",
     "nvd_last_modified": "2026-11-12T16:19:04.953",
@@ -13365,10 +14243,10 @@
     "epss_score_prev": 0.00538,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T12:19:15.223",
     "nvd_last_modified": "2026-11-11T12:19:15.363",
@@ -13419,10 +14297,10 @@
     "epss_score_prev": 0.00708,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T12:18:14.700",
     "nvd_last_modified": "2026-11-13T18:17:25.023",
@@ -13473,10 +14351,10 @@
     "epss_score_prev": 0.00274,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:19.163",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -13527,10 +14405,10 @@
     "epss_score_prev": 0.00266,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:18.730",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -13581,10 +14459,10 @@
     "epss_score_prev": 0.00327,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:18.607",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -13635,10 +14513,10 @@
     "epss_score_prev": 0.00404,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:18.470",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -13689,10 +14567,10 @@
     "epss_score_prev": 0.00409,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:17.693",
     "nvd_last_modified": "2026-11-12T18:44:50.720",
@@ -13743,10 +14621,10 @@
     "epss_score_prev": 0.00338,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:17.270",
     "nvd_last_modified": "2026-11-12T18:44:50.720",
@@ -13797,10 +14675,10 @@
     "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:17.020",
     "nvd_last_modified": "2026-11-12T18:44:50.720",
@@ -13851,10 +14729,10 @@
     "epss_score_prev": 0.00228,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:16.877",
     "nvd_last_modified": "2026-11-12T18:44:50.720",
@@ -13905,10 +14783,10 @@
     "epss_score_prev": 0.00409,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:16.710",
     "nvd_last_modified": "2026-11-12T18:44:50.720",
@@ -13960,9 +14838,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-11T06:17:16.570",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14013,10 +14893,10 @@
     "epss_score_prev": 0.0073,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:14.767",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14067,10 +14947,10 @@
     "epss_score_prev": 0.00434,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:13.893",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14121,10 +15001,10 @@
     "epss_score_prev": 0.00483,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:13.753",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14175,10 +15055,10 @@
     "epss_score_prev": 0.00626,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:13.607",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14229,10 +15109,10 @@
     "epss_score_prev": 0.00373,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:11.617",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14283,10 +15163,10 @@
     "epss_score_prev": 0.00383,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:10.727",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14499,10 +15379,10 @@
     "epss_score_prev": 0.0025,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T08:17:18.250",
     "nvd_last_modified": "2026-11-11T14:17:40.477",
@@ -14553,10 +15433,10 @@
     "epss_score_prev": 0.0029,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T08:17:18.097",
     "nvd_last_modified": "2026-11-11T14:17:40.280",
@@ -14608,9 +15488,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-11T08:17:16.887",
     "nvd_last_modified": "2026-11-13T00:20:07.757",
@@ -15139,9 +16021,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-10T22:21:14.003",
     "nvd_last_modified": "2026-11-13T17:17:35.877",
@@ -16107,7 +16991,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-10T16:17:14.330",
-    "nvd_last_modified": "2026-11-11T05:19:17.207",
+    "nvd_last_modified": "2026-11-13T17:17:16.883",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -16320,8 +17204,7 @@
     "affected": [],
     "matched_keywords": [
       "FortiClientWindows",
-      "FortiClientMac",
-      "Fortinet"
+      "FortiClientMac"
     ],
     "source": "nvd",
     "published": "2026-11-10T20:18:56.790",
@@ -19423,7 +20306,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-10T14:17:29.980",
-    "nvd_last_modified": "2026-11-12T20:04:52.377",
+    "nvd_last_modified": "2026-11-13T23:17:19.340",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -19797,7 +20680,9 @@
     "epss_score_prev": 0.0044,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
+    "affected": [
+      "php/php"
+    ],
     "matched_keywords": [
       "content management system"
     ],
@@ -19907,10 +20792,10 @@
     "epss_score_prev": 0.00642,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T20:18:03.537",
     "nvd_last_modified": "2026-11-12T16:18:12.410",
@@ -32005,10 +32890,10 @@
     "epss_score_prev": 0.03153,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "ManageEngine"
+    "affected": [
+      "cisco/ios"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T12:17:19.660",
     "nvd_last_modified": "2026-11-13T15:17:45.900",
@@ -32059,10 +32944,10 @@
     "epss_score_prev": 0.0388,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "ManageEngine"
+    "affected": [
+      "cisco/ios"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T11:16:43.757",
     "nvd_last_modified": "2026-11-12T19:17:06.547",
@@ -32167,10 +33052,10 @@
     "epss_score_prev": 0.0019,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T07:16:53.180",
     "nvd_last_modified": "2026-11-11T14:17:50.507",
@@ -32221,10 +33106,10 @@
     "epss_score_prev": 0.0019,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T07:16:52.777",
     "nvd_last_modified": "2026-11-10T17:17:49.480",
@@ -32275,10 +33160,10 @@
     "epss_score_prev": 0.00395,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T07:16:52.463",
     "nvd_last_modified": "2026-11-13T15:17:56.223",
@@ -32330,9 +33215,12 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress",
+      "wp-content"
+    ],
     "source": "nvd",
     "published": "2026-11-10T07:16:51.733",
     "nvd_last_modified": "2026-11-12T19:16:48.700",
@@ -32383,10 +33271,10 @@
     "epss_score_prev": 0.00835,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T07:16:47.970",
     "nvd_last_modified": "2026-11-10T16:17:12.947",
@@ -34131,7 +35019,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T13:17:07.503",
-    "nvd_last_modified": "2026-11-12T21:36:06.743",
+    "nvd_last_modified": "2026-11-14T02:16:48.033",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -34342,9 +35230,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-09T11:17:21.143",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34395,10 +35285,10 @@
     "epss_score_prev": 0.00298,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T11:17:19.940",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34449,10 +35339,10 @@
     "epss_score_prev": 0.00611,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:30.213",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34503,10 +35393,10 @@
     "epss_score_prev": 0.00231,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:29.480",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34557,10 +35447,10 @@
     "epss_score_prev": 0.00232,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:29.210",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34611,10 +35501,10 @@
     "epss_score_prev": 0.00257,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:29.073",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34665,10 +35555,10 @@
     "epss_score_prev": 0.00257,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:28.930",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34719,10 +35609,10 @@
     "epss_score_prev": 0.00245,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:28.490",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34773,10 +35663,10 @@
     "epss_score_prev": 0.00231,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:28.357",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34827,10 +35717,10 @@
     "epss_score_prev": 0.00288,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:28.223",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34881,10 +35771,10 @@
     "epss_score_prev": 0.00277,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:28.087",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34935,10 +35825,10 @@
     "epss_score_prev": 0.00336,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:27.953",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -34990,9 +35880,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-09T07:17:27.820",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -35043,10 +35935,10 @@
     "epss_score_prev": 0.00406,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-09T07:17:27.353",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -35590,10 +36482,10 @@
     "epss_score_prev": 0.00277,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-08T06:17:04.673",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -35644,10 +36536,10 @@
     "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-08T06:17:04.443",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -35698,10 +36590,10 @@
     "epss_score_prev": 0.00226,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-08T06:17:04.333",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -35752,10 +36644,10 @@
     "epss_score_prev": 0.00193,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-08T06:17:02.487",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -35807,9 +36699,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-08T06:17:04.807",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -35866,7 +36760,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-08T14:18:14.823",
-    "nvd_last_modified": "2026-11-10T21:46:25.083",
+    "nvd_last_modified": "2026-11-13T04:17:40.870",
     "vuln_status": "Undergoing Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -36079,10 +36973,10 @@
     "epss_score_prev": 0.0013,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-07T06:16:59.077",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -36133,10 +37027,10 @@
     "epss_score_prev": 0.00232,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-07T06:16:58.960",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -36187,10 +37081,10 @@
     "epss_score_prev": 0.00286,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-07T06:16:58.620",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -36242,9 +37136,11 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "wordpress/wordpress"
+      "php/php"
     ],
-    "matched_keywords": [],
+    "matched_keywords": [
+      "wordpress"
+    ],
     "source": "nvd",
     "published": "2026-11-07T06:16:58.280",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -36295,10 +37191,10 @@
     "epss_score_prev": 0.00297,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-07T06:16:58.040",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -36349,10 +37245,10 @@
     "epss_score_prev": 0.00252,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-07T06:16:56.923",
     "nvd_last_modified": "2026-11-10T16:28:46.510",
@@ -39590,8 +40486,7 @@
     "osv_fixed_versions": [],
     "affected": [],
     "matched_keywords": [
-      "Devolutions",
-      "Active Directory"
+      "Devolutions"
     ],
     "source": "nvd",
     "published": "2026-11-03T21:17:04.270",
@@ -43214,7 +44109,6 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "nginx/nginx",
       "php/php"
     ],
     "matched_keywords": [],
@@ -46843,10 +47737,10 @@
     "epss_score_prev": 0.00363,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-04T17:17:34.930",
     "nvd_last_modified": "2026-11-12T21:36:06.743",
@@ -46898,10 +47792,10 @@
     "epss_score_prev": 0.0021,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-04T17:17:34.607",
     "nvd_last_modified": "2026-11-12T21:36:06.743",
@@ -54134,10 +55028,25 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-03T21:17:09.003",
-    "nvd_last_modified": "2026-11-04T14:17:32.543",
-    "vuln_status": "Undergoing Analysis",
-    "nvd_fix_versions": [],
-    "nvd_reference_links": [],
+    "nvd_last_modified": "2026-11-13T20:50:58.263",
+    "vuln_status": "Analyzed",
+    "nvd_fix_versions": [
+      {
+        "vendor": "google",
+        "product": "chrome",
+        "fixed": "157.0.8103.38",
+        "fix_type": "before"
+      }
+    ],
+    "nvd_reference_links": [
+      {
+        "url": "https://chromereleases.googleblog.com/2026/11/stable-channel-update-for-desktop.html",
+        "tags": [
+          "Release Notes",
+          "Vendor Advisory"
+        ]
+      }
+    ],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-04T02:21:42.355972+00:00",
@@ -58732,7 +59641,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.956652+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -58789,7 +59698,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954446+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -58846,7 +59755,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954436+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-04"
   },
   {
@@ -58903,7 +59812,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954427+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -58960,7 +59869,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954416+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59017,7 +59926,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954405+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59074,7 +59983,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954395+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-09"
   },
   {
@@ -59131,7 +60040,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954385+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -59188,7 +60097,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954371+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59245,7 +60154,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954362+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59303,7 +60212,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954352+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59360,7 +60269,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954341+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59417,7 +60326,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954331+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59474,7 +60383,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954322+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-07"
   },
   {
@@ -59531,7 +60440,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954312+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59571,8 +60480,15 @@
     },
     "risk_score_prev": 26.3,
     "epss_score_prev": 0.00282,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-120040",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "316ea2fc45794ed04b22da8668f3ab9586b92331",
+        "repo": "https://github.com/jwardee/wp-mail-catcher"
+      }
+    ],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -59588,7 +60504,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954300+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-09"
   },
   {
@@ -59645,7 +60561,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954289+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-09"
   },
   {
@@ -59702,7 +60618,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954280+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59759,7 +60675,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954271+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59816,7 +60732,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954261+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59873,7 +60789,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954252+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59930,7 +60846,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954243+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-09"
   },
   {
@@ -59987,7 +60903,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954234+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -60027,8 +60943,15 @@
     },
     "risk_score_prev": 25.3,
     "epss_score_prev": 0.00247,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-116522",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "b0324957b27e2dfc2aa116c96dcf578fbec9e0e5",
+        "repo": "https://github.com/msaari/relevanssi"
+      }
+    ],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -60044,7 +60967,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954224+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -60101,7 +61024,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954214+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -60141,8 +61064,15 @@
     },
     "risk_score_prev": 25.3,
     "epss_score_prev": 0.00307,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-111254",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "7168b0d7cc80e827ad234a0428ab3ecdbef3c107",
+        "repo": "https://github.com/boldgrid/w3-total-cache"
+      }
+    ],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -60158,7 +61088,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954204+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -60216,7 +61146,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954192+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-07"
   },
   {
@@ -60273,7 +61203,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954182+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -60330,7 +61260,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954170+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -60370,8 +61300,21 @@
     },
     "risk_score_prev": 53.8,
     "epss_score_prev": 0.01199,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-119977",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "56c2652dc905a83ff6b913c4aeee7a17b5017f60",
+        "repo": "https://github.com/wordpress/wordpress"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "0a7a06e84201adffec2e2855df45cd1eb26a7279",
+        "repo": "https://github.com/wordpress/wordpress-develop"
+      }
+    ],
     "affected": [
       "wordpress/wordpress"
     ],
@@ -60439,7 +61382,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954160+00:00",
-    "osv_checked": "2026-10-31"
+    "osv_checked": "2026-11-14"
   },
   {
     "cve_id": "CVE-2026-116520",
@@ -60495,7 +61438,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954149+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -60552,7 +61495,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954139+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -60609,7 +61552,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-31T12:22:38.954128+00:00",
-    "osv_checked": "2026-10-31",
+    "osv_checked": "2026-11-14",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -78790,10 +79733,10 @@
     "epss_score_prev": 0.00305,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "Fortinet"
+    "affected": [
+      "fortinet/fortios"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-27T07:16:32.040",
     "nvd_last_modified": "2026-11-10T13:18:19.303",
@@ -171981,10 +172924,10 @@
     "epss_score_prev": 0.00461,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-22T11:17:04.990",
     "nvd_last_modified": "2026-11-10T12:10:00.177",
@@ -292383,7 +293326,7 @@
       "palo alto networks/pan-os"
     ],
     "matched_keywords": [
-      "PAN-OS",
+      "Palo Alto Networks",
       "CISA KEV"
     ],
     "source": "nvd",
@@ -317839,15 +318782,15 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T20:17:30.617",
-    "nvd_last_modified": "2026-10-15T15:12:54.040",
+    "nvd_last_modified": "2026-11-13T18:17:44.033",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.743761+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-04",
-    "osv_checked": "2026-10-23"
+    "osv_checked": "2026-10-23",
+    "affected_cpe_check": "no_cpes:2026-11-04"
   },
   {
     "cve_id": "CVE-2026-63146",
@@ -317901,15 +318844,15 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-10-13T20:17:30.210",
-    "nvd_last_modified": "2026-10-17T02:17:20.033",
+    "nvd_last_modified": "2026-11-13T18:17:43.623",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-13T23:36:47.743750+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-04",
-    "osv_checked": "2026-10-22"
+    "osv_checked": "2026-10-22",
+    "affected_cpe_check": "no_cpes:2026-11-04"
   },
   {
     "cve_id": "CVE-2026-102855",
@@ -400874,10 +401817,10 @@
     "epss_score_prev": 0.00267,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "wordpress/wordpress"
+    "affected": [],
+    "matched_keywords": [
+      "wordpress"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-23T06:16:59.060",
     "nvd_last_modified": "2026-11-11T23:10:00.263",
