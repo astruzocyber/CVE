@@ -1,5 +1,276 @@
 [
   {
+    "cve_id": "CVE-2026-120687",
+    "description": "The Lightbox & Modal Popup WordPress Plugin \u2013 FooBox plugin for WordPress is vulnerable to Stored DOM-Based Cross-Site Scripting via the 'img alt attribute inside .wp-caption container' parameter in all versions up to, and including, 2.8.7 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This is exploitable by Subscriber-level users when bbPress is installed, as its bbp_filter_kses filter chain permits img and pre tags while preserving numeric character references inside attribute values, allowing encoded payloads to bypass save-time sanitization and reach the vulnerable sink fully intact. Exploitation by attackers with subscriber-level access and above requires that bbPress 2.6.20 is installed, a public forum exists, and either the first topic has already been approved or subsequent topics clear moderation. On a default installation, where that is not configured, the vulnerability requires attackers with contributor-level access and above.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-14T16:17:03.957",
+    "nvd_last_modified": "2026-11-14T16:17:04.090",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-15T06:38:25.410072+00:00",
+    "osv_checked": "2026-11-15"
+  },
+  {
+    "cve_id": "CVE-2026-116753",
+    "description": "The Multi Step for Contact Form 7 plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'multipart field name (array key)' parameter in all versions up to, and including, 2.9.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Successful exploitation requires the target CF7 form to have the 'Save every step' option enabled and the Database for Contact Form 7 companion plugin to be active with its 'Expandable' table option enabled, both of which are disabled by default.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-14T16:17:03.793",
+    "nvd_last_modified": "2026-11-14T16:17:03.917",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-15T06:38:25.410062+00:00",
+    "osv_checked": "2026-11-15"
+  },
+  {
+    "cve_id": "CVE-2026-19907",
+    "description": "The Shipo plugin for WordPress is vulnerable to Authentication Bypass in versions 1.6 through 1.8.0. This is due to the `authenticate_rest_user()` function parsing the `LOGGED_IN_COOKIE` value and authenticating the named user without verifying the cookie's cryptographic signature. The function's intended `/wp-json/shipo/` route restriction can also be bypassed by placing that substring in the query string of an unrelated REST endpoint. This makes it possible for unauthenticated attackers who know an existing username to impersonate that user, including an administrator, and perform authorized actions through the REST API, including creating another administrator account.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-287"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-14T13:17:23.137",
+    "nvd_last_modified": "2026-11-14T13:17:23.250",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-15T06:38:25.410051+00:00",
+    "osv_checked": "2026-11-15"
+  },
+  {
+    "cve_id": "CVE-2026-18053",
+    "description": "The MemberDash plugin for WordPress is vulnerable to Privilege Escalation in all versions up to, and including, 1.8.7. This is due to a mass-assignment vulnerability in the `user_account_manager()` function's edit_profile branch, where all submitted `$_POST` fields are iterated and directly assigned to the current member object via the `MS_Model` `__set()` magic method with no field allowlist and no capability or ownership check on the submitted `id` parameter. This makes it possible for authenticated attackers, with subscriber-level access and above, to inject an arbitrary user ID via the `id` parameter \u2014 overwriting any WordPress user's email address and password, including the site administrator's \u2014 and subsequently use those modified credentials to gain full administrative access to the site.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-639"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-14T13:17:22.990",
+    "nvd_last_modified": "2026-11-14T13:17:23.103",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-15T06:38:25.410034+00:00",
+    "osv_checked": "2026-11-15"
+  },
+  {
+    "cve_id": "CVE-2026-120522",
+    "description": "The Cloud Storage Manager for Fluent Forms \u2013 Google Drive, Dropbox, OneDrive, S3 Uploads plugin for WordPress is vulnerable to Arbitrary File Write in all versions up to, and including, 1.2.0. This is due to missing authorization checks on the `connection/{driver}/save` and `/download/single-file` REST endpoints, combined with insufficient path validation in the Google Drive `downloadFile()` function, where the Google Drive metadata `name` value is concatenated into a local path without `basename()`, `sanitize_file_name()`, or canonical path validation. This makes it possible for unauthenticated attackers to store attacker-controlled Google Drive credentials, trigger a download of an attacker-owned file whose provider-returned filename contains path traversal, and write attacker-controlled content outside the intended `downloads` directory. When the written file has a PHP extension and lands in a web-accessible location, this can lead to remote code execution.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-22"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-14T13:17:20.403",
+    "nvd_last_modified": "2026-11-14T13:17:20.520",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-15T06:38:25.410021+00:00",
+    "osv_checked": "2026-11-15"
+  },
+  {
     "cve_id": "CVE-2026-9661",
     "description": "Poste Italiane Postecert FIRMAOK! 1.6.29 on Windows contains a local privilege escalation vulnerability caused by an uncontrolled OpenSSL search path, where launcher.exe and dependent executables such as updater.exe and tslupdater.exe load OpenSSL configuration and library files from a hardcoded, user-writable directory that does not exist by default. A low-privileged local attacker can create this missing directory and place malicious OpenSSL configuration or library files inside it, causing the application to load and execute attacker-controlled code with the privileges of the user running it, enabling horizontal or, when a higher-privileged user runs the application, vertical privilege escalation up to full system compromise.",
     "cvss_score": 7.0,
@@ -51,7 +322,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-14T18:12:53.810669+00:00",
-    "osv_checked": "2026-11-14"
+    "osv_checked": "2026-11-14",
+    "affected_cpe_check": "no_cpes:2026-11-15"
   },
   {
     "cve_id": "CVE-2026-68905",
@@ -209,10 +481,10 @@
     "epss_score_prev": 0.00537,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-14T05:18:37.750",
     "nvd_last_modified": "2026-11-14T05:18:37.887",
@@ -263,10 +535,11 @@
     "epss_score_prev": 0.00454,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-14T05:18:32.480",
     "nvd_last_modified": "2026-11-14T05:18:32.670",
@@ -645,7 +918,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "nginx/nginx"
+      "nginx/nginx",
+      "php/php"
     ],
     "matched_keywords": [],
     "source": "nvd",
@@ -866,10 +1140,10 @@
     "epss_score_prev": 0.00258,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T20:18:55.757",
     "nvd_last_modified": "2026-11-13T20:18:55.757",
@@ -920,10 +1194,11 @@
     "epss_score_prev": 0.00536,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:54.350",
     "nvd_last_modified": "2026-11-13T19:19:23.517",
@@ -974,10 +1249,11 @@
     "epss_score_prev": 0.003,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:54.260",
     "nvd_last_modified": "2026-11-13T19:19:23.297",
@@ -1028,10 +1304,11 @@
     "epss_score_prev": 0.00373,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:54.057",
     "nvd_last_modified": "2026-11-13T19:19:22.500",
@@ -1082,10 +1359,10 @@
     "epss_score_prev": 0.00274,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:53.960",
     "nvd_last_modified": "2026-11-13T19:19:22.350",
@@ -1136,10 +1413,10 @@
     "epss_score_prev": 0.00155,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:53.870",
     "nvd_last_modified": "2026-11-13T19:19:22.197",
@@ -1190,7 +1467,9 @@
     "epss_score_prev": 0.00226,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
     "matched_keywords": [
       "WeChat"
     ],
@@ -1244,10 +1523,10 @@
     "epss_score_prev": 0.00216,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:53.487",
     "nvd_last_modified": "2026-11-13T19:19:18.620",
@@ -1298,10 +1577,10 @@
     "epss_score_prev": 0.00241,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:53.387",
     "nvd_last_modified": "2026-11-13T19:19:18.473",
@@ -1352,10 +1631,10 @@
     "epss_score_prev": 0.00208,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:52.997",
     "nvd_last_modified": "2026-11-13T19:18:36.277",
@@ -1406,10 +1685,11 @@
     "epss_score_prev": 0.00373,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:52.897",
     "nvd_last_modified": "2026-11-13T19:18:36.110",
@@ -1460,10 +1740,11 @@
     "epss_score_prev": 0.0049,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:52.807",
     "nvd_last_modified": "2026-11-13T19:18:35.953",
@@ -1514,10 +1795,10 @@
     "epss_score_prev": 0.00267,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T06:16:52.700",
     "nvd_last_modified": "2026-11-13T19:18:32.717",
@@ -1626,10 +1907,10 @@
     "epss_score_prev": 0.00408,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T15:17:43.257",
     "nvd_last_modified": "2026-11-13T17:17:24.207",
@@ -1680,10 +1961,10 @@
     "epss_score_prev": 0.01031,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:28.153",
     "nvd_last_modified": "2026-11-13T23:17:15.190",
@@ -1734,10 +2015,10 @@
     "epss_score_prev": 0.00988,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:27.993",
     "nvd_last_modified": "2026-11-13T17:17:20.253",
@@ -1788,10 +2069,10 @@
     "epss_score_prev": 0.00427,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:27.823",
     "nvd_last_modified": "2026-11-13T10:17:27.953",
@@ -1842,10 +2123,10 @@
     "epss_score_prev": 0.00391,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:27.137",
     "nvd_last_modified": "2026-11-13T17:17:18.830",
@@ -1896,10 +2177,11 @@
     "epss_score_prev": 0.01337,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:26.483",
     "nvd_last_modified": "2026-11-13T23:17:13.633",
@@ -1950,10 +2232,10 @@
     "epss_score_prev": 0.00993,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:26.150",
     "nvd_last_modified": "2026-11-13T20:17:52.917",
@@ -2004,10 +2286,11 @@
     "epss_score_prev": 0.00875,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-13T10:17:25.983",
     "nvd_last_modified": "2026-11-13T20:17:51.890",
@@ -2448,10 +2731,10 @@
     "epss_score_prev": 0.00279,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T19:16:48.553",
     "nvd_last_modified": "2026-11-12T22:19:08.640",
@@ -2502,10 +2785,10 @@
     "epss_score_prev": 0.00348,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T18:17:18.017",
     "nvd_last_modified": "2026-11-12T22:19:08.513",
@@ -2556,10 +2839,10 @@
     "epss_score_prev": 0.00372,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T18:17:16.130",
     "nvd_last_modified": "2026-11-12T19:16:48.103",
@@ -2610,10 +2893,11 @@
     "epss_score_prev": 0.00559,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-06-09T13:16:35.140",
     "nvd_last_modified": "2026-11-12T22:17:32.630",
@@ -6563,10 +6847,10 @@
     "epss_score_prev": 0.00652,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T14:17:27.040",
     "nvd_last_modified": "2026-11-12T21:36:06.743",
@@ -6617,10 +6901,10 @@
     "epss_score_prev": 0.00442,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T12:18:24.087",
     "nvd_last_modified": "2026-11-13T02:18:56.770",
@@ -6671,10 +6955,10 @@
     "epss_score_prev": 0.00442,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T12:18:23.920",
     "nvd_last_modified": "2026-11-13T19:19:32.200",
@@ -6725,10 +7009,10 @@
     "epss_score_prev": 0.00506,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T12:18:23.753",
     "nvd_last_modified": "2026-11-12T18:17:45.153",
@@ -6779,10 +7063,10 @@
     "epss_score_prev": 0.00226,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:14.937",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -6833,10 +7117,10 @@
     "epss_score_prev": 0.00283,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:13.853",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -6887,10 +7171,11 @@
     "epss_score_prev": 0.00462,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:13.743",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -6941,10 +7226,10 @@
     "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:13.150",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -6995,10 +7280,10 @@
     "epss_score_prev": 0.00227,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:13.023",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -7049,10 +7334,10 @@
     "epss_score_prev": 0.00216,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:12.920",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -7103,10 +7388,10 @@
     "epss_score_prev": 0.0013,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:12.810",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -7157,10 +7442,10 @@
     "epss_score_prev": 0.00231,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:12.257",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -7211,10 +7496,10 @@
     "epss_score_prev": 0.00417,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-12T06:17:11.100",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -12157,7 +12442,7 @@
     "osv_fixed_versions": [],
     "affected": [],
     "matched_keywords": [
-      "FortiGate"
+      "Fortinet"
     ],
     "source": "nvd",
     "published": "2026-11-11T22:17:16.987",
@@ -13668,10 +13953,10 @@
     "epss_score_prev": 0.00647,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:26.200",
     "nvd_last_modified": "2026-11-13T05:18:27.217",
@@ -13722,10 +14007,10 @@
     "epss_score_prev": 0.00578,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:26.073",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -13776,10 +14061,10 @@
     "epss_score_prev": 0.00572,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.783",
     "nvd_last_modified": "2026-11-13T05:18:26.830",
@@ -13830,10 +14115,10 @@
     "epss_score_prev": 0.00753,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.623",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -13884,10 +14169,10 @@
     "epss_score_prev": 0.00466,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.490",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -13938,10 +14223,10 @@
     "epss_score_prev": 0.00374,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:25.347",
     "nvd_last_modified": "2026-11-12T19:14:29.340",
@@ -13992,10 +14277,10 @@
     "epss_score_prev": 0.00243,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [
-      "fortinet/fortios"
+    "affected": [],
+    "matched_keywords": [
+      "Fortinet"
     ],
-    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T22:17:11.250",
     "nvd_last_modified": "2026-11-14T05:18:31.270",
@@ -14411,7 +14696,7 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "openssl/openssl"
+      "oracle/mysql"
     ],
     "matched_keywords": [],
     "source": "nvd",
@@ -14464,10 +14749,10 @@
     "epss_score_prev": 0.00928,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T13:17:23.810",
     "nvd_last_modified": "2026-11-12T16:19:04.953",
@@ -14518,10 +14803,10 @@
     "epss_score_prev": 0.00538,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T12:19:15.223",
     "nvd_last_modified": "2026-11-11T12:19:15.363",
@@ -14572,10 +14857,10 @@
     "epss_score_prev": 0.00708,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T12:18:14.700",
     "nvd_last_modified": "2026-11-13T18:17:25.023",
@@ -14626,10 +14911,10 @@
     "epss_score_prev": 0.00274,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:19.163",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14680,10 +14965,10 @@
     "epss_score_prev": 0.00266,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:18.730",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14734,10 +15019,10 @@
     "epss_score_prev": 0.00327,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:18.607",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14788,10 +15073,10 @@
     "epss_score_prev": 0.00404,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:18.470",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -14842,10 +15127,10 @@
     "epss_score_prev": 0.00409,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:17.693",
     "nvd_last_modified": "2026-11-12T18:44:50.720",
@@ -14896,10 +15181,10 @@
     "epss_score_prev": 0.00338,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:17.270",
     "nvd_last_modified": "2026-11-12T18:44:50.720",
@@ -14950,10 +15235,10 @@
     "epss_score_prev": 0.00262,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:17.020",
     "nvd_last_modified": "2026-11-12T18:44:50.720",
@@ -15004,10 +15289,10 @@
     "epss_score_prev": 0.00228,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:16.877",
     "nvd_last_modified": "2026-11-12T18:44:50.720",
@@ -15058,10 +15343,10 @@
     "epss_score_prev": 0.00409,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:16.710",
     "nvd_last_modified": "2026-11-12T18:44:50.720",
@@ -15112,10 +15397,11 @@
     "epss_score_prev": 0.00672,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:16.570",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -15166,10 +15452,10 @@
     "epss_score_prev": 0.0073,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:14.767",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -15220,10 +15506,10 @@
     "epss_score_prev": 0.00434,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:13.893",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -15274,10 +15560,10 @@
     "epss_score_prev": 0.00483,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:13.753",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -15328,10 +15614,10 @@
     "epss_score_prev": 0.00626,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:13.607",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -15382,10 +15668,10 @@
     "epss_score_prev": 0.00373,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:11.617",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -15436,10 +15722,10 @@
     "epss_score_prev": 0.00383,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T06:17:10.727",
     "nvd_last_modified": "2026-11-12T18:49:18.840",
@@ -15652,10 +15938,10 @@
     "epss_score_prev": 0.0025,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T08:17:18.250",
     "nvd_last_modified": "2026-11-11T14:17:40.477",
@@ -15706,10 +15992,10 @@
     "epss_score_prev": 0.0029,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T08:17:18.097",
     "nvd_last_modified": "2026-11-11T14:17:40.280",
@@ -15760,10 +16046,11 @@
     "epss_score_prev": 0.00555,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-11T08:17:16.887",
     "nvd_last_modified": "2026-11-13T00:20:07.757",
@@ -16291,10 +16578,11 @@
     "epss_score_prev": 0.00704,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T22:21:14.003",
     "nvd_last_modified": "2026-11-13T17:17:35.877",
@@ -17471,7 +17759,8 @@
     "affected": [],
     "matched_keywords": [
       "FortiClientWindows",
-      "FortiClientMac"
+      "FortiClientMac",
+      "Fortinet"
     ],
     "source": "nvd",
     "published": "2026-11-10T20:18:56.790",
@@ -20948,9 +21237,7 @@
     "affected": [
       "php/php"
     ],
-    "matched_keywords": [
-      "content management system"
-    ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T20:19:08.097",
     "nvd_last_modified": "2026-11-12T22:18:51.470",
@@ -21057,10 +21344,10 @@
     "epss_score_prev": 0.00642,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T20:18:03.537",
     "nvd_last_modified": "2026-11-12T16:18:12.410",
@@ -33330,10 +33617,10 @@
     "epss_score_prev": 0.0019,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T07:16:53.180",
     "nvd_last_modified": "2026-11-11T14:17:50.507",
@@ -33438,10 +33725,10 @@
     "epss_score_prev": 0.00395,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T07:16:52.463",
     "nvd_last_modified": "2026-11-13T15:17:56.223",
@@ -33492,11 +33779,11 @@
     "epss_score_prev": 0.00481,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress",
-      "wp-content"
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-10T07:16:51.733",
     "nvd_last_modified": "2026-11-12T19:16:48.700",
@@ -44379,7 +44666,8 @@
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
-      "nginx/nginx"
+      "nginx/nginx",
+      "php/php"
     ],
     "matched_keywords": [],
     "source": "nvd",
@@ -48005,10 +48293,10 @@
     "epss_score_prev": 0.00363,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-04T17:17:34.930",
     "nvd_last_modified": "2026-11-12T21:36:06.743",
@@ -48060,10 +48348,10 @@
     "epss_score_prev": 0.0021,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-04T17:17:34.607",
     "nvd_last_modified": "2026-11-12T21:36:06.743",
@@ -59681,7 +59969,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-01T18:58:34.455298+00:00",
-    "osv_checked": "2026-11-01",
+    "osv_checked": "2026-11-15",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59738,7 +60026,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-01T18:58:34.454865+00:00",
-    "osv_checked": "2026-11-01",
+    "osv_checked": "2026-11-15",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59795,7 +60083,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-01T18:58:34.454855+00:00",
-    "osv_checked": "2026-11-01",
+    "osv_checked": "2026-11-15",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -59852,7 +60140,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-01T18:58:34.454844+00:00",
-    "osv_checked": "2026-11-01",
+    "osv_checked": "2026-11-15",
     "affected_cpe_check": "no_cpes:2026-11-06"
   },
   {
@@ -174573,8 +174861,8 @@
     ],
     "source": "nvd",
     "published": "2026-10-21T14:17:09.357",
-    "nvd_last_modified": "2026-11-05T19:17:07.900",
-    "vuln_status": "Analyzed",
+    "nvd_last_modified": "2026-11-15T01:18:01.333",
+    "vuln_status": "Modified",
     "nvd_fix_versions": [
       {
         "vendor": "php",
@@ -402084,10 +402372,10 @@
     "epss_score_prev": 0.00267,
     "osv_id": null,
     "osv_fixed_versions": [],
-    "affected": [],
-    "matched_keywords": [
-      "wordpress"
+    "affected": [
+      "wordpress/wordpress"
     ],
+    "matched_keywords": [],
     "source": "nvd",
     "published": "2026-09-23T06:16:59.060",
     "nvd_last_modified": "2026-11-11T23:10:00.263",
