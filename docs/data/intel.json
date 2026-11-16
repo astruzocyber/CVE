@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-16T01:59:13.460298+00:00",
+ "generated_at": "2026-11-16T09:33:40.481369+00:00",
  "category_labels": {
   "exploited": "Actively exploited",
   "social_engineering": "Social engineering",
@@ -14,7 +14,7 @@
    "name": "BleepingComputer",
    "ok": true,
    "items": 15,
-   "kept": 8
+   "kept": 9
   },
   {
    "name": "The Hacker News",
@@ -38,18 +38,19 @@
    "name": "SecurityWeek",
    "ok": true,
    "items": 10,
-   "kept": 4
+   "kept": 6
   },
   {
    "name": "Help Net Security",
    "ok": true,
    "items": 10,
-   "kept": 6
+   "kept": 8
   },
   {
    "name": "The Register",
-   "ok": false,
-   "error": "feed declares a DTD/entities; refused"
+   "ok": true,
+   "items": 50,
+   "kept": 17
   },
   {
    "name": "Microsoft Security Blog",
@@ -65,13 +66,15 @@
   },
   {
    "name": "Cyber Security News",
-   "ok": false,
-   "error": "no feed items in response (173 bytes, starts '<html><head><link rel=\"icon\" href=\"data:;\"><meta http-equiv=')"
+   "ok": true,
+   "items": 10,
+   "kept": 7
   },
   {
    "name": "GBHackers",
-   "ok": false,
-   "error": "no feed items in response (1287 bytes, starts '<html><head><link rel=\"icon\" href=\"data:;\"><meta http-equiv=')"
+   "ok": true,
+   "items": 10,
+   "kept": 8
   },
   {
    "name": "Krebs on Security",
@@ -172,59 +175,583 @@
   {
    "name": "GNews: Teams / help-desk vishing",
    "ok": true,
-   "items": 9,
-   "kept": 8
+   "items": 8,
+   "kept": 7
   },
   {
    "name": "GNews: estate perimeter exploited",
-   "ok": true,
-   "items": 30,
-   "kept": 30
-  },
-  {
-   "name": "GNews: remote access & password managers",
-   "ok": true,
-   "items": 8,
-   "kept": 0
-  },
-  {
-   "name": "GNews: identity & M365 attacks",
    "ok": true,
    "items": 29,
    "kept": 29
   },
   {
+   "name": "GNews: remote access & password managers",
+   "ok": true,
+   "items": 10,
+   "kept": 1
+  },
+  {
+   "name": "GNews: identity & M365 attacks",
+   "ok": true,
+   "items": 31,
+   "kept": 31
+  },
+  {
    "name": "GNews: business SaaS breaches",
    "ok": true,
-   "items": 18,
+   "items": 17,
    "kept": 12
   },
   {
    "name": "GNews: Veeam & backup attacks",
    "ok": true,
    "items": 8,
-   "kept": 7
+   "kept": 6
   },
   {
    "name": "GNews: virtualization & cloud",
    "ok": true,
-   "items": 30,
+   "items": 32,
    "kept": 28
   },
   {
    "name": "GNews: dev & AI tools",
    "ok": true,
-   "items": 77,
+   "items": 79,
    "kept": 50
   },
   {
    "name": "GNews: media & publishing sector",
    "ok": true,
-   "items": 25,
-   "kept": 3
+   "items": 24,
+   "kept": 2
   }
  ],
  "items": [
+  {
+   "id": "dd88cdaa7c564ac2",
+   "title": "New NoisyTCP vulnerability lets attackers crash Linux servers",
+   "link": "https://www.bleepingcomputer.com/news/linux/new-noisytcp-linux-kernel-flaw-lets-attackers-crash-servers/",
+   "source": "BleepingComputer",
+   "published": "2026-11-16T09:30:04+00:00",
+   "summary": "An 11-year-old Linux kernel vulnerability, dubbed NoisyTCP, affects almost all Linux distributions and lets attackers crash systems running Nginx, Apache, and SSH servers with default configurations. [...]",
+   "categories": [
+    "vendor_issue",
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "apache",
+    "linux",
+    "linux kernel",
+    "nginx"
+   ],
+   "cve_ids": [],
+   "score": 55,
+   "priority": "medium",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "530c74f6a86499c4",
+   "title": "Rspamd 4.3.0 stops forwarded mail from softening DMARC rejects",
+   "link": "https://www.helpnetsecurity.com/2026/11/16/rspamd-4-3-0-released/",
+   "source": "Help Net Security",
+   "published": "2026-11-16T09:27:24+00:00",
+   "summary": "Rspamd 4.3.0 fixes bugs that let an unauthenticated attacker crash the spam filter’s workers or slip forged authentication results through it. The worst crash took one HTTP request. A header line without a colon was enough to stop a worker, and an empty Deliver-To header could crash workers again and again. Sites running the milter proxy, the part that connects Rspamd to the mail server, have a…",
+   "categories": [
+    "vendor_issue",
+    "patch"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 20,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "6f9201ed6dca0721",
+   "title": "Tor Updates DoS Defenses Again as Relay Attacks Continue",
+   "link": "https://www.securityweek.com/tor-updates-dos-defenses-again-as-relay-attacks-continue/",
+   "source": "SecurityWeek",
+   "published": "2026-11-16T08:55:32+00:00",
+   "summary": "Tor 0.4.9.17 patches several security issues, including one related to how built-in DoS protections deal with IPv6. The post Tor Updates DoS Defenses Again as Relay Attacks Continue appeared first on SecurityWeek .",
+   "categories": [
+    "patch"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 10,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "7e3c2db368acc8d1",
+   "title": "Microsoft pushes Windows emergency updates to fix activation failures",
+   "link": "https://www.bleepingcomputer.com/news/microsoft/microsoft-new-windows-emergency-updates-fix-activation-licensing-failures/",
+   "source": "BleepingComputer",
+   "published": "2026-11-16T08:26:52+00:00",
+   "summary": "Microsoft has released emergency out-of-band updates to fix Windows activation and licensing failures caused by this month's security updates. [...]",
+   "categories": [
+    "vendor_issue",
+    "patch"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "windows"
+   ],
+   "cve_ids": [],
+   "score": 60,
+   "priority": "high",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "945e75ee03383e19",
+   "title": "Microsoft Rules Out Cyberattack in Outage, Warns of Phishing Campaign",
+   "link": "https://www.securityweek.com/microsoft-rules-out-cyberattack-in-outage-warns-of-phishing-campaign/",
+   "source": "SecurityWeek",
+   "published": "2026-11-16T08:15:12+00:00",
+   "summary": "Phishing emails posing as Microsoft 365 service notices referenced the real outage incident and threatened to delete held messages. The post Microsoft Rules Out Cyberattack in Outage, Warns of Phishing Campaign appeared first on SecurityWeek .",
+   "categories": [
+    "social_engineering",
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft 365"
+   ],
+   "cve_ids": [],
+   "score": 70,
+   "priority": "high",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "ad8a165dbf645db3",
+   "title": "Microsoft Reveals How a Hidden Windows Bug Took Down Microsoft 365 Services Worldwide",
+   "link": "https://cybersecuritynews.com/microsoft-outage-incident-report/",
+   "source": "Cyber Security News",
+   "published": "2026-11-16T08:04:53+00:00",
+   "summary": "Microsoft has traced the worldwide Microsoft 365 outage on November 12–13, 2026, to a hidden Windows defect that overwhelmed servers handling cloud connections. Its preliminary incident report, dated November 15, describes how a software change, shifted traffic, and reduced server capacity combined to cause widespread failures. Exchange Online suffered the greatest impact. The disruption lasted…",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "exchange",
+    "exchange online",
+    "microsoft",
+    "microsoft 365",
+    "windows"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "c210a165dc1fe0b3",
+   "title": "11-Year-Old Linux Kernel TCP Flaw NoisyTCP Lets Hackers Remotely Crash Servers Without Authentication",
+   "link": "https://gbhackers.com/11-year-old-linux-kernel-tcp-flaw-noisytcp/",
+   "source": "GBHackers",
+   "published": "2026-11-16T07:51:42+00:00",
+   "summary": "A Linux kernel TCP flaw that went unnoticed for about 11 years lets a remote attacker crash servers without credentials. Researcher Hyunwoo Kim (@v4bel) found and patched the bug. He named it NoisyTCP and tracks it as CVE-2026-99288. After the agreed embargo with Linux distributions ended, Kim published the full advisory on the oss-security mailing […] The post 11-Year-Old Linux Kernel TCP Flaw…",
+   "categories": [
+    "vendor_issue",
+    "patch",
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "linux",
+    "linux kernel"
+   ],
+   "cve_ids": [
+    "CVE-2026-99288"
+   ],
+   "score": 70,
+   "priority": "high",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "8ca16b34526a355a",
+   "title": "AWS Confirms Major US-EAST-1 Outage Disrupted 11 Cloud Services Before Full Recovery",
+   "link": "https://gbhackers.com/aws-confirms-major-us-east-1-outage/",
+   "source": "GBHackers",
+   "published": "2026-11-16T07:37:57+00:00",
+   "summary": "Amazon Web Services confirmed that an operational incident disrupted 11 services in its US-EAST-1 region in Northern Virginia on November 15, 2026. Customers experienced authentication failures, sign-up errors, and network connectivity problems before engineers restored normal operations. AWS published its final resolution update at 6:53 AM PST, confirming that all services were operating…",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "amazon",
+    "amazon web services",
+    "aws"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "f159cf23a7b20d4c",
+   "title": "Amazon Uncovers AI Agent Campaign Targeting LiteLLM, Dify, and Other Apps for API Keys",
+   "link": "https://thehackernews.com/2026/11/amazon-uncovers-ai-agent-campaign.html",
+   "source": "The Hacker News",
+   "published": "2026-11-16T07:34:21+00:00",
+   "summary": "Attackers' AI agents have been hunting for weak spots in internet-exposed AI apps such as LiteLLM, One API, and Dify to steal the AI provider keys stored inside, according to the agents' own records. The records, which Amazon's threat intelligence team captured with decoy servers, describe stolen keys being used to run the AI models that powered the search for more keys. The team said this",
+   "categories": [],
+   "watch_matches": [
+    "amazon"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "466d2c8db94ef373",
+   "title": "10 Risk-Based Vulnerability Management Tools: The 2026 Buyer’s Verdict Guide",
+   "link": "https://gbhackers.com/rbvm-buyers-guide/",
+   "source": "GBHackers",
+   "published": "2026-11-16T07:22:36+00:00",
+   "summary": "Risk-based vulnerability management exists because severity misleads: the vast majority of CVSS criticals are never exploited, and the few that matter are buried among thousands that don’t. RBVM reorders the queue by real-world exploitation, asset criticality, and reachability and the market splits honestly into native scoring inside scanner platforms, aggregation layers sitting above them, and…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 5,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "036cedae46c96a1e",
+   "title": "11 Cloud Vulnerability Management Tools: The 2026 Buyer’s Verdict Guide",
+   "link": "https://gbhackers.com/cloud-vulnerability-management-buyers-guide/",
+   "source": "GBHackers",
+   "published": "2026-11-16T07:16:43+00:00",
+   "summary": "Cloud vulnerability management changed the fundamental rules. When agentless snapshot scanning can sweep an entire estate in hours, the useful question is no longer “what is vulnerable” practically everything is but “what is reachable, exploitable, and wired to something that actually matters.” This verdict guide judges eleven tools on context-graph quality, agentless speed, runtime truth, […]…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 5,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "2df59c557c55c451",
+   "title": "10 Network Vulnerability Scanners: The 2026 Buyer’s Verdict Guide",
+   "link": "https://gbhackers.com/network-vulnerability-scanners-buyers-guide/",
+   "source": "GBHackers",
+   "published": "2026-11-16T07:11:15+00:00",
+   "summary": "Honest network scanning is settled before a single packet leaves: where the engines sit relative to segmentation, how credentials reach them for authenticated depth, and which scan windows the operations teams who own those switches have agreed to. This verdict guide judges the field with those three realities declared on every entry, and with one […] The post 10 Network Vulnerability Scanners:…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "windows"
+   ],
+   "cve_ids": [],
+   "score": 30,
+   "priority": "medium",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "6aae81c1beb90b90",
+   "title": "Hackers Disguise LOTUSLITE V2 Malware as Indo-Pacific Security Assessment to Compromise Windows Systems",
+   "link": "https://gbhackers.com/lotuslite-v2-malware/",
+   "source": "GBHackers",
+   "published": "2026-11-16T07:10:59+00:00",
+   "summary": "A Thailand-focused malware campaign is distributing LOTUSLITE V2 through an Indo-Pacific economic and security assessment lure, using legitimate PDFgear software to execute malicious code on Windows systems. The supplied technical analysis assesses with high confidence that the .NET implant succeeds LOTUSLITE, although its association with Mustang Panda, also called Earth Preta, remains an…",
+   "categories": [
+    "social_engineering"
+   ],
+   "watch_matches": [
+    "windows"
+   ],
+   "cve_ids": [],
+   "score": 60,
+   "priority": "high",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "8b632e6059dc8255",
+   "title": "Top 10 Best Continuous Threat Exposure Management (CTEM) Platforms in 2026 [Ranked & Scored]",
+   "link": "https://cybersecuritynews.com/best-ctem-platforms/",
+   "source": "Cyber Security News",
+   "published": "2026-11-16T07:08:54+00:00",
+   "summary": "CTEM is a five-stage operating rhythm scope, discover, prioritize, validate, mobilize and no single product runs it all, whatever the datasheets imply. The honest buying question is which stages each platform genuinely covers, with validation (the stage most organizations skip) as the differentiator that separates exposure management from vulnerability management wearing new branding. XM Cyber…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 5,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "4a4509c4395a86ed",
+   "title": "Microsoft Warns Hackers Are Exploiting Microsoft 365 Outage to Launch Credential Phishing Attacks - GBHackers News",
+   "link": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNOUhPS285aV9IbHFtcllITk9fbkVUVHlMNEV1QkwtUjVFaTdONlAtZE00VVNWZFdqZE9INWphcWlJQlpCSkJUZ2FublhQcnZsNG0wamg0TmFjRkdIRGJYNzJta1hMUzUwd2hCbHVkWVpaWHV3N3VZYm13bGdEcVJqRmRUV2FCRktOWnfSAY8BQVVfeXFMUGs5NVVXU2VCNk1Ma1pzNWpPbDVvNGlER0xjX3pyMHNyM1o4V2pwNlFiWklSbFpBWVR6RFRTb3NhNEJnUV8wWVlTcFNHZjREMWNoQVQ0a1AyN1ZJd3JEQ01NeDF4b2twYk0xN05JaFJOaDRod21RaTVnY2tEcEpyMjR6bWpDbXppRnNSR3RQbGM?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-16T07:08:16+00:00",
+   "summary": "Microsoft Warns Hackers Are Exploiting Microsoft 365 Outage to Launch Credential Phishing Attacks GBHackers News",
+   "categories": [
+    "social_engineering",
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft 365"
+   ],
+   "cve_ids": [],
+   "score": 70,
+   "priority": "high",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "2047e52c94cc848e",
+   "title": "11 Web Application Vulnerability Scanners: The 2026 Buyer’s Verdict Guide",
+   "link": "https://gbhackers.com/web-app-scanners-buyers-guide/",
+   "source": "GBHackers",
+   "published": "2026-11-16T07:06:42+00:00",
+   "summary": "Web application scanning is won or lost at the crawl, and most procurement conversations never test it. Single-page apps, authenticated flows, and API backends defeat naive crawlers, so a scanner that touches 40% of your routes is describing a different application from the one you deployed. This verdict guide weighs eleven options on coverage honesty, […] The post 11 Web Application…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 5,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "265e5efdcbff2955",
+   "title": "Top 10 Best Risk-Based Vulnerability Management Tools in 2026 [Ranked & Scored]",
+   "link": "https://cybersecuritynews.com/best-rbvm-tools/",
+   "source": "Cyber Security News",
+   "published": "2026-11-16T07:03:19+00:00",
+   "summary": "Risk-based vulnerability management exists because severity lies: most CVSS criticals are never exploited, and the handful that matter hide among thousands that don’t. RBVM re-ranks by exploitation evidence, asset criticality, and reachability and the honest market now includes native scoring inside scanner platforms, aggregation layers above them, and exposure-math engines beside them. One count…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 5,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "4cc737bfb588faa7",
+   "title": "You can now self-host Kitesurf, Cloudflare’s open-source browser for AI agents",
+   "link": "https://www.helpnetsecurity.com/2026/11/16/cloudflare-kitesurf-open-source/",
+   "source": "Help Net Security",
+   "published": "2026-11-16T07:00:02+00:00",
+   "summary": "Kitesurf is Cloudflare’s browser for AI agents, built to load web pages and run their JavaScript on Cloudflare Workers without starting up a full desktop browser. Cloudflare has published its source code so developers can inspect it, modify it, test it on their own machines, and deploy a copy to their Cloudflare account. A browser without Chromium Kitesurf needs no browser container, and it can…",
+   "categories": [],
+   "watch_matches": [
+    "cloudflare"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "41784492d5193557",
+   "title": "11 Vulnerability Management Tools: The 2026 Buyer’s Verdict Guide",
+   "link": "https://gbhackers.com/vulnerability-management-buyers-guide/",
+   "source": "GBHackers",
+   "published": "2026-11-16T06:57:34+00:00",
+   "summary": "Vulnerability management is bought on the promise of finding flaws and judged on the reality of closing them and the gap between those two is where most programs quietly fail. Detection is a commodity; the 2026 differentiators are coverage honesty (what each model can’t see), prioritization that survives contact with threat reality, and remediation workflow […] The post 11 Vulnerability…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 5,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "1080bcdad02fbfda",
+   "title": "Top 10 Best Cloud Vulnerability Management Tools in 2026 [Ranked & Scored]",
+   "link": "https://cybersecuritynews.com/best-cloud-vulnerability-management/",
+   "source": "Cyber Security News",
+   "published": "2026-11-16T06:55:22+00:00",
+   "summary": "Cloud vulnerability management rewrote the category’s physics: agentless snapshot scanning covers an estate in hours, and the question stopped being “what’s vulnerable” everything is and became “what’s reachable, exploitable, and attached to something that matters.” The 2026 leaders answer with context graphs: vulnerability joined to exposure, identity, and data sensitivity. Wiz takes 1; Palo…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 5,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "1a13d7025b37d20c",
+   "title": "BO Team Exploits Log4Shell in VMware vCenter, Compromises Russian Firm's Code-Signing Server",
+   "link": "https://thehackernews.com/2026/11/bo-team-exploits-log4shell-in-vmware.html",
+   "source": "The Hacker News",
+   "published": "2026-11-16T06:53:34+00:00",
+   "summary": "An investigation into suspicious activity within a Russian software developer's network has uncovered a months-long compromise of its development infrastructure and a software code-signing server. The activity, documented by Kaspersky's ICS CERT team after it was contacted by the affected developer in June 2025, has been attributed to a threat actor named BO Team (aka Black Owl, Hoody Hyena,",
+   "categories": [],
+   "watch_matches": [
+    "vmware"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "ea303ac2072131eb",
+   "title": "Google Project Zero will disclose bugs after 90 days, fixed or not",
+   "link": "https://www.helpnetsecurity.com/2026/11/16/google-project-zero-disclosure-policy/",
+   "source": "Help Net Security",
+   "published": "2026-11-16T06:30:02+00:00",
+   "summary": "Google’s Project Zero will disclose the vulnerabilities it finds 90 days after reporting them to a vendor, whether or not the vendor has shipped a fix. The deadline drops to 60 days on February 2, 2027, and to 30 days on January 3, 2028. Project Zero calls the new policy “Full X,” where X is the number of days. The change ends the “90 + 30” rule the team has followed since 2021. That rule … More…",
+   "categories": [
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "google"
+   ],
+   "cve_ids": [],
+   "score": 30,
+   "priority": "medium",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "a2d287f6c9c3acd0",
+   "title": "Ory Hydra: Open-source OAuth 2.0 server and OpenID Connect provider",
+   "link": "https://www.helpnetsecurity.com/2026/11/16/ory-hydra-oauth-server-open-source/",
+   "source": "Help Net Security",
+   "published": "2026-11-16T06:00:29+00:00",
+   "summary": "Ory Hydra is an open-source OAuth 2.0 server and OpenID Connect provider. Ory built it to issue and validate tokens, register client applications, and manage the keys that sign those tokens. Hydra stores no usernames or passwords, so logins stay with whatever identity system an organization already runs. The OAuth specifications run to more than 400 pages, and a team building its own server has…",
+   "categories": [
+    "identity"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 15,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "5b93234addd05a97",
+   "title": "Product showcase: ESET Mobile Security brings phishing protection and security checks to iOS",
+   "link": "https://www.helpnetsecurity.com/2026/11/16/product-showcase-eset-mobile-security-ios/",
+   "source": "Help Net Security",
+   "published": "2026-11-16T05:30:19+00:00",
+   "summary": "ESET Mobile Security for iOS helps iPhone users identify suspicious links, review device security settings, and assess Wi-Fi connections. ESET Mobile Security is available for iPhones running iOS 18.0 or later. Free features can be used without creating an account. Device security checks and link verification The app’s Device Scan reviews security settings, permissions, and configuration issues,…",
+   "categories": [
+    "social_engineering"
+   ],
+   "watch_matches": [
+    "ios"
+   ],
+   "cve_ids": [],
+   "score": 60,
+   "priority": "high",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "9fe441a397594100",
+   "title": "NoisyTCP: 11-Year-Old Linux Kernel Flaw Lets Unauthenticated Attackers Crash Servers Remotely",
+   "link": "https://cybersecuritynews.com/noisytcp-linux-kernel-vulnerability/",
+   "source": "Cyber Security News",
+   "published": "2026-11-16T05:26:51+00:00",
+   "summary": "NoisyTCP is an 11-year-old Linux kernel bug. It lets a remote attacker crash a server without logging in. The flaw is tracked as CVE-2026-99288. Hyunwoo Kim (@v4bel) reported and patched it, and he released the NoisyTCP advisory on GitHub after the Linux distribution embargo ended. The flaw sits in the kernel’s TCP code, which handles […] The post NoisyTCP: 11-Year-Old Linux Kernel Flaw Lets…",
+   "categories": [
+    "vendor_issue",
+    "patch",
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "linux",
+    "linux kernel"
+   ],
+   "cve_ids": [
+    "CVE-2026-99288"
+   ],
+   "score": 70,
+   "priority": "high",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "34dc448ac31ffa8f",
+   "title": "AI uncovers flaws in discontinued devices with no vendor left to patch them",
+   "link": "https://www.helpnetsecurity.com/2026/11/16/forescout-ai-models-vulnerability-research/",
+   "source": "Help Net Security",
+   "published": "2026-11-16T05:00:22+00:00",
+   "summary": "Forescout researchers built a tool to test if generally available AI models could find security flaws on a limited budget. They examined both open-source code and compiled software whose source code was unavailable, testing an approach attackers could also use. The team confirmed 99 vulnerabilities across 10 TCP/IP stacks, the software components that allow devices to communicate over networks.…",
+   "categories": [
+    "patch",
+    "vulnerability"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 15,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "1312adcd6418fc92",
+   "title": "AWS Restores Services in US-EAST-1 After Hours-Long Outage Disrupts Cloud Operations",
+   "link": "https://cybersecuritynews.com/aws-services-outage/",
+   "source": "Cyber Security News",
+   "published": "2026-11-16T03:43:23+00:00",
+   "summary": "Amazon Web Services restored operations in its US-EAST-1 region on November 15 after an outage disrupted account signups, authentication, and network connections. Problems began at 3:05 a.m. PST, and the last network issue was resolved at 6:21 a.m. PST, leaving some customers affected for more than three hours. The disruption affected customers using IAM Identity […] The post AWS Restores…",
+   "categories": [
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "amazon",
+    "amazon web services",
+    "aws"
+   ],
+   "cve_ids": [],
+   "score": 50,
+   "priority": "medium",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "d2780c99828e5159",
+   "title": "Tor Releases Emergency Security Update as Ongoing DDoS Attack Overwhelms Network Relays",
+   "link": "https://cybersecuritynews.com/tor-ddos-attack/",
+   "source": "Cyber Security News",
+   "published": "2026-11-16T03:23:56+00:00",
+   "summary": "The Tor Project has released Tor 0.4.9.17 in an urgent response to an ongoing distributed denial-of-service attack that is overwhelming network relays. Announced on November 13, 2026, the stable release includes several security fixes, including one that addresses IPv6 handling in relay denial-of-service defenses. Tor says the attack has affected most relay operators and urges […] The post Tor…",
+   "categories": [
+    "patch"
+   ],
+   "watch_matches": [],
+   "cve_ids": [],
+   "score": 10,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
+   "id": "59e160c3e2b7a199",
+   "title": "Hackers exploit Microsoft 365 outage to target users with phishing emails - The Eastleigh Voice",
+   "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNZ2doQXZndmVib21jRFZjUEhMSUdlTHczYW5MTFRhd1NEZFN3bEwtNUpVTVZTYzIzZXktMVdsQjQ3MWdDMUhXcjJWTjRITnNhYlBRbkNRVlNBelNzTjM1R3NfSXFHcXlraHJvVjVXdW83Z2tJY3h2NlNRYl9hUTlJc0hFNktZdU1LOGNoMC1SWjZyOTJMWnBfNy1iZlliVFZRb3hvUUh5cmJrcm1SMllhZUhWX0M?oc=5",
+   "source": "GNews: identity & M365 attacks",
+   "published": "2026-11-15T23:08:09+00:00",
+   "summary": "Hackers exploit Microsoft 365 outage to target users with phishing emails The Eastleigh Voice",
+   "categories": [
+    "social_engineering",
+    "vendor_issue"
+   ],
+   "watch_matches": [
+    "microsoft",
+    "microsoft 365"
+   ],
+   "cve_ids": [],
+   "score": 70,
+   "priority": "high",
+   "first_seen": "2026-11-14T11:25:26.957406+00:00"
+  },
   {
    "id": "8d87100358658906",
    "title": "The Microsoft Outage Left 15 Hotel Guests Poisoned by Chlorine",
@@ -498,6 +1025,22 @@
    "score": 25,
    "priority": "low",
    "first_seen": "2026-11-15T15:37:56.820726+00:00"
+  },
+  {
+   "id": "f25fe5ec24c7da6a",
+   "title": "Cursor Says Stolen Fireworks AI Key Led to Trojanized Claude Code Extension Incident - The Hacker News",
+   "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQZ0pVd0VKNnk2Vmpxalp6amtSaFlvX0Vpd0NOQkNZVldpTjRYdzQyZHd2c2IwdmhEdm5RNElZWXJ6bWtMVGhlemhGX0FqM0d3Vnp3MWRvWUNxTGJwMnV3Ymx0cy1TbWJJMVliVi1HM0xaUExCZ0FQU3NOMEJWWHJhaGZ3?oc=5",
+   "source": "GNews: dev & AI tools",
+   "published": "2026-11-15T08:22:00+00:00",
+   "summary": "Cursor Says Stolen Fireworks AI Key Led to Trojanized Claude Code Extension Incident The Hacker News",
+   "categories": [],
+   "watch_matches": [
+    "claude code"
+   ],
+   "cve_ids": [],
+   "score": 25,
+   "priority": "low",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
   },
   {
    "id": "96235b30ee6d8fc5",
@@ -848,26 +1391,6 @@
    ],
    "watch_matches": [
     "check point"
-   ],
-   "cve_ids": [],
-   "score": 70,
-   "priority": "high",
-   "first_seen": "2026-11-14T11:25:26.957406+00:00"
-  },
-  {
-   "id": "59e160c3e2b7a199",
-   "title": "Hackers exploit Microsoft 365 outage to target users with phishing emails - The Eastleigh Voice",
-   "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNZ2doQXZndmVib21jRFZjUEhMSUdlTHczYW5MTFRhd1NEZFN3bEwtNUpVTVZTYzIzZXktMVdsQjQ3MWdDMUhXcjJWTjRITnNhYlBRbkNRVlNBelNzTjM1R3NfSXFHcXlraHJvVjVXdW83Z2tJY3h2NlNRYl9hUTlJc0hFNktZdU1LOGNoMC1SWjZyOTJMWnBfNy1iZlliVFZRb3hvUUh5cmJrcm1SMllhZUhWX0M?oc=5",
-   "source": "GNews: identity & M365 attacks",
-   "published": "2026-11-14T10:35:36+00:00",
-   "summary": "Hackers exploit Microsoft 365 outage to target users with phishing emails The Eastleigh Voice",
-   "categories": [
-    "social_engineering",
-    "vendor_issue"
-   ],
-   "watch_matches": [
-    "microsoft",
-    "microsoft 365"
    ],
    "cve_ids": [],
    "score": 70,
@@ -1229,6 +1752,27 @@
    "score": 65,
    "priority": "high",
    "first_seen": "2026-11-14T17:57:37.259792+00:00"
+  },
+  {
+   "id": "c18bb17aff3de46e",
+   "title": "Check Point, flaw CVE-2026-123039 exploited on gateways to install the TSGA backdoor - Meteora Web",
+   "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOOXRydnRtQ1RWVU5zN2lzUzRUY2ltb3VVaS16ZzZSOWFXZC1sNERwNU00MEpvQW9waUt1alpYQl92TzJKellQeEVMQWNhRmk5TVBKUVBmMllfR2x5a0s3M3RvQlp0Z1RUMTVQV2lrUTF3dU5oQldORVIxdlNjUE5scE00WHM2TDU4R2QyLVg3VDZveWJ5czgyTXU1NkxUZkMx?oc=5",
+   "source": "GNews: virtualization & cloud",
+   "published": "2026-11-14T06:02:16+00:00",
+   "summary": "Check Point, flaw CVE-2026-123039 exploited on gateways to install the TSGA backdoor Meteora Web",
+   "categories": [
+    "exploited",
+    "vulnerability"
+   ],
+   "watch_matches": [
+    "check point"
+   ],
+   "cve_ids": [
+    "CVE-2026-123039"
+   ],
+   "score": 75,
+   "priority": "high",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
   },
   {
    "id": "045287f63b2b0dea",
@@ -2457,10 +3001,28 @@
    "first_seen": "2026-11-13T16:16:24.980311+00:00"
   },
   {
+   "id": "8fd7e3b54f4f91f9",
+   "title": "Hackers Exploit Check Point PHP2Shell Flaws to Gain Root Access and Deploy Wiper Malware - GBHackers News",
+   "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBGNThlTGZiTXhXUzhXNjVYVTRLOU90Q1BmbXdSdm9VVUpHbFNFVlBGNjVoU1d4R204aEdrTTlPNkRLclY0U0ZFSnBIMHlUNTZ6TzhaTzF6RGFzdmd2OFc2MndMZXlCWGN2UlRtdWl0OExpTkVp0gF6QVVfeXFMUEUxbS1UaTZTZ2VSLWstYVJwV1VvUTBFZ1RJdEFJa01WbEE2WEFoVno4Wlk4X3Boc2dSTkxrMUF1Qi1nblMtTzJCNE05R3pIVVlWRFJvYzFFeWpzazNoRDJkcWxZNTBCNWVjaWdCQmFYYURXRG5ESDNpS1E?oc=5",
+   "source": "GNews: estate perimeter exploited",
+   "published": "2026-11-13T10:41:08+00:00",
+   "summary": "Hackers Exploit Check Point PHP2Shell Flaws to Gain Root Access and Deploy Wiper Malware GBHackers News",
+   "categories": [
+    "exploited"
+   ],
+   "watch_matches": [
+    "check point"
+   ],
+   "cve_ids": [],
+   "score": 65,
+   "priority": "high",
+   "first_seen": "2026-11-16T09:33:40.481369+00:00"
+  },
+  {
    "id": "00cc4b6fc88d6bcf",
    "title": "PHP2Shell: New attacks on Check Point Gateways – TSGA backdoor distribution - SecNews.gr",
    "link": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1WWlpGajRSeVdSMldTVG5ZWWZnbXdKUnlSMDNzOFhuYkgwRVkzV2Y2MTg1RHVYVjJUeUFXSWRSeFJMVzExZFNRbTB2QUNKT3ZwdHM4QnB1NDBURl9Hdy1yYUVfSVc3OThoU2RPNjRkSG9pZVJpTDJjRA?oc=5",
-   "source": "GNews: virtualization & cloud",
+   "source": "GNews: estate perimeter exploited",
    "published": "2026-11-13T10:31:00+00:00",
    "summary": "PHP2Shell: New attacks on Check Point Gateways – TSGA backdoor distribution SecNews.gr",
    "categories": [],
@@ -26161,538 +26723,6 @@
    "score": 25,
    "priority": "low",
    "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "d633b1882b41a5c5",
-   "title": "Drupal Commerce Core Vulnerability Exploited Against Online Stores",
-   "link": "https://www.securityweek.com/drupal-commerce-core-vulnerability-exploited-against-online-stores/",
-   "source": "SecurityWeek",
-   "published": "2026-10-30T11:07:11+00:00",
-   "summary": "Drupal says a highly critical Commerce Core access bypass is exploited in the wild and urges store owners to audit their orders. The post Drupal Commerce Core Vulnerability Exploited Against Online Stores appeared first on SecurityWeek .",
-   "categories": [
-    "exploited",
-    "vulnerability"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 45,
-   "priority": "medium",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "c1b9d24cf095db1a",
-   "title": "Drupal Commerce Core Vulnerability Exploited Against Online Stores - SecurityWeek",
-   "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOMVdSUkNkNUV2ZFVqYVZxZUo3V1g1RnlYckoyUTY5dDhNNTE3aG1kbTZwMGhFTm5OZUM0dU01SnVTTmdNZFU0RUhiU1M4VXdVajNMXzlMY21ibWVoazFfTC1waXI2WlltcjJPMVBYU19TTENTamMxU2FIb0FjRWRYYlNWYmIyaGJjeURLMm1EaWZ1elFRVXRaVTdwdTc?oc=5",
-   "source": "GNews: virtualization & cloud",
-   "published": "2026-10-30T11:07:11+00:00",
-   "summary": "Drupal Commerce Core Vulnerability Exploited Against Online Stores SecurityWeek",
-   "categories": [
-    "exploited",
-    "vulnerability"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 45,
-   "priority": "medium",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "816f912517caf8c6",
-   "title": "BeyondTrust announces the general availability of its AI Agent Security - TahawulTech.com",
-   "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNVUxWMmdSQ3Q2RU9kZF9NYkhobU5BRE1XYldteWpVcUxmMmtHVkZDMHRGYmU2dUx4ZUtlZ3pJcFlsY3ZiT3pna250RGJlVldNLXVJeFdmX21PM002RTM3RTVGN1kzWjdLbDQwYVd0bmNVcGpQbnp4SmFKMWdVZjRfMlN4OFJ6dTgteWw0M25kdEJGeHlLRHZUREZ2cUF2Ry1wR3NUWThBekljZjkxU2hqU1hxZTdyT1d4bUhOSw?oc=5",
-   "source": "GNews: remote access & password managers",
-   "published": "2026-10-30T11:07:00+00:00",
-   "summary": "BeyondTrust announces the general availability of its AI Agent Security TahawulTech.com",
-   "categories": [],
-   "watch_matches": [
-    "beyondtrust"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "15f231fffe443d24",
-   "title": "Crypto exchange Binance freezes assets after $6.3bn 'complex' security breach - Investify",
-   "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNUjRZVjBsZGRrNmtPRml3eFZCV3NKSk9nTkYtSk0yWFJIbExSbk9tenY0UFFVTGUxWmdBZWh1b1dSWkFPV0h1RWZJTVJfUjNtWXY1elRQNXVzZUhxT1d2ZS01SVRyT2JIQ3g5V2d3R1dGVXJ6SC11QjJUVVE2VlBscWNsRVFZWjZoLWZ2WlMtOU14eG5mNE1LS19Hdl80dW51V0pTVWY5SlFrYUlBdHhJSHI0R244cFJW?oc=5",
-   "source": "GNews: media & publishing sector",
-   "published": "2026-10-30T10:52:44+00:00",
-   "summary": "Crypto exchange Binance freezes assets after $6.3bn 'complex' security breach Investify",
-   "categories": [],
-   "watch_matches": [
-    "exchange"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "ab321fde5d125186",
-   "title": "New Kairos DDoS Botnet Hijacks Linux Devices to Overwhelm Servers With Thousands of TCP Connections",
-   "link": "https://gbhackers.com/kairos-ddos-botnet/",
-   "source": "GBHackers",
-   "published": "2026-10-30T10:49:33+00:00",
-   "summary": "Nozomi Networks Labs has documented Kairos, a previously undocumented Go-based DDoS bot for Linux. It turns compromised Linux devices into attack nodes that exhaust a victim’s connection capacity with thousands of idle TCP sessions. Kairos DDoS botnet Honeypot telemetry captured three Kairos builds. They differ only in the hard-coded C2 address and the Go compiler […] The post New Kairos DDoS…",
-   "categories": [],
-   "watch_matches": [
-    "linux"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "247af471f7d49cc2",
-   "title": "Weaponized Claude Code Extension Gives Hackers Persistent Remote Access to Developer Systems - CyberSecurityNews",
-   "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5PeVlzdldiSmVTV0g5cUFZYUZNUmYwMjVBRjlUUWpwalBfbWFtVHhYM1dQT3pTU1BnVE5FWi1ac0hnWTFpQl9EZExWbkFIa3ZFWmxaQTRjdFYxdGtqMFBSS3YwWHotZURmN0lGdFkzUdIBdEFVX3lxTE1ROWFWX21DTFFzVktUcHdQVWdQX0ZwMW1xVmEtMm5MeGdQaklYcVVXYnpIcGFVUmxJY2x4amI1dEtBQ1ZXQ0FtWVNDd3Iwb1B1LXpMVjJnTVo3czlndUN6Z0JxV0FpWU1aUmJ4c0RiNlltZXRp?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T10:44:57+00:00",
-   "summary": "Weaponized Claude Code Extension Gives Hackers Persistent Remote Access to Developer Systems CyberSecurityNews",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "6298e6872ea400c1",
-   "title": "Palo Alto Confirms Active PHP2Shell Exploitation Targeting Exposed PAN-OS Management Interfaces",
-   "link": "https://cybersecuritynews.com/palo-alto-php2shell-exploitation/",
-   "source": "Cyber Security News",
-   "published": "2026-10-30T10:42:02+00:00",
-   "summary": "Palo Alto Networks has confirmed that attackers are actively exploiting PHP2Shell vulnerabilities against PAN-OS management interfaces exposed to the internet. In its October 29, 2026, update, Unit 42 said it independently verified attacker tools used to combine the PHP flaws with a Linux kernel vulnerability and gain root access. The vulnerabilities, CVE-2026-109618 and CVE-2026-109619, each […]…",
-   "categories": [
-    "exploited",
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "linux",
-    "linux kernel",
-    "palo alto",
-    "palo alto networks",
-    "pan-os",
-    "php"
-   ],
-   "cve_ids": [
-    "CVE-2026-109618",
-    "CVE-2026-109619"
-   ],
-   "score": 75,
-   "priority": "high",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "426fe317078d13d8",
-   "title": "Malicious Claude Code extension hits 5,000 Cursor users - NewsBytes",
-   "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNckx6ZnZ5Tm5UMV9zS3Y5WDN2R2JVR1BkLVRzUVNTSjV3RFdzc0FHMHFiRW9jNjNuUExpMWFPcks5SW92SWU0LWpPX2F4UTVGQ2tLRS1xLTlRal8tX2IyaXpuYnhVZkVsaTdORDhpUTNaWjNDTjY1Q0xodWZGX2Zkal9JZWx5V0o0WXBMd2FGZklVdURObF9WV2hWYzFBRTlNWkhyQTRMaTk1TzA0WUpfMXRnVnpqZ2dBVkE?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T10:34:05+00:00",
-   "summary": "Malicious Claude Code extension hits 5,000 Cursor users NewsBytes",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-11-04T19:42:42.213958+00:00"
-  },
-  {
-   "id": "0ed707c4e965afce",
-   "title": "DarkSword iOS Exploit Chain Bypasses Safari Sandbox and Steals Apple Notes Data",
-   "link": "https://gbhackers.com/darksword-ios-exploit-chain/",
-   "source": "GBHackers",
-   "published": "2026-10-30T10:23:27+00:00",
-   "summary": "Zimperium zLabs has found that the Coruna iOS exploit campaign now serves two iOS exploit chains, picked by the victim’s iOS version. A DarkSword-derived chain escapes Safari’s sandbox on newer iPhones and has stolen Apple Notes data. Recent coverage of Coruna and DarkSword spreading through Instagram ads and abandoned tags shows the kits are still […] The post DarkSword iOS Exploit Chain…",
-   "categories": [],
-   "watch_matches": [
-    "ios"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "e6e915d182814834",
-   "title": "Drupal warns of critical Commerce Core flaw exploited in attacks",
-   "link": "https://www.bleepingcomputer.com/news/security/drupal-warns-of-critical-commerce-core-flaw-exploited-in-attacks/",
-   "source": "BleepingComputer",
-   "published": "2026-10-30T10:16:07+00:00",
-   "summary": "Drupal warned admins to patch a critical access bypass vulnerability in the Commerce Core module that attackers are exploiting in the wild. [...]",
-   "categories": [
-    "exploited",
-    "patch",
-    "vulnerability"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 55,
-   "priority": "medium",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "34f46cc051c09c0d",
-   "title": "Malicious Claude Code Extension on Cursor Marketplace Hid SSH Backdoor, Up to 5,000 Users Exposed - BigGo Finance",
-   "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE53NzFPS1JNOW9ycTVNWDVBNVdkRVJDUENjME5uaVRZeWhCbHhtUnUwb09qOWJhblNnV2lrMHBId19uYi1sand5WWg3alg2MWZvbUpNekpBOWc0ZDNrdEJQbHZibkV2WlBiVmNPOHFyOUtDeWxmUWc?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T09:56:00+00:00",
-   "summary": "Malicious Claude Code Extension on Cursor Marketplace Hid SSH Backdoor, Up to 5,000 Users Exposed BigGo Finance",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T19:18:22.987529+00:00"
-  },
-  {
-   "id": "f0b2c6ee0f054ee8",
-   "title": "Cursor flags malicious Claude Code extension, up to 5,000 users affected - Business Today",
-   "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNMlJfUnJFSFR2Q2gzYy1RVjJMREVCcThfWXdxcm54VHphRDVkSTBCQVRJLUgzQzhPMkt1Q2swVDRWM2N3TWszSlpCN3RaNS1YcWVMUHBYc2FuaDhtcFBkV2ZRaWpzWEJoT1p6Qi1HSlhNTUc2VkJTRDhSZk9aQWJwRHFDZDd1WVAwc0FfZmRhcnFGSDN5TkJLOFhBQWhPRHZWVTlqa0NaVkVBcWJRYTBJV3lOUzJYLXNwdEFuUURHUU5aeFJBVjA4SmR4RmhZdkxBTFpVVFRB0gHbAUFVX3lxTE5sdF9NNnVEelU1NVdHVFNMUHJwUENldllRTUhueHQ1RHU1cnZkX0ItX253RktITkppWEtpMlpIS05fVGh6VUlPT1F6NElNYTExM1RQQ3doQkF5SFIwNjJBX2RsSHZyTnRFNlJpbl9pU0JlOUxGRVZvWEc3akNSSllsVklqcl85QnJ3c2t1Zmt5eXdJR2NtV19mSWlYQUV2WEFJaDhQZlBPYTFiV3JwbkMxSWs2UXNBSWtLR19YQmYtdTl5RjJuOUI1ZUZsdjVhX3loeEpwRGxNTGRFNA?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T09:47:16+00:00",
-   "summary": "Cursor flags malicious Claude Code extension, up to 5,000 users affected Business Today",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "90bb7d760e8b1377",
-   "title": "Malicious Claude Code extension hit Cursor: 5,000 at risk - The News International",
-   "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNNWhuTHZzT3JKRDlkNEx4bnpqRG1kbVVZOXFqNGp6SEdybXhXZDhvTjk1RFhMY0ZHcHZxT3pMSUE1MVI5MmJVOVVPdlFvM2ppajdrSThJZ1V4U2xsRDBmNm1fcjhmQ19KMXNrWGFsN05VSndMUENEb09fQ3I4dlc2ci1qNk5KcXZFOGdBTEN2ZFBINnV3cTRGRndqSnQ4QdIBmgFBVV95cUxPYndXUWtvaEZyeU5EUDhlcXZ1YUlGeENYM1VxUnBZNlpvdzFYSzNSODZBNDF5b1ZNUVIxdVZENXdFTjFacFdPc1lFTUxWMXJyTDctRnpacFExajhwaENhZ1JFZmo0U2czM19kRTJBU3RMelRETXA0VndwWlFZRmRscnJ6bTFVdVdvQl8wUW9YeUNqLU5JeVpUeHdR?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T09:46:41+00:00",
-   "summary": "Malicious Claude Code extension hit Cursor: 5,000 at risk The News International",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "a0a46e1ba16f83da",
-   "title": "New AI-Powered NIK C2 Malware Uses OpenAI API to Help Hackers Steal Data and Control Windows PCs",
-   "link": "https://gbhackers.com/nik-c2-malware/",
-   "source": "GBHackers",
-   "published": "2026-10-30T09:45:09+00:00",
-   "summary": "Cisco Talos has uncovered NIK C2, a Go-based, 64-bit Windows remote access tool that embeds a working OpenAI client. Operators can send prompts through an infected machine and read the model’s replies in their C2 panel. NIK C2 malware According to technical research published by Cisco Talos, the implant talks to its server over TLS-secured […] The post New AI-Powered NIK C2 Malware Uses OpenAI…",
-   "categories": [],
-   "watch_matches": [
-    "cisco",
-    "windows"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "e1b5d4f5eeb2f60a",
-   "title": "Cursor shuts down extension marketplace after malicious Claude Code puts 5,000 users at risk - Firstpost",
-   "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxOU09OdGlRQUN6UnZtd0dDVGhDOTJsQ25kV0lhalNVZEYtVVJlR0xxaEJCeG5VZ0FqSUZFSmw4a0tGc2E0M3piaU5uOUNMLWllTUlmRjQ3RklCSDNoX0lRbVNTMUFxeEkxOFNXa0xyaU1FNEJadjZ0NExwd2RwSzJIYjFqaG8zR3Q0dGxrRG9DdWlEWFZQVE9XWEdjOTl5MklCclRxaXV1dW9LUEFNa3B3WlludkJqSjliZE85cUpoQ2REV0RWdnFVSjAteWtOSmlaOU9YY211VmloaEXSAeABQVVfeXFMUEpmQ2J3cjBKS3pxLWNWNHdGNTVZb0NKWVAxUzFNMDhnNDhEeE1xbGxqUWZVSEYyeF9KSmZnZnYzQUdMYXgycmw0clVONlRfS0gxMzJkcUM0ajFnakYxQ2Fib0pGZ2hqNGIxVnl5b1B6V0VTZkVXZmVOOUZlWmpYaTEzT1NWb3hKYjlaNmd6eENLYWUxSklGMjBQWElQZmFxUXlDOERfekwtVE14bW5GclNKdHN2ZW9vRU5ET0t5d3djdWhLZE9za1VUQW56Z3lrcFJ0cjZ5UU1aOU5sWTQyR1U?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T09:35:39+00:00",
-   "summary": "Cursor shuts down extension marketplace after malicious Claude Code puts 5,000 users at risk Firstpost",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "9e647c5e925357e8",
-   "title": "Max-Severity GitLab Vulnerability Exploited Against Alpine Linux",
-   "link": "https://www.securityweek.com/max-severity-gitlab-vulnerability-exploited-against-alpine-linux/",
-   "source": "SecurityWeek",
-   "published": "2026-10-30T09:32:27+00:00",
-   "summary": "Tracked as CVE-2026-97229, the bug allows unauthenticated attackers to execute arbitrary code on the server. The post Max-Severity GitLab Vulnerability Exploited Against Alpine Linux appeared first on SecurityWeek .",
-   "categories": [
-    "exploited",
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "linux"
-   ],
-   "cve_ids": [
-    "CVE-2026-97229"
-   ],
-   "score": 75,
-   "priority": "high",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "0f2a6e73dd3d767b",
-   "title": "Max-Severity GitLab Vulnerability Exploited Against Alpine Linux - SecurityWeek",
-   "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNdHFLd05DTm1QdmhDR0dXWHVtV3lVT0xCS2cwa0k4X2ZsYnVCZjRRbW51emlMcGFvMEZ5RzhGSGxfMEJJLW8yLTZNeUVSS2RVQUl5cDFuZGpkT2pXTVdVSTRWOFJMM0Vlb0NBejFGUDR1dlJrbFVMSG9LUDJTR2FrQW9ad095eUJOSW92VWYxQWtmdFZfWExJRnRB0gGfAUFVX3lxTFA5dmhKNXZiUlVpV1o3b2hYcHFWNmlKZjZKVzM2LVhYVmt0b1N4dUhoQkVnQ0N5VDdxTVJLd2JDR2JtRTVFN3FGUGljZFNiQVp4SDZxdUdiaTc1dGluTXdiazN2d2w3U01FZTg2VXpSa2ZPc01TTE1sOThIODUzRkx4SjRxVW0yNy1QbmtsdW5kV0VsM056TEpEVEttX2tYOA?oc=5",
-   "source": "GNews: estate perimeter exploited",
-   "published": "2026-10-30T09:32:27+00:00",
-   "summary": "Max-Severity GitLab Vulnerability Exploited Against Alpine Linux SecurityWeek",
-   "categories": [
-    "exploited",
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "linux"
-   ],
-   "cve_ids": [],
-   "score": 70,
-   "priority": "high",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "6859615bd45d58ab",
-   "title": "Zero-day vulnerability in Cisco firewall actively exploited - Techzine Global",
-   "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNcXlwcXB6aFVMd2NIbl9ZQUZYaUZGc2ZMWUI4MWNfTkpaSzJJZXRIWElrMnl6eFNuQWJ4RVpJdWFEUVpYTHFpb20tcDBCbVFkQ0pYd0YzeFRSdWdydklkQUpvRlNyV0p5WTFZMUUwdmNsMlQ5cXQtWmxPbkdIQmNDal9TdVVUT3F1WUVvX3hQMzRGSFQ0YXE5TFNQOUx0Wk9oUFRKR3RNbWM?oc=5",
-   "source": "GNews: estate perimeter exploited",
-   "published": "2026-10-30T09:23:57+00:00",
-   "summary": "Zero-day vulnerability in Cisco firewall actively exploited Techzine Global",
-   "categories": [
-    "exploited",
-    "vulnerability"
-   ],
-   "watch_matches": [
-    "cisco"
-   ],
-   "cve_ids": [],
-   "score": 70,
-   "priority": "high",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "dedbd68a83d894dd",
-   "title": "Binance links $6.3 billion crypto theft to compromised DevOps laptop",
-   "link": "https://www.bleepingcomputer.com/news/security/binance-links-63-billion-crypto-theft-to-compromised-devops-laptop/",
-   "source": "BleepingComputer",
-   "published": "2026-10-30T09:18:13+00:00",
-   "summary": "Binance, the world's largest crypto exchange, has linked the theft of about $6.3 billion in cryptocurrency to a DevOps engineer's compromised laptop. [...]",
-   "categories": [],
-   "watch_matches": [
-    "exchange"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "cbd53026184f35c5",
-   "title": "Claude Code extension compromised on Cursor, tries to open an SSH backdoor - Pasquale Pillitteri",
-   "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQWld6cmwyS2VaSzdERnlkcERnUHpRb3M5SkhTZG1qX0NocVl1THJQTUVBV2pjSWdoTlcxcXlWOUt3U29waWxIRUUtRFBZZFV4MTU5QTlIY1dKTUdJTFhqQkFpX3VTZUZkOHpLd05iUTBpaWZsMWJaUzZvTW5qaUJtUHVpQ2Njbzh2WGtqYU53?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T09:06:32+00:00",
-   "summary": "Claude Code extension compromised on Cursor, tries to open an SSH backdoor Pasquale Pillitteri",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "efe89b188938a66f",
-   "title": "Claude Code extension hacked: SSH backdoor puts 5,000 Cursor users potentially at risk - News9live",
-   "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQRloycUpJc0RKRHhhclJaVnpXT092Mml5OXhWaDhiMEpoWUtWR1dRUFJBT1pLOC01ZFpyRGk5SWZhd1h4WXU5eUtiVGVCR05wY3JmMUlkcXJidUNLc2dQdHRWUDhRZi03bXl0d3JaMEdoRXhQZHNvblFJd3I2OGRxZDR6bVNvcG1mTEhRTGhYNnBEekxkLTlEWFA2ZjBSVDlLQXIwT0NpZEdKMEtHVnJtTDB0R01SZkJv0gG-AUFVX3lxTFAyR2gzamxkMU5GdzdJWnlQUlhtaWJRaG1QRnlMa3d1Ymx4M042X1lOYnh3MV9UeTZ6Nkl2c19SRVBBQm9YN1pGVFBBS3dyVWQ1OXhZWlpUYlNXel9NTVduVkMzcnJ3X2FuN0w0RzJYTWdkTU1NRmwxVjJhOXA2X1pYSXRoTUptT0ZSSEdvT1doZ3E1SG1OOXpMb0hkT3dlaUhwd045V2RpNGRQVXR3SXpvZmFGOUM0aUxJcDFvRHc?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T08:58:32+00:00",
-   "summary": "Claude Code extension hacked: SSH backdoor puts 5,000 Cursor users potentially at risk News9live",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "ad2cc061f5526d02",
-   "title": "Official Claude Code Extension on Cursor Marketplace Trojanized with Persistent SSH Backdoor",
-   "link": "https://thehackernews.com/2026/10/official-claude-code-vs-code-extension.html",
-   "source": "The Hacker News",
-   "published": "2026-10-30T08:55:47+00:00",
-   "summary": "Cybersecurity researchers have disclosed that a trojanized version of Anthropic's official Claude Code extension was distributed through the Cursor Marketplace as a legitimate update, attempting to install a persistent SSH backdoor on affected systems. The malicious update, version 2.1.313, was distributed under the extension's legitimate publisher identity, prompting Cursor to temporarily shut",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "6aee6d057b61e6b4",
-   "title": "Cursor shuts down marketplace after malicious Claude Code extension hits 5,000 users, offers fix - India Today",
-   "link": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxNMko0MjVpcWRwXzVOWlFrYWVXQ2w3LXZDQ240S20tWlhMVUhBLWZsM2hvM3NUZHlRMUY1VHhhZWdjMlA4ZlJzR3VYRnNQbURhTHhOakRwbERvcFpqMWx5X2RNYWZJZ2NPSXVsSWhzLVgtX3BYV1Z0WW1OX2VzNDhUMXcxTTB3WW1HUG9yRVhZQm9JWkZMQjZSVnRvdlZwdHFPR3hvVktsQkJKeVB4VUVaU3FGcEQzRGo3VlZ6ak93QlhkWDRmbWxSdHRyYXdBTm02NW02bTdZX28wdHRSVjluMHp1QmgxNXByaFJua3BfUC1PVjTSAfgBQVVfeXFMTV9zanNFYk5ZbzhDLUNrbDE5NUhMTFJXRGZjcTQtcGRvSXVUS2JVa1JPbFBtRklhbEtDM0hoTTQ2SjFQbTVmWlRNZ2ZfVGNRU3FtaWY1MHhUV1RrXzVtZUt4RHVhOW5Ra1dkYmwtNjRKTmE5SzZ2WmZnQVlLam9uTEZyYnZXSXdiQ0FRYjV2d3FFMUExNnZwMVIxc3BnXzNLbVNYcmV3R1o1V1BySUc3R1lXRElyR0hWWFBGbG1OaVVURVlfX05DQWYzQmtiaXA4THNDMFpSRWZHcGNKRzVqNVdmQ3N3SkVCZWxqX09fcW5vdk9oWTk2M1E?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T08:53:45+00:00",
-   "summary": "Cursor shuts down marketplace after malicious Claude Code extension hits 5,000 users, offers fix India Today",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "686a9af4f9091ef4",
-   "title": "Downloaded ChatGPT, Claude Apps From Links On Google Search? You Have Been Hacked, Delete Now; Here Is How - Esquire India",
-   "link": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxQd292YWFvVkZUaENWaGVOVW1raVVUVXlrVDE1TTdVQVVCb3p3VXdqUkRQeXlXYks0OVBIc3M1VGN3bWJzRWxSQzlQMzgyTEhPMXNDd2xJR2YwUVlERTR1em5zVXcxNEh5S2ZXdVNPS3NmX09IdUNOMm9LSDd3d2NUcGV2a0dBQmI4SlpCdDZRZ3ZzX2FHREs5QXJrSVl6X2pBZl9QVEFLN2p1Wkh6ZXUybnFMdFhycVNlaVBHcEFOOGZWX2JFbWZFcmxzNE9QbUhvVzc2N2NMejNSd24wVjNUaTJNWmM5ZkcybVp3UDBMQ2ROZHZ5UkJZUEdUWGFLZ9IBiwJBVV95cUxPUVNMVnhCaVZXSHhLVkJDWHpsNndUTlllUFluTkZMSEJfU1p2UU1LOUZjRlE2akdnS0YzaDR2bEdvblk1aG1QWU1SWTY4Y0hJTFBQdVkxdkZacTdxWUZUZ1h5VG5zRHR4bnQwejVxSndsZ2hNWnUtUlRrd2dmMXB2TGFUWFp0bUs3YU1panl3Rklpb29RMDRDWUhVQlU3SkU0NzU5TW1nUm9tRHNSSmhaLUFjUDNVc2tlVDdRYWh4Ym1teWU2Uy13ejZleDFXT1hnOFNUckZSUnhTOVhzZDdwLWJUcWsyaTh0c0JHT080NXZoQmZaSGp5eHdMTHFRNllrR1Q2MGJxb0prM3M?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T08:50:35+00:00",
-   "summary": "Downloaded ChatGPT, Claude Apps From Links On Google Search? You Have Been Hacked, Delete Now; Here Is How Esquire India",
-   "categories": [],
-   "watch_matches": [
-    "google"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "d9db446116fff13d",
-   "title": "Unauthorized OpenAI Codex and Claude Code Relays Disable AI Sandboxes and Redirect Enterprise Data",
-   "link": "https://cybersecuritynews.com/unauthorized-openai-codex/",
-   "source": "Cyber Security News",
-   "published": "2026-10-30T08:50:24+00:00",
-   "summary": "An unauthorized AI relay service is installing genuine OpenAI Codex and Anthropic Claude Code tools on company computers, then changing their settings to send requests through third-party servers. The setup also removes sandbox controls, creating a path for sensitive business data to leave approved systems. Symantec’s Threat Hunter Team documented the activity in an October […] The post…",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "c85ee35045094148",
-   "title": "TeamViewer Flaw Could Let Malicious Hosts Take Over Support Technicians’ Machines",
-   "link": "https://www.securityweek.com/teamviewer-flaw-could-let-malicious-hosts-take-over-support-technicians-machines/",
-   "source": "SecurityWeek",
-   "published": "2026-10-30T08:44:49+00:00",
-   "summary": "An integer overflow tracked as CVE-2026-111585 could be used to execute arbitrary code on the viewer’s system. The post TeamViewer Flaw Could Let Malicious Hosts Take Over Support Technicians’ Machines appeared first on SecurityWeek .",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [],
-   "cve_ids": [
-    "CVE-2026-111585"
-   ],
-   "score": 10,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "b33f28d7e57226d8",
-   "title": "TeamViewer Flaw Could Let Malicious Hosts Take Over Support Technicians’ Machines - SecurityWeek",
-   "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNV01heldaMUY2YVNKXzF4VV8xcWFaam1WMktiS0llR0ZsTjMzeEtQUkhWZDVmb29VQmY2VFJOUW9yMk1TekszNlpzWkV1SzBicW1zS2ZmMGVqNXVvLVdJN09fRThCZHhKRngtMzBKMEtHSmVWaHVXUGVWb1lNSXYyWko5OEVHbEZhOTlmY2pndnpiUVJFaUg3enlaTVBmUkpRWFlvRjcyMTdsczBneDlJ0gG0AUFVX3lxTE5LLTBVbnB4N25LSzh0NVNuVFEtVUF4MTBDTXVjQjA0ejFkcWVZSTBDS0JULTBiRG1PRFVmNVNFRW5IWEl6VXZyNlE2VmFlcHZQc3dYYnlCYzlLUDR2QzljOHp5SS1jX2FhSHZZbWpXdThWb2oxeHB4ZllYTU9NRjdXQzZNci12Ni01YzFqazFmWkFCN2JKR1NRdk0wZnZsNVhmQ0ZzYUx3QTRHVzNmbGlKZHFSdA?oc=5",
-   "source": "GNews: Veeam & backup attacks",
-   "published": "2026-10-30T08:44:49+00:00",
-   "summary": "TeamViewer Flaw Could Let Malicious Hosts Take Over Support Technicians’ Machines SecurityWeek",
-   "categories": [
-    "vulnerability"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 5,
-   "priority": "low",
-   "first_seen": "2026-11-03T16:11:59.628740+00:00"
-  },
-  {
-   "id": "072488cc7021cb79",
-   "title": "Trojanized Claude Code 2.1.312 and 2.1.313 in Cursor Marketplace Plants SSH Backdoor - Rescana",
-   "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNdDNoVkx3Mmpqa0JHVUJkdjl6RTEyX1RpU0p2eHF3eGxWNm52aEd1NDUxY3ZZLU12QTk0WC1OZkNCR2J6azRkTEd6QVliX1B0V0NzT21RRWRYUTBwQngyNFR4dFNrMmxyeGhwSzE1a1VJdWZ4X0hkcWxlWHgtWFVJcGRSSjczWm04RXJCVHJ5ZGkzQlRmTHJYbVhFQ3FyS0ViLTEw?oc=5",
-   "source": "GNews: dev & AI tools",
-   "published": "2026-10-30T08:31:30+00:00",
-   "summary": "Trojanized Claude Code 2.1.312 and 2.1.313 in Cursor Marketplace Plants SSH Backdoor Rescana",
-   "categories": [],
-   "watch_matches": [
-    "claude code"
-   ],
-   "cve_ids": [],
-   "score": 25,
-   "priority": "low",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "b3ed8c618efedf00",
-   "title": "CISA Warns of GitLab Integer Overflow Vulnerability Exploited in Attacks",
-   "link": "https://cybersecuritynews.com/gitlab-integer-overflow-vulnerability-exploited/",
-   "source": "Cyber Security News",
-   "published": "2026-10-30T08:28:50+00:00",
-   "summary": "The Cybersecurity and Infrastructure Security Agency has warned that attackers are exploiting CVE-2026-97229. This GitLab vulnerability could allow code execution without logging in. CISA added the flaw to its Known Exploited Vulnerabilities catalog on October 29, 2026, confirming evidence of active exploitation and raising the urgency for organizations running affected GitLab servers. The…",
-   "categories": [
-    "exploited",
-    "vulnerability"
-   ],
-   "watch_matches": [],
-   "cve_ids": [
-    "CVE-2026-97229"
-   ],
-   "score": 50,
-   "priority": "medium",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "7b431bf0a1eb9515",
-   "title": "Ivanti Connect Secure 0-Days Exploited in the Wild to Gain Unauthenticated Root Access",
-   "link": "https://cybersecuritynews.com/ivanti-connect-secure-zero-days-exploited/",
-   "source": "Cyber Security News",
-   "published": "2026-10-30T08:26:39+00:00",
-   "summary": "Attackers are chaining zero-day flaws in Ivanti Connect Secure VPN appliances to gain unauthenticated root access, exposing stored credentials and sensitive Active Directory data. Ivanti confirmed attacks against a limited number of customers and released additional fixes on October 29, 2026, following its initial October patches. Volexity tracked UTA0576 activity to October 3 and, during […] The…",
-   "categories": [
-    "exploited",
-    "patch",
-    "identity"
-   ],
-   "watch_matches": [
-    "active directory"
-   ],
-   "cve_ids": [],
-   "score": 90,
-   "priority": "high",
-   "first_seen": "2026-10-30T12:47:33.988166+00:00"
-  },
-  {
-   "id": "0d6d5291c7558720",
-   "title": "Ivanti Connect Secure 0-Days Exploited in the Wild to Gain Unauthenticated Root Access - CyberSecurityNews",
-   "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE43cEJ0SHhsSTVWNzVhLW9ONFZ6RFVUeU8xcHAwMk85eFFVaVlPZ0luWmMxb2luT09pRzN4bGlDM0UzQlo5a0VJWTFiTmFWU3R2UzFHX0tQQ0NXTi1RbW5nVkhsOTJsYzBHbHNydU5zU193eHJ5eFg4TFg5am_SAYIBQVVfeXFMTzZ0YndOV202NzlTcHI1Nm1yTVhkVlFDQ1R3eGtSX1lsdXpBakJULU9OQmF2bmU1T2VBMlBUSm5fSDFGaEZOYzhubEVCWERvSlZ5dmF1dkhINVp3S1ViVkhOYzJFNkdXRTJuUkx4SkpOZU1XOHJDUUZPMlRSRVhRalBuZw?oc=5",
-   "source": "GNews: identity & M365 attacks",
-   "published": "2026-10-30T08:26:39+00:00",
-   "summary": "Ivanti Connect Secure 0-Days Exploited in the Wild to Gain Unauthenticated Root Access CyberSecurityNews",
-   "categories": [
-    "exploited"
-   ],
-   "watch_matches": [],
-   "cve_ids": [],
-   "score": 40,
-   "priority": "medium",
-   "first_seen": "2026-11-02T23:28:34.027633+00:00"
   }
  ]
 }
