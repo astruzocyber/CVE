@@ -1,5 +1,1074 @@
 [
   {
+    "cve_id": "CVE-2026-128668",
+    "description": "An Unrestricted File Upload vulnerability in the admin panel of PHPGurukul News Portal Project V4.1 allows authenticated attackers to upload files with arbitrary content by bypassing weak filename extension validation in add-post.php and change-image.php. Although files are renamed with an image extension upon storage, the lack of MIME type and content validation enables content spoofing, storage of malicious markup, and creates a vector for Remote Code Execution (RCE) with server misconfigurations or secondary Local File Inclusion.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": 0.00299,
+    "epss_percentile": 0.23135,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 30.9,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 30.8,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00299,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-18T20:18:59.280",
+    "nvd_last_modified": "2026-11-21T03:17:00.317",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.481659+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-128662",
+    "description": "PHPGurukul Employee Leaves Management System V2.1 contains an information disclosure vulnerability because database backup files are stored within the publicly accessible web root. An unauthenticated remote attacker can download the SQL backup files and retrieve sensitive database contents, including employee personally identifiable information and password hashes.",
+    "cvss_score": 7.5,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-538"
+    ],
+    "epss_score": 0.00201,
+    "epss_percentile": 0.10118,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 26.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.5,
+      "cvss_component": 26.2,
+      "cvss_weight": "35.0% of (CVSS/10)",
+      "epss_raw": 0.00201,
+      "epss_component": 0.1,
+      "epss_weight": "40.0% of EPSS probability",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +25.0 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": false
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "php/php"
+    ],
+    "matched_keywords": [],
+    "source": "nvd",
+    "published": "2026-11-18T19:17:39.927",
+    "nvd_last_modified": "2026-11-21T03:17:00.137",
+    "vuln_status": "Received",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.481573+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-125054",
+    "description": "The SiteOrigin CSS plugin for WordPress is vulnerable to Stored DOM-Based Cross-Site Scripting via the 'class' parameter in all versions up to, and including, 1.6.9 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Successful exploitation requires a Contributor-level or higher attacker to store a crafted class attribute value in a post, which then fires when a user with the edit_theme_options capability opens the Visual Inspector on the affected post and clicks anywhere in the preview iframe. Exploitation by unauthenticated attackers requires that a third-party plugin providing wp_kses_post()-filtered unauthenticated front-end submission is installed and configured, and a moderator approves the submission. On a default installation, where that is not configured, the vulnerability requires attackers with contributor-level access and above.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T09:16:38.957",
+    "nvd_last_modified": "2026-11-21T09:16:40.123",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480998+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-96991",
+    "description": "The SchemaEngine AI \u2013 AI Schema Markup, Reviews & Rich Snippets for SEO plugin for WordPress is vulnerable to Stored Cross-Site Scripting via Comment Content via WebPage JSON-LD Description in all versions up to, and including, 3.1.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Exploitation requires that the target page renders a core/latest-comments block with the displayExcerpt option enabled, causing comment content to be incorporated into the WebPage JSON-LD description output in wp_head.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:40.353",
+    "nvd_last_modified": "2026-11-21T08:16:40.477",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480989+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-133361",
+    "description": "The BlockStrap Page Builder \u2013 Bootstrap Blocks plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'comment' parameter in all versions up to, and including, 0.1.65 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Successful exploitation requires that the attacker has previously had at least one comment approved for a given name and email address, allowing subsequent comments from that author to bypass moderation under WordPress's default policy; exploitation is also limited to sites using a block theme, which is the WordPress default.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:39.870",
+    "nvd_last_modified": "2026-11-21T08:16:40.000",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480980+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-132620",
+    "description": "The WPBot \u2013 AI ChatBot for WordPress & Growth Suite: SEO, AI Writer, Email Marketing, Social Media plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'text' parameter in all versions up to, and including, 9.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The exploit is triggered when an administrator opens the Chat Sessions screen, at which point the plugin's bundled Bootstrap 3.3.7 affix data-API passes the attacker-controlled data-target attribute value to jQuery as HTML, executing the injected script in the administrator's session.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:39.680",
+    "nvd_last_modified": "2026-11-21T08:16:39.830",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480970+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-131822",
+    "description": "The Contact Form to Any API plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'your-message (any CF7 form field)' parameter in all versions up to, and including, 3.0.7 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The malicious payload is stored via a single unauthenticated POST to Contact Form 7's public REST feedback endpoint, which uses permission_callback __return_true and requires no authentication or prior interaction to submit.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:39.513",
+    "nvd_last_modified": "2026-11-21T08:16:39.637",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480961+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-126011",
+    "description": "The Photo Gallery, Sliders, Proofing and Themes \u2013 NextGEN Gallery plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'comment' parameter in all versions up to, and including, 4.5.6 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This requires the site administrator to have configured the Thickbox lightbox effect with the \"Try to apply to all images\" context (thumbEffectContext=all_images), and exploitation additionally depends on an administrator approving the attacker's initial comment so that subsequent comments from that author are auto-approved.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:39.147",
+    "nvd_last_modified": "2026-11-21T08:16:39.267",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480952+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-125039",
+    "description": "The EZ SQL Reports Shortcode Widget and DB Backup plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'User-Agent header (stored to comment_agent)' parameter in all versions up to, and including, 5.26.45 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Successful exploitation requires that an administrator has saved a report whose SQL query selects attacker-controlled data such as comment_agent, and that the attacker can identify the saved report's slug \u2014 a condition trivially met when the administrator publishes the report on a public page via the [SQLREPORT] shortcode.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:38.993",
+    "nvd_last_modified": "2026-11-21T08:16:39.117",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480942+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-120676",
+    "description": "The Forminator Forms \u2013 Contact Form, Payment Form & Custom Form Builder plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'upload-1 (the File Upload field's element_id)' parameter in all versions up to, and including, 1.58.4 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This vulnerability is an incomplete fix for CVE-2024-1794; exploitation requires that the Forminator form's File Upload field is left at plugin defaults (no 'custom-files' restriction configured) and that the server maps no Content-Type to the .rtx extension \u2014 the default behavior of the Debian/Ubuntu Apache package used by the official WordPress Docker image and many shared hosts.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:38.523",
+    "nvd_last_modified": "2026-11-21T08:16:38.643",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480932+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-120529",
+    "description": "The Admin Columns plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'HTTP_USER_AGENT' parameter in all versions up to, and including, 7.1.7 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The kses sanitization pass in classes/Sanitize/Kses.php uses wp_kses_allowed_html('post') augmented with iframe[src] and the data: protocol; because wp_kses_attr_check accepts any data-* attribute on any allowed tag without inspecting its value, a payload embedded inside a data-ac-tip attribute survives intact and is subsequently assigned to innerHTML by assets/js/table.js, bypassing the apparent mitigation entirely.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:38.377",
+    "nvd_last_modified": "2026-11-21T08:16:38.493",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480922+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-120485",
+    "description": "The Admin Columns plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'url' parameter in all versions up to, and including, 7.1.8 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Exploitation requires that an administrator has added the Author URL column to the Comments screen layout and that the site accepts unauthenticated comments, both of which are default WordPress and plugin configurations.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:38.073",
+    "nvd_last_modified": "2026-11-21T08:16:38.193",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480910+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-119632",
+    "description": "The Forminator Forms \u2013 Contact Form, Payment Form & Custom Form Builder plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'textarea-N (rich-text draft value, saved as Save-and-Continue draft meta)' parameter in all versions up to, and including, 1.58.4 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This requires the targeted form to have a Rich-Text Textarea field with Save-and-Continue enabled and public submission permissions \u2014 once a crafted draft is saved, the payload executes whenever any user, including an administrator, resumes the draft or opens the Draft ID link from the Forminator Submissions screen.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:37.920",
+    "nvd_last_modified": "2026-11-21T08:16:38.040",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480900+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-116619",
+    "description": "The MetForm \u2013 Contact Form, Survey, Quiz, Conditional Forms, Form Templates & Custom Form Builder for Elementor plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'mf-te (the form-builder-chosen name of the Text Editor field)' parameter in all versions up to, and including, 4.3.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Successful exploitation requires a published form containing a Text Editor block; the form's public markup exposes the submission nonce as data-form-nonce, allowing any unauthenticated visitor to satisfy the only submission barrier and store the malicious payload.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:37.610",
+    "nvd_last_modified": "2026-11-21T08:16:37.733",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480890+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-107713",
+    "description": "The Flutterwave Payments plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'form_id' parameter in all versions up to, and including, 1.0.7 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. The storing endpoint is accessible without authentication because the required nonce is publicly exposed on any front-end page rendering the plugin's [flw-pay-form], [flw-pay-button], or [flw-donation-form] shortcodes, allowing any unauthenticated visitor to scrape and reuse it.",
+    "cvss_score": 7.2,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-79"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 42.0,
+    "risk_score_breakdown": {
+      "cvss_raw": 7.2,
+      "cvss_component": 42.0,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T08:16:37.443",
+    "nvd_last_modified": "2026-11-21T08:16:37.577",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480880+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-129220",
+    "description": "The Everest Forms \u2013 Contact Form, Payment Form, Quiz, Survey & Custom Form Builder with AI plugin for WordPress is vulnerable to Missing Authorization in all versions up to, and including, 3.6.4 This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for authenticated attackers, with everest_forms_create_forms capabilities, to activate any already-installed inactive plugin on the server by supplying an arbitrary slug, triggering its activation hooks and escalating privileges up to administrator level. Exploitation requires that a site administrator has delegated the everest_forms_create_forms capability to a lower-privileged role via the plugin's Role & Permission feature, and that at least one inactive installed plugin whose main file follows the slug/slug.php naming convention exists on the server.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-129220",
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T07:16:41.030",
+    "nvd_last_modified": "2026-11-21T07:16:41.403",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480870+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-123086",
+    "description": "The PublishPress Revisions: Duplicate Posts, Submit, Approve and Schedule Content Changes plugin for WordPress is vulnerable to authorization bypass in all versions up to, and including, 4.3.4 This is due to the plugin not properly verifying that a user is authorized to perform an action. This makes it possible for authenticated attackers, with contributor-level access and above, to permanently force-delete arbitrary trashed posts, pages, and revisions owned by any user, including higher-privileged users. The required nonce is trivially harvested by any Contributor-level user because the static 'revisions-deleted' nonce action is emitted in a redirect header on the init hook before WordPress enforces edit.php's capability check, and once obtained it authorizes deletion of any trashed post or revision on the site.",
+    "cvss_score": 8.1,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "LOW",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-862"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 47.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.1,
+      "cvss_component": 47.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T07:16:39.647",
+    "nvd_last_modified": "2026-11-21T07:16:39.930",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480859+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-120539",
+    "description": "The Restrictions for BuddyPress plugin for WordPress is vulnerable to Remote Code Execution in all versions up to, and including, 1.5.4 This is due to the plugin splicing the attacker-controlled request URI into a PHP expression inside a double-quoted string and evaluating it with eval(). Because PHP interpolates double-quoted strings, a payload of the form {${...}} in the URL path is executed during interpolation, so no quote breakout is required and WordPress' slashing does not mitigate it. This makes it possible for unauthenticated attackers to execute arbitrary code on the server with a single GET request. The affected conditions ship enabled by default and are evaluated before any logged-in check, so no plugin configuration is needed; the site must have BuddyPress and Paid Memberships Pro active alongside this plugin.",
+    "cvss_score": 9.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "NONE"
+    },
+    "cwe_ids": [
+      "CWE-95"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 57.2,
+    "risk_score_breakdown": {
+      "cvss_raw": 9.8,
+      "cvss_component": 57.2,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": "CVE-2026-120539",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "f254b3e5524d703d4ae4e85812b3f5a548a5cca4",
+        "repo": "https://github.com/seventhqueen/buddypress-restrict"
+      }
+    ],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T06:16:33.227",
+    "nvd_last_modified": "2026-11-21T06:16:33.343",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480846+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
+    "cve_id": "CVE-2026-19793",
+    "description": "The WP Import Export Lite plugin for WordPress is vulnerable to Limited Code Injection in all versions up to, and including, 3.9.32 via the 'comment' parameter. This is due to a two-stage shortcode check that evaluates the raw mapping placeholder before data substitution, causing the neutralizer to be skipped when attacker-controlled comment content containing a malicious [wpie_function] shortcode is substituted at runtime. This makes it possible for unauthenticated attackers to inject arbitrary PHP callables on the server. Exploitation requires an Administrator to perform the standard Export With Settings For Import followed by a New Import migration workflow, which is a routine operational task; the attacker themselves requires no account or authentication, needing only the ability to submit a pending comment on any comments-open post.",
+    "cvss_score": 8.8,
+    "cvss_version": "CVSS V31",
+    "cvss_vector_components": {
+      "attack_vector": "NETWORK",
+      "attack_complexity": "LOW",
+      "privileges_required": "NONE",
+      "user_interaction": "REQUIRED"
+    },
+    "cwe_ids": [
+      "CWE-434"
+    ],
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev": false,
+    "kev_date_added": null,
+    "kev_due_date": null,
+    "kev_ransomware_use": false,
+    "kev_required_action": null,
+    "kev_notes": null,
+    "risk_score": 51.3,
+    "risk_score_breakdown": {
+      "cvss_raw": 8.8,
+      "cvss_component": 51.3,
+      "cvss_weight": "58.3% of (CVSS/10)",
+      "epss_raw": null,
+      "epss_component": 0.0,
+      "epss_weight": "n/a (missing)",
+      "kev_bonus": 0.0,
+      "kev_weight": "flat +41.7 if in CISA KEV",
+      "capped": false,
+      "weight_redistributed": true
+    },
+    "risk_score_prev": null,
+    "epss_score_prev": null,
+    "osv_id": null,
+    "osv_fixed_versions": [],
+    "affected": [
+      "wordpress/wordpress",
+      "php/php"
+    ],
+    "matched_keywords": [
+      "wordpress"
+    ],
+    "source": "nvd",
+    "published": "2026-11-21T04:17:20.800",
+    "nvd_last_modified": "2026-11-21T04:17:20.933",
+    "vuln_status": "Deferred",
+    "nvd_fix_versions": [],
+    "nvd_reference_links": [],
+    "severity": null,
+    "dependabot_url": null,
+    "first_seen": "2026-11-21T09:46:45.480832+00:00",
+    "osv_checked": "2026-11-21"
+  },
+  {
     "cve_id": "CVE-2026-23871",
     "description": "Incomplete validation of external ad-reply URLs in WhatsApp for Android and WhatsApp Business for Android before 2.26.17.4 could have caused a target's device to reveal its IP information to an attacker if an attacker sent media from an attacker-controlled URL when a crafted Click to WhatsApp ad-reply message was rendered and displayed in a message thread. This issue may have been abused in conjunction with specific spam messages.",
     "cvss_score": 3.5,
@@ -34,7 +1103,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 20.4,
     "epss_score_prev": null,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -88,7 +1157,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.8,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-94598",
     "osv_fixed_versions": [
@@ -151,7 +1220,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 54.3,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-94567",
     "osv_fixed_versions": [
@@ -212,7 +1281,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 54.3,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-94565",
     "osv_fixed_versions": [
@@ -275,7 +1344,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.8,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-94564",
     "osv_fixed_versions": [
@@ -336,7 +1405,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-94561",
     "osv_fixed_versions": [
@@ -397,7 +1466,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-55372",
     "osv_fixed_versions": [
@@ -458,7 +1527,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.7,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-54065",
     "osv_fixed_versions": [
@@ -519,7 +1588,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.7,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-49259",
     "osv_fixed_versions": [
@@ -580,7 +1649,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 47.8,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-48118",
     "osv_fixed_versions": [
@@ -643,7 +1712,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 42.0,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-94562",
     "osv_fixed_versions": [
@@ -707,7 +1776,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-61832",
     "osv_fixed_versions": [
@@ -770,7 +1839,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 50.7,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-54064",
     "osv_fixed_versions": [
@@ -833,8 +1902,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00226,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -889,8 +1958,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 34.4,
+    "epss_score_prev": 0.00179,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -945,8 +2014,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00137,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1001,8 +2070,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.0017,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1057,8 +2126,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 28.4,
+    "epss_score_prev": 0.00137,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1114,7 +2183,7 @@
       "capped": false,
       "weight_redistributed": true
     },
-    "risk_score_prev": null,
+    "risk_score_prev": 43.8,
     "epss_score_prev": null,
     "osv_id": "CVE-2026-94597",
     "osv_fixed_versions": [
@@ -1180,8 +2249,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.8,
+    "epss_score_prev": 0.00056,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1234,8 +2303,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00146,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1288,8 +2357,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00146,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1342,8 +2411,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.9,
+    "epss_score_prev": 0.00162,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1396,8 +2465,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.7,
+    "epss_score_prev": 0.00138,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1450,8 +2519,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00146,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1504,8 +2573,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 26.3,
+    "epss_score_prev": 0.00185,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1558,8 +2627,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 31.9,
+    "epss_score_prev": 0.00188,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -1612,8 +2681,8 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": null,
-    "epss_score_prev": null,
+    "risk_score_prev": 25.7,
+    "epss_score_prev": 0.0014,
     "osv_id": null,
     "osv_fixed_versions": [],
     "affected": [
@@ -2176,7 +3245,7 @@
       "capped": false,
       "weight_redistributed": false
     },
-    "risk_score_prev": 31.9,
+    "risk_score_prev": 26.3,
     "epss_score_prev": 0.0029,
     "osv_id": null,
     "osv_fixed_versions": [],
@@ -3025,7 +4094,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-19T22:18:04.090",
-    "nvd_last_modified": "2026-11-20T20:17:35.520",
+    "nvd_last_modified": "2026-11-21T05:18:22.160",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -4174,7 +5243,7 @@
     ],
     "source": "nvd",
     "published": "2026-11-19T15:17:25.407",
-    "nvd_last_modified": "2026-11-20T20:52:33.710",
+    "nvd_last_modified": "2026-11-21T05:18:10.817",
     "vuln_status": "Analyzed",
     "nvd_fix_versions": [
       {
@@ -9379,7 +10448,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-18T19:18:07.443",
-    "nvd_last_modified": "2026-11-19T21:45:07.880",
+    "nvd_last_modified": "2026-11-21T05:18:23.673",
     "vuln_status": "Deferred",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10338,7 +11407,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-18T16:17:47.560",
-    "nvd_last_modified": "2026-11-18T16:17:47.560",
+    "nvd_last_modified": "2026-11-21T04:17:09.163",
     "vuln_status": "Received",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -10582,7 +11651,7 @@
     "matched_keywords": [],
     "source": "nvd",
     "published": "2026-11-18T12:17:10.783",
-    "nvd_last_modified": "2026-11-18T12:17:10.903",
+    "nvd_last_modified": "2026-11-21T03:17:01.927",
     "vuln_status": "Awaiting Analysis",
     "nvd_fix_versions": [],
     "nvd_reference_links": [],
@@ -20817,7 +21886,8 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-17T04:32:54.414677+00:00",
-    "osv_checked": "2026-11-17"
+    "osv_checked": "2026-11-17",
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2026-90436",
@@ -62749,7 +63819,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T21:50:53.612495+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-121866",
@@ -62803,7 +63873,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T21:50:53.612487+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-121848",
@@ -62857,7 +63927,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T21:50:53.612479+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-121491",
@@ -62911,7 +63981,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T21:50:53.612471+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-121379",
@@ -62965,7 +64035,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T21:50:53.612462+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-117525",
@@ -63172,7 +64242,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T16:28:27.015644+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -63227,7 +64297,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T16:28:27.015637+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -63284,7 +64354,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T16:28:27.015413+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -63740,7 +64810,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T16:28:27.015358+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -63854,7 +64924,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T16:28:27.015345+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -64482,7 +65552,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T16:28:27.015261+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -64881,7 +65951,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T08:47:12.739021+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -64939,7 +66009,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T08:47:12.738942+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -65339,7 +66409,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T08:47:12.738892+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -65568,7 +66638,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T08:47:12.738863+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -65910,7 +66980,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-07T08:47:12.738816+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -66130,7 +67200,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T21:33:45.143113+00:00",
-    "osv_checked": "2026-11-06"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-120733",
@@ -66204,7 +67274,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T21:33:45.143102+00:00",
-    "osv_checked": "2026-11-06"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-120715",
@@ -66278,7 +67348,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T21:33:45.143093+00:00",
-    "osv_checked": "2026-11-06"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-119636",
@@ -66498,7 +67568,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T21:33:45.142704+00:00",
-    "osv_checked": "2026-11-06"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-33050",
@@ -66716,8 +67786,21 @@
     },
     "risk_score_prev": 29.6,
     "epss_score_prev": 0.00581,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-118515",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "ffaeb561f97bb0045f1f9720a5224607816a75ee",
+        "repo": "https://github.com/symfony/serializer"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "d44b243381597fdc2830d1e6a878fda10293b49b",
+        "repo": "https://github.com/symfony/symfony"
+      }
+    ],
     "affected": [
       "php/php"
     ],
@@ -66731,7 +67814,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T21:33:45.134740+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -66772,8 +67855,21 @@
     },
     "risk_score_prev": 30.6,
     "epss_score_prev": 0.00504,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-123792",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "d44b243381597fdc2830d1e6a878fda10293b49b",
+        "repo": "https://github.com/symfony/symfony"
+      },
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "8ff81e554b0d78653a146b35e344e0a022d7e838",
+        "repo": "https://github.com/symfony/yaml"
+      }
+    ],
     "affected": [
       "php/php"
     ],
@@ -66787,7 +67883,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T21:33:45.134730+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-17"
   },
   {
@@ -66992,7 +68088,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.512941+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -67111,7 +68207,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.504174+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -67341,7 +68437,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.504132+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -67398,7 +68494,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.504122+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -67456,7 +68552,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.504111+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-12"
   },
   {
@@ -67513,7 +68609,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.504100+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -67570,7 +68666,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.504090+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -67627,7 +68723,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.504077+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -67913,7 +69009,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.504028+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -67970,7 +69066,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.504017+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -68027,7 +69123,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.504007+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -68141,7 +69237,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.503985+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -68426,7 +69522,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.503933+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -68483,7 +69579,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.503920+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -68597,7 +69693,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.503877+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -68711,7 +69807,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.503854+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -68768,7 +69864,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-11-06T15:57:36.503844+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -85088,7 +86184,7 @@
     "dependabot_url": null,
     "first_seen": "2026-11-02T15:45:14.614269+00:00",
     "osv_checked": "2026-11-16",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2026-103420",
@@ -85143,7 +86239,7 @@
     "dependabot_url": null,
     "first_seen": "2026-11-02T15:45:14.614257+00:00",
     "osv_checked": "2026-11-16",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2026-102802",
@@ -182945,7 +184041,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.535367+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-58073",
@@ -182999,7 +184095,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.535360+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-58072",
@@ -183053,7 +184149,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.535354+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-58071",
@@ -183276,7 +184372,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.535278+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-73298",
@@ -183391,7 +184487,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.535248+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-15587",
@@ -183445,7 +184541,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.535230+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-47299",
@@ -183567,7 +184663,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.535198+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-65815",
@@ -183636,7 +184732,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.535192+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-18657",
@@ -184067,7 +185163,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.535037+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-65811",
@@ -184136,7 +185232,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.535002+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-67261",
@@ -184204,7 +185300,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.534995+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-54489",
@@ -184272,7 +185368,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.534990+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-53416",
@@ -184611,7 +185707,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.534931+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-66150",
@@ -184959,7 +186055,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.534868+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-70465",
@@ -185594,7 +186690,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.534784+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-65767",
@@ -185723,7 +186819,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.534770+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-62918",
@@ -185845,7 +186941,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.534757+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-18953",
@@ -185919,7 +187015,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.534402+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -185989,7 +187085,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531245+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -186059,7 +187155,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531238+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -186269,7 +187365,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531217+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -186479,7 +187575,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531151+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -186549,7 +187645,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531145+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -186759,7 +187855,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531125+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -186829,7 +187925,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531119+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -186899,7 +187995,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531112+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -186969,7 +188065,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531106+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -187039,7 +188135,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531098+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -187179,7 +188275,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531086+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -187319,7 +188415,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531073+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -187529,7 +188625,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531054+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -187949,7 +189045,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531014+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -188019,7 +189115,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531008+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -188089,7 +189185,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.531001+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -188299,7 +189395,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530981+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -188369,7 +189465,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530974+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -188929,7 +190025,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530918+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -188999,7 +190095,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530912+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -189069,7 +190165,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530906+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -189139,7 +190235,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530899+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -189349,7 +190445,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530880+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -189419,7 +190515,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530873+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -189489,7 +190585,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530866+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -189559,7 +190655,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530858+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -189699,7 +190795,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530844+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -189769,7 +190865,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530838+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -189839,7 +190935,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530830+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -189909,7 +191005,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530823+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -190049,7 +191145,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530809+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -190119,7 +191215,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530803+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -190259,7 +191355,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530788+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -190329,7 +191425,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530781+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -190399,7 +191495,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530775+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -190539,7 +191635,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530762+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -190609,7 +191705,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530755+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -190679,7 +191775,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530602+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -190749,7 +191845,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530596+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -190889,7 +191985,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530580+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -191099,7 +192195,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.530557+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -191287,7 +192383,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529704+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191342,7 +192438,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529605+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191397,7 +192493,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529597+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191452,7 +192548,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529591+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191507,7 +192603,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529584+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191562,7 +192658,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529576+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191617,7 +192713,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529508+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191672,7 +192768,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529502+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191727,7 +192823,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529494+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191782,7 +192878,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529488+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191837,7 +192933,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529481+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191892,7 +192988,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529474+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -191947,7 +193043,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529467+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -192057,7 +193153,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529454+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -192221,8 +193317,15 @@
     },
     "risk_score_prev": 34.5,
     "epss_score_prev": 0.00418,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-17544",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "fb193d3df72d1ca3b5ef58ec9e9b6ef5bdf18bef",
+        "repo": "https://github.com/php/php-src"
+      }
+    ],
     "affected": [
       "php/php"
     ],
@@ -192256,7 +193359,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529359+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -192296,8 +193399,15 @@
     },
     "risk_score_prev": 34.4,
     "epss_score_prev": 0.0033,
-    "osv_id": null,
-    "osv_fixed_versions": [],
+    "osv_id": "CVE-2026-17543",
+    "osv_fixed_versions": [
+      {
+        "package": null,
+        "ecosystem": null,
+        "fixed": "651db3ebfa622cae0c4e6b39766812efbd274ced",
+        "repo": "https://github.com/php/php-src"
+      }
+    ],
     "affected": [
       "php/php"
     ],
@@ -192343,7 +193453,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.529352+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -192624,7 +193734,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.528496+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -192679,7 +193789,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.528489+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -192736,7 +193846,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.528481+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-11"
   },
   {
@@ -192808,7 +193918,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.528143+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -192880,7 +193990,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.528135+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -192944,7 +194054,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T23:11:38.528088+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -193057,7 +194167,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T18:22:05.345964+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-73614",
@@ -193384,7 +194494,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T18:22:05.339896+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -193439,7 +194549,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T18:22:05.339889+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -193851,7 +194961,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T13:29:17.932656+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -194536,7 +195646,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T00:44:44.083635+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-09"
   },
   {
@@ -194591,7 +195701,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T00:44:44.083627+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-10"
   },
   {
@@ -194646,7 +195756,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T00:44:44.083619+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-09"
   },
   {
@@ -194701,7 +195811,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T00:44:44.083610+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-09"
   },
   {
@@ -194811,7 +195921,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T00:44:44.083594+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-09"
   },
   {
@@ -194866,7 +195976,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T00:44:44.083585+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-09"
   },
   {
@@ -195093,7 +196203,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-23T00:44:44.082593+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-09"
   },
   {
@@ -209824,7 +210934,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254611+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210110,7 +211220,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254570+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210250,7 +211360,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254553+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210320,7 +211430,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254544+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210390,7 +211500,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254533+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210460,7 +211570,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254524+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210530,7 +211640,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254516+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210600,7 +211710,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254508+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210670,7 +211780,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254499+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210740,7 +211850,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254487+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210810,7 +211920,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254479+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -210880,7 +211990,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254470+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -211020,7 +212130,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254452+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -211160,7 +212270,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254436+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -211370,7 +212480,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254408+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -211440,7 +212550,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254397+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -211510,7 +212620,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254388+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -211580,7 +212690,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254379+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -211650,7 +212760,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254370+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -211720,7 +212830,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254361+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -211860,7 +212970,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254342+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -211930,7 +213040,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254333+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212000,7 +213110,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254323+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212070,7 +213180,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254314+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212140,7 +213250,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254303+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212280,7 +213390,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254286+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212350,7 +213460,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254277+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212490,7 +213600,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254259+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212560,7 +213670,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254245+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212630,7 +213740,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254224+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212770,7 +213880,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254205+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212910,7 +214020,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254186+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -212980,7 +214090,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254176+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -213050,7 +214160,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254166+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -213120,7 +214230,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254158+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -213330,7 +214440,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254132+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -213400,7 +214510,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254124+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -213470,7 +214580,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254116+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -213610,7 +214720,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254098+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -213680,7 +214790,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254089+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -213820,7 +214930,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254069+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -214170,7 +215280,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254024+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -214310,7 +215420,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.254007+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -214450,7 +215560,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253988+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -214520,7 +215630,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253979+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -214590,7 +215700,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253970+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -214660,7 +215770,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253959+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -214730,7 +215840,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253951+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -214870,7 +215980,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253934+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215010,7 +216120,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253915+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215150,7 +216260,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253897+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215220,7 +216330,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253889+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215290,7 +216400,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253880+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215430,7 +216540,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253860+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215500,7 +216610,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253852+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215570,7 +216680,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253841+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215640,7 +216750,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253831+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215710,7 +216820,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253822+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215780,7 +216890,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253813+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -215920,7 +217030,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253795+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216060,7 +217170,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253778+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216130,7 +217240,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253767+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216200,7 +217310,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253758+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216270,7 +217380,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253745+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216340,7 +217450,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253736+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216410,7 +217520,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253726+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216480,7 +217590,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253717+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216550,7 +217660,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253709+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216620,7 +217730,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253700+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216690,7 +217800,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253692+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216830,7 +217940,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253673+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -216970,7 +218080,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253597+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -217110,7 +218220,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253577+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -217250,7 +218360,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253559+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -217320,7 +218430,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253550+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -217390,7 +218500,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253541+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -217460,7 +218570,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253533+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -217600,7 +218710,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253515+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -217740,7 +218850,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253498+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -217810,7 +218920,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253490+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -217880,7 +218990,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253478+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218090,7 +219200,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253450+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218160,7 +219270,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253441+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218230,7 +219340,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253432+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218370,7 +219480,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253413+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218440,7 +219550,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253404+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218510,7 +219620,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253395+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218580,7 +219690,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253386+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218650,7 +219760,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253377+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218796,7 +219906,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253357+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218866,7 +219976,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253348+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -218936,7 +220046,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253339+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219006,7 +220116,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253330+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219146,7 +220256,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253312+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219216,7 +220326,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253303+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219286,7 +220396,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253294+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219356,7 +220466,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253285+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219426,7 +220536,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253276+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219496,7 +220606,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253267+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219566,7 +220676,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253254+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219636,7 +220746,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253228+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219776,7 +220886,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253209+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219846,7 +220956,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253200+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219916,7 +221026,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253192+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -219986,7 +221096,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253183+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -220202,7 +221312,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253157+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -220272,7 +221382,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253149+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -220552,7 +221662,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253110+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -220768,7 +221878,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253081+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -220978,7 +222088,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253054+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -221118,7 +222228,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-21T00:43:27.253035+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "ok"
   },
   {
@@ -226195,7 +227305,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-20T21:59:40.126443+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2025-12952",
@@ -230366,7 +231476,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-20T21:38:28.281874+00:00",
-    "osv_checked": "2026-11-06",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-08"
   },
   {
@@ -300832,7 +301942,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.005077+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-12384",
@@ -300888,7 +301998,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.005069+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-07"
   },
   {
@@ -300945,7 +302055,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.005060+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -301003,7 +302113,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.005052+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-12197",
@@ -301060,7 +302170,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.005044+00:00",
     "osv_checked": "2026-11-20",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-12682",
@@ -301117,7 +302227,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.005035+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-12493",
@@ -301235,7 +302345,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.005016+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-11890",
@@ -301291,7 +302401,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.005008+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -301348,7 +302458,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004997+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -301407,7 +302517,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004990+00:00",
     "osv_checked": "2026-11-20",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-11704",
@@ -301464,7 +302574,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004979+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -301522,7 +302632,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004971+00:00",
     "osv_checked": "2026-11-20",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-11008",
@@ -301579,7 +302689,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004961+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-11007",
@@ -301636,7 +302746,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004952+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-8900",
@@ -301693,7 +302803,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004943+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-6990",
@@ -301750,7 +302860,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004935+00:00",
     "osv_checked": "2026-11-21",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-6574",
@@ -301806,7 +302916,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004927+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-07"
   },
   {
@@ -301864,7 +302974,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004918+00:00",
     "osv_checked": "2026-11-21",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-11755",
@@ -301922,7 +303032,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004910+00:00",
     "osv_checked": "2026-11-21",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-11499",
@@ -301979,7 +303089,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004899+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-10487",
@@ -302035,7 +303145,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004891+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -302093,7 +303203,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004883+00:00",
     "osv_checked": "2026-11-07",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-11995",
@@ -302149,7 +303259,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004875+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -302207,7 +303317,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004865+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-11920",
@@ -302265,7 +303375,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004856+00:00",
     "osv_checked": "2026-11-21",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-9697",
@@ -302320,7 +303430,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004847+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-9587",
@@ -302374,7 +303484,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004839+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-07"
   },
   {
@@ -302431,7 +303541,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004831+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-07"
   },
   {
@@ -302488,7 +303598,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004822+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-09"
   },
   {
@@ -302546,7 +303656,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T22:27:16.004813+00:00",
     "osv_checked": "2026-11-07",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-62216",
@@ -305234,7 +306344,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T18:40:11.209096+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -305360,7 +306470,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T18:40:11.209079+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-13486",
@@ -305417,7 +306527,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T18:40:11.209068+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-13646",
@@ -305623,7 +306733,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T18:40:11.209040+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-13724",
@@ -305679,7 +306789,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T18:40:11.209031+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -305797,7 +306907,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T18:40:11.209010+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -305854,7 +306964,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T18:40:11.209001+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-21"
   },
   {
@@ -305913,7 +307023,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T18:40:11.208878+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-07"
   },
   {
@@ -306026,7 +307136,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T15:52:07.474530+00:00",
     "osv_checked": "2026-11-08",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2026-110981",
@@ -306082,7 +307192,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T15:52:07.474516+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-09"
   },
   {
@@ -306139,7 +307249,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T15:52:07.474503+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -306196,7 +307306,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T15:52:07.472760+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -306254,7 +307364,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-18T15:52:07.472746+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-05"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2025-12181",
@@ -306310,7 +307420,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T15:52:07.472733+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-20"
   },
   {
@@ -306367,7 +307477,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-18T15:52:07.472717+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-20"
   },
   {
@@ -306866,7 +307976,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T20:36:03.702210+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-10-24"
   },
   {
@@ -306992,7 +308102,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T20:36:03.702191+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-10-23"
   },
   {
@@ -311483,7 +312593,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T14:57:17.547310+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -311540,7 +312650,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T14:57:17.547300+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -311597,7 +312707,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T08:17:57.706752+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-09"
   },
   {
@@ -311654,7 +312764,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T08:17:57.706742+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -311712,7 +312822,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-17T08:17:57.706733+00:00",
     "osv_checked": "2026-11-07",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2026-108123",
@@ -311768,7 +312878,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T08:17:57.706723+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -311827,7 +312937,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-17T08:17:57.706713+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2026-103899",
@@ -311883,7 +312993,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T08:17:57.706697+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -311941,7 +313051,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-17T08:17:57.706687+00:00",
     "osv_checked": "2026-11-20",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2026-109208",
@@ -311997,7 +313107,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T08:17:57.706664+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -312055,7 +313165,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-17T08:17:57.706653+00:00",
     "osv_checked": "2026-11-08",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2026-104734",
@@ -312112,7 +313222,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-17T08:17:57.706641+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -314294,7 +315404,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T19:32:23.093730+00:00",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2023-35311",
@@ -328249,7 +329359,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T16:09:08.995954+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -328306,7 +329416,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T16:09:08.995944+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -328363,7 +329473,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T16:09:08.995933+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -328420,7 +329530,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T16:09:08.995925+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-21"
   },
   {
@@ -328477,7 +329587,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T16:09:08.995918+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -328534,7 +329644,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T16:09:08.995875+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -328591,7 +329701,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T16:09:08.995867+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-07"
   },
   {
@@ -329200,7 +330310,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647411+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -329257,7 +330367,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647402+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -329314,7 +330424,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647393+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-20"
   },
   {
@@ -329371,7 +330481,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647383+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -329428,7 +330538,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647375+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-10-23"
   },
   {
@@ -329485,7 +330595,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647362+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -329543,7 +330653,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647353+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-19"
   },
   {
@@ -329600,7 +330710,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647344+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -329657,7 +330767,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647336+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -329714,7 +330824,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647327+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -329771,7 +330881,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647318+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-19"
   },
   {
@@ -329828,7 +330938,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647287+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -329885,7 +330995,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647276+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-07"
   },
   {
@@ -329942,7 +331052,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647267+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-10-23"
   },
   {
@@ -329999,7 +331109,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647259+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -330056,7 +331166,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647250+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-07"
   },
   {
@@ -330113,7 +331223,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647240+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -330170,7 +331280,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647212+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-10-23"
   },
   {
@@ -330228,7 +331338,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647203+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-07"
   },
   {
@@ -330285,7 +331395,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647195+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -330342,7 +331452,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647187+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -330400,7 +331510,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647178+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -330457,7 +331567,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647166+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-05",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-19"
   },
   {
@@ -330514,7 +331624,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647157+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -330571,7 +331681,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647146+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -330628,7 +331738,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647136+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-10-23"
   },
   {
@@ -330685,7 +331795,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647127+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -330743,7 +331853,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647106+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-19"
   },
   {
@@ -330800,7 +331910,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647095+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-11-08"
   },
   {
@@ -330864,7 +331974,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647087+00:00",
-    "affected_cpe_check": "no_cpes:2026-11-06",
+    "affected_cpe_check": "no_cpes:2026-11-21",
     "osv_checked": "2026-10-23"
   },
   {
@@ -330922,7 +332032,7 @@
     "dependabot_url": null,
     "first_seen": "2026-10-16T08:47:00.647079+00:00",
     "osv_checked": "2026-11-19",
-    "affected_cpe_check": "no_cpes:2026-11-06"
+    "affected_cpe_check": "no_cpes:2026-11-21"
   },
   {
     "cve_id": "CVE-2026-107746",
@@ -454233,7 +455343,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-09T12:13:51.901685+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-08"
   },
   {
@@ -463026,7 +464136,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-06T12:14:54.648524+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-08"
   },
   {
@@ -463715,7 +464825,7 @@
     "severity": null,
     "dependabot_url": null,
     "first_seen": "2026-09-05T16:12:40.521125+00:00",
-    "osv_checked": "2026-11-07",
+    "osv_checked": "2026-11-21",
     "affected_cpe_check": "no_cpes:2026-11-08"
   },
   {
@@ -470460,7 +471570,7 @@
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485454+00:00",
     "affected_cpe_check": "ok",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-20279",
@@ -470570,7 +471680,7 @@
     "dependabot_url": null,
     "first_seen": "2026-09-05T15:02:54.485447+00:00",
     "affected_cpe_check": "no_cpes:2026-11-19",
-    "osv_checked": "2026-11-07"
+    "osv_checked": "2026-11-21"
   },
   {
     "cve_id": "CVE-2026-20277",
